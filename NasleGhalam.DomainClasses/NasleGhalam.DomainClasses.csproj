@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{164402EF-47AF-4C7B-BD43-0D7D6558FF21}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NasleGhalam.DomainClasses</RootNamespace>
+    <AssemblyName>NasleGhalam.DomainClasses</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\QuestionAnswerView.cs" />
+    <Compile Include="Entities\QuestionAnswer.cs" />
+    <Compile Include="Entities\Action.cs" />
+    <Compile Include="Entities\Box.cs" />
+    <Compile Include="Entities\EducationBook.cs" />
+    <Compile Include="Entities\AxillaryBook.cs" />
+    <Compile Include="Entities\Question.cs" />
+    <Compile Include="Entities\QuestionEqual.cs" />
+    <Compile Include="Entities\QuestionOption.cs" />
+    <Compile Include="Entities\QuestionJudge.cs" />
+    <Compile Include="Entities\Topic.cs" />
+    <Compile Include="Entities\Publisher.cs" />
+    <Compile Include="Entities\Lesson.cs" />
+    <Compile Include="Entities\Ratio.cs" />
+    <Compile Include="Entities\HistoryEducation.cs" />
+    <Compile Include="Entities\EducationGroup_Lesson.cs" />
+    <Compile Include="Entities\UniversityBranch_HistoryEducation.cs" />
+    <Compile Include="Entities\UniversityBranch.cs" />
+    <Compile Include="Entities\Teacher.cs" />
+    <Compile Include="Entities\Tag.cs" />
+    <Compile Include="Entities\EducationSubGroup.cs" />
+    <Compile Include="Entities\EducationGroup.cs" />
+    <Compile Include="Entities\Exam.cs" />
+    <Compile Include="Entities\GradeLevel.cs" />
+    <Compile Include="Entities\Grade.cs" />
+    <Compile Include="Entities\EducationYear.cs" />
+    <Compile Include="Entities\Controller.cs" />
+    <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\Province.cs" />
+    <Compile Include="Entities\Student.cs" />
+    <Compile Include="Entities\Role.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="EntityConfigs\ActionConfig.cs" />
+    <Compile Include="EntityConfigs\QuestionAnswerViewConfig.cs" />
+    <Compile Include="EntityConfigs\EducationSubGroupConfig.cs" />
+    <Compile Include="EntityConfigs\EducationGroupConfig.cs" />
+    <Compile Include="EntityConfigs\ExamConfig.cs" />
+    <Compile Include="EntityConfigs\BoxConfig.cs" />
+    <Compile Include="EntityConfigs\EducationBookConfig.cs" />
+    <Compile Include="EntityConfigs\AxillaryBookConfig.cs" />
+    <Compile Include="EntityConfigs\QuestionConfig.cs" />
+    <Compile Include="EntityConfigs\QuestionEqualConfig.cs" />
+    <Compile Include="EntityConfigs\QuestionOptionConfig.cs" />
+    <Compile Include="EntityConfigs\QuestionJudgConfig.cs" />
+    <Compile Include="EntityConfigs\QuestionAnswerConfig.cs" />
+    <Compile Include="EntityConfigs\TopicConfig.cs" />
+    <Compile Include="EntityConfigs\PublisherConfig.cs" />
+    <Compile Include="EntityConfigs\LessonConfig.cs" />
+    <Compile Include="EntityConfigs\RatioConfig.cs" />
+    <Compile Include="EntityConfigs\HistoryEducationConfig.cs" />
+    <Compile Include="EntityConfigs\EducationGroup_LessonConfig.cs" />
+    <Compile Include="EntityConfigs\UniversityBranch_HistoryEducationConfig.cs" />
+    <Compile Include="EntityConfigs\UniversityBranchConfig.cs" />
+    <Compile Include="EntityConfigs\TagConfig.cs" />
+    <Compile Include="EntityConfigs\GradeLevelConfig.cs" />
+    <Compile Include="EntityConfigs\GradeConfig.cs" />
+    <Compile Include="EntityConfigs\ProvinceConfig.cs" />
+    <Compile Include="EntityConfigs\ControllerConfig.cs" />
+    <Compile Include="EntityConfigs\CityConfig.cs" />
+    <Compile Include="EntityConfigs\EducationYearConfig.cs" />
+    <Compile Include="EntityConfigs\StudentConfig.cs" />
+    <Compile Include="EntityConfigs\RoleConfig.cs" />
+    <Compile Include="EntityConfigs\TeacherConfig.cs" />
+    <Compile Include="EntityConfigs\UserConfig.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NasleGhalam.Common\NasleGhalam.Common.csproj">
+      <Project>{f383db37-6c98-4fc8-a8ae-5c3bbf62a998}</Project>
+      <Name>NasleGhalam.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

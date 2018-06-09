@@ -1,0 +1,102 @@
+﻿<#@ template debug="true" hostSpecific="true" language="C#"  #>
+<#@ output extension=".cs" encoding="utf-8" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Reflection" #>
+<#
+	string modelName = "EducationGroup";
+	string instanceName = "educationGroup";
+#>
+using System.Web.Http;
+using NasleGhalam.Common;
+using NasleGhalam.ServiceLayer.Services;
+using NasleGhalam.WebApi.FilterAttribute;
+using NasleGhalam.ViewModels.<#= modelName #>;
+
+namespace NasleGhalam.WebApi.Controllers
+{
+    /// <inheritdoc />
+	/// <author>
+	///     name: 
+	///     date: 
+	/// </author>
+	public class <#= modelName #>Controller : ApiController
+	{
+		private const short ReadAccess = -1;
+        private const short CreateAccess = -1;
+        private const short UpdateAccess = -1;
+        private const short DeleteAccess = -1;
+
+        private readonly <#= modelName #>Service _<#= instanceName #>Service;
+		public <#= modelName #>Controller(<#= modelName #>Service <#= instanceName #>Service)
+        {
+            _<#= instanceName #>Service = <#= instanceName #>Service;
+        }
+
+
+		[HttpGet, CheckUserAccess(ActionBit = new [] { ReadAccess })]
+        public IHttpActionResult GetAll()
+        {
+            return Ok(_<#= instanceName #>Service.GetAll());
+        }
+
+
+		[HttpGet, CheckUserAccess(ActionBit = new [] { ReadAccess })]
+        public IHttpActionResult GetById(int id)
+        {
+            var <#= instanceName #> = _<#= instanceName #>Service.GetById(id);
+            if (<#= instanceName #> == null)
+            {
+                return NotFound();
+            }
+            return Ok(<#= instanceName #>);
+        }
+
+
+		[HttpPost]
+        [CheckUserAccess(ActionBit = new [] { CreateAccess})]
+        [CheckModelValidation]
+        public IHttpActionResult Create(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
+        {
+            var msgRes = _<#= instanceName #>Service.Create(<#= instanceName #>ViewModel);
+            return Ok(new MessageResultApi
+            {
+                Message = msgRes.FaMessage,
+                MessageType = msgRes.MessageType,
+                Id = msgRes.Id
+            });
+        }
+
+
+        [HttpPost]
+        [CheckUserAccess(ActionBit = new [] { UpdateAccess})]
+        [CheckModelValidation]
+        public IHttpActionResult Update(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
+        {
+            var msgRes = _<#= instanceName #>Service.Update(<#= instanceName #>ViewModel);
+            return Ok(new MessageResultApi
+            {
+                Message = msgRes.FaMessage,
+                MessageType = msgRes.MessageType
+            });
+        }
+
+
+        [HttpPost, CheckUserAccess(ActionBit = new [] {DeleteAccess})]
+        public IHttpActionResult Delete(int id)
+        {
+            var msgRes = _<#= instanceName #>Service.Delete(id);
+            return Ok(new MessageResultApi
+            {
+                Message = msgRes.FaMessage,
+                MessageType = msgRes.MessageType
+            });
+        }
+	}
+}

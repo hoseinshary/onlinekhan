@@ -116,7 +116,10 @@ namespace NasleGhalam.ServiceLayer.Jwt
         }
 
 
-        public static string CreateToken(byte roleLevel, bool isAdmin, int user_id, string user_access, int region_id)
+        public static string CreateToken(byte roleLevel, 
+            bool isAdmin, 
+            int user_id, 
+            string user_access)
         {
             long expire = DateTime.Now.ToUniversalTime().AddMinutes(6000).Ticks;
 
@@ -124,11 +127,10 @@ namespace NasleGhalam.ServiceLayer.Jwt
             {
                 Access = user_access,
                 Exp = expire,
-                Value = String.Format("{0}_{1}_{2}_{3}",
+                Value = string.Format("{0}_{1}_{2}",
                     roleLevel,
                     isAdmin,
-                    user_id, 
-                    region_id)
+                    user_id)
             };
 
             return Encode(payload, JwtHashAlgorithm.HS512);

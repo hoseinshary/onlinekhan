@@ -28,11 +28,6 @@ namespace NasleGhalam.WebApi.Controllers
 	/// </author>
 	public class <#= modelName #>Controller : ApiController
 	{
-		private const short ReadAccess = -1;
-        private const short CreateAccess = -1;
-        private const short UpdateAccess = -1;
-        private const short DeleteAccess = -1;
-
         private readonly <#= modelName #>Service _<#= instanceName #>Service;
 		public <#= modelName #>Controller(<#= modelName #>Service <#= instanceName #>Service)
         {
@@ -40,14 +35,14 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBit = new [] { ReadAccess })]
+		[HttpGet, CheckUserAccess(ActionBits.<#= modelName #>ReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_<#= instanceName #>Service.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBit = new [] { ReadAccess })]
+		[HttpGet, CheckUserAccess(ActionBits.<#= modelName #>ReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var <#= instanceName #> = _<#= instanceName #>Service.GetById(id);
@@ -60,7 +55,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBit = new [] { CreateAccess})]
+        [CheckUserAccess(ActionBits.<#= modelName #>CreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
         {
@@ -75,7 +70,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBit = new [] { UpdateAccess})]
+        [CheckUserAccess(ActionBits.<#= modelName #>UpdateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Update(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
         {
@@ -88,7 +83,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBit = new [] {DeleteAccess})]
+        [HttpPost, CheckUserAccess(ActionBits.<#= modelName #>DeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _<#= instanceName #>Service.Delete(id);

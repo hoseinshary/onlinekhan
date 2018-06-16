@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionBitsEnum.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="MessageResult.cs" />
     <Compile Include="MessageResultApi.cs" />

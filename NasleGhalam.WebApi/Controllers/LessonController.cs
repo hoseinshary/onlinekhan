@@ -13,11 +13,6 @@ namespace NasleGhalam.WebApi.Controllers
 	/// </author>
 	public class LessonController : ApiController
     {
-        private const short ReadAccess = 1;
-        private const short CreateAccess = 2;
-        private const short UpdateAccess = 3;
-        private const short DeleteAccess = 4;
-
         private readonly LessonService _lessonService;
         public LessonController(LessonService lessonService)
         {
@@ -25,14 +20,14 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBit = new[] { ReadAccess })]
+        [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_lessonService.GetAll());
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBit = new[] { ReadAccess })]
+        [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var lesson = _lessonService.GetById(id);
@@ -45,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBit = new[] { CreateAccess })]
+        [CheckUserAccess(ActionBits.LessonCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(LessonViewModel lessonViewModel)
         {
@@ -60,7 +55,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBit = new[] { UpdateAccess })]
+        [CheckUserAccess(ActionBits.LessonUpdateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Update(LessonViewModel lessonViewModel)
         {
@@ -73,7 +68,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBit = new[] { DeleteAccess })]
+        [HttpPost, CheckUserAccess(ActionBits.LessonDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _lessonService.Delete(id);

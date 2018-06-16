@@ -12,11 +12,15 @@ namespace NasleGhalam.WebApi.FilterAttribute
 {
     public class CheckUserAccess : ActionFilterAttribute
     {
-        public short[] ActionBit { set; get; }
+        private readonly short[] _actionBits;
+        public CheckUserAccess(params ActionBits[] actionBits)
+        {
+            _actionBits = actionBits.Select(current => (short)current).ToArray();
+        }
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            return;
+            //return;
             bool isAuthenticated = false;
 
             string token = null;
@@ -30,18 +34,20 @@ namespace NasleGhalam.WebApi.FilterAttribute
             {
                 try
                 {
-                    // if valid token...
+                    // decode token and convert to JwtPayload
                     var jsonPayload = JsonWebToken.Decode(token);
                     long tick = DateTime.Now.ToUniversalTime().Ticks;
 
                     //if token does not expire
                     if (jsonPayload.Exp > tick)
                     {
-                        if (ActionBit.Any()) // if public action 
+                        // if public action 
+                        if (_actionBits == null || _actionBits.Length == 0) 
                         {
                             isAuthenticated = true;
                         }
-                        else if (Utility.HasAccess(jsonPayload.Access, ActionBit)) // if token has access to this action
+                        // if token has access to this action
+                        else if (Utility.HasAccess(jsonPayload.Access, _actionBits)) 
                         {
                             isAuthenticated = true;
                         }

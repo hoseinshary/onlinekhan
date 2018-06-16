@@ -13,11 +13,6 @@ namespace NasleGhalam.WebApi.Controllers
 	/// </author>
 	public class EducationGroupController : ApiController
 	{
-		private const short ReadAccess = -1;
-        private const short CreateAccess = -1;
-        private const short UpdateAccess = -1;
-        private const short DeleteAccess = -1;
-
         private readonly EducationGroupService _educationGroupService;
 		public EducationGroupController(EducationGroupService educationGroupService)
         {
@@ -25,14 +20,14 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBit = new [] { ReadAccess })]
+		[HttpGet, CheckUserAccess(ActionBits.EducationGroupReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_educationGroupService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBit = new [] { ReadAccess })]
+		[HttpGet, CheckUserAccess(ActionBits.EducationGroupReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var educationGroup = _educationGroupService.GetById(id);
@@ -45,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBit = new [] { CreateAccess})]
+        [CheckUserAccess(ActionBits.EducationGroupCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(EducationGroupViewModel educationGroupViewModel)
         {
@@ -60,7 +55,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBit = new [] { UpdateAccess})]
+        [CheckUserAccess(ActionBits.EducationGroupUpdateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Update(EducationGroupViewModel educationGroupViewModel)
         {
@@ -73,7 +68,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBit = new [] {DeleteAccess})]
+        [HttpPost, CheckUserAccess(ActionBits.EducationGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _educationGroupService.Delete(id);

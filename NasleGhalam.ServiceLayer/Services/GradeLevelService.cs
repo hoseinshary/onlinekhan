@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.GradeLevel;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class GradeLevelService
-	{
-		private const string Title = "پایه";
+    public class GradeLevelService
+    {
+        private const string Title = "پایه";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<GradeLevel> _gradeLevels;
-       
-	    public GradeLevelService(IUnitOfWork uow)
+
+        public GradeLevelService(IUnitOfWork uow)
         {
             _uow = uow;
             _gradeLevels = uow.Set<GradeLevel>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  پایه با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -40,7 +40,7 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه پایه ها
         /// </summary>
         /// <returns></returns>
@@ -53,7 +53,7 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت پایه
         /// </summary>
         /// <param name="gradeLevelViewModel"></param>
@@ -63,13 +63,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
             _gradeLevels.Add(gradeLevel);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = gradeLevel.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = gradeLevel.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش پایه
         /// </summary>
         /// <param name="gradeLevelViewModel"></param>
@@ -82,14 +82,14 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف پایه
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  gradeLevelViewModel = GetById(id);
+            var gradeLevelViewModel = GetById(id);
             if (gradeLevelViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -113,5 +113,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

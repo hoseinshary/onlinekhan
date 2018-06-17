@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Lesson
+namespace NasleGhalam.ViewModels.Province
 {
-    public class LessonViewModel
+    public class ProvinceViewModel
     {
+   
         public int Id { get; set; }
 
 
@@ -11,7 +12,9 @@ namespace NasleGhalam.ViewModels.Lesson
         public string Name { get; set; }
 
 
-        [Display(Name = "اختصاصی")]
-        public bool IsMain { get; set; }
+        [Display(Name = "پیش شماره")]
+        public string Code { get; set; }
+
+
     }
 }

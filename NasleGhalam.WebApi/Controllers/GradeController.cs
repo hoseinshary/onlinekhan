@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.GradeLevel;
+using NasleGhalam.ViewModels.Grade;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -11,40 +11,40 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class GradeLevelController : ApiController
-	{
-        private readonly GradeLevelService _gradeLevelService;
-		public GradeLevelController(GradeLevelService gradeLevelService)
+	public class GradeController : ApiController
+    {
+        private readonly GradeService _gradeService;
+        public GradeController(GradeService gradeService)
         {
-            _gradeLevelService = gradeLevelService;
+            _gradeService = gradeService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.GradeReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_gradeLevelService.GetAll());
+            return Ok(_gradeService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.GradeReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var gradeLevel = _gradeLevelService.GetById(id);
-            if (gradeLevel == null)
+            var grade = _gradeService.GetById(id);
+            if (grade == null)
             {
                 return NotFound();
             }
-            return Ok(gradeLevel);
+            return Ok(grade);
         }
 
 
-		[HttpPost]
-        [CheckUserAccess(ActionBits.GradeLevelCreateAccess)]
+        [HttpPost]
+        [CheckUserAccess(ActionBits.GradeCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(GradeLevelViewModel gradeLevelViewModel)
+        public IHttpActionResult Create(GradeViewModel gradeViewModel)
         {
-            var msgRes = _gradeLevelService.Create(gradeLevelViewModel);
+            var msgRes = _gradeService.Create(gradeViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -55,11 +55,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.GradeLevelUpdateAccess)]
+        [CheckUserAccess(ActionBits.GradeUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(GradeLevelViewModel gradeLevelViewModel)
+        public IHttpActionResult Update(GradeViewModel gradeViewModel)
         {
-            var msgRes = _gradeLevelService.Update(gradeLevelViewModel);
+            var msgRes = _gradeService.Update(gradeViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -68,15 +68,15 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.GradeLevelDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.GradeDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _gradeLevelService.Delete(id);
+            var msgRes = _gradeService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.GradeLevel;
+using NasleGhalam.ViewModels.City;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -11,40 +11,40 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class GradeLevelController : ApiController
-	{
-        private readonly GradeLevelService _gradeLevelService;
-		public GradeLevelController(GradeLevelService gradeLevelService)
+	public class CityController : ApiController
+    {
+        private readonly CityService _cityService;
+        public CityController(CityService cityService)
         {
-            _gradeLevelService = gradeLevelService;
+            _cityService = cityService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_gradeLevelService.GetAll());
+            return Ok(_cityService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var gradeLevel = _gradeLevelService.GetById(id);
-            if (gradeLevel == null)
+            var city = _cityService.GetById(id);
+            if (city == null)
             {
                 return NotFound();
             }
-            return Ok(gradeLevel);
+            return Ok(city);
         }
 
 
-		[HttpPost]
-        [CheckUserAccess(ActionBits.GradeLevelCreateAccess)]
+        [HttpPost]
+        [CheckUserAccess(ActionBits.CityCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(GradeLevelViewModel gradeLevelViewModel)
+        public IHttpActionResult Create(CityViewModel cityViewModel)
         {
-            var msgRes = _gradeLevelService.Create(gradeLevelViewModel);
+            var msgRes = _cityService.Create(cityViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -55,11 +55,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.GradeLevelUpdateAccess)]
+        [CheckUserAccess(ActionBits.CityUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(GradeLevelViewModel gradeLevelViewModel)
+        public IHttpActionResult Update(CityViewModel cityViewModel)
         {
-            var msgRes = _gradeLevelService.Update(gradeLevelViewModel);
+            var msgRes = _cityService.Update(cityViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -68,15 +68,15 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.GradeLevelDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.CityDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _gradeLevelService.Delete(id);
+            var msgRes = _cityService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

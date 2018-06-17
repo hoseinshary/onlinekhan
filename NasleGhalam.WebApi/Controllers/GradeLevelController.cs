@@ -12,22 +12,22 @@ namespace NasleGhalam.WebApi.Controllers
 	///     date: 
 	/// </author>
 	public class GradeLevelController : ApiController
-	{
+    {
         private readonly GradeLevelService _gradeLevelService;
-		public GradeLevelController(GradeLevelService gradeLevelService)
+        public GradeLevelController(GradeLevelService gradeLevelService)
         {
             _gradeLevelService = gradeLevelService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_gradeLevelService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var gradeLevel = _gradeLevelService.GetById(id);
@@ -39,7 +39,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.GradeLevelCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(GradeLevelViewModel gradeLevelViewModel)
@@ -78,5 +78,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

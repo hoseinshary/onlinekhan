@@ -111,8 +111,12 @@
     </None>
     <Compile Include="App_Start\StructureMapHttpControllerActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\EducationGroupController.cs" />
+    <Compile Include="Controllers\GradeController.cs" />
+    <Compile Include="Controllers\GradeLevelController.cs" />
     <Compile Include="Controllers\LessonController.cs" />
+    <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Extentions\RequestExtention.cs" />
     <Compile Include="FilterAttribute\CheckModelValidation.cs" />
     <Compile Include="FilterAttribute\CheckUserAccess.cs" />
@@ -162,7 +166,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63839</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

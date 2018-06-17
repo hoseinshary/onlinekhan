@@ -12,13 +12,16 @@ namespace NasleGhalam.ViewModels.GradeLevel
         public string Name { get; set; }
 
 
-        [Display(Name = "")]
+        [Display(Name = "اولویت نمایش")]
         public byte Priority { get; set; }
 
 
         [Display(Name = "مقطع")]
         public int GradeId { get; set; }
 
+
+        [Display(Name = "مقطع")]
+        public string GradeName{ get; set; }
 
     }
 }

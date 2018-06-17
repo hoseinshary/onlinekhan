@@ -61,6 +61,10 @@
     <Compile Include="Migrations\201806061509052_init3.Designer.cs">
       <DependentUpon>201806061509052_init3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806171418275_addTopicQuestion.cs" />
+    <Compile Include="Migrations\201806171418275_addTopicQuestion.Designer.cs">
+      <DependentUpon>201806171418275_addTopicQuestion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -87,6 +91,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806061509052_init3.resx">
       <DependentUpon>201806061509052_init3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806171418275_addTopicQuestion.resx">
+      <DependentUpon>201806171418275_addTopicQuestion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

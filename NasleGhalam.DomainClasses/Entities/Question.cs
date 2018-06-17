@@ -15,6 +15,7 @@ namespace NasleGhalam.DomainClasses.Entities
             Tags = new HashSet<Tag>();
             Boxes = new HashSet<Box>();
             Answers = new HashSet<QuestionAnswer>();
+            Topics = new HashSet<Topic>();
         }
         public int Id { get; set; }
 
@@ -65,5 +66,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public virtual ICollection<Box> Boxes { get; set; }
 
         public virtual ICollection<QuestionAnswer> Answers { get; set; }
+
+        public virtual ICollection<Topic> Topics { get; set; }
     }
 }

@@ -29,6 +29,17 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                     config.MapRightKey("EducationBookId");
                     config.ToTable("Topics_EducationBooks");
                 });
+
+
+            this.HasMany(x => x.Questions)
+                .WithMany(x => x.Topics)
+                .Map(config =>
+                {
+                    config.MapLeftKey("TopicId");
+                    config.MapRightKey("QuestionId");
+                    config.ToTable("Topics_Questions");
+                });
+
         }
     }
 }

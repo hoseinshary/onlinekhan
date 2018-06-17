@@ -32,8 +32,14 @@ namespace NasleGhalam.ViewModels.EducationBook
         public int GradeLevelId { get; set; }
 
 
-        [Display(Name = "")]
+        [Display(Name = "پایه")]
+        public string GradeLevelName { get; set; }
+
+        [Display(Name = "درس")]
         public int EducationGroup_LessonId { get; set; }
+
+        [Display(Name = "درس")]
+        public string  LessonName { get; set; }
 
 
     }

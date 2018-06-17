@@ -16,5 +16,10 @@ namespace NasleGhalam.ViewModels.City
         public int ProvinceId { get; set; }
 
 
+
+        [Display(Name = "استان")]
+        public string ProvinceName { get; set; }
+
+
     }
 }

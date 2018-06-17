@@ -1,20 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Question
+namespace NasleGhalam.ViewModels.Grade
 {
-	public class QuestionViewModel
+	public class GradeViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public string Context { get; set; }
+		public string Name { get; set; }
 
 
 		[Display(Name = "")]
-		public int QuestionNumber { get; set; }
+		public byte Priority { get; set; }
 
 
-		[Display(Name = "")]
-		public 
+	}
+}

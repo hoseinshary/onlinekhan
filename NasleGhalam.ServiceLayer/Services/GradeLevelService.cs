@@ -35,7 +35,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new GradeLevelViewModel
                 {
-                    Id = current.Id
+                    Id = current.Id,
+                    
                 }).FirstOrDefault();
         }
 
@@ -49,6 +50,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _gradeLevels.Select(current => new GradeLevelViewModel()
             {
                 Id = current.Id,
+                GradeName = current.Grade.Name
             }).ToList();
         }
 

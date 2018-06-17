@@ -7,33 +7,33 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.GradeLevel;
+using NasleGhalam.ViewModels.EducationGroup_Lesson;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class GradeLevelService
+	public class EducationGroup_LessonService
 	{
-		private const string Title = "پایه";
+		private const string Title = "رابط گروه آموزشی درس";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<GradeLevel> _gradeLevels;
+        private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lessons;
        
-	    public GradeLevelService(IUnitOfWork uow)
+	    public EducationGroup_LessonService(IUnitOfWork uow)
         {
             _uow = uow;
-            _gradeLevels = uow.Set<GradeLevel>();
+            _educationGroup_Lessons = uow.Set<EducationGroup_Lesson>();
         }
 
 
 		/// <summary>
-        /// گرفتن  پایه با آی دی
+        /// گرفتن  رابط گروه آموزشی درس با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public GradeLevelViewModel GetById(int id)
+        public EducationGroup_LessonViewModel GetById(int id)
         {
-            return _gradeLevels
+            return _educationGroup_Lessons
                 .Where(current => current.Id == id)
-                .Select(current => new GradeLevelViewModel
+                .Select(current => new EducationGroup_LessonViewModel
                 {
                     Id = current.Id
                 }).FirstOrDefault();
@@ -41,12 +41,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// گرفتن همه پایه ها
+        /// گرفتن همه رابط گروه آموزشی درس ها
         /// </summary>
         /// <returns></returns>
-        public IList<GradeLevelViewModel> GetAll()
+        public IList<EducationGroup_LessonViewModel> GetAll()
         {
-            return _gradeLevels.Select(current => new GradeLevelViewModel()
+            return _educationGroup_Lessons.Select(current => new EducationGroup_LessonViewModel()
             {
                 Id = current.Id,
             }).ToList();
@@ -54,60 +54,60 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// ثبت پایه
+        /// ثبت رابط گروه آموزشی درس
         /// </summary>
-        /// <param name="gradeLevelViewModel"></param>
+        /// <param name="educationGroup_LessonViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(GradeLevelViewModel gradeLevelViewModel)
+        public MessageResult Create(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
         {
-            var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
-            _gradeLevels.Add(gradeLevel);
+            var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
+            _educationGroup_Lessons.Add(educationGroup_Lesson);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = gradeLevel.Id;
+			msgRes.Id = educationGroup_Lesson.Id;
             return msgRes;
         }
 
 
 		/// <summary>
-        /// ویرایش پایه
+        /// ویرایش رابط گروه آموزشی درس
         /// </summary>
-        /// <param name="gradeLevelViewModel"></param>
+        /// <param name="educationGroup_LessonViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(GradeLevelViewModel gradeLevelViewModel)
+        public MessageResult Update(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
         {
-            var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
-            _uow.MarkAsChanged(gradeLevel);
+            var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
+            _uow.MarkAsChanged(educationGroup_Lesson);
             return _uow.CommitChanges(CrudType.Update, Title);
         }
 
 
 		/// <summary>
-        /// حذف پایه
+        /// حذف رابط گروه آموزشی درس
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  gradeLevelViewModel = GetById(id);
-            if (gradeLevelViewModel == null)
+			var  educationGroup_LessonViewModel = GetById(id);
+            if (educationGroup_LessonViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
-            _uow.MarkAsDeleted(gradeLevel);
+            var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
+            _uow.MarkAsDeleted(educationGroup_Lesson);
             return _uow.CommitChanges(CrudType.Delete, Title);
         }
 
 
         /// <summary>
-        /// گرفتن همه پایه ها برای لیست کشویی
+        /// گرفتن همه رابط گروه آموزشی درس ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _gradeLevels.Select(current => new SelectViewModel
+            return _educationGroup_Lessons.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

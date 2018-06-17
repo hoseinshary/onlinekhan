@@ -12,7 +12,7 @@ namespace NasleGhalam.ViewModels.Grade
         public string Name { get; set; }
 
 
-        [Display(Name = "")]
+        [Display(Name = "اولویت نمایش")]
         public byte Priority { get; set; }
 
 

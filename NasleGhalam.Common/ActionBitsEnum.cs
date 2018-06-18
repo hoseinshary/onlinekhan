@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NasleGhalam.Common
+﻿namespace NasleGhalam.Common
 {
     public enum ActionBits
     {
@@ -39,5 +33,16 @@ namespace NasleGhalam.Common
         GradeLevelCreateAccess = 22,
         GradeLevelUpdateAccess = 23,
         GradeLevelDeleteAccess = 24,
+
+        RoleReadAccess = 25,
+        RoleCreateAccess = 26,
+        RoleUpdateAccess = 27,
+        RoleDeleteAccess = 28,
+        RoleChangeAccess = 29,
+
+        UserReadAccess = 30,
+        UserCreateAccess = 31,
+        UserUpdateAccess = 32,
+        UserDeleteAccess = 33
     }
 }

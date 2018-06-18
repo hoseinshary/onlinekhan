@@ -39,6 +39,7 @@ project.lock.json
 *.pyc
 nupkg/
 
+
 # Visual Studio Code
 .vscode
 

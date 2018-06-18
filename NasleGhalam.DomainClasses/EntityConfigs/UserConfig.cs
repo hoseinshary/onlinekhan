@@ -11,11 +11,12 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             this.Property(x => x.Name).HasMaxLength(50).IsRequired();
             this.Property(x => x.Family).HasMaxLength(50).IsRequired();
             this.Property(x => x.Username).HasMaxLength(50).IsRequired();
+            this.HasIndex(x => x.Username).IsUnique().HasName("UK_User_Username");
             this.Property(x => x.Password).HasMaxLength(50).IsRequired();
-            this.HasIndex(x => x.Username).IsUnique();
             this.Property(x => x.NationalNo).HasMaxLength(10);
             this.Property(x => x.Phone).HasMaxLength(8);
             this.Property(x => x.Mobile).HasMaxLength(10);
+
 
             this.HasRequired(x => x.Role)
                 .WithMany(x => x.Users)

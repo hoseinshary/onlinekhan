@@ -10,10 +10,10 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Reflection" #>
 <#@ import namespace="NasleGhalam.DomainClasses.Entities" #>
-<#@ assembly name="C:\Users\hosein\source\repos\nasleghalam\NasleGhalam.DomainClasses\bin\Debug\NasleGhalam.DomainClasses.dll" #>
+<#@ assembly name="$(SolutionDir)\NasleGhalam.DomainClasses\bin\Debug\NasleGhalam.DomainClasses.dll" #>
 <#
-	string modelName = "Grade";
-	var modelProps = typeof(Grade).GetProperties();
+	string modelName = "GradeLevel";
+	var modelProps = typeof(Question).GetProperties();
 
 	Dictionary<Type, string> Aliases = new Dictionary<Type, string>()
     {
@@ -64,7 +64,7 @@ namespace NasleGhalam.ViewModels.<#= modelName #>
 				}
 #>
 		[Display(Name = "")]
-		public <#= Aliases[prop.PropertyType] #> <#= prop.Name #> { get; set; }
+		public <#= Aliases.ContainsKey(prop.PropertyType)? Aliases[prop.PropertyType]:prop.PropertyType.Name #> <#= prop.Name #> { get; set; }
 
 
 <#

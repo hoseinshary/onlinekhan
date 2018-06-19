@@ -39,6 +39,7 @@ project.lock.json
 *.pyc
 nupkg/
 
+
 # Visual Studio Code
 .vscode
 
@@ -78,6 +79,29 @@ yarn-error.log
 
 # Editor directories and files
 .idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.png
+
+# Client App 
+.quasar
+.DS_Store
+.thumbs.db
+node_modules
+/dist
+/src-cordova/platforms
+/src-cordova/plugins
+/src-cordova/www
+.gi  t
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
 *.suo
 *.ntvs*
 *.njsproj

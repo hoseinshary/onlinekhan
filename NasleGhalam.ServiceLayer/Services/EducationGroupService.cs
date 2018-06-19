@@ -36,7 +36,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(current => new EducationGroupViewModel
                 {
                     Id = current.Id,
-                    Name = current.Name
+                    Name = current.Name,
                 }).FirstOrDefault();
         }
 

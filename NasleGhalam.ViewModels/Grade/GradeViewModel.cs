@@ -9,10 +9,13 @@ namespace NasleGhalam.ViewModels.Grade
 
 
         [Display(Name = "نام")]
+        [Required]
+        [StringLength(50, MinimumLength = 4)]
         public string Name { get; set; }
 
 
         [Display(Name = "اولویت نمایش")]
+        [Required]
         public byte Priority { get; set; }
 
 

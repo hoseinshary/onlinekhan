@@ -63,12 +63,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\CityService.cs" />
     <Compile Include="Services\EducationGroupService.cs" />
     <Compile Include="Services\GradeLevelService.cs" />
     <Compile Include="Services\GradeService.cs" />
     <Compile Include="Services\LessonService.cs" />
-    <Compile Include="Services\ProvinceService.cs" />
     <None Include="%40CodeTemplates\ServiceLayerGenerator1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -53,12 +53,10 @@
       <DependentUpon>ViewModelGenerator.tt</DependentUpon>
     </None>
     <Compile Include="Topic\TopicViewModel.cs" />
-    <Compile Include="City\CityViewModel.cs" />
     <Compile Include="EducationBook\EducationBook.cs" />
     <Compile Include="EducationGroup\ٍEducationGroupViewModel.cs" />
     <Compile Include="GradeLevel\GradeLevelViewModel.cs" />
     <Compile Include="Grade\GradeViewModel.cs" />
-    <Compile Include="Province\ProvinceViewModel.cs" />
     <Compile Include="Question\QuestionViewModel.cs" />
     <Compile Include="SelectViewModel.cs" />
     <Compile Include="Lesson\LessonViewModel.cs" />

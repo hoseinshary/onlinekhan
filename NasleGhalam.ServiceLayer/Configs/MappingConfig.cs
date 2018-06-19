@@ -1,5 +1,8 @@
 ﻿using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Lesson;
+using NasleGhalam.ViewModels.EducationGroup;
+using NasleGhalam.ViewModels.Role;
+using NasleGhalam.ViewModels.User;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -10,10 +13,12 @@ namespace NasleGhalam.ServiceLayer.Configs
             AutoMapper.Mapper.Initialize(config =>
             {
                 config.CreateMap<LessonViewModel, Lesson>();
-                //config.CreateMap<AreaViewModel, Area>();
-                //config.CreateMap<SensorViewModel, Sensor>();
-                //config.CreateMap<RoleViewModel, Role>();
-                //config.CreateMap<UserViewModel, User>();
+                config.CreateMap<EducationGroupViewModel, EducationGroup>();
+        
+                config.CreateMap<RoleViewModel, Role>();
+                config.CreateMap<UserViewModel, User>();
+
+
             });
         }
     }

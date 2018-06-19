@@ -20,10 +20,7 @@
         GradeUpdateAccess = 11,
         GradeDeleteAccess = 12,
 
-        GradeReadAccess = 17,
-        GradeCreateAccess = 18,
-        GradeUpdateAccess = 19,
-        GradeDeleteAccess = 20,
+
 
         GradeLevelReadAccess = 21,
         GradeLevelCreateAccess = 22,

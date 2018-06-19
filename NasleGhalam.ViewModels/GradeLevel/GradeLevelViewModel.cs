@@ -9,18 +9,19 @@ namespace NasleGhalam.ViewModels.GradeLevel
 
 
         [Display(Name = "نام")]
-        [Required]
-        [StringLength(50, MinimumLength = 4)]
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
+        [MinLength(3, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
         public string Name { get; set; }
 
 
         [Display(Name = "اولویت نمایش")]
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         public byte Priority { get; set; }
 
 
         [Display(Name = "مقطع")]
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         public int GradeId { get; set; }
 
 

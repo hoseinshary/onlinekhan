@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Action\ActionViewModel.cs" />
     <Compile Include="Controller\ControllerViewModel .cs" />
+    <Compile Include="EducationGroup_Lesson\EducationGroup_LessonViewModel.cs" />
     <Compile Include="ErrorResources.Designer.cs" />
     <Compile Include="ErrorResources1.Designer.cs">
       <AutoGen>True</AutoGen>

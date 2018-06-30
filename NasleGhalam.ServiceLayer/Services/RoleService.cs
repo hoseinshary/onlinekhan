@@ -117,7 +117,8 @@ namespace NasleGhalam.ServiceLayer.Services
             newRole.SumOfActionBit = oldRole.SumOfActionBit;
 
             _uow.MarkAsChanged(newRole);
-            return _uow.CommitChanges(CrudType.Update, Title);
+           return _uow.CommitChanges(CrudType.Update, Title);
+            
         }
 
 
@@ -137,7 +138,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsDeleted(role);
-            return _uow.CommitChanges(CrudType.Delete, Title);
+            return _uow.CommitChanges(CrudType.Create, Title);
+            
         }
 
 
@@ -197,6 +199,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsChanged(role);
             return _uow.CommitChanges(CrudType.Update, Title);
+            
         }
     }
 }

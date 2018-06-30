@@ -69,7 +69,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.LessonDeleteAccess)]
+        [HttpPost , CheckUserAccess(ActionBits.LessonDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _lessonService.Delete(id);

@@ -82,7 +82,9 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var lesson = Mapper.Map<Lesson>(lessonViewModel);
             _uow.MarkAsChanged(lesson);
-            return _uow.CommitChanges(CrudType.Update, Title);
+
+           return _uow.CommitChanges(CrudType.Update, Title);
+            
         }
 
 
@@ -101,7 +103,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var lesson = Mapper.Map<Lesson>(lessonViewModel);
             _uow.MarkAsDeleted(lesson);
+
             return _uow.CommitChanges(CrudType.Delete, Title);
+            
         }
 
 

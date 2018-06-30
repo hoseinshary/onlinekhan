@@ -93,7 +93,10 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _uow.MarkAsChanged(<#= instanceName #>);
-            return _uow.CommitChanges(CrudType.Update, Title);
+
+			
+			return  _uow.CommitChanges(CrudType.Update, Title);
+			
         }
 
 
@@ -112,7 +115,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _uow.MarkAsDeleted(<#= instanceName #>);
-            return _uow.CommitChanges(CrudType.Delete, Title);
+            
+			return  _uow.CommitChanges(CrudType.Delete, Title);
+			
         }
 
 

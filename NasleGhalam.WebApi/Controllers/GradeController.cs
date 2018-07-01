@@ -8,8 +8,8 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: حسین شریعتمداری
+	///     date: 09/04/1397
 	/// </author>
 	public class GradeController : ApiController
     {

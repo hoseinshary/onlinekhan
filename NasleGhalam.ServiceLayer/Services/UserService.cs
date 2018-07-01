@@ -142,6 +142,8 @@ namespace Matin.Abfa.ServiceLayer.Services
 
             var user = Mapper.Map<User>(userViewModel);
             _uow.MarkAsChanged(user);
+
+
             return _uow.CommitChanges(CrudType.Update, Title);
         }
 
@@ -163,6 +165,7 @@ namespace Matin.Abfa.ServiceLayer.Services
             var user = Mapper.Map<User>(userViewModel);
             _uow.MarkAsDeleted(user);
             return _uow.CommitChanges(CrudType.Delete, Title);
+            
         }
 
 

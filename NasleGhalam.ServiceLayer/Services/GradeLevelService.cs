@@ -84,7 +84,9 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
             _uow.MarkAsChanged(gradeLevel);
+
             return _uow.CommitChanges(CrudType.Update, Title);
+            
         }
 
 
@@ -103,7 +105,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
             _uow.MarkAsDeleted(gradeLevel);
+
             return _uow.CommitChanges(CrudType.Delete, Title);
+            
         }
 
 

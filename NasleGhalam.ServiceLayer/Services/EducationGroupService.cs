@@ -50,7 +50,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _educationGroups.Select(current => new EducationGroupViewModel()
             {
                 Id = current.Id,
-                Name = current.Name
+                Name = current.Name               
             }).ToList();
         }
 

@@ -25,8 +25,9 @@ namespace NasleGhalam.ViewModels.EducationGroup_Lesson
         public string LessonName { get; set; }
 
 
-        public bool isChecked;
+        public bool IsChecked{ get; set; }
 
-
+        
+        
     }
 }

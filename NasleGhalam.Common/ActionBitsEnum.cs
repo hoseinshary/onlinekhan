@@ -21,6 +21,10 @@
         GradeDeleteAccess = 12,
 
 
+        EducationGroup_LessonCreateAccess = 13,
+        EducationGroup_LessonReadAccess = 14,
+        EducationGroup_LessonUpdateAccess = 15,
+        EducationGroup_LessonDeleteAccess = 16,
 
         GradeLevelReadAccess = 21,
         GradeLevelCreateAccess = 22,
@@ -36,6 +40,11 @@
         UserReadAccess = 30,
         UserCreateAccess = 31,
         UserUpdateAccess = 32,
-        UserDeleteAccess = 33
+        UserDeleteAccess = 33,
+
+        TopicCreateAccess = 34,
+        TopicReadAccess = 35,
+        TopicUpdateAccess = 36,
+        TopicDeleteAccess = 37,
     }
 }

@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.GradeLevel;
+using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,40 +12,40 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class GradeLevelController : ApiController
+	public class TopicController : ApiController
 	{
-        private readonly GradeLevelService _gradeLevelService;
-		public GradeLevelController(GradeLevelService gradeLevelService)
+        private readonly TopicService _topicService;
+		public TopicController(TopicService topicService)
         {
-            _gradeLevelService = gradeLevelService;
+            _topicService = topicService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_gradeLevelService.GetAll());
+            return Ok(_topicService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var gradeLevel = _gradeLevelService.GetById(id);
-            if (gradeLevel == null)
+            var topic = _topicService.GetById(id);
+            if (topic == null)
             {
                 return NotFound();
             }
-            return Ok(gradeLevel);
+            return Ok(topic);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.GradeLevelCreateAccess)]
+        [CheckUserAccess(ActionBits.TopicCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(GradeLevelViewModel gradeLevelViewModel)
+        public IHttpActionResult Create(TopicViewModel topicViewModel)
         {
-            var msgRes = _gradeLevelService.Create(gradeLevelViewModel);
+            var msgRes = _topicService.Create(topicViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -56,11 +56,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.GradeLevelUpdateAccess)]
+        [CheckUserAccess(ActionBits.TopicUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(GradeLevelViewModel gradeLevelViewModel)
+        public IHttpActionResult Update(TopicViewModel topicViewModel)
         {
-            var msgRes = _gradeLevelService.Update(gradeLevelViewModel);
+            var msgRes = _topicService.Update(topicViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -69,10 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.GradeLevelDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.TopicDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _gradeLevelService.Delete(id);
+            var msgRes = _topicService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

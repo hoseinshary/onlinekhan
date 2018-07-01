@@ -53,7 +53,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 Id = current.Id,
                 Name = current.Name,
                 IsMain = current.IsMain
-            }).ToList();
+            }).OrderByDescending(m => m.IsMain).ToList();
         }
 
 

@@ -38,6 +38,9 @@ namespace NasleGhalam.ServiceLayer.Services
                     Id = current.Id,
                     Name = current.Name,
                     GradeName = current.Grade.Name,
+                    GradeId = current.GradeId,
+                    Priority = current.Priority
+                    
                     
                 }).FirstOrDefault();
         }
@@ -54,6 +57,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 Id = current.Id,
                 Name = current.Name,
                 GradeName = current.Grade.Name,
+                GradeId = current.GradeId,
+                Priority = current.Priority
 
             }).OrderBy(m => m.Priority).ToList();
         }

@@ -68,7 +68,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewModelGenerator.tt</DependentUpon>
     </None>
-    <Compile Include="Topic\TopicViewModel.cs" />
     <Compile Include="EducationBook\EducationBook.cs" />
     <Compile Include="EducationGroup\ٍEducationGroupViewModel.cs" />
     <Compile Include="GradeLevel\GradeLevelViewModel.cs" />

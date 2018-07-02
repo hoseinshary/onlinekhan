@@ -11,20 +11,22 @@ using NasleGhalam.ViewModels.Province;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class ProvinceService
-	{
-		private const string Title = "استان";
+    public class ProvinceService
+    {
+        private const string Title = "استان";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Province> _provinces;
        
-	    public ProvinceService(IUnitOfWork uow)
+
+        public ProvinceService(IUnitOfWork uow )
         {
             _uow = uow;
             _provinces = uow.Set<Province>();
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  استان با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -35,12 +37,14 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new ProvinceViewModel
                 {
-                    Id = current.Id
+                    Id = current.Id,
+                    Name = current.Name,
+                    Code = current.Code,
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه استان ها
         /// </summary>
         /// <returns></returns>
@@ -49,11 +53,14 @@ namespace NasleGhalam.ServiceLayer.Services
             return _provinces.Select(current => new ProvinceViewModel()
             {
                 Id = current.Id,
+                Name = current.Name,
+                Code = current.Code
+
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت استان
         /// </summary>
         /// <param name="provinceViewModel"></param>
@@ -63,13 +70,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var province = Mapper.Map<Province>(provinceViewModel);
             _provinces.Add(province);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = province.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = province.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش استان
         /// </summary>
         /// <param name="provinceViewModel"></param>
@@ -79,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var province = Mapper.Map<Province>(provinceViewModel);
             _uow.MarkAsChanged(province);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف استان
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  provinceViewModel = GetById(id);
+            var provinceViewModel = GetById(id);
             if (provinceViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -100,9 +107,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var province = Mapper.Map<Province>(provinceViewModel);
             _uow.MarkAsDeleted(province);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
@@ -118,5 +125,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

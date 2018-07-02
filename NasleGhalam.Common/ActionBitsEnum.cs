@@ -26,6 +26,12 @@
         EducationGroup_LessonUpdateAccess = 15,
         EducationGroup_LessonDeleteAccess = 16,
 
+        ProvinceReadAccess = 17,
+        ProvinceCreateAccess = 18,
+        ProvinceUpdateAccess = 19,
+        ProvinceDeleteAccess = 20,
+
+
         GradeLevelReadAccess = 21,
         GradeLevelCreateAccess = 22,
         GradeLevelUpdateAccess = 23,
@@ -46,5 +52,7 @@
         TopicReadAccess = 35,
         TopicUpdateAccess = 36,
         TopicDeleteAccess = 37,
+
+
     }
 }

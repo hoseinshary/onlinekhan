@@ -71,6 +71,7 @@
     <Compile Include="Services\GradeLevelService.cs" />
     <Compile Include="Services\GradeService.cs" />
     <Compile Include="Services\LessonService.cs" />
+    <Compile Include="Services\ProvinceService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\UserService.cs" />
     <None Include="%40CodeTemplates\ServiceLayerGenerator1.cs">

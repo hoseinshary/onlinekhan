@@ -6,6 +6,8 @@ using NasleGhalam.ViewModels.User;
 using NasleGhalam.ViewModels.Grade;
 using NasleGhalam.ViewModels.GradeLevel;
 using NasleGhalam.ViewModels.EducationGroup_Lesson;
+using NasleGhalam.ViewModels.Province;
+
 
 
 namespace NasleGhalam.ServiceLayer.Configs
@@ -25,6 +27,8 @@ namespace NasleGhalam.ServiceLayer.Configs
 
                 config.CreateMap<GradeViewModel, Grade>() ;
                 config.CreateMap<GradeLevelViewModel, GradeLevel>();
+
+                config.CreateMap<ProvinceViewModel, Province>();
 
 
             });

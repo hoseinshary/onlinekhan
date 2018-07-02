@@ -13,6 +13,7 @@ namespace NasleGhalam.ServiceLayer.Services
 {
     public class EducationGroup_LessonService
     {
+
         private const string Title = "رابط گروه آموزشی درس";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lessons;

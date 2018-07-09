@@ -50,7 +50,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _educationGroups.Select(current => new EducationGroupViewModel()
             {
                 Id = current.Id,
-                Name = current.Name
+                Name = current.Name               
             }).ToList();
         }
 
@@ -81,6 +81,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _uow.MarkAsChanged(educationGroup);
             return _uow.CommitChanges(CrudType.Update, Title);
+            
         }
 
 
@@ -100,6 +101,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _uow.MarkAsDeleted(educationGroup);
             return _uow.CommitChanges(CrudType.Delete, Title);
+            
         }
 
 

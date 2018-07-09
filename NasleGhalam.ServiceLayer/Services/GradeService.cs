@@ -37,6 +37,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Name = current.Name,
+                    Priority = current.Priority,
                     
                 }).FirstOrDefault();
         }
@@ -52,7 +53,8 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 Id = current.Id,
                 Name = current.Name,
-            }).OrderBy(m => m.Priority).ToList();
+                Priority = current.Priority
+            }).OrderBy(current => current.Priority ).ToList();
         }
 
 
@@ -82,6 +84,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var grade = Mapper.Map<Grade>(gradeViewModel);
             _uow.MarkAsChanged(grade);
             return _uow.CommitChanges(CrudType.Update, Title);
+            
         }
 
 
@@ -101,6 +104,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var grade = Mapper.Map<Grade>(gradeViewModel);
             _uow.MarkAsDeleted(grade);
             return _uow.CommitChanges(CrudType.Delete, Title);
+            
         }
 
 

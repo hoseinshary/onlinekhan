@@ -49,12 +49,14 @@
   <ItemGroup>
     <Compile Include="Action\ActionViewModel.cs" />
     <Compile Include="Controller\ControllerViewModel .cs" />
+    <Compile Include="EducationGroup_Lesson\EducationGroup_LessonViewModel.cs" />
     <Compile Include="ErrorResources.Designer.cs" />
     <Compile Include="ErrorResources1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Province\ProvinceViewModel.cs" />
     <Compile Include="Role\RoleAccessViewModel.cs" />
     <Compile Include="Role\RoleViewModel.cs" />
     <Compile Include="User\LoginResultViewModel.cs" />
@@ -67,7 +69,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewModelGenerator.tt</DependentUpon>
     </None>
-    <Compile Include="Topic\TopicViewModel.cs" />
     <Compile Include="EducationBook\EducationBook.cs" />
     <Compile Include="EducationGroup\ٍEducationGroupViewModel.cs" />
     <Compile Include="GradeLevel\GradeLevelViewModel.cs" />
@@ -102,5 +103,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,26 +9,26 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 11/4/1397
 	/// </author>
 	public class ProvinceController : ApiController
-	{
+    {
         private readonly ProvinceService _provinceService;
-		public ProvinceController(ProvinceService provinceService)
+        public ProvinceController(ProvinceService provinceService)
         {
             _provinceService = provinceService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.ProvinceReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.ProvinceReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_provinceService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.ProvinceReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.ProvinceReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var province = _provinceService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.ProvinceCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(ProvinceViewModel provinceViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

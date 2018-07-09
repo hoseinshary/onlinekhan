@@ -4,18 +4,20 @@ namespace NasleGhalam.ViewModels.Province
 {
     public class ProvinceViewModel
     {
+        
         public int Id { get; set; }
 
 
+        [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        [Display(Name = "نام")]
         public string Name { get; set; }
+    
 
-
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [Display(Name = "کد")]
         [MaxLength(5, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        [Display(Name = "پیش شماره")]
         public string Code { get; set; }
+
+
     }
 }

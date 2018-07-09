@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Vazir';
+  src: url("./fonts/Vazir-persian-digits-overwrite.woff");
+}
+
+html,
+body {
+  font-family: 'Vazir';
+  font-size: 11px;
+  height: 100%;
+  background-color: #ecf0f5;
+}

@@ -1,48 +1,97 @@
-var path = require("path");
 // Configuration for your app
+const path = require('path')
 
-module.exports = function(ctx) {
+module.exports = function(
+  ctx
+) {
   return {
     // app plugins (/src/plugins)
-    plugins: ["i18n", "axios", "eventhub", "vuelidate"],
-    css: ["app.styl"],
+    plugins: [
+      'i18n',
+      'axios',
+      'vuelidate',
+      'main'
+    ],
+    css: ['app.styl'],
     extras: [
-      ctx.theme.mat ? "roboto-font" : null,
-      "material-icons"
+      ctx.theme.mat
+        ? 'roboto-font'
+        : null,
+      'material-icons' // optional, you are not bound to it
       // 'ionicons',
       // 'mdi',
       // 'fontawesome'
     ],
     supportIE: true,
-    vendor: {
-      add: [],
-      remove: []
-    },
     build: {
-      scopeHoisting: true,
-      vueRouterMode: "history",
       rtl: true,
+      scopeHoisting: true,
+      vueRouterMode:
+        'history',
+      // vueCompiler: true,
       // gzip: true,
       // analyze: true,
       // extractCSS: false,
-      // useNotifier: false,
-      extendWebpack(cfg) {
-        // cfg.module.rules.push({
-        //   enforce: 'pre',
-        //   test: /\.(js|vue)$/,
-        //   loader: 'eslint-loader',
-        //   exclude: /(node_modules|quasar)/
-        // })
+      extendWebpack(
+        cfg
+      ) {
+        var rules =
+          cfg.module
+            .rules
+
+        rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader:
+            'eslint-loader',
+          exclude: /(node_modules|quasar)/
+        })
+        // rules.push({
+        //   test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        //   loader: "url-loader?limit=10000&mimetype=application/font-woff"
+        // });
+        rules.push({
+          test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          loader:
+            'file-loader'
+        })
 
         cfg.resolve.alias = {
-          ...cfg.resolve.alias,
-          assets: path.resolve(__dirname, "./src/assets/"),
-          components: path.resolve(__dirname, "./src/components/"),
-          serviceLayers: path.resolve(__dirname, "./src/serviceLayers/"),
-          utilities: path.resolve(__dirname, "./src/utilities/"),
-          views: path.resolve(__dirname, "./src/views/"),
-          store: path.resolve(__dirname, "./src/store/")
-        };
+          ...cfg.resolve
+            .alias,
+          assets: path.resolve(
+            __dirname,
+            './src/assets/'
+          ),
+          components: path.resolve(
+            __dirname,
+            './src/components/'
+          ),
+          serviceLayers: path.resolve(
+            __dirname,
+            './src/serviceLayers/'
+          ),
+          utilities: path.resolve(
+            __dirname,
+            './src/utilities/'
+          ),
+          views: path.resolve(
+            __dirname,
+            './src/views/'
+          ),
+          viewModels: path.resolve(
+            __dirname,
+            './src/viewModels/'
+          ),
+          plugins: path.resolve(
+            __dirname,
+            './src/plugins/'
+          ),
+          store: path.resolve(
+            __dirname,
+            './src/store/'
+          )
+        }
       }
     },
     devServer: {
@@ -53,93 +102,101 @@ module.exports = function(ctx) {
     // framework: 'all' --- includes everything; for dev only!
     framework: {
       components: [
-        "QLayout",
-        "QLayoutHeader",
-        "QLayoutDrawer",
-        "QPageContainer",
-        "QPage",
-        "QToolbar",
-        "QToolbarTitle",
-        "QBtn",
-        "QIcon",
-        "QList",
-        "QListHeader",
-        "QItem",
-        "QItemMain",
-        "QItemSide",
-        "QField",
-        "QInput",
-        "QBtn",
-        "QModal",
-        "QModalLayout",
-        "QSearch",
-        "QChip",
-        "QTooltip",
-        "QSelect",
-        "QTabs",
-        "QTab",
-        "QTabPane",
-        "QRouteTab",
-        "QScrollArea",
-        "QLayoutFooter",
-        "QTree",
-        "QTable",
-        "QTh",
-        "QTr",
-        "QTd",
-        "QTableColumns",
-        "QSearch",
-        "QSelect",
-        "QBtnDropdown",
-        "Notify",
-        "QPopover",
-        "Loading",
-        "QToggle",
-        "QCollapsible"
+        'QLayout',
+        'QLayoutHeader',
+        'QLayoutDrawer',
+        'QPageContainer',
+        'QPage',
+        'QToolbar',
+        'QToolbarTitle',
+        'QBtn',
+        'QIcon',
+        'QList',
+        'QListHeader',
+        'QItem',
+        'QItemMain',
+        'QItemSide',
+        'QModal',
+        'QModalLayout',
+        'QInput',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardSeparator',
+        'QField',
+        'QSelect',
+        'QRadio',
+        'QCheckbox',
+        'QToggle'
       ],
-      directives: ["Ripple", "CloseOverlay"],
+      directives: [
+        'Ripple',
+        'CloseOverlay'
+      ],
       // Quasar plugins
-      plugins: ["Notify", "LocalStorage"],
-      i18n: "fa-ir"
+      plugins: [
+        'Notify'
+      ],
+      // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+      i18n: 'fa-ir' // Quasar language
     },
     // animations: 'all' --- includes all animations
-    animations: "all",
+    animations: [],
     pwa: {
-      cacheExt:
-        "js,html,css,ttf,eot,otf,woff,woff2,json,svg,gif,jpg,jpeg,png,wav,ogg,webm,flac,aac,mp4,mp3",
+      // workboxPluginMode: 'InjectManifest',
+      // workboxOptions: {},
       manifest: {
         // name: 'Quasar App',
         // short_name: 'Quasar-PWA',
         // description: 'Best PWA App in town!',
-        display: "standalone",
-        orientation: "portrait",
-        background_color: "#ffffff",
-        theme_color: "#027be3",
+        display:
+          'standalone',
+        orientation:
+          'portrait',
+        background_color:
+          '#ffffff',
+        theme_color:
+          '#027be3',
         icons: [
           {
-            src: "statics/icons/icon-128x128.png",
-            sizes: "128x128",
-            type: "image/png"
+            src:
+              'statics/icons/icon-128x128.png',
+            sizes:
+              '128x128',
+            type:
+              'image/png'
           },
           {
-            src: "statics/icons/icon-192x192.png",
-            sizes: "192x192",
-            type: "image/png"
+            src:
+              'statics/icons/icon-192x192.png',
+            sizes:
+              '192x192',
+            type:
+              'image/png'
           },
           {
-            src: "statics/icons/icon-256x256.png",
-            sizes: "256x256",
-            type: "image/png"
+            src:
+              'statics/icons/icon-256x256.png',
+            sizes:
+              '256x256',
+            type:
+              'image/png'
           },
           {
-            src: "statics/icons/icon-384x384.png",
-            sizes: "384x384",
-            type: "image/png"
+            src:
+              'statics/icons/icon-384x384.png',
+            sizes:
+              '384x384',
+            type:
+              'image/png'
           },
           {
-            src: "statics/icons/icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png"
+            src:
+              'statics/icons/icon-512x512.png',
+            sizes:
+              '512x512',
+            type:
+              'image/png'
           }
         ]
       }
@@ -148,10 +205,14 @@ module.exports = function(ctx) {
       // id: 'org.cordova.quasar.app'
     },
     electron: {
-      extendWebpack(cfg) {
-        // do something with cfg
+      // bundler: 'builder', // or 'packager'
+      extendWebpack(
+        cfg
+      ) {
+        // do something with Electron process Webpack cfg
       },
       packager: {
+        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
         // OS X / Mac App Store
         // appBundleId: '',
         // appCategoryType: '',
@@ -159,10 +220,11 @@ module.exports = function(ctx) {
         // protocol: 'myapp://path',
         // Window only
         // win32metadata: { ... }
+      },
+      builder: {
+        // https://www.electron.build/configuration/configuration
+        // appId: 'quasar-app'
       }
-    },
-
-    // leave this here for Quasar CLI
-    starterKit: "1.0.2"
-  };
-};
+    }
+  }
+}

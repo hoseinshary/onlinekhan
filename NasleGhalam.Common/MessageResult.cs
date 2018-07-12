@@ -2,7 +2,10 @@
 {
     public class MessageResult
     {
+
+
         public string FaMessage { get; set; }
+
 
         public string EnMessage { get; set; }
 

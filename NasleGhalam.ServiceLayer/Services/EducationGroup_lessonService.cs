@@ -196,10 +196,39 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
         {
+            MessageResult msgRes;
             var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
+
+            //بررسی یکی بودن تمام آی دی درس ها
+            for (int i = 0; i < educationGroup_LessonViewModel.Count; i++)
+            {
+                if(educationGroup_LessonViewModel[i].LessonId != educationGroup_LessonViewModel[i+1].LessonId)
+                {
+                    msgRes = new MessageResult();
+                    msgRes.MessageType = MessageType.Error;
+                    msgRes.FaMessage = "خطا در یکی نبودن آی دی درس ها ";
+                    return msgRes;
+                }
+            }
+
+            //خواندن اطلاعات واسط 
+            var previousEducationGroupLesson = _educationGroup_Lessons
+                .Where(current => current.LessonId == educationGroup_Lesson.LessonId).Select(current => current.EducationGroupId).ToList();
+
+
+            foreach(EducationGroup_Lesson egl in previousEducationGroupLesson)
+            {
+                if()
+            }
+
+
+
+
+
+           
             _educationGroup_Lessons.Add(educationGroup_Lesson);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationGroup_Lesson.Id;
             return msgRes;
         }

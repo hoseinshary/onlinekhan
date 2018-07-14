@@ -5,7 +5,7 @@ namespace NasleGhalam.ViewModels.EducationGroup_Lesson
 {
     public class EducationGroup_LessonViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
 
         [Display(Name = "گروه آموزشی")]

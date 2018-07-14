@@ -114,7 +114,6 @@ namespace NasleGhalam.WebApi.Controllers
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
-                Id = msgRes.Id
             });
         }
 

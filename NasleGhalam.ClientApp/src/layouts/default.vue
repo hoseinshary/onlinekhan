@@ -2,40 +2,40 @@
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
       <q-toolbar :glossy="$q.theme === 'mat'"
-        text-color="white" color="cyan-10">
-        <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen"
-          aria-label="Menu">
+                 text-color="white"
+                 color="cyan-10">
+        <q-btn flat
+               dense
+               round
+               @click="leftDrawerOpen = !leftDrawerOpen"
+               aria-label="Menu">
           <!-- <q-icon name="menu" /> -->
         </q-btn>
 
         <q-toolbar-title>
           Quasar App
-          <div slot="subtitle">Running on Quasar
-            v{{ $q.version
-            }}
+          <div slot="subtitle">Running on Quasar v{{ $q.version }}
           </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>
 
     <q-layout-drawer v-model="leftDrawerOpen"
-      :overlay="true" side="left"
-      :mini="miniState" @click.capture="drawerClick"
-      :content-class="$q.theme === 'mat' ? 'bg-cyan-14' : null">
+                     :overlay="true"
+                     side="left"
+                     :mini="miniState"
+                     @click.capture="drawerClick"
+                     :content-class="$q.theme === 'mat' ? 'bg-cyan-14' : null">
       <router-link to="/grade">
         <q-item>
-          <q-item-side icon="receipt"
-          />
-          <q-item-main label="پایه تحصیلی"
-          />
+          <q-item-side icon="receipt" />
+          <q-item-main label="پایه تحصیلی" />
         </q-item>
       </router-link>
       <router-link to="/gradeLevel">
         <q-item>
-          <q-item-side icon="reorder"
-          />
-          <q-item-main label="مقطع تحصیلی"
-          />
+          <q-item-side icon="reorder" />
+          <q-item-main label="مقطع تحصیلی" />
         </q-item>
       </router-link>
     </q-layout-drawer>
@@ -52,33 +52,31 @@
 </template>
 
 <script>
-import { openURL } from 'quasar'
+import { openURL } from 'quasar';
 
 export default {
   data() {
     return {
       leftDrawerOpen: true, //this.$q.platform.is.desktop,
       miniState: false
-    }
+    };
   },
   methods: {
     openURL,
     drawerClick(e) {
       // if in "mini" state and user
       // click on drawer, we switch it to "normal" mode
-      if (
-        this.miniState
-      ) {
-        this.miniState = false
+      if (this.miniState) {
+        this.miniState = false;
 
         // notice we have registered an event with capture flag;
         // we need to stop further propagation as this click is
         // intended for switching drawer to "normal" mode only
-        e.stopPropagation()
+        e.stopPropagation();
       }
     }
   }
-}
+};
 </script>
 
 <style>

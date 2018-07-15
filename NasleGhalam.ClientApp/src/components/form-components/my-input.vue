@@ -1,27 +1,35 @@
 <template>
-  <q-field count :helper="helper"
-    :error-label="errorLabel()">
-    <q-input ref="input" :type="type"
-      v-model="model.$model"
-      :float-label="displayName"
-      :error="model.$error"
-      :max-height="maxHeight"
-      :prefix="prefix" :suffix="suffix"
-      :readonly="readonly" :clearable="clearable"
-      :align="align" :disable="disable"
-      :before="before" :after="after"
-      :maxlength="inputMaxLen"
-      :rows="rows" :min="min"
-      :max="max" :step="step"
-      :autocomplete="autocomplete"
-      @input="$emit('input', model)"
-      @change="$emit('change', model)"
-      @clear="$emit('clear', model)"
-      @focus="$emit('focus')"
-      @blur="$emit('blur')"
-      @keydown="keydown" @keyup="$emit('keyup')"
-      @click="$emit('click')"
-    />
+  <q-field count
+           :helper="helper"
+           :error-label="errorLabel()">
+    <q-input ref="input"
+             :type="type"
+             v-model="model.$model"
+             :float-label="displayName"
+             :error="model.$error"
+             :max-height="maxHeight"
+             :prefix="prefix"
+             :suffix="suffix"
+             :readonly="readonly"
+             :clearable="clearable"
+             :align="align"
+             :disable="disable"
+             :before="before"
+             :after="after"
+             :maxlength="inputMaxLen"
+             :rows="rows"
+             :min="min"
+             :max="max"
+             :step="step"
+             :autocomplete="autocomplete"
+             @input="$emit('input', model)"
+             @change="$emit('change', model)"
+             @clear="$emit('clear', model)"
+             @focus="$emit('focus')"
+             @blur="$emit('blur')"
+             @keydown="keydown"
+             @keyup="$emit('keyup')"
+             @click="$emit('click')" />
   </q-field>
 </template>
 
@@ -99,117 +107,39 @@ export default {
      * get model error
      */
     errorLabel() {
-      if (
-        !this.model
-          .$dirty
-      ) {
+      if (!this.model.$dirty) {
         return ''
       }
 
-      if (
-        this
-          .isOnlyPersianChar
-      ) {
+      if (this.isOnlyPersianChar) {
         return 'فقط از حروف فارسی استفاده شود'
-      } else if (
-        this
-          .isNotPersianChar
-      ) {
+      } else if (this.isNotPersianChar) {
         return 'کیبورد را انگلیسی نمایید'
-      } else if (
-        this.isNumeric
-      ) {
+      } else if (this.isNumeric) {
         return 'فقط عدد وارد شود'
-      } else if (
-        this.model
-          .required !==
-          undefined &&
-        !this.model
-          .required
-      ) {
-        return `(${
-          this
-            .displayName
-        }) خالی میباشد`
-      } else if (
-        this.model
-          .minLength !==
-          undefined &&
-        !this.model
-          .minLength
-      ) {
-        return `حداقل تعداد کاراکتر وارد شده برای (${
-          this
-            .displayName
-        }) باید (${
-          this.minLen
-        }) باشد`
-      } else if (
-        this.model
-          .maxLength !==
-          undefined &&
-        !this.model
-          .maxLength
-      ) {
-        return `تعداد کاراکتر وارد شده برای (${
-          this
-            .displayName
-        }) بیش از (${
-          this.maxLen
-        }) می باشد`
+      } else if (this.model.required !== undefined && !this.model.required) {
+        return `(${this.displayName}) خالی میباشد`
+      } else if (this.model.minLength !== undefined && !this.model.minLength) {
+        return `حداقل تعداد کاراکتر وارد شده برای (${this.displayName}) باید (${this.minLen}) باشد`
+      } else if (this.model.maxLength !== undefined && !this.model.maxLength) {
+        return `تعداد کاراکتر وارد شده برای (${this.displayName}) بیش از (${this.maxLen}) می باشد`
       }
       return ''
     },
     keydown(e) {
-      this.$emit(
-        'keydown'
-      )
+      this.$emit('keydown')
 
-      if (
-        this
-          .isOnlyPersianChar ||
-        this
-          .isNotPersianChar ||
-        this.isNumeric
-      ) {
+      if (this.isOnlyPersianChar || this.isNotPersianChar || this.isNumeric) {
         if (
-          [
-            46,
-            8,
-            9,
-            27,
-            13,
-            190,
-            32
-          ].includes(
-            e.keyCode
-          ) || // {46:delete, 8:backspace, 9:tab, 27:escape, 13:enter, 110:decimal point, 190:period, 32:space}
+          [46, 8, 9, 27, 13, 190, 32].includes(e.keyCode) || // {46:delete, 8:backspace, 9:tab, 27:escape, 13:enter, 110:decimal point, 190:period, 32:space}
           // Allow: Ctrl/cmd+A
-          (e.keyCode ==
-            65 &&
-            (e.ctrlKey ===
-              true ||
-              e.metaKey ===
-                true)) ||
+          (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
           // Allow: Ctrl/cmd+C
-          (e.keyCode ==
-            67 &&
-            (e.ctrlKey ===
-              true ||
-              e.metaKey ===
-                true)) ||
+          (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
           // Allow: Ctrl/cmd+X
-          (e.keyCode ==
-            88 &&
-            (e.ctrlKey ===
-              true ||
-              e.metaKey ===
-                true)) ||
+          (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
           // Allow: home, end, left, right
-          (e.keyCode >=
-            35 &&
-            e.keyCode <=
-              39)
+          (e.keyCode >= 35 && e.keyCode <= 39)
         ) {
           // let it happen, don't do anything
           return
@@ -227,18 +157,8 @@ export default {
      * get displayname of model
      */
     displayName() {
-      if (
-        this.model &&
-        this.model
-          .$params &&
-        this.model
-          .$params
-          .displayName
-      ) {
-        return this.model
-          .$params
-          .displayName
-          .value
+      if (this.model && this.model.$params && this.model.$params.displayName) {
+        return this.model.$params.displayName.value
       }
       return ''
     },
@@ -246,17 +166,8 @@ export default {
      * get min value of model
      */
     minLen() {
-      if (
-        this.model &&
-        this.model
-          .$params &&
-        this.model
-          .$params
-          .minLength
-      ) {
-        return this.model
-          .$params
-          .minLength.min
+      if (this.model && this.model.$params && this.model.$params.minLength) {
+        return this.model.$params.minLength.min
       }
       return 0
     },
@@ -264,17 +175,8 @@ export default {
      * get jmax value of model
      */
     maxLen() {
-      if (
-        this.model &&
-        this.model
-          .$params &&
-        this.model
-          .$params
-          .maxLength
-      ) {
-        return this.model
-          .$params
-          .maxLength.max
+      if (this.model && this.model.$params && this.model.$params.maxLength) {
+        return this.model.$params.maxLength.max
       }
       return 0
     },
@@ -282,37 +184,19 @@ export default {
      * check if onlyPersianChar validator assign to model
      */
     isOnlyPersianChar() {
-      return (
-        this.model
-          .onlyPersianChar !==
-          undefined &&
-        !this.model
-          .onlyPersianChar
-      )
+      return this.model.onlyPersianChar !== undefined && !this.model.onlyPersianChar
     },
     /**
      * check if notPersianChar validator assign to model
      */
     isNotPersianChar() {
-      return (
-        this.model
-          .notPersianChar !==
-          undefined &&
-        !this.model
-          .notPersianChar
-      )
+      return this.model.notPersianChar !== undefined && !this.model.notPersianChar
     },
     /**
      * check if numeric validator assign to model
      */
     isNumeric() {
-      return (
-        this.model
-          .numeric !==
-          undefined &&
-        !this.model
-          .numeric
-      )
+      return this.model.numeric !== undefined && !this.model.numeric
     }
   },
   /**
@@ -320,18 +204,9 @@ export default {
    */
   created() {
     // set input maxlen
-    if (
-      this.maxlength ===
-        undefined &&
-      this.model
-        .maxLength !==
-        undefined
-    ) {
+    if (this.maxlength === undefined && this.model.maxLength !== undefined) {
       this.inputMaxLen = this.maxLen
-    } else if (
-      this.maxlength !==
-      undefined
-    ) {
+    } else if (this.maxlength !== undefined) {
       this.inputMaxLen = this.maxlength
     }
   }

@@ -1,14 +1,49 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import example from './module-example'
+import grade from './grade';
+import gradeLevel from './gradeLevel';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  modules: {
-    example
-  }
-})
+  actions: {
+    notify({}, notify) {
+      // if vue instance not pass
+      if (!notify.vm) return;
+      var html = `<div class="snotifyToast__body">${notify.body}</div> `;
+      if (notify.title) {
+        html = `<div class="snotifyToast__title">${notify.title}</div>` + html;
+      }
 
-export default store
+      //fine notification type
+      var type =
+        notify.type == 0
+          ? 'error'
+          : notify.type == 1
+            ? 'success'
+            : notify.type == 2
+              ? 'warning'
+              : 'error';
+
+      //show notification
+      notify.vm.$snotify.html(html, {
+        type: type,
+        timeout: 4000,
+        showProgressBar: true
+      });
+    },
+    notifyInvalidForm({ dispatch }, vm) {
+      dispatch('notify', {
+        vm,
+        body: 'تمام مقادیر را بصورت صحیح وارد نمایید.'
+      });
+    }
+  },
+  modules: {
+    grade,
+    gradeLevel
+  }
+});
+
+export default store;

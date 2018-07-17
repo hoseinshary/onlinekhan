@@ -4,6 +4,7 @@ using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.EducationGroup_Lesson;
 using NasleGhalam.WebApi.Extentions;
+using System.Collections.Generic;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -102,5 +103,20 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.EducationGroup_LessonCreateAccess,ActionBits.EducationGroup_LessonUpdateAccess,ActionBits.EducationGroup_LessonDeleteAccess)]
+        [CheckModelValidation]
+        public IHttpActionResult Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
+        {
+            var msgRes = _educationGroup_LessonService.Change(educationGroup_LessonViewModel);
+            return Ok(new MessageResultApi
+            {
+                Message = msgRes.FaMessage,
+                MessageType = msgRes.MessageType,
+            });
+        }
+
+
     }
 }

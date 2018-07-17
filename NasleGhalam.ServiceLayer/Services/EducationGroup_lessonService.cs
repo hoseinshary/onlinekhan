@@ -79,22 +79,28 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<EducationGroup_LessonViewModel> GetAllEducationGroupByLessonId(int id)
         {
-            //return _educationGroup_Lessons
-            //    .Where(current => current.LessonId == id)
-            //    .Select(current => new EducationGroup_LessonViewModel
-            //    {
-            //        Id = current.Id,
-            //        EducatioGroupName = current.EducationGroup.Name,
-            //        EducationGroupId = current.EducationGroupId,
-            //        isChecked = true
 
-            //    }).ToList();
 
-            //var q =
-            //from eg in _educationGroup
-            //join egl in _educationGroup_Lessons on _educationGroup equals egl.EducationGroupId into ps
-            //from egl in ps.DefaultIfEmpty()
-            //select new { Category = c, ProductName = p == null ? "(No products)" : p.ProductName };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -108,16 +114,17 @@ namespace NasleGhalam.ServiceLayer.Services
                  .SelectMany(curent => curent.EducationGroups_Lessons,
                  (education, edu_lesson) => new EducationGroup_LessonViewModel
                  {
+                     Id = edu_lesson.Id,
                      EducatioGroupName = education.Name,
                      EducationGroupId = education.Id,
                      LessonId = edu_lesson == null ? 0 : edu_lesson.Lesson.Id,
                      LessonName = edu_lesson.Lesson.Name,
-                     IsChecked = edu_lesson != null 
-                 }).ToList();
+                     IsChecked = edu_lesson != null
+                 }).Where(current => current.LessonId == id).OrderByDescending(current => current.IsChecked).ToList();
 
 
 
-          
+
         }
 
 
@@ -196,11 +203,49 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
         {
-            var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
-            _educationGroup_Lessons.Add(educationGroup_Lesson);
+            MessageResult msgRes;
+            
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = educationGroup_Lesson.Id;
+            //بررسی یکی بودن تمام آی دی درس ها
+            for (int i = 0; i < educationGroup_LessonViewModel.Count; i++)
+            {
+                if(educationGroup_LessonViewModel[i].LessonId != educationGroup_LessonViewModel[i+1].LessonId)
+                {
+                    msgRes = new MessageResult();
+                    msgRes.MessageType = MessageType.Error;
+                    msgRes.FaMessage = "خطا در یکی نبودن آی دی درس ها ";
+                    return msgRes;
+                }
+            }
+
+            //خواندن اطلاعات واسط 
+            var previousEducationGroupLesson = _educationGroup_Lessons
+                .Where(current => current.LessonId == educationGroup_LessonViewModel.First().LessonId).ToList();
+
+            //create 
+            foreach (EducationGroup_LessonViewModel egl in educationGroup_LessonViewModel)
+            {
+                if( egl.IsChecked && !Utility.isExistInArray<int>(previousEducationGroupLesson.Select(x => x.EducationGroupId),egl.EducationGroupId))
+                {
+                    var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(egl);
+                    _educationGroup_Lessons.Add(educationGroup_Lesson);
+                }
+            }
+
+
+            //delete
+            foreach (EducationGroup_Lesson egl in previousEducationGroupLesson)
+            {
+                if (!Utility.isExistInArray<int>(educationGroup_LessonViewModel.Where(x => x.IsChecked).Select(x=>x.EducationGroupId), egl.EducationGroupId))
+                {
+                    _uow.MarkAsDeleted(egl);
+                }
+            }
+
+
+            
+
+            msgRes = _uow.CommitChanges(CrudType.None, Title);
             return msgRes;
         }
 

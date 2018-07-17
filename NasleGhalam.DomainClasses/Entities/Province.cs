@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+
 namespace NasleGhalam.DomainClasses.Entities
 {
     public class Province
@@ -8,6 +9,7 @@ namespace NasleGhalam.DomainClasses.Entities
         {
             Cities = new HashSet<City>();
         }
+
         public int Id { get; set; }
 
         public string Name { get; set; }

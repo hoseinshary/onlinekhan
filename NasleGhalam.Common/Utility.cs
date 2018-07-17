@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -186,5 +187,24 @@ namespace NasleGhalam.Common
         //    };
         //} 
         #endregion
+
+
+        #region ### utility ###
+        public static bool isExistInArray<T>(IEnumerable<T> list , T key )
+        {
+            foreach(T temp in list)
+            {
+                if(temp.Equals(key))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        #endregion
+
+
     }
 }

@@ -1,9 +1,10 @@
-import { required, displayName, numeric } from 'plugins/vuelidate';
+import { required, displayName, numeric, maxLength } from 'plugins/vuelidate';
 
 export default {
   instanceObj: {
     Name: {
       displayName: displayName('نام'),
+      maxLength: maxLength(50),
       required
     },
     Priority: {

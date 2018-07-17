@@ -1,31 +1,25 @@
 <template>
 
-  <my-panel>
+  <my-panel class="col-md-8">
     <span slot="title">{{modelName}}</span>
     <div slot="body">
-      <my-btn-create @click="openModalCreateStore"></my-btn-create>
-      <!-- <my-btn-edit @click="showModalEdit"></my-btn-edit>
-      <my-btn-delete @click="showModalDelete"></my-btn-delete>-->
-      <my-btn-back @click="btnBack"></my-btn-back>
+      <my-btn-create @click="showModalCreate"></my-btn-create>
       <br>
-      <br>
-      <table class="my-table">
-        <thead>
-          <tr>
-            <th>نام</th>
-            <th>اولویت</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in allObj"
-              :key="row.id">
-            <td>{{row.Name}}</td>
-            <td>{{row.Priority}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <my-table :grid-data="allObj"
+                :columns="gridColumns"
+                :hasIndex="true">
+        <template slot="Id"
+                  slot-scope="data">
+          <my-btn-edit round
+                       @click="showModalEdit(data.row.Id)" />
+          <my-btn-delete round
+                         @click="showModalDelete(data.row.Id)" />
+        </template>
+      </my-table>
 
       <modal-create></modal-create>
+      <modal-edit></modal-edit>
+      <modal-delete></modal-delete>
     </div>
   </my-panel>
 </template>
@@ -33,43 +27,77 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import modalCreate from './create';
+import modalEdit from './edit';
+import modalDelete from './delete';
 
 export default {
   components: {
-    'modal-create': modalCreate
+    'modal-create': modalCreate,
+    'modal-edit': modalEdit,
+    'modal-delete': modalDelete
   },
   /**
    * data
    */
   data() {
-    return {};
+    return {
+      gridColumns: [
+        {
+          title: 'نام',
+          data: 'Name',
+          searchable: true,
+          sortable: true
+        },
+        {
+          title: 'اولویت',
+          data: 'Priority',
+          searchable: true,
+          sortable: true
+        },
+        {
+          title: 'عملیات',
+          data: 'Id'
+        }
+      ]
+    };
   },
   /**
    * methods
    */
   methods: {
-    ...mapActions('grade', ['openModalCreateStore', 'fillGridStore']),
-    btnBack() {
-      // var obj = {};
-      // this.grade.map12(obj);
-      // console.log(obj);
-
-      console.log((1236).format());
-
-      this.$store.dispatch('notify', {
-        vm: this,
-        body: 'خطا',
-        type: 0
+    ...mapActions('grade', [
+      'toggleModalCreateStore',
+      'toggleModalEditStore',
+      'toggleModalDeleteStore',
+      'getByIdStore',
+      'fillGridStore',
+      'resetCreateStore',
+      'resetEditStore'
+    ]),
+    showModalCreate() {
+      // reset data on modal show
+      this.resetCreateStore();
+      // show modal
+      this.toggleModalCreateStore(true);
+    },
+    showModalEdit(id) {
+      // reset data on modal show
+      this.resetEditStore();
+      // get data by id
+      this.getByIdStore(id).then(() => {
+        // show modal
+        this.toggleModalEditStore(true);
+      });
+    },
+    showModalDelete(id) {
+      // get data by id
+      this.getByIdStore(id).then(() => {
+        // show modal
+        this.toggleModalDeleteStore(true);
       });
     }
   },
-  // computed: mapState('grade', ['allObj, modelName']),
   computed: {
-    // ...mapState('grade', ['allObj, modelName'])
-    //   ...mapState({
-    //     allObj: s => s.grade.allObj,
-    //     modelName: s => s.grade.modelName
-    //   })
     ...mapState('grade', {
       modelName: 'modelName',
       allObj: 'allObj'

@@ -1,11 +1,11 @@
 <template>
-  <my-modal-create :title="modelName"
-                   size="sm"
-                   height="55%"
-                   :openModal="isOpenModalCreate"
-                   @confirm="submitCreateStore"
-                   @reset="resetCreateStore"
-                   @toggle="toggleModalCreateStore">
+  <my-modal-edit :title="modelName"
+                 size="sm"
+                 height="55%"
+                 :openModal="isOpenModalEdit"
+                 @confirm="submitEditStore"
+                 @reset="resetEditStore"
+                 @toggle="toggleModalEditStore">
 
     <my-input :model="$v.instanceObj.Name"
               class="col-12">
@@ -15,7 +15,7 @@
               class="col-12">
     </my-input>
 
-  </my-modal-create>
+  </my-modal-edit>
 </template>
 
 <script>
@@ -34,10 +34,10 @@ export default {
    */
   methods: {
     ...mapActions('grade', [
-      'toggleModalCreateStore',
-      'createVueStore',
-      'submitCreateStore',
-      'resetCreateStore'
+      'toggleModalEditStore',
+      'editVueStore',
+      'submitEditStore',
+      'resetEditStore'
     ])
   },
   /**
@@ -47,7 +47,7 @@ export default {
     ...mapState('grade', {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
-      isOpenModalCreate: 'isOpenModalCreate'
+      isOpenModalEdit: 'isOpenModalEdit'
     })
   },
   /**
@@ -58,7 +58,7 @@ export default {
    * created
    */
   created() {
-    this.createVueStore(this);
+    this.editVueStore(this);
   }
 };
 </script>

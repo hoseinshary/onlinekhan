@@ -9,6 +9,9 @@ import 'vue-snotify/styles/material.css';
 /** panel */
 import myPanel from 'components/my-panel';
 
+/** table */
+import myTable from 'components/my-table';
+
 /* btn */
 import btnSave from 'components/buttons/my-btn-save';
 import btnSaveBack from 'components/buttons/my-btn-save-back';
@@ -37,6 +40,9 @@ export default ({ app, router, Vue }) => {
 
   // register panel
   Vue.component('my-panel', myPanel);
+
+  // register table
+  Vue.component('my-table', myTable);
 
   // register btn
   Vue.component('my-btn-save', btnSave);

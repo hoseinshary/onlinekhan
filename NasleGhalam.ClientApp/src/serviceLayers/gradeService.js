@@ -5,11 +5,8 @@ export default {
   getAll() {
     return axios.get(`${GRADE_URL}/GetAll`);
   },
-  getAllRole() {
-    return axios.get(`${GRADE_URL}/GetAllDdl`);
-  },
-  getById(Id) {
-    return axios.get(`${GRADE_URL}/GetById/` + Id);
+  getById(id) {
+    return axios.get(`${GRADE_URL}/GetById/` + id);
   },
   create(instanceObj) {
     return axios.post(`${GRADE_URL}/Create`, instanceObj);
@@ -17,7 +14,7 @@ export default {
   update(instanceObj) {
     return axios.post(`${GRADE_URL}/Update`, instanceObj);
   },
-  delete(Id) {
-    return axios.post(`${GRADE_URL}/Delete/` + Id);
+  delete(id) {
+    return axios.post(`${GRADE_URL}/Delete/` + id);
   }
 };

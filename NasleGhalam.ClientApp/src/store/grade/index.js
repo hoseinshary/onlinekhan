@@ -6,12 +6,18 @@ export default {
   state: {
     modelName: 'مقطع تحصیلی',
     isOpenModalCreate: false,
+    isOpenModalEdit: false,
+    isOpenModalDelete: false,
     instanceObj: {
       Id: 0,
       Name: '',
-      Priority: ''
+      Priority: 0
     },
-    allObj: []
+    allObj: [],
+    selectedIndex: -1,
+    selectedId: 0,
+    createVue: null,
+    editVue: null
   },
   mutations: {
     /**
@@ -26,12 +32,20 @@ export default {
     /**
      * update instanceObj of allObj
      */
-    update() {},
+    update(state) {
+      let index = state.selectedIndex;
+      if (index < 0) return;
+      util.mapObject(state.instanceObj, state.allObj[index]);
+    },
 
     /**
      * delete from allObj
      */
-    delete() {},
+    delete(state) {
+      let index = state.selectedIndex;
+      if (index < 0) return;
+      state.allObj.splice(index, 1);
+    },
 
     /**
      * rest value of instanceObj
@@ -41,28 +55,26 @@ export default {
       if ($v) {
         $v.$reset();
       }
+    },
+
+    /**
+     * set selectedIndex
+     */
+    setIndex(state) {
+      state.selectedIndex = state.allObj.findIndex(
+        o => o.Id == state.instanceObj.Id
+      );
     }
   },
   actions: {
     /**
-     * vlidate form
+     * get data by id
      */
-    validateFormStore({ dispatch }, vm) {
-      // check instance validation
-      vm.$v.instanceObj.$touch();
-      if (vm.$v.instanceObj.$error) {
-        dispatch('notifyInvalidForm', vm, { root: true });
-        return false;
-      }
-
-      return true;
-    },
-
-    /**
-     * reset form
-     */
-    resetStore({ commit }, $v) {
-      commit('reset', $v);
+    getByIdStore({ state }, id) {
+      gradeService.getById(id).then(response => {
+        state.selectedId = id;
+        util.mapObject(response.data, state.instanceObj);
+      });
     },
 
     /**
@@ -76,25 +88,25 @@ export default {
 
     //### create section ###
     /**
-     * open modal create
+     * toggle modal create
      */
-    openModalCreateStore({ state }) {
-      state.isOpenModalCreate = true;
+    toggleModalCreateStore({ state }, isOpen) {
+      state.isOpenModalCreate = isOpen;
     },
 
     /**
-     * close modal create
+     * init create validation on load
      */
-
-    closeModalCreateStore({ state }) {
-      state.isOpenModalCreate = false;
+    createVueStore({ state }, vm) {
+      state.createVue = vm;
     },
 
     /**
      * submit create data
      */
-    submitCreateStore({ state, commit, dispatch }, submitedData) {
-      dispatch('validateFormStore', submitedData.vm).then(isValid => {
+    submitCreateStore({ state, commit, dispatch }, closeModal) {
+      var vm = state.createVue;
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
         gradeService.create(state.instanceObj).then(response => {
@@ -102,8 +114,8 @@ export default {
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
-            commit('reset', submitedData.vm.$v);
-            state.isOpenModalCreate = !submitedData.closeModal;
+            commit('reset', vm.$v);
+            state.isOpenModalCreate = !closeModal;
           }
 
           dispatch(
@@ -111,20 +123,127 @@ export default {
             {
               body: data.Message,
               type: data.MessageType,
-              vm: submitedData.vm
+              vm: vm
             },
             { root: true }
           );
         });
       });
-    }
+    },
+
+    /**
+     * reset create vue
+     */
+    resetCreateStore({ state, commit }) {
+      commit('reset', state.createVue.$v);
+    },
     //------------------------------------------------
+
+    //### edit section ###
+    /**
+     * toggle modal edit
+     */
+    toggleModalEditStore({ state }, isOpen) {
+      state.isOpenModalEdit = isOpen;
+    },
+
+    /**
+     * init edit validation on load
+     */
+    editVueStore({ state }, vm) {
+      state.editVue = vm;
+    },
+
+    /**
+     * submit edit data
+     */
+    submitEditStore({ state, commit, dispatch }) {
+      var vm = state.editVue;
+      dispatch('validateFormStore', vm).then(isValid => {
+        if (!isValid) return;
+
+        state.instanceObj = state.selectedId;
+        gradeService.update(state.instanceObj).then(response => {
+          let data = response.data;
+          if (data.MessageType == 1) {
+            commit('setIndex');
+            commit('update');
+            commit('reset', vm.$v);
+            state.isOpenModalEdit = false;
+          }
+
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            { root: true }
+          );
+        });
+      });
+    },
+
+    /**
+     * reset edit vue
+     */
+    resetEditStore({ state, commit }) {
+      commit('reset', state.editVue.$v);
+    },
+    //------------------------------------------------
+
+    //### delete section ###
+    /**
+     * toggle modal delete
+     */
+    toggleModalDeleteStore({ state }, isOpen) {
+      state.isOpenModalDelete = isOpen;
+    },
+
+    /**
+     * submit to delete data
+     */
+    submitDeleteStore({ state, commit, dispatch }, vm) {
+      gradeService.delete(state.selectedId).then(response => {
+        let data = response.data;
+        if (data.MessageType == 1) {
+          commit('setIndex');
+          commit('delete');
+          commit('reset');
+          state.isOpenModalDelete = false;
+        }
+
+        dispatch(
+          'notify',
+          {
+            body: data.Message,
+            type: data.MessageType,
+            vm: vm
+          },
+          { root: true }
+        );
+      });
+    },
+    //------------------------------------------------
+
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.instanceObj.$touch();
+      if (vm.$v.instanceObj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        return false;
+      }
+
+      return true;
+    }
+  },
+  getters: {
+    recordName(state) {
+      return state.instanceObj.Name;
+    }
   }
-  //   getters: {
-  //     getCount: state => {
-  //       console.log('getCount:')
-  //       console.log(state)
-  //       return state.count
-  //     }
-  //   }
 };

@@ -1,6 +1,7 @@
 <template>
 
-  <q-card :square="true" :class="'my-panel ' + colSize">
+  <q-card :square="true"
+          class="my-panel">
     <q-card-title class="text-center text-bold bg-white header">
       <slot name="title"></slot>
     </q-card-title>
@@ -13,14 +14,7 @@
 </template>
 
 <script>
-export default {
-  props: {
-    colSize: {
-      type: String,
-      default: 'col-md-10'
-    }
-  }
-}
+export default {};
 </script>
 
 <style>

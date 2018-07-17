@@ -10,34 +10,3 @@ body {
   height: 100%;
   background-color: #ecf0f5;
 }
-
-.my-table {
-  width: 100% !important;
-}
-
-.my-table tr td {
-  vertical-align: middle;
-  text-align: center;
-  border: 1px solid rgb(230, 230, 230);
-  height: 30px;
-}
-
-.my-table th {
-  background-color: #e6e6e6;
-  color: #524f4f;
-  vertical-align: middle;
-  text-align: center;
-}
-
-.my-table tr:nth-child(2n + 2) {
-  background-color: #f3f3f3;
-}
-
-.my-table tr:nth-child(2n + 1) {
-  background-color: #fafafa;
-}
-
-.my-table tr td table tr td {
-  width: 22px;
-  font-weight: bold;
-}

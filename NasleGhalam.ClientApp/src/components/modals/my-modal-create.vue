@@ -1,7 +1,7 @@
 <template>
   <q-modal v-model="isOpen"
            @show="$emit('toggle', true)"
-           @hide="$emit('toggle', false)"
+           @hide="hide"
            no-backdrop-dismiss
            :content-css="modalContentCss">
     <q-modal-layout>
@@ -97,6 +97,15 @@ export default {
       isOpen: false,
       modalContentCss
     };
+  },
+  /**
+   * methods
+   */
+  methods: {
+    hide(isOpen) {
+      this.isOpen = false;
+      this.$emit('toggle', false);
+    }
   },
   /**
    * whatch

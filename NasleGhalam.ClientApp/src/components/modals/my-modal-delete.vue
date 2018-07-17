@@ -1,12 +1,14 @@
 <template>
   <q-modal v-model="isOpen"
-    minimized @show="$emit('toggle', true)"
-    @hide="$emit('toggle', false)"
-    no-backdrop-dismiss>
+           minimized
+           @show="$emit('toggle', true)"
+           @hide="$emit('toggle', false)"
+           no-backdrop-dismiss>
     <q-card>
       <q-card-title>
-        <q-icon name="warning" color="amber"
-          size="30px"></q-icon>
+        <q-icon name="warning"
+                color="amber"
+                size="30px"></q-icon>
         حذف
         <span class="text-red">{{title}}</span>
       </q-card-title>
@@ -36,7 +38,7 @@ export default {
   data() {
     return {
       isOpen: false
-    }
+    };
   },
   /**
    * props
@@ -60,10 +62,10 @@ export default {
    */
   watch: {
     openModal(newVal) {
-      this.isOpen = newVal
+      this.isOpen = newVal;
     }
   }
-}
+};
 </script>
 
 <style>

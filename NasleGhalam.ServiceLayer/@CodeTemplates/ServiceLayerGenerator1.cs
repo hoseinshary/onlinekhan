@@ -7,20 +7,20 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.City;
+using NasleGhalam.ViewModels.EducationYear;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class CityService
+	public class EducationYearService
 	{
 		private const string Title = "شهر";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<City> _Citys;
+        private readonly IDbSet<EducationYear> _EducationYears;
        
-	    public CityService(IUnitOfWork uow)
+	    public EducationYearService(IUnitOfWork uow)
         {
             _uow = uow;
-            _Citys = uow.Set<City>();
+            _EducationYears = uow.Set<EducationYear>();
         }
 
 
@@ -29,16 +29,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public CityViewModel GetById(int id)
+        public EducationYearViewModel GetById(int id)
         {
-            return _Citys
+            return _EducationYears
                 .Where(current => current.Id == id)
-                .Select(current => new CityViewModel
+                .Select(current => new EducationYearViewModel
                 {
                     Id = current.Id,
-                    Name = current.Name,
-                    ProvinceId = current.ProvinceId,
-                    ProvinceName = current.Province.Name
+                    
                 }).FirstOrDefault();
         }
 
@@ -47,14 +45,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه شهر ها
         /// </summary>
         /// <returns></returns>
-        public IList<CityViewModel> GetAll()
+        public IList<EducationYearViewModel> GetAll()
         {
-            return _Citys.Select(current => new CityViewModel()
+            return _EducationYears.Select(current => new EducationYearViewModel()
             {
                 Id = current.Id,
-                Name = current.Name,
-                ProvinceId = current.ProvinceId,
-                ProvinceName = current.Province.Name
             }).ToList();
         }
 
@@ -62,15 +57,15 @@ namespace NasleGhalam.ServiceLayer.Services
 		/// <summary>
         /// ثبت شهر
         /// </summary>
-        /// <param name="CityViewModel"></param>
+        /// <param name="EducationYearViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(CityViewModel CityViewModel)
+        public MessageResult Create(EducationYearViewModel EducationYearViewModel)
         {
-            var City = Mapper.Map<City>(CityViewModel);
-            _Citys.Add(City);
+            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
+            _EducationYears.Add(EducationYear);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = City.Id;
+			msgRes.Id = EducationYear.Id;
             return msgRes;
         }
 
@@ -78,12 +73,12 @@ namespace NasleGhalam.ServiceLayer.Services
 		/// <summary>
         /// ویرایش شهر
         /// </summary>
-        /// <param name="CityViewModel"></param>
+        /// <param name="EducationYearViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(CityViewModel CityViewModel)
+        public MessageResult Update(EducationYearViewModel EducationYearViewModel)
         {
-            var City = Mapper.Map<City>(CityViewModel);
-            _uow.MarkAsChanged(City);
+            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
+            _uow.MarkAsChanged(EducationYear);
 
 			
 			return  _uow.CommitChanges(CrudType.Update, Title);
@@ -98,14 +93,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  CityViewModel = GetById(id);
-            if (CityViewModel == null)
+			var  EducationYearViewModel = GetById(id);
+            if (EducationYearViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var City = Mapper.Map<City>(CityViewModel);
-            _uow.MarkAsDeleted(City);
+            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
+            _uow.MarkAsDeleted(EducationYear);
             
 			return  _uow.CommitChanges(CrudType.Delete, Title);
 			
@@ -118,7 +113,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _Citys.Select(current => new SelectViewModel
+            return _EducationYears.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

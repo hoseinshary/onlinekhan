@@ -2,9 +2,9 @@
 
 namespace NasleGhalam.ViewModels.EducationYear
 {
-	public class EducationYearViewModel
-	{
-		public int Id { get; set; }
+    public class EducationYearViewModel
+    {
+        public int Id { get; set; }
 
 
         [Display(Name = "نام")]
@@ -17,5 +17,5 @@ namespace NasleGhalam.ViewModels.EducationYear
         public bool IsActiveYear { get; set; }
 
 
-	}
+    }
 }

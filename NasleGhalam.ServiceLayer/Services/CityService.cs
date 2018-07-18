@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.City;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class CityService
-	{
-		private const string Title = "شهر";
+    public class CityService
+    {
+        private const string Title = "شهر";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<City> _Citys;
-       
-	    public CityService(IUnitOfWork uow)
+
+        public CityService(IUnitOfWork uow)
         {
             _uow = uow;
             _Citys = uow.Set<City>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  شهر با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -43,7 +43,7 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه شهر ها
         /// </summary>
         /// <returns></returns>
@@ -59,7 +59,7 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت شهر
         /// </summary>
         /// <param name="CityViewModel"></param>
@@ -69,13 +69,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var City = Mapper.Map<City>(CityViewModel);
             _Citys.Add(City);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = City.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = City.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش شهر
         /// </summary>
         /// <param name="CityViewModel"></param>
@@ -85,20 +85,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var City = Mapper.Map<City>(CityViewModel);
             _uow.MarkAsChanged(City);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف شهر
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  CityViewModel = GetById(id);
+            var CityViewModel = GetById(id);
             if (CityViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -106,9 +106,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var City = Mapper.Map<City>(CityViewModel);
             _uow.MarkAsDeleted(City);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
@@ -124,5 +124,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

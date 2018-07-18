@@ -66,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="%40CodeTemplates\ServiceLayerGenerator1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ServiceLayerGenerator.tt</DependentUpon>
+    </Content>
+    <Compile Include="Services\CityService.cs" />
     <Compile Include="Services\EducationGroupService.cs" />
     <Compile Include="Services\EducationGroup_lessonService.cs" />
     <Compile Include="Services\GradeLevelService.cs" />
@@ -74,11 +80,6 @@
     <Compile Include="Services\ProvinceService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\UserService.cs" />
-    <None Include="%40CodeTemplates\ServiceLayerGenerator1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ServiceLayerGenerator.tt</DependentUpon>
-    </None>
     <Compile Include="Configs\MappingConfig.cs" />
     <Compile Include="Configs\SiteConfig.cs" />
     <Compile Include="Configs\StructureMapConfig.cs" />

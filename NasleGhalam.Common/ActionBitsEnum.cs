@@ -53,6 +53,9 @@
         TopicUpdateAccess = 36,
         TopicDeleteAccess = 37,
 
-
+        CityReadAccess = 38,
+        CityCreateAccess = 39,
+        CityUpdateAccess = 40,
+        CityDeleteAccess = 41,
     }
 }

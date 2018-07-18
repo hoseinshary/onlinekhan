@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Province
+namespace NasleGhalam.ViewModels.City
 {
-	public class ProvinceViewModel
+	public class CityViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
@@ -13,7 +13,7 @@ namespace NasleGhalam.ViewModels.Province
 
 
 		[Display(Name = "")]
-		public string Code { get; set; }
+		public int ProvinceId { get; set; }
 
 
 	}

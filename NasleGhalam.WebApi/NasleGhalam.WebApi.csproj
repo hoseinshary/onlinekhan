@@ -102,15 +102,16 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="%40CodeTemplates\WebApiControllerGenerator1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebApiControllerGenerator.tt</DependentUpon>
+    </Content>
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\EducationGroup_LessonController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <None Include="%40CodeTemplates\WebApiControllerGenerator1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WebApiControllerGenerator.tt</DependentUpon>
-    </None>
     <Compile Include="App_Start\StructureMapHttpControllerActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\EducationGroupController.cs" />

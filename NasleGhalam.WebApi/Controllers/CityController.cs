@@ -13,22 +13,22 @@ namespace NasleGhalam.WebApi.Controllers
 	///     date: 
 	/// </author>
 	public class CityController : ApiController
-	{
+    {
         private readonly CityService _CityService;
-		public CityController(CityService CityService)
+        public CityController(CityService CityService)
         {
             _CityService = CityService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_CityService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var City = _CityService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.CityCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(CityViewModel CityViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

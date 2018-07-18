@@ -7,6 +7,7 @@ using NasleGhalam.ViewModels.Grade;
 using NasleGhalam.ViewModels.GradeLevel;
 using NasleGhalam.ViewModels.EducationGroup_Lesson;
 using NasleGhalam.ViewModels.Province;
+using NasleGhalam.ViewModels.City;
 
 
 
@@ -29,6 +30,8 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<GradeLevelViewModel, GradeLevel>();
 
                 config.CreateMap<ProvinceViewModel, Province>();
+
+                config.CreateMap<CityViewModel, City>();
 
 
             });

@@ -57,5 +57,10 @@
         CityCreateAccess = 39,
         CityUpdateAccess = 40,
         CityDeleteAccess = 41,
+
+        EducationYearReadAccess = 42,
+        EducationYearCreateAccess = 43,
+        EducationYearUpdateAccess = 44,
+        EducationYearDeleteAccess = 45,
     }
 }

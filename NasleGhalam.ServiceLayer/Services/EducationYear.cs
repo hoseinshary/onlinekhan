@@ -11,21 +11,21 @@ using NasleGhalam.ViewModels.EducationYear;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class EducationYearService
-	{
-		private const string Title = "شهر";
+    public class EducationYearService
+    {
+        private const string Title = "سال تحصیلی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<EducationYear> _EducationYears;
-       
-	    public EducationYearService(IUnitOfWork uow)
+
+        public EducationYearService(IUnitOfWork uow)
         {
             _uow = uow;
             _EducationYears = uow.Set<EducationYear>();
         }
 
 
-		/// <summary>
-        /// گرفتن  شهر با آی دی
+        /// <summary>
+        /// گرفتن  سال تحصیلی با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -36,15 +36,14 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(current => new EducationYearViewModel
                 {
                     Id = current.Id,
-                    
-                    
-                    
+                    Name = current.Name,
+                    IsActiveYear = current.IsActiveYear
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
-        /// گرفتن همه شهر ها
+        /// <summary>
+        /// گرفتن همه سال تحصیلی ها
         /// </summary>
         /// <returns></returns>
         public IList<EducationYearViewModel> GetAll()
@@ -52,28 +51,42 @@ namespace NasleGhalam.ServiceLayer.Services
             return _EducationYears.Select(current => new EducationYearViewModel()
             {
                 Id = current.Id,
+                Name = current.Name,
+                IsActiveYear = current.IsActiveYear
             }).ToList();
         }
 
 
-		/// <summary>
-        /// ثبت شهر
+        /// <summary>
+        /// ثبت سال تحصیلی
         /// </summary>
         /// <param name="EducationYearViewModel"></param>
         /// <returns></returns>
         public MessageResult Create(EducationYearViewModel EducationYearViewModel)
         {
+            if(EducationYearViewModel.IsActiveYear == true)
+            {
+                UpdateForCreateAsync();
+
+            }
             var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
             _EducationYears.Add(EducationYear);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = EducationYear.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = EducationYear.Id;
             return msgRes;
+
         }
 
-
-		/// <summary>
-        /// ویرایش شهر
+        public async void UpdateForCreateAsync()
+        {
+            await _EducationYears.ForEachAsync(current => current.IsActiveYear = false);
+            return;
+        }
+             
+        
+        /// <summary>
+        /// ویرایش سال تحصیلی
         /// </summary>
         /// <param name="EducationYearViewModel"></param>
         /// <returns></returns>
@@ -82,20 +95,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
             _uow.MarkAsChanged(EducationYear);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
-        /// حذف شهر
+        /// <summary>
+        /// حذف سال تحصیلی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  EducationYearViewModel = GetById(id);
+            var EducationYearViewModel = GetById(id);
             if (EducationYearViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -103,14 +116,14 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
             _uow.MarkAsDeleted(EducationYear);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
         /// <summary>
-        /// گرفتن همه شهر ها برای لیست کشویی
+        /// گرفتن همه سال تحصیلی ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
@@ -121,5 +134,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

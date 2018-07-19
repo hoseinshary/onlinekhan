@@ -9,26 +9,26 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 28/04/97
 	/// </author>
 	public class EducationYearController : ApiController
-	{
+    {
         private readonly EducationYearService _EducationYearService;
-		public EducationYearController(EducationYearService EducationYearService)
+        public EducationYearController(EducationYearService EducationYearService)
         {
             _EducationYearService = EducationYearService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_EducationYearService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var EducationYear = _EducationYearService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.EducationYearCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(EducationYearViewModel EducationYearViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

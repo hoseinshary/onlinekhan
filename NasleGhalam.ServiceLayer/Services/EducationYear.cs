@@ -66,8 +66,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             if(EducationYearViewModel.IsActiveYear == true)
             {
-                UpdateForCreateAsync();
-
+                _EducationYears.ToList().ForEach(current => current.IsActiveYear = false);
             }
             var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
             _EducationYears.Add(EducationYear);
@@ -78,11 +77,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
         }
 
-        public async void UpdateForCreateAsync()
-        {
-            await _EducationYears.ForEachAsync(current => current.IsActiveYear = false);
-            return;
-        }
+        
              
         
         /// <summary>

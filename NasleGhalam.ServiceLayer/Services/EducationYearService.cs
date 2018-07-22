@@ -77,9 +77,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
         }
 
-        
-             
-        
         /// <summary>
         /// ویرایش سال تحصیلی
         /// </summary>
@@ -87,6 +84,10 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Update(EducationYearViewModel EducationYearViewModel)
         {
+            if(EducationYearViewModel.IsActiveYear == true)
+            {
+                _EducationYears.ToList<EducationYear>().ForEach(current => current.IsActiveYear = false);
+            }
             var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
             _uow.MarkAsChanged(EducationYear);
 

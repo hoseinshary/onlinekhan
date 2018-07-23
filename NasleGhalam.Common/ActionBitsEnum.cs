@@ -62,5 +62,10 @@
         EducationYearCreateAccess = 43,
         EducationYearUpdateAccess = 44,
         EducationYearDeleteAccess = 45,
+
+        ExamReadAccess = 46,
+        ExamCreateAccess = 47,
+        ExamUpdateAccess = 48,
+        ExamDeleteAccess = 49,
     }
 }

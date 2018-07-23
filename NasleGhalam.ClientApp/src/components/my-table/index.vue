@@ -34,23 +34,39 @@ import tableSummary from './table-summary.vue';
 
 export default {
   components: {
-    'filter-key': filterKey,
-    'per-page': perPage,
+    filterKey,
+    perPage,
     pagination,
-    'table-summary': tableSummary
+    tableSummary
   },
   render(h) {
     var tbl = this;
     // var $slots = tbl.$slots;
     var $scopedSlots = tbl.$scopedSlots;
 
+    var icon_asc = h('q-icon', {
+      props: {
+        name: 'arrow_drop_up',
+        color: 'red',
+        size: '18px'
+      }
+    });
+
+    var icon_desc = h('q-icon', {
+      props: {
+        name: 'arrow_drop_down',
+        color: 'red',
+        size: '18px'
+      }
+    });
+
     // create th of columns
     var column = tbl.columns.map(function(col, index) {
       var data = {
         key: col.data + '_' + index,
-        class: {
-          active: col.sortable && tbl.sortKey == col.data
-        },
+        // class: {
+        //   active: col.sortable && tbl.sortKey == col.data
+        // },
         on: {
           click: function click(evt) {
             evt.stopPropagation();
@@ -69,12 +85,17 @@ export default {
       };
 
       let slot = $scopedSlots['HEAD_' + col.data];
+      let child = [];
       if (slot) {
-        slot = [slot({ title: col.title, col: col })];
+        child.push(slot({ title: col.title, col: col }));
       } else {
-        data.domProps = { innerHTML: col.title };
+        child.push(h('span', col.title));
       }
-      return h('th', data, slot);
+
+      if (col.sortable && tbl.sortKey == col.data) {
+        child.unshift(tbl.sortOrders[col.data] == 1 ? icon_asc : icon_desc);
+      }
+      return h('th', data, child);
     });
 
     // create thead
@@ -410,16 +431,16 @@ export default {
             item.title = item.data;
           }
 
-          item.searchable = item.searchable || false;
-          item.sortable = item.sortable || false;
+          item.searchable = item.searchable == undefined || item.searchable;
+          item.sortable = item.sortable == undefined || item.searchable;
           item.key = i;
         } else if (util.isString(item)) {
           // if item is string then convert to object
           this.columns[i] = {
             title: item,
             data: item,
-            searchable: false,
-            sortable: false,
+            searchable: true,
+            sortable: true,
             key: i
           };
         } else {
@@ -490,6 +511,7 @@ export default {
   color: #524f4f;
   vertical-align: middle;
   text-align: center;
+  font-size: 13px;
 }
 
 .my-table tr:nth-child(2n + 2) {
@@ -500,16 +522,21 @@ export default {
   background-color: #fafafa;
 }
 
-.my-table tr td table tr td {
+/* .my-table tr td table tr td {
   width: 22px;
   font-weight: bold;
-}
+} */
 
 table.my-table tbody tr.selected {
   background-color: #b0bed9 !important;
   transition: all 400ms linear; /*cubic-bezier(1, 0, 1, 0); */
-  color: red;
+  color: #c50505;
+  font-weight: bold;
   /* background-color: purple; */
 }
+
+/* table.my-table thead th.active {
+  color: #c50505;
+} */
 </style>
 

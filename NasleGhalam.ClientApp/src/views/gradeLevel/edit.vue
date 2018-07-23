@@ -1,23 +1,30 @@
 <template>
   <my-modal-edit :title="modelName"
                  size="md"
-                 height="240px"
+                 height="320px"
                  :openModal="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
                  @toggle="toggleModalEditStore">
 
+    <my-select :model="$v.instanceObj.GradeId"
+               :options="gradeDdl"
+               class="col-md-6"
+               clearable />
+
     <my-input :model="$v.instanceObj.Name"
-              class="col-md-6" />
+              class="col-md-6">
+    </my-input>
 
     <my-input :model="$v.instanceObj.Priority"
-              class="col-md-6" />
+              class="col-md-6">
+    </my-input>
 
   </my-modal-edit>
 </template>
 
 <script>
-import viewModel from 'viewModels/gradeViewModel';
+import viewModel from 'viewModels/gradeLevelViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -25,21 +32,27 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('gradeStore', [
+    ...mapActions('gradeLevelStore', [
       'toggleModalEditStore',
       'editVueStore',
       'submitEditStore',
       'resetEditStore'
-    ])
+    ]),
+    ...mapActions('gradeStore', {
+      fillGradeDdlStore: 'fillDdlStore'
+    })
   },
   /**
    * computed
    */
   computed: {
-    ...mapState('gradeStore', {
+    ...mapState('gradeLevelStore', {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
       isOpenModalEdit: 'isOpenModalEdit'
+    }),
+    ...mapState('gradeStore', {
+      gradeDdl: 'allObjDdl'
     })
   },
   /**
@@ -51,6 +64,7 @@ export default {
    */
   created() {
     this.editVueStore(this);
+    this.fillGradeDdlStore();
   }
 };
 </script>

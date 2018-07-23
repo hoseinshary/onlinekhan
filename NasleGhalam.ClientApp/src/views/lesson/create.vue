@@ -1,6 +1,6 @@
 <template>
   <my-modal-create :title="modelName"
-                   size="md"
+                   size="sm"
                    height="240px"
                    :openModal="isOpenModalCreate"
                    @confirm="submitCreateStore"
@@ -8,15 +8,13 @@
                    @toggle="toggleModalCreateStore">
 
     <my-input :model="$v.instanceObj.Name"
-              class="col-md-6" />
-    <my-input :model="$v.instanceObj.Priority"
-              class="col-md-6" />
+              class="col-md-12" />
 
   </my-modal-create>
 </template>
 
 <script>
-import viewModel from 'viewModels/gradeViewModel';
+import viewModel from 'viewModels/lessonViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -24,7 +22,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('gradeStore', [
+    ...mapActions('lessonStore', [
       'toggleModalCreateStore',
       'createVueStore',
       'submitCreateStore',
@@ -35,7 +33,7 @@ export default {
    * computed
    */
   computed: {
-    ...mapState('gradeStore', {
+    ...mapState('lessonStore', {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
       isOpenModalCreate: 'isOpenModalCreate'

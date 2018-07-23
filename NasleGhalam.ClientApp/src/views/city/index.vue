@@ -42,14 +42,6 @@ export default {
     return {
       gridColumns: [
         {
-          title: 'نام',
-          data: 'Name'
-        },
-        {
-          title: 'اولویت',
-          data: 'Priority'
-        },
-        {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
@@ -62,7 +54,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('gradeStore', [
+    ...mapActions('cityStore', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -95,7 +87,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('gradeStore', {
+    ...mapState('cityStore', {
       modelName: 'modelName',
       allObj: 'allObj'
     })

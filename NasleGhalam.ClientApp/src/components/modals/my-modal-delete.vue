@@ -5,13 +5,13 @@
            @hide="$emit('toggle', false)"
            no-backdrop-dismiss>
     <q-card>
-      <q-card-title>
+      <q-card-main class="text-bold">
         <q-icon name="warning"
                 color="amber"
-                size="30px"></q-icon>
+                size="25px"></q-icon>
         حذف
         <span class="text-red">{{title}}</span>
-      </q-card-title>
+      </q-card-main>
       <q-card-separator />
       <q-card-main class="text-dark">
         آیا از حذف این رکورد

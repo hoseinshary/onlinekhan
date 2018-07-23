@@ -20,7 +20,7 @@ namespace NasleGhalam.ViewModels.GradeLevel
 
 
         [Display(Name = "مقطع")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int GradeId { get; set; }
 
 

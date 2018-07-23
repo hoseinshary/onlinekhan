@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.Exam;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class ExamService
-	{
-		private const string Title = "امتحان";
+    public class ExamService
+    {
+        private const string Title = "امتحان";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Exam> _Exams;
-       
-	    public ExamService(IUnitOfWork uow)
+
+        public ExamService(IUnitOfWork uow)
         {
             _uow = uow;
             _Exams = uow.Set<Exam>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  امتحان با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -35,13 +35,18 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new ExamViewModel
                 {
-                    Id = current.Id
-
+                    Id = current.Id,
+                    Name = current.Name,
+                    Date = current.Date,
+                    EducationGroupId = current.EducationGroupId,
+                    EducationGroupName = current.EducationGroup.Name,
+                    EducationYearId = current.EducationYearId,
+                    EducationYearName = current.EducationYear.Name
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه امتحان ها
         /// </summary>
         /// <returns></returns>
@@ -50,11 +55,17 @@ namespace NasleGhalam.ServiceLayer.Services
             return _Exams.Select(current => new ExamViewModel()
             {
                 Id = current.Id,
+                Name = current.Name,
+                Date = current.Date,
+                EducationGroupId = current.EducationGroupId,
+                EducationGroupName = current.EducationGroup.Name,
+                EducationYearId = current.EducationYearId,
+                EducationYearName = current.EducationYear.Name
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت امتحان
         /// </summary>
         /// <param name="ExamViewModel"></param>
@@ -64,13 +75,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var Exam = Mapper.Map<Exam>(ExamViewModel);
             _Exams.Add(Exam);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = Exam.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = Exam.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش امتحان
         /// </summary>
         /// <param name="ExamViewModel"></param>
@@ -80,20 +91,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var Exam = Mapper.Map<Exam>(ExamViewModel);
             _uow.MarkAsChanged(Exam);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف امتحان
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  ExamViewModel = GetById(id);
+            var ExamViewModel = GetById(id);
             if (ExamViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -101,9 +112,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var Exam = Mapper.Map<Exam>(ExamViewModel);
             _uow.MarkAsDeleted(Exam);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
@@ -119,5 +130,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

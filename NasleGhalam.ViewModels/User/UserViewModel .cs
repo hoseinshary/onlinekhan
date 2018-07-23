@@ -7,21 +7,21 @@ namespace NasleGhalam.ViewModels.User
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "Required")]
-        [MaxLength(50, ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "MaxLen")]
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         [MinLength(3, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
         [Display(Name = "نام")]
         public string Name { get; set; }
 
 
-        [Required(ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "Required")]
-        [MaxLength(50, ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "MaxLen")]
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         [Display(Name = "نام خانوادگی")]
         public string Family { get; set; }
 
 
-        [Required(ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "Required")]
-        [MaxLength(50, ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "MaxLen")]
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         [Display(Name = "نام کاربری")]
         public string Username { get; set; }
 

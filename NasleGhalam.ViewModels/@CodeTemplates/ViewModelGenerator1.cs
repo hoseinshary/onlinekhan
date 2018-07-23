@@ -1,19 +1,29 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Province
+namespace NasleGhalam.ViewModels.Exam
 {
-	public class ProvinceViewModel
+	public class ExamViewModel
 	{
-		[Display(Name = "")]
+		
 		public int Id { get; set; }
 
 
-		[Display(Name = "")]
+		[Display(Name = "نام")]
 		public string Name { get; set; }
 
 
-		[Display(Name = "")]
-		public string Code { get; set; }
+		[Display(Name = "تاریخ امتحان")]
+		public DateTime Date { get; set; }
+
+        [Display(Name = "گروه درسی")]
+        public string EducationGroupName { get; set; }   
+
+        public int EducationGroupId { get; set; }
+
+		[Display(Name = "سال تحصیلی")]
+        public string EducationYearName { get; set; }
+        public int EducationYearId { get; set; }
 
 
 	}

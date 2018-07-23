@@ -13,22 +13,22 @@ namespace NasleGhalam.WebApi.Controllers
 	///     date: 
 	/// </author>
 	public class ExamController : ApiController
-	{
+    {
         private readonly ExamService _ExamService;
-		public ExamController(ExamService ExamService)
+        public ExamController(ExamService ExamService)
         {
             _ExamService = ExamService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.ExamReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.ExamReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_ExamService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.ExamReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.ExamReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var Exam = _ExamService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.ExamCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(ExamViewModel ExamViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

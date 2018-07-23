@@ -53,6 +53,19 @@
         TopicUpdateAccess = 36,
         TopicDeleteAccess = 37,
 
+        CityReadAccess = 38,
+        CityCreateAccess = 39,
+        CityUpdateAccess = 40,
+        CityDeleteAccess = 41,
 
+        EducationYearReadAccess = 42,
+        EducationYearCreateAccess = 43,
+        EducationYearUpdateAccess = 44,
+        EducationYearDeleteAccess = 45,
+
+        ExamReadAccess = 46,
+        ExamCreateAccess = 47,
+        ExamUpdateAccess = 48,
+        ExamDeleteAccess = 49,
     }
 }

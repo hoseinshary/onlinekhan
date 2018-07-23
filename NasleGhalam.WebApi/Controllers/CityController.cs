@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Exam;
+using NasleGhalam.ViewModels.City;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,40 +12,40 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class ExamController : ApiController
-	{
-        private readonly ExamService _ExamService;
-		public ExamController(ExamService ExamService)
+	public class CityController : ApiController
+    {
+        private readonly CityService _CityService;
+        public CityController(CityService CityService)
         {
-            _ExamService = ExamService;
+            _CityService = CityService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.ExamReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_ExamService.GetAll());
+            return Ok(_CityService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.ExamReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var Exam = _ExamService.GetById(id);
-            if (Exam == null)
+            var City = _CityService.GetById(id);
+            if (City == null)
             {
                 return NotFound();
             }
-            return Ok(Exam);
+            return Ok(City);
         }
 
 
-		[HttpPost]
-        [CheckUserAccess(ActionBits.ExamCreateAccess)]
+        [HttpPost]
+        [CheckUserAccess(ActionBits.CityCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(ExamViewModel ExamViewModel)
+        public IHttpActionResult Create(CityViewModel CityViewModel)
         {
-            var msgRes = _ExamService.Create(ExamViewModel);
+            var msgRes = _CityService.Create(CityViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -56,11 +56,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.ExamUpdateAccess)]
+        [CheckUserAccess(ActionBits.CityUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(ExamViewModel ExamViewModel)
+        public IHttpActionResult Update(CityViewModel CityViewModel)
         {
-            var msgRes = _ExamService.Update(ExamViewModel);
+            var msgRes = _CityService.Update(CityViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -69,15 +69,15 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.ExamDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.CityDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _ExamService.Delete(id);
+            var msgRes = _CityService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

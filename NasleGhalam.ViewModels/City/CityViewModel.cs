@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using NasleGhalam.ViewModels._Attributes;
+﻿using NasleGhalam.ViewModels._Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace NasleGhalam.ViewModels.City
 {
@@ -8,17 +8,17 @@ namespace NasleGhalam.ViewModels.City
         public int Id { get; set; }
 
 
+        [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        [Display(Name = "نام")]
         public string Name { get; set; }
 
-
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         [Display(Name = "استان")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int ProvinceId { get; set; }
 
-
+        [Display(Name = "استان")]
         public string ProvinceName { get; set; }
+
     }
 }

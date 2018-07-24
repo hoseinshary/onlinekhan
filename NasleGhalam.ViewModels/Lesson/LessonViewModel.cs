@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace NasleGhalam.ViewModels.Lesson
 {
@@ -12,8 +13,9 @@ namespace NasleGhalam.ViewModels.Lesson
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Name { get; set; }
 
-        
         [Display(Name = "اختصاصی")]
         public bool IsMain { get; set; }
+
+        public DateTime DateTime { get; set; }
     }
 }

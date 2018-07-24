@@ -3,7 +3,6 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.EducationGroup_Lesson;
-using NasleGhalam.WebApi.Extentions;
 using System.Collections.Generic;
 
 namespace NasleGhalam.WebApi.Controllers

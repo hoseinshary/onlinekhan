@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NasleGhalam.DomainClasses.Entities
+﻿namespace NasleGhalam.DomainClasses.Entities
 {
     public class UniversityBranch_HistoryEducation
     {

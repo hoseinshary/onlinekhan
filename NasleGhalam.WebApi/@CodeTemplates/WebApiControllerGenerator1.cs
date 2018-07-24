@@ -2,50 +2,50 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.EducationYear;
+using NasleGhalam.ViewModels.EducationSubGroup;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 01/05/1397
 	/// </author>
-	public class EducationYearController : ApiController
+	public class EducationSubGroupController : ApiController
 	{
-        private readonly EducationYearService _EducationYearService;
-		public EducationYearController(EducationYearService EducationYearService)
+        private readonly EducationSubGroupService _educationSubGroupService;
+		public EducationSubGroupController(EducationSubGroupService educationSubGroupService)
         {
-            _EducationYearService = EducationYearService;
+            _educationSubGroupService = educationSubGroupService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_EducationYearService.GetAll());
+            return Ok(_educationSubGroupService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var EducationYear = _EducationYearService.GetById(id);
-            if (EducationYear == null)
+            var educationSubGroup = _educationSubGroupService.GetById(id);
+            if (educationSubGroup == null)
             {
                 return NotFound();
             }
-            return Ok(EducationYear);
+            return Ok(educationSubGroup);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.EducationYearCreateAccess)]
+        [CheckUserAccess(ActionBits.EducationSubGroupCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(EducationYearViewModel EducationYearViewModel)
+        public IHttpActionResult Create(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            var msgRes = _EducationYearService.Create(EducationYearViewModel);
+            var msgRes = _educationSubGroupService.Create(educationSubGroupViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -56,11 +56,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.EducationYearUpdateAccess)]
+        [CheckUserAccess(ActionBits.EducationSubGroupUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(EducationYearViewModel EducationYearViewModel)
+        public IHttpActionResult Update(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            var msgRes = _EducationYearService.Update(EducationYearViewModel);
+            var msgRes = _educationSubGroupService.Update(educationSubGroupViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -69,10 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.EducationYearDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.EducationSubGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _EducationYearService.Delete(id);
+            var msgRes = _educationSubGroupService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

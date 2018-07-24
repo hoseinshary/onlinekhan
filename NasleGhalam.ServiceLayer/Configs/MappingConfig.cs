@@ -9,6 +9,8 @@ using NasleGhalam.ViewModels.EducationGroup_Lesson;
 using NasleGhalam.ViewModels.Province;
 using NasleGhalam.ViewModels.City;
 using NasleGhalam.ViewModels.EducationYear;
+using NasleGhalam.ViewModels.Exam;
+using NasleGhalam.ViewModels.EducationSubGroup;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -33,6 +35,12 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<CityViewModel, City>();
 
                 config.CreateMap<EducationYearViewModel, EducationYear>();
+
+                config.CreateMap<ExamViewModel, Exam>();
+
+                config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
+
+
 
             });
         }

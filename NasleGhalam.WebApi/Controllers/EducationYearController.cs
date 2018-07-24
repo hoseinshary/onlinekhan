@@ -14,38 +14,38 @@ namespace NasleGhalam.WebApi.Controllers
 	/// </author>
 	public class EducationYearController : ApiController
     {
-        private readonly EducationYearService _EducationYearService;
-        public EducationYearController(EducationYearService EducationYearService)
+        private readonly EducationYearService _educationYearService;
+        public EducationYearController(EducationYearService educationYearService)
         {
-            _EducationYearService = EducationYearService;
+            _educationYearService = educationYearService;
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_EducationYearService.GetAll());
+            return Ok(_educationYearService.GetAll());
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var EducationYear = _EducationYearService.GetById(id);
-            if (EducationYear == null)
+            var educationYear = _educationYearService.GetById(id);
+            if (educationYear == null)
             {
                 return NotFound();
             }
-            return Ok(EducationYear);
+            return Ok(educationYear);
         }
 
 
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationYearCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(EducationYearViewModel EducationYearViewModel)
+        public IHttpActionResult Create(EducationYearViewModel educationYearViewModel)
         {
-            var msgRes = _EducationYearService.Create(EducationYearViewModel);
+            var msgRes = _educationYearService.Create(educationYearViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -58,9 +58,9 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationYearUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(EducationYearViewModel EducationYearViewModel)
+        public IHttpActionResult Update(EducationYearViewModel educationYearViewModel)
         {
-            var msgRes = _EducationYearService.Update(EducationYearViewModel);
+            var msgRes = _educationYearService.Update(educationYearViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -72,7 +72,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.EducationYearDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _EducationYearService.Delete(id);
+            var msgRes = _educationYearService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

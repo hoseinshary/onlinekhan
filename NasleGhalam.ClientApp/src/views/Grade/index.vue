@@ -1,5 +1,4 @@
 <template>
-
   <my-panel class="col-md-8">
     <span slot="title">{{modelName}}</span>
     <div slot="body">
@@ -7,7 +6,7 @@
       <br>
       <my-table :grid-data="allObj"
                 :columns="gridColumns"
-                :hasIndex="true">
+                hasIndex>
         <template slot="Id"
                   slot-scope="data">
           <my-btn-edit round
@@ -44,19 +43,17 @@ export default {
       gridColumns: [
         {
           title: 'نام',
-          data: 'Name',
-          searchable: true,
-          sortable: true
+          data: 'Name'
         },
         {
           title: 'اولویت',
-          data: 'Priority',
-          searchable: true,
-          sortable: true
+          data: 'Priority'
         },
         {
           title: 'عملیات',
-          data: 'Id'
+          data: 'Id',
+          searchable: false,
+          sortable: false
         }
       ]
     };
@@ -65,7 +62,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('grade', [
+    ...mapActions('gradeStore', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -98,7 +95,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('grade', {
+    ...mapState('gradeStore', {
       modelName: 'modelName',
       allObj: 'allObj'
     })

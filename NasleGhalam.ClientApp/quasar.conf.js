@@ -88,7 +88,8 @@ module.exports = function(ctx) {
         'QCheckbox',
         'QToggle',
         'QPagination',
-        'QTooltip'
+        'QTooltip',
+        'Loading'
       ],
       directives: ['Ripple', 'CloseOverlay'],
       // Quasar plugins

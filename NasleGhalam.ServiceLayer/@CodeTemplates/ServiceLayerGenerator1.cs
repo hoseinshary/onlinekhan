@@ -7,49 +7,47 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.EducationYear;
+using NasleGhalam.ViewModels.EducationSubGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class EducationYearService
+	public class EducationSubGroupService
 	{
-		private const string Title = "شهر";
+		private const string Title = "زیر گروه تحصیلی";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<EducationYear> _EducationYears;
+        private readonly IDbSet<EducationSubGroup> _educationSubGroups;
        
-	    public EducationYearService(IUnitOfWork uow)
+	    public EducationSubGroupService(IUnitOfWork uow)
         {
             _uow = uow;
-            _EducationYears = uow.Set<EducationYear>();
+            _educationSubGroups = uow.Set<EducationSubGroup>();
         }
 
 
 		/// <summary>
-        /// گرفتن  شهر با آی دی
+        /// گرفتن  زیر گروه تحصیلی با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public EducationYearViewModel GetById(int id)
+        public EducationSubGroupViewModel GetById(int id)
         {
-            return _EducationYears
+            return _educationSubGroups
                 .Where(current => current.Id == id)
-                .Select(current => new EducationYearViewModel
+                .Select(current => new EducationSubGroupViewModel
                 {
-                    Id = current.Id,
-                    
-                    
+                    Id = current.Id
                     
                 }).FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه شهر ها
+        /// گرفتن همه زیر گروه تحصیلی ها
         /// </summary>
         /// <returns></returns>
-        public IList<EducationYearViewModel> GetAll()
+        public IList<EducationSubGroupViewModel> GetAll()
         {
-            return _EducationYears.Select(current => new EducationYearViewModel()
+            return _educationSubGroups.Select(current => new EducationSubGroupViewModel()
             {
                 Id = current.Id,
             }).ToList();
@@ -57,30 +55,30 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// ثبت شهر
+        /// ثبت زیر گروه تحصیلی
         /// </summary>
-        /// <param name="EducationYearViewModel"></param>
+        /// <param name="educationSubGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(EducationYearViewModel EducationYearViewModel)
+        public MessageResult Create(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
-            _EducationYears.Add(EducationYear);
+            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
+            _educationSubGroups.Add(educationSubGroup);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = EducationYear.Id;
+			msgRes.Id = educationSubGroup.Id;
             return msgRes;
         }
 
 
 		/// <summary>
-        /// ویرایش شهر
+        /// ویرایش زیر گروه تحصیلی
         /// </summary>
-        /// <param name="EducationYearViewModel"></param>
+        /// <param name="educationSubGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(EducationYearViewModel EducationYearViewModel)
+        public MessageResult Update(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
-            _uow.MarkAsChanged(EducationYear);
+            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
+            _uow.MarkAsChanged(educationSubGroup);
 
 			
 			return  _uow.CommitChanges(CrudType.Update, Title);
@@ -89,20 +87,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف شهر
+        /// حذف زیر گروه تحصیلی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  EducationYearViewModel = GetById(id);
-            if (EducationYearViewModel == null)
+			var  educationSubGroupViewModel = GetById(id);
+            if (educationSubGroupViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
-            _uow.MarkAsDeleted(EducationYear);
+            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
+            _uow.MarkAsDeleted(educationSubGroup);
             
 			return  _uow.CommitChanges(CrudType.Delete, Title);
 			
@@ -110,12 +108,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه شهر ها برای لیست کشویی
+        /// گرفتن همه زیر گروه تحصیلی ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _EducationYears.Select(current => new SelectViewModel
+            return _educationSubGroups.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

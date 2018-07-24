@@ -3,6 +3,7 @@ import axios from 'axios';
 // import router from "utilities/router";
 import { API_URL } from './site-config';
 // import { bus } from '../main';
+import { Loading } from 'quasar';
 
 axios.interceptors.request.use(
   cfg => {
@@ -13,6 +14,7 @@ axios.interceptors.request.use(
     // }
     cfg.url = API_URL + cfg.url;
     //bus.$emit('enableLoader');
+    //Loading.show();
     // cfg.headers.Token = `Bearer dsfsdfsddfvbfggh2315645dfgp`;
 
     return cfg;
@@ -26,6 +28,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   res => {
     // bus.$emit('disableLoader');
+    //Loading.hide();
     return res;
   },
   // eslint-disable-next-line
@@ -44,6 +47,7 @@ axios.interceptors.response.use(
           break;
       }
 
+    //Loading.hide();
     // bus.$emit('disableLoader');
     return Promise.reject(err);
   }

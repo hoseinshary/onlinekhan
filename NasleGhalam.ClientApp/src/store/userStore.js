@@ -29,16 +29,15 @@ export default {
   },
   mutations: {
     create(state) {
-      debugger
-      state.instance.id++
-      let newObj = JSON.parse(JSON.stringify(state.instance))
-      state.allInstance.push(newObj)
+      state.instance.id++;
+      let newObj = JSON.parse(JSON.stringify(state.instance));
+      state.allInstance.push(newObj);
     },
     openModalCreate(state) {
-      state.isOpenModalCreate = true
+      state.isOpenModalCreate = true;
     },
     closeModalCreate(state) {
-      state.isOpenModalCreate = false
+      state.isOpenModalCreate = false;
     }
   }
   //,
@@ -54,4 +53,4 @@ export default {
   //       return state.count
   //     }
   //   }
-}
+};

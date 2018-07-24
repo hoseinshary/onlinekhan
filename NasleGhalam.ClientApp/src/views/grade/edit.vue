@@ -1,19 +1,17 @@
 <template>
   <my-modal-edit :title="modelName"
-                 size="sm"
-                 height="55%"
+                 size="md"
+                 height="240px"
                  :openModal="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
                  @toggle="toggleModalEditStore">
 
     <my-input :model="$v.instanceObj.Name"
-              class="col-12">
-    </my-input>
+              class="col-md-6" />
 
     <my-input :model="$v.instanceObj.Priority"
-              class="col-12">
-    </my-input>
+              class="col-md-6" />
 
   </my-modal-edit>
 </template>
@@ -24,16 +22,10 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   /**
-   * data
-   */
-  data() {
-    return {};
-  },
-  /**
    * methods
    */
   methods: {
-    ...mapActions('grade', [
+    ...mapActions('gradeStore', [
       'toggleModalEditStore',
       'editVueStore',
       'submitEditStore',
@@ -44,7 +36,7 @@ export default {
    * computed
    */
   computed: {
-    ...mapState('grade', {
+    ...mapState('gradeStore', {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
       isOpenModalEdit: 'isOpenModalEdit'

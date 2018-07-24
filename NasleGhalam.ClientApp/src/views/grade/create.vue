@@ -1,19 +1,16 @@
 <template>
   <my-modal-create :title="modelName"
-                   size="sm"
-                   height="55%"
+                   size="md"
+                   height="240px"
                    :openModal="isOpenModalCreate"
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
                    @toggle="toggleModalCreateStore">
 
     <my-input :model="$v.instanceObj.Name"
-              class="col-12">
-    </my-input>
-
+              class="col-md-6" />
     <my-input :model="$v.instanceObj.Priority"
-              class="col-12">
-    </my-input>
+              class="col-md-6" />
 
   </my-modal-create>
 </template>
@@ -24,16 +21,10 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   /**
-   * data
-   */
-  data() {
-    return {};
-  },
-  /**
    * methods
    */
   methods: {
-    ...mapActions('grade', [
+    ...mapActions('gradeStore', [
       'toggleModalCreateStore',
       'createVueStore',
       'submitCreateStore',
@@ -44,7 +35,7 @@ export default {
    * computed
    */
   computed: {
-    ...mapState('grade', {
+    ...mapState('gradeStore', {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
       isOpenModalCreate: 'isOpenModalCreate'

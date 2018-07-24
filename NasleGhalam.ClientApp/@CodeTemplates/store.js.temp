@@ -1,19 +1,20 @@
 import util from 'utilities/util';
-import gradeService from 'serviceLayers/gradeService';
+import axios from 'utilities/axios';
+import { {__modelName}_URL as baseUrl } from 'utilities/site-config';
 
 export default {
   namespaced: true,
   state: {
-    modelName: 'مقطع تحصیلی',
+    modelName: 'عنوان',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
     instanceObj: {
       Id: 0,
-      Name: '',
-      Priority: 0
+      Name: ''
     },
     allObj: [],
+    allObjDdl: [],
     selectedIndex: -1,
     selectedId: 0,
     createVue: null,
@@ -71,7 +72,7 @@ export default {
      * get data by id
      */
     getByIdStore({ state }, id) {
-      gradeService.getById(id).then(response => {
+      axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.instanceObj);
       });
@@ -81,8 +82,17 @@ export default {
      * fill grid data
      */
     fillGridStore({ state }) {
-      gradeService.getAll().then(response => {
+      axios.get(`${baseUrl}/GetAll`).then(response => {
         state.allObj = response.data;
+      });
+    },
+
+    /**
+     * fill dropDwonList
+     */
+    fillDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+        state.allObjDdl = response.data;
       });
     },
 
@@ -95,7 +105,7 @@ export default {
     },
 
     /**
-     * init create validation on load
+     * init create vue on load
      */
     createVueStore({ state }, vm) {
       state.createVue = vm;
@@ -106,16 +116,16 @@ export default {
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
-      dispatch('validateFormStore', vm).then(isValid => {
+      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
         if (!isValid) return;
 
-        gradeService.create(state.instanceObj).then(response => {
+        axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
-            commit('reset', vm.$v);
-            state.isOpenModalCreate = !closeModal;
+            dispatch('resetCreateStore');
+            dispatch('toggleModalCreateStore', !closeModal);
           }
 
           dispatch(
@@ -148,7 +158,7 @@ export default {
     },
 
     /**
-     * init edit validation on load
+     * init edit vue on load
      */
     editVueStore({ state }, vm) {
       state.editVue = vm;
@@ -159,17 +169,16 @@ export default {
      */
     submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
-      dispatch('validateFormStore', vm).then(isValid => {
+      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
         if (!isValid) return;
-
-        state.instanceObj = state.selectedId;
-        gradeService.update(state.instanceObj).then(response => {
+        state.instanceObj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('setIndex');
             commit('update');
-            commit('reset', vm.$v);
-            state.isOpenModalEdit = false;
+            dispatch('resetEditStore');
+            dispatch('toggleModalEditStore', false);
           }
 
           dispatch(
@@ -205,13 +214,13 @@ export default {
      * submit to delete data
      */
     submitDeleteStore({ state, commit, dispatch }, vm) {
-      gradeService.delete(state.selectedId).then(response => {
+      axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
           commit('setIndex');
           commit('delete');
           commit('reset');
-          state.isOpenModalDelete = false;
+          dispatch('toggleModalDeleteStore', false);
         }
 
         dispatch(
@@ -224,22 +233,8 @@ export default {
           { root: true }
         );
       });
-    },
-    //------------------------------------------------
-
-    /**
-     * vlidate form
-     */
-    validateFormStore({ dispatch }, vm) {
-      // check instance validation
-      vm.$v.instanceObj.$touch();
-      if (vm.$v.instanceObj.$error) {
-        dispatch('notifyInvalidForm', vm, { root: true });
-        return false;
-      }
-
-      return true;
     }
+    //------------------------------------------------
   },
   getters: {
     recordName(state) {

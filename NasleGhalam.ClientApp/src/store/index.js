@@ -1,13 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import grade from './grade';
-import gradeLevel from './gradeLevel';
+import gradeStore from './gradeStore';
+import gradeLevelStore from './gradeLevelStore';
+import cityStore from './cityStore';
+import lessonStore from './lessonStore';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   actions: {
+    /**
+     * create notification and show
+     */
     notify({}, notify) {
       // if vue instance not pass
       if (!notify.vm) return;
@@ -30,19 +35,40 @@ const store = new Vuex.Store({
       notify.vm.$snotify.html(html, {
         type: type,
         timeout: 4000,
-        showProgressBar: true
+        showProgressBar: true,
+        position: 'leftTop'
       });
     },
+
+    /**
+     * show invalid form notification
+     */
     notifyInvalidForm({ dispatch }, vm) {
       dispatch('notify', {
         vm,
         body: 'تمام مقادیر را بصورت صحیح وارد نمایید.'
       });
+    },
+
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.instanceObj.$touch();
+      if (vm.$v.instanceObj.$error) {
+        dispatch('notifyInvalidForm', vm);
+        return false;
+      }
+
+      return true;
     }
   },
   modules: {
-    grade,
-    gradeLevel
+    gradeStore,
+    gradeLevelStore,
+    cityStore,
+    lessonStore
   }
 });
 

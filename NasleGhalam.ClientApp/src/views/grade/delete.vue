@@ -15,7 +15,10 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('grade', ['toggleModalDeleteStore', 'submitDeleteStore']),
+    ...mapActions('gradeStore', [
+      'toggleModalDeleteStore',
+      'submitDeleteStore'
+    ]),
     submitDelete() {
       this.submitDeleteStore(this);
     }
@@ -24,11 +27,11 @@ export default {
    * computed
    */
   computed: {
-    ...mapState('grade', {
+    ...mapState('gradeStore', {
       modelName: 'modelName',
       isOpenModalDelete: 'isOpenModalDelete'
     }),
-    ...mapGetters('grade', ['recordName'])
+    ...mapGetters('gradeStore', ['recordName'])
   }
 };
 </script>

@@ -5,7 +5,7 @@
          icon="create"
          color="purple"
          size="sm"
-         class="shadow-5 bg-white"
+         class="shadow-5 bg-white q-mr-sm"
          @click="$emit('click')">
     <q-tooltip>
       ویرایش

@@ -67,5 +67,10 @@
         ExamCreateAccess = 47,
         ExamUpdateAccess = 48,
         ExamDeleteAccess = 49,
+
+        EducationSubGroupReadAccess = 50,
+        EducationSubGroupCreateAccess = 51,
+        EducationSubGroupUpdateAccess = 52,
+        EducationSubGroupDeleteAccess = 53,
     }
 }

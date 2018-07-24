@@ -13,22 +13,22 @@ namespace NasleGhalam.WebApi.Controllers
 	///     date: 01/05/1397
 	/// </author>
 	public class EducationSubGroupController : ApiController
-	{
+    {
         private readonly EducationSubGroupService _educationSubGroupService;
-		public EducationSubGroupController(EducationSubGroupService educationSubGroupService)
+        public EducationSubGroupController(EducationSubGroupService educationSubGroupService)
         {
             _educationSubGroupService = educationSubGroupService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_educationSubGroupService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var educationSubGroup = _educationSubGroupService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.EducationSubGroupCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(EducationSubGroupViewModel educationSubGroupViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

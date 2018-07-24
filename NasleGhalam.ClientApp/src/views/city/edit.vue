@@ -7,17 +7,14 @@
                  @reset="resetEditStore"
                  @toggle="toggleModalEditStore">
 
-    <my-input :model="$v.instanceObj.Name"
-              class="col-md-6" />
-
-    <my-input :model="$v.instanceObj.Priority"
-              class="col-md-6" />
+    <!--<my-input :model="$v.instanceObj.Name"
+              class="col-md-6"/>-->
 
   </my-modal-edit>
 </template>
 
 <script>
-import viewModel from 'viewModels/gradeViewModel';
+import viewModel from 'viewModels/cityViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -25,7 +22,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('gradeStore', [
+    ...mapActions('cityStore', [
       'toggleModalEditStore',
       'editVueStore',
       'submitEditStore',
@@ -36,7 +33,7 @@ export default {
    * computed
    */
   computed: {
-    ...mapState('gradeStore', {
+    ...mapState('cityStore', {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
       isOpenModalEdit: 'isOpenModalEdit'

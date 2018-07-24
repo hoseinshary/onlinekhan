@@ -9,12 +9,12 @@
                round
                @click="leftDrawerOpen = !leftDrawerOpen"
                aria-label="Menu">
-          <!-- <q-icon name="menu" /> -->
+          <q-icon name="menu" />
         </q-btn>
 
         <q-toolbar-title>
-          Quasar App
-          <div slot="subtitle">Running on Quasar v{{ $q.version }}
+          نسل قلم
+          <div slot="subtitle">سامانه جامع کنکور
           </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -29,13 +29,25 @@
       <router-link to="/grade">
         <q-item>
           <q-item-side icon="receipt" />
-          <q-item-main label="پایه تحصیلی" />
+          <q-item-main label="دوره تحصیلی" />
         </q-item>
       </router-link>
       <router-link to="/gradeLevel">
         <q-item>
           <q-item-side icon="reorder" />
-          <q-item-main label="مقطع تحصیلی" />
+          <q-item-main label="پایه تحصیلی" />
+        </q-item>
+      </router-link>
+      <router-link to="/city">
+        <q-item>
+          <q-item-side icon="reorder" />
+          <q-item-main label="شهر" />
+        </q-item>
+      </router-link>
+      <router-link to="/lesson">
+        <q-item>
+          <q-item-side icon="reorder" />
+          <q-item-main label="درس" />
         </q-item>
       </router-link>
     </q-layout-drawer>

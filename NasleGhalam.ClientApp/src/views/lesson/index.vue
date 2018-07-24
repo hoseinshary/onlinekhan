@@ -25,15 +25,12 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import modalCreate from './create';
-import modalEdit from './edit';
-import modalDelete from './delete';
 
 export default {
   components: {
-    'modal-create': modalCreate,
-    'modal-edit': modalEdit,
-    'modal-delete': modalDelete
+    'modal-create': () => import('./create'),
+    'modal-edit': () => import('./edit'),
+    'modal-delete': () => import('./delete')
   },
   /**
    * data
@@ -44,10 +41,6 @@ export default {
         {
           title: 'نام',
           data: 'Name'
-        },
-        {
-          title: 'اولویت',
-          data: 'Priority'
         },
         {
           title: 'عملیات',
@@ -62,7 +55,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('gradeStore', [
+    ...mapActions('lessonStore', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -95,7 +88,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('gradeStore', {
+    ...mapState('lessonStore', {
       modelName: 'modelName',
       allObj: 'allObj'
     })

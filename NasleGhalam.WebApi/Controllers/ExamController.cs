@@ -9,43 +9,43 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین     
+	///     date: 31/04/1397
 	/// </author>
 	public class ExamController : ApiController
     {
-        private readonly ExamService _ExamService;
-        public ExamController(ExamService ExamService)
+        private readonly ExamService _examService;
+        public ExamController(ExamService examService)
         {
-            _ExamService = ExamService;
+            _examService = examService;
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.ExamReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_ExamService.GetAll());
+            return Ok(_examService.GetAll());
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.ExamReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var Exam = _ExamService.GetById(id);
-            if (Exam == null)
+            var exam = _examService.GetById(id);
+            if (exam == null)
             {
                 return NotFound();
             }
-            return Ok(Exam);
+            return Ok(exam);
         }
 
 
         [HttpPost]
         [CheckUserAccess(ActionBits.ExamCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(ExamViewModel ExamViewModel)
+        public IHttpActionResult Create(ExamViewModel examViewModel)
         {
-            var msgRes = _ExamService.Create(ExamViewModel);
+            var msgRes = _examService.Create(examViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -58,9 +58,9 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.ExamUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(ExamViewModel ExamViewModel)
+        public IHttpActionResult Update(ExamViewModel examViewModel)
         {
-            var msgRes = _ExamService.Update(ExamViewModel);
+            var msgRes = _examService.Update(examViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -72,7 +72,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.ExamDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _ExamService.Delete(id);
+            var msgRes = _examService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

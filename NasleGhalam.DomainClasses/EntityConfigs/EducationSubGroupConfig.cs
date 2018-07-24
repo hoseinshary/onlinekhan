@@ -9,6 +9,11 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             this.HasKey(x => x.Id);
             this.Property(x => x.Name).HasMaxLength(50).IsRequired();
+
+            this.HasRequired(x => x.EducationGroup)
+                .WithMany(x => x.EducationSubGroups)
+                .HasForeignKey(x => x.EducationGroupId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

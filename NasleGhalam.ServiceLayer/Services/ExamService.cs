@@ -14,12 +14,12 @@ namespace NasleGhalam.ServiceLayer.Services
     {
         private const string Title = "امتحان";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Exam> _Exams;
+        private readonly IDbSet<Exam> _exams;
 
         public ExamService(IUnitOfWork uow)
         {
             _uow = uow;
-            _Exams = uow.Set<Exam>();
+            _exams = uow.Set<Exam>();
         }
 
 
@@ -30,7 +30,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ExamViewModel GetById(int id)
         {
-            return _Exams
+            return _exams
                 .Where(current => current.Id == id)
                 .Select(current => new ExamViewModel
                 {
@@ -38,9 +38,9 @@ namespace NasleGhalam.ServiceLayer.Services
                     Name = current.Name,
                     Date = current.Date,
                     EducationGroupId = current.EducationGroupId,
-                    EducationGroupName = current.EducationGroup.Name,
+                   // EducationGroupName = current.EducationGroup.Name,
                     EducationYearId = current.EducationYearId,
-                    EducationYearName = current.EducationYear.Name
+                   // EducationYearName = current.EducationYear.Name
                 }).FirstOrDefault();
         }
 
@@ -51,7 +51,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<ExamViewModel> GetAll()
         {
-            return _Exams.Select(current => new ExamViewModel()
+            return _exams.Select(current => new ExamViewModel()
             {
                 Id = current.Id,
                 Name = current.Name,
@@ -67,15 +67,15 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// ثبت امتحان
         /// </summary>
-        /// <param name="ExamViewModel"></param>
+        /// <param name="examViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(ExamViewModel ExamViewModel)
+        public MessageResult Create(ExamViewModel examViewModel)
         {
-            var Exam = Mapper.Map<Exam>(ExamViewModel);
-            _Exams.Add(Exam);
+            var exam = Mapper.Map<Exam>(examViewModel);
+            _exams.Add(exam);
 
             MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = Exam.Id;
+            msgRes.Id = exam.Id;
             return msgRes;
         }
 
@@ -83,12 +83,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// ویرایش امتحان
         /// </summary>
-        /// <param name="ExamViewModel"></param>
+        /// <param name="examViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(ExamViewModel ExamViewModel)
+        public MessageResult Update(ExamViewModel examViewModel)
         {
-            var Exam = Mapper.Map<Exam>(ExamViewModel);
-            _uow.MarkAsChanged(Exam);
+            var exam = Mapper.Map<Exam>(examViewModel);
+            _uow.MarkAsChanged(exam);
 
 
             return _uow.CommitChanges(CrudType.Update, Title);
@@ -103,14 +103,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-            var ExamViewModel = GetById(id);
-            if (ExamViewModel == null)
+            var examViewModel = GetById(id);
+            if (examViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var Exam = Mapper.Map<Exam>(ExamViewModel);
-            _uow.MarkAsDeleted(Exam);
+            var exam = Mapper.Map<Exam>(examViewModel);
+            _uow.MarkAsDeleted(exam);
 
             return _uow.CommitChanges(CrudType.Delete, Title);
 
@@ -123,7 +123,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _Exams.Select(current => new SelectViewModel
+            return _exams.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

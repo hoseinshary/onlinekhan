@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.EducationSubGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class EducationSubGroupService
-	{
-		private const string Title = "زیر گروه تحصیلی";
+    public class EducationSubGroupService
+    {
+        private const string Title = "زیر گروه تحصیلی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<EducationSubGroup> _educationSubGroups;
-       
-	    public EducationSubGroupService(IUnitOfWork uow)
+
+        public EducationSubGroupService(IUnitOfWork uow)
         {
             _uow = uow;
             _educationSubGroups = uow.Set<EducationSubGroup>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  زیر گروه تحصیلی با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -35,13 +35,14 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new EducationSubGroupViewModel
                 {
-                    Id = current.Id
-                    
+                    Id = current.Id,
+                    Name = current.Name,
+                    EducationGroupId = current.EducationGroupId
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه زیر گروه تحصیلی ها
         /// </summary>
         /// <returns></returns>
@@ -49,12 +50,16 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _educationSubGroups.Select(current => new EducationSubGroupViewModel()
             {
+                
                 Id = current.Id,
+                Name = current.Name,
+                EducationGroupId = current.EducationGroupId,
+                EducationGroupName = current.EducationGroup.Name
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت زیر گروه تحصیلی
         /// </summary>
         /// <param name="educationSubGroupViewModel"></param>
@@ -64,13 +69,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
             _educationSubGroups.Add(educationSubGroup);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = educationSubGroup.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = educationSubGroup.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش زیر گروه تحصیلی
         /// </summary>
         /// <param name="educationSubGroupViewModel"></param>
@@ -80,20 +85,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
             _uow.MarkAsChanged(educationSubGroup);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف زیر گروه تحصیلی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  educationSubGroupViewModel = GetById(id);
+            var educationSubGroupViewModel = GetById(id);
             if (educationSubGroupViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -101,9 +106,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
             _uow.MarkAsDeleted(educationSubGroup);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
@@ -119,5 +124,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

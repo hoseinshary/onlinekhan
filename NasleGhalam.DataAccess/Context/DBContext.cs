@@ -109,7 +109,7 @@ namespace NasleGhalam.DataAccess.Context
                     result.FaMessage = "خطا در حذف اطلاعات <br />";
                     result.FaMessage += "خطای رابطه ای! این موجودیت با دیگر جداول در ارتباط میباشد... ابتدا آنها را حذف نمایید";
 
-                    result.ErrorNumber = 2601;
+                    result.ErrorNumber = 547;
                 }
                 else
                 {

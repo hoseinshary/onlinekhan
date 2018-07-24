@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201806181746162_changeUserTbl.Designer.cs">
       <DependentUpon>201806181746162_changeUserTbl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807240809238_EducationSubGroupRelation.cs" />
+    <Compile Include="Migrations\201807240809238_EducationSubGroupRelation.Designer.cs">
+      <DependentUpon>201807240809238_EducationSubGroupRelation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -101,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806181746162_changeUserTbl.resx">
       <DependentUpon>201806181746162_changeUserTbl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807240809238_EducationSubGroupRelation.resx">
+      <DependentUpon>201807240809238_EducationSubGroupRelation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

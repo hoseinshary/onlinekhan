@@ -103,11 +103,13 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
             return _educationGroup
+                
                  .Select(current => new
                  {
                      current.Id,
                      current.Name,
-                     EducationGroups_Lessons = current.EducationGroups_Lessons.DefaultIfEmpty()
+                     EducationGroups_Lessons = current.EducationGroups_Lessons
+                     .Where(x => x.LessonId == id).DefaultIfEmpty()
                  })
                  .SelectMany(curent => curent.EducationGroups_Lessons,
                  (education, edu_lesson) => new EducationGroup_LessonViewModel
@@ -118,7 +120,7 @@ namespace NasleGhalam.ServiceLayer.Services
                      LessonId = edu_lesson == null ? 0 : edu_lesson.Lesson.Id,
                      LessonName = edu_lesson.Lesson.Name,
                      IsChecked = edu_lesson != null
-                 }).Where(current => current.LessonId == id).OrderByDescending(current => current.IsChecked).ToList();
+                 }).OrderByDescending(current => current.IsChecked).ToList();
 
 
 

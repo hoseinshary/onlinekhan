@@ -8,43 +8,43 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 25/04/1397
 	/// </author>
 	public class CityController : ApiController
     {
-        private readonly CityService _CityService;
-        public CityController(CityService CityService)
+        private readonly CityService _cityService;
+        public CityController(CityService cityService)
         {
-            _CityService = CityService;
+            _cityService = cityService;
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_CityService.GetAll());
+            return Ok(_cityService.GetAll());
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var City = _CityService.GetById(id);
-            if (City == null)
+            var city = _cityService.GetById(id);
+            if (city == null)
             {
                 return NotFound();
             }
-            return Ok(City);
+            return Ok(city);
         }
 
 
         [HttpPost]
         [CheckUserAccess(ActionBits.CityCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(CityViewModel CityViewModel)
+        public IHttpActionResult Create(CityViewModel cityViewModel)
         {
-            var msgRes = _CityService.Create(CityViewModel);
+            var msgRes = _cityService.Create(cityViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -57,9 +57,9 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.CityUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(CityViewModel CityViewModel)
+        public IHttpActionResult Update(CityViewModel cityViewModel)
         {
-            var msgRes = _CityService.Update(CityViewModel);
+            var msgRes = _cityService.Update(cityViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -71,7 +71,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.CityDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _CityService.Delete(id);
+            var msgRes = _cityService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

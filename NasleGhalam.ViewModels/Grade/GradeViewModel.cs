@@ -15,7 +15,8 @@ namespace NasleGhalam.ViewModels.Grade
 
 
         [Display(Name = "اولویت نمایش")]
-
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [Range(0,byte.MaxValue,ErrorMessageResourceType=typeof(ErrorResources),ErrorMessageResourceName ="Range")]
         public byte Priority { get; set; }
 
 

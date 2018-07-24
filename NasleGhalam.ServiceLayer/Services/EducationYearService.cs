@@ -14,12 +14,12 @@ namespace NasleGhalam.ServiceLayer.Services
     {
         private const string Title = "سال تحصیلی";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<EducationYear> _EducationYears;
+        private readonly IDbSet<EducationYear> _educationYears;
 
         public EducationYearService(IUnitOfWork uow)
         {
             _uow = uow;
-            _EducationYears = uow.Set<EducationYear>();
+            _educationYears = uow.Set<EducationYear>();
         }
 
 
@@ -30,7 +30,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public EducationYearViewModel GetById(int id)
         {
-            return _EducationYears
+            return _educationYears
                 .Where(current => current.Id == id)
                 .Select(current => new EducationYearViewModel
                 {
@@ -47,7 +47,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<EducationYearViewModel> GetAll()
         {
-            return _EducationYears.Select(current => new EducationYearViewModel()
+            return _educationYears.Select(current => new EducationYearViewModel()
             {
                 Id = current.Id,
                 Name = current.Name,
@@ -59,19 +59,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// ثبت سال تحصیلی
         /// </summary>
-        /// <param name="EducationYearViewModel"></param>
+        /// <param name="educationYearViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(EducationYearViewModel EducationYearViewModel)
+        public MessageResult Create(EducationYearViewModel educationYearViewModel)
         {
-            if(EducationYearViewModel.IsActiveYear == true)
+            if(educationYearViewModel.IsActiveYear == true)
             {
-                _EducationYears.ToList().ForEach(current => current.IsActiveYear = false);
+                _educationYears.ToList().ForEach(current => current.IsActiveYear = false);
             }
-            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
-            _EducationYears.Add(EducationYear);
+            var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
+            _educationYears.Add(educationYear);
 
             MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = EducationYear.Id;
+            msgRes.Id = educationYear.Id;
             return msgRes;
 
         }
@@ -79,16 +79,16 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// ویرایش سال تحصیلی
         /// </summary>
-        /// <param name="EducationYearViewModel"></param>
+        /// <param name="educationYearViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(EducationYearViewModel EducationYearViewModel)
+        public MessageResult Update(EducationYearViewModel educationYearViewModel)
         {
-            if(EducationYearViewModel.IsActiveYear == true)
+            if(educationYearViewModel.IsActiveYear == true)
             {
-                _EducationYears.ToList<EducationYear>().ForEach(current => current.IsActiveYear = false);
+                _educationYears.ToList<EducationYear>().ForEach(current => current.IsActiveYear = false);
             }
-            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
-            _uow.MarkAsChanged(EducationYear);
+            var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
+            _uow.MarkAsChanged(educationYear);
 
 
             return _uow.CommitChanges(CrudType.Update, Title);
@@ -103,14 +103,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-            var EducationYearViewModel = GetById(id);
-            if (EducationYearViewModel == null)
+            var educationYearViewModel = GetById(id);
+            if (educationYearViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var EducationYear = Mapper.Map<EducationYear>(EducationYearViewModel);
-            _uow.MarkAsDeleted(EducationYear);
+            var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
+            _uow.MarkAsDeleted(educationYear);
 
             return _uow.CommitChanges(CrudType.Delete, Title);
 
@@ -123,7 +123,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _EducationYears.Select(current => new SelectViewModel
+            return _educationYears.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

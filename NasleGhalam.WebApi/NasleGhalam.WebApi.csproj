@@ -113,6 +113,7 @@
     <Compile Include="Controllers\EducationYearController.cs" />
     <Compile Include="Controllers\ExamController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
+    <Compile Include="Controllers\RatioController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="App_Start\StructureMapHttpControllerActivator.cs" />

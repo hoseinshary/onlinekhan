@@ -9,9 +9,9 @@
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#
-	string modelName = "EducationSubGroup";
-	string instanceName = "educationSubGroup";
-	string faName = "زیر گروه تحصیلی";
+	string modelName = "Ratio";
+	string instanceName = "ratio";
+	string faName = "ضریب";
 #>
 using System;
 using System.Collections.Generic;

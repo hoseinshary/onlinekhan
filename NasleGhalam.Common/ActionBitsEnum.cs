@@ -72,5 +72,10 @@
         EducationSubGroupCreateAccess = 51,
         EducationSubGroupUpdateAccess = 52,
         EducationSubGroupDeleteAccess = 53,
+
+        RatioReadAccess = 54,
+        RatioCreateAccess = 55,
+        RatioUpdateAccess = 56,
+        RatioDeleteAccess = 57,
     }
 }

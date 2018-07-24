@@ -13,7 +13,7 @@ namespace NasleGhalam.ServiceLayer.Services
 {
     public class EducationSubGroupService
     {
-        private const string Title = "زیر گروه تحصیلی";
+        private const string Title = "زیر گروه آموزشی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<EducationSubGroup> _educationSubGroups;
 
@@ -25,7 +25,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن  زیر گروه تحصیلی با آی دی
+        /// گرفتن  زیر گروه آموزشی با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -43,7 +43,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه زیر گروه تحصیلی ها
+        /// گرفتن همه زیر گروه آموزشی ها
         /// </summary>
         /// <returns></returns>
         public IList<EducationSubGroupViewModel> GetAll()
@@ -60,7 +60,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// ثبت زیر گروه تحصیلی
+        /// ثبت زیر گروه آموزشی
         /// </summary>
         /// <param name="educationSubGroupViewModel"></param>
         /// <returns></returns>
@@ -76,7 +76,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// ویرایش زیر گروه تحصیلی
+        /// ویرایش زیر گروه آموزشی
         /// </summary>
         /// <param name="educationSubGroupViewModel"></param>
         /// <returns></returns>
@@ -92,7 +92,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// حذف زیر گروه تحصیلی
+        /// حذف زیر گروه آموزشی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -113,7 +113,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه زیر گروه تحصیلی ها برای لیست کشویی
+        /// گرفتن همه زیر گروه آموزشی ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()

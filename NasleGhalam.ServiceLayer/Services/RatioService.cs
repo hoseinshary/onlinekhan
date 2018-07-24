@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.Ratio;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class RatioService
-	{
-		private const string Title = "ضریب";
+    public class RatioService
+    {
+        private const string Title = "ضریب";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Ratio> _ratios;
-       
-	    public RatioService(IUnitOfWork uow)
+
+        public RatioService(IUnitOfWork uow)
         {
             _uow = uow;
             _ratios = uow.Set<Ratio>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  ضریب با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -35,12 +35,17 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new RatioViewModel
                 {
-                    Id = current.Id
+                    Id = current.Id,
+                    Name = current.Name,
+                    Rate = current.Rate,
+                    EducationSubGroupId = current.EducationSubGroupId,
+                    LessonId = current.LessonId
+                    
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه ضریب ها
         /// </summary>
         /// <returns></returns>
@@ -49,11 +54,17 @@ namespace NasleGhalam.ServiceLayer.Services
             return _ratios.Select(current => new RatioViewModel()
             {
                 Id = current.Id,
+                Name = current.Name,
+                Rate = current.Rate,
+                EducationSubGroupId = current.EducationSubGroupId,
+                EducationSubGroupName = current.EducationSubGroup.Name,
+                LessonId = current.LessonId,
+                LessonName = current.Lesson.Name
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت ضریب
         /// </summary>
         /// <param name="ratioViewModel"></param>
@@ -63,13 +74,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var ratio = Mapper.Map<Ratio>(ratioViewModel);
             _ratios.Add(ratio);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = ratio.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = ratio.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش ضریب
         /// </summary>
         /// <param name="ratioViewModel"></param>
@@ -79,20 +90,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var ratio = Mapper.Map<Ratio>(ratioViewModel);
             _uow.MarkAsChanged(ratio);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف ضریب
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  ratioViewModel = GetById(id);
+            var ratioViewModel = GetById(id);
             if (ratioViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -100,9 +111,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var ratio = Mapper.Map<Ratio>(ratioViewModel);
             _uow.MarkAsDeleted(ratio);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
@@ -118,5 +129,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

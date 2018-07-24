@@ -20,10 +20,10 @@ namespace NasleGhalam.ViewModels.Exam
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         public DateTime Date { get; set; }
 
-        [Display(Name = "گروه درسی")]
+        [Display(Name = "گروه آموزشی")]
         public string EducationGroupName { get; set; }
 
-        [Display(Name = "گروه درسی")]
+        [Display(Name = "گروه آموزشی")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationGroupId { get; set; }
 

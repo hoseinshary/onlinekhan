@@ -19,6 +19,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
         public GradeService(IUnitOfWork uow)
         {
+            
             _uow = uow;
             _grades = uow.Set<Grade>();
         }
@@ -31,6 +32,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public GradeViewModel GetById(int id)
         {
+            
             return _grades
                 .Where(current => current.Id == id)
                 .Select(current => new GradeViewModel

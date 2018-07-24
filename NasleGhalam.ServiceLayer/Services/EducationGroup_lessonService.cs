@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.EducationGroup_Lesson;
 
 namespace NasleGhalam.ServiceLayer.Services

@@ -16,7 +16,69 @@ namespace NasleGhalam.Common
             int month = pc.GetMonth(mDate);
             int year = pc.GetYear(mDate);
 
-            return String.Format("{0:0000}/{1:00}/{2:00} {3:00}:{4:00}:{5:00}", year, month, day, mDate.Hour, mDate.Minute, mDate.Second);
+            return $"{year:0000}/{month:00}/{day:00} {mDate.Hour:00}:{mDate.Minute:00}:{mDate.Second:00}";
+        }
+
+        public static DateTime? ToMiladiDateTime(this string pDateTime)
+        {
+            PersianCalendar pc = new PersianCalendar();
+            DateTime thisDate = DateTime.Now;
+
+            string[] arr_dateTime = pDateTime.Split(new Char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (arr_dateTime.Length == 2) // date and time
+            {
+                try
+                {
+                    string[] arr_date = arr_dateTime[0].Split('/', '\\', '-');
+                    string[] arr_time = arr_dateTime[1].Split(':');
+
+                    int pDay;
+                    int pYear;
+                    if (arr_date[2].Length == 4)
+                    {
+                        pDay = Convert.ToInt16(arr_date[0]);
+                        pYear = Convert.ToInt16(arr_date[2]);
+                    }
+                    else
+                    {
+                        pDay = Convert.ToInt16(arr_date[2]);
+                        pYear = Convert.ToInt16(arr_date[0]);
+                    }
+                    int pMonth = Convert.ToInt16(arr_date[1]);
+
+                    thisDate = pc.ToDateTime(pYear, pMonth, pDay,
+                        Convert.ToInt32(arr_time[0]), Convert.ToInt32(arr_time[1]), Convert.ToInt32(arr_time[2]), 0);
+
+                }
+                catch { return null; }
+            }
+            else if (arr_dateTime.Length == 1) // only date
+            {
+                try
+                {
+                    string[] arr_date = arr_dateTime[0].Split('/', '\\', '-');
+
+                    int pDay;
+                    int pYear;
+                    if (arr_date[2].Length == 4)
+                    {
+                        pDay = Convert.ToInt16(arr_date[0]);
+                        pYear = Convert.ToInt16(arr_date[2]);
+                    }
+                    else
+                    {
+                        pDay = Convert.ToInt16(arr_date[2]);
+                        pYear = Convert.ToInt16(arr_date[0]);
+                    }
+                    int pMonth = Convert.ToInt16(arr_date[1]);
+
+                    thisDate = pc.ToDateTime(pYear, pMonth, pDay, 0, 0, 0, 0);
+
+                }
+                catch { return null; }
+            }
+            return thisDate;
         }
 
 

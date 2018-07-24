@@ -1,6 +1,4 @@
-﻿using NasleGhalam.Common;
-
-namespace NasleGhalam.DomainClasses.Entities
+﻿namespace NasleGhalam.DomainClasses.Entities
 {
     public class QuestionAnswerView
     {

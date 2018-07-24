@@ -1,20 +1,20 @@
 ﻿using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
-using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Lesson;
-
+using NasleGhalam.WebApi.FilterAttribute;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
-	/// <author>
-	///     name: علیرضا اعتمادی
-	///     date: 1397.03.16
-	/// </author>
-	public class LessonController : ApiController
+    /// <author>
+    ///     name: علیرضا اعتمادی
+    ///     date: 1397.03.16
+    /// </author>
+    public class LessonController : ApiController
     {
         private readonly LessonService _lessonService;
+
         public LessonController(LessonService lessonService)
         {
             _lessonService = lessonService;
@@ -69,7 +69,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost , CheckUserAccess(ActionBits.LessonDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.LessonDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _lessonService.Delete(id);

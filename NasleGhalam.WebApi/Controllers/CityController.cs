@@ -3,7 +3,6 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.City;
-using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {

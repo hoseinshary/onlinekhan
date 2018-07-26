@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Exam\ExamViewModel.cs" />
     <Compile Include="Province\ProvinceViewModel.cs" />
+    <Compile Include="Ratio\RatioViewModel.cs" />
     <Compile Include="Role\RoleAccessViewModel.cs" />
     <Compile Include="Role\RoleViewModel.cs" />
     <Compile Include="User\LoginResultViewModel.cs" />

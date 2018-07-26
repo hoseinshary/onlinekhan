@@ -13,22 +13,22 @@ namespace NasleGhalam.WebApi.Controllers
 	///     date: 02/05/1397
 	/// </author>
 	public class RatioController : ApiController
-	{
+    {
         private readonly RatioService _ratioService;
-		public RatioController(RatioService ratioService)
+        public RatioController(RatioService ratioService)
         {
             _ratioService = ratioService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.RatioReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.RatioReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_ratioService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.RatioReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.RatioReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var ratio = _ratioService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.RatioCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(RatioViewModel ratioViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

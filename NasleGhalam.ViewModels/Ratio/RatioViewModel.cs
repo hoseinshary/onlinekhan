@@ -2,25 +2,25 @@
 
 namespace NasleGhalam.ViewModels.Ratio
 {
-	public class RatioViewModel
-	{
-		
-		public int Id { get; set; }
+    public class RatioViewModel
+    {
+
+        public int Id { get; set; }
 
 
-		[Display(Name = "نام")]
+        [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(200, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Name { get; set; }
 
 
-		[Display(Name = "ضریب")]
+        [Display(Name = "ضریب")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [Range(0, byte.MaxValue, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
         public byte Rate { get; set; }
 
 
-		[Display(Name = "درس")]
+        [Display(Name = "درس")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         public int LessonId { get; set; }
 
@@ -29,7 +29,8 @@ namespace NasleGhalam.ViewModels.Ratio
 
 
         [Display(Name = "زیر گروه درسی")]
-		public int EducationSubGroupId { get; set; }
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        public int EducationSubGroupId { get; set; }
 
         [Display(Name = "زیر گروه درسی")]
         public string EducationSubGroupName { get; set; }

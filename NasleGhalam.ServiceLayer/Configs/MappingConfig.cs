@@ -11,6 +11,7 @@ using NasleGhalam.ViewModels.City;
 using NasleGhalam.ViewModels.EducationYear;
 using NasleGhalam.ViewModels.Exam;
 using NasleGhalam.ViewModels.EducationSubGroup;
+using NasleGhalam.ViewModels.Ratio;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -39,6 +40,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<ExamViewModel, Exam>();
 
                 config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
+                config.CreateMap<RatioViewModel, Ratio>();
 
 
 

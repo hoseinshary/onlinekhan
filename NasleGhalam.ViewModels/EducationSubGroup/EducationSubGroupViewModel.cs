@@ -15,11 +15,11 @@ namespace NasleGhalam.ViewModels.EducationSubGroup
         public string Name { get; set; }
 
 
-        [Display(Name = "گروه تحصیلی")]
+        [Display(Name = "گروه آموزشی")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationGroupId { get; set; }
 
-        [Display(Name = "گروه تحصیلی")]
+        [Display(Name = "گروه آموزشی")]
         public string EducationGroupName { get; set; }
 
     }

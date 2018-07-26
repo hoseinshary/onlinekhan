@@ -3,7 +3,7 @@ using NasleGhalam.Common;
 using Newtonsoft.Json;
 using StructureMap.TypeRules;
 
-namespace NasleGhalam.WebApi.ModelBinder
+namespace NasleGhalam.WebApi.ModelBinderAndFormatter
 {
     public class CustomJsonFormatter : JsonConverter
     {

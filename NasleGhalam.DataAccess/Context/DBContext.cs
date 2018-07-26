@@ -4,11 +4,10 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
+using System.Linq.Expressions;
 using System.Text;
 using NasleGhalam.Common;
-using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.DomainClasses.EntityConfigs;
-using Action = NasleGhalam.DomainClasses.Entities.Action;
 
 namespace NasleGhalam.DataAccess.Context
 {
@@ -32,13 +31,59 @@ namespace NasleGhalam.DataAccess.Context
         {
             return base.Set<TEntity>();
         }
+
         public void MarkAsChanged<TEntity>(TEntity entity) where TEntity : class
         {
             Entry(entity).State = EntityState.Modified;
         }
+
         public void MarkAsDeleted<TEntity>(TEntity entity) where TEntity : class
         {
             Entry(entity).State = EntityState.Deleted;
+        }
+
+        public void MarkAsDetached<TEntity>(TEntity entity) where TEntity : class
+        {
+            Entry(entity).State = EntityState.Detached;
+        }
+
+        public void DetachAll()
+        {
+            foreach (DbEntityEntry dbEntityEntry in this.ChangeTracker.Entries())
+            {
+                if (dbEntityEntry.Entity != null)
+                {
+                    Entry(dbEntityEntry.Entity).State = EntityState.Detached;
+                }
+            }
+        }
+
+        public void UpdateFields<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] fields) where TEntity : class
+        {
+            foreach (var property in fields)
+            {
+                Entry(entity).Property(property).IsModified = true;
+            }
+        }
+
+        public void ExcludeFieldsFromUpdate<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] fields) where TEntity : class
+        {
+            MarkAsChanged(entity);
+            foreach (var property in fields)
+            {
+                Entry(entity).Property(property).IsModified = false;
+            }
+        }
+
+        public void ValidateOnSaveEnabled(bool validateOnSaveEnabled)
+        {
+            this.Configuration.ValidateOnSaveEnabled = validateOnSaveEnabled;
+        }
+
+        public int SaveChanges(bool validateOnSaveEnabled)
+        {
+            ValidateOnSaveEnabled(validateOnSaveEnabled);
+            return SaveChanges();
         }
 
         public MessageResult CommitChanges(CrudType type = CrudType.None, string fieldName = "")
@@ -104,12 +149,10 @@ namespace NasleGhalam.DataAccess.Context
                     result.FaMessage = string.IsNullOrEmpty(fieldName) ? "خطای تکراری بودن داده! با مدیر تماس بگیرید." : $"این {fieldName} تکراری میباشد";
                     result.ErrorNumber = 2601;
                 }
-                else if (innerException != null && innerException.Number == 547)
+                else if (type == CrudType.Delete && innerException != null && innerException.Number == 547)
                 {
-                    result.FaMessage = "خطا در حذف اطلاعات <br />";
+                    result.FaMessage = "خطا در حذف اطلاعات ،";
                     result.FaMessage += "خطای رابطه ای! این موجودیت با دیگر جداول در ارتباط میباشد... ابتدا آنها را حذف نمایید";
-
-                    result.ErrorNumber = 547;
                 }
                 else
                 {
@@ -128,7 +171,7 @@ namespace NasleGhalam.DataAccess.Context
                     //    eve.Entry.Entity.GetType().Name, eve.Entry.State);
                     foreach (var ve in eve.ValidationErrors)
                     {
-                        result.FaMessage += ve.PropertyName + ": " + ve.ErrorMessage + "</br>";
+                        result.FaMessage += ve.PropertyName + ": " + ve.ErrorMessage + "،";
                     }
                 }
 
@@ -137,17 +180,21 @@ namespace NasleGhalam.DataAccess.Context
 
             return result;
         }
-        #endregion
 
+        public DbContextTransaction BeginTransaction()
+        {
+            return this.Database.BeginTransaction();
+        }
 
-        #region ### Db Sets ###
-        public DbSet<Action> Actions { get; set; }
+        public DbRawSqlQuery<T> RunQuery<T>(string sqlQuery, params object[] sqlParam)
+        {
+            return this.Database.SqlQuery<T>(sqlQuery, sqlParam);
+        }
 
-        public DbSet<Controller> Controllers { get; set; }
-
-        public DbSet<Role> Roles { get; set; }
-
-        public DbSet<User> Users { get; set; }
+        public int ExecuteSqlCommand(string sqlQuery, params object[] sqlParam)
+        {
+            return this.Database.ExecuteSqlCommand(sqlQuery, sqlParam);
+        }
         #endregion
     }
 }

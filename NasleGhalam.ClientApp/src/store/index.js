@@ -5,6 +5,7 @@ import gradeStore from './gradeStore';
 import gradeLevelStore from './gradeLevelStore';
 import cityStore from './cityStore';
 import lessonStore from './lessonStore';
+import provinceStore from './provinceStore';
 
 Vue.use(Vuex);
 
@@ -68,7 +69,8 @@ const store = new Vuex.Store({
     gradeStore,
     gradeLevelStore,
     cityStore,
-    lessonStore
+    lessonStore,
+    provinceStore
   }
 });
 

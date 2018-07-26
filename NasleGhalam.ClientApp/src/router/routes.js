@@ -16,6 +16,10 @@ export default [
         component: () => import('views/gradeLevel')
       },
       {
+        path: '/province',
+        component: () => import('views/province')
+      },
+      {
         path: '/city',
         component: () => import('views/city')
       },

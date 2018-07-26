@@ -127,9 +127,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="ModelBinder\DateTimeModelBinder.cs" />
-    <Compile Include="ModelBinder\CustomJsonFormatter.cs" />
-    <Compile Include="ModelBinder\StringModelBinder.cs" />
+    <Compile Include="ModelBinderAndFormatter\DateTimeModelBinder.cs" />
+    <Compile Include="ModelBinderAndFormatter\CustomJsonFormatter.cs" />
+    <Compile Include="ModelBinderAndFormatter\StringModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

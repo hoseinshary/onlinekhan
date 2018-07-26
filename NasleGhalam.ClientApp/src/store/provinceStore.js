@@ -11,7 +11,8 @@ export default {
     isOpenModalDelete: false,
     instanceObj: {
       Id: 0,
-      Name: ''
+      Name: '',
+      Code: ''
     },
     allObj: [],
     allObjDdl: [],

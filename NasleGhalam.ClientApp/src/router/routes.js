@@ -1,5 +1,9 @@
 export default [
   {
+    path: '/user/login',
+    component: () => import('views/user/login')
+  },
+  {
     path: '/',
     component: () => import('layouts/default'),
     children: [

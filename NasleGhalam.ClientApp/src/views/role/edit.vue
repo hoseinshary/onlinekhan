@@ -7,13 +7,31 @@
                  @reset="resetEditStore"
                  @toggle="toggleModalEditStore">
 
-    {__props}
+    <my-input :model="$v.instanceObj.Name"
+              class="col-md-6" />
+
+    <my-field class="col-md-6"
+              :model="$v.instance.Priority">
+      <template slot-scope="data">
+        <q-radio v-model="data.obj.$model"
+                 val="false"
+                 label="false" />
+        <q-radio v-model="data.obj.$model"
+                 val="true"
+                 label="true" />
+      </template>
+    </my-field>
+
+    <my-select :model="$v.instanceObj.GradeId"
+               :options=""
+               class="col-md-6"
+               clearable />
 
   </my-modal-edit>
 </template>
 
 <script>
-import viewModel from 'viewModels/{__viewModelName}ViewModel';
+import viewModel from 'viewModels/roleViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -21,7 +39,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('{__modelName}', [
+    ...mapActions('roleStore', [
       'toggleModalEditStore',
       'editVueStore',
       'submitEditStore',
@@ -32,7 +50,7 @@ export default {
    * computed
    */
   computed: {
-    ...mapState('{__modelName}', {
+    ...mapState('roleStore', {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
       isOpenModalEdit: 'isOpenModalEdit'

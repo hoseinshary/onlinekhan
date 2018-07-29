@@ -1,6 +1,6 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { {__modelName}_URL as baseUrl } from 'utilities/site-config';
+import { ROLE_URL as baseUrl } from 'utilities/site-config';
 
 export default {
   namespaced: true,
@@ -11,7 +11,9 @@ export default {
     isOpenModalDelete: false,
     instanceObj: {
       Id: 0,
-      {__props}
+      Name: '',
+      Priority: false,
+      GradeId: []
     },
     allObj: [],
     allObjDdl: [],

@@ -7,8 +7,7 @@
                    @reset="resetCreateStore"
                    @toggle="toggleModalCreateStore">
 
-    <!--<my-input :model="$v.instanceObj.Name"
-              class="col-md-6" />-->
+    {__props}
 
   </my-modal-create>
 </template>

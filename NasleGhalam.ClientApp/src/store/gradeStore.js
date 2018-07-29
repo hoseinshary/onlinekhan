@@ -2,7 +2,15 @@ import util from 'utilities/util';
 import axios from 'utilities/axios';
 import { GRADE_URL as baseUrl } from 'utilities/site-config';
 
-export default {
+/**
+ * find index of object in allObj by id
+ * @param {Number} id
+ */
+function getIndexById(id) {
+  return store.state.allObj.findIndex(o => o.Id == id);
+}
+
+const store = {
   namespaced: true,
   state: {
     modelName: 'دوره تحصیلی',
@@ -16,7 +24,6 @@ export default {
     },
     allObj: [],
     allObjDdl: [],
-    selectedIndex: -1,
     selectedId: 0,
     createVue: null,
     editVue: null
@@ -35,7 +42,7 @@ export default {
      * update instanceObj of allObj
      */
     update(state) {
-      let index = state.selectedIndex;
+      var index = getIndexById(state.selectedId);
       if (index < 0) return;
       util.mapObject(state.instanceObj, state.allObj[index]);
     },
@@ -44,7 +51,7 @@ export default {
      * delete from allObj
      */
     delete(state) {
-      let index = state.selectedIndex;
+      var index = getIndexById(state.selectedId);
       if (index < 0) return;
       state.allObj.splice(index, 1);
     },
@@ -57,15 +64,6 @@ export default {
       if ($v) {
         $v.$reset();
       }
-    },
-
-    /**
-     * set selectedIndex
-     */
-    setIndex(state) {
-      state.selectedIndex = state.allObj.findIndex(
-        o => o.Id == state.instanceObj.Id
-      );
     }
   },
   actions: {
@@ -120,7 +118,6 @@ export default {
       dispatch('validateFormStore', vm, { root: true }).then(isValid => {
         if (!isValid) return;
 
-        debugger;
         axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
           let data = response.data;
 
@@ -177,7 +174,6 @@ export default {
         axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
-            commit('setIndex');
             commit('update');
             dispatch('resetEditStore');
             dispatch('toggleModalEditStore', false);
@@ -216,11 +212,9 @@ export default {
      * submit to delete data
      */
     submitDeleteStore({ state, commit, dispatch }, vm) {
-      debugger;
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
-          commit('setIndex');
           commit('delete');
           commit('reset');
           dispatch('toggleModalDeleteStore', false);
@@ -245,3 +239,5 @@ export default {
     }
   }
 };
+
+export default store;

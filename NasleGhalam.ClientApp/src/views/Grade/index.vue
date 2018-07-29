@@ -1,45 +1,47 @@
 <template>
-  <my-panel class="col-md-8">
-    <span slot="title">{{modelName}}</span>
-    <div slot="body">
-      <my-btn-create @click="showModalCreate"></my-btn-create>
-      <br>
-      <my-table :grid-data="allObj"
-                :columns="gridColumns"
-                hasIndex>
-        <template slot="Id"
-                  slot-scope="data">
-          <my-btn-edit round
-                       @click="showModalEdit(data.row.Id)" />
-          <my-btn-delete round
-                         @click="showModalDelete(data.row.Id)" />
-        </template>
-      </my-table>
+  <section class="col-md-8">
+    <!-- panel -->
+    <my-panel>
+      <span slot="title">{{modelName}}</span>
+      <div slot="body">
+        <my-btn-create @click="showModalCreate"></my-btn-create>
+        <br>
+        <my-table :grid-data="allObj"
+                  :columns="gridColumns"
+                  hasIndex>
+          <template slot="Id"
+                    slot-scope="data">
+            <my-btn-edit round
+                         @click="showModalEdit(data.row.Id)" />
+            <my-btn-delete round
+                           @click="showModalDelete(data.row.Id)" />
+          </template>
+        </my-table>
+      </div>
+    </my-panel>
 
-      <modal-create></modal-create>
-      <modal-edit></modal-edit>
-      <modal-delete></modal-delete>
-    </div>
-  </my-panel>
+    <!-- modals -->
+    <modal-create></modal-create>
+    <modal-edit></modal-edit>
+    <modal-delete></modal-delete>
+  </section>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import modalCreate from './create';
-import modalEdit from './edit';
-import modalDelete from './delete';
 
 export default {
   components: {
-    'modal-create': modalCreate,
-    'modal-edit': modalEdit,
-    'modal-delete': modalDelete
+    'modal-create': () => import('./create'),
+    'modal-edit': () => import('./edit'),
+    'modal-delete': () => import('./delete')
   },
   /**
    * data
    */
   data() {
     return {
+      currentView: 'modal-create',
       gridColumns: [
         {
           title: 'نام',

@@ -10,7 +10,8 @@
     <my-select :model="$v.instanceObj.GradeId"
                :options="gradeDdl"
                class="col-md-6"
-               clearable />
+               clearable
+               @change="setGradeName" />
 
     <my-input :model="$v.instanceObj.Name"
               class="col-md-6">
@@ -19,7 +20,6 @@
     <my-input :model="$v.instanceObj.Priority"
               class="col-md-6">
     </my-input>
-
   </my-modal-edit>
 </template>
 
@@ -38,9 +38,9 @@ export default {
       'submitEditStore',
       'resetEditStore'
     ]),
-    ...mapActions('gradeStore', {
-      fillGradeDdlStore: 'fillDdlStore'
-    })
+    setGradeName(item) {
+      this.instanceObj.GradeName = item.label;
+    }
   },
   /**
    * computed
@@ -64,7 +64,6 @@ export default {
    */
   created() {
     this.editVueStore(this);
-    this.fillGradeDdlStore();
   }
 };
 </script>

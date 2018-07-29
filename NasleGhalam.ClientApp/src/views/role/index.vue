@@ -1,5 +1,5 @@
 <template>
-  <section class="col-md-8">
+<section class="col-md-8">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
@@ -12,21 +12,24 @@
           <template slot="Id"
                     slot-scope="data">
             <my-btn-edit round
-                         @click="showModalEdit(data.row.Id)" />
+                        @click="showModalEdit(data.row.Id)" />
             <my-btn-delete round
-                           @click="showModalDelete(data.row.Id)" />
+                          @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table>
+
+        <modal-create></modal-create>
+        <modal-edit></modal-edit>
+        <modal-delete></modal-delete>
       </div>
     </my-panel>
 
-    <!-- modals -->
+  <!-- modals -->
     <modal-create></modal-create>
     <modal-edit></modal-edit>
     <modal-delete></modal-delete>
   </section>
 </template>
-
 
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -44,9 +47,15 @@ export default {
     return {
       gridColumns: [
         {
-          title: 'نام',
-          data: 'Name'
-        },
+      title:'Name',
+      data:'Name'
+    },{
+      title:'Priority',
+      data:'Priority'
+    },{
+      title:'GradeId',
+      data:'GradeId'
+    }
         {
           title: 'عملیات',
           data: 'Id',
@@ -60,7 +69,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('lessonStore', [
+    ...mapActions('roleStore', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -93,7 +102,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('lessonStore', {
+    ...mapState('roleStore', {
       modelName: 'modelName',
       allObj: 'allObj'
     })

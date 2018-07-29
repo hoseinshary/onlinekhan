@@ -18,9 +18,9 @@ export default {};
 </script>
 
 <style>
-.my-panel {
+/* .my-panel {
   margin: 0 auto;
-}
+} */
 
 .my-panel .header {
   border-bottom: 2px solid orange;

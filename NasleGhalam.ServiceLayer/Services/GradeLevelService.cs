@@ -36,11 +36,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Name = current.Name,
-                    GradeName = current.Grade.Name,
                     GradeId = current.GradeId,
                     Priority = current.Priority
-                    
-                    
+                    //GradeName = current.Grade.Name,
                 }).FirstOrDefault();
         }
 
@@ -90,7 +88,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsChanged(gradeLevel);
 
             return _uow.CommitChanges(CrudType.Update, Title);
-            
+
         }
 
 
@@ -111,7 +109,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(gradeLevel);
 
             return _uow.CommitChanges(CrudType.Delete, Title);
-            
+
         }
 
 

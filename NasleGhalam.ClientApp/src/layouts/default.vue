@@ -61,7 +61,7 @@
     <q-page-container>
 
       <br />
-      <div class="row">
+      <div class="row justify-center">
         <router-view />
       </div>
 

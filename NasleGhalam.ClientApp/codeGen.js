@@ -82,6 +82,36 @@ var store = fs
 fs.writeFileSync(`${storelDir}`, store, 'utf8');
 //--------------------------------------------------------------------------
 
+// insert import into store/index.js
+var storeIndex = fs
+  .readFileSync(`${__dirname}/src/store/index.js`, 'utf8')
+  .replace(
+    '\r\nVue.use(Vuex);',
+    `import ${modelName}Store from './${modelName}Store';\r\n\r\nVue.use(Vuex);`
+  )
+  .replace(
+    'Store\r\n  }\r\n});\r\n\r\nexport default store;',
+    `Store,\r\n    ${modelName}Store\r\n  }\r\n});\r\n\r\nexport default store;`
+  );
+fs.writeFileSync(`${__dirname}/src/store/index.js`, storeIndex, 'utf8');
+
+// insert const Url into utilities/site-config.js
+var configUrl = fs
+  .readFileSync(`${__dirname}/src/utilities/site-config.js`, 'utf8')
+  .replace(
+    '\r\nexport {',
+    `const ${modelName.toUpperCase()}_URL =  '/api/${modelName.replace(
+      '_',
+      ''
+    )}';\r\n\r\nexport {`
+  )
+  .replace('_URL\r\n};', `_URL,\r\n  ${modelName.toUpperCase()}_URL\r\n};`);
+fs.writeFileSync(
+  `${__dirname}/src/utilities/site-config.js`,
+  configUrl,
+  'utf8'
+);
+
 // create vue dir
 if (!dirExist(viewDir)) {
   fs.mkdirSync(viewDir);

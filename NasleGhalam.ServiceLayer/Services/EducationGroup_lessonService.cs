@@ -76,32 +76,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <returns></returns>
         public IList<EducationGroup_LessonViewModel> GetAllEducationGroupByLessonId(int id)
-        {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        {    
             return _educationGroup
                 
                  .Select(current => new
@@ -117,13 +92,10 @@ namespace NasleGhalam.ServiceLayer.Services
                      Id = edu_lesson.Id,
                      EducatioGroupName = education.Name,
                      EducationGroupId = education.Id,
-                     LessonId = edu_lesson == null ? 0 : edu_lesson.Lesson.Id,
+                     LessonId = edu_lesson == null ? 0 : edu_lesson.LessonId,
                      LessonName = edu_lesson.Lesson.Name,
-                     IsChecked = edu_lesson != null
+                     IsChecked = edu_lesson != null 
                  }).OrderByDescending(current => current.IsChecked).ToList();
-
-
-
 
         }
 
@@ -204,7 +176,9 @@ namespace NasleGhalam.ServiceLayer.Services
         public MessageResult Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
         {
             MessageResult msgRes;
-            
+
+            // educationGroup_LessonViewModel.GroupBy(current => current.LessonId)
+              //  .Select(current => current.Key).ToList();
 
             //بررسی یکی بودن تمام آی دی درس ها
             for (int i = 0; i < educationGroup_LessonViewModel.Count; i++)

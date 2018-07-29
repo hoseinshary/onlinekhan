@@ -19,7 +19,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
             {
                 foreach (var error in modelState.Value.Errors)
                 {
-                    sb.Append(error.ErrorMessage + "پارامتر ها به درستی وارد نشده است</br>");
+                    sb.Append(error.ErrorMessage + "</br>");
                 }
             }
 

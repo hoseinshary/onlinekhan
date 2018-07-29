@@ -1,5 +1,9 @@
 export default [
   {
+    path: '/user/login',
+    component: () => import('views/user/login')
+  },
+  {
     path: '/',
     component: () => import('layouts/default'),
     children: [
@@ -14,6 +18,10 @@ export default [
       {
         path: '/gradelevel',
         component: () => import('views/gradeLevel')
+      },
+      {
+        path: '/province',
+        component: () => import('views/province')
       },
       {
         path: '/city',

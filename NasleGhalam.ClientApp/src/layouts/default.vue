@@ -38,6 +38,12 @@
           <q-item-main label="پایه تحصیلی" />
         </q-item>
       </router-link>
+      <router-link to="/province">
+        <q-item>
+          <q-item-side icon="reorder" />
+          <q-item-main label="استان" />
+        </q-item>
+      </router-link>
       <router-link to="/city">
         <q-item>
           <q-item-side icon="reorder" />

@@ -3,7 +3,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Dispatcher;
 using NasleGhalam.ServiceLayer.Configs;
-using NasleGhalam.WebApi.ModelBinder;
+using NasleGhalam.WebApi.ModelBinderAndFormatter;
 
 namespace NasleGhalam.WebApi
 {

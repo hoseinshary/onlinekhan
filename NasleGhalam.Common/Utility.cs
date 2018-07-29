@@ -7,6 +7,7 @@ namespace NasleGhalam.Common
 {
     public static class Utility
     {
+        #region ### DateTime ###
         public static string ToPersianDateTime(this DateTime mDateTime)
         {
             PersianCalendar pc = new PersianCalendar();
@@ -16,7 +17,7 @@ namespace NasleGhalam.Common
             int month = pc.GetMonth(mDate);
             int year = pc.GetYear(mDate);
 
-            return $"{year:0000}/{month:00}/{day:00} {mDate.Hour:00}:{mDate.Minute:00}:{mDate.Second:00}";
+            return String.Format("{0:0000}/{1:00}/{2:00} {3:00}:{4:00}:{5:00}", year, month, day, mDate.Hour, mDate.Minute, mDate.Second);
         }
 
         public static DateTime? ToMiladiDateTime(this string pDateTime)
@@ -80,6 +81,7 @@ namespace NasleGhalam.Common
             }
             return thisDate;
         }
+        #endregion
 
 
         #region ### Access ###
@@ -266,7 +268,5 @@ namespace NasleGhalam.Common
 
 
         #endregion
-
-
     }
 }

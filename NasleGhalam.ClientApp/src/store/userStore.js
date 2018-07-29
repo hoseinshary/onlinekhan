@@ -4,7 +4,7 @@ export default {
   state: {
     modelName: 'کاربر',
     isOpenModalCreate: false,
-    instance: {
+    instanceObj: {
       id: 0,
       name: '',
       family: '',
@@ -12,7 +12,13 @@ export default {
       gender: '',
       isActive: false,
       children: [],
-      roleId: ''
+      roleId: '',
+      Username: '',
+      Password: ''
+    },
+    loginObj: {
+      Username: '',
+      Password: ''
     },
     allInstance: [
       {

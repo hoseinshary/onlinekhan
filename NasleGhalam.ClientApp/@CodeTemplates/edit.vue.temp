@@ -1,11 +1,9 @@
 <template>
   <my-modal-edit :title="modelName"
-                 size="md"
-                 height="240px"
-                 :openModal="isOpenModalEdit"
+                 :show="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
-                 @toggle="toggleModalEditStore">
+                 @close="toggleModalEditStore(false)">
 
     {__props}
 

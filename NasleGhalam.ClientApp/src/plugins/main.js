@@ -1,6 +1,6 @@
 // import something here
 import '../css/my-style.css';
-import 'utilities/extentions';
+// import 'utilities/extentions';
 
 /** notification */
 import Snotify from 'vue-snotify';
@@ -23,10 +23,10 @@ import btnCreate from 'components/buttons/my-btn-create';
 import btnSearch from 'components/buttons/my-btn-search';
 
 /* modal */
+import bsModal from 'components/modals/bs-modal';
 import modalCreate from 'components/modals/my-modal-create';
 import modalEdit from 'components/modals/my-modal-edit';
 import modalDelete from 'components/modals/my-modal-delete';
-import modalCustom from 'components/modals/my-modal-custom';
 
 /* form-components */
 import myField from 'components/form-components/my-field';
@@ -55,10 +55,10 @@ export default ({ app, router, Vue }) => {
   Vue.component('my-btn-search', btnSearch);
 
   // register modal
+  Vue.component('bs-modal', bsModal);
   Vue.component('my-modal-create', modalCreate);
   Vue.component('my-modal-edit', modalEdit);
   Vue.component('my-modal-delete', modalDelete);
-  Vue.component('my-modal-custom', modalCustom);
 
   // register input
   Vue.component('my-field', myField);

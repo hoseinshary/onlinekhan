@@ -1,31 +1,22 @@
 <template>
   <my-modal-edit :title="modelName"
-                 size="md"
-                 height="240px"
-                 :openModal="isOpenModalEdit"
+                 :show="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
-                 @toggle="toggleModalEditStore">
+                 @close="toggleModalEditStore(false)">
 
-    <my-input :model="$v.instanceObj.Name"
-              class="col-md-6" />
-
-    <my-field class="col-md-6"
-              :model="$v.instance.Priority">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
-      </template>
-    </my-field>
-
-    <my-select :model="$v.instanceObj.GradeId"
-               :options=""
-               class="col-md-6"
-               clearable />
+    <my-input :model="$v.instanceObj.Name" class="col-md-6" />
+          
+          <my-field class="col-md-6" :model="$v.instance.Priority">
+              <template slot-scope="data">
+                <q-radio v-model="data.obj.$model" val="false" label="false" />
+                <q-radio v-model="data.obj.$model" val="true" label="true" />
+              </template>
+            </my-field>
+            
+            <my-select :model="$v.instanceObj.GradeId" :options="" class="col-md-6" clearable />
+          
+          
 
   </my-modal-edit>
 </template>

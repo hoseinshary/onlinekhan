@@ -1,14 +1,12 @@
 <template>
   <my-modal-edit :title="modelName"
-                 size="md"
-                 height="240px"
-                 :openModal="isOpenModalEdit"
+                 :show="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
-                 @toggle="toggleModalEditStore">
+                 @close="toggleModalEditStore(false)">
 
-    <!--<my-input :model="$v.instanceObj.Name"
-              class="col-md-6"/>-->
+    <!-- <my-input :model="$v.instanceObj.Name"
+              class="col-md-6" /> -->
 
   </my-modal-edit>
 </template>

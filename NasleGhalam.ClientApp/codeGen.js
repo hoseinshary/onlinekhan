@@ -9,28 +9,41 @@ if (arg.length < 1) {
   process.exit();
 }
 var modelName = arg[0];
+// parsing arrObjProp
 var arrObjProp = arg[1].split(',').map(item => {
   let arr = item.split(':');
   let obj = {};
+
   if (arr.length == 1) {
     obj.name = arr[0];
     obj.type = 'string';
+    obj.default = `''`;
   } else if (arr.length == 2) {
     obj.name = arr[0];
-    obj.type =
-      arr[1] == '0'
-        ? 'number'
-        : arr[1] == 'true' || arr[1] == 'false'
-          ? 'boolean'
-          : arr[1] == '[]'
-            ? 'array'
-            : 'string';
+    obj.type = arr[1];
+    if (obj.type == 'number') {
+      obj.default = '0';
+    } else if (obj.type == 'boolean') {
+      obj.default = 'false';
+    } else if (obj.type == 'array') {
+      obj.default = '[]';
+    } else {
+      obj.default = `''`;
+      obj.type = 'string';
+    }
+  } else if (arr.length == 3) {
+    obj.name = arr[0];
+    obj.type = arr[1];
+    obj.default = arr[2];
   } else {
     console.log('error on parsing viewModelProps');
     process.exit();
   }
+
   return obj;
 });
+//------------
+
 var viewModelDir = `${__dirname}/src/viewModels/${modelName}ViewModel.js`;
 var storelDir = `${__dirname}/src/store/${modelName}Store.js`;
 var viewDir = `${__dirname}/src/views/${modelName}`;
@@ -61,17 +74,7 @@ fs.writeFileSync(`${viewModelDir}`, viewModel, 'utf8');
 // generate store
 var storeProp = [];
 arrObjProp.forEach(item => {
-  storeProp.push(
-    `${item.name}:${
-      item.type == 'number'
-        ? '0'
-        : item.type == 'boolean'
-          ? 'false'
-          : item.type == 'array'
-            ? '[]'
-            : "''"
-    }`
-  );
+  storeProp.push(`${item.name}:${item.default}`);
 });
 
 var store = fs
@@ -81,36 +84,6 @@ var store = fs
 
 fs.writeFileSync(`${storelDir}`, store, 'utf8');
 //--------------------------------------------------------------------------
-
-// insert import into store/index.js
-var storeIndex = fs
-  .readFileSync(`${__dirname}/src/store/index.js`, 'utf8')
-  .replace(
-    '\r\nVue.use(Vuex);',
-    `import ${modelName}Store from './${modelName}Store';\r\n\r\nVue.use(Vuex);`
-  )
-  .replace(
-    'Store\r\n  }\r\n});\r\n\r\nexport default store;',
-    `Store,\r\n    ${modelName}Store\r\n  }\r\n});\r\n\r\nexport default store;`
-  );
-fs.writeFileSync(`${__dirname}/src/store/index.js`, storeIndex, 'utf8');
-
-// insert const Url into utilities/site-config.js
-var configUrl = fs
-  .readFileSync(`${__dirname}/src/utilities/site-config.js`, 'utf8')
-  .replace(
-    '\r\nexport {',
-    `const ${modelName.toUpperCase()}_URL =  '/api/${modelName.replace(
-      '_',
-      ''
-    )}';\r\n\r\nexport {`
-  )
-  .replace('_URL\r\n};', `_URL,\r\n  ${modelName.toUpperCase()}_URL\r\n};`);
-fs.writeFileSync(
-  `${__dirname}/src/utilities/site-config.js`,
-  configUrl,
-  'utf8'
-);
 
 // create vue dir
 if (!dirExist(viewDir)) {
@@ -187,6 +160,45 @@ var deleteVue = fs
   .readFileSync('./@CodeTemplates/delete.vue.temp', 'utf8')
   .replace(/{__modelName}/g, `${modelName}Store`);
 fs.writeFileSync(`${viewDir}/delete.vue`, deleteVue, 'utf8');
+//--------------------------------------------------------------------------
+
+// insert import into store/index.js
+let storePropImport = `import ${modelName}Store from './${modelName}Store'`;
+let storeIndex = fs.readFileSync(`${__dirname}/src/store/index.js`, 'utf8');
+
+if (!storeIndex.includes(storePropImport)) {
+  storeIndex = storeIndex
+    .replace('\r\nVue.use(Vuex);', `${storePropImport};\r\n\r\nVue.use(Vuex);`)
+    .replace(
+      'Store\r\n  }\r\n});\r\n\r\nexport default store;',
+      `Store,\r\n    ${modelName}Store\r\n  }\r\n});\r\n\r\nexport default store;`
+    );
+  fs.writeFileSync(`${__dirname}/src/store/index.js`, storeIndex, 'utf8');
+}
+
+//--------------------------------------------------------------------------
+
+// insert const Url into utilities/site-config.js
+let configProp = `const ${modelName.toUpperCase()}_URL`;
+var configUrl = fs.readFileSync(
+  `${__dirname}/src/utilities/site-config.js`,
+  'utf8'
+);
+if (!configUrl.includes(configProp)) {
+  configUrl = configUrl
+    .replace(
+      '\r\nexport {',
+      `${configProp} =  '/api/${modelName.replace('_', '')}';\r\n\r\nexport {`
+    )
+    .replace('_URL\r\n};', `_URL,\r\n  ${modelName.toUpperCase()}_URL\r\n};`);
+
+  fs.writeFileSync(
+    `${__dirname}/src/utilities/site-config.js`,
+    configUrl,
+    'utf8'
+  );
+}
+
 //--------------------------------------------------------------------------
 
 /**

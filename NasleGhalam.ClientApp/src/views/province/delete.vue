@@ -1,9 +1,9 @@
 <template>
   <my-modal-delete :title="modelName"
                    :recordName="recordName"
-                   :openModal="isOpenModalDelete"
+                   :show="isOpenModalDelete"
                    @confirm="submitDelete"
-                   @toggle="toggleModalDeleteStore">
+                   @close="toggleModalDeleteStore(false)">
   </my-modal-delete>
 </template>
 
@@ -15,7 +15,10 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('provinceStore', ['toggleModalDeleteStore', 'submitDeleteStore']),
+    ...mapActions('provinceStore', [
+      'toggleModalDeleteStore',
+      'submitDeleteStore'
+    ]),
     submitDelete() {
       this.submitDeleteStore(this);
     }

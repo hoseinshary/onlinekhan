@@ -6,7 +6,7 @@
          icon="delete"
          color="red"
          size="sm"
-         class="shadow-5 bg-white"
+         class="shadow-1 bg-white"
          @click="$emit('click')">
     <q-tooltip>
       حذف
@@ -15,7 +15,7 @@
   <q-btn v-else
          outline
          color="red"
-         class="shadow-5 bg-white q-mr-md"
+         class="shadow-1 bg-white q-mr-sm"
          @click="$emit('click')">
     <q-icon name="delete" /> حذف
   </q-btn>

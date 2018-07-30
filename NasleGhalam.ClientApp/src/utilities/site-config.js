@@ -5,6 +5,7 @@ const GRADE_LEVEL_URL = '/api/gradeLevel';
 const CITY_URL = '/api/city';
 const LESSON_URL = '/api/lesson';
 const PROVINCE_URL = '/api/province';
+const ROLE_URL =  '/api/role';
 
 export {
   API_URL,
@@ -12,5 +13,6 @@ export {
   GRADE_LEVEL_URL,
   CITY_URL,
   LESSON_URL,
-  PROVINCE_URL
+  PROVINCE_URL,
+  ROLE_URL
 };

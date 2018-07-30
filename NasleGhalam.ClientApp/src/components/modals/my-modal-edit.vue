@@ -1,10 +1,10 @@
 <template>
-  <q-modal v-model="isOpen"
-           @show="$emit('toggle', true)"
-           @hide="hide"
-           no-backdrop-dismiss
-           :content-css="modalContentCss">
-    <q-modal-layout>
+  <bs-modal :show="show"
+            :center="center"
+            :size="size"
+            @close="$emit('close')">
+
+    <template slot="header">
       <q-toolbar slot="header"
                  color="cyan-9"
                  text-color="">
@@ -12,30 +12,20 @@
           ویرایش
           <span class="text-orange">{{title}}</span>
         </q-toolbar-title>
-
         <q-btn dense
-               v-close-overlay
-               icon="close" />
+               icon="close"
+               @click="$emit('close')" />
       </q-toolbar>
+    </template>
 
-      <div class="layout-padding">
-        <div class="row gutter-sm">
-          <slot></slot>
-        </div>
-      </div>
+    <slot></slot>
 
-      <q-toolbar slot="footer"
-                 color="white">
-        <q-toolbar-title>
-          <div class="row justify-center ">
-            <my-btn-edit @click="$emit('confirm')"></my-btn-edit>
-            <my-btn-clear @click="$emit('reset')"></my-btn-clear>
-            <my-btn-back @click="isOpen=false"></my-btn-back>
-          </div>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-modal-layout>
-  </q-modal>
+    <template slot="footer">
+      <my-btn-edit @click="$emit('confirm')"></my-btn-edit>
+      <my-btn-clear @click="$emit('reset')"></my-btn-clear>
+      <my-btn-back @click="$emit('close')"></my-btn-back>
+    </template>
+  </bs-modal>
 </template>
 
 <script>
@@ -44,61 +34,12 @@ export default {
    * props
    */
   props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    size: {
-      type: String,
-      default: 'md'
-    },
-    height: {
-      type: String,
-      default: '100%'
-    },
-    contentCss: Object,
-    openModal: {
+    title: String,
+    size: String,
+    center: Boolean,
+    show: {
       type: Boolean,
-      default: false
-    }
-  },
-  /**
-   * data
-   */
-  data() {
-    let modalContentCss = {};
-    if (this.contentCss) {
-      modalContentCss = this.contentCss;
-    } else if (this.size == 'sm') {
-      modalContentCss = { minWidth: '40vw', height: this.height };
-    } else if (this.size == 'md') {
-      modalContentCss = { minWidth: '60vw', height: this.height };
-    } else if (this.size == 'lg') {
-      modalContentCss = { minWidth: '80vw', height: this.height };
-    } else if (this.size == 'xl') {
-      modalContentCss = { minWidth: '95vw', height: this.height };
-    }
-
-    return {
-      isOpen: false,
-      modalContentCss
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    hide(isOpen) {
-      this.isOpen = false;
-      this.$emit('toggle', false);
-    }
-  },
-  /**
-   * whatch
-   */
-  watch: {
-    openModal(newVal) {
-      this.isOpen = newVal;
+      required: true
     }
   }
 };

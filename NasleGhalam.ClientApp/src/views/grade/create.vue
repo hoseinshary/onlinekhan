@@ -1,11 +1,10 @@
 <template>
   <my-modal-create :title="modelName"
+                   :show="isOpenModalCreate"
                    size="md"
-                   height="240px"
-                   :openModal="isOpenModalCreate"
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
-                   @toggle="toggleModalCreateStore">
+                   @close="toggleModalCreateStore(false)">
 
     <my-input :model="$v.instanceObj.Name"
               class="col-md-6" />

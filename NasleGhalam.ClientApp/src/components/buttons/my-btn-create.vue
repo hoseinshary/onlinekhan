@@ -1,7 +1,7 @@
 <template>
   <q-btn outline
          color="secondary"
-         class="shadow-5 bg-white q-mr-md"
+         class="shadow-1 bg-white q-mr-sm"
          icon="library_add"
          label="ایجاد"
          @click="$emit('click')">

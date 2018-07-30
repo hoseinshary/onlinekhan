@@ -1,11 +1,9 @@
 <template>
   <my-modal-create :title="modelName"
-                   size="md"
-                   height="320px"
-                   :openModal="isOpenModalCreate"
+                   :show="isOpenModalCreate"
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
-                   @toggle="toggleModalCreateStore">
+                   @close="toggleModalCreateStore(false)">
 
     <my-select :model="$v.instanceObj.GradeId"
                :options="gradeDdl"

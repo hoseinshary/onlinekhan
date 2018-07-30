@@ -5,7 +5,7 @@
          icon="create"
          color="purple"
          size="sm"
-         class="shadow-5 bg-white q-mr-sm"
+         class="shadow-1 bg-white q-mr-sm"
          @click="$emit('click')">
     <q-tooltip>
       ویرایش
@@ -14,7 +14,7 @@
   <q-btn v-else
          outline
          color="purple"
-         class="shadow-5 bg-white q-mr-md"
+         class="shadow-1 bg-white q-mr-sm"
          @click="$emit('click')">
     <q-icon name="create" /> ویرایش
   </q-btn>

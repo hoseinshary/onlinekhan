@@ -74,9 +74,9 @@ export default {
       'resetEditStore'
     ]),
     showModalCreate() {
-      // reset data on modal show
+      // // reset data on modal show
       this.resetCreateStore();
-      // show modal
+      // // show modal
       this.toggleModalCreateStore(true);
     },
     showModalEdit(id) {

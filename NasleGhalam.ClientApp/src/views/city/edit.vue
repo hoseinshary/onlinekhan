@@ -7,7 +7,6 @@
 
     <!-- <my-input :model="$v.instanceObj.Name"
               class="col-md-6" /> -->
-
   </my-modal-edit>
 </template>
 

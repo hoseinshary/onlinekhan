@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\QuestionAnswerView.cs" />
     <Compile Include="Entities\QuestionAnswer.cs" />
     <Compile Include="Entities\Action.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="EntityConfigs\ActionConfig.cs" />
+    <Compile Include="EntityConfigs\ModuleConfig.cs" />
     <Compile Include="EntityConfigs\QuestionAnswerViewConfig.cs" />
     <Compile Include="EntityConfigs\EducationSubGroupConfig.cs" />
     <Compile Include="EntityConfigs\EducationGroupConfig.cs" />

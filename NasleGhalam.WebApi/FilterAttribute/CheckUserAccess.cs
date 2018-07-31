@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,15 +19,18 @@ namespace NasleGhalam.WebApi.FilterAttribute
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            return;
+            //return;
             bool isAuthenticated = false;
 
-            string token = null;
-            IEnumerable<string> values;
-            if (actionContext.Request.Headers.TryGetValues("Token", out values))
-            {
-                token = values.FirstOrDefault();
-            }
+            //string token = null;
+            //IEnumerable<string> values;
+            //if (actionContext.Request.Headers.TryGetValues("Token", out values))
+            //{
+            //    token = values.FirstOrDefault();
+            //}
+
+            //todo: remove later, for test
+            var token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJWYWx1ZSI6IjFfVHJ1ZV8xIiwiQWNjZXNzIjoiMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTEwIiwiRXhwIjo2MzY2OTAwNjYwNDc1NDQ5MjR9._lWuHN-3bgCez5aV_MQssQpPoI073q_L1uwhIScf_7Lkfhnb9y2rERQDyXE1tnvBodQIVvmfpG_qZ-nj8ITB0Q";
 
             if (token != null)
             {

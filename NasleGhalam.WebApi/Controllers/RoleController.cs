@@ -96,9 +96,16 @@ namespace NasleGhalam.WebApi.Controllers
 
         #region ### Access ###
         [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
-        public IHttpActionResult GetAllControllerDdl()
+        public IHttpActionResult GetAllModuleDdl()
         {
-            return Ok(_actionService.Value.GetAllControllerDdl(Request.GetAccess()));
+            return Ok(_actionService.Value.GetAllModuleDdl(Request.GetAccess()));
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
+        public IHttpActionResult GetAllControllerByModuleIdDdl(int id)
+        {
+            return Ok(_actionService.Value.GetAllControllerByModuleIdDdl(id, Request.GetAccess()));
         }
 
 

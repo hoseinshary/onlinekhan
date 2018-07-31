@@ -73,6 +73,14 @@
     <Compile Include="Migrations\201807240809238_EducationSubGroupRelation.Designer.cs">
       <DependentUpon>201807240809238_EducationSubGroupRelation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807311642432_addModule.cs" />
+    <Compile Include="Migrations\201807311642432_addModule.Designer.cs">
+      <DependentUpon>201807311642432_addModule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807311650201_addModuleRelation.cs" />
+    <Compile Include="Migrations\201807311650201_addModuleRelation.Designer.cs">
+      <DependentUpon>201807311650201_addModuleRelation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -108,6 +116,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807240809238_EducationSubGroupRelation.resx">
       <DependentUpon>201807240809238_EducationSubGroupRelation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807311642432_addModule.resx">
+      <DependentUpon>201807311642432_addModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807311650201_addModuleRelation.resx">
+      <DependentUpon>201807311650201_addModuleRelation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,6 @@
 <template>
   <my-modal-create :title="modelName"
                    :show="isOpenModalCreate"
-                   size="md"
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
                    @close="toggleModalCreateStore(false)">

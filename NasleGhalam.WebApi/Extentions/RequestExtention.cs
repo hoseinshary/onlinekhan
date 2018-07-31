@@ -26,7 +26,7 @@ namespace NasleGhalam.WebApi.Extentions
         public static byte GetRoleLevel(this HttpRequestMessage request)
         {
             Object obj = request.Properties["_roleLevel"];
-            return obj != null ? Convert.ToByte(obj) : (byte)0;
+            return Convert.ToByte(obj);
         }
     }
 }

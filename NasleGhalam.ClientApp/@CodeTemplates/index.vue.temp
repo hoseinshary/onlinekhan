@@ -17,10 +17,6 @@
                           @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table>
-
-        <modal-create></modal-create>
-        <modal-edit></modal-edit>
-        <modal-delete></modal-delete>
       </div>
     </my-panel>
 
@@ -47,7 +43,7 @@ export default {
     return {
       gridColumns: [
         {__props}
-        {
+        ,{
           title: 'عملیات',
           data: 'Id',
           searchable: false,

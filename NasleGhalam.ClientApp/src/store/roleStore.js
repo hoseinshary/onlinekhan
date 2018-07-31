@@ -13,17 +13,19 @@ function getIndexById(id) {
 const store = {
   namespaced: true,
   state: {
-    modelName: 'عنوان',
+    modelName: 'نقش',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
     instanceObj: {
       Id: 0,
-      Name:'',Priority:true,GradeId:[]
+      Name: '',
+      Level: 0
     },
     allObj: [],
     allObjDdl: [],
     selectedId: 0,
+    isModelChanged: true,
     createVue: null,
     editVue: null
   },
@@ -63,6 +65,14 @@ const store = {
       if ($v) {
         $v.$reset();
       }
+    },
+
+    /**
+     * change isModelChange
+     * @param {Boolean} b
+     */
+    toggleIsModelChanged(state, b) {
+      state.isModelChanged = b;
     }
   },
   actions: {
@@ -89,9 +99,11 @@ const store = {
      * fill dropDwonList
      */
     fillDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.allObjDdl = response.data;
-      });
+      if (state.isModelChanged) {
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.allObjDdl = response.data;
+        });
+      }
     },
 
     //### create section ###
@@ -238,6 +250,5 @@ const store = {
     }
   }
 };
-
 
 export default store;

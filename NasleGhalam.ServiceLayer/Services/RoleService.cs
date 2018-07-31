@@ -198,8 +198,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsChanged(role);
-            return _uow.CommitChanges(CrudType.Update, Title);
-            
+            return _uow.CommitChanges(CrudType.Update, Title);         
         }
     }
 }

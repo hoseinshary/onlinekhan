@@ -49,7 +49,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 return new List<ActionViewModel>();
 
             return _actions
-                .Include(current=>current.Controller)
+                .Include(current => current.Controller)
                 .Where(current => controllerId == 0 || current.ControllerId == controllerId)
                 .OrderBy(current => current.Controller.Priority)
                 .ThenBy(current => current.Priority)
@@ -92,14 +92,14 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن گرفتن منو برای لیست کشویی
+        /// گرفتن منو برای لیست کشویی با اعمال دسترسی
         /// </summary>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllControllerDdl(string userAccess)
+        public IList<SelectViewModel> GetAllControllerByModuleIdDdl(int moduleId, string userAccess)
         {
             return _actions
-                .Include(current => current.Controller)
                 .Where(current => current.IsIndex)
+                .Where(current => current.Controller.ModuleId == moduleId)
                 .OrderBy(current => current.Controller.Priority)
                 .AsEnumerable()
                 .Where(current => Utility.HasAccess(userAccess, current.ActionBit))
@@ -107,6 +107,25 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     value = current.ControllerId,
                     label = current.Controller.FaName
+                }).ToList();
+        }
+
+
+        /// <summary>
+        /// گرفتن  ماژول برای لیست کشویی با اعمال دسترسی
+        /// </summary>
+        /// <returns></returns>
+        public IList<SelectViewModel> GetAllModuleDdl(string userAccess)
+        {
+            return _actions
+                .Where(current => current.IsIndex)
+                .OrderBy(current => current.Controller.Module.Priority)
+                .AsEnumerable()
+                .Where(current => Utility.HasAccess(userAccess, current.ActionBit))
+                .Select(current => new SelectViewModel
+                {
+                    value = current.Controller.ModuleId,
+                    label = current.Controller.Module.Name
                 }).ToList();
         }
     }

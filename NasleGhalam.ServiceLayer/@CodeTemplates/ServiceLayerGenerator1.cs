@@ -7,33 +7,33 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.Ratio;
+using NasleGhalam.ViewModels.Module;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class RatioService
+	public class ModuleService
 	{
-		private const string Title = "ضریب";
+		private const string Title = "ماژول";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Ratio> _ratios;
+        private readonly IDbSet<Module> _modules;
        
-	    public RatioService(IUnitOfWork uow)
+	    public ModuleService(IUnitOfWork uow)
         {
             _uow = uow;
-            _ratios = uow.Set<Ratio>();
+            _modules = uow.Set<Module>();
         }
 
 
 		/// <summary>
-        /// گرفتن  ضریب با آی دی
+        /// گرفتن  ماژول با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public RatioViewModel GetById(int id)
+        public ModuleViewModel GetById(int id)
         {
-            return _ratios
+            return _modules
                 .Where(current => current.Id == id)
-                .Select(current => new RatioViewModel
+                .Select(current => new ModuleViewModel
                 {
                     Id = current.Id
                 }).FirstOrDefault();
@@ -41,12 +41,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// گرفتن همه ضریب ها
+        /// گرفتن همه ماژول ها
         /// </summary>
         /// <returns></returns>
-        public IList<RatioViewModel> GetAll()
+        public IList<ModuleViewModel> GetAll()
         {
-            return _ratios.Select(current => new RatioViewModel()
+            return _modules.Select(current => new ModuleViewModel()
             {
                 Id = current.Id,
             }).ToList();
@@ -54,30 +54,30 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// ثبت ضریب
+        /// ثبت ماژول
         /// </summary>
-        /// <param name="ratioViewModel"></param>
+        /// <param name="moduleViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(RatioViewModel ratioViewModel)
+        public MessageResult Create(ModuleViewModel moduleViewModel)
         {
-            var ratio = Mapper.Map<Ratio>(ratioViewModel);
-            _ratios.Add(ratio);
+            var module = Mapper.Map<Module>(moduleViewModel);
+            _modules.Add(module);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = ratio.Id;
+			msgRes.Id = module.Id;
             return msgRes;
         }
 
 
 		/// <summary>
-        /// ویرایش ضریب
+        /// ویرایش ماژول
         /// </summary>
-        /// <param name="ratioViewModel"></param>
+        /// <param name="moduleViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(RatioViewModel ratioViewModel)
+        public MessageResult Update(ModuleViewModel moduleViewModel)
         {
-            var ratio = Mapper.Map<Ratio>(ratioViewModel);
-            _uow.MarkAsChanged(ratio);
+            var module = Mapper.Map<Module>(moduleViewModel);
+            _uow.MarkAsChanged(module);
 
 			
 			return  _uow.CommitChanges(CrudType.Update, Title);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف ضریب
+        /// حذف ماژول
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  ratioViewModel = GetById(id);
-            if (ratioViewModel == null)
+			var  moduleViewModel = GetById(id);
+            if (moduleViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var ratio = Mapper.Map<Ratio>(ratioViewModel);
-            _uow.MarkAsDeleted(ratio);
+            var module = Mapper.Map<Module>(moduleViewModel);
+            _uow.MarkAsDeleted(module);
             
 			return  _uow.CommitChanges(CrudType.Delete, Title);
 			
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه ضریب ها برای لیست کشویی
+        /// گرفتن همه ماژول ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _ratios.Select(current => new SelectViewModel
+            return _modules.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

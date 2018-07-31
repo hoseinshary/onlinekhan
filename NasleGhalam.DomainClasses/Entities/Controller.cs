@@ -18,6 +18,10 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public byte Priority { get; set; }
 
+        public int ModuleId { get; set; }
+
+        public Module Module { get; set; }
+
         public virtual ICollection<Action> Actions { get; set; }
     }
 }

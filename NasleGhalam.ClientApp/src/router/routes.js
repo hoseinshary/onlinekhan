@@ -1,3 +1,4 @@
+let str = 'views/user';
 export default [
   {
     path: '/user/login',
@@ -30,6 +31,14 @@ export default [
       {
         path: '/lesson',
         component: () => import('views/lesson')
+      },
+      {
+        path: '/role',
+        component: () => import('views/role')
+      },
+      {
+        path: '/user',
+        component: () => import(str)
       }
     ]
   },

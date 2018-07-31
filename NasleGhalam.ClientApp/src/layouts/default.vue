@@ -56,6 +56,18 @@
           <q-item-main label="درس" />
         </q-item>
       </router-link>
+      <router-link to="/role">
+        <q-item>
+          <q-item-side icon="reorder" />
+          <q-item-main label="نقش" />
+        </q-item>
+      </router-link>
+      <router-link to="/user">
+        <q-item>
+          <q-item-side icon="reorder" />
+          <q-item-main label="کاربر" />
+        </q-item>
+      </router-link>
     </q-layout-drawer>
 
     <q-page-container>

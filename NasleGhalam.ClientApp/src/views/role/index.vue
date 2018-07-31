@@ -1,5 +1,5 @@
 <template>
-<section class="col-md-8">
+  <section class="col-md-8">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
@@ -12,19 +12,15 @@
           <template slot="Id"
                     slot-scope="data">
             <my-btn-edit round
-                        @click="showModalEdit(data.row.Id)" />
+                         @click="showModalEdit(data.row.Id)" />
             <my-btn-delete round
-                          @click="showModalDelete(data.row.Id)" />
+                           @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table>
-
-        <modal-create></modal-create>
-        <modal-edit></modal-edit>
-        <modal-delete></modal-delete>
       </div>
     </my-panel>
 
-  <!-- modals -->
+    <!-- modals -->
     <modal-create></modal-create>
     <modal-edit></modal-edit>
     <modal-delete></modal-delete>
@@ -47,15 +43,13 @@ export default {
     return {
       gridColumns: [
         {
-      title:'Name',
-      data:'Name'
-    },{
-      title:'Priority',
-      data:'Priority'
-    },{
-      title:'GradeId',
-      data:'GradeId'
-    }
+          title: 'نام',
+          data: 'Name'
+        },
+        {
+          title: 'سطح نقش',
+          data: 'Level'
+        },
         {
           title: 'عملیات',
           data: 'Id',

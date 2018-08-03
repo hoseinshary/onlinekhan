@@ -3,7 +3,11 @@ import axios from 'axios';
 // import router from "utilities/router";
 import { API_URL } from './site-config';
 // import { bus } from '../main';
-import { Loading } from 'quasar';
+import { Loading, QSpinnerIos } from 'quasar';
+import { LocalStorage } from 'quasar';
+import util from 'utilities/util';
+
+axios.defaults.headers.common['Token'] = LocalStorage.get.item('Token');
 
 axios.interceptors.request.use(
   cfg => {
@@ -14,6 +18,7 @@ axios.interceptors.request.use(
     // }
     cfg.url = API_URL + cfg.url;
     //bus.$emit('enableLoader');
+    Loading.show({ spinner: QSpinnerIos, delay: 0 });
     //Loading.show();
     // cfg.headers.Token = `Bearer dsfsdfsddfvbfggh2315645dfgp`;
 
@@ -21,22 +26,33 @@ axios.interceptors.request.use(
   },
   err => {
     // bus.$emit('disableLoader');
+    if (401 === err.response.status) util.logout();
+    setTimeout(() => {
+      Loading.hide();
+    }, 500);
     Promise.reject(err);
   }
 );
 
 axios.interceptors.response.use(
   res => {
+    setTimeout(() => {
+      Loading.hide();
+    }, 500);
     // bus.$emit('disableLoader');
     //Loading.hide();
     return res;
   },
   // eslint-disable-next-line
   err => {
+    setTimeout(() => {
+      Loading.hide();
+    }, 500);
     console.log(err);
     if (err.response && err.response.status)
       switch (err.response.status) {
         case 401:
+          util.logout();
           // store.commit("removeAuthentication");
           // router.push({
           //   path: "/signin",

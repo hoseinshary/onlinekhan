@@ -110,7 +110,12 @@
 
       <br />
       <div class="row justify-center">
-        <router-view />
+        <transition name="transitions"
+                    enter-active-class="animated bounceInDown"
+                    leave-active-class="animated bounceOutUp"
+                    mode="out-in">
+          <router-view />
+        </transition>
       </div>
 
     </q-page-container>
@@ -119,6 +124,7 @@
 
 <script>
 import { openURL } from 'quasar';
+import util from 'utilities/util';
 
 export default {
   data() {
@@ -126,7 +132,7 @@ export default {
       leftDrawerOpen: true, //this.$q.platform.is.desktop,
       miniState: false,
       menuList: null,
-      FullName: 'علیرضا اعتمادی',
+      FullName: '',
       showLogoutMenu: false
     };
   },
@@ -145,20 +151,12 @@ export default {
       }
     },
     logout() {
-      this.$q.localStorage.remove('authList');
-      this.$q.localStorage.remove('menuList');
-      this.$q.localStorage.remove('Token');
-      this.$q.localStorage.remove('FullName');
-      this.$axios.defaults.headers.common['Token'] = '';
-      this.$router.push('/user/login');
+      util.logout();
     }
   },
   created: function() {
-    // this.FullName = this.$q.localStorage.get.item('FullName');
-    // this.menuList = this.$q.localStorage.get.item('menuList');
-    // window.$eventHub.on('logoutAxios', () => {
-    //   this.logout();
-    // });
+    this.FullName = this.$q.localStorage.get.item('FullName');
+    this.menuList = this.$q.localStorage.get.item('menuList');
   }
 };
 </script>

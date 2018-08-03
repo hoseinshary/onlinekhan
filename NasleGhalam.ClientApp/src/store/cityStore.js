@@ -13,7 +13,7 @@ function getIndexById(id) {
 const store = {
   namespaced: true,
   state: {
-    modelName: 'عنوان',
+    modelName: 'شهر',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,

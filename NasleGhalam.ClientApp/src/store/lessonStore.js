@@ -5,7 +5,7 @@ import { LESSON_URL as baseUrl } from 'utilities/site-config';
 export default {
   namespaced: true,
   state: {
-    modelName: 'عنوان',
+    modelName: 'درس',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,

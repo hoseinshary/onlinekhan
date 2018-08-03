@@ -90,12 +90,13 @@ module.exports = function(ctx) {
         'QToggle',
         'QPagination',
         'QTooltip',
-        'Loading',
+        // 'Loading',
+        'QSpinnerIos',
         'QPopover'
       ],
       directives: ['Ripple', 'CloseOverlay'],
       // Quasar plugins
-      plugins: ['Notify', 'LocalStorage'],
+      plugins: ['Notify', 'LocalStorage', 'Loading'],
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       i18n: 'fa-ir' // Quasar language
     },

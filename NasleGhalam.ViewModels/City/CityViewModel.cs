@@ -17,7 +17,6 @@ namespace NasleGhalam.ViewModels.City
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int ProvinceId { get; set; }
 
-        [Display(Name = "استان")]
         public string ProvinceName { get; set; }
 
     }

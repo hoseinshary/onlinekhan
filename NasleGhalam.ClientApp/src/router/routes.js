@@ -1,4 +1,4 @@
-let str = 'views/user';
+let str = 'views/lesson';
 export default [
   {
     path: '/user/login',
@@ -38,7 +38,7 @@ export default [
       },
       {
         path: '/user',
-        component: () => import(str)
+        component: () => import('views/lesson')
       }
     ]
   },

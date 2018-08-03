@@ -6,8 +6,8 @@
       <div slot="body">
         <my-btn-create @click="showModalCreate"></my-btn-create>
         <br>
-        <my-table :grid-data="allObj"
-                  :columns="gridColumns"
+        <my-table :grid-data="{__modelName}GridData"
+                  :columns="{__modelName}GridColumn"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
@@ -41,7 +41,7 @@ export default {
    */
   data() {
     return {
-      gridColumns: [
+      {__modelName}GridColumn: [
         {__props}
         ,{
           title: 'عملیات',
@@ -56,7 +56,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('{__modelName}', [
+    ...mapActions('{__modelNameStore}', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -89,9 +89,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('{__modelName}', {
+    ...mapState('{__modelNameStore}', {
       modelName: 'modelName',
-      allObj: 'allObj'
+      {__modelName}GridData: '{__modelName}GridData'
     })
   },
   created() {

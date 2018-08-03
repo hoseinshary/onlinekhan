@@ -6,8 +6,8 @@
       <div slot="body">
         <my-btn-create @click="showModalCreate"></my-btn-create>
         <br>
-        <my-table :grid-data="allObj"
-                  :columns="gridColumns"
+        <my-table :grid-data="cityGridData"
+                  :columns="cityGridColumn"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
@@ -41,7 +41,15 @@ export default {
    */
   data() {
     return {
-      gridColumns: [
+      cityGridColumn: [
+        {
+          title: 'Name',
+          data: 'Name'
+        },
+        {
+          title: 'ProvinceId',
+          data: 'ProvinceId'
+        },
         {
           title: 'عملیات',
           data: 'Id',
@@ -90,7 +98,7 @@ export default {
   computed: {
     ...mapState('cityStore', {
       modelName: 'modelName',
-      allObj: 'allObj'
+      cityGridData: 'cityGridData'
     })
   },
   created() {

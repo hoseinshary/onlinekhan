@@ -1,15 +1,20 @@
 import {
   required,
   displayName,
-  maxLength
+  maxLength,
+  requiredDdl
 } from 'plugins/vuelidate';
 
 export default {
-  instanceObj: {
+  cityObj: {
     Name: {
-      displayName: displayName('نام'),
+      displayName: displayName('Name'),
       maxLength: maxLength(50),
       required
+    },
+    ProvinceId: {
+      displayName: displayName('ProvinceId'),
+      requiredDdl: requiredDdl(0)
     }
   }
 };

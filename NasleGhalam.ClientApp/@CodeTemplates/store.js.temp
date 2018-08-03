@@ -1,13 +1,13 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { {__modelName}_URL as baseUrl } from 'utilities/site-config';
+import { {__modelNameUpperCase}_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in allObj by id
+ * find index of object in {__modelName}GridData by id
  * @param {Number} id
  */
 function getIndexById(id) {
-  return store.state.allObj.findIndex(o => o.Id == id);
+  return store.state.{__modelName}GridData.findIndex(o => o.Id == id);
 }
 
 const store = {
@@ -17,49 +17,49 @@ const store = {
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    instanceObj: {
+    {__modelName}Obj: {
       Id: 0,
       {__props}
     },
-    allObj: [],
-    allObjDdl: [],
+    {__modelName}GridData: [],
+    {__modelName}Ddl: [],
     selectedId: 0,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new instanceObj to allObj
+     * insert new {__modelName}Obj to {__modelName}GridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.instanceObj);
+      let createdObj = util.cloneObject(state.{__modelName}Obj);
       createdObj.Id = id;
-      state.allObj.push(createdObj);
+      state.{__modelName}GridData.push(createdObj);
     },
 
     /**
-     * update instanceObj of allObj
+     * update {__modelName}Obj of {__modelName}GridData
      */
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.instanceObj, state.allObj[index]);
+      util.mapObject(state.{__modelName}Obj, state.{__modelName}GridData[index]);
     },
 
     /**
-     * delete from allObj
+     * delete from {__modelName}GridData
      */
     delete(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.allObj.splice(index, 1);
+      state.{__modelName}GridData.splice(index, 1);
     },
 
     /**
-     * rest value of instanceObj
+     * rest value of {__modelName}Obj
      */
     reset(state, $v) {
-      util.clearObject(state.instanceObj);
+      util.clearObject(state.{__modelName}Obj);
       if ($v) {
         $v.$reset();
       }
@@ -72,7 +72,7 @@ const store = {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.instanceObj);
+        util.mapObject(response.data, state.{__modelName}Obj);
       });
     },
 
@@ -81,7 +81,7 @@ const store = {
      */
     fillGridStore({ state }) {
       axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.allObj = response.data;
+        state.{__modelName}GridData = response.data;
       });
     },
 
@@ -90,7 +90,7 @@ const store = {
      */
     fillDdlStore({ state }) {
       axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.allObjDdl = response.data;
+        state.{__modelName}Ddl = response.data;
       });
     },
 
@@ -117,7 +117,7 @@ const store = {
       dispatch('validateFormStore', vm, { root: true }).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
+        axios.post(`${baseUrl}/Create`, state.{__modelName}Obj).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
@@ -169,8 +169,8 @@ const store = {
       var vm = state.editVue;
       dispatch('validateFormStore', vm, { root: true }).then(isValid => {
         if (!isValid) return;
-        state.instanceObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
+        state.{__modelName}Obj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.{__modelName}Obj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
@@ -234,7 +234,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.instanceObj.Name;
+      return state.{__modelName}Obj.Name;
     }
   }
 };

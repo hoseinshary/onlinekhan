@@ -6,11 +6,23 @@
       <div slot="body">
         <my-btn-create @click="showModalCreate"></my-btn-create>
         <br>
-        <my-table :grid-data="allObj"
+        <my-table :grid-data="roleGridData"
                   :columns="gridColumns"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
+            <q-btn outline
+                   round
+                   icon="list"
+                   color="brown"
+                   size="sm"
+                   class="shadow-1 bg-white q-mr-sm"
+                   @click="showModalAccess(data.row.Id, data.row.Name)">
+              <q-tooltip>
+                انتساب نقش
+              </q-tooltip>
+            </q-btn>
+
             <my-btn-edit round
                          @click="showModalEdit(data.row.Id)" />
             <my-btn-delete round
@@ -24,6 +36,7 @@
     <modal-create></modal-create>
     <modal-edit></modal-edit>
     <modal-delete></modal-delete>
+    <modal-access></modal-access>
   </section>
 </template>
 
@@ -34,7 +47,8 @@ export default {
   components: {
     'modal-create': () => import('./create'),
     'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
+    'modal-delete': () => import('./delete'),
+    'modal-access': () => import('./access')
   },
   /**
    * data
@@ -70,7 +84,10 @@ export default {
       'getByIdStore',
       'fillGridStore',
       'resetCreateStore',
-      'resetEditStore'
+      'resetEditStore',
+      'toggleModalAccessStore',
+      'setRoleIdStore',
+      'setRoleNameStore'
     ]),
     showModalCreate() {
       // reset data on modal show
@@ -93,12 +110,17 @@ export default {
         // show modal
         this.toggleModalDeleteStore(true);
       });
+    },
+    showModalAccess(id, name) {
+      this.setRoleIdStore(id);
+      this.setRoleNameStore(name);
+      this.toggleModalAccessStore(true);
     }
   },
   computed: {
     ...mapState('roleStore', {
       modelName: 'modelName',
-      allObj: 'allObj'
+      roleGridData: 'roleGridData'
     })
   },
   created() {

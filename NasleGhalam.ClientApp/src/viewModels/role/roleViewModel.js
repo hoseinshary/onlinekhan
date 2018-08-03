@@ -1,7 +1,7 @@
 import { required, displayName, maxLength, numeric } from 'plugins/vuelidate';
 
 export default {
-  instanceObj: {
+  roleObj: {
     Name: {
       displayName: displayName('نام'),
       maxLength: maxLength(50),

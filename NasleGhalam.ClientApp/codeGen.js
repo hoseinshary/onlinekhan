@@ -26,7 +26,7 @@ var arrObjProp = arg[1].split(',').map(item => {
     } else if (obj.type == 'boolean') {
       obj.default = 'false';
     } else if (obj.type == 'array') {
-      obj.default = '[]';
+      obj.default = '0';
     } else {
       obj.default = `''`;
       obj.type = 'string';
@@ -66,6 +66,7 @@ arrObjProp.forEach(item => {
 
 var viewModel = fs
   .readFileSync('./@CodeTemplates/viewModel.js.temp', 'utf8')
+  .replace(/{__modelName}/g, modelName)
   .replace(/{__props}/g, viewModelProp.join(','));
 
 fs.writeFileSync(`${viewModelDir}`, viewModel, 'utf8');
@@ -79,7 +80,8 @@ arrObjProp.forEach(item => {
 
 var store = fs
   .readFileSync('./@CodeTemplates/store.js.temp', 'utf8')
-  .replace(/{__modelName}/g, modelName.toUpperCase())
+  .replace(/{__modelNameUpperCase}/g, modelName.toUpperCase())
+  .replace(/{__modelName}/g, modelName)
   .replace(/{__props}/g, storeProp.join(','));
 
 fs.writeFileSync(`${storelDir}`, store, 'utf8');
@@ -103,7 +105,8 @@ arrObjProp.forEach(item => {
 
 var indexVue = fs
   .readFileSync('./@CodeTemplates/index.vue.temp', 'utf8')
-  .replace(/{__modelName}/g, `${modelName}Store`)
+  .replace(/{__modelName}/g, `${modelName}`)
+  .replace(/{__modelNameStore}/g, `${modelName}Store`)
   .replace(/{__props}/g, indexVueProp.join(','));
 
 fs.writeFileSync(`${viewDir}/index.vue`, indexVue, 'utf8');
@@ -114,7 +117,7 @@ arrObjProp.forEach(item => {
   createEditVueProp.push(
     `${
       item.type == 'array'
-        ? `<my-select :model="$v.instanceObj.${
+        ? `<my-select :model="$v.${modelName}Obj.${
             item.name
           }" :options="" class="col-md-6" clearable />
           
@@ -128,7 +131,7 @@ arrObjProp.forEach(item => {
             </my-field>
             
             `
-          : `<my-input :model="$v.instanceObj.${item.name}" class="col-md-6" />
+          : `<my-input :model="$v.${modelName}.${item.name}" class="col-md-6" />
           
           `
     }`
@@ -139,7 +142,8 @@ arrObjProp.forEach(item => {
 var createVue = fs
   .readFileSync('./@CodeTemplates/create.vue.temp', 'utf8')
   .replace(/{__viewModelName}/g, modelName)
-  .replace(/{__modelName}/g, `${modelName}Store`)
+  .replace(/{__modelName}/g, modelName)
+  .replace(/{__modelNameStroe}/g, `${modelName}Store`)
   .replace(/{__props}/g, createEditVueProp.join(''));
 
 fs.writeFileSync(`${viewDir}/create.vue`, createVue, 'utf8');
@@ -149,7 +153,8 @@ fs.writeFileSync(`${viewDir}/create.vue`, createVue, 'utf8');
 var editVue = fs
   .readFileSync('./@CodeTemplates/edit.vue.temp', 'utf8')
   .replace(/{__viewModelName}/g, modelName)
-  .replace(/{__modelName}/g, `${modelName}Store`)
+  .replace(/{__modelName}/g, modelName)
+  .replace(/{__modelNameStore}/g, `${modelName}Store`)
   .replace(/{__props}/g, createEditVueProp.join(''));
 
 fs.writeFileSync(`${viewDir}/edit.vue`, editVue, 'utf8');

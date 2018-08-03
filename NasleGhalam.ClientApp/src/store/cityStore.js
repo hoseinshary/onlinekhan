@@ -2,69 +2,68 @@ import util from 'utilities/util';
 import axios from 'utilities/axios';
 import { CITY_URL as baseUrl } from 'utilities/site-config';
 
-export default {
+/**
+ * find index of object in cityGridData by id
+ * @param {Number} id
+ */
+function getIndexById(id) {
+  return store.state.cityGridData.findIndex(o => o.Id == id);
+}
+
+const store = {
   namespaced: true,
   state: {
     modelName: 'عنوان',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    instanceObj: {
+    cityObj: {
       Id: 0,
-      Name: ''
+      Name: '',
+      ProvinceId: 0
     },
-    allObj: [],
-    allObjDdl: [],
-    selectedIndex: -1,
+    cityGridData: [],
+    cityDdl: [],
     selectedId: 0,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new instanceObj to allObj
+     * insert new cityObj to cityGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.instanceObj);
+      let createdObj = util.cloneObject(state.cityObj);
       createdObj.Id = id;
-      state.allObj.push(createdObj);
+      state.cityGridData.push(createdObj);
     },
 
     /**
-     * update instanceObj of allObj
+     * update cityObj of cityGridData
      */
     update(state) {
-      let index = state.selectedIndex;
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.instanceObj, state.allObj[index]);
+      util.mapObject(state.cityObj, state.cityGridData[index]);
     },
 
     /**
-     * delete from allObj
+     * delete from cityGridData
      */
     delete(state) {
-      let index = state.selectedIndex;
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.allObj.splice(index, 1);
+      state.cityGridData.splice(index, 1);
     },
 
     /**
-     * rest value of instanceObj
+     * rest value of cityObj
      */
     reset(state, $v) {
-      util.clearObject(state.instanceObj);
+      util.clearObject(state.cityObj);
       if ($v) {
         $v.$reset();
       }
-    },
-
-    /**
-     * set selectedIndex
-     */
-    setIndex(state) {
-      state.selectedIndex = state.allObj.findIndex(
-        o => o.Id == state.instanceObj.Id
-      );
     }
   },
   actions: {
@@ -74,7 +73,7 @@ export default {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.instanceObj);
+        util.mapObject(response.data, state.cityObj);
       });
     },
 
@@ -83,7 +82,7 @@ export default {
      */
     fillGridStore({ state }) {
       axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.allObj = response.data;
+        state.cityGridData = response.data;
       });
     },
 
@@ -92,7 +91,7 @@ export default {
      */
     fillDdlStore({ state }) {
       axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.allObjDdl = response.data;
+        state.cityDdl = response.data;
       });
     },
 
@@ -119,7 +118,7 @@ export default {
       dispatch('validateFormStore', vm, { root: true }).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
+        axios.post(`${baseUrl}/Create`, state.cityObj).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
@@ -171,11 +170,10 @@ export default {
       var vm = state.editVue;
       dispatch('validateFormStore', vm, { root: true }).then(isValid => {
         if (!isValid) return;
-        state.instanceObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
+        state.cityObj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.cityObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
-            commit('setIndex');
             commit('update');
             dispatch('resetEditStore');
             dispatch('toggleModalEditStore', false);
@@ -217,7 +215,6 @@ export default {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
-          commit('setIndex');
           commit('delete');
           commit('reset');
           dispatch('toggleModalDeleteStore', false);
@@ -238,7 +235,9 @@ export default {
   },
   getters: {
     recordName(state) {
-      return state.instanceObj.Name;
+      return state.cityObj.Name;
     }
   }
 };
+
+export default store;

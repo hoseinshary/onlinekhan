@@ -98,6 +98,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<SelectViewModel> GetAllControllerByModuleIdDdl(int moduleId, string userAccess)
         {
             return _actions
+                .Include(current => current.Controller)
                 .Where(current => current.IsIndex)
                 .Where(current => current.Controller.ModuleId == moduleId)
                 .OrderBy(current => current.Controller.Priority)
@@ -120,12 +121,24 @@ namespace NasleGhalam.ServiceLayer.Services
             return _actions
                 .Where(current => current.IsIndex)
                 .OrderBy(current => current.Controller.Module.Priority)
+                .GroupBy(current => new
+                {
+                    current.Controller.ModuleId,
+                    ModuleName = current.Controller.Module.Name,
+                    current.ActionBit
+                })
+                .Select(current=>new
+                {
+                    current.Key.ModuleId,
+                    current.Key.ModuleName,
+                    current.Key.ActionBit
+                })
                 .AsEnumerable()
                 .Where(current => Utility.HasAccess(userAccess, current.ActionBit))
                 .Select(current => new SelectViewModel
                 {
-                    value = current.Controller.ModuleId,
-                    label = current.Controller.Module.Name
+                    value = current.ModuleId,
+                    label = current.ModuleName
                 }).ToList();
         }
     }

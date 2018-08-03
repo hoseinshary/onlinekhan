@@ -19,7 +19,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('{__modelName}', [
+    ...mapActions('{__modelNameStore}', [
       'toggleModalEditStore',
       'editVueStore',
       'submitEditStore',
@@ -30,9 +30,9 @@ export default {
    * computed
    */
   computed: {
-    ...mapState('{__modelName}', {
+    ...mapState('{__modelNameStore}', {
       modelName: 'modelName',
-      instanceObj: 'instanceObj',
+      {__modelName}Obj: '{__modelName}Obj',
       isOpenModalEdit: 'isOpenModalEdit'
     })
   },

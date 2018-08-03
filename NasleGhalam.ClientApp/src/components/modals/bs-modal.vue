@@ -1,36 +1,36 @@
 <template>
-    <div>
-        <transition name="bs-modal">
-            <div v-show="show"
-                 class="bs-modal"
-                 tabindex="0"
-                 role="dialog"
-                 @click="close('click')">
-                <div class="bs-modal-dialog"
-                     :class="modalSize"
-                     role="document"
-                     @click.stop>
-                    <div class="bs-modal-content">
-                        <section class="bs-modal-header">
-                            <slot name="header"></slot>
-                        </section>
+  <div>
+    <transition name="bs-modal">
+      <div v-show="show"
+           class="bs-modal"
+           tabindex="0"
+           role="dialog"
+           @click="close('click')">
+        <div class="bs-modal-dialog"
+             :class="modalSize"
+             role="document"
+             @click.stop>
+          <div class="bs-modal-content">
+            <section class="bs-modal-header">
+              <slot name="header"></slot>
+            </section>
 
-                        <section class="bs-modal-body">
-                            <div class="row gutter-sm">
-                                <slot></slot>
-                            </div>
-                        </section>
+            <section class="bs-modal-body">
+              <div class="row gutter-sm">
+                <slot></slot>
+              </div>
+            </section>
 
-                        <section class="bs-modal-footer">
-                            <slot name="footer"></slot>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </transition>
-        <section v-if="show"
-                 class="bs-modal-backdrop"></section>
-    </div>
+            <section class="bs-modal-footer">
+              <slot name="footer"></slot>
+            </section>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <section v-if="show"
+             class="bs-modal-backdrop"></section>
+  </div>
 </template>
 
 <script>
@@ -39,10 +39,6 @@ export default {
    * props
    */
   props: {
-    title: {
-      type: String,
-      default: ''
-    },
     size: String,
     show: {
       type: Boolean,
@@ -88,33 +84,28 @@ export default {
   /**
    * whatch
    */
-  //   watch: {
-  //     show(newVal) {
-  //       this.$emit('toggle', newVal);
-  //       if (newVal) {
-  //         this.$emit('show');
-
-  //         // document.body.classList.add('bs-modal-open');
-  //         // document.body.style.paddingRight = '17px';
-  //       } else {
-  //         this.$emit('hide');
-
-  //         // document.body.classList.remove('bs-modal-open');
-  //         // document.body.style.paddingRight = '0';
-  //       }
-  //     }
-  //   },
-  mouted() {
-    console.log('esc');
-    document.addEventListener('keydown', e => {
-      console.log('esc');
-      if (this.show && e.keyCode == 27) {
-        this.close();
+  watch: {
+    show(newVal) {
+      if (newVal) {
+        document.body.classList.add('bs-modal-open');
+        // document.body.style.paddingRight = '17px';
+      } else {
+        document.body.classList.remove('bs-modal-open');
+        // document.body.style.paddingRight = '0';
       }
-    });
+    }
+  },
+  mounted() {
+    // console.log('esc');
+    // document.addEventListener('keydown', e => {
+    //   console.log('esc');
+    //   if (this.show && e.keyCode == 27) {
+    //     this.close();
+    //   }
+    // });
   },
   destroyed() {
-    console.log('modal destroyed');
+    // console.log('modal destroyed');
   }
 };
 </script>

@@ -5,17 +5,17 @@
                    @reset="resetCreateStore"
                    @close="toggleModalCreateStore(false)">
 
-    <my-input :model="$v.instanceObj.Name"
+    <my-input :model="$v.roleObj.Name"
               class="col-md-6" />
 
-    <my-input :model="$v.instanceObj.Level"
+    <my-input :model="$v.roleObj.Level"
               class="col-md-6" />
 
   </my-modal-create>
 </template>
 
 <script>
-import viewModel from 'viewModels/roleViewModel';
+import viewModel from 'viewModels/role/roleViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -36,7 +36,7 @@ export default {
   computed: {
     ...mapState('roleStore', {
       modelName: 'modelName',
-      instanceObj: 'instanceObj',
+      roleObj: 'roleObj',
       isOpenModalCreate: 'isOpenModalCreate'
     })
   },

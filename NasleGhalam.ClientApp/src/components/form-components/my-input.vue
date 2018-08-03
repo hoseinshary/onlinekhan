@@ -70,64 +70,68 @@ export default {
   data() {
     return {
       inputMaxLen: Infinity
-    }
+    };
   },
   methods: {
     /**
      *  Clear the model
      * */
     clear() {
-      this.$refs.input.clear()
+      this.$refs.input.clear();
     },
     /**
      * showing password or not.
      */
     togglePass() {
-      this.$refs.input.togglePass()
+      this.$refs.input.togglePass();
     },
     /**
      * Focused the textfield.
      */
     focus() {
-      this.$refs.input.focus()
+      this.$refs.input.focus();
     },
     /**
      * Makes textfield lose focus.
      */
     blur() {
-      this.$refs.input.blur()
+      this.$refs.input.blur();
     },
     /**
      * Selects all textfield text and focuses.
      */
     select() {
-      this.$refs.input.select()
+      this.$refs.input.select();
     },
     /**
      * get model error
      */
     errorLabel() {
       if (!this.model.$dirty) {
-        return ''
+        return '';
       }
 
       if (this.isOnlyPersianChar) {
-        return 'فقط از حروف فارسی استفاده شود'
+        return 'فقط از حروف فارسی استفاده شود';
       } else if (this.isNotPersianChar) {
-        return 'کیبورد را انگلیسی نمایید'
+        return 'کیبورد را انگلیسی نمایید';
       } else if (this.isNumeric) {
-        return 'فقط عدد وارد شود'
+        return 'فقط عدد وارد شود';
       } else if (this.model.required !== undefined && !this.model.required) {
-        return `(${this.displayName}) خالی میباشد`
+        return `(${this.displayName}) خالی میباشد`;
       } else if (this.model.minLength !== undefined && !this.model.minLength) {
-        return `حداقل تعداد کاراکتر وارد شده برای (${this.displayName}) باید (${this.minLen}) باشد`
+        return `حداقل تعداد کاراکتر وارد شده برای (${this.displayName}) باید (${
+          this.minLen
+        }) باشد`;
       } else if (this.model.maxLength !== undefined && !this.model.maxLength) {
-        return `تعداد کاراکتر وارد شده برای (${this.displayName}) بیش از (${this.maxLen}) می باشد`
+        return `تعداد کاراکتر وارد شده برای (${this.displayName}) بیش از (${
+          this.maxLen
+        }) می باشد`;
       }
-      return ''
+      return '';
     },
     keydown(e) {
-      this.$emit('keydown')
+      this.$emit('keydown');
 
       if (this.isOnlyPersianChar || this.isNotPersianChar || this.isNumeric) {
         if (
@@ -142,10 +146,10 @@ export default {
           (e.keyCode >= 35 && e.keyCode <= 39)
         ) {
           // let it happen, don't do anything
-          return
+          return;
         }
 
-        e.preventDefault()
+        e.preventDefault();
       }
     }
   },
@@ -158,45 +162,49 @@ export default {
      */
     displayName() {
       if (this.model && this.model.$params && this.model.$params.displayName) {
-        return this.model.$params.displayName.value
+        return this.model.$params.displayName.value;
       }
-      return ''
+      return '';
     },
     /**
      * get min value of model
      */
     minLen() {
       if (this.model && this.model.$params && this.model.$params.minLength) {
-        return this.model.$params.minLength.min
+        return this.model.$params.minLength.min;
       }
-      return 0
+      return 0;
     },
     /**
      * get jmax value of model
      */
     maxLen() {
       if (this.model && this.model.$params && this.model.$params.maxLength) {
-        return this.model.$params.maxLength.max
+        return this.model.$params.maxLength.max;
       }
-      return 0
+      return 0;
     },
     /**
      * check if onlyPersianChar validator assign to model
      */
     isOnlyPersianChar() {
-      return this.model.onlyPersianChar !== undefined && !this.model.onlyPersianChar
+      return (
+        this.model.onlyPersianChar !== undefined && !this.model.onlyPersianChar
+      );
     },
     /**
      * check if notPersianChar validator assign to model
      */
     isNotPersianChar() {
-      return this.model.notPersianChar !== undefined && !this.model.notPersianChar
+      return (
+        this.model.notPersianChar !== undefined && !this.model.notPersianChar
+      );
     },
     /**
      * check if numeric validator assign to model
      */
     isNumeric() {
-      return this.model.numeric !== undefined && !this.model.numeric
+      return this.model.numeric !== undefined && !this.model.numeric;
     }
   },
   /**
@@ -205,12 +213,12 @@ export default {
   created() {
     // set input maxlen
     if (this.maxlength === undefined && this.model.maxLength !== undefined) {
-      this.inputMaxLen = this.maxLen
+      this.inputMaxLen = this.maxLen;
     } else if (this.maxlength !== undefined) {
-      this.inputMaxLen = this.maxlength
+      this.inputMaxLen = this.maxlength;
     }
   }
-}
+};
 </script>
 
 <style>

@@ -1,3 +1,8 @@
+import axios from 'utilities/axios';
+import { USER_URL as baseUrl } from 'utilities/site-config';
+import { LocalStorage } from 'quasar';
+import router from 'router';
+
 export default {
   namespaced: true,
   strict: true,
@@ -16,8 +21,8 @@ export default {
       Username: '',
       Password: ''
     },
-    loginObj: {
-      Username: '',
+    instanceLoginObj: {
+      UserName: '',
       Password: ''
     },
     allInstance: [
@@ -45,13 +50,41 @@ export default {
     closeModalCreate(state) {
       state.isOpenModalCreate = false;
     }
+  },
+  actions: {
+    // create(context) {
+    //   context.commit('create');
+    // }
+    loginStore(context, vm) {
+      debugger;
+      axios
+        .post(`${baseUrl}/Login`, context.state.instanceLoginObj)
+        .then(response => {
+          let data = response.data;
+
+          context.dispatch(
+            'notify',
+            { body: data.Message, type: data.MessageType, vm: vm },
+            { root: true }
+          );
+
+          if (data.MessageType == 1) {
+            axios.defaults.headers.common['Token'] = data.Token;
+            // LocalStorage.set('Token', data.Token);
+            // LocalStorage.set('FullName', data.FullName);
+            axios.get(`${baseUrl}/GetMenu`).then(axiosData => {
+              LocalStorage.set(
+                'authList',
+                axiosData.data.map(x => x.EnName.toLowerCase())
+              );
+              LocalStorage.set('menuList', axiosData.data);
+              router.push(data.DefaultPage);
+            });
+          }
+          router.push('/' + data.DefaultPage);
+        });
+    }
   }
-  //,
-  //   actions: {
-  //     create(context) {
-  //       context.commit('create')
-  //     }
-  //   },
   //   getters: {
   //     getCount: state => {
   //       console.log('getCount:')

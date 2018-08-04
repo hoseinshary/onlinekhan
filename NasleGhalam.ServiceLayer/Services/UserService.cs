@@ -165,7 +165,7 @@ namespace Matin.Abfa.ServiceLayer.Services
             var user = Mapper.Map<User>(userViewModel);
             _uow.MarkAsDeleted(user);
             return _uow.CommitChanges(CrudType.Delete, Title);
-            
+
         }
 
 
@@ -213,15 +213,15 @@ namespace Matin.Abfa.ServiceLayer.Services
                 }
                 else
                 {
-                    var lstAccessPage = _actionService.Value.GetMenu(usr.Role.SumOfActionBit);
-                    if (lstAccessPage.Count == 0)
+                    loginResult.SubMenus = _actionService.Value.GetSubMenu(usr.Role.SumOfActionBit);
+                    if (loginResult.SubMenus.Count == 0)
                     {
                         loginResult.Message = "شما به صفحه ای دسترسی ندارید";
                     }
                     else
                     {
                         string defaultPage = "";
-                        foreach (var item in lstAccessPage)
+                        foreach (var item in loginResult.SubMenus)
                         {
                             if (item.EnName == "/Dashboard/Map")
                             {
@@ -232,14 +232,18 @@ namespace Matin.Abfa.ServiceLayer.Services
 
                         if (string.IsNullOrEmpty(defaultPage))
                         {
-                            defaultPage = lstAccessPage[0].EnName;
+                            defaultPage = loginResult.SubMenus[0].EnName;
                         }
 
                         loginResult.Message = "در حال انتقال...";
                         loginResult.MessageType = MessageType.Success;
-                        loginResult.Token = JsonWebToken.CreateToken(usr.Role.Level, 
-                            usr.IsAdmin, usr.Id, usr.Role.SumOfActionBit);
+
+                        loginResult.Menus = _actionService.Value.GetMenu(usr.Role.SumOfActionBit);
                         loginResult.DefaultPage = defaultPage;
+
+                        loginResult.FullName = usr.Name + " " + usr.Family;
+                        loginResult.Token = JsonWebToken.CreateToken(usr.Role.Level,
+                            usr.IsAdmin, usr.Id, usr.Role.SumOfActionBit);
                     }
                 }
             }

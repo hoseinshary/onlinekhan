@@ -31,6 +31,8 @@
                clearable
                @change="fillActionGrid" />
 
+   
+
     <my-table :grid-data="actionGridData"
               :columns="gridColumns">
       <template slot="IsChecked"
@@ -67,11 +69,11 @@ export default {
         },
         {
           title: 'نام فرم',
-          data: 'ActionFaName'
+          data: 'ControllerFaName'
         },
         {
           title: 'نام عملیات',
-          data: 'ControllerFaName'
+          data: 'ActionFaName'
         }
       ]
     };

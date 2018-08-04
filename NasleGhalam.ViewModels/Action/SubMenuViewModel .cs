@@ -1,7 +1,9 @@
-﻿namespace NasleGhalam.ViewModels.Controller
+﻿namespace NasleGhalam.ViewModels.Action
 {
-    public class ControllerViewModel
+    public class SubMenuViewModel
     {
+        public int ModuleId { get; set; }
+
         public string FaName { get; set; }
 
         public string EnName { get; set; }

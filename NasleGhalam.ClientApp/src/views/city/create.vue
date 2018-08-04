@@ -9,7 +9,7 @@
               class="col-md-6" />
 
     <my-select :model="$v.cityObj.ProvinceId"
-               :options=""
+               :options="a"
                class="col-md-6"
                clearable />
 

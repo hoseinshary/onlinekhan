@@ -33,7 +33,7 @@
     </my-panel>
 
     <!-- modals -->
-    <modal-create></modal-create>
+    <modal-create v-if="true"></modal-create>
     <modal-edit></modal-edit>
     <modal-delete></modal-delete>
     <modal-access></modal-access>

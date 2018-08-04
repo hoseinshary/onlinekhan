@@ -235,7 +235,7 @@ export default {
       'div',
       {
         attrs: {
-          class: 'row justify-content-between'
+          class: 'row col-xs-12'
         }
       },
       [

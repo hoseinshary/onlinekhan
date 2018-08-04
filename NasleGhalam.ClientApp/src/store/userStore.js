@@ -1,3 +1,8 @@
+import axios from 'utilities/axios';
+import { USER_URL as baseUrl } from 'utilities/site-config';
+import { LocalStorage } from 'quasar';
+import router from 'router';
+
 export default {
   namespaced: true,
   strict: true,
@@ -16,8 +21,8 @@ export default {
       Username: '',
       Password: ''
     },
-    loginObj: {
-      Username: '',
+    instanceLoginObj: {
+      UserName: '',
       Password: ''
     },
     allInstance: [
@@ -45,13 +50,95 @@ export default {
     closeModalCreate(state) {
       state.isOpenModalCreate = false;
     }
+  },
+  actions: {
+    // create(context) {
+    //   context.commit('create');
+    // }
+    // logoutStore(context, vm) {
+    //   LocalStorage.remove('authList');
+    //   LocalStorage.remove('menuList');
+    //   LocalStorage.remove('Token');
+    //   LocalStorage.remove('FullName');
+    //   // this.$axios.defaults.headers.common['Token'] = '';
+    //   this.$router.push('/user/login');
+    // },
+    loginStore(context, vm) {
+      debugger;
+      axios
+        .post(`${baseUrl}/Login`, context.state.instanceLoginObj)
+        .then(response => {
+          let data = response.data;
+
+          context.dispatch(
+            'notify',
+            { body: data.Message, type: data.MessageType, vm: vm },
+            { root: true }
+          );
+
+          if (data.MessageType == 1) {
+            axios.defaults.headers.common['Token'] = data.Token;
+            LocalStorage.set('Token', data.Token);
+            LocalStorage.set('FullName', 'علیرضا اعتمادی'); //data.FullName);
+            // axios.get(`${baseUrl}/GetMenu`).then(axiosData => {
+            var axiosData = {};
+            axiosData.data = [
+              {
+                FaName: 'دوره تحصیلی',
+                EnName: '/grade',
+                Icon: 'receipt',
+                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
+              },
+              {
+                FaName: 'پایه تحصیلی',
+                EnName: '/gradeLevel',
+                Icon: 'reorder',
+                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
+              },
+              {
+                FaName: 'استان',
+                EnName: '/province',
+                Icon: 'terrain',
+                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
+              },
+              {
+                FaName: 'شهر',
+                EnName: '/city',
+                Icon: 'terrain',
+                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
+              },
+              {
+                FaName: 'درس',
+                EnName: '/lesson',
+                Icon: 'multiline chart',
+                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
+              },
+              {
+                FaName: 'نقش',
+                EnName: '/role',
+                Icon: 'group work',
+                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
+              },
+              {
+                FaName: 'کاربر',
+                EnName: '/user',
+                Icon: 'group work',
+                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
+              }
+            ];
+
+            LocalStorage.set(
+              'authList',
+              axiosData.data.map(x => x.EnName.toLowerCase())
+            );
+            LocalStorage.set('menuList', axiosData.data);
+            // router.push(data.DefaultPage);
+            // });
+          }
+          router.push('/' + data.DefaultPage);
+        });
+    }
   }
-  //,
-  //   actions: {
-  //     create(context) {
-  //       context.commit('create')
-  //     }
-  //   },
   //   getters: {
   //     getCount: state => {
   //       console.log('getCount:')

@@ -1,4 +1,3 @@
-let str = 'views/lesson';
 export default [
   {
     path: '/user/login',

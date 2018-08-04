@@ -17,6 +17,42 @@
           <div slot="subtitle">سامانه جامع کنکور
           </div>
         </q-toolbar-title>
+        <div class="gt-xs inline">
+          <img src="/assets/img/User.jpg"
+               class="img-circle"
+               style="width: 20px;height: 20px;border-radius: 50%;"> {{FullName}}،
+          خوش آمدید
+          <a @click="logout"
+             style="text-decoration: none;color: white;padding-right: 20px;cursor: pointer;">
+            <q-icon name="assignment return" /> خروج </a>
+        </div>
+        <div class="lt-sm inline">
+          <q-btn flat
+                 dense
+                 round
+                 color="primary"
+                 @click="showLogoutMenu = true"
+                 style="color:white !important">
+            <q-icon name="list" />
+          </q-btn>
+          <div>
+
+            <q-popover v-model="showLogoutMenu"
+                       style="border-radius: 5px;">
+              <div style="padding:5px; background: rgb(32, 116, 119);border-radius: 5px;overflow: overlay;">
+                <img src="/assets/img/User.jpg"
+                     class="img-circle"
+                     style="width: 20px;height: 20px;border-radius: 50%;">{{FullName}}،
+                خوش آمدید
+                <a @click="logout"
+                   style="text-decoration: none;color: white;margin-right: 5px; cursor: pointer;">
+                  <q-icon id="exitLtlMenu"
+                          name="assignment return" /> خروج </a>
+              </div>
+            </q-popover>
+          </div>
+        </div>
+
       </q-toolbar>
     </q-layout-header>
 
@@ -74,7 +110,12 @@
 
       <br />
       <div class="row justify-center">
-        <router-view />
+        <transition name="transitions"
+                    enter-active-class="animated bounceInDown"
+                    leave-active-class="animated bounceOutUp"
+                    mode="out-in">
+          <router-view />
+        </transition>
       </div>
 
     </q-page-container>
@@ -83,12 +124,16 @@
 
 <script>
 import { openURL } from 'quasar';
+import util from 'utilities/util';
 
 export default {
   data() {
     return {
       leftDrawerOpen: true, //this.$q.platform.is.desktop,
-      miniState: false
+      miniState: false,
+      menuList: null,
+      FullName: '',
+      showLogoutMenu: false
     };
   },
   methods: {
@@ -104,7 +149,14 @@ export default {
         // intended for switching drawer to "normal" mode only
         e.stopPropagation();
       }
+    },
+    logout() {
+      util.logout();
     }
+  },
+  created: function() {
+    this.FullName = this.$q.localStorage.get.item('FullName');
+    this.menuList = this.$q.localStorage.get.item('menuList');
   }
 };
 </script>

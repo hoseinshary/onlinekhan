@@ -1,150 +1,76 @@
 
 <template>
-    <div class="login">
-        <!-- <loading></loading> -->
-        <div class="limiter">
-            <div class="container-login100"
-                 style="background-image: url('../../assets/img/bg.jpg');">
-                <!-- <transition appear enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutUp">
-        <div @click="doTrans" v-if="show" id="login-button">
-          <img src="../../assets/img/login-w-icon.png">
-        </div>
-      </transition> -->
-                <transition appear
-                            enter-active-class="animated fadeIn"
-                            leave-active-class="animated fadeOutUp">
-                    <div v-if="show2"
-                         id="container">
-                        <div class="wrap-login100">
-                            <form class="login100-form validate-form">
-                                <span class="login100-form-title p-b-34 p-t-27">
-                                    آموزشگاه کنکور نسل قلم
-                                </span>
+  <div class="login">
+    <!-- <loading></loading> -->
+    <div class="limiter">
+      <div class="container-login100"
+           style="background-image: url('../../assets/img/bg.jpg');">
+        <transition appear
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOutUp">
+          <div id="container">
+            <div class="wrap-login100">
+              <div class="login100-form validate-form">
+                <span class="login100-form-title p-b-34 p-t-27">
+                  آموزشگاه کنکور نسل قلم
+                </span>
 
-                                <span class="login100-form-logo">
-                                    <i class="zmdi zmdi-landscape"></i>
-                                </span>
+                <span class="login100-form-logo">
+                  <i class="zmdi zmdi-landscape"></i>
+                </span>
 
-                                <span class="login200-form-title p-b-34 p-t-27">
-                                    ورود به سامانه
-                                </span>
-                                <my-input :model="$v.instanceObj.Username"
-                                          class="col-md-6" />
-                                <my-input :model="$v.instanceObj.Password"
-                                          type="password"
-                                          class="col-md-6" />
+                <span class="login200-form-title p-b-34 p-t-27">
+                  ورود به سامانه
+                </span>
+                <my-input :model="$v.instanceLoginObj.UserName"
+                          class="col-md-6" />
+                <my-input :model="$v.instanceLoginObj.Password"
+                          type="password"
+                          class="col-md-6" />
 
-                                <div class="container-login100-form-btn">
-                                    <button class="login100-form-btn"
-                                            style="padding-bottom: 5px;">
-                                        ورود
-                                    </button>
-                                </div>
+                <div class="container-login100-form-btn">
+                  <button @click="login"
+                          class="login100-form-btn"
+                          style="padding-bottom: 5px;">
+                    ورود
+                  </button>
+                </div>
 
-                                <div class="text-center forget">
-                                    <a class="txt1"
-                                       href="#">
-                                        فراموشی رمز عبور
-                                    </a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- <div v-if="show2" id="container">
-        <h3 style="font-family:tahoma ; text-align:center ; font-weight: bold; background: #a6aab6c7; border-radius: 0px 5px;color:white; font-size:3vh;margin: 5px;">
-          نسل قلم
-                 </h3>
-        <h4 style="font-family:tahoma ; text-align:center ; font-weight:bold; color:white; font-size:14px;margin: 5px;">
-          ورود به سیستم
-        </h4>
-        <span class="close-btn">
-          <img @click="returnTrans" src="../../assets/icons/close.png">
-        </span>
-        <form>
-
-          <input @keyup.enter="checkAuth" v-model="username" type="text" name="username" placeholder="نام کاربری">
-          <input @keyup.enter="checkAuth" v-model="password" type="password" name="pass" placeholder="رمز عبور">
-          <a @click="checkAuth" style="font-family:tahoma ; cursor: pointer;   background: #3d91db; text-align:center ; font-weight:bold; color:white; font-size:14px;">ورود</a>
-        </form>
-      </div> -->
-                </transition>
+                <div class="text-center forget">
+                  <a class="txt1"
+                     href="#">
+                    فراموشی رمز عبور
+                  </a>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
 
+        </transition>
+      </div>
     </div>
+
+  </div>
 </template>
 
 <script>
-// import _userService from "serviceLayers/UserService";
-// import loading from "components/loading.vue";
 import viewModel from 'viewModels/user/loginViewModel';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
-import { Notify } from 'quasar';
 export default {
   validations: viewModel,
-  data: () => ({
-    show2: true,
-    show: true,
-    username: '',
-    password: ''
-  }),
+
   methods: {
-    doTrans() {
-      this.show = false;
-      setTimeout(() => {
-        this.show2 = true;
-      }, 500);
-    },
-    returnTrans() {
-      this.show2 = false;
-      setTimeout(() => {
-        this.show = true;
-      }, 500);
-    },
-    checkAuth() {
-      // _userService.logIn(this.username, this.password).then(response => {
-      //   var log = response.data;
-      //   Notify.create({
-      //     message: log.Message,
-      //     type: log.MessageType == 1 ? "positive" : "negative",
-      //     position: "top",
-      //     timeout: 1000
-      //   });
-      //   debugger;
-      //   if (log.MessageType == 1) {
-      //     this.$q.localStorage.set("Token", log.Token);
-      //     _userService.getMenu().then(axiosData => {
-      //       this.$q.localStorage.set(
-      //         "authList",
-      //         axiosData.data.map(x => x.EnName.toLowerCase())
-      //       );
-      //       this.$q.localStorage.set("menuList", axiosData.data);
-      //       this.$router.push(log.DefaultPage);
-      //     });
-      //   }
-      // });
-      this.$q.localStorage.set('authList', ['/user', '/role']);
-      this.$q.localStorage.set('menuList', '');
-      this.$router.push('/user');
+    ...mapActions('userStore', ['loginStore']),
+    login() {
+      this.loginStore(this);
     }
   },
   computed: {
     ...mapState({
-      instanceObj: s => s.userStore.instanceObj
+      instanceLoginObj: s => s.userStore.instanceLoginObj
     })
-  },
-  created: function() {
-    this.doTrans();
   }
-  // mounted: function() {
-  //   $("body").addClass("myLogin");
-  // },
-  // destroyed: function() {
-  //   $("body").removeClass("myLogin");
-  // },
-  //   components: { loading }
 };
 </script>
 

@@ -49,7 +49,8 @@ module.exports = function(ctx) {
           views: path.resolve(__dirname, './src/views/'),
           viewModels: path.resolve(__dirname, './src/viewModels/'),
           plugins: path.resolve(__dirname, './src/plugins/'),
-          store: path.resolve(__dirname, './src/store/')
+          store: path.resolve(__dirname, './src/store/'),
+          router: path.resolve(__dirname, './src/router/')
         };
       }
     },
@@ -89,11 +90,13 @@ module.exports = function(ctx) {
         'QToggle',
         'QPagination',
         'QTooltip',
-        'Loading'
+        // 'Loading',
+        'QSpinnerIos',
+        'QPopover'
       ],
       directives: ['Ripple', 'CloseOverlay'],
       // Quasar plugins
-      plugins: ['Notify'],
+      plugins: ['Notify', 'LocalStorage', 'Loading'],
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       i18n: 'fa-ir' // Quasar language
     },

@@ -1,3 +1,7 @@
+import { LocalStorage } from 'quasar';
+import router from 'router';
+import axios from 'utilities/axios';
+
 /**
  * map all value of source object to dest object
  * @param {Object} cloneFrom
@@ -88,6 +92,17 @@ const isObject = function(value) {
 const isBoolean = function(value) {
   return typeof value === 'boolean';
 };
+/**
+ * handle logout
+ */
+const logout = function() {
+  LocalStorage.remove('authList');
+  LocalStorage.remove('menuList');
+  LocalStorage.remove('Token');
+  LocalStorage.remove('FullName');
+  axios.defaults.headers.common['Token'] = '';
+  router.push('/user/login');
+};
 
 //   isNull(value) {
 //     return value === null;
@@ -126,5 +141,6 @@ export default {
   isNumber,
   isArray,
   isObject,
-  isBoolean
+  isBoolean,
+  logout
 };

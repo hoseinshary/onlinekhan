@@ -30,8 +30,9 @@ Router.beforeEach((to, from, next) => {
   // }
   // window.$eventHub.removeAllListeners('closeModal');
 
+  debugger;
   var authList = LocalStorage.get.item('authList');
-  var menuList = LocalStorage.get.item('menuList');
+  var subMenuList = LocalStorage.get.item('subMenuList');
   if (to.fullPath == '/user/login') {
     next();
     document.title = 'ورود';
@@ -40,7 +41,7 @@ Router.beforeEach((to, from, next) => {
     document.title = 'ورود';
   } else {
     next();
-    document.title = menuList.filter(
+    document.title = subMenuList.filter(
       x => x.EnName.toLowerCase() == to.fullPath.toLowerCase()
     )[0].FaName;
   }

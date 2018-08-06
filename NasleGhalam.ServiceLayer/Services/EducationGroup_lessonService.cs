@@ -61,11 +61,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.EducationGroupId == id)
                 .Select(current => new EducationGroup_LessonViewModel
                 {
-                    Id = current.Id,
-                    LessonId = current.LessonId,
+                    Id = current.Id,             
                     LessonName = current.Lesson.Name,
-                    IsChecked = true
-
+              
                 }).ToList();
         }
 

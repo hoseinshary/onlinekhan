@@ -1,39 +1,48 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Ratio
+namespace NasleGhalam.ViewModels.Topic
 {
-	public class RatioViewModel
+	public class TopicViewModel
 	{
-		
+		[Display(Name = "")]
 		public int Id { get; set; }
 
 
-		[Display(Name = "نام")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-        [MaxLength(200, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        public string Name { get; set; }
+		[Display(Name = "")]
+		public string Title { get; set; }
 
 
-		[Display(Name = "ضریب")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-        [Range(0, byte.MaxValue, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
-        public byte Rate { get; set; }
+		[Display(Name = "")]
+		public int ExamStock { get; set; }
 
 
-		[Display(Name = "درس")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-        public int LessonId { get; set; }
-
-        [Display(Name = "درس")]
-        public string LessonName { get; set; }
+		[Display(Name = "")]
+		public int ExamStockSystem { get; set; }
 
 
-        [Display(Name = "زیر گروه درسی")]
-		public int EducationSubGroupId { get; set; }
-
-        [Display(Name = "زیر گروه درسی")]
-        public string EducationSubGroupName { get; set; }
+		[Display(Name = "")]
+		public short Importance { get; set; }
 
 
-    }
+		[Display(Name = "")]
+		public bool IsExamSource { get; set; }
+
+
+		[Display(Name = "")]
+		public TopicHardnessType HardnessType { get; set; }
+
+
+		[Display(Name = "")]
+		public AreaType AreaType { get; set; }
+
+
+		[Display(Name = "")]
+		public bool IsActive { get; set; }
+
+
+		[Display(Name = "")]
+		public int EducationGroup_LessonId { get; set; }
+
+
+	}
 }

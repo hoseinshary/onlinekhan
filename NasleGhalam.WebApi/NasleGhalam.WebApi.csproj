@@ -115,6 +115,7 @@
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\RatioController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="App_Start\StructureMapHttpControllerActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />

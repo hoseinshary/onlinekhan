@@ -274,6 +274,13 @@ export default {
   }
 }
 
+@media (min-width: 768px) {
+  .bs-modal-xl {
+    width: 95%;
+    max-width: 2000px;
+  }
+}
+
 .fixed-top {
   /* position: fixed;
   top: 0;

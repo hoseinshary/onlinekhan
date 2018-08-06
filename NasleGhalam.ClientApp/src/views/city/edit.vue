@@ -8,10 +8,10 @@
     <my-input :model="$v.city.Name"
               class="col-md-6" />
 
-    <!-- <my-select :model="$v.cityObj.ProvinceId"
-               :options=""
+    <my-select :model="$v.cityObj.ProvinceId"
+               :options="a"
                class="col-md-6"
-               clearable /> -->
+               clearable />
 
   </my-modal-edit>
 </template>

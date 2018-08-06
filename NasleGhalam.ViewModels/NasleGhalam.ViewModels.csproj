@@ -56,8 +56,9 @@
       <DependentUpon>ViewModelGenerator.tt</DependentUpon>
     </Content>
     <Compile Include="Action\ActionViewModel.cs" />
+    <Compile Include="Action\MenuViewModel.cs" />
     <Compile Include="City\CityViewModel.cs" />
-    <Compile Include="Controller\ControllerViewModel .cs" />
+    <Compile Include="Action\SubMenuViewModel .cs" />
     <Compile Include="EducationGroup_Lesson\EducationGroup_LessonViewModel.cs" />
     <Compile Include="EducationSubGroup\EducationSubGroupViewModel.cs" />
     <Compile Include="EducationYear\EducationYearViewModel.cs" />

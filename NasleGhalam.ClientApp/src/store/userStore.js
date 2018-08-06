@@ -79,63 +79,15 @@ export default {
           if (data.MessageType == 1) {
             axios.defaults.headers.common['Token'] = data.Token;
             LocalStorage.set('Token', data.Token);
-            LocalStorage.set('FullName', 'علیرضا اعتمادی'); //data.FullName);
-            // axios.get(`${baseUrl}/GetMenu`).then(axiosData => {
-            var axiosData = {};
-            axiosData.data = [
-              {
-                FaName: 'دوره تحصیلی',
-                EnName: '/grade',
-                Icon: 'receipt',
-                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
-              },
-              {
-                FaName: 'پایه تحصیلی',
-                EnName: '/gradeLevel',
-                Icon: 'reorder',
-                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
-              },
-              {
-                FaName: 'استان',
-                EnName: '/province',
-                Icon: 'terrain',
-                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
-              },
-              {
-                FaName: 'شهر',
-                EnName: '/city',
-                Icon: 'terrain',
-                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
-              },
-              {
-                FaName: 'درس',
-                EnName: '/lesson',
-                Icon: 'multiline chart',
-                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
-              },
-              {
-                FaName: 'نقش',
-                EnName: '/role',
-                Icon: 'group work',
-                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
-              },
-              {
-                FaName: 'کاربر',
-                EnName: '/user',
-                Icon: 'group work',
-                UserAccess: ['ایجاد', 'ویرایش', 'حذف']
-              }
-            ];
-
+            LocalStorage.set('FullName', data.FullName);
             LocalStorage.set(
               'authList',
-              axiosData.data.map(x => x.EnName.toLowerCase())
+              data.SubMenus.map(x => x.EnName.toLowerCase())
             );
-            LocalStorage.set('menuList', axiosData.data);
-            // router.push(data.DefaultPage);
-            // });
+            LocalStorage.set('menuList', data.Menus);
+            LocalStorage.set('subMenuList', data.SubMenus);
+            router.push(data.DefaultPage);
           }
-          router.push('/' + data.DefaultPage);
         });
     }
   }

@@ -1,4 +1,6 @@
-﻿using NasleGhalam.Common;
+﻿using System.Collections.Generic;
+using NasleGhalam.Common;
+using NasleGhalam.ViewModels.Action;
 
 namespace NasleGhalam.ViewModels.User
 {
@@ -10,6 +12,12 @@ namespace NasleGhalam.ViewModels.User
 
         public string Token { get; set; }
 
+        public string FullName { get; set; }
+
         public string DefaultPage { get; set; }
+
+        public IList<SubMenuViewModel> SubMenus { get; set; }
+
+        public IList<MenuViewModel> Menus { get; set; }
     }
 }

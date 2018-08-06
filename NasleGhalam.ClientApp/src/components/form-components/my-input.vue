@@ -28,8 +28,8 @@
              @focus="$emit('focus')"
              @blur="$emit('blur')"
              @keydown="keydown"
-             @keyup="$emit('keyup')"
-             @click="$emit('click')" />
+             @keyup="$emit('keyup',$event)"
+             @click="$emit('click',$event)" />
   </q-field>
 </template>
 

@@ -15,7 +15,5 @@ namespace NasleGhalam.ViewModels.Lesson
 
         [Display(Name = "اختصاصی")]
         public bool IsMain { get; set; }
-
-        public DateTime DateTime { get; set; }
     }
 }

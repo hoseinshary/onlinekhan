@@ -16,12 +16,9 @@ namespace NasleGhalam.WebApi.Controllers
     public class UserController : ApiController
     {
         private readonly UserService _userService;
-        private readonly Lazy<ActionService> _actionService;
-        public UserController(UserService userService,
-            Lazy<ActionService> actionService)
+        public UserController(UserService userService)
         {
             _userService = userService;
-            _actionService = actionService;
         }
 
 
@@ -89,13 +86,6 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Login(LoginViewModel login)
         {
             return Ok(_userService.Login(login));
-        }
-
-
-        [HttpGet, CheckUserAccess(ActionBits.PublicAcceess)]
-        public IHttpActionResult GetMenu()
-        {
-            return Ok(_actionService.Value.GetMenu(Request.GetAccess()));
         }
     }
 }

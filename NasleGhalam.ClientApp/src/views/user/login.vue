@@ -26,7 +26,8 @@
                           class="col-md-6" />
                 <my-input :model="$v.instanceLoginObj.Password"
                           type="password"
-                          class="col-md-6" />
+                          class="col-md-6"
+                          @keyup.enter="login" />
 
                 <div class="container-login100-form-btn">
                   <button @click="login"

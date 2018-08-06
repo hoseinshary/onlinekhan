@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Http;
-using Matin.Abfa.ServiceLayer.Services;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.ViewModels.User;
@@ -48,7 +47,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.UserCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(UserViewModel userViewModel)
+        public IHttpActionResult Create(UserCreateViewModel userViewModel)
         {
             var msgRes = _userService.Create(userViewModel, Request.GetRoleLevel());
             return Ok(new MessageResultApi
@@ -63,7 +62,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.UserUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(UserViewModel userViewModel)
+        public IHttpActionResult Update(UserUpdateViewModel userViewModel)
         {
             var msgRes = _userService.Update(userViewModel, Request.GetRoleLevel());
             return Ok(new MessageResultApi

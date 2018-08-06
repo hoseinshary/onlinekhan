@@ -30,7 +30,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
             //}
 
             //todo: remove later, for test
-            var token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJWYWx1ZSI6IjFfVHJ1ZV8xIiwiQWNjZXNzIjoiMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTEwIiwiRXhwIjo2MzY2OTAwNjYwNDc1NDQ5MjR9._lWuHN-3bgCez5aV_MQssQpPoI073q_L1uwhIScf_7Lkfhnb9y2rERQDyXE1tnvBodQIVvmfpG_qZ-nj8ITB0Q";
+            var token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJWYWx1ZSI6IjFfVHJ1ZV8xIiwiQWNjZXNzIjoiMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTEwIiwiRXhwIjo2MzY2OTQxNTI2MzE0MDAyMDl9.HxOsdchKVeY4Tq4NIXZoJdJB8yGTjdgWlDwX1fuzf2jN7KFEpj6FN2qRVaIPBj9_VCUygoA84eNmM6gCW0eERg";
 
             if (token != null)
             {

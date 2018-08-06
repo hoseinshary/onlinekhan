@@ -3,7 +3,7 @@ using NasleGhalam.ViewModels._Attributes;
 
 namespace NasleGhalam.ViewModels.User
 {
-    public class UserViewModel
+    public class UserCreateViewModel
     {
         public int Id { get; set; }
 
@@ -31,11 +31,6 @@ namespace NasleGhalam.ViewModels.User
         [MinLength(5, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
         [Display(Name = "رمز عبور")]
         public string Password { get; set; }
-
-
-        //[Display(Name = "ادمین")]
-        //public bool IsAdmin { get; set; }
-
 
         [Display(Name = "فعال")]
         public bool IsActive { get; set; }
@@ -67,14 +62,14 @@ namespace NasleGhalam.ViewModels.User
         public string Mobile { get; set; }
 
 
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         [Display(Name = "نقش")]
         public int RoleId { get; set; }
 
         public string RoleName { get; set; }
 
 
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(Matin.Abfa.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         [Display(Name = "شهر")]
         public int CityId { get; set; }
 

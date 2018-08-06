@@ -7,11 +7,10 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ServiceLayer.Jwt;
-using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.User;
 
-namespace Matin.Abfa.ServiceLayer.Services
+namespace NasleGhalam.ServiceLayer.Services
 {
     public class UserService
     {
@@ -38,21 +37,22 @@ namespace Matin.Abfa.ServiceLayer.Services
         /// <param name="id"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public UserViewModel GetById(int id, byte userRoleLevel)
+        public UserGetViewModel GetById(int id, byte userRoleLevel)
         {
             return _users
                 .Where(current => current.Id == id)
                 .Where(current => current.Role.Level > userRoleLevel)
-                .Select(current => new UserViewModel
+                .Select(current => new UserGetViewModel
                 {
                     Id = current.Id,
                     Name = current.Name,
                     Family = current.Family,
                     Username = current.Username,
-                    Password = current.Password,
                     IsActive = current.IsActive,
                     RoleId = current.RoleId,
+                    RoleName = current.Role.Name,
                     CityId = current.CityId,
+                    CityName = current.City.Name,
                     Gender = current.Gender,
                     Mobile = current.Mobile,
                     NationalNo = current.NationalNo,
@@ -66,26 +66,23 @@ namespace Matin.Abfa.ServiceLayer.Services
         /// </summary>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public IList<UserViewModel> GetAll(byte userRoleLevel)
+        public IList<UserGetViewModel> GetAll(byte userRoleLevel)
         {
             return _users
                 .Where(current => current.Role.Level > userRoleLevel)
-                .Select(current => new UserViewModel()
+                .Select(current => new UserGetViewModel()
                 {
                     Id = current.Id,
                     Name = current.Name,
                     Family = current.Family,
                     Username = current.Username,
-                    Password = current.Password,
                     IsActive = current.IsActive,
                     RoleId = current.RoleId,
                     CityId = current.CityId,
                     Gender = current.Gender,
                     Mobile = current.Mobile,
                     NationalNo = current.NationalNo,
-                    Phone = current.Phone,
-                    CityName = current.City.Name,
-                    RoleName = current.Role.Name
+                    Phone = current.Phone
                 }).ToList();
         }
 
@@ -96,7 +93,7 @@ namespace Matin.Abfa.ServiceLayer.Services
         /// <param name="userViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResult Create(UserViewModel userViewModel, byte userRoleLevel)
+        public MessageResult Create(UserCreateViewModel userViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
@@ -108,8 +105,8 @@ namespace Matin.Abfa.ServiceLayer.Services
                 };
 
             var user = Mapper.Map<User>(userViewModel);
+            user.LastLogin = DateTime.Now;
             _users.Add(user);
-
             MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = user.Id;
             return msgRes;
@@ -122,7 +119,7 @@ namespace Matin.Abfa.ServiceLayer.Services
         /// <param name="userViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResult Update(UserViewModel userViewModel, byte userRoleLevel)
+        public MessageResult Update(UserUpdateViewModel userViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
@@ -140,9 +137,16 @@ namespace Matin.Abfa.ServiceLayer.Services
                     MessageType = MessageType.Error
                 };
 
-            var user = Mapper.Map<User>(userViewModel);
-            _uow.MarkAsChanged(user);
-
+            var user = Mapper.Map<UserUpdateViewModel, User>(userViewModel);
+            if (string.IsNullOrEmpty(user.Password))
+            {
+                _uow.ExcludeFieldsFromUpdate(user, x => x.Password, x => x.LastLogin);
+                _uow.ValidateOnSaveEnabled(false);
+            }
+            else
+            {
+                _uow.MarkAsChanged(user);
+            }
 
             return _uow.CommitChanges(CrudType.Update, Title);
         }
@@ -165,7 +169,7 @@ namespace Matin.Abfa.ServiceLayer.Services
             var user = Mapper.Map<User>(userViewModel);
             _uow.MarkAsDeleted(user);
             return _uow.CommitChanges(CrudType.Delete, Title);
-            
+
         }
 
 
@@ -237,7 +241,7 @@ namespace Matin.Abfa.ServiceLayer.Services
 
                         loginResult.Message = "در حال انتقال...";
                         loginResult.MessageType = MessageType.Success;
-                        loginResult.Token = JsonWebToken.CreateToken(usr.Role.Level, 
+                        loginResult.Token = JsonWebToken.CreateToken(usr.Role.Level,
                             usr.IsAdmin, usr.Id, usr.Role.SumOfActionBit);
                         loginResult.DefaultPage = defaultPage;
                     }

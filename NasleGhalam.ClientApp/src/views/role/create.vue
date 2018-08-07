@@ -49,7 +49,6 @@ export default {
    */
   created() {
     this.createVueStore(this);
-    console.log('created');
   }
 };
 </script>

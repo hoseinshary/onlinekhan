@@ -131,7 +131,7 @@ export default {
       return '';
     },
     keydown(e) {
-      this.$emit('keydown');
+      this.$emit('keydown', e);
 
       if (this.isOnlyPersianChar || this.isNotPersianChar || this.isNumeric) {
         if (

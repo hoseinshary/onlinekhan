@@ -9,5 +9,7 @@
         public string ControllerFaName { get; set; }
 
         public bool IsChecked { get; set; }
+
+        public short ActionBit { get; set; }
     }
 }

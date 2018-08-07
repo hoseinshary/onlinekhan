@@ -3,19 +3,20 @@
                  :show="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
+                 @open="modalOpen"
                  @close="toggleModalEditStore(false)">
 
-    <my-select :model="$v.instanceObj.GradeId"
+    <my-select :model="$v.gradeLevelObj.GradeId"
                :options="gradeDdl"
                class="col-md-6"
                clearable
                @change="setGradeName" />
 
-    <my-input :model="$v.instanceObj.Name"
+    <my-input :model="$v.gradeLevelObj.Name"
               class="col-md-6">
     </my-input>
 
-    <my-input :model="$v.instanceObj.Priority"
+    <my-input :model="$v.gradeLevelObj.Priority"
               class="col-md-6">
     </my-input>
   </my-modal-edit>
@@ -36,8 +37,14 @@ export default {
       'submitEditStore',
       'resetEditStore'
     ]),
+    ...mapActions('gradeStore', {
+      fillGradeDdlStore: 'fillDdlStore'
+    }),
     setGradeName(item) {
-      this.instanceObj.GradeName = item.label;
+      this.gradeLevelObj.GradeName = item.label;
+    },
+    modalOpen() {
+      this.fillGradeDdlStore();
     }
   },
   /**
@@ -46,11 +53,11 @@ export default {
   computed: {
     ...mapState('gradeLevelStore', {
       modelName: 'modelName',
-      instanceObj: 'instanceObj',
+      gradeLevelObj: 'gradeLevelObj',
       isOpenModalEdit: 'isOpenModalEdit'
     }),
     ...mapState('gradeStore', {
-      gradeDdl: 'allObjDdl'
+      gradeDdl: 'gradeDdl'
     })
   },
   /**

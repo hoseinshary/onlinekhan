@@ -24,6 +24,7 @@ const store = {
     {__modelName}GridData: [],
     {__modelName}Ddl: [],
     selectedId: 0,
+    isModelChanged: true,
     createVue: null,
     editVue: null
   },
@@ -79,20 +80,55 @@ const store = {
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.{__modelName}GridData = response.data;
-      });
+    fillGridStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+        
+        // get data
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.{__modelName}GridData = response.data;
+        });
+      }
     },
 
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.{__modelName}Ddl = response.data;
-      });
+    fillDdlStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.{__modelName}Ddl = response.data;
+        });
+      }
     },
+
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.{__modelName}Obj.$touch();
+      if (vm.$v.{__modelName}Obj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        return false;
+      }
+
+      return true;
+    },
+
+    /**
+     * change isModelChange
+     * @param {Boolean} b
+     */
+    toggleModelChangeStore({ state }, b) {
+      state.isModelChanged = b;
+    },
+
 
     //### create section ###
     /**
@@ -114,7 +150,7 @@ const store = {
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
         axios.post(`${baseUrl}/Create`, state.{__modelName}Obj).then(response => {
@@ -122,6 +158,7 @@ const store = {
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
+            dispatch('toggleModelChangeStore', true);            
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
@@ -167,13 +204,14 @@ const store = {
      */
     submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.{__modelName}Obj.Id = state.selectedId;
         axios.post(`${baseUrl}/Update`, state.{__modelName}Obj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
+            dispatch('toggleModelChangeStore', true);
             dispatch('resetEditStore');
             dispatch('toggleModalEditStore', false);
           }
@@ -216,6 +254,7 @@ const store = {
         if (data.MessageType == 1) {
           commit('delete');
           commit('reset');
+          dispatch('toggleModelChangeStore', true);
           dispatch('toggleModalDeleteStore', false);
         }
 

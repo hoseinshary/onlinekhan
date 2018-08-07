@@ -2,6 +2,7 @@
   <bs-modal :show="show"
             :center="center"
             :size="size"
+            @open="$emit('open')"
             @close="$emit('close')">
 
     <template slot="header">

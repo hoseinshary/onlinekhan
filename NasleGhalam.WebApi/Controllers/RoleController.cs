@@ -110,9 +110,9 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
-        public IHttpActionResult GetActionByControllerId(int controllerId, int roleId)
+        public IHttpActionResult GetActionByControllerIdAndModuleId(int controllerId, int roleId, int moduleId)
         {
-            return Ok(_actionService.Value.GetActionByControllerId(controllerId, roleId, Request.GetRoleLevel()));
+            return Ok(_actionService.Value.GetActionByControllerIdAndModuleId(controllerId, roleId, moduleId, Request.GetRoleLevel()));
         }
 
 

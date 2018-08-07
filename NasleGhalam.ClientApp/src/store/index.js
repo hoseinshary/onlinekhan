@@ -51,20 +51,6 @@ const store = new Vuex.Store({
         vm,
         body: 'تمام مقادیر را بصورت صحیح وارد نمایید.'
       });
-    },
-
-    /**
-     * vlidate form
-     */
-    validateFormStore({ dispatch }, vm) {
-      // check instance validation
-      vm.$v.instanceObj.$touch();
-      if (vm.$v.instanceObj.$error) {
-        dispatch('notifyInvalidForm', vm);
-        return false;
-      }
-
-      return true;
     }
   },
   modules: {

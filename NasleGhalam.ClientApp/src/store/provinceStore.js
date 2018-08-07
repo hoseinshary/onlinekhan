@@ -2,70 +2,69 @@ import util from 'utilities/util';
 import axios from 'utilities/axios';
 import { PROVINCE_URL as baseUrl } from 'utilities/site-config';
 
-export default {
+/**
+ * find index of object in provinceGridData by id
+ * @param {Number} id
+ */
+function getIndexById(id) {
+  return store.state.provinceGridData.findIndex(o => o.Id == id);
+}
+
+const store = {
   namespaced: true,
   state: {
     modelName: 'استان',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    instanceObj: {
+    provinceObj: {
       Id: 0,
       Name: '',
       Code: ''
     },
-    allObj: [],
-    allObjDdl: [],
-    selectedIndex: -1,
+    provinceGridData: [],
+    provinceDdl: [],
     selectedId: 0,
+    isModelChanged: true,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new instanceObj to allObj
+     * insert new provinceObj to provinceGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.instanceObj);
+      let createdObj = util.cloneObject(state.provinceObj);
       createdObj.Id = id;
-      state.allObj.push(createdObj);
+      state.provinceGridData.push(createdObj);
     },
 
     /**
-     * update instanceObj of allObj
+     * update provinceObj of provinceGridData
      */
     update(state) {
-      let index = state.selectedIndex;
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.instanceObj, state.allObj[index]);
+      util.mapObject(state.provinceObj, state.provinceGridData[index]);
     },
 
     /**
-     * delete from allObj
+     * delete from provinceGridData
      */
     delete(state) {
-      let index = state.selectedIndex;
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.allObj.splice(index, 1);
+      state.provinceGridData.splice(index, 1);
     },
 
     /**
-     * rest value of instanceObj
+     * rest value of provinceObj
      */
     reset(state, $v) {
-      util.clearObject(state.instanceObj);
+      util.clearObject(state.provinceObj);
       if ($v) {
         $v.$reset();
       }
-    },
-
-    /**
-     * set selectedIndex
-     */
-    setIndex(state) {
-      state.selectedIndex = state.allObj.findIndex(
-        o => o.Id == state.instanceObj.Id
-      );
     }
   },
   actions: {
@@ -75,26 +74,60 @@ export default {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.instanceObj);
+        util.mapObject(response.data, state.provinceObj);
       });
     },
 
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.allObj = response.data;
-      });
+    fillGridStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.provinceGridData = response.data;
+        });
+      }
     },
 
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.allObjDdl = response.data;
-      });
+    fillDdlStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.provinceDdl = response.data;
+        });
+      }
+    },
+
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.provinceObj.$touch();
+      if (vm.$v.provinceObj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        return false;
+      }
+
+      return true;
+    },
+
+    /**
+     * change isModelChange
+     * @param {Boolean} b
+     */
+    toggleModelChangeStore({ state }, b) {
+      state.isModelChanged = b;
     },
 
     //### create section ###
@@ -117,14 +150,15 @@ export default {
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
+        axios.post(`${baseUrl}/Create`, state.provinceObj).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
+            dispatch('toggleModelChangeStore', true);
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
@@ -170,14 +204,14 @@ export default {
      */
     submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.instanceObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
+        state.provinceObj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.provinceObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
-            commit('setIndex');
             commit('update');
+            dispatch('toggleModelChangeStore', true);
             dispatch('resetEditStore');
             dispatch('toggleModalEditStore', false);
           }
@@ -218,9 +252,9 @@ export default {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
-          commit('setIndex');
           commit('delete');
           commit('reset');
+          dispatch('toggleModelChangeStore', true);
           dispatch('toggleModalDeleteStore', false);
         }
 
@@ -239,7 +273,9 @@ export default {
   },
   getters: {
     recordName(state) {
-      return state.instanceObj.Name;
+      return state.provinceObj.Name;
     }
   }
 };
+
+export default store;

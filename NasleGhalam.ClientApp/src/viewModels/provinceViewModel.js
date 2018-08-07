@@ -1,7 +1,7 @@
 import { required, displayName, maxLength } from 'plugins/vuelidate';
 
 export default {
-  instanceObj: {
+  provinceObj: {
     Name: {
       displayName: displayName('نام'),
       maxLength: maxLength(50),
@@ -9,7 +9,7 @@ export default {
     },
     Code: {
       displayName: displayName('کد'),
-      maxLength: maxLength(5),
+      maxLength: maxLength(10),
       required
     }
   }

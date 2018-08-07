@@ -6,7 +6,7 @@
       <div slot="body">
         <my-btn-create @click="showModalCreate"></my-btn-create>
         <br>
-        <my-table :grid-data="allObj"
+        <my-table :grid-data="gradeGridData"
                   :columns="gridColumns"
                   hasIndex>
           <template slot="Id"
@@ -99,7 +99,7 @@ export default {
   computed: {
     ...mapState('gradeStore', {
       modelName: 'modelName',
-      allObj: 'allObj'
+      gradeGridData: 'gradeGridData'
     })
   },
   created() {

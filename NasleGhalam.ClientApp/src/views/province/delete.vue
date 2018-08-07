@@ -15,10 +15,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('provinceStore', [
-      'toggleModalDeleteStore',
-      'submitDeleteStore'
-    ]),
+    ...mapActions('provinceStore', ['toggleModalDeleteStore', 'submitDeleteStore']),
     submitDelete() {
       this.submitDeleteStore(this);
     }

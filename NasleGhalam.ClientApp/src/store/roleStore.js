@@ -25,7 +25,7 @@ const store = {
     },
     roleGridData: [],
     roleDdl: [],
-    selectedRoleId: 0,
+    selectedId: 0,
     isModelChanged: true,
     createVue: null,
     editVue: null,
@@ -52,7 +52,7 @@ const store = {
      * update roleObj of roleGridData
      */
     update(state) {
-      let index = getIndexById(state.selectedRoleId);
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
       util.mapObject(state.roleObj, state.roleGridData[index]);
     },
@@ -61,7 +61,7 @@ const store = {
      * delete from roleGridData
      */
     delete(state) {
-      let index = getIndexById(state.selectedRoleId);
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
       state.roleGridData.splice(index, 1);
     },
@@ -74,14 +74,6 @@ const store = {
       if ($v) {
         $v.$reset();
       }
-    },
-
-    /**
-     * change isModelChange
-     * @param {Boolean} b
-     */
-    toggleIsModelChanged(state, b) {
-      state.isModelChanged = b;
     }
   },
   actions: {
@@ -90,7 +82,7 @@ const store = {
      */
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
-        state.selectedRoleId = id;
+        state.selectedId = id;
         util.mapObject(response.data, state.roleObj);
       });
     },
@@ -98,22 +90,47 @@ const store = {
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.roleGridData = response.data;
-      });
+    fillGridStore({ state, dispatch }) {
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.roleGridData = response.data;
+        });
+      }
     },
 
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
+    fillDdlStore({ state, dispatch }) {
       if (state.isModelChanged) {
-        commit('toggleIsModelChanged', false);
+        dispatch('toggleModelChangeStore', false);
         axios.get(`${baseUrl}/GetAllDdl`).then(response => {
           state.roleDdl = response.data;
         });
       }
+    },
+
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.roleObj.$touch();
+      if (vm.$v.roleObj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        return false;
+      }
+
+      return true;
+    },
+
+    /**
+     * change isModelChange
+     * @param {Boolean} b
+     */
+    toggleModelChangeStore({ state }, b) {
+      state.isModelChanged = b;
     },
 
     //### create section ###
@@ -136,7 +153,7 @@ const store = {
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
         axios.post(`${baseUrl}/Create`, state.roleObj).then(response => {
@@ -144,7 +161,7 @@ const store = {
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
-            commit('toggleIsModelChanged', true);
+            dispatch('toggleModelChangeStore', true);
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
@@ -190,14 +207,14 @@ const store = {
      */
     submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.roleObj.Id = state.selectedRoleId;
+        state.roleObj.Id = state.selectedId;
         axios.post(`${baseUrl}/Update`, state.roleObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
-            commit('toggleIsModelChanged', true);
+            dispatch('toggleModelChangeStore', true);
             dispatch('resetEditStore');
             dispatch('toggleModalEditStore', false);
           }
@@ -235,12 +252,12 @@ const store = {
      * submit to delete data
      */
     submitDeleteStore({ state, commit, dispatch }, vm) {
-      axios.post(`${baseUrl}/Delete/${state.selectedRoleId}`).then(response => {
+      axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
           commit('delete');
           commit('reset');
-          commit('toggleIsModelChanged', true);
+          dispatch('toggleModelChangeStore', true);
           dispatch('toggleModalDeleteStore', false);
         }
 
@@ -268,6 +285,10 @@ const store = {
      * fill module ddl
      */
     fillModuleDdlStore({ state }) {
+      if (state.moduleDdl.length) {
+        return;
+      }
+
       axios.get(`${baseUrl}/GetAllModuleDdl`).then(response => {
         state.moduleDdl = response.data;
       });
@@ -281,18 +302,19 @@ const store = {
         .get(`${baseUrl}/GetAllControllerByModuleIdDdl/${id}`)
         .then(response => {
           state.controllerDdl = response.data;
+          state.accessObj.ControllerId = 0;
         });
     },
 
     /**
      * fill action grid by roleId and controllerId ddl
      */
-    fillActionByControllerIdGridStore({ state }, controllerId) {
+    fillActionByControllerIdAndModuleIdGridStore({ state }, obj) {
       axios
         .get(
-          `${baseUrl}/GetActionByControllerId?roleId=${
-            state.selectedRoleId
-          }&controllerId=${controllerId}`
+          `${baseUrl}/GetActionByControllerIdAndModuleId?roleId=${
+            state.selectedId
+          }&controllerId=${obj.controllerId}&moduleId=${obj.moduleId}`
         )
         .then(response => {
           state.actionGridData = response.data;
@@ -304,7 +326,7 @@ const store = {
      * @param {Number} id
      */
     setRoleIdStore({ state }, id) {
-      state.selectedRoleId = id;
+      state.selectedId = id;
     },
 
     /**
@@ -313,6 +335,29 @@ const store = {
      */
     setRoleNameStore({ state }, name) {
       state.roleName = name;
+    },
+
+    /**
+     * change access
+     */
+    changeAccessStore({ state, dispatch }, obj) {
+      obj.RoleId = state.selectedId;
+
+      axios.post(`${baseUrl}/ChangeAccess`, obj).then(response => {
+        let data = response.data;
+
+        if (data.MessageType != 1) {
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            { root: true }
+          );
+        }
+      });
     }
   },
   getters: {

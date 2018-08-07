@@ -1,6 +1,7 @@
 <template>
   <bs-modal :show="isOpenModalAccess"
             size="lg"
+            @open="openModal"
             @close="closeModal">
 
     <!-- header -->
@@ -22,23 +23,21 @@
     <my-select :model="$v.accessObj.ModuleId"
                :options="moduleDdl"
                class="col-md-6"
-               clearable
+               filter
                @change="fillControllerDdl" />
 
     <my-select :model="$v.accessObj.ControllerId"
                :options="controllerDdl"
                class="col-md-6"
-               clearable
+               filter
                @change="fillActionGrid" />
-
-   
 
     <my-table :grid-data="actionGridData"
               :columns="gridColumns">
       <template slot="IsChecked"
                 slot-scope="data">
         <q-checkbox v-model="data.row.IsChecked"
-                    @input="actionChecked($event)" />
+                    @input="actionChecked(data.row.Id, $event)" />
       </template>
     </my-table>
 
@@ -60,6 +59,7 @@ export default {
    */
   data() {
     return {
+      moduleId: 0,
       gridColumns: [
         {
           title: 'انتخاب',
@@ -86,19 +86,30 @@ export default {
       'toggleModalAccessStore',
       'fillModuleDdlStore',
       'fillControllerByModuleIdDdlStore',
-      'fillActionByControllerIdGridStore'
+      'fillActionByControllerIdAndModuleIdGridStore',
+      'changeAccessStore'
     ]),
     fillControllerDdl(item) {
+      this.moduleId = item.value;
       this.fillControllerByModuleIdDdlStore(item.value);
     },
     fillActionGrid(item) {
-      this.fillActionByControllerIdGridStore(item.value);
+      this.fillActionByControllerIdAndModuleIdGridStore({
+        controllerId: item.value,
+        moduleId: this.moduleId
+      });
+    },
+    openModal() {
+      this.fillModuleDdlStore();
     },
     closeModal() {
       this.toggleModalAccessStore(false);
     },
-    actionChecked(e) {
-      console.log(e);
+    actionChecked(actionId, checked) {
+      this.changeAccessStore({
+        ActionId: actionId,
+        IsChecked: checked
+      });
     }
   },
   /**
@@ -117,13 +128,7 @@ export default {
   /**
    * validations
    */
-  validations: viewModel,
-  /**
-   * created
-   */
-  created() {
-    this.fillModuleDdlStore();
-  }
+  validations: viewModel
 };
 </script>
 

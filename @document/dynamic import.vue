@@ -20,10 +20,12 @@
       </div>
     </my-panel>
 
-    <!-- modals -->
-    <modal-create></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
+    <!-- load modals component dynamicaly -->
+    <keep-alive>
+      <component :is="componentInstance"
+                 @hook:mounted='componentMounted'>
+      </component>
+    </keep-alive>
   </section>
 </template>
 
@@ -31,16 +33,18 @@
 import { mapState, mapActions } from 'vuex';
 
 export default {
-  components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
-  },
   /**
    * data
    */
   data() {
     return {
+      // componentInstance: null,
+      modalName: '',
+      modalInstance: {
+        create: null,
+        edit: null,
+        delete: null
+      },
       gridColumns: [
         {
           title: 'مقطع تحصیلی',
@@ -74,37 +78,75 @@ export default {
       'resetCreateStore',
       'resetEditStore'
     ]),
-    showModalCreate() {
-      // reset data on modal show
-      this.resetCreateStore();
-      // show modal
-      this.toggleModalCreateStore(true);
-    },
-    showModalEdit(id) {
-      // reset data on modal show
-      this.resetEditStore();
-      // get data by id
-      this.getByIdStore(id).then(() => {
+    ...mapActions('gradeStore', {
+      fillGradeDdlStore: 'fillDdlStore'
+    }),
+    componentMounted() {
+      if (this.modalName == 'create') {
+        // show modal
+        this.toggleModalCreateStore(true);
+      } else if (this.modalName == 'edit') {
         // show modal
         this.toggleModalEditStore(true);
-      });
-    },
-    showModalDelete(id) {
-      // get data by id
-      this.getByIdStore(id).then(() => {
+      } else if (this.modalName == 'delete') {
         // show modal
         this.toggleModalDeleteStore(true);
-      });
+      }
+    },
+    showModalCreate() {
+      this.modalName = 'create';
+
+      // check if modal loaded
+      if (!this.modalInstance.create) {
+        this.modalInstance.create = () => import(`./${this.modalName}`);
+      } else {
+        // reset data on modal show
+        this.resetCreateStore();
+        // show modal
+        this.toggleModalCreateStore(true);
+      }
+    },
+    async showModalEdit(id) {
+      this.modalName = 'edit';
+      // get data by id
+      await this.getByIdStore(id);
+
+      // check if modal loaded
+      if (!this.modalInstance.edit) {
+        this.modalInstance.edit = () => import(`./${this.modalName}`);
+      } else {
+        // reset data on modal show
+        this.resetEditStore();
+        // show modal
+        this.toggleModalEditStore(true);
+      }
+    },
+    async showModalDelete(id) {
+      this.modalName = 'delete';
+      // get data by id
+      await this.getByIdStore(id);
+
+      // check if modal loaded
+      if (!this.modalInstance.delete) {
+        this.modalInstance.delete = () => import(`./${this.modalName}`);
+      } else {
+        // show modal
+        this.toggleModalDeleteStore(true);
+      }
     }
   },
   computed: {
     ...mapState('gradeLevelStore', {
       modelName: 'modelName',
       gradeLevelGridData: 'gradeLevelGridData'
-    })
+    }),
+    componentInstance() {
+      return this.modalInstance[this.modalName];
+    }
   },
   created() {
     this.fillGridStore();
+    this.fillGradeDdlStore();
   }
 };
 </script>

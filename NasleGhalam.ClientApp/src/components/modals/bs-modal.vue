@@ -88,6 +88,7 @@ export default {
     show(newVal) {
       if (newVal) {
         document.body.classList.add('bs-modal-open');
+        this.$emit('open');
         // document.body.style.paddingRight = '17px';
       } else {
         document.body.classList.remove('bs-modal-open');

@@ -7,7 +7,7 @@ import {
 } from 'plugins/vuelidate';
 
 export default {
-  instanceObj: {
+  gradeLevelObj: {
     Name: {
       displayName: displayName('نام'),
       maxLength: maxLength(50),

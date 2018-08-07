@@ -5,10 +5,10 @@
                    @reset="resetCreateStore"
                    @close="toggleModalCreateStore(false)">
 
-    <my-input :model="$v.instanceObj.Name"
+    <my-input :model="$v.provinceObj.Name"
               class="col-md-6" />
 
-    <my-input :model="$v.instanceObj.Code"
+    <my-input :model="$v.provinceObj.Code"
               class="col-md-6" />
 
   </my-modal-create>
@@ -36,7 +36,7 @@ export default {
   computed: {
     ...mapState('provinceStore', {
       modelName: 'modelName',
-      instanceObj: 'instanceObj',
+      provinceObj: 'provinceObj',
       isOpenModalCreate: 'isOpenModalCreate'
     })
   },

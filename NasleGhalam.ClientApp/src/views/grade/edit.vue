@@ -5,10 +5,10 @@
                  @reset="resetEditStore"
                  @close="toggleModalEditStore(false)">
 
-    <my-input :model="$v.instanceObj.Name"
+    <my-input :model="$v.gradeObj.Name"
               class="col-md-6" />
 
-    <my-input :model="$v.instanceObj.Priority"
+    <my-input :model="$v.gradeObj.Priority"
               class="col-md-6" />
 
   </my-modal-edit>
@@ -36,7 +36,7 @@ export default {
   computed: {
     ...mapState('gradeStore', {
       modelName: 'modelName',
-      instanceObj: 'instanceObj',
+      gradeObj: 'gradeObj',
       isOpenModalEdit: 'isOpenModalEdit'
     })
   },

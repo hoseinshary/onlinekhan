@@ -123,7 +123,9 @@ arrObjProp.forEach(item => {
           
           `
         : item.type == 'boolean'
-          ? `<my-field class="col-md-6" :model="$v.instance.${item.name}">
+          ? `<my-field class="col-md-6" :model="$v.${modelName}Obj.${
+              item.name
+            }">
               <template slot-scope="data">
                 <q-radio v-model="data.obj.$model" val="false" label="false" />
                 <q-radio v-model="data.obj.$model" val="true" label="true" />
@@ -131,7 +133,9 @@ arrObjProp.forEach(item => {
             </my-field>
             
             `
-          : `<my-input :model="$v.${modelName}.${item.name}" class="col-md-6" />
+          : `<my-input :model="$v.${modelName}Obj.${
+              item.name
+            }" class="col-md-6" />
           
           `
     }`
@@ -143,7 +147,7 @@ var createVue = fs
   .readFileSync('./@CodeTemplates/create.vue.temp', 'utf8')
   .replace(/{__viewModelName}/g, modelName)
   .replace(/{__modelName}/g, modelName)
-  .replace(/{__modelNameStroe}/g, `${modelName}Store`)
+  .replace(/{__modelNameStore}/g, `${modelName}Store`)
   .replace(/{__props}/g, createEditVueProp.join(''));
 
 fs.writeFileSync(`${viewDir}/create.vue`, createVue, 'utf8');

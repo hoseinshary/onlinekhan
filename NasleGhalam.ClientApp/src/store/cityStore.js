@@ -95,6 +95,20 @@ const store = {
       });
     },
 
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.gradeObj.$touch();
+      if (vm.$v.gradeObj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        return false;
+      }
+
+      return true;
+    },
+
     //### create section ###
     /**
      * toggle modal create
@@ -115,7 +129,7 @@ const store = {
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
         axios.post(`${baseUrl}/Create`, state.cityObj).then(response => {
@@ -168,7 +182,7 @@ const store = {
      */
     submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.cityObj.Id = state.selectedId;
         axios.post(`${baseUrl}/Update`, state.cityObj).then(response => {

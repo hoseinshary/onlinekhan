@@ -6,9 +6,9 @@
                    @reset="resetCreateStore"
                    @close="toggleModalCreateStore(false)">
 
-    <my-input :model="$v.instanceObj.Name"
+    <my-input :model="$v.gradeObj.Name"
               class="col-md-6" />
-    <my-input :model="$v.instanceObj.Priority"
+    <my-input :model="$v.gradeObj.Priority"
               class="col-md-6" />
 
   </my-modal-create>
@@ -36,7 +36,7 @@ export default {
   computed: {
     ...mapState('gradeStore', {
       modelName: 'modelName',
-      instanceObj: 'instanceObj',
+      gradeObj: 'gradeObj',
       isOpenModalCreate: 'isOpenModalCreate'
     })
   },

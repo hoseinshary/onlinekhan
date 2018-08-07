@@ -4,7 +4,7 @@
     {
         public int RoleId { get; set; }
 
-        public int [] LstActionId { get; set; }
+        public int ActionId { get; set; }
 
         public bool IsChecked { get; set; }
     }

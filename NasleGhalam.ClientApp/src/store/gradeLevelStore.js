@@ -3,11 +3,11 @@ import axios from 'utilities/axios';
 import { GRADE_LEVEL_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in allObj by id
+ * find index of object in gradeLevelGridData by id
  * @param {Number} id
  */
 function getIndexById(id) {
-  return store.state.allObj.findIndex(o => o.Id == id);
+  return store.state.gradeLevelGridData.findIndex(o => o.Id == id);
 }
 
 const store = {
@@ -17,52 +17,53 @@ const store = {
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    instanceObj: {
+    gradeLevelObj: {
       Id: 0,
       Name: '',
       Priority: 0,
       GradeId: 0,
       GradeName: ''
     },
-    allObj: [],
-    allObjDdl: [],
+    gradeLevelGridData: [],
+    gradeLevelDdl: [],
     selectedId: 0,
+    isModelChanged: true,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new instanceObj to allObj
+     * insert new gradeLevelObj to gradeLevelGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.instanceObj);
+      let createdObj = util.cloneObject(state.gradeLevelObj);
       createdObj.Id = id;
-      state.allObj.push(createdObj);
+      state.gradeLevelGridData.push(createdObj);
     },
 
     /**
-     * update instanceObj of allObj
+     * update gradeLevelObj of gradeLevelGridData
      */
     update(state) {
       var index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.instanceObj, state.allObj[index]);
+      util.mapObject(state.gradeLevelObj, state.gradeLevelGridData[index]);
     },
 
     /**
-     * delete from allObj
+     * delete from gradeLevelGridData
      */
     delete(state) {
-      let index = getIndexById(state.instanceObj.Id);
+      let index = getIndexById(state.gradeLevelObj.Id);
       if (index < 0) return;
-      state.allObj.splice(index, 1);
+      state.gradeLevelGridData.splice(index, 1);
     },
 
     /**
-     * rest value of instanceObj
+     * rest value of gradeLevelObj
      */
     reset(state, $v) {
-      util.clearObject(state.instanceObj);
+      util.clearObject(state.gradeLevelObj);
       if ($v) {
         $v.$reset();
       }
@@ -72,20 +73,59 @@ const store = {
     /**
      * get data by id
      */
-    getByIdStore({ state }, id) {
+    getByIdStore({ state, dispatch }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.instanceObj);
+        util.mapObject(response.data, state.gradeLevelObj);
       });
     },
 
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.allObj = response.data;
-      });
+    fillGridStore({ state, dispatch }) {
+      // get data if model changed
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.gradeLevelGridData = response.data;
+        });
+      }
+    },
+
+    /**
+     * fill dropDwonList
+     */
+    fillDdlStore({ state, dispatch }) {
+      // get data if model changed
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.gradeDdl = response.data;
+        });
+      }
+    },
+
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.gradeLevelObj.$touch();
+      if (vm.$v.gradeLevelObj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        return false;
+      }
+
+      return true;
+    },
+
+    /**
+     * change isModelChange
+     * @param {Boolean} b
+     */
+    toggleModelChangeStore({ state }, b) {
+      state.isModelChanged = b;
     },
 
     //### create section ###
@@ -108,14 +148,15 @@ const store = {
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
+        axios.post(`${baseUrl}/Create`, state.gradeLevelObj).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
+            dispatch('toggleModelChangeStore', true);
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
@@ -161,14 +202,15 @@ const store = {
      */
     submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.instanceObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
+        state.gradeLevelObj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.gradeLevelObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
             dispatch('resetEditStore');
+            dispatch('toggleModelChangeStore', true);
             dispatch('toggleModalEditStore', false);
           }
 
@@ -210,6 +252,7 @@ const store = {
         if (data.MessageType == 1) {
           commit('delete');
           commit('reset');
+          dispatch('toggleModelChangeStore', true);
           dispatch('toggleModalDeleteStore', false);
         }
 
@@ -228,7 +271,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.instanceObj.Name;
+      return state.gradeLevelObj.Name;
     }
   }
 };

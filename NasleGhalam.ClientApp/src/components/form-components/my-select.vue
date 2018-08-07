@@ -13,7 +13,8 @@
               :filter="filter"
               :readonly="readonly"
               :clearable="clearable"
-              autofocus-filter
+              :autofocus-filter="true"
+              filter-placeholder="جستجو"
               :error="model.$error"
               :max-height="maxHeight"
               :prefix="prefix"

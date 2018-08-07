@@ -5,11 +5,11 @@
                  @reset="resetEditStore"
                  @close="toggleModalEditStore(false)">
 
-    <my-input :model="$v.instanceObj.Name"
-              class="col-md-6" />
-
-    <my-input :model="$v.instanceObj.Code"
-              class="col-md-6" />
+    <my-input :model="$v.provinceObj.Name" class="col-md-6" />
+          
+          <my-input :model="$v.provinceObj.Code" class="col-md-6" />
+          
+          
 
   </my-modal-edit>
 </template>
@@ -36,7 +36,7 @@ export default {
   computed: {
     ...mapState('provinceStore', {
       modelName: 'modelName',
-      instanceObj: 'instanceObj',
+      provinceObj: 'provinceObj',
       isOpenModalEdit: 'isOpenModalEdit'
     })
   },

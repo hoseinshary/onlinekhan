@@ -117,8 +117,8 @@ namespace NasleGhalam.ServiceLayer.Services
             newRole.SumOfActionBit = oldRole.SumOfActionBit;
 
             _uow.MarkAsChanged(newRole);
-           return _uow.CommitChanges(CrudType.Update, Title);
-            
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
@@ -139,7 +139,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsDeleted(role);
             return _uow.CommitChanges(CrudType.Create, Title);
-            
+
         }
 
 
@@ -170,35 +170,33 @@ namespace NasleGhalam.ServiceLayer.Services
         public MessageResult ChangeAccess(RoleAccessViewModel roleAccess, string userAccess, byte userRoleLevel)
         {
             var roleViewModel = GetById(roleAccess.RoleId, userRoleLevel);
-            var actions = _actionService.Value.GetActionByIds(roleAccess.LstActionId);
+            var action = _actionService.Value.GetActionById(roleAccess.ActionId);
 
-            if (roleViewModel == null)
+            if (roleViewModel == null || action == null)
                 return new MessageResult()
                 {
                     FaMessage = "نقش یافت نگردید.",
                     MessageType = MessageType.Error
                 };
 
-            foreach (var action in actions)
-            {
-                // اگر در کلاینت چک خورده باشد ولی در دیتابیس چک نخورده باشد
-                // باید به دسترسی آن اضاف کنیم
-                if (roleAccess.IsChecked && Utility.HasAccess(userAccess, action.ActionBit))
-                {
-                    roleViewModel.SumOfActionBit = Utility.AddAccess(roleViewModel.SumOfActionBit, action.ActionBit);
-                }
-                // اگر در کلاینت چک نخورده باشد ولی در دیتابیس چک خورده باشد
-                // باید از دسترسی آن کم کنیم
-                else if (Utility.HasAccess(userAccess, action.ActionBit))
-                {
-                    roleViewModel.SumOfActionBit = Utility.RemoveAccess(roleViewModel.SumOfActionBit, action.ActionBit);
 
-                }
+            // اگر در کلاینت چک خورده باشد ولی در دیتابیس چک نخورده باشد
+            // باید به دسترسی آن اضاف کنیم
+            if (roleAccess.IsChecked && Utility.HasAccess(userAccess, action.ActionBit))
+            {
+                roleViewModel.SumOfActionBit = Utility.AddAccess(roleViewModel.SumOfActionBit, action.ActionBit);
+            }
+            // اگر در کلاینت چک نخورده باشد ولی در دیتابیس چک خورده باشد
+            // باید از دسترسی آن کم کنیم
+            else if (Utility.HasAccess(userAccess, action.ActionBit))
+            {
+                roleViewModel.SumOfActionBit = Utility.RemoveAccess(roleViewModel.SumOfActionBit, action.ActionBit);
+
             }
 
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsChanged(role);
-            return _uow.CommitChanges(CrudType.Update, Title);         
+            return _uow.CommitChanges(CrudType.Update, Title);
         }
     }
 }

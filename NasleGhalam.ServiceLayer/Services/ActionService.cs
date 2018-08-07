@@ -25,13 +25,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// گرفتن  اکشن بیت
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public IList<Action> GetActionByIds(int[] ids)
+        public ActionViewModel GetActionById(int id)
         {
             return _actions
-                .Where(current => ids.Contains(current.Id))
-                .ToList();
+                .Where(current => id == current.Id)
+                .Select(current => new ActionViewModel()
+                {
+                    Id = current.Id,
+                    ActionFaName = current.FaName,
+                    ActionBit = current.ActionBit
+                }).FirstOrDefault();
         }
 
 
@@ -40,9 +45,10 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="controllerId"></param>
         /// <param name="roleId"></param>
+        /// <param name="moduleId"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public IList<ActionViewModel> GetActionByControllerId(int controllerId, int roleId, byte userRoleLevel)
+        public IList<ActionViewModel> GetActionByControllerIdAndModuleId(int controllerId, int roleId, int moduleId, byte userRoleLevel)
         {
             var role = _roleService.Value.GetById(roleId, userRoleLevel);
             if (role == null)
@@ -50,6 +56,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             return _actions
                 .Include(current => current.Controller)
+                .Where(current => moduleId == 0 || current.Controller.ModuleId == moduleId)
                 .Where(current => controllerId == 0 || current.ControllerId == controllerId)
                 .OrderBy(current => current.Controller.Priority)
                 .ThenBy(current => current.Priority)

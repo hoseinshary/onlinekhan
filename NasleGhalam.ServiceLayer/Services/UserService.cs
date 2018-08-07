@@ -145,7 +145,8 @@ namespace NasleGhalam.ServiceLayer.Services
             }
             else
             {
-                _uow.MarkAsChanged(user);
+                _uow.ExcludeFieldsFromUpdate(user, x => x.LastLogin);
+               
             }
 
             return _uow.CommitChanges(CrudType.Update, Title);

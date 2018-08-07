@@ -176,5 +176,9 @@ namespace Matin.Abfa.ViewModels {
                 return ResourceManager.GetString("RequiredDll", resourceCulture);
             }
         }
+
+
+
+
     }
 }

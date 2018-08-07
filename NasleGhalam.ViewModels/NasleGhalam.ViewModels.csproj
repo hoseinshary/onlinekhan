@@ -81,6 +81,7 @@
     <Compile Include="User\UserGetViewModel.cs" />
     <Compile Include="User\UserUpdateViewModel.cs" />
     <Compile Include="User\UserCreateViewModel .cs" />
+    <Compile Include="_Attributes\MinLengthExcludeEmptyAndNullAttribute.cs" />
     <Compile Include="_Attributes\NationalNoAttribute.cs" />
     <Compile Include="_Attributes\RequiredDdlAttribute.cs" />
     <Compile Include="EducationBook\EducationBook.cs" />

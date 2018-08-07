@@ -7,33 +7,33 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.Module;
+using NasleGhalam.ViewModels.Topic;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class ModuleService
+	public class TopicService
 	{
-		private const string Title = "ماژول";
+		private const string Title = "مبحث";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Module> _modules;
+        private readonly IDbSet<Topic> _topics;
        
-	    public ModuleService(IUnitOfWork uow)
+	    public TopicService(IUnitOfWork uow)
         {
             _uow = uow;
-            _modules = uow.Set<Module>();
+            _topics = uow.Set<Topic>();
         }
 
 
 		/// <summary>
-        /// گرفتن  ماژول با آی دی
+        /// گرفتن  مبحث با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ModuleViewModel GetById(int id)
+        public TopicViewModel GetById(int id)
         {
-            return _modules
+            return _topics
                 .Where(current => current.Id == id)
-                .Select(current => new ModuleViewModel
+                .Select(current => new TopicViewModel
                 {
                     Id = current.Id
                 }).FirstOrDefault();
@@ -41,12 +41,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// گرفتن همه ماژول ها
+        /// گرفتن همه مبحث ها
         /// </summary>
         /// <returns></returns>
-        public IList<ModuleViewModel> GetAll()
+        public IList<TopicViewModel> GetAll()
         {
-            return _modules.Select(current => new ModuleViewModel()
+            return _topics.Select(current => new TopicViewModel()
             {
                 Id = current.Id,
             }).ToList();
@@ -54,30 +54,30 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// ثبت ماژول
+        /// ثبت مبحث
         /// </summary>
-        /// <param name="moduleViewModel"></param>
+        /// <param name="topicViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(ModuleViewModel moduleViewModel)
+        public MessageResult Create(TopicViewModel topicViewModel)
         {
-            var module = Mapper.Map<Module>(moduleViewModel);
-            _modules.Add(module);
+            var topic = Mapper.Map<Topic>(topicViewModel);
+            _topics.Add(topic);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = module.Id;
+			msgRes.Id = topic.Id;
             return msgRes;
         }
 
 
 		/// <summary>
-        /// ویرایش ماژول
+        /// ویرایش مبحث
         /// </summary>
-        /// <param name="moduleViewModel"></param>
+        /// <param name="topicViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(ModuleViewModel moduleViewModel)
+        public MessageResult Update(TopicViewModel topicViewModel)
         {
-            var module = Mapper.Map<Module>(moduleViewModel);
-            _uow.MarkAsChanged(module);
+            var topic = Mapper.Map<Topic>(topicViewModel);
+            _uow.MarkAsChanged(topic);
 
 			
 			return  _uow.CommitChanges(CrudType.Update, Title);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف ماژول
+        /// حذف مبحث
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  moduleViewModel = GetById(id);
-            if (moduleViewModel == null)
+			var  topicViewModel = GetById(id);
+            if (topicViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var module = Mapper.Map<Module>(moduleViewModel);
-            _uow.MarkAsDeleted(module);
+            var topic = Mapper.Map<Topic>(topicViewModel);
+            _uow.MarkAsDeleted(topic);
             
 			return  _uow.CommitChanges(CrudType.Delete, Title);
 			
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه ماژول ها برای لیست کشویی
+        /// گرفتن همه مبحث ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _modules.Select(current => new SelectViewModel
+            return _topics.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

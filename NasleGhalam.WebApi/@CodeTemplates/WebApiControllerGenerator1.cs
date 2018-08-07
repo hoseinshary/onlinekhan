@@ -2,50 +2,50 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Ratio;
+using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: هاشم معین
-	///     date: 02/05/1397
+	///     name: 
+	///     date: 
 	/// </author>
-	public class RatioController : ApiController
+	public class TopicController : ApiController
 	{
-        private readonly RatioService _ratioService;
-		public RatioController(RatioService ratioService)
+        private readonly TopicService _topicService;
+		public TopicController(TopicService topicService)
         {
-            _ratioService = ratioService;
+            _topicService = topicService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.RatioReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_ratioService.GetAll());
+            return Ok(_topicService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.RatioReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var ratio = _ratioService.GetById(id);
-            if (ratio == null)
+            var topic = _topicService.GetById(id);
+            if (topic == null)
             {
                 return NotFound();
             }
-            return Ok(ratio);
+            return Ok(topic);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.RatioCreateAccess)]
+        [CheckUserAccess(ActionBits.TopicCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(RatioViewModel ratioViewModel)
+        public IHttpActionResult Create(TopicViewModel topicViewModel)
         {
-            var msgRes = _ratioService.Create(ratioViewModel);
+            var msgRes = _topicService.Create(topicViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -56,11 +56,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.RatioUpdateAccess)]
+        [CheckUserAccess(ActionBits.TopicUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(RatioViewModel ratioViewModel)
+        public IHttpActionResult Update(TopicViewModel topicViewModel)
         {
-            var msgRes = _ratioService.Update(ratioViewModel);
+            var msgRes = _topicService.Update(topicViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -69,10 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.RatioDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.TopicDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _ratioService.Delete(id);
+            var msgRes = _topicService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

@@ -16,14 +16,14 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lessons;
         private readonly IDbSet<EducationGroup> _educationGroup;
-        private readonly IDbSet<Lesson> _Lessons;
+        private readonly IDbSet<Lesson> _lessons;
 
         public EducationGroup_LessonService(IUnitOfWork uow)
         {
             _uow = uow;
             _educationGroup_Lessons = uow.Set<EducationGroup_Lesson>();
             _educationGroup = uow.Set<EducationGroup>();
-            _Lessons = uow.Set<Lesson>();
+            _lessons = uow.Set<Lesson>();
         }
 
 
@@ -61,11 +61,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.EducationGroupId == id)
                 .Select(current => new EducationGroup_LessonViewModel
                 {
-                    Id = current.Id,
-                    LessonId = current.LessonId,
+                    Id = current.Id,             
                     LessonName = current.Lesson.Name,
-                    IsChecked = true
-
+              
                 }).ToList();
         }
 
@@ -83,6 +81,7 @@ namespace NasleGhalam.ServiceLayer.Services
                  {
                      current.Id,
                      current.Name,
+
                      EducationGroups_Lessons = current.EducationGroups_Lessons
                      .Where(x => x.LessonId == id).DefaultIfEmpty()
                  })
@@ -94,7 +93,7 @@ namespace NasleGhalam.ServiceLayer.Services
                      EducationGroupId = education.Id,
                      LessonId = edu_lesson == null ? 0 : edu_lesson.LessonId,
                      LessonName = edu_lesson.Lesson.Name,
-                     IsChecked = edu_lesson != null 
+                     IsChecked = edu_lesson != null
                  }).OrderByDescending(current => current.IsChecked).ToList();
 
         }

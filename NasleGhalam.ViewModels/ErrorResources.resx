@@ -132,6 +132,9 @@
   <data name="MinLen" xml:space="preserve">
     <value>حداقل تعداد کارکتر برای ({0}) باید ({1}) باشد</value>
   </data>
+  <data name="MinLen2" xml:space="preserve">
+    <value>حداقل تعداد کارکتر برای ({0}) باید ({1}) باشد</value>
+  </data>
   <data name="NationalNo" xml:space="preserve">
     <value>قسمت ({0}) نامعتبر میباشد</value>
   </data>

@@ -4,14 +4,17 @@
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
-        <my-btn-create @click="showModalCreate"></my-btn-create>
+        <my-btn-create v-if="rolePageAccess.canCreate"
+                       @click="showModalCreate" />
+        <!-- <button @click="showModalCreate">sssss</button> -->
         <br>
         <my-table :grid-data="roleGridData"
                   :columns="gridColumns"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
-            <q-btn outline
+            <q-btn v-if="rolePageAccess.canAccess"
+                   outline
                    round
                    icon="list"
                    color="brown"
@@ -23,9 +26,11 @@
               </q-tooltip>
             </q-btn>
 
-            <my-btn-edit round
+            <my-btn-edit v-if="rolePageAccess.canEdit"
+                         round
                          @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete round
+            <my-btn-delete v-if="rolePageAccess.canDelete"
+                           round
                            @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table>
@@ -33,10 +38,10 @@
     </my-panel>
 
     <!-- modals -->
-    <modal-create v-if="true"></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
-    <modal-access></modal-access>
+    <modal-create v-if="roleModalShown.modalCreate"></modal-create>
+    <modal-edit v-if="roleModalShown.modalEdit"></modal-edit>
+    <modal-delete v-if="roleModalShown.modalDelete"></modal-delete>
+    <modal-access v-if="roleModalShown.modalAccess"></modal-access>
   </section>
 </template>
 
@@ -55,6 +60,18 @@ export default {
    */
   data() {
     return {
+      rolePageAccess: {
+        canCreate: false,
+        canEdit: false,
+        canDelete: false,
+        canAccess: false
+      },
+      roleModalShown: {
+        modalCreate: false,
+        modalEdit: false,
+        modalDelete: false,
+        modalAccess: false
+      },
       gridColumns: [
         {
           title: 'نام',
@@ -90,6 +107,10 @@ export default {
       'setRoleNameStore'
     ]),
     showModalCreate() {
+      debugger;
+      // modal Create v-if = true => Created Trigger
+      this.roleModalShown.modalCreate = true;
+
       // reset data on modal show
       this.resetCreateStore();
       // show modal
@@ -98,6 +119,8 @@ export default {
     showModalEdit(id) {
       // reset data on modal show
       this.resetEditStore();
+      // modal Edit v-if = true => Created Trigger
+      this.roleModalShown.modalEdit = true;
       // get data by id
       this.getByIdStore(id).then(() => {
         // show modal
@@ -107,6 +130,8 @@ export default {
     showModalDelete(id) {
       // get data by id
       this.getByIdStore(id).then(() => {
+        // modal Delete v-if = true => Created Trigger
+        this.roleModalShown.modalDelete = true;
         // show modal
         this.toggleModalDeleteStore(true);
       });
@@ -124,6 +149,15 @@ export default {
     })
   },
   created() {
+    var accessControl = this.$q.localStorage.get
+      .item('subMenuList')
+      .filter(x => x.EnName.toLowerCase() == '/role')
+      .map(x => x.UserAccess);
+    this.rolePageAccess.canCreate = accessControl[0].includes('ایجاد');
+    this.rolePageAccess.canEdit = accessControl[0].includes('ویرایش');
+    this.rolePageAccess.canDelete = accessControl[0].includes('حذف');
+    this.rolePageAccess.canDelete = accessControl[0].includes('دسترسی');
+
     this.fillGridStore();
   }
 };

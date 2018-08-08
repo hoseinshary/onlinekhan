@@ -21,6 +21,16 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.ParentTopicId)
                 .WillCascadeOnDelete(false);
 
+            this.HasRequired(x => x.HardnessType)
+                .WithMany(x => x.Topics)
+                .HasForeignKey(x => x.HardnessTypeId)
+                .WillCascadeOnDelete(false);
+
+            this.HasRequired(x => x.AreaType)
+                .WithMany(x => x.Topics)
+                .HasForeignKey(x => x.AreaTypeId)
+                .WillCascadeOnDelete(false);
+
             this.HasMany(x => x.EducationBooks)
                 .WithMany(x => x.Topics)
                 .Map(config =>

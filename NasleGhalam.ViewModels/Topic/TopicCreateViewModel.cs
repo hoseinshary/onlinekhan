@@ -34,11 +34,13 @@ namespace NasleGhalam.ViewModels.Topic
 
 
         [Display(Name = "درجه سختی")]
-        public TopicHardnessType HardnessType { get; set; }
+        //TODO:Complate Lookup Instance
+        public int HardnessTypeId { get; set; }
 
 
         [Display(Name = "حیطه مبحث")]
-        public AreaType AreaType { get; set; }
+        //TODO:Complate Lookup Instance
+        public int AreaTypeId { get; set; }
 
 
         [Display(Name = "فعال")]

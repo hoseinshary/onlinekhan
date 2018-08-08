@@ -29,7 +29,9 @@
         Equal = 0,
         Same = 1
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public enum AnswerType : byte
     {
     }

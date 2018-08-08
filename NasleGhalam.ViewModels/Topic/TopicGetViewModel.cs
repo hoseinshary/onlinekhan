@@ -29,12 +29,12 @@ namespace NasleGhalam.ViewModels.Topic
         public bool IsExamSource { get; set; }
 
 
-        
-        public TopicHardnessType HardnessType { get; set; }
+        //TODO:Complate Lookup Instance
+        public int HardnessTypeId { get; set; }
 
 
-        
-        public AreaType AreaType { get; set; }
+        //TODO:Complate Lookup Instance
+        public int AreaTypeId { get; set; }
 
 
         

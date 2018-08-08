@@ -18,7 +18,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string FilePath { get; set; }
 
-        public AnswerType AnswerType { get; set; }
+        public int AnswerTypeId { get; set; }
+        public LookUp AnswerType { get; set; }
 
         public string Description { get; set; }
 

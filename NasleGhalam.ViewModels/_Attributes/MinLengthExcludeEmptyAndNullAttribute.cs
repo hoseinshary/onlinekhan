@@ -19,7 +19,7 @@ namespace NasleGhalam.ViewModels._Attributes
 
         public override bool IsValid(object value)
         {
-            if (value == null || value.ToString() == "" || value.ToString().Length > MinLeght)
+            if (value == null || value.ToString() == "" || value.ToString().Length >= MinLeght)
             {
                 return true;
             }

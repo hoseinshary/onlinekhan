@@ -29,7 +29,7 @@ namespace NasleGhalam.ViewModels.User
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
        //[MinLength(5, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
         [Display(Name = "رمز عبور")]
-        [MinLengthExcludeEmptyAndNull(5, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen2")]
+        [MinLengthExcludeEmptyAndNull(5, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
         public string Password { get; set; }
 
 

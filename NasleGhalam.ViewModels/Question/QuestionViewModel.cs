@@ -19,16 +19,19 @@ namespace NasleGhalam.ViewModels.Question
 
 
         [Display(Name = "نوع سوال")]
-        public QuestionType QuestionType { get; set; }
+        //TODO:Complate Instance Lookup 
+        public int QuestionTypeId { get; set; }
 
         [Display(Name = "نمره سوال")]
         public int QuestionPoint { get; set; }
 
         [Display(Name = "سختی سوال")]
-        public QuestionHardnessType QuestionHardnessType { get; set; }
+        //TODO:Complate Instance Lookup 
+        public int QuestionHardnessTypeId { get; set; }
 
         [Display(Name = "تکرار")]
-        public ReapetnessType ReapetnessType { get; set; }
+        //TODO:Complate Lookup Instance
+        public int ReapetnessTypeId { get; set; }
 
         [Display(Name = "ارزبابی")]
         public bool UseEvaluation { get; set; }

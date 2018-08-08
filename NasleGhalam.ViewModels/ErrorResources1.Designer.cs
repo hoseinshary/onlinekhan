@@ -106,15 +106,6 @@ namespace NasleGhalam.ViewModels {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to حداقل تعداد کارکتر برای ({0}) باید ({1}) باشد.
-        /// </summary>
-        internal static string MinLen2 {
-            get {
-                return ResourceManager.GetString("MinLen2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to قسمت ({0}) نامعتبر میباشد.
         /// </summary>
         internal static string NationalNo {

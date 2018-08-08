@@ -23,13 +23,16 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int QuestionNumber { get; set; }
 
-        public QuestionType QuestionType { get; set; }
+        public int QuestionTypeId { get; set; }
+        public LookUp QuestionType { get; set; }
 
         public int QuestionPoint { get; set; }
 
-        public QuestionHardnessType QuestionHardnessType { get; set; }
+        public int QuestionHardnessTypeId { get; set; }
+        public LookUp QuestionHardnessType { get; set; }
 
-        public ReapetnessType ReapetnessType { get; set; }
+        public int ReapetnessTypeId { get; set; }
+        public LookUp ReapetnessType { get; set; }
 
         public bool UseEvaluation { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.AccessControl;
 using NasleGhalam.Common;
 
 namespace NasleGhalam.DomainClasses.Entities
@@ -23,17 +24,19 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Font { get; set; }
 
-        public PrintType PrintType { get; set; }
+        public int PrintTypeId { get; set; }
+        public LookUp PrintType { get; set; }
 
         public string ImgPath { get; set; }
 
         public int Price { get; set; }
 
         public int OriginalPrice { get; set; }
+        public int BookTypeId { get; set; }
+        public LookUp BookType { get; set; }
 
-        //public BookType BookType { get; set; }
-
-        public PaperType PaperType { get; set; }
+        public int PaperTypeId { get; set; }
+        public LookUp PaperType { get; set; }
 
         public bool HasImage { get; set; }
 

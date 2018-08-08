@@ -37,11 +37,13 @@
       </div>
     </my-panel>
 
+    <component :is="componentId"
+               @hook:created="showModals"></component>
     <!-- modals -->
-    <modal-create v-if="roleModalShown.modalCreate"></modal-create>
+    <!-- <modal-create v-if="roleModalShown.modalCreate"></modal-create>
     <modal-edit v-if="roleModalShown.modalEdit"></modal-edit>
     <modal-delete v-if="roleModalShown.modalDelete"></modal-delete>
-    <modal-access v-if="roleModalShown.modalAccess"></modal-access>
+    <modal-access v-if="roleModalShown.modalAccess"></modal-access> -->
   </section>
 </template>
 
@@ -49,17 +51,19 @@
 import { mapState, mapActions } from 'vuex';
 
 export default {
-  components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete'),
-    'modal-access': () => import('./access')
-  },
+  // components: {
+  //   'modal-create': () => import('./create'),
+  //   'modal-edit': () => import('./edit'),
+  //   'modal-delete': () => import('./delete'),
+  //   'modal-access': () => import('./access')
+  // },
   /**
    * data
    */
   data() {
     return {
+      componentId: '',
+      currentObjId: 0,
       rolePageAccess: {
         canCreate: false,
         canEdit: false,
@@ -107,25 +111,46 @@ export default {
       'setRoleNameStore'
     ]),
     showModalCreate() {
-      debugger;
-      // modal Create v-if = true => Created Trigger
-      this.roleModalShown.modalCreate = true;
+      if (this.componentId == 'modal-create') this.showModals();
+      else this.componentId = 'modal-create';
+      // debugger;
+      // // modal Create v-if = true => Created Trigger
+      // this.roleModalShown.modalCreate = true;
 
-      // reset data on modal show
-      this.resetCreateStore();
-      // show modal
-      this.toggleModalCreateStore(true);
+      // // reset data on modal show
+      // this.resetCreateStore();
+      // // show modal
+      // this.toggleModalCreateStore(true);
+    },
+    showModals() {
+      debugger;
+      switch (this.componentId) {
+        case 'modal-create':
+          this.resetCreateStore();
+          this.toggleModalCreateStore(true);
+          break;
+        case 'modal-edit':
+          this.resetEditStore();
+          this.getByIdStore(this.currentObjId).then(() => {
+            // show modal
+            this.toggleModalEditStore(true);
+          });
+          break;
+      }
     },
     showModalEdit(id) {
-      // reset data on modal show
-      this.resetEditStore();
-      // modal Edit v-if = true => Created Trigger
-      this.roleModalShown.modalEdit = true;
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalEditStore(true);
-      });
+      this.currentObjId = id;
+      if (this.componentId == 'modal-edit') this.showModals();
+      else this.componentId = 'modal-edit';
+      // // reset data on modal show
+      // this.resetEditStore();
+      // // modal Edit v-if = true => Created Trigger
+      // this.roleModalShown.modalEdit = true;
+      // // get data by id
+      // this.getByIdStore(id).then(() => {
+      //   // show modal
+      //   this.toggleModalEditStore(true);
+      // });
     },
     showModalDelete(id) {
       // get data by id
@@ -159,6 +184,12 @@ export default {
     this.rolePageAccess.canDelete = accessControl[0].includes('دسترسی');
 
     this.fillGridStore();
+  },
+  watch: {
+    componentId(newVal, oldVal) {
+      console.log(newVal);
+      console.log(oldVal);
+    }
   }
 };
 </script>

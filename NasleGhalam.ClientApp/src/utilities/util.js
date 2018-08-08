@@ -98,6 +98,7 @@ const isBoolean = function(value) {
 const logout = function() {
   LocalStorage.remove('authList');
   LocalStorage.remove('menuList');
+  LocalStorage.remove('subMenuList');
   LocalStorage.remove('Token');
   LocalStorage.remove('FullName');
   axios.defaults.headers.common['Token'] = '';

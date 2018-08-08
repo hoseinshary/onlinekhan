@@ -31,7 +31,6 @@ Router.beforeEach((to, from, next) => {
   // }
   // window.$eventHub.removeAllListeners('closeModal');
 
-  debugger;
   var authList = LocalStorage.get.item('authList');
   var subMenuList = LocalStorage.get.item('subMenuList');
   if (to.fullPath == '/user/login') {

@@ -22,19 +22,19 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.AxillaryBookId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.QuestionType)
-                .WithMany(x => x.Questions)
-                .HasForeignKey(x => x.QuestionTypeId)
+            this.HasRequired(x => x.Lookup_QuestionType)
+                .WithMany(x => x.Question_QuestionTypes)
+                .HasForeignKey(x => x.LookupId_QuestionType)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.QuestionHardnessType)
-                .WithMany(x => x.Questions)
-                .HasForeignKey(x => x.QuestionHardnessTypeId)
+            this.HasRequired(x => x.Lookup_QuestionHardnessType)
+                .WithMany(x => x.Question_QuestionHardnessTypes)
+                .HasForeignKey(x => x.LookupId_QuestionHardnessType)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.ReapetnessType)
-                .WithMany(x => x.Questions)
-                .HasForeignKey(x => x.ReapetnessTypeId)
+            this.HasRequired(x => x.Lookup_ReapetnessType)
+                .WithMany(x => x.Question_ReapetnessTypes)
+                .HasForeignKey(x => x.LookupId_ReapetnessType)
                 .WillCascadeOnDelete(false);
 
             this.HasMany(x => x.Tags)

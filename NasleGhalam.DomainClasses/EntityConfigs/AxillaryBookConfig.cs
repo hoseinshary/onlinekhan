@@ -18,19 +18,19 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.PublisherId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.PrintType)
-                .WithMany(x => x.AxillaryBooks)
-                .HasForeignKey(x => x.PrintTypeId)
+            this.HasRequired(x => x.Lookup_PrintType)
+                .WithMany(x => x.AxillaryBook_PrintTypes)
+                .HasForeignKey(x => x.LookupId_PrintType)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.BookType)
-                .WithMany(x => x.AxillaryBooks)
-                .HasForeignKey(x => x.BookTypeId)
+            this.HasRequired(x => x.Lookup_BookType)
+                .WithMany(x => x.AxillaryBook_BookTypes)
+                .HasForeignKey(x => x.LookupId_BookType)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.PaperType)
-                .WithMany(x => x.AxillaryBooks)
-                .HasForeignKey(x => x.PaperTypeId)
+            this.HasRequired(x => x.Lookup_PaperType)
+                .WithMany(x => x.AxillaryBook_PaperTypes)
+                .HasForeignKey(x => x.LookupId_PaperType)
                 .WillCascadeOnDelete(false);
 
 

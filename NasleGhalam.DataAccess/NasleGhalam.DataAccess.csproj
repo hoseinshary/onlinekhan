@@ -81,6 +81,18 @@
     <Compile Include="Migrations\201807311650201_addModuleRelation.Designer.cs">
       <DependentUpon>201807311650201_addModuleRelation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808081821255_addLookupTbl.cs" />
+    <Compile Include="Migrations\201808081821255_addLookupTbl.Designer.cs">
+      <DependentUpon>201808081821255_addLookupTbl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808081830542_addLookupTbl2.cs" />
+    <Compile Include="Migrations\201808081830542_addLookupTbl2.Designer.cs">
+      <DependentUpon>201808081830542_addLookupTbl2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808081853344_addLookupRelation.cs" />
+    <Compile Include="Migrations\201808081853344_addLookupRelation.Designer.cs">
+      <DependentUpon>201808081853344_addLookupRelation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -122,6 +134,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807311650201_addModuleRelation.resx">
       <DependentUpon>201807311650201_addModuleRelation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808081821255_addLookupTbl.resx">
+      <DependentUpon>201808081821255_addLookupTbl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808081830542_addLookupTbl2.resx">
+      <DependentUpon>201808081830542_addLookupTbl2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808081853344_addLookupRelation.resx">
+      <DependentUpon>201808081853344_addLookupRelation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

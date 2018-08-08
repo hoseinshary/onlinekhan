@@ -3,13 +3,13 @@ using NasleGhalam.DomainClasses.Entities;
 
 namespace NasleGhalam.DomainClasses.EntityConfigs
 {
-    public class LookUpConfig : EntityTypeConfiguration<LookUp>
+    public class LookupConfig : EntityTypeConfiguration<Lookup>
     {
-        public LookUpConfig()
+        public LookupConfig()
         {
             this.HasKey(x => x.Id);
             this.Property(x => x.Name).HasMaxLength(50).IsRequired();
-            this.Property(x => x.Name).HasMaxLength(50).IsRequired();
+            this.Property(x => x.Value).HasMaxLength(50).IsRequired();
         }
     }
 }

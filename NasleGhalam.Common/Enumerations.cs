@@ -29,75 +29,73 @@
         Equal = 0,
         Same = 1
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    public enum AnswerType : byte
-    {
-    }
+   
+    //public enum AnswerType : byte
+    //{
+    //}
 
-    public enum PaperType : byte
-    {
-        White = 0,
-        Kahi = 1,
-        Glasse = 2
-    }
+    //public enum PaperType : byte
+    //{
+    //    White = 0,
+    //    Kahi = 1,
+    //    Glasse = 2
+    //}
 
-    public enum PrintType : byte
-    {
-        Colered = 0,
-        BlackAndWhite = 1
-    }
+    //public enum PrintType : byte
+    //{
+    //    Colered = 0,
+    //    BlackAndWhite = 1
+    //}
 
-    public enum BookType : byte
-    {
+    //public enum BookType : byte
+    //{
 
-    }
+    //}
 
-    public enum QuestionType : byte
-    {
-        MultipleChoice = 0,
-        Detailed = 1
-    }
+    //public enum QuestionType : byte
+    //{
+    //    MultipleChoice = 0,
+    //    Detailed = 1
+    //}
 
 
-    public enum TopicHardnessType : byte
-    {
-        Easy = 0,
-        Normal = 1,
-        Hard = 2
-    }
+    //public enum TopicHardnessType : byte
+    //{
+    //    Easy = 0,
+    //    Normal = 1,
+    //    Hard = 2
+    //}
 
-    public enum QuestionHardnessType : byte
-    {
-        Easy = 0,
-        Normal = 1,
-        Hard = 2,
-        Olampiad = 3
-    }
+    //public enum QuestionHardnessType : byte
+    //{
+    //    Easy = 0,
+    //    Normal = 1,
+    //    Hard = 2,
+    //    Olampiad = 3
+    //}
 
-    public enum AreaType : byte
-    {
-        Danesh = 0,
-        DarkVaFahm = 1,
-        Karbord = 2,
-        TajzieVaTahlil = 3,
-        Tarkib = 4,
-        Arzeshyabi = 5
-    }
+    //public enum AreaType : byte
+    //{
+    //    Danesh = 0,
+    //    DarkVaFahm = 1,
+    //    Karbord = 2,
+    //    TajzieVaTahlil = 3,
+    //    Tarkib = 4,
+    //    Arzeshyabi = 5
+    //}
 
 
-    public enum ReapetnessType : byte
-    {
-        Low = 0,
-        Medium = 1,
-        High = 2
-    }
+    //public enum ReapetnessType : byte
+    //{
+    //    Low = 0,
+    //    Medium = 1,
+    //    High = 2
+    //}
 
-    public enum AuthorType : byte
-    {
-        Konkoor = 0,
-        Talif = 1,
-        Jozve = 2
-    }
+    //public enum AuthorType : byte
+    //{
+    //    Konkoor = 0,
+    //    Talif = 1,
+    //    Jozve = 2
+    //}
 }

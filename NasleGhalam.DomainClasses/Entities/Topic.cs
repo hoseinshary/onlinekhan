@@ -23,11 +23,11 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public bool IsExamSource { get; set; }
 
-        public int HardnessTypeId { get; set; }
-        public LookUp HardnessType { get; set; }
+        public int LookupId_HardnessType { get; set; }
+        public Lookup Lookup_HardnessType { get; set; }
 
-        public int AreaTypeId { get; set; }
-        public LookUp AreaType { get; set; }
+        public int LookupId_AreaType { get; set; }
+        public Lookup Lookup_AreaType { get; set; }
 
         public bool IsActive { get; set; }
 

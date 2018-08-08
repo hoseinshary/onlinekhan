@@ -23,9 +23,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.UserId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.AnswerType)
+            this.HasRequired(x => x.Lookup_AnswerType)
                 .WithMany(x => x.QuestionAnswers)
-                .HasForeignKey(x => x.AnswerTypeId)
+                .HasForeignKey(x => x.LookupId_AnswerType)
                 .WillCascadeOnDelete(false);
         }
     }

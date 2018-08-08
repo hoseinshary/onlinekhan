@@ -92,7 +92,8 @@ module.exports = function(ctx) {
         'QTooltip',
         // 'Loading',
         'QSpinnerIos',
-        'QPopover'
+        'QPopover',
+        'QCollapsible'
       ],
       directives: ['Ripple', 'CloseOverlay'],
       // Quasar plugins

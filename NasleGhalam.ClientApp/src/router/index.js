@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { LocalStorage } from 'quasar';
 import routes from './routes';
+import util from 'utilities/util';
 
 Vue.use(VueRouter);
 
@@ -35,9 +36,11 @@ Router.beforeEach((to, from, next) => {
   var subMenuList = LocalStorage.get.item('subMenuList');
   if (to.fullPath == '/user/login') {
     next();
+    // util.logout();
     document.title = 'ورود';
   } else if (!authList || !authList.includes(to.fullPath.toLowerCase())) {
-    next('/user/login');
+    // next('/user/login');
+    util.logout();
     document.title = 'ورود';
   } else {
     next();

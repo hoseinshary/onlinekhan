@@ -5,8 +5,8 @@
       <span slot="title">{{modelName}}</span>
       <div slot="body">
         <my-btn-create v-if="rolePageAccess.canCreate"
+                       :label="`ایجاد (${modelName}) جدید`"
                        @click="showModalCreate" />
-        <!-- <button @click="showModalCreate">sssss</button> -->
         <br>
         <my-table :grid-data="roleGridData"
                   :columns="gridColumns"

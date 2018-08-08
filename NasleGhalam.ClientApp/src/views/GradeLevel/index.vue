@@ -4,7 +4,8 @@
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
-        <my-btn-create @click="showModalCreate"></my-btn-create>
+        <my-btn-create :label="`ایجاد (${modelName}) جدید`"
+                       @click="showModalCreate"></my-btn-create>
         <br>
         <my-table :grid-data="gradeLevelGridData"
                   :columns="gridColumns"

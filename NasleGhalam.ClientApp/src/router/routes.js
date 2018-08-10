@@ -38,6 +38,14 @@ export default [
       {
         path: '/user',
         component: () => import('views/lesson')
+      },
+      {
+        path: '/educationGroup',
+        component: () => import('views/educationGroup')
+      },
+      {
+        path: '/educationSubGroup',
+        component: () => import('views/educationGroup')
       }
     ]
   },

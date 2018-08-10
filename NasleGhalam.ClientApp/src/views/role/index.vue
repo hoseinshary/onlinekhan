@@ -48,6 +48,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+// import util from 'utilities/util';
 
 export default {
   components: {
@@ -60,21 +61,8 @@ export default {
    * data
    */
   data() {
-    var accessControl = this.$q.localStorage.get
-      .item('subMenuList')
-      .find(x => x.EnName.toLowerCase() == '/role');
-
-    if (accessControl) {
-      accessControl = accessControl.UserAccess;
-    }
-
     return {
-      pageAccess: {
-        canCreate: accessControl && accessControl.includes('ایجاد'),
-        canEdit: accessControl && accessControl.includes('ویرایش'),
-        canDelete: accessControl && accessControl.includes('حذف'),
-        canAccess: accessControl && accessControl.includes('دسترسی')
-      },
+      pageAccess: this.$util.initAccess('/roe'),
       gridColumns: [
         {
           title: 'نام',

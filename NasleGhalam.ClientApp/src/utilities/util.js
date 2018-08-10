@@ -104,6 +104,26 @@ const logout = function() {
   axios.defaults.headers.common['Token'] = '';
   router.push('/user/login');
 };
+const initAccess = function(modelName) {
+  var actionsLst = {
+    ایجاد: 'canCreate',
+    ویرایش: 'canEdit',
+    حذف: 'canDelete',
+    دسترسی: 'canAccess',
+    شهر: 'canCity'
+  };
+  var accessControl = LocalStorage.get
+    .item('subMenuList')
+    .find(x => x.EnName.toLowerCase() == modelName);
+  if (accessControl) {
+    accessControl = accessControl.UserAccess;
+    var pageAccess = {};
+    accessControl.forEach(item => {
+      pageAccess[actionsLst[item]] = true;
+    });
+    return pageAccess;
+  } else return {};
+};
 
 //   isNull(value) {
 //     return value === null;
@@ -143,5 +163,6 @@ export default {
   isArray,
   isObject,
   isBoolean,
-  logout
+  logout,
+  initAccess
 };

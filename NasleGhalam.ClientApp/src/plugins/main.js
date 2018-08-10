@@ -33,6 +33,9 @@ import myField from 'components/form-components/my-field';
 import myInput from 'components/form-components/my-input';
 import mySelect from 'components/form-components/my-select';
 
+/* util js file */
+import util from 'utilities/util';
+
 // leave the export, even if you don't use it
 export default ({ app, router, Vue }) => {
   // register notification
@@ -64,4 +67,9 @@ export default ({ app, router, Vue }) => {
   Vue.component('my-field', myField);
   Vue.component('my-input', myInput);
   Vue.component('my-select', mySelect);
+
+  // register this.util
+  Object.defineProperty(Vue.prototype, '$util', {
+    value: util
+  });
 };

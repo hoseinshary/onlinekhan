@@ -115,14 +115,17 @@ const initAccess = function(modelName) {
   var accessControl = LocalStorage.get
     .item('subMenuList')
     .find(x => x.EnName.toLowerCase() == modelName);
+  debugger;
   if (accessControl) {
     accessControl = accessControl.UserAccess;
-    var pageAccess = {};
-    accessControl.forEach(item => {
-      pageAccess[actionsLst[item]] = true;
-    });
-    return pageAccess;
-  } else return {};
+  }
+  var pageAccess = {};
+  Object.keys(actionsLst).forEach(key => {
+    pageAccess[actionsLst[key]] = accessControl
+      ? accessControl.includes(key)
+      : false;
+  });
+  return pageAccess;
 };
 
 //   isNull(value) {

@@ -62,7 +62,7 @@ export default {
    */
   data() {
     return {
-      pageAccess: this.$util.initAccess('/role'),
+      pageAccess: this.$util.initAccess('/ole'),
       gridColumns: [
         {
           title: 'نام',

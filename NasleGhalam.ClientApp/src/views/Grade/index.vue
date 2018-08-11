@@ -4,7 +4,8 @@
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
-        <my-btn-create :label="`ایجاد (${modelName}) جدید`"
+        <my-btn-create v-if="pageAccess.canCreate"
+                       :label="`ایجاد (${modelName}) جدید`"
                        @click="showModalCreate" />
         <br>
         <my-table :grid-data="gradeGridData"
@@ -13,8 +14,10 @@
           <template slot="Id"
                     slot-scope="data">
             <my-btn-edit round
+                         v-if="pageAccess.canEdit"
                          @click="showModalEdit(data.row.Id)" />
             <my-btn-delete round
+                           v-if="pageAccess.canDelete"
                            @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table>
@@ -41,7 +44,9 @@ export default {
    * data
    */
   data() {
+    var pageAccess = this.$util.initAccess('/grade');
     return {
+      pageAccess,
       currentView: 'modal-create',
       gridColumns: [
         {
@@ -56,7 +61,8 @@ export default {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

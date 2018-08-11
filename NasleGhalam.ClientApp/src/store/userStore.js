@@ -64,7 +64,6 @@ export default {
     //   this.$router.push('/user/login');
     // },
     loginStore(context, vm) {
-      debugger;
       axios
         .post(`${baseUrl}/Login`, context.state.instanceLoginObj)
         .then(response => {

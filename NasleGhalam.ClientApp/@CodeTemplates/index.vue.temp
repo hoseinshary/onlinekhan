@@ -4,27 +4,30 @@
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
-        <my-btn-create :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate"/>
+        <my-btn-create v-if="pageAccess.canCreate"
+                       :label="`ایجاد (${modelName}) جدید`"
+                       @click="showModalCreate" />
         <br>
         <my-table :grid-data="{__modelName}GridData"
                   :columns="{__modelName}GridColumn"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
-            <my-btn-edit round
-                        @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete round
-                          @click="showModalDelete(data.row.Id)" />
+            <my-btn-edit v-if="pageAccess.canEdit"
+                         round
+                         @click="showModalEdit(data.row.Id)" />
+            <my-btn-delete v-if="pageAccess.canDelete"
+                           round
+                           @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table>
       </div>
     </my-panel>
 
   <!-- modals -->
-    <modal-create></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
+    <modal-create v-if="pageAccess.canCreate"></modal-create>
+    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
+    <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
 
@@ -41,14 +44,17 @@ export default {
    * data
    */
   data() {
+    var pageAccess = this.$util.initAccess('/{__modelName}'); 
     return {
+      pageAccess,
       {__modelName}GridColumn: [
         {__props}
         ,{
           title: 'عملیات',
           data: 'Id',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: this.pageAccess.canEdit || this.pageAccess.canDelete
         }
       ]
     };

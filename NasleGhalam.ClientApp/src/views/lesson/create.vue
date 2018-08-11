@@ -3,10 +3,42 @@
                    :show="isOpenModalCreate"
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
-                   @close="toggleModalCreateStore(false)">
+                   @close="toggleModalCreateStore(false)"
+                   @open="getAllEduGroupAndEduSubGroup_CreateStore()">
 
     <my-input :model="$v.instanceObj.Name"
               class="col-md-12" />
+    <fieldset class="col-12">
+      <legend>گروههای آموزشی</legend>
+      <div class="row"
+           v-if="eduGroupAndEduSubGroupLst">
+
+        <div class="col-sm-2"
+             v-for="group in eduGroupAndEduSubGroupLst"
+             :key="group.Name">
+          <q-checkbox v-model="group.IsChecked"
+                      :label="group.Name" />
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="col-12"
+         v-for="group in eduGroupAndEduSubGroupLst.filter(x => x.IsChecked)"
+         :key="group.Id">
+      <fieldset class="col-12">
+        <legend>گروههای آموزشی</legend>
+        <div class="inline col-sm-4"
+             style="padding-top:5px;"
+             v-for="subGroup in group.SubGroups"
+             :key="subGroup.Id">
+          <div style="margin-top:20px;">{{subGroup.Name}}:</div>
+          <q-input type="number"
+                   style="margin-right:10px; width:60%;"
+                   v-model="subGroup.Ratio"
+                   float-label='ضریب'></q-input>
+        </div>
+      </fieldset>
+    </div>
 
   </my-modal-create>
 </template>
@@ -16,6 +48,9 @@ import viewModel from 'viewModels/lessonViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {};
+  },
   /**
    * methods
    */
@@ -24,7 +59,8 @@ export default {
       'toggleModalCreateStore',
       'createVueStore',
       'submitCreateStore',
-      'resetCreateStore'
+      'resetCreateStore',
+      'getAllEduGroupAndEduSubGroup_CreateStore'
     ])
   },
   /**
@@ -34,8 +70,13 @@ export default {
     ...mapState('lessonStore', {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
-      isOpenModalCreate: 'isOpenModalCreate'
-    })
+      isOpenModalCreate: 'isOpenModalCreate',
+      eduGroupAndEduSubGroupLst: 'eduGroupAndEduSubGroupLst'
+    }),
+    now: function() {
+      console.log(this.eduGroupAndEduSubGroupLst.filter(x => x.IsChecked));
+      return this.eduGroupAndEduSubGroupLst.filter(x => x.IsChecked);
+    }
   },
   /**
    * validations
@@ -50,3 +91,8 @@ export default {
 };
 </script>
 
+<style scoped>
+div >>> .inline {
+  display: inline-flex;
+}
+</style>

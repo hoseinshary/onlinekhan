@@ -6,10 +6,10 @@
       <div slot="body">
         <my-btn-create v-if="pageAccess.canCreate"
                        :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate"></my-btn-create>
+                       @click="showModalCreate" />
         <br>
-        <my-table :grid-data="gradeLevelGridData"
-                  :columns="gridColumns"
+        <my-table :grid-data="educationGroupGridData"
+                  :columns="educationGroupGridColumn"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
@@ -44,21 +44,13 @@ export default {
    * data
    */
   data() {
-    var pageAccess = this.$util.initAccess('/gradelevel');
+    var pageAccess = this.$util.initAccess('/educationgroup');
     return {
       pageAccess,
-      gridColumns: [
-        {
-          title: 'مقطع تحصیلی',
-          data: 'GradeName'
-        },
+      educationGroupGridColumn: [
         {
           title: 'نام',
           data: 'Name'
-        },
-        {
-          title: 'اولویت',
-          data: 'Priority'
         },
         {
           title: 'عملیات',
@@ -74,7 +66,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('gradeLevelStore', [
+    ...mapActions('educationGroupStore', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -107,9 +99,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('gradeLevelStore', {
+    ...mapState('educationGroupStore', {
       modelName: 'modelName',
-      gradeLevelGridData: 'gradeLevelGridData'
+      educationGroupGridData: 'educationGroupGridData'
     })
   },
   created() {

@@ -71,7 +71,6 @@ const store = {
      */
     reset(state, $v) {
       util.clearObject(state.roleObj);
-      debugger;
 
       if ($v) {
         $v.$reset();

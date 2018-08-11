@@ -1,71 +1,72 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { LESSON_URL as baseUrl } from 'utilities/site-config';
+import { EDUCATION_GROUP_URL as baseUrl } from 'utilities/site-config';
 
-export default {
+/**
+ * find index of object in educationGroupGridData by id
+ * @param {Number} id
+ */
+function getIndexById(id) {
+  return store.state.educationGroupGridData.findIndex(o => o.Id == id);
+}
+
+const store = {
   namespaced: true,
   state: {
-    modelName: 'درس',
+    modelName: 'گروه آموزشی',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    instanceObj: {
+    educationGroupObj: {
       Id: 0,
       Name: ''
     },
-    allObj: [],
-    allObjDdl: [],
-    selectedIndex: -1,
+    educationGroupGridData: [],
+    educationGroupDdl: [],
     selectedId: 0,
+    isModelChanged: true,
     createVue: null,
-    editVue: null,
-    eduGroupAndEduSubGroupLst: []
+    editVue: null
   },
   mutations: {
     /**
-     * insert new instanceObj to allObj
+     * insert new educationGroupObj to educationGroupGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.instanceObj);
+      let createdObj = util.cloneObject(state.educationGroupObj);
       createdObj.Id = id;
-      state.allObj.push(createdObj);
+      state.educationGroupGridData.push(createdObj);
     },
 
     /**
-     * update instanceObj of allObj
+     * update educationGroupObj of educationGroupGridData
      */
     update(state) {
-      let index = state.selectedIndex;
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.instanceObj, state.allObj[index]);
+      util.mapObject(
+        state.educationGroupObj,
+        state.educationGroupGridData[index]
+      );
     },
 
     /**
-     * delete from allObj
+     * delete from educationGroupGridData
      */
     delete(state) {
-      let index = state.selectedIndex;
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.allObj.splice(index, 1);
+      state.educationGroupGridData.splice(index, 1);
     },
 
     /**
-     * rest value of instanceObj
+     * rest value of educationGroupObj
      */
     reset(state, $v) {
-      util.clearObject(state.instanceObj);
+      util.clearObject(state.educationGroupObj);
       if ($v) {
         $v.$reset();
       }
-    },
-
-    /**
-     * set selectedIndex
-     */
-    setIndex(state) {
-      state.selectedIndex = state.allObj.findIndex(
-        o => o.Id == state.instanceObj.Id
-      );
     }
   },
   actions: {
@@ -75,35 +76,47 @@ export default {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.instanceObj);
+        util.mapObject(response.data, state.educationGroupObj);
       });
     },
 
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.allObj = response.data;
-      });
+    fillGridStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.educationGroupGridData = response.data;
+        });
+      }
     },
 
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.allObjDdl = response.data;
-      });
+    fillDdlStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.educationGroupDdl = response.data;
+        });
+      }
     },
+
     /**
      * vlidate form
      */
     validateFormStore({ dispatch }, vm) {
-      debugger;
       // check instance validation
-      vm.$v.instanceObj.$touch();
-      if (vm.$v.instanceObj.$error) {
+      vm.$v.educationGroupObj.$touch();
+      if (vm.$v.educationGroupObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
@@ -112,35 +125,11 @@ export default {
     },
 
     /**
-     * fill dropDwon EduGroupAndEduSubGroup
+     * change isModelChange
+     * @param {Boolean} b
      */
-    getAllEduGroupAndEduSubGroup_CreateStore({ state }) {
-      state.eduGroupAndEduSubGroupLst = [
-        {
-          Id: 1,
-          Name: 'ریاضی',
-          IsChecked: false,
-          SubGroups: [
-            { Name: 'ریاضی 1', Id: 10, Ratio: null },
-            { Name: 'ریاضی 2', Id: 20, Ratio: null }
-          ]
-        },
-        {
-          Id: 2,
-          Name: 'تجربی',
-          IsChecked: false,
-          SubGroups: [
-            { Name: 'تجربی 1', Id: 30, Ratio: null },
-            { Name: 'تجربی 2', Id: 40, Ratio: null },
-            { Name: 'تجربی 3', Id: 50, Ratio: null }
-          ]
-        }
-      ];
-      // axios
-      //   .get(`${baseUrl}/getAllEduGroupAndEduSubGroup_Create`)
-      //   .then(response => {
-      //     state.eduGroupAndEduSubGroupLst = response.data;
-      //   });
+    toggleModelChangeStore({ state }, b) {
+      state.isModelChanged = b;
     },
 
     //### create section ###
@@ -162,28 +151,29 @@ export default {
      * submit create data
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
-      debugger;
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
         axios
-          .post(`${baseUrl}/Create`, {
-            obj: state.instanceObj,
-            eduGroup: state.eduGroupAndEduSubGroupLst.filter(x => x.IsChecked)
-          })
+          .post(`${baseUrl}/Create`, state.educationGroupObj)
           .then(response => {
             let data = response.data;
 
             if (data.MessageType == 1) {
               commit('insert', data.Id);
+              dispatch('toggleModelChangeStore', true);
               dispatch('resetCreateStore');
               dispatch('toggleModalCreateStore', !closeModal);
             }
 
             dispatch(
               'notify',
-              { body: data.Message, type: data.MessageType, vm: vm },
+              {
+                body: data.Message,
+                type: data.MessageType,
+                vm: vm
+              },
               { root: true }
             );
           });
@@ -220,26 +210,28 @@ export default {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.instanceObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
-          let data = response.data;
-          if (data.MessageType == 1) {
-            commit('setIndex');
-            commit('update');
-            dispatch('resetEditStore');
-            dispatch('toggleModalEditStore', false);
-          }
+        state.educationGroupObj.Id = state.selectedId;
+        axios
+          .post(`${baseUrl}/Update`, state.educationGroupObj)
+          .then(response => {
+            let data = response.data;
+            if (data.MessageType == 1) {
+              commit('update');
+              dispatch('toggleModelChangeStore', true);
+              dispatch('resetEditStore');
+              dispatch('toggleModalEditStore', false);
+            }
 
-          dispatch(
-            'notify',
-            {
-              body: data.Message,
-              type: data.MessageType,
-              vm: vm
-            },
-            { root: true }
-          );
-        });
+            dispatch(
+              'notify',
+              {
+                body: data.Message,
+                type: data.MessageType,
+                vm: vm
+              },
+              { root: true }
+            );
+          });
       });
     },
 
@@ -266,9 +258,9 @@ export default {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
-          commit('setIndex');
           commit('delete');
           commit('reset');
+          dispatch('toggleModelChangeStore', true);
           dispatch('toggleModalDeleteStore', false);
         }
 
@@ -287,7 +279,9 @@ export default {
   },
   getters: {
     recordName(state) {
-      return state.instanceObj.Name;
+      return state.educationGroupObj.Name;
     }
   }
 };
+
+export default store;

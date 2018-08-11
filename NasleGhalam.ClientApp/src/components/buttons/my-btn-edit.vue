@@ -15,6 +15,7 @@
          outline
          color="purple"
          class="shadow-1 bg-white q-mr-sm"
+         type="submit"
          @click="$emit('click')">
     <q-icon name="create" /> ویرایش
   </q-btn>

@@ -60,21 +60,9 @@ export default {
    * data
    */
   data() {
-    var accessControl = this.$q.localStorage.get
-      .item('subMenuList')
-      .find(x => x.EnName.toLowerCase() == '/role');
-
-    if (accessControl) {
-      accessControl = accessControl.UserAccess;
-    }
-
+    var pageAccess = this.$util.initAccess('/role');
     return {
-      pageAccess: {
-        canCreate: accessControl && accessControl.includes('ایجاد'),
-        canEdit: accessControl && accessControl.includes('ویرایش'),
-        canDelete: accessControl && accessControl.includes('حذف'),
-        canAccess: accessControl && accessControl.includes('دسترسی')
-      },
+      pageAccess,
       gridColumns: [
         {
           title: 'نام',
@@ -88,13 +76,15 @@ export default {
           title: 'انتساب نقش',
           data: 'role',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canAccess
         },
         {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

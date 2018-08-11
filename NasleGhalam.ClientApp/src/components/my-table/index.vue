@@ -62,6 +62,9 @@ export default {
 
     // create th of columns
     var column = tbl.columns.map(function(col, index) {
+      // return if col is hidden
+      if (!col.visible) return;
+
       var data = {
         key: col.data + '_' + index,
         // class: {
@@ -113,6 +116,8 @@ export default {
       let tds = [];
       tds.push(
         tbl.columns.map(function(col, colIndex) {
+          // return if col is hidden
+          if (!col.visible) return;
           let colData = {
             key: 'row_' + rowIndex + '_cell_' + colIndex
           };
@@ -432,7 +437,8 @@ export default {
           }
 
           item.searchable = item.searchable == undefined || item.searchable;
-          item.sortable = item.sortable == undefined || item.searchable;
+          item.sortable = item.sortable == undefined || item.sortable;
+          item.visible = item.visible == undefined || item.visible;
           item.key = i;
         } else if (util.isString(item)) {
           // if item is string then convert to object
@@ -441,6 +447,7 @@ export default {
             data: item,
             searchable: true,
             sortable: true,
+            visible: true,
             key: i
           };
         } else {
@@ -459,6 +466,7 @@ export default {
           data: '_index',
           searchable: false,
           sortable: false,
+          visible: true,
           key: 0
         });
       }

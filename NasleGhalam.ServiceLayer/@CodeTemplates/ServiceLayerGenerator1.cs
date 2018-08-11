@@ -7,20 +7,20 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.Topic;
+using NasleGhalam.ViewModels.EducationGroupWithSubGroups;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class TopicService
+	public class EducationGroupWithSubGroupsService
 	{
 		private const string Title = "مبحث";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Topic> _topics;
+        private readonly IDbSet<EducationGroupWithSubGroups> _educationGroupWithSubGroupss;
        
-	    public TopicService(IUnitOfWork uow)
+	    public EducationGroupWithSubGroupsService(IUnitOfWork uow)
         {
             _uow = uow;
-            _topics = uow.Set<Topic>();
+            _educationGroupWithSubGroupss = uow.Set<EducationGroupWithSubGroups>();
         }
 
 
@@ -29,11 +29,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public TopicViewModel GetById(int id)
+        public EducationGroupWithSubGroupsViewModel GetById(int id)
         {
-            return _topics
+            return _educationGroupWithSubGroupss
                 .Where(current => current.Id == id)
-                .Select(current => new TopicViewModel
+                .Select(current => new EducationGroupWithSubGroupsViewModel
                 {
                     Id = current.Id
                 }).FirstOrDefault();
@@ -44,9 +44,9 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه مبحث ها
         /// </summary>
         /// <returns></returns>
-        public IList<TopicViewModel> GetAll()
+        public IList<EducationGroupWithSubGroupsViewModel> GetAll()
         {
-            return _topics.Select(current => new TopicViewModel()
+            return _educationGroupWithSubGroupss.Select(current => new EducationGroupWithSubGroupsViewModel()
             {
                 Id = current.Id,
             }).ToList();
@@ -56,15 +56,15 @@ namespace NasleGhalam.ServiceLayer.Services
 		/// <summary>
         /// ثبت مبحث
         /// </summary>
-        /// <param name="topicViewModel"></param>
+        /// <param name="educationGroupWithSubGroupsViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(TopicViewModel topicViewModel)
+        public MessageResult Create(EducationGroupWithSubGroupsViewModel educationGroupWithSubGroupsViewModel)
         {
-            var topic = Mapper.Map<Topic>(topicViewModel);
-            _topics.Add(topic);
+            var educationGroupWithSubGroups = Mapper.Map<EducationGroupWithSubGroups>(educationGroupWithSubGroupsViewModel);
+            _educationGroupWithSubGroupss.Add(educationGroupWithSubGroups);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = topic.Id;
+			msgRes.Id = educationGroupWithSubGroups.Id;
             return msgRes;
         }
 
@@ -72,12 +72,12 @@ namespace NasleGhalam.ServiceLayer.Services
 		/// <summary>
         /// ویرایش مبحث
         /// </summary>
-        /// <param name="topicViewModel"></param>
+        /// <param name="educationGroupWithSubGroupsViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(TopicViewModel topicViewModel)
+        public MessageResult Update(EducationGroupWithSubGroupsViewModel educationGroupWithSubGroupsViewModel)
         {
-            var topic = Mapper.Map<Topic>(topicViewModel);
-            _uow.MarkAsChanged(topic);
+            var educationGroupWithSubGroups = Mapper.Map<EducationGroupWithSubGroups>(educationGroupWithSubGroupsViewModel);
+            _uow.MarkAsChanged(educationGroupWithSubGroups);
 
 			
 			return  _uow.CommitChanges(CrudType.Update, Title);
@@ -92,14 +92,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  topicViewModel = GetById(id);
-            if (topicViewModel == null)
+			var  educationGroupWithSubGroupsViewModel = GetById(id);
+            if (educationGroupWithSubGroupsViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var topic = Mapper.Map<Topic>(topicViewModel);
-            _uow.MarkAsDeleted(topic);
+            var educationGroupWithSubGroups = Mapper.Map<EducationGroupWithSubGroups>(educationGroupWithSubGroupsViewModel);
+            _uow.MarkAsDeleted(educationGroupWithSubGroups);
             
 			return  _uow.CommitChanges(CrudType.Delete, Title);
 			
@@ -112,7 +112,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _topics.Select(current => new SelectViewModel
+            return _educationGroupWithSubGroupss.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

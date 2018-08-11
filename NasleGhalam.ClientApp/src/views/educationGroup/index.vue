@@ -44,8 +44,9 @@ export default {
    * data
    */
   data() {
+    var pageAccess = this.$util.initAccess('/educationgroup');
     return {
-      pageAccess: this.$util.initAccess('/educationgroup'),
+      pageAccess,
       educationGroupGridColumn: [
         {
           title: 'نام',
@@ -55,7 +56,8 @@ export default {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

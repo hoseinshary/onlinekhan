@@ -44,8 +44,9 @@ export default {
    * data
    */
   data() {
+    var pageAccess = this.$util.initAccess('/grade');
     return {
-      pageAccess: this.$util.initAccess('/grade'),
+      pageAccess,
       currentView: 'modal-create',
       gridColumns: [
         {
@@ -60,7 +61,8 @@ export default {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

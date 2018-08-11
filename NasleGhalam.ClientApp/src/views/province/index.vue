@@ -44,8 +44,9 @@ export default {
    * data
    */
   data() {
+    var pageAccess = this.$util.initAccess('/province');
     return {
-      pageAccess: this.$util.initAccess('/province'),
+      pageAccess,
       provinceGridColumn: [
         {
           title: 'نام',
@@ -59,7 +60,8 @@ export default {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

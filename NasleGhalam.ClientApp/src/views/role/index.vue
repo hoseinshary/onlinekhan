@@ -48,7 +48,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-// import util from 'utilities/util';
 
 export default {
   components: {
@@ -61,8 +60,9 @@ export default {
    * data
    */
   data() {
+    var pageAccess = this.$util.initAccess('/role');
     return {
-      pageAccess: this.$util.initAccess('/ole'),
+      pageAccess,
       gridColumns: [
         {
           title: 'نام',
@@ -76,13 +76,15 @@ export default {
           title: 'انتساب نقش',
           data: 'role',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canAccess
         },
         {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

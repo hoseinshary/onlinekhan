@@ -44,8 +44,9 @@ export default {
    * data
    */
   data() {
+    var pageAccess = this.$util.initAccess('/gradelevel');
     return {
-      pageAccess: this.$util.initAccess('/gradelevel'),
+      pageAccess,
       gridColumns: [
         {
           title: 'مقطع تحصیلی',
@@ -61,7 +62,10 @@ export default {
         },
         {
           title: 'عملیات',
-          data: 'Id'
+          data: 'Id',
+          searchable: false,
+          sortable: false,
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

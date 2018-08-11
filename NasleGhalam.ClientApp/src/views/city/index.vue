@@ -43,8 +43,9 @@ export default {
    * data
    */
   data() {
+    var pageAccess = this.$util.initAccess('/city');
     return {
-      pageAccess: this.$util.initAccess('/city'),
+      pageAccess,
       cityGridColumn: [
         {
           title: 'Name',
@@ -58,7 +59,8 @@ export default {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

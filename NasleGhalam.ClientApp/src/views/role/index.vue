@@ -62,7 +62,7 @@ export default {
   data() {
     var pageAccess = this.$util.initAccess('/role');
     return {
-      pageAccess: pageAccess,
+      pageAccess,
       gridColumns: [
         {
           title: 'نام',
@@ -76,7 +76,8 @@ export default {
           title: 'انتساب نقش',
           data: 'role',
           searchable: false,
-          sortable: false
+          sortable: false,
+          visible: pageAccess.canAccess
         },
         {
           title: 'عملیات',

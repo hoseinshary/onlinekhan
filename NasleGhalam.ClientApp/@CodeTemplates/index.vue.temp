@@ -46,7 +46,7 @@ export default {
   data() {
     var pageAccess = this.$util.initAccess('/{__modelName}'); 
     return {
-      pageAccess: pageAccess,
+      pageAccess,
       {__modelName}GridColumn: [
         {__props}
         ,{

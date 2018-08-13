@@ -85,7 +85,7 @@
     <Compile Include="_Attributes\NationalNoAttribute.cs" />
     <Compile Include="_Attributes\RequiredDdlAttribute.cs" />
     <Compile Include="EducationBook\EducationBook.cs" />
-    <Compile Include="EducationGroup\ٍEducationGroupViewModel.cs" />
+    <Compile Include="EducationGroup\EducationGroupViewModel.cs" />
     <Compile Include="GradeLevel\GradeLevelViewModel.cs" />
     <Compile Include="Grade\GradeViewModel.cs" />
     <Compile Include="Question\QuestionViewModel.cs" />

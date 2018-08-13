@@ -8,16 +8,16 @@
                        :label="`ایجاد (${modelName}) جدید`"
                        @click="showModalCreate" />
         <br>
-        <my-table :grid-data="cityGridData"
-                  :columns="cityGridColumn"
+        <my-table :grid-data="educationSubGroupGridData"
+                  :columns="educationSubGroupGridColumn"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
-            <my-btn-edit round
-                         v-if="pageAccess.canEdit"
+            <my-btn-edit v-if="pageAccess.canEdit"
+                         round
                          @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete round
-                           v-if="pageAccess.canDelete"
+            <my-btn-delete v-if="pageAccess.canDelete"
+                           round
                            @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table>
@@ -25,9 +25,9 @@
     </my-panel>
 
     <!-- modals -->
-    <modal-create></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
+    <modal-create v-if="pageAccess.canCreate"></modal-create>
+    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
+    <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
 
@@ -44,24 +44,24 @@ export default {
    * data
    */
   data() {
-    var pageAccess = this.$util.initAccess('/city');
+    var pageAccess = this.$util.initAccess('/educationSubGroup');
     return {
       pageAccess,
-      cityGridColumn: [
+      educationSubGroupGridColumn: [
         {
-          title: 'Name',
-          data: 'Name'
+          title: 'گروه آموزشی',
+          data: 'EducationGroupName'
         },
         {
-          title: 'ProvinceId',
-          data: 'ProvinceId'
+          title: 'نام',
+          data: 'Name'
         },
         {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
           sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
+          visible: this.pageAccess.canEdit || this.pageAccess.canDelete
         }
       ]
     };
@@ -70,7 +70,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('cityStore', [
+    ...mapActions('educationSubGroupStore', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -103,9 +103,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('cityStore', {
+    ...mapState('educationSubGroupStore', {
       modelName: 'modelName',
-      cityGridData: 'cityGridData'
+      educationSubGroupGridData: 'educationSubGroupGridData'
     })
   },
   created() {

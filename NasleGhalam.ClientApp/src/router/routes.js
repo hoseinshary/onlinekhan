@@ -45,7 +45,7 @@ export default [
       },
       {
         path: '/educationSubGroup',
-        component: () => import('views/educationGroup')
+        component: () => import('views/educationSubGroup')
       }
     ]
   },

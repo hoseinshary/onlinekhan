@@ -18,7 +18,8 @@ export default {
     selectedIndex: -1,
     selectedId: 0,
     createVue: null,
-    editVue: null
+    editVue: null,
+    eduGroupAndEduSubGroupLst: []
   },
   mutations: {
     /**
@@ -95,6 +96,52 @@ export default {
         state.allObjDdl = response.data;
       });
     },
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      debugger;
+      // check instance validation
+      vm.$v.instanceObj.$touch();
+      if (vm.$v.instanceObj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        return false;
+      }
+
+      return true;
+    },
+
+    /**
+     * fill dropDwon EduGroupAndEduSubGroup
+     */
+    getAllEduGroupAndEduSubGroup_CreateStore({ state }) {
+      state.eduGroupAndEduSubGroupLst = [
+        {
+          Id: 1,
+          Name: 'ریاضی',
+          IsChecked: false,
+          SubGroups: [
+            { Name: 'ریاضی 1', Id: 10, Ratio: null },
+            { Name: 'ریاضی 2', Id: 20, Ratio: null }
+          ]
+        },
+        {
+          Id: 2,
+          Name: 'تجربی',
+          IsChecked: false,
+          SubGroups: [
+            { Name: 'تجربی 1', Id: 30, Ratio: null },
+            { Name: 'تجربی 2', Id: 40, Ratio: null },
+            { Name: 'تجربی 3', Id: 50, Ratio: null }
+          ]
+        }
+      ];
+      // axios
+      //   .get(`${baseUrl}/getAllEduGroupAndEduSubGroup_Create`)
+      //   .then(response => {
+      //     state.eduGroupAndEduSubGroupLst = response.data;
+      //   });
+    },
 
     //### create section ###
     /**
@@ -115,29 +162,31 @@ export default {
      * submit create data
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
+      debugger;
       var vm = state.createVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
-          let data = response.data;
+        axios
+          .post(`${baseUrl}/Create`, {
+            obj: state.instanceObj,
+            eduGroup: state.eduGroupAndEduSubGroupLst.filter(x => x.IsChecked)
+          })
+          .then(response => {
+            let data = response.data;
 
-          if (data.MessageType == 1) {
-            commit('insert', data.Id);
-            dispatch('resetCreateStore');
-            dispatch('toggleModalCreateStore', !closeModal);
-          }
+            if (data.MessageType == 1) {
+              commit('insert', data.Id);
+              dispatch('resetCreateStore');
+              dispatch('toggleModalCreateStore', !closeModal);
+            }
 
-          dispatch(
-            'notify',
-            {
-              body: data.Message,
-              type: data.MessageType,
-              vm: vm
-            },
-            { root: true }
-          );
-        });
+            dispatch(
+              'notify',
+              { body: data.Message, type: data.MessageType, vm: vm },
+              { root: true }
+            );
+          });
       });
     },
 
@@ -169,7 +218,7 @@ export default {
      */
     submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
-      dispatch('validateFormStore', vm, { root: true }).then(isValid => {
+      dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.instanceObj.Id = state.selectedId;
         axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {

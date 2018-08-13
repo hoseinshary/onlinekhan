@@ -46,7 +46,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     IsChecked = true
 
                 }).FirstOrDefault();
-     
+
         }
 
 
@@ -61,9 +61,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.EducationGroupId == id)
                 .Select(current => new EducationGroup_LessonViewModel
                 {
-                    Id = current.Id,             
+                    Id = current.Id,
                     LessonName = current.Lesson.Name,
-              
+
                 }).ToList();
         }
 
@@ -74,9 +74,9 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <returns></returns>
         public IList<EducationGroup_LessonViewModel> GetAllEducationGroupByLessonId(int id)
-        {    
+        {
             return _educationGroup
-                
+
                  .Select(current => new
                  {
                      current.Id,
@@ -177,12 +177,12 @@ namespace NasleGhalam.ServiceLayer.Services
             MessageResult msgRes;
 
             // educationGroup_LessonViewModel.GroupBy(current => current.LessonId)
-              //  .Select(current => current.Key).ToList();
+            //  .Select(current => current.Key).ToList();
 
             //بررسی یکی بودن تمام آی دی درس ها
             for (int i = 0; i < educationGroup_LessonViewModel.Count; i++)
             {
-                if(educationGroup_LessonViewModel[i].LessonId != educationGroup_LessonViewModel[i+1].LessonId)
+                if (educationGroup_LessonViewModel[i].LessonId != educationGroup_LessonViewModel[i + 1].LessonId)
                 {
                     msgRes = new MessageResult();
                     msgRes.MessageType = MessageType.Error;
@@ -198,7 +198,7 @@ namespace NasleGhalam.ServiceLayer.Services
             //create 
             foreach (EducationGroup_LessonViewModel egl in educationGroup_LessonViewModel)
             {
-                if( egl.IsChecked && !Utility.isExistInArray<int>(previousEducationGroupLesson.Select(x => x.EducationGroupId),egl.EducationGroupId))
+                if (egl.IsChecked && !Utility.isExistInArray<int>(previousEducationGroupLesson.Select(x => x.EducationGroupId), egl.EducationGroupId))
                 {
                     var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(egl);
                     _educationGroup_Lessons.Add(educationGroup_Lesson);
@@ -209,14 +209,14 @@ namespace NasleGhalam.ServiceLayer.Services
             //delete
             foreach (EducationGroup_Lesson egl in previousEducationGroupLesson)
             {
-                if (!Utility.isExistInArray<int>(educationGroup_LessonViewModel.Where(x => x.IsChecked).Select(x=>x.EducationGroupId), egl.EducationGroupId))
+                if (!Utility.isExistInArray<int>(educationGroup_LessonViewModel.Where(x => x.IsChecked).Select(x => x.EducationGroupId), egl.EducationGroupId))
                 {
                     _uow.MarkAsDeleted(egl);
                 }
             }
 
 
-            
+
 
             msgRes = _uow.CommitChanges(CrudType.None, Title);
             return msgRes;

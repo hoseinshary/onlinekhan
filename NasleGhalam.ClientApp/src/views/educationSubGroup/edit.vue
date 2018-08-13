@@ -10,7 +10,7 @@
                :options="educationGroupDdl"
                class="col-md-6"
                clearable
-               @change="setEducationGroupName" /> />
+               @change="setEducationGroupName" />
 
     <my-input :model="$v.educationSubGroupObj.Name"
               class="col-md-6" />

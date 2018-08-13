@@ -108,7 +108,6 @@
       <DependentUpon>WebApiControllerGenerator.tt</DependentUpon>
     </Content>
     <Compile Include="Controllers\CityController.cs" />
-    <Compile Include="Controllers\EducationGroup_LessonController.cs" />
     <Compile Include="Controllers\EducationSubGroupController.cs" />
     <Compile Include="Controllers\EducationYearController.cs" />
     <Compile Include="Controllers\ExamController.cs" />

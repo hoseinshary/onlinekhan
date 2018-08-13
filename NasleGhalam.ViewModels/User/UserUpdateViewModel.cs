@@ -71,14 +71,10 @@ namespace NasleGhalam.ViewModels.User
         [Display(Name = "نقش")]
         public int RoleId { get; set; }
 
-        public string RoleName { get; set; }
-
 
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         [Display(Name = "شهر")]
         public int CityId { get; set; }
-
-        public string CityName { get; set; }
     }
 }
 

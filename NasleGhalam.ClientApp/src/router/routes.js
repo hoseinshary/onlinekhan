@@ -37,7 +37,7 @@ export default [
       },
       {
         path: '/user',
-        component: () => import('views/lesson')
+        component: () => import('views/user')
       },
       {
         path: '/educationGroup',

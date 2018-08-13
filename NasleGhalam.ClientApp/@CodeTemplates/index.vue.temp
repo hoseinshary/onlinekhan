@@ -54,7 +54,7 @@ export default {
           data: 'Id',
           searchable: false,
           sortable: false,
-          visible: this.pageAccess.canEdit || this.pageAccess.canDelete
+          visible: pageAccess.canEdit || pageAccess.canDelete
         }
       ]
     };

@@ -1,100 +1,320 @@
+import util from 'utilities/util';
 import axios from 'utilities/axios';
 import { USER_URL as baseUrl } from 'utilities/site-config';
 import { LocalStorage } from 'quasar';
 import router from 'router';
 
-export default {
+/**
+ * find index of object in userGridData by id
+ * @param {Number} id
+ */
+function getIndexById(id) {
+  return store.state.userGridData.findIndex(o => o.Id == id);
+}
+
+const store = {
   namespaced: true,
-  strict: true,
   state: {
     modelName: 'کاربر',
     isOpenModalCreate: false,
-    instanceObj: {
-      id: 0,
-      name: '',
-      family: '',
-      age: '',
-      gender: '',
-      isActive: false,
-      children: [],
-      roleId: '',
+    isOpenModalEdit: false,
+    isOpenModalDelete: false,
+    userObj: {
+      Id: 0,
+      Name: '',
+      Family: '',
       Username: '',
-      Password: ''
+      Password: '',
+      IsActive: false,
+      NationalNo: '',
+      Gender: false,
+      Phone: '',
+      Mobile: '',
+      RoleId: 0,
+      CityId: 0
     },
-    instanceLoginObj: {
-      UserName: '',
-      Password: ''
-    },
-    allInstance: [
-      {
-        id: 0,
-        name: 'علیرضا',
-        family: 'اعتمادی',
-        age: '17',
-        gender: '1',
-        isActive: false,
-        children: [],
-        roleId: '3'
-      }
-    ]
+    userGridData: [],
+    userDdl: [],
+    selectedId: 0,
+    isModelChanged: true,
+    createVue: null,
+    editVue: null
   },
   mutations: {
-    create(state) {
-      state.instance.id++;
-      let newObj = JSON.parse(JSON.stringify(state.instance));
-      state.allInstance.push(newObj);
+    /**
+     * insert new userObj to userGridData
+     */
+    insert(state, id) {
+      let createdObj = util.cloneObject(state.userObj);
+      createdObj.Id = id;
+      state.userGridData.push(createdObj);
     },
-    openModalCreate(state) {
-      state.isOpenModalCreate = true;
+
+    /**
+     * update userObj of userGridData
+     */
+    update(state) {
+      let index = getIndexById(state.selectedId);
+      if (index < 0) return;
+      util.mapObject(state.userObj, state.userGridData[index]);
     },
-    closeModalCreate(state) {
-      state.isOpenModalCreate = false;
+
+    /**
+     * delete from userGridData
+     */
+    delete(state) {
+      let index = getIndexById(state.selectedId);
+      if (index < 0) return;
+      state.userGridData.splice(index, 1);
+    },
+
+    /**
+     * rest value of userObj
+     */
+    reset(state, $v) {
+      util.clearObject(state.userObj);
+      if ($v) {
+        $v.$reset();
+      }
     }
   },
   actions: {
-    // create(context) {
-    //   context.commit('create');
-    // }
-    // logoutStore(context, vm) {
-    //   LocalStorage.remove('authList');
-    //   LocalStorage.remove('menuList');
-    //   LocalStorage.remove('Token');
-    //   LocalStorage.remove('FullName');
-    //   // this.$axios.defaults.headers.common['Token'] = '';
-    //   this.$router.push('/user/login');
-    // },
-    loginStore(context, vm) {
-      axios
-        .post(`${baseUrl}/Login`, context.state.instanceLoginObj)
-        .then(response => {
+    /**
+     * get data by id
+     */
+    getByIdStore({ state }, id) {
+      axios.get(`${baseUrl}/GetById/${id}`).then(response => {
+        state.selectedId = id;
+        util.mapObject(response.data, state.userObj);
+      });
+    },
+
+    /**
+     * fill grid data
+     */
+    fillGridStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.userGridData = response.data;
+        });
+      }
+    },
+
+    /**
+     * fill dropDwonList
+     */
+    fillDdlStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.userDdl = response.data;
+        });
+      }
+    },
+
+    /**
+     * vlidate form
+     */
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.userObj.$touch();
+      if (vm.$v.userObj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        return false;
+      }
+
+      return true;
+    },
+
+    /**
+     * change isModelChange
+     * @param {Boolean} b
+     */
+    toggleModelChangeStore({ state }, b) {
+      state.isModelChanged = b;
+    },
+
+    //### create section ###
+    /**
+     * toggle modal create
+     */
+    toggleModalCreateStore({ state }, isOpen) {
+      state.isOpenModalCreate = isOpen;
+    },
+
+    /**
+     * init create vue on load
+     */
+    createVueStore({ state }, vm) {
+      state.createVue = vm;
+    },
+
+    /**
+     * submit create data
+     */
+    submitCreateStore({ state, commit, dispatch }, closeModal) {
+      var vm = state.createVue;
+      dispatch('validateFormStore', vm).then(isValid => {
+        if (!isValid) return;
+
+        axios.post(`${baseUrl}/Create`, state.userObj).then(response => {
           let data = response.data;
 
-          context.dispatch(
+          if (data.MessageType == 1) {
+            commit('insert', data.Id);
+            dispatch('toggleModelChangeStore', true);
+            dispatch('resetCreateStore');
+            dispatch('toggleModalCreateStore', !closeModal);
+          }
+
+          dispatch(
             'notify',
-            { body: data.Message, type: data.MessageType, vm: vm },
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
             { root: true }
           );
-
-          if (data.MessageType == 1) {
-            axios.defaults.headers.common['Token'] = data.Token;
-            LocalStorage.set('Token', data.Token);
-            LocalStorage.set('FullName', data.FullName);
-            LocalStorage.set(
-              'authList',
-              data.SubMenus.map(x => x.EnName.toLowerCase())
-            );
-            LocalStorage.set('menuList', data.Menus);
-            LocalStorage.set('subMenuList', data.SubMenus);
-            router.push(data.DefaultPage);
-          }
         });
+      });
+    },
+
+    /**
+     * reset create vue
+     */
+    resetCreateStore({ state, commit }) {
+      commit('reset', state.createVue.$v);
+    },
+    //------------------------------------------------
+
+    //### edit section ###
+    /**
+     * toggle modal edit
+     */
+    toggleModalEditStore({ state }, isOpen) {
+      state.isOpenModalEdit = isOpen;
+    },
+
+    /**
+     * init edit vue on load
+     */
+    editVueStore({ state }, vm) {
+      state.editVue = vm;
+    },
+
+    /**
+     * submit edit data
+     */
+    submitEditStore({ state, commit, dispatch }) {
+      var vm = state.editVue;
+      dispatch('validateFormStore', vm).then(isValid => {
+        if (!isValid) return;
+        state.userObj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.userObj).then(response => {
+          let data = response.data;
+          if (data.MessageType == 1) {
+            commit('update');
+            dispatch('toggleModelChangeStore', true);
+            dispatch('resetEditStore');
+            dispatch('toggleModalEditStore', false);
+          }
+
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            { root: true }
+          );
+        });
+      });
+    },
+
+    /**
+     * reset edit vue
+     */
+    resetEditStore({ state, commit }) {
+      commit('reset', state.editVue.$v);
+    },
+    //------------------------------------------------
+
+    //### delete section ###
+    /**
+     * toggle modal delete
+     */
+    toggleModalDeleteStore({ state }, isOpen) {
+      state.isOpenModalDelete = isOpen;
+    },
+
+    /**
+     * submit to delete data
+     */
+    submitDeleteStore({ state, commit, dispatch }, vm) {
+      axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
+        let data = response.data;
+        if (data.MessageType == 1) {
+          commit('delete');
+          commit('reset');
+          dispatch('toggleModelChangeStore', true);
+          dispatch('toggleModalDeleteStore', false);
+        }
+
+        dispatch(
+          'notify',
+          {
+            body: data.Message,
+            type: data.MessageType,
+            vm: vm
+          },
+          { root: true }
+        );
+      });
+    },
+    //------------------------------------------------
+
+    /**
+     * login to website
+     */
+    loginStore({ dispatch, state }, vm) {
+      axios.post(`${baseUrl}/Login`, state.instanceLoginObj).then(response => {
+        let data = response.data;
+
+        dispatch(
+          'notify',
+          { body: data.Message, type: data.MessageType, vm: vm },
+          { root: true }
+        );
+
+        if (data.MessageType == 1) {
+          axios.defaults.headers.common['Token'] = data.Token;
+          LocalStorage.set('Token', data.Token);
+          LocalStorage.set('FullName', data.FullName);
+          LocalStorage.set(
+            'authList',
+            data.SubMenus.map(x => x.EnName.toLowerCase())
+          );
+          LocalStorage.set('menuList', data.Menus);
+          LocalStorage.set('subMenuList', data.SubMenus);
+          router.push(data.DefaultPage);
+        }
+      });
+    }
+  },
+  getters: {
+    recordName(state) {
+      return state.userObj.Name;
     }
   }
-  //   getters: {
-  //     getCount: state => {
-  //       console.log('getCount:')
-  //       console.log(state)
-  //       return state.count
-  //     }
-  //   }
 };
+
+export default store;

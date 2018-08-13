@@ -14,23 +14,25 @@
         EducationGroupUpdateAccess = 7,
         EducationGroupDeleteAccess = 8,
 
+        ProvinceReadAccess = 9,
+        ProvinceCreateAccess = 10,
+        ProvinceUpdateAccess = 11,
+        ProvinceDeleteAccess = 12,
 
-        GradeReadAccess = 9,
-        GradeCreateAccess = 10,
-        GradeUpdateAccess = 11,
-        GradeDeleteAccess = 12,
+        CityReadAccess = 13,
+        CityCreateAccess = 14,
+        CityUpdateAccess = 15,
+        CityDeleteAccess = 16,
 
+        //EducationGroup_LessonCreateAccess = 13,
+        //EducationGroup_LessonReadAccess = 14,
+        //EducationGroup_LessonUpdateAccess = 15,
+        //EducationGroup_LessonDeleteAccess = 16,
 
-        EducationGroup_LessonCreateAccess = 13,
-        EducationGroup_LessonReadAccess = 14,
-        EducationGroup_LessonUpdateAccess = 15,
-        EducationGroup_LessonDeleteAccess = 16,
-
-        ProvinceReadAccess = 17,
-        ProvinceCreateAccess = 18,
-        ProvinceUpdateAccess = 19,
-        ProvinceDeleteAccess = 20,
-
+        GradeReadAccess = 17,
+        GradeCreateAccess = 18,
+        GradeUpdateAccess = 19,
+        GradeDeleteAccess = 20,
 
         GradeLevelReadAccess = 21,
         GradeLevelCreateAccess = 22,
@@ -53,10 +55,10 @@
         TopicUpdateAccess = 36,
         TopicDeleteAccess = 37,
 
-        CityReadAccess = 38,
-        CityCreateAccess = 39,
-        CityUpdateAccess = 40,
-        CityDeleteAccess = 41,
+        EducationSubGroupReadAccess = 38,
+        EducationSubGroupCreateAccess = 39,
+        EducationSubGroupUpdateAccess = 40,
+        EducationSubGroupDeleteAccess = 41,
 
         EducationYearReadAccess = 42,
         EducationYearCreateAccess = 43,
@@ -68,14 +70,9 @@
         ExamUpdateAccess = 48,
         ExamDeleteAccess = 49,
 
-        EducationSubGroupReadAccess = 50,
-        EducationSubGroupCreateAccess = 51,
-        EducationSubGroupUpdateAccess = 52,
-        EducationSubGroupDeleteAccess = 53,
-
-        RatioReadAccess = 54,
-        RatioCreateAccess = 55,
-        RatioUpdateAccess = 56,
-        RatioDeleteAccess = 57,
+        RatioReadAccess = 50,
+        RatioCreateAccess = 51,
+        RatioUpdateAccess = 52,
+        RatioDeleteAccess = 53,
     }
 }

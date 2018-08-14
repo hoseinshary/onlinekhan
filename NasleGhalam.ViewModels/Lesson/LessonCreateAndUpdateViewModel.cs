@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using NasleGhalam.ViewModels.Ratio;
+using NasleGhalam.ViewModels._Attributes;
 
 namespace NasleGhalam.ViewModels.Lesson
 {
-    public class LessonViewModel
+    public class LessonCreateAndUpdateViewModel
     {
 
         public int Id { get; set; }
@@ -16,6 +19,9 @@ namespace NasleGhalam.ViewModels.Lesson
 
         [Display(Name = "اختصاصی")]
         public bool IsMain { get; set; }
+
+        public List<RatioCreateViewModel> RatioCreateViewModels { get; set; }
+
 
     }
 }

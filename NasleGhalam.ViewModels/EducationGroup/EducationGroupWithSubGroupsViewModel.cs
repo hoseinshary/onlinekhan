@@ -6,7 +6,7 @@ namespace NasleGhalam.ViewModels.EducationGroup
 {
     public class EducationGroupWithSubGroupsViewModel
     {
-        public List<EducationGroupIsCheckedViewModel> EducationGroups { get; set; }
-        public List<List<EducationSubGroupViewModel>> SubGroups { get; set; }
+        public EducationGroupIsCheckedViewModel EducationGroups { get; set; }
+        public List<EducationSubGroupViewModel> SubGroups { get; set; }
     }
 }

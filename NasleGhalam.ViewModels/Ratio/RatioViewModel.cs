@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NasleGhalam.ViewModels._Attributes;
 
 namespace NasleGhalam.ViewModels.Ratio
 {
@@ -9,7 +10,6 @@ namespace NasleGhalam.ViewModels.Ratio
 
 
         [Display(Name = "نام")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(200, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Name { get; set; }
 
@@ -21,7 +21,7 @@ namespace NasleGhalam.ViewModels.Ratio
 
 
         [Display(Name = "درس")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LessonId { get; set; }
 
         [Display(Name = "درس")]
@@ -29,7 +29,7 @@ namespace NasleGhalam.ViewModels.Ratio
 
 
         [Display(Name = "زیر گروه درسی")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationSubGroupId { get; set; }
 
         [Display(Name = "زیر گروه درسی")]

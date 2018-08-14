@@ -7,6 +7,7 @@ using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.EducationGroup;
+using NasleGhalam.ViewModels.EducationSubGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -15,11 +16,13 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "گروه آموزشی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<EducationGroup> _educationGroups;
+        private readonly IDbSet<EducationSubGroup> _educationSubGroups;
 
         public EducationGroupService(IUnitOfWork uow)
         {
             _uow = uow;
             _educationGroups = uow.Set<EducationGroup>();
+            _educationSubGroups = uow.Set<EducationSubGroup>();
         }
 
 
@@ -51,6 +54,71 @@ namespace NasleGhalam.ServiceLayer.Services
                 Id = current.Id,
                 Name = current.Name               
             }).ToList();
+        }
+
+        public IList<EducationGroupWithSubGroupsViewModel> GetAllEducationGroupWithsubGroups(int lessonId)
+        {
+            List<EducationGroupWithSubGroupsViewModel> returnVal = new List<EducationGroupWithSubGroupsViewModel>();
+            if (lessonId == 0)
+            {
+                var educationGroups = _educationGroups.Select(current => new EducationGroupIsCheckedViewModel()
+                {
+                    Id = current.Id,
+                    Name = current.Name
+                }).ToList();
+
+                foreach (var item in educationGroups)
+                {
+                    int educationGroupkeySearch = item.Id;
+                    var subGroups = _educationSubGroups
+                        .Where(current => current.EducationGroupId == educationGroupkeySearch)
+                        .Select(current => new EducationSubGroupViewModel
+                        {
+                            Id = current.Id,
+                            Name = current.Name,
+                            EducationGroupId = current.EducationGroupId,
+
+                        }).ToList();
+                    EducationGroupWithSubGroupsViewModel model = new EducationGroupWithSubGroupsViewModel()
+                    {
+                        EducationGroups = item,
+                        SubGroups = subGroups
+                    };
+                    returnVal.Add(model);
+                }
+            
+            }
+            else
+            {
+                EducationGroup_LessonService obj = new EducationGroup_LessonService(_uow);
+                var educationGroups = obj.GetAllEducationGroupByLessonId(lessonId);
+                foreach (var item in educationGroups)
+                {
+                    int educationGroupkeySearch = item.EducationGroupId;
+                    var eduIsChecked = new EducationGroupIsCheckedViewModel()
+                    {
+                        Id = item.EducationGroupId,
+                        Name = item.EducatioGroupName,
+                        IsChecked = item.IsChecked
+                    };
+                    var subGroups = _educationSubGroups
+                        .Where(current => current.EducationGroupId == educationGroupkeySearch)
+                        .Select(current => new EducationSubGroupViewModel
+                        {
+                            Id = current.Id,
+                            Name = current.Name,
+                            EducationGroupId = current.EducationGroupId,
+
+                        }).ToList();
+                    var model = new EducationGroupWithSubGroupsViewModel()
+                    {
+                        EducationGroups = eduIsChecked,
+                        SubGroups = subGroups
+                    };
+                    returnVal.Add(model);
+                }
+            }
+            return returnVal;
         }
 
 
@@ -116,5 +184,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
+
+
+
     }
 }

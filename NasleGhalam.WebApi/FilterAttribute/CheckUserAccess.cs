@@ -32,7 +32,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
 
             ////todo: remove later, for test
             if (token == null)
-                token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJWYWx1ZSI6IjFfVHJ1ZV8xIiwiQWNjZXNzIjoiMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTEwIiwiRXhwIjo2MzY2OTMyNDczMTk0NzE0NTl9.eniF9VrmRZ8TQTS-0o7uAIX0ufAOK-ZIwZS6fXq3SfKjcA6Nq1g4zFaZKudTCzPVabh-ypxUBA0R_aP0O-6GXA";
+                token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJWYWx1ZSI6IjFfVHJ1ZV8xIiwiQWNjZXNzIjoiMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTEwIiwiRXhwIjo2MzY3MDIwMjY0NzQyMTYwNDd9.RSv-AyJTHh8sPWZr6PwGlbmyidKz-_cEqliR12WlSNRAVvd4V_P9EBLfHDK9P__2AWhhfv4vxY-oX17bPVrpVw";
 
             if (token != null)
             {

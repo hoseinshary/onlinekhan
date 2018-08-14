@@ -1,16 +1,37 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using NasleGhalam.ViewModels.Ratio;
 
-namespace NasleGhalam.ViewModels.EducationGroup
+namespace NasleGhalam.ViewModels.Lesson
 {
-	public class EducationGroupWithSubGroupsViewModel
-    {
-		[Display(Name = "")]
-		public int Id { get; set; }
+	public class LessonViewModel
+	{
+	    
+        public int Id { get; set; }
 
 
-		[Display(Name = "")]
-		public string Name { get; set; }
+	    [Display(Name = "نام")]
+	    [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+	    [MaxLength(200, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
+        public string Name { get; set; }
 
 
-	}
+		[Display(Name = "اختصاصی")]
+		public bool IsMain { get; set; }
+
+	    [Display(Name = "گروه آموزشی")]
+	    [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        public List<int> EducationGroupId { get; set; }
+
+	    [Display(Name = "ضرایب")]
+	    [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+
+	    public List<List<Rate>> List1 { get; set; }
+
+
+
+
+
+
+    }
 }

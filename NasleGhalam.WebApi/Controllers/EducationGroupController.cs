@@ -26,6 +26,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_educationGroupService.GetAll());
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.EducationGroupReadAccess)]
+        public IHttpActionResult GetAllEducationWithSubGroups(int id)
+        {
+            return Ok(_educationGroupService.GetAllEducationGroupWithsubGroups(id));
+        }
+
 
         [HttpGet, CheckUserAccess(ActionBits.EducationGroupReadAccess)]
         public IHttpActionResult GetById(int id)

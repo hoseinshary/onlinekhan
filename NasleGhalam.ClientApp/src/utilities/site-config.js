@@ -8,6 +8,7 @@ const PROVINCE_URL = '/api/province';
 const ROLE_URL = '/api/role';
 const USER_URL = '/api/USER';
 const EDUCATION_GROUP_URL = '/api/educationGroup';
+const EDUCATION_SUB_GROUP_URL = '/api/educationSubGroup';
 
 export {
   API_URL,
@@ -18,5 +19,6 @@ export {
   PROVINCE_URL,
   ROLE_URL,
   USER_URL,
-  EDUCATION_GROUP_URL
+  EDUCATION_GROUP_URL,
+  EDUCATION_SUB_GROUP_URL
 };

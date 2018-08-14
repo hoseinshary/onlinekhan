@@ -5,7 +5,8 @@
       <span slot="title">{{modelName}}</span>
       <div slot="body">
         <my-btn-create v-if="pageAccess.canCreate"
-                       @click="showModalCreate"></my-btn-create>
+                       :label="`ایجاد (${modelName}) جدید`"
+                       @click="showModalCreate" />
         <br>
         <my-table :grid-data="cityGridData"
                   :columns="cityGridColumn"

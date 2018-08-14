@@ -92,6 +92,7 @@ const isObject = function(value) {
 const isBoolean = function(value) {
   return typeof value === 'boolean';
 };
+
 /**
  * handle logout
  */
@@ -104,6 +105,10 @@ const logout = function() {
   axios.defaults.headers.common['Token'] = '';
   router.push('/user/login');
 };
+
+/**
+ * مقدار دهی اولیه دسترسی
+ */
 const initAccess = function(modelName) {
   var actionsLst = {
     ایجاد: 'canCreate',
@@ -112,10 +117,11 @@ const initAccess = function(modelName) {
     دسترسی: 'canAccess',
     شهر: 'canCity'
   };
+
   var accessControl = LocalStorage.get
     .item('subMenuList')
-    .find(x => x.EnName.toLowerCase() == modelName);
-  debugger;
+    .find(x => x.EnName.toLowerCase() == modelName.toLowerCase());
+
   if (accessControl) {
     accessControl = accessControl.UserAccess;
   }

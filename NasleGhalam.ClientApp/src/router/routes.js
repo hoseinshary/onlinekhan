@@ -37,7 +37,7 @@ export default [
       },
       {
         path: '/user',
-        component: () => import('views/lesson')
+        component: () => import('views/user')
       },
       {
         path: '/educationGroup',
@@ -45,7 +45,7 @@ export default [
       },
       {
         path: '/educationSubGroup',
-        component: () => import('views/educationGroup')
+        component: () => import('views/educationSubGroup')
       }
     ]
   },

@@ -1,5 +1,5 @@
 <template>
-<section class="col-md-8">
+  <section class="col-md-8">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
@@ -8,8 +8,8 @@
                        :label="`ایجاد (${modelName}) جدید`"
                        @click="showModalCreate" />
         <br>
-        <my-table :grid-data="{__modelName}GridData"
-                  :columns="{__modelName}GridColumn"
+        <my-table :grid-data="educationSubGroupGridData"
+                  :columns="educationSubGroupGridColumn"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
@@ -24,7 +24,7 @@
       </div>
     </my-panel>
 
-  <!-- modals -->
+    <!-- modals -->
     <modal-create v-if="pageAccess.canCreate"></modal-create>
     <modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
@@ -44,12 +44,19 @@ export default {
    * data
    */
   data() {
-    var pageAccess = this.$util.initAccess('/{__modelName}'); 
+    var pageAccess = this.$util.initAccess('/educationSubGroup');
     return {
       pageAccess,
-      {__modelName}GridColumn: [
-        {__props}
-        ,{
+      educationSubGroupGridColumn: [
+        {
+          title: 'گروه آموزشی',
+          data: 'EducationGroupName'
+        },
+        {
+          title: 'نام',
+          data: 'Name'
+        },
+        {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
@@ -63,7 +70,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('{__modelNameStore}', [
+    ...mapActions('educationSubGroupStore', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -96,9 +103,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('{__modelNameStore}', {
+    ...mapState('educationSubGroupStore', {
       modelName: 'modelName',
-      {__modelName}GridData: '{__modelName}GridData'
+      educationSubGroupGridData: 'educationSubGroupGridData'
     })
   },
   created() {

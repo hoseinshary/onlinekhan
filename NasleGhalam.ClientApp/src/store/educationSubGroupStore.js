@@ -1,40 +1,30 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { USER_URL as baseUrl } from 'utilities/site-config';
-import { LocalStorage } from 'quasar';
-import router from 'router';
+import { EDUCATION_SUB_GROUP_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in userGridData by id
+ * find index of object in educationSubGroupGridData by id
  * @param {Number} id
  */
 function getIndexById(id) {
-  return store.state.userGridData.findIndex(o => o.Id == id);
+  return store.state.educationSubGroupGridData.findIndex(o => o.Id == id);
 }
 
 const store = {
   namespaced: true,
   state: {
-    modelName: 'کاربر',
+    modelName: 'زیر گروه آموزشی',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    userObj: {
+    educationSubGroupObj: {
       Id: 0,
       Name: '',
-      Family: '',
-      Username: '',
-      Password: '',
-      IsActive: false,
-      NationalNo: '',
-      Gender: false,
-      Phone: '',
-      Mobile: '',
-      RoleId: 0,
-      CityId: 0
+      EducationGroupId: 0,
+      EducationGroupName: ''
     },
-    userGridData: [],
-    userDdl: [],
+    educationSubGroupGridData: [],
+    educationSubGroupDdl: [],
     selectedId: 0,
     isModelChanged: true,
     createVue: null,
@@ -42,37 +32,40 @@ const store = {
   },
   mutations: {
     /**
-     * insert new userObj to userGridData
+     * insert new educationSubGroupObj to educationSubGroupGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.userObj);
+      let createdObj = util.cloneObject(state.educationSubGroupObj);
       createdObj.Id = id;
-      state.userGridData.push(createdObj);
+      state.educationSubGroupGridData.push(createdObj);
     },
 
     /**
-     * update userObj of userGridData
+     * update educationSubGroupObj of educationSubGroupGridData
      */
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.userObj, state.userGridData[index]);
+      util.mapObject(
+        state.educationSubGroupObj,
+        state.educationSubGroupGridData[index]
+      );
     },
 
     /**
-     * delete from userGridData
+     * delete from educationSubGroupGridData
      */
     delete(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.userGridData.splice(index, 1);
+      state.educationSubGroupGridData.splice(index, 1);
     },
 
     /**
-     * rest value of userObj
+     * rest value of educationSubGroupObj
      */
     reset(state, $v) {
-      util.clearObject(state.userObj);
+      util.clearObject(state.educationSubGroupObj);
       if ($v) {
         $v.$reset();
       }
@@ -85,7 +78,7 @@ const store = {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.userObj);
+        util.mapObject(response.data, state.educationSubGroupObj);
       });
     },
 
@@ -99,7 +92,7 @@ const store = {
 
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.userGridData = response.data;
+          state.educationSubGroupGridData = response.data;
         });
       }
     },
@@ -114,7 +107,7 @@ const store = {
 
         // get data
         axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-          state.userDdl = response.data;
+          state.educationSubGroupDdl = response.data;
         });
       }
     },
@@ -124,8 +117,8 @@ const store = {
      */
     validateFormStore({ dispatch }, vm) {
       // check instance validation
-      vm.$v.userObj.$touch();
-      if (vm.$v.userObj.$error) {
+      vm.$v.educationSubGroupObj.$touch();
+      if (vm.$v.educationSubGroupObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
@@ -164,26 +157,28 @@ const store = {
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.userObj).then(response => {
-          let data = response.data;
+        axios
+          .post(`${baseUrl}/Create`, state.educationSubGroupObj)
+          .then(response => {
+            let data = response.data;
 
-          if (data.MessageType == 1) {
-            commit('insert', data.Id);
-            dispatch('toggleModelChangeStore', true);
-            dispatch('resetCreateStore');
-            dispatch('toggleModalCreateStore', !closeModal);
-          }
+            if (data.MessageType == 1) {
+              commit('insert', data.Id);
+              dispatch('toggleModelChangeStore', true);
+              dispatch('resetCreateStore');
+              dispatch('toggleModalCreateStore', !closeModal);
+            }
 
-          dispatch(
-            'notify',
-            {
-              body: data.Message,
-              type: data.MessageType,
-              vm: vm
-            },
-            { root: true }
-          );
-        });
+            dispatch(
+              'notify',
+              {
+                body: data.Message,
+                type: data.MessageType,
+                vm: vm
+              },
+              { root: true }
+            );
+          });
       });
     },
 
@@ -217,26 +212,28 @@ const store = {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.userObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.userObj).then(response => {
-          let data = response.data;
-          if (data.MessageType == 1) {
-            commit('update');
-            dispatch('toggleModelChangeStore', true);
-            dispatch('resetEditStore');
-            dispatch('toggleModalEditStore', false);
-          }
+        state.educationSubGroupObj.Id = state.selectedId;
+        axios
+          .post(`${baseUrl}/Update`, state.educationSubGroupObj)
+          .then(response => {
+            let data = response.data;
+            if (data.MessageType == 1) {
+              commit('update');
+              dispatch('toggleModelChangeStore', true);
+              dispatch('resetEditStore');
+              dispatch('toggleModalEditStore', false);
+            }
 
-          dispatch(
-            'notify',
-            {
-              body: data.Message,
-              type: data.MessageType,
-              vm: vm
-            },
-            { root: true }
-          );
-        });
+            dispatch(
+              'notify',
+              {
+                body: data.Message,
+                type: data.MessageType,
+                vm: vm
+              },
+              { root: true }
+            );
+          });
       });
     },
 
@@ -279,40 +276,12 @@ const store = {
           { root: true }
         );
       });
-    },
-    //------------------------------------------------
-
-    /**
-     * login to website
-     */
-    loginStore({ dispatch, state }, vm) {
-      axios.post(`${baseUrl}/Login`, state.instanceLoginObj).then(response => {
-        let data = response.data;
-
-        dispatch(
-          'notify',
-          { body: data.Message, type: data.MessageType, vm: vm },
-          { root: true }
-        );
-
-        if (data.MessageType == 1) {
-          axios.defaults.headers.common['Token'] = data.Token;
-          LocalStorage.set('Token', data.Token);
-          LocalStorage.set('FullName', data.FullName);
-          LocalStorage.set(
-            'authList',
-            data.SubMenus.map(x => x.EnName.toLowerCase())
-          );
-          LocalStorage.set('menuList', data.Menus);
-          LocalStorage.set('subMenuList', data.SubMenus);
-          router.push(data.DefaultPage);
-        }
-      });
     }
+    //------------------------------------------------
   },
   getters: {
     recordName(state) {
-      return state.userObj.Name;
+      return state.educationSubGroupObj.Name;
     }
   }
 };

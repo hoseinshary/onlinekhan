@@ -1,5 +1,5 @@
 <template>
-<section class="col-md-8">
+  <section class="col-xs-12 q-px-md">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
@@ -8,8 +8,8 @@
                        :label="`ایجاد (${modelName}) جدید`"
                        @click="showModalCreate" />
         <br>
-        <my-table :grid-data="{__modelName}GridData"
-                  :columns="{__modelName}GridColumn"
+        <my-table :grid-data="userGridData"
+                  :columns="userGridColumn"
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
@@ -24,9 +24,9 @@
       </div>
     </my-panel>
 
-  <!-- modals -->
-    <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
+    <!-- modals -->
+    <!-- <modal-create v-if="pageAccess.canCreate"></modal-create>
+    <modal-edit v-if="pageAccess.canEdit"></modal-edit> -->
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
@@ -36,20 +36,59 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
+    // 'modal-create': () => import('./create'),
+    // 'modal-edit': () => import('./edit'),
     'modal-delete': () => import('./delete')
   },
   /**
    * data
    */
   data() {
-    var pageAccess = this.$util.initAccess('/{__modelName}'); 
+    var pageAccess = this.$util.initAccess('/user');
     return {
       pageAccess,
-      {__modelName}GridColumn: [
-        {__props}
-        ,{
+      userGridColumn: [
+        {
+          title: 'نام',
+          data: 'Name'
+        },
+        {
+          title: 'نام خانوادگی',
+          data: 'Family'
+        },
+        {
+          title: 'نام کاربری',
+          data: 'Username'
+        },
+        {
+          title: 'فعال',
+          data: 'IsActive'
+        },
+        {
+          title: 'کد ملی',
+          data: 'NationalNo'
+        },
+        {
+          title: 'جنسیت',
+          data: 'Gender'
+        },
+        {
+          title: 'تلفن ثابت',
+          data: 'Phone'
+        },
+        {
+          title: 'موبایل',
+          data: 'Mobile'
+        },
+        {
+          title: 'نقش',
+          data: 'RoleName'
+        },
+        {
+          title: 'شهر',
+          data: 'CityName'
+        },
+        {
           title: 'عملیات',
           data: 'Id',
           searchable: false,
@@ -63,7 +102,7 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('{__modelNameStore}', [
+    ...mapActions('userStore', [
       'toggleModalCreateStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
@@ -96,9 +135,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('{__modelNameStore}', {
+    ...mapState('userStore', {
       modelName: 'modelName',
-      {__modelName}GridData: '{__modelName}GridData'
+      userGridData: 'userGridData'
     })
   },
   created() {

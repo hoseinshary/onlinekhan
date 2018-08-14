@@ -1,7 +1,7 @@
 import { required, displayName, maxLength } from 'plugins/vuelidate';
 
 export default {
-  instanceLoginObj: {
+  loginObj: {
     UserName: {
       displayName: displayName('نام کاربری'),
       maxLength: maxLength(50),

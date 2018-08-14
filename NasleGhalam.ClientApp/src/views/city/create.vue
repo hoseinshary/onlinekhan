@@ -3,15 +3,16 @@
                    :show="isOpenModalCreate"
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
+                   @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
 
-    <my-input :model="$v.city.Name"
-              class="col-md-6" />
-
     <my-select :model="$v.cityObj.ProvinceId"
-               :options="a"
+               :options="provinceDdl"
                class="col-md-6"
                clearable />
+
+    <my-input :model="$v.cityObj.Name"
+              class="col-md-6" />
 
   </my-modal-create>
 </template>
@@ -25,21 +26,33 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('{__modelNameStore}', [
+    ...mapActions('cityStore', [
       'toggleModalCreateStore',
       'createVueStore',
       'submitCreateStore',
       'resetCreateStore'
-    ])
+    ]),
+    ...mapActions('provinceStore', {
+      fillProvinceDdlStore: 'fillDdlStore'
+    }),
+    setProvinceName(item) {
+      this.cityObj.ProvinceName = item.label;
+    },
+    modalOpen() {
+      this.fillProvinceDdlStore();
+    }
   },
   /**
    * computed
    */
   computed: {
-    ...mapState('{__modelNameStore}', {
+    ...mapState('cityStore', {
       modelName: 'modelName',
       cityObj: 'cityObj',
       isOpenModalCreate: 'isOpenModalCreate'
+    }),
+    ...mapState('provinceStore', {
+      provinceDdl: 'provinceDdl'
     })
   },
   /**

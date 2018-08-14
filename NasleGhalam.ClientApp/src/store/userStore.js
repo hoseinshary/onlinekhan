@@ -38,7 +38,11 @@ const store = {
     selectedId: 0,
     isModelChanged: true,
     createVue: null,
-    editVue: null
+    editVue: null,
+    loginObj: {
+      UserName: '',
+      Password: ''
+    }
   },
   mutations: {
     /**
@@ -286,14 +290,8 @@ const store = {
      * login to website
      */
     loginStore({ dispatch, state }, vm) {
-      axios.post(`${baseUrl}/Login`, state.instanceLoginObj).then(response => {
+      axios.post(`${baseUrl}/Login`, state.loginObj).then(response => {
         let data = response.data;
-
-        dispatch(
-          'notify',
-          { body: data.Message, type: data.MessageType, vm: vm },
-          { root: true }
-        );
 
         if (data.MessageType == 1) {
           axios.defaults.headers.common['Token'] = data.Token;
@@ -306,6 +304,12 @@ const store = {
           LocalStorage.set('menuList', data.Menus);
           LocalStorage.set('subMenuList', data.SubMenus);
           router.push(data.DefaultPage);
+        } else {
+          dispatch(
+            'notify',
+            { body: data.Message, type: data.MessageType, vm: vm },
+            { root: true }
+          );
         }
       });
     }

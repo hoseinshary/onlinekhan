@@ -13,11 +13,11 @@
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
-            <my-btn-edit round
-                         v-if="pageAccess.canEdit"
+            <my-btn-edit v-if="pageAccess.canEdit"
+                         round
                          @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete round
-                           v-if="pageAccess.canDelete"
+            <my-btn-delete v-if="pageAccess.canDelete"
+                           round
                            @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table>
@@ -25,9 +25,9 @@
     </my-panel>
 
     <!-- modals -->
-    <modal-create></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
+    <modal-create v-if="pageAccess.canCreate"></modal-create>
+    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
+    <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
 
@@ -49,12 +49,12 @@ export default {
       pageAccess,
       cityGridColumn: [
         {
-          title: 'Name',
-          data: 'Name'
+          title: 'استان',
+          data: 'ProvinceName'
         },
         {
-          title: 'ProvinceId',
-          data: 'ProvinceId'
+          title: 'نام شهر',
+          data: 'Name'
         },
         {
           title: 'عملیات',

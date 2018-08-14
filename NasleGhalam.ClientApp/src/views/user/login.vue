@@ -1,7 +1,5 @@
-
 <template>
   <div class="login">
-    <!-- <loading></loading> -->
     <div class="limiter">
       <div class="container-login100"
            style="background-image: url('../../assets/img/bg.jpg');">
@@ -22,9 +20,9 @@
                 <span class="login200-form-title p-b-34 p-t-27">
                   ورود به سامانه
                 </span>
-                <my-input :model="$v.instanceLoginObj.UserName"
+                <my-input :model="$v.loginObj.UserName"
                           class="col-md-6" />
-                <my-input :model="$v.instanceLoginObj.Password"
+                <my-input :model="$v.loginObj.Password"
                           type="password"
                           class="col-md-6"
                           @keyup.enter="login" />
@@ -69,7 +67,7 @@ export default {
   },
   computed: {
     ...mapState({
-      instanceLoginObj: s => s.userStore.instanceLoginObj
+      loginObj: s => s.userStore.loginObj
     })
   }
 };

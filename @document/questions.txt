@@ -1,1 +1,21 @@
-مفاهیم request response در web api با کمک postman
+---access---
+توضیح ساز و کار دسترسی
+
+--- user ---
+1-تبدیل UserGetWiewModel به UserViewModel
+2-حذف پراپرتی های اضافه در createViewModel مثل cityName و roleName
+(خودم حذفشون کردم)
+3- متد getById نیازی به cityName و roleName ندارد
+4- متد  getAll به مورد بالا نیاز دارد
+5-مقدار جنسیت بولیین میباشد. پس باید از سمت سرور به (دختر و پسر تبدیل شود)
+(فقط در متد getAll)
+6- خط 144 در سرویس کاربر بررسی شود
+
+
+--- city ---
+1-اضاف کردن GetAllDdl در ProvinceController 
+ و ایجاد دسترسی برای شهر و کاربر
+ 
+--- province ---
+1-اضاف کردن GetAllByProvinceIdDdl در CityController 
+و همچنین ایجاد دسترسی برای کاربر

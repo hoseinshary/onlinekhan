@@ -8,12 +8,12 @@ import {
 export default {
   cityObj: {
     Name: {
-      displayName: displayName('Name'),
+      displayName: displayName('نام'),
       maxLength: maxLength(50),
       required
     },
     ProvinceId: {
-      displayName: displayName('ProvinceId'),
+      displayName: displayName('استان'),
       requiredDdl: requiredDdl(0)
     }
   }

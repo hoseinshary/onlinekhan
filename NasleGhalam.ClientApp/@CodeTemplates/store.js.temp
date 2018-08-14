@@ -82,12 +82,11 @@ const store = {
      */
     fillGridStore({ state, dispatch }) {
       // fill grid if modelChanged
-      if (state.isModelChanged) {
-        dispatch('toggleModelChangeStore', false);
-        
+      if (state.isModelChanged) {        
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
           state.{__modelName}GridData = response.data;
+          dispatch('toggleModelChangeStore', false);
         });
       }
     },
@@ -98,11 +97,10 @@ const store = {
     fillDdlStore({ state, dispatch }) {
       // fill grid if modelChanged
       if (state.isModelChanged) {
-        dispatch('toggleModelChangeStore', false);
-
         // get data
         axios.get(`${baseUrl}/GetAllDdl`).then(response => {
           state.{__modelName}Ddl = response.data;
+          dispatch('toggleModelChangeStore', false);
         });
       }
     },

@@ -20,11 +20,13 @@ const store = {
     cityObj: {
       Id: 0,
       Name: '',
-      ProvinceId: 0
+      ProvinceId: 0,
+      ProvinceName: ''
     },
     cityGridData: [],
     cityDdl: [],
     selectedId: 0,
+    isModelChanged: true,
     createVue: null,
     editVue: null
   },
@@ -80,19 +82,31 @@ const store = {
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.cityGridData = response.data;
-      });
+    fillGridStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.cityGridData = response.data;
+        });
+      }
     },
 
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.cityDdl = response.data;
-      });
+    fillDdlStore({ state, dispatch }) {
+      // fill grid if modelChanged
+      if (state.isModelChanged) {
+        dispatch('toggleModelChangeStore', false);
+
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.cityDdl = response.data;
+        });
+      }
     },
 
     /**
@@ -100,13 +114,21 @@ const store = {
      */
     validateFormStore({ dispatch }, vm) {
       // check instance validation
-      vm.$v.gradeObj.$touch();
-      if (vm.$v.gradeObj.$error) {
+      vm.$v.cityObj.$touch();
+      if (vm.$v.cityObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
 
       return true;
+    },
+
+    /**
+     * change isModelChange
+     * @param {Boolean} b
+     */
+    toggleModelChangeStore({ state }, b) {
+      state.isModelChanged = b;
     },
 
     //### create section ###
@@ -137,6 +159,7 @@ const store = {
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
+            dispatch('toggleModelChangeStore', true);
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
@@ -189,6 +212,7 @@ const store = {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
+            dispatch('toggleModelChangeStore', true);
             dispatch('resetEditStore');
             dispatch('toggleModalEditStore', false);
           }
@@ -231,6 +255,7 @@ const store = {
         if (data.MessageType == 1) {
           commit('delete');
           commit('reset');
+          dispatch('toggleModelChangeStore', true);
           dispatch('toggleModalDeleteStore', false);
         }
 

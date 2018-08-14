@@ -11,6 +11,11 @@
         <my-table :grid-data="userGridData"
                   :columns="userGridColumn"
                   hasIndex>
+          <template slot="IsActive"
+                    slot-scope="data">
+            <q-checkbox v-model="data.row.Gender"
+                        readonly />
+          </template>
           <template slot="Id"
                     slot-scope="data">
             <my-btn-edit v-if="pageAccess.canEdit"
@@ -25,8 +30,8 @@
     </my-panel>
 
     <!-- modals -->
-    <!-- <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit> -->
+    <!-- <modal-create v-if="pageAccess.canCreate"></modal-create> -->
+    <!--<modal-edit v-if="pageAccess.canEdit"></modal-edit> -->
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
@@ -57,20 +62,23 @@ export default {
           data: 'Family'
         },
         {
-          title: 'نام کاربری',
-          data: 'Username'
-        },
-        {
-          title: 'فعال',
-          data: 'IsActive'
+          title: 'جنسیت',
+          data: 'Gender'
+          // render(data, type, row) {
+          //   return data ? 'پسر' : 'دختر';
+          // }
         },
         {
           title: 'کد ملی',
           data: 'NationalNo'
         },
         {
-          title: 'جنسیت',
-          data: 'Gender'
+          title: 'نام کاربری',
+          data: 'Username'
+        },
+        {
+          title: 'فعال',
+          data: 'IsActive'
         },
         {
           title: 'تلفن ثابت',

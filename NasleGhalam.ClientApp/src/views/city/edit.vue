@@ -3,15 +3,16 @@
                  :show="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
+                 @open="modalOpen"
                  @close="toggleModalEditStore(false)">
 
-    <my-input :model="$v.city.Name"
-              class="col-md-6" />
-
     <my-select :model="$v.cityObj.ProvinceId"
-               :options="a"
+               :options="provinceDdl"
                class="col-md-6"
                clearable />
+
+    <my-input :model="$v.cityObj.Name"
+              class="col-md-6" />
 
   </my-modal-edit>
 </template>
@@ -30,7 +31,16 @@ export default {
       'editVueStore',
       'submitEditStore',
       'resetEditStore'
-    ])
+    ]),
+    ...mapActions('provinceStore', {
+      fillProvinceDdlStore: 'fillDdlStore'
+    }),
+    setProvinceName(item) {
+      this.cityObj.ProvinceName = item.label;
+    },
+    modalOpen() {
+      this.fillProvinceDdlStore();
+    }
   },
   /**
    * computed
@@ -40,6 +50,9 @@ export default {
       modelName: 'modelName',
       cityObj: 'cityObj',
       isOpenModalEdit: 'isOpenModalEdit'
+    }),
+    ...mapState('provinceStore', {
+      provinceDdl: 'provinceDdl'
     })
   },
   /**

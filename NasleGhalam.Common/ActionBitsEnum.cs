@@ -24,10 +24,10 @@
         CityUpdateAccess = 15,
         CityDeleteAccess = 16,
 
-        //EducationGroup_LessonCreateAccess = 13,
-        //EducationGroup_LessonReadAccess = 14,
-        //EducationGroup_LessonUpdateAccess = 15,
-        //EducationGroup_LessonDeleteAccess = 16,
+        EducationGroup_LessonCreateAccess = 13,
+        EducationGroup_LessonReadAccess = 14,
+        EducationGroup_LessonUpdateAccess = 15,
+        EducationGroup_LessonDeleteAccess = 16,
 
         GradeReadAccess = 17,
         GradeCreateAccess = 18,

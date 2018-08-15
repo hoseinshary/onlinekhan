@@ -73,8 +73,9 @@
     <Compile Include="Exam\ExamViewModel.cs" />
     <Compile Include="Lesson\LessonCreateAndUpdateViewModel.cs" />
     <Compile Include="Province\ProvinceViewModel.cs" />
+    <Compile Include="Ratio\RatioExcludeLessonViewModel.cs" />
     <Compile Include="Ratio\RatioViewModel.cs" />
-    <Compile Include="Ratio\RatioCreateModel.cs" />
+    <Compile Include="Ratio\RatioCreateModelViewModel.cs" />
     <Compile Include="Role\RoleAccessViewModel.cs" />
     <Compile Include="Role\RoleViewModel.cs" />
     <Compile Include="Topic\TopicCreateViewModel.cs" />

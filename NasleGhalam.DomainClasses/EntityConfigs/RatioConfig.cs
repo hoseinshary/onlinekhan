@@ -8,7 +8,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         public RatioConfig()
         {
             this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(200).IsRequired();
+            this.Property(x => x.Name).HasMaxLength(200);
 
             this.HasRequired(x => x.EducationSubGroup)
                 .WithMany(x => x.Ratios)

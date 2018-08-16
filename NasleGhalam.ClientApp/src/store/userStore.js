@@ -36,7 +36,8 @@ const store = {
     userGridData: [],
     userDdl: [],
     selectedId: 0,
-    isModelChanged: true,
+    ddlModelChanged: true,
+    gridModelChanged: true,
     createVue: null,
     editVue: null,
     loginObj: {
@@ -96,14 +97,13 @@ const store = {
     /**
      * fill grid data
      */
-    fillGridStore({ state, dispatch }) {
+    fillGridStore({ state }) {
       // fill grid if modelChanged
-      if (state.isModelChanged) {
-        dispatch('toggleModelChangeStore', false);
-
+      if (state.gridModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
           state.userGridData = response.data;
+          state.gridModelChanged = false;
         });
       }
     },
@@ -111,14 +111,13 @@ const store = {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state, dispatch }) {
+    fillDdlStore({ state }) {
       // fill grid if modelChanged
-      if (state.isModelChanged) {
-        dispatch('toggleModelChangeStore', false);
-
+      if (state.ddlModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAllDdl`).then(response => {
           state.userDdl = response.data;
+          state.ddlModelChanged = false;
         });
       }
     },
@@ -138,11 +137,11 @@ const store = {
     },
 
     /**
-     * change isModelChange
-     * @param {Boolean} b
+     * model changed
      */
-    toggleModelChangeStore({ state }, b) {
-      state.isModelChanged = b;
+    modelChangedStore({ state }) {
+      state.ddlModelChanged = true;
+      state.gridModelChanged = true;
     },
 
     //### create section ###
@@ -173,7 +172,7 @@ const store = {
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
-            dispatch('toggleModelChangeStore', true);
+            dispatch('modelChangedStore');
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
@@ -226,7 +225,7 @@ const store = {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
-            dispatch('toggleModelChangeStore', true);
+            dispatch('modelChangedStore');
             dispatch('resetEditStore');
             dispatch('toggleModalEditStore', false);
           }
@@ -269,7 +268,7 @@ const store = {
         if (data.MessageType == 1) {
           commit('delete');
           commit('reset');
-          dispatch('toggleModelChangeStore', true);
+          dispatch('modelChangedStore');
           dispatch('toggleModalDeleteStore', false);
         }
 

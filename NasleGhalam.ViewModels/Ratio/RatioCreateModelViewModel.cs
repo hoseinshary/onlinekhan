@@ -10,7 +10,7 @@ namespace NasleGhalam.ViewModels.Ratio
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationGroupId { get; set; }
 
-        public List<RatioViewModel> RatioViewModels { get; set; }   
+        public List<RatioExcludeLessonViewModel> RatioViewModels { get; set; }   
 
     }
 }

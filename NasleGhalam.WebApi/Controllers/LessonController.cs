@@ -54,6 +54,20 @@ namespace NasleGhalam.WebApi.Controllers
             });
         }
 
+        [HttpPost]
+        [CheckUserAccess(ActionBits.LessonCreateAccess)]
+        [CheckModelValidation]
+        public IHttpActionResult CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateAndUpdateViewModel)
+        {
+            var msgRes = _lessonService.CreateLessonWithRatio(lessonCreateAndUpdateViewModel);
+            return Ok(new MessageResultApi
+            {
+                Message = msgRes.FaMessage,
+                MessageType = msgRes.MessageType,
+                Id = msgRes.Id
+            });
+        }
+
 
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonUpdateAccess)]

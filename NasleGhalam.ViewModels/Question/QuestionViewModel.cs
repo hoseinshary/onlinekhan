@@ -1,70 +1,72 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using NasleGhalam.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace NasleGhalam.ViewModels.Question
 {
     public class QuestionViewModel
     {
-        
+        [Display(Name = "")]
         public int Id { get; set; }
 
 
-        [Display(Name = "متن سوال")]
+        [Display(Name = "")]
         public string Context { get; set; }
 
 
-        [Display(Name = "شماره سوال در کتاب اصلی")]
+        [Display(Name = "")]
         public int QuestionNumber { get; set; }
 
 
-        [Display(Name = "نوع سوال")]
-        //TODO:Complate Instance Lookup 
-        public int QuestionTypeId { get; set; }
+        [Display(Name = "")]
+        public int LookupId_QuestionType { get; set; }
 
-        [Display(Name = "نمره سوال")]
+
+        [Display(Name = "")]
         public int QuestionPoint { get; set; }
 
-        [Display(Name = "سختی سوال")]
-        //TODO:Complate Instance Lookup 
-        public int QuestionHardnessTypeId { get; set; }
 
-        [Display(Name = "تکرار")]
-        //TODO:Complate Lookup Instance
-        public int ReapetnessTypeId { get; set; }
+        [Display(Name = "")]
+        public int LookupId_QuestionHardnessType { get; set; }
 
-        [Display(Name = "ارزبابی")]
+
+        [Display(Name = "")]
+        public int LookupId_ReapetnessType { get; set; }
+
+
+        [Display(Name = "")]
         public bool UseEvaluation { get; set; }
 
-        [Display(Name = "استاندارد")]
+
+        [Display(Name = "")]
         public bool IsStandard { get; set; }
 
-        [Display(Name = "نوع طراح")]
+
+        [Display(Name = "")]
         public byte AuthorType { get; set; }
 
-        [Display(Name = "طراح")]
+
+        [Display(Name = "")]
         public string AuthorName { get; set; }
 
-        [Display(Name = "زمان پاسخ")]
+
+        [Display(Name = "")]
         public short ResponseSecond { get; set; }
 
-        [Display(Name = "توضیحات")]
+
+        [Display(Name = "")]
         public string Description { get; set; }
 
-        [Display(Name = "تاریخ ثبت")]
+
+        [Display(Name = "")]
         public DateTime InsertDateTime { get; set; }
 
-        [Display(Name = "کاربر ثبت کننده")]
+
+        [Display(Name = "")]
         public int UserId { get; set; }
 
-        [Display(Name = "کاربر ثبت کننده")]
-        public string UserName { get; set; }
 
-        [Display(Name = "کتاب")]
+        [Display(Name = "")]
         public int AxillaryBookId { get; set; }
-
-        [Display(Name = "کتاب")]
-        public string AxillaryBookName { get; set; }
 
 
     }

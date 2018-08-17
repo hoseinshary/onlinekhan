@@ -38,7 +38,6 @@ namespace NasleGhalam.ServiceLayer.Services
                     Id = current.Id,
                     Name = current.Name,
                     Priority = current.Priority,
-                    
                 }).FirstOrDefault();
         }
 

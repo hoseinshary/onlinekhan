@@ -22,7 +22,7 @@ namespace NasleGhalam.ServiceLayer.Configs
             AutoMapper.Mapper.Initialize(config =>
             {
                 config.CreateMap<LessonViewModel, Lesson>();
-                config.CreateMap<EducationGroupViewModel, EducationGroup>();
+                config.CreateMap<ViewModels.EducationGroup.EducationGroupViewModel, EducationGroup>();
                 config.CreateMap<EducationGroup_LessonViewModel, EducationGroup_Lesson>();
 
                 config.CreateMap<RoleViewModel, Role>();
@@ -41,7 +41,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<ExamViewModel, Exam>();
 
                 config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
-                config.CreateMap<RatioViewModel, Ratio>();
+                config.CreateMap<ViewModels.Ratio.RatioViewModel, Ratio>();
 
 
 

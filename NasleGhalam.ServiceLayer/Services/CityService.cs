@@ -37,7 +37,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Id = current.Id,
                     Name = current.Name,
                     ProvinceId = current.ProvinceId,
-                 // ProvinceName = current.Province.Name
+                    // ProvinceName = current.Province.Name
                 }).FirstOrDefault();
         }
 
@@ -115,13 +115,15 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه شهر ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
+        public IList<SelectViewModel> GetAllByProvinceIdDdl(int provinceId)
         {
-            return _cities.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
+            return _cities
+                .Where(current => current.ProvinceId == provinceId)
+                .Select(current => new SelectViewModel
+                {
+                    value = current.Id,
+                    label = current.Name
+                }).ToList();
         }
     }
 }

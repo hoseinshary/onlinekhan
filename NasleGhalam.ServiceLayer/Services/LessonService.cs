@@ -120,7 +120,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var crLessEdu = new EducationGroup_LessonService(_uow);
             var crRatio = new RatioService(_uow);
 
-            foreach (var item in lessonCreateViewModel.RatioCreateViewModels)
+            foreach (var item in lessonCreateViewModel.EducationGroups)
             {
                 //second:create EducationGroup_LessonService
                 var educationGroupLesson = new EducationGroup_LessonViewModel()
@@ -132,9 +132,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 msgResEducationGroupLesson = crLessEdu.Create(educationGroupLesson);
 
                 //third create ratio
-                foreach (var VARIABLE in item.RatioViewModels)
+                foreach (var VARIABLE in item.Ratios)
                 {
-                    var ratio = new RatioViewModel()
+                    var ratio = new ViewModels.Ratio.RatioViewModel()
                     {
                         Rate = VARIABLE.Rate,
                         EducationSubGroupId = VARIABLE.EducationSubGroupId,

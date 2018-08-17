@@ -74,5 +74,9 @@
         RatioCreateAccess = 51,
         RatioUpdateAccess = 52,
         RatioDeleteAccess = 53,
+        QuestionCreateAccess = 54,
+        QuestionUpdateAccess = 55,
+        QuestionDeleteAccess = 56,
+        QuestionReadAccess = 57,
     }
 }

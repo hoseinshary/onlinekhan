@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using NasleGhalam.ViewModels._Attributes;
 
-namespace NasleGhalam.ViewModels.Ratio
+namespace NasleGhalam.ViewModels.Lesson
 {
-    public class RatioExcludeLessonViewModel
+    public class RatioLessonViewModel
     {
 
         public int Id { get; set; }

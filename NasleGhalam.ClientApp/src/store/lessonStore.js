@@ -1,6 +1,9 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { LESSON_URL as baseUrl } from 'utilities/site-config';
+import {
+  LESSON_URL as baseUrl,
+  EDUCATION_GROUP_URL
+} from 'utilities/site-config';
 
 export default {
   namespaced: true,
@@ -99,48 +102,68 @@ export default {
     /**
      * vlidate form
      */
-    validateFormStore({ dispatch }, vm) {
+    validateFormStore({ state, dispatch }, vm) {
+      var flag = true;
+      var message = '';
+      state.eduGroupAndEduSubGroupLst
+        .filter(x => x.IsChecked)
+        .forEach(groups => {
+          groups.SubGroups.forEach(group => {
+            if (group.Ratio < 0 || group.Ratio > 10) {
+              flag = false;
+              message += group.Name + ' و ';
+            }
+          });
+        });
       debugger;
-      // check instance validation
-      vm.$v.instanceObj.$touch();
-      if (vm.$v.instanceObj.$error) {
-        dispatch('notifyInvalidForm', vm, { root: true });
-        return false;
+      if (!flag) {
+        var cnt = message.split(' و ').length;
+        dispatch(
+          'notify',
+          {
+            body:
+              message.substring(0, message.length - 2) +
+              '، باید بین 0 تا 10 ' +
+              (cnt > 2 ? 'باشند.' : 'باشد.'),
+            type: 0,
+            vm: vm
+          },
+          { root: true }
+        );
       }
-
-      return true;
+      return flag;
     },
 
     /**
      * fill dropDwon EduGroupAndEduSubGroup
      */
-    getAllEduGroupAndEduSubGroup_CreateStore({ state }) {
-      state.eduGroupAndEduSubGroupLst = [
-        {
-          Id: 1,
-          Name: 'ریاضی',
-          IsChecked: false,
-          SubGroups: [
-            { Name: 'ریاضی 1', Id: 10, Ratio: null },
-            { Name: 'ریاضی 2', Id: 20, Ratio: null }
-          ]
-        },
-        {
-          Id: 2,
-          Name: 'تجربی',
-          IsChecked: false,
-          SubGroups: [
-            { Name: 'تجربی 1', Id: 30, Ratio: null },
-            { Name: 'تجربی 2', Id: 40, Ratio: null },
-            { Name: 'تجربی 3', Id: 50, Ratio: null }
-          ]
-        }
-      ];
-      // axios
-      //   .get(`${baseUrl}/getAllEduGroupAndEduSubGroup_Create`)
-      //   .then(response => {
-      //     state.eduGroupAndEduSubGroupLst = response.data;
-      //   });
+    getAllEduGroupAndEduSubGroupStore({ state }) {
+      // state.eduGroupAndEduSubGroupLst = [
+      //   {
+      //     Id: 1,
+      //     Name: 'ریاضی',
+      //     IsChecked: false,
+      //     SubGroups: [
+      //       { Name: 'ریاضی 1', Id: 10, Ratio: null },
+      //       { Name: 'ریاضی 2', Id: 20, Ratio: null }
+      //     ]
+      //   },
+      //   {
+      //     Id: 2,
+      //     Name: 'تجربی',
+      //     IsChecked: false,
+      //     SubGroups: [
+      //       { Name: 'تجربی 1', Id: 30, Ratio: null },
+      //       { Name: 'تجربی 2', Id: 40, Ratio: null },
+      //       { Name: 'تجربی 3', Id: 50, Ratio: null }
+      //     ]
+      //   }
+      // ];
+      axios
+        .get(`${EDUCATION_GROUP_URL}/GetAllEducationWithSubGroups`)
+        .then(response => {
+          state.eduGroupAndEduSubGroupLst = response.data;
+        });
     },
 
     //### create section ###
@@ -162,9 +185,9 @@ export default {
      * submit create data
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
-      debugger;
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
+        debugger;
         if (!isValid) return;
 
         axios

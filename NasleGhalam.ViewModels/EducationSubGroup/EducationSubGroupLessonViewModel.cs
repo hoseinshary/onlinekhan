@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NasleGhalam.ViewModels.EducationSubGroup
 {
-    public class EducationSubGroupViewModel
+    public class EducationSubGroupLessonViewModel
     {
 
         public int EducationSubGroupId { get; set; }
@@ -15,12 +15,8 @@ namespace NasleGhalam.ViewModels.EducationSubGroup
         public string Name { get; set; }
 
 
-        [Display(Name = "گروه آموزشی")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
-        public int EducationGroupId { get; set; }
+        public byte Ratio { get; set; }
 
-        [Display(Name = "گروه آموزشی")]
-        public string EducationGroupName { get; set; }
 
     }
 }

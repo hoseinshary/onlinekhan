@@ -34,7 +34,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new EducationSubGroupViewModel
                 {
-                    Id = current.Id,
+                    EducationSubGroupId = current.Id,
                     Name = current.Name,
                     EducationGroupId = current.EducationGroupId
                 }).FirstOrDefault();
@@ -50,7 +50,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _educationSubGroups.Select(current => new EducationSubGroupViewModel()
             {
                 
-                Id = current.Id,
+                EducationSubGroupId = current.Id,
                 Name = current.Name,
                 EducationGroupId = current.EducationGroupId,
                 EducationGroupName = current.EducationGroup.Name

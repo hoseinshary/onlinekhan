@@ -2,15 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using NasleGhalam.ViewModels._Attributes;
 
-namespace NasleGhalam.ViewModels.Ratio
+namespace NasleGhalam.ViewModels.Lesson
 {
-    public class RatioCreateViewModel
+    public class EducationGroupLessonViewModel
     {
         [Display(Name = "گروه آموزشی")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationGroupId { get; set; }
 
-        public List<RatioExcludeLessonViewModel> RatioViewModels { get; set; }   
+        public List<RatioLessonViewModel> Ratios { get; set; }   
 
     }
 }

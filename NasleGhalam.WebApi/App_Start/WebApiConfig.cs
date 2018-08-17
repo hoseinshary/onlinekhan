@@ -22,7 +22,7 @@ namespace NasleGhalam.WebApi
             //var cors = new EnableCorsAttribute("http://localhost:8080,http://192.168.1.62,http://151.233.58.224:8080", "*", "*");
             var cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
-            //------------------------------
+            ////------------------------------
 
 
             // config formatter

@@ -63,25 +63,26 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 var educationGroups = _educationGroups.Select(current => new EducationGroupIsCheckedViewModel()
                 {
-                    Id = current.Id,
+                    EducationGroupId = current.Id,
                     Name = current.Name
                 }).ToList();
 
                 foreach (var item in educationGroups)
                 {
-                    int educationGroupkeySearch = item.Id;
+                    int educationGroupkeySearch = item.EducationGroupId;
                     var subGroups = _educationSubGroups
                         .Where(current => current.EducationGroupId == educationGroupkeySearch)
-                        .Select(current => new EducationSubGroupViewModel
+                        .Select(current => new EducationSubGroupLessonViewModel
                         {
-                            Id = current.Id,
+
+                            EducationSubGroupId = current.Id,
                             Name = current.Name,
-                            EducationGroupId = current.EducationGroupId,
+                            
 
                         }).ToList();
                     EducationGroupWithSubGroupsViewModel model = new EducationGroupWithSubGroupsViewModel()
                     {
-                        EducationGroups = item,
+                        EducationGroup = item,
                         SubGroups = subGroups
                     };
                     returnVal.Add(model);
@@ -97,22 +98,22 @@ namespace NasleGhalam.ServiceLayer.Services
                     int educationGroupkeySearch = item.EducationGroupId;
                     var eduIsChecked = new EducationGroupIsCheckedViewModel()
                     {
-                        Id = item.EducationGroupId,
+                        EducationGroupId = item.EducationGroupId,
                         Name = item.EducatioGroupName,
                         IsChecked = item.IsChecked
                     };
                     var subGroups = _educationSubGroups
                         .Where(current => current.EducationGroupId == educationGroupkeySearch)
-                        .Select(current => new EducationSubGroupViewModel
+                        .Select(current => new EducationSubGroupLessonViewModel
                         {
-                            Id = current.Id,
-                            Name = current.Name,
-                            EducationGroupId = current.EducationGroupId,
+                            EducationSubGroupId = current.Id,
+                            Name = current.Name
+                            
 
                         }).ToList();
                     var model = new EducationGroupWithSubGroupsViewModel()
                     {
-                        EducationGroups = eduIsChecked,
+                        EducationGroup = eduIsChecked,
                         SubGroups = subGroups
                     };
                     returnVal.Add(model);

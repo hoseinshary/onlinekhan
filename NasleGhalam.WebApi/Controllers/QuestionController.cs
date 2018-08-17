@@ -9,26 +9,26 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: حسین شریعتمداری
+	///     date: 26/05/1397
 	/// </author>
 	public class QuestionController : ApiController
-	{
+    {
         private readonly QuestionService _questionService;
-		public QuestionController(QuestionService questionService)
+        public QuestionController(QuestionService questionService)
         {
             _questionService = questionService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_questionService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var question = _questionService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.QuestionCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(QuestionViewModel questionViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

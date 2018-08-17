@@ -75,6 +75,7 @@
     <Compile Include="Lesson\LessonCreateAndUpdateViewModel.cs" />
     <Compile Include="Province\ProvinceViewModel.cs" />
     <Compile Include="Lesson\RatioLessonViewModel.cs" />
+    <Compile Include="Question\QuestionViewModel.cs" />
     <Compile Include="Ratio\RatioViewModel.cs" />
     <Compile Include="Lesson\EducationGroupLessonViewModel.cs" />
     <Compile Include="Role\RoleAccessViewModel.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="EducationGroup\EducationGroupViewModel.cs" />
     <Compile Include="GradeLevel\GradeLevelViewModel.cs" />
     <Compile Include="Grade\GradeViewModel.cs" />
-    <Compile Include="Question\QuestionViewModel.cs" />
     <Compile Include="SelectViewModel.cs" />
     <Compile Include="Lesson\LessonViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

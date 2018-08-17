@@ -136,7 +136,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     var ratio = new ViewModels.Ratio.RatioViewModel()
                     {
-                        Rate = VARIABLE.Rate,
+                        Rate = VARIABLE.Ratio,
                         EducationSubGroupId = VARIABLE.EducationSubGroupId,
                         LessonId = msgResLesson.Id
                         

@@ -22,7 +22,7 @@ namespace NasleGhalam.ViewModels.Ratio
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LessonId { get; set; }
 
-        [Display(Name = "درس")]
+        [Display(Name = "درس")]   
         public string LessonName { get; set; }
 
 

@@ -132,7 +132,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 msgResEducationGroupLesson = crLessEdu.Create(educationGroupLesson);
 
                 //third create ratio
-                foreach (var VARIABLE in item.Ratios)
+                foreach (var VARIABLE in item.SubGroups)
                 {
                     var ratio = new ViewModels.Ratio.RatioViewModel()
                     {
@@ -174,9 +174,40 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(LessonViewModel lessonViewModel)
+        public MessageResult Update(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
-            var lesson = Mapper.Map<Lesson>(lessonViewModel);
+
+            ////خواندن اطلاعات واسط 
+            //var previousEducationGroupLesson = _educationGroup_Lessons
+            //    .Where(current => current.LessonId == educationGroup_LessonViewModel.First().LessonId).ToList();
+
+            ////create 
+            //foreach (EducationGroup_LessonViewModel egl in educationGroup_LessonViewModel)
+            //{
+            //    if (egl.IsChecked && !Utility.isExistInArray<int>(previousEducationGroupLesson.Select(x => x.EducationGroupId), egl.EducationGroupId))
+            //    {
+            //        var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(egl);
+            //        _educationGroup_Lessons.Add(educationGroup_Lesson);
+            //    }
+            //}
+
+
+            ////delete
+            //foreach (EducationGroup_Lesson egl in previousEducationGroupLesson)
+            //{
+            //    if (!Utility.isExistInArray<int>(educationGroup_LessonViewModel.Where(x => x.IsChecked).Select(x => x.EducationGroupId), egl.EducationGroupId))
+            //    {
+            //        _uow.MarkAsDeleted(egl);
+            //    }
+            //}
+
+
+
+
+            //msgRes = _uow.CommitChanges(CrudType.None, Title);
+            //return msgRes;
+
+            var lesson = Mapper.Map<Lesson>(lessonCreateViewModel);
             _uow.MarkAsChanged(lesson);
 
             return _uow.CommitChanges(CrudType.Update, Title);

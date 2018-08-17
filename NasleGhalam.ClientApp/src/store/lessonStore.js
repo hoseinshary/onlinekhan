@@ -131,6 +131,13 @@ export default {
           { root: true }
         );
       }
+      debugger;
+      vm.$v.instanceObj.$touch();
+      if (vm.$v.instanceObj.$error) {
+        dispatch('notifyInvalidForm', vm, { root: true });
+        flag = false;
+      }
+
       return flag;
     },
 
@@ -138,27 +145,6 @@ export default {
      * fill dropDwon EduGroupAndEduSubGroup
      */
     getAllEduGroupAndEduSubGroupStore({ state }) {
-      // state.eduGroupAndEduSubGroupLst = [
-      //   {
-      //     Id: 1,
-      //     Name: 'ریاضی',
-      //     IsChecked: false,
-      //     SubGroups: [
-      //       { Name: 'ریاضی 1', Id: 10, Ratio: null },
-      //       { Name: 'ریاضی 2', Id: 20, Ratio: null }
-      //     ]
-      //   },
-      //   {
-      //     Id: 2,
-      //     Name: 'تجربی',
-      //     IsChecked: false,
-      //     SubGroups: [
-      //       { Name: 'تجربی 1', Id: 30, Ratio: null },
-      //       { Name: 'تجربی 2', Id: 40, Ratio: null },
-      //       { Name: 'تجربی 3', Id: 50, Ratio: null }
-      //     ]
-      //   }
-      // ];
       axios
         .get(`${EDUCATION_GROUP_URL}/GetAllEducationWithSubGroups`)
         .then(response => {
@@ -189,27 +175,24 @@ export default {
       dispatch('validateFormStore', vm).then(isValid => {
         debugger;
         if (!isValid) return;
+        state.instanceObj.EducationGroups = state.eduGroupAndEduSubGroupLst.filter(
+          x => x.IsChecked
+        );
+        axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
+          let data = response.data;
 
-        axios
-          .post(`${baseUrl}/Create`, {
-            obj: state.instanceObj,
-            eduGroup: state.eduGroupAndEduSubGroupLst.filter(x => x.IsChecked)
-          })
-          .then(response => {
-            let data = response.data;
+          if (data.MessageType == 1) {
+            commit('insert', data.Id);
+            dispatch('resetCreateStore');
+            dispatch('toggleModalCreateStore', !closeModal);
+          }
 
-            if (data.MessageType == 1) {
-              commit('insert', data.Id);
-              dispatch('resetCreateStore');
-              dispatch('toggleModalCreateStore', !closeModal);
-            }
-
-            dispatch(
-              'notify',
-              { body: data.Message, type: data.MessageType, vm: vm },
-              { root: true }
-            );
-          });
+          dispatch(
+            'notify',
+            { body: data.Message, type: data.MessageType, vm: vm },
+            { root: true }
+          );
+        });
       });
     },
 

@@ -19,11 +19,16 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "درس";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Lesson> _lessons;
+        //private readonly Services.EducationGroup_LessonService _educationGroupLessonService;
+        
 
-        public LessonService(IUnitOfWork uow)
+
+
+        public LessonService(IUnitOfWork uow , Services.EducationGroup_LessonService educationGroupLessonService)
         {
             _uow = uow;
             _lessons = uow.Set<Lesson>();
+          //  _educationGroupLessonService = educationGroupLessonService;
         }
 
 
@@ -82,6 +87,17 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
+            Lesson l=new Lesson();
+            l.EducationGroups_Lessons.Add(new EducationGroup_Lesson()
+            {
+               EducationGroupId = 5
+            });
+
+        l.Ratios.Add(new Ratio()
+        {
+            
+        });
+            //_lessons.
             MessageResult msgResEducationGroupLesson = new MessageResult();
             MessageResult msgResRatio = new MessageResult();
             MessageResult msgResLesson = new MessageResult();
@@ -95,6 +111,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 IsMain = lessonCreateViewModel.IsMain
             };
 
+            var transaction = _uow.BeginTransaction();
             msgResLesson = Create(lessonViewModel);
             
 
@@ -133,6 +150,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (msgResLesson.MessageType == MessageType.Success && msgResEducationGroupLesson.MessageType == MessageType.Success && msgResRatio.MessageType == MessageType.Success)
             {
+                transaction.Commit();
                 return msgResLesson;
             }
             else if (msgResLesson.MessageType != MessageType.Success)

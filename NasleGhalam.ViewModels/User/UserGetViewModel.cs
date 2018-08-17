@@ -12,6 +12,7 @@ namespace NasleGhalam.ViewModels.User
         public bool IsActive { get; set; }
         public string NationalNo { get; set; }
         public bool Gender { get; set; }
+        public string GenderName { get; set; }
         public string Phone { get; set; }
         public string Mobile { get; set; }
         public int RoleId { get; set; }

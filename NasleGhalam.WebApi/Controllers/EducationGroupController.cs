@@ -29,7 +29,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.EducationGroupReadAccess)]
         public IHttpActionResult GetAllEducationWithSubGroups()
         {
-            return Ok(_educationGroupService.GetAllEducationGroupWithsubGroups(0));
+            return Ok(_educationGroupService.GetAllEducationGroupWithSubGroups());
         }
 
 

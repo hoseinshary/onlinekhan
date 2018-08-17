@@ -35,7 +35,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(current => new RatioViewModel
                 {
                     Id = current.Id,
-                    Name = current.Name,
                     Rate = current.Rate,
                     EducationSubGroupId = current.EducationSubGroupId,
                     LessonId = current.LessonId
@@ -53,7 +52,6 @@ namespace NasleGhalam.ServiceLayer.Services
             return _ratios.Select(current => new RatioViewModel()
             {
                 Id = current.Id,
-                Name = current.Name,
                 Rate = current.Rate,
                 EducationSubGroupId = current.EducationSubGroupId,
                 EducationSubGroupName = current.EducationSubGroup.Name,
@@ -115,18 +113,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
         }
 
-
-        /// <summary>
-        /// گرفتن همه ضریب ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _ratios.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
-        }
+        
     }
 }

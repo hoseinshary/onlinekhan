@@ -9,6 +9,9 @@ import 'vue-snotify/styles/material.css';
 /** panel */
 import myPanel from 'components/my-panel';
 
+/** hr */
+import myHr from 'components/my-hr';
+
 /** table */
 import myTable from 'components/my-table';
 
@@ -43,6 +46,9 @@ export default ({ app, router, Vue }) => {
 
   // register panel
   Vue.component('my-panel', myPanel);
+
+  // register hr
+  Vue.component('my-hr', myHr);
 
   // register table
   Vue.component('my-table', myTable);

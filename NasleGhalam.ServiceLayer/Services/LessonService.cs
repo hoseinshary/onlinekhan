@@ -87,84 +87,112 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
-            Lesson l=new Lesson();
-            l.EducationGroups_Lessons.Add(new EducationGroup_Lesson()
+            var currentLesson = _lessons.FirstOrDefault(current => current.Name == lessonCreateViewModel.Name);
+            if (currentLesson != null)
             {
-               EducationGroupId = 5
-            });
+                MessageResult msg = new MessageResult();
+                msg.FaMessage = "این درس قبلا ثبت شده است. برای تغییر از منوی ویرایش استفاده کنید";
+                msg.MessageType = MessageType.Error;
+                return msg;
+            }
 
-        l.Ratios.Add(new Ratio()
-        {
-            
-        });
-            //_lessons.
-            MessageResult msgResEducationGroupLesson = new MessageResult();
-            MessageResult msgResRatio = new MessageResult();
-            MessageResult msgResLesson = new MessageResult();
-
-            //first:create lesson
-
-            var lessonViewModel = new LessonViewModel()
+            Lesson l = new Lesson()
             {
-                Id = lessonCreateViewModel.Id,
                 Name = lessonCreateViewModel.Name,
                 IsMain = lessonCreateViewModel.IsMain
             };
 
-            var transaction = _uow.BeginTransaction();
-            msgResLesson = Create(lessonViewModel);
+            foreach (var educationGroup in lessonCreateViewModel.EducationGroups)
+            {
+                l.EducationGroups_Lessons.Add(new EducationGroup_Lesson
+                {
+                    EducationGroupId = educationGroup.EducationGroupId
+                });
+
+                foreach (var ratio in educationGroup.SubGroups)
+                {
+                    l.Ratios.Add(new Ratio()
+                    {
+                        Rate = ratio.Ratio,
+                        EducationSubGroupId = ratio.EducationSubGroupId
+                    });
+                }
+            }
+
+            _lessons.Add(l);
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = l.Id;
+            return msgRes;
+
+
+            //_lessons.
+            //MessageResult msgResEducationGroupLesson = new MessageResult();
+            //MessageResult msgResRatio = new MessageResult();
+            //MessageResult msgResLesson = new MessageResult();
+
+            ////first:create lesson
+
+            //var lessonViewModel = new LessonViewModel()
+            //{
+            //    Id = lessonCreateViewModel.Id,
+            //    Name = lessonCreateViewModel.Name,
+            //    IsMain = lessonCreateViewModel.IsMain
+            //};
+
+            //var transaction = _uow.BeginTransaction();
+            //msgResLesson = Create(lessonViewModel);
             
 
-            //second and third
+            ////second and third
 
-            var crLessEdu = new EducationGroup_LessonService(_uow);
-            var crRatio = new RatioService(_uow);
+            //var crLessEdu = new EducationGroup_LessonService(_uow);
+            //var crRatio = new RatioService(_uow);
 
-            foreach (var item in lessonCreateViewModel.EducationGroups)
-            {
-                //second:create EducationGroup_LessonService
-                var educationGroupLesson = new EducationGroup_LessonViewModel()
-                {
-                    EducationGroupId = item.EducationGroupId,
-                    LessonId = msgResLesson.Id
-                };
+            //foreach (var item in lessonCreateViewModel.EducationGroups)
+            //{
+            //    //second:create EducationGroup_LessonService
+            //    var educationGroupLesson = new EducationGroup_LessonViewModel()
+            //    {
+            //        EducationGroupId = item.EducationGroupId,
+            //        LessonId = msgResLesson.Id
+            //    };
 
-                msgResEducationGroupLesson = crLessEdu.Create(educationGroupLesson);
+            //    msgResEducationGroupLesson = crLessEdu.Create(educationGroupLesson);
 
-                //third create ratio
-                foreach (var VARIABLE in item.SubGroups)
-                {
-                    var ratio = new ViewModels.Ratio.RatioViewModel()
-                    {
-                        Rate = VARIABLE.Ratio,
-                        EducationSubGroupId = VARIABLE.EducationSubGroupId,
-                        LessonId = msgResLesson.Id
+            //    //third create ratio
+            //    foreach (var VARIABLE in item.SubGroups)
+            //    {
+            //        var ratio = new ViewModels.Ratio.RatioViewModel()
+            //        {
+            //            Rate = VARIABLE.Ratio,
+            //            EducationSubGroupId = VARIABLE.EducationSubGroupId,
+            //            LessonId = msgResLesson.Id
                         
-                    };
+            //        };
 
-                  msgResRatio = crRatio.Create(ratio);
+            //      msgResRatio = crRatio.Create(ratio);
 
-                }
+            //    }
 
-            }
+            //}
 
-            if (msgResLesson.MessageType == MessageType.Success && msgResEducationGroupLesson.MessageType == MessageType.Success && msgResRatio.MessageType == MessageType.Success)
-            {
-                transaction.Commit();
-                return msgResLesson;
-            }
-            else if (msgResLesson.MessageType != MessageType.Success)
-            {
-                return msgResLesson;
-            }
-            else if (msgResEducationGroupLesson.MessageType != MessageType.Success)
-            {
-                return msgResEducationGroupLesson;
-            }
-            else
-            {
-                return msgResRatio;
-            }
+            //if (msgResLesson.MessageType == MessageType.Success && msgResEducationGroupLesson.MessageType == MessageType.Success && msgResRatio.MessageType == MessageType.Success)
+            //{
+            //    transaction.Commit();
+            //    return msgResLesson;
+            //}
+            //else if (msgResLesson.MessageType != MessageType.Success)
+            //{
+            //    return msgResLesson;
+            //}
+            //else if (msgResEducationGroupLesson.MessageType != MessageType.Success)
+            //{
+            //    return msgResEducationGroupLesson;
+            //}
+            //else
+            //{
+            //    return msgResRatio;
+            //}
 
         }
 

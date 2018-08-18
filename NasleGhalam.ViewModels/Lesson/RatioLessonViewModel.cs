@@ -8,9 +8,6 @@ namespace NasleGhalam.ViewModels.Lesson
 
         public int Id { get; set; }
 
-
-        
-
         [Display(Name = "ضریب")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [Range(0, byte.MaxValue, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]

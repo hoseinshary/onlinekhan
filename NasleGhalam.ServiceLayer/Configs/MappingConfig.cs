@@ -42,7 +42,7 @@ namespace NasleGhalam.ServiceLayer.Configs
 
                 config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
                 config.CreateMap<ViewModels.Ratio.RatioViewModel, Ratio>();
-
+                config.CreateMap<RatioLessonViewModel, Ratio>();
 
 
             });

@@ -14,7 +14,8 @@ export default {
     isOpenModalDelete: false,
     instanceObj: {
       Id: 0,
-      Name: ''
+      Name: '',
+      IsMain: undefined
     },
     allObj: [],
     allObjDdl: [],
@@ -57,6 +58,14 @@ export default {
      */
     reset(state, $v) {
       util.clearObject(state.instanceObj);
+      state.eduGroupAndEduSubGroupLst
+        .filter(x => x.IsChecked)
+        .forEach(element => {
+          element.IsChecked = false;
+          element.SubGroups.forEach(item => {
+            item.Ratio = 0;
+          });
+        });
       if ($v) {
         $v.$reset();
       }

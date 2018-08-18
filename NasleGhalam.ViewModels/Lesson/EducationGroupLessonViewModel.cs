@@ -10,6 +10,15 @@ namespace NasleGhalam.ViewModels.Lesson
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationGroupId { get; set; }
 
+
+        public string EducationGroupName { get; set; }
+
+
+        public bool IsChecked { get; set; }
+
+        
+
+
         public List<RatioLessonViewModel> SubGroups { get; set; }   
 
     }

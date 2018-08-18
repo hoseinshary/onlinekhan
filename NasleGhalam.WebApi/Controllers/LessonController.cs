@@ -43,7 +43,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(LessonViewModel lessonViewModel)
+        public IHttpActionResult Create2(LessonViewModel lessonViewModel)
         {
             var msgRes = _lessonService.Create(lessonViewModel);
             return Ok(new MessageResultApi
@@ -57,7 +57,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateAndUpdateViewModel)
+        public IHttpActionResult Create(LessonCreateAndUpdateViewModel lessonCreateAndUpdateViewModel)
         {
             var msgRes = _lessonService.CreateLessonWithRatio(lessonCreateAndUpdateViewModel);
             return Ok(new MessageResultApi
@@ -72,7 +72,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(LessonViewModel lessonViewModel)
+        public IHttpActionResult Update(LessonCreateAndUpdateViewModel lessonViewModel)
         {
             var msgRes = _lessonService.Update(lessonViewModel);
             return Ok(new MessageResultApi

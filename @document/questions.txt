@@ -1,4 +1,4 @@
----access---
+﻿---access---
 توضیح ساز و کار دسترسی
 
 --- user ---
@@ -12,10 +12,10 @@
 6- خط 144 در سرویس کاربر بررسی شود
 
 
---- city ---
+--- province---
 1-اضاف کردن GetAllDdl در ProvinceController 
  و ایجاد دسترسی برای شهر و کاربر
  
---- province ---
+--- city---
 1-اضاف کردن GetAllByProvinceIdDdl در CityController 
 و همچنین ایجاد دسترسی برای کاربر

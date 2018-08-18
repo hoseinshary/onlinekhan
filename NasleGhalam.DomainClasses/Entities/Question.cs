@@ -46,6 +46,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Description { get; set; }
 
+        public string FileName { get; set; }
+
         public DateTime InsertDateTime { get; set; }
 
         public int UserId { get; set; }

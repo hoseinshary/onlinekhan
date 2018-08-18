@@ -50,9 +50,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Username = current.Username,
                     IsActive = current.IsActive,
                     RoleId = current.RoleId,
-                    RoleName = current.Role.Name,
                     CityId = current.CityId,
-                    CityName = current.City.Name,
                     Gender = current.Gender,
                     Mobile = current.Mobile,
                     NationalNo = current.NationalNo,
@@ -82,7 +80,10 @@ namespace NasleGhalam.ServiceLayer.Services
                     Gender = current.Gender,
                     Mobile = current.Mobile,
                     NationalNo = current.NationalNo,
-                    Phone = current.Phone
+                    Phone = current.Phone,
+                    RoleName = current.Role.Name,
+                    CityName = current.City.Name,
+                    GenderName = current.Gender ? "پسر" : "دختر"
                 }).ToList();
         }
 
@@ -146,7 +147,7 @@ namespace NasleGhalam.ServiceLayer.Services
             else
             {
                 _uow.ExcludeFieldsFromUpdate(user, x => x.LastLogin);
-               
+
             }
 
             return _uow.CommitChanges(CrudType.Update, Title);

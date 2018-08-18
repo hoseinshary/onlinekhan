@@ -52,74 +52,99 @@ namespace NasleGhalam.ServiceLayer.Services
             return _educationGroups.Select(current => new EducationGroupViewModel()
             {
                 Id = current.Id,
-                Name = current.Name               
+                Name = current.Name
             }).ToList();
         }
 
-        public IList<EducationGroupWithSubGroupsViewModel> GetAllEducationGroupWithsubGroups(int lessonId)
+
+
+        /// <summary>
+        /// گرفتن همه گروه های آموزشی همراه با زیر گروه آموزشی 
+        /// </summary>
+        /// <returns></returns>
+        public IList<EducationGroupWithSubGroupsViewModel> GetAllEducationGroupWithSubGroups()
         {
-            List<EducationGroupWithSubGroupsViewModel> returnVal = new List<EducationGroupWithSubGroupsViewModel>();
-            if (lessonId == 0)
-            {
-                var educationGroups = _educationGroups.Select(current => new EducationGroupIsCheckedViewModel()
+            return _educationGroups
+                .Where(current => current.EducationSubGroups.Any())
+                .Select(current => new EducationGroupWithSubGroupsViewModel()
                 {
-                    Id = current.Id,
-                    Name = current.Name
-                }).ToList();
-
-                foreach (var item in educationGroups)
-                {
-                    int educationGroupkeySearch = item.Id;
-                    var subGroups = _educationSubGroups
-                        .Where(current => current.EducationGroupId == educationGroupkeySearch)
-                        .Select(current => new EducationSubGroupViewModel
-                        {
-                            Id = current.Id,
-                            Name = current.Name,
-                            EducationGroupId = current.EducationGroupId,
-
-                        }).ToList();
-                    EducationGroupWithSubGroupsViewModel model = new EducationGroupWithSubGroupsViewModel()
+                    EducationGroupId = current.Id,
+                    Name = current.Name,
+                    SubGroups = current.EducationSubGroups.Select(x => new EducationSubGroupLessonViewModel()
                     {
-                        EducationGroups = item,
-                        SubGroups = subGroups
-                    };
-                    returnVal.Add(model);
-                }
-            
-            }
-            else
-            {
-                EducationGroup_LessonService obj = new EducationGroup_LessonService(_uow);
-                var educationGroups = obj.GetAllEducationGroupByLessonId(lessonId);
-                foreach (var item in educationGroups)
-                {
-                    int educationGroupkeySearch = item.EducationGroupId;
-                    var eduIsChecked = new EducationGroupIsCheckedViewModel()
-                    {
-                        Id = item.EducationGroupId,
-                        Name = item.EducatioGroupName,
-                        IsChecked = item.IsChecked
-                    };
-                    var subGroups = _educationSubGroups
-                        .Where(current => current.EducationGroupId == educationGroupkeySearch)
-                        .Select(current => new EducationSubGroupViewModel
-                        {
-                            Id = current.Id,
-                            Name = current.Name,
-                            EducationGroupId = current.EducationGroupId,
-
-                        }).ToList();
-                    var model = new EducationGroupWithSubGroupsViewModel()
-                    {
-                        EducationGroups = eduIsChecked,
-                        SubGroups = subGroups
-                    };
-                    returnVal.Add(model);
-                }
-            }
-            return returnVal;
+                        EducationSubGroupId = x.Id,
+                        Name = x.Name,
+                    }).ToList()
+            }).ToList();
         }
+
+
+
+        //public IList<EducationGroupWithSubGroupsViewModel> GetAllEducationGroupWithsubGroups2(int lessonId)
+        //{
+        //    List<EducationGroupWithSubGroupsViewModel> returnVal = new List<EducationGroupWithSubGroupsViewModel>();
+        //    if (lessonId == 0)
+        //    {
+        //        var educationGroups = _educationGroups.Select(current => new EducationGroupIsCheckedViewModel()
+        //        {
+        //            EducationGroupId = current.Id,
+        //            Name = current.Name
+        //        }).ToList();
+
+        //        foreach (var item in educationGroups)
+        //        {
+        //            int educationGroupkeySearch = item.EducationGroupId;
+        //            var subGroups = _educationSubGroups
+        //                .Where(current => current.EducationGroupId == educationGroupkeySearch)
+        //                .Select(current => new EducationSubGroupLessonViewModel
+        //                {
+
+        //                    EducationSubGroupId = current.Id,
+        //                    Name = current.Name,
+
+
+        //                }).ToList();
+        //            EducationGroupWithSubGroupsViewModel model = new EducationGroupWithSubGroupsViewModel()
+        //            {
+        //                EducationGroup = item,
+        //                SubGroups = subGroups
+        //            };
+        //            returnVal.Add(model);
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        EducationGroup_LessonService obj = new EducationGroup_LessonService(_uow);
+        //        var educationGroups = obj.GetAllEducationGroupByLessonId(lessonId);
+        //        foreach (var item in educationGroups)
+        //        {
+        //            int educationGroupkeySearch = item.EducationGroupId;
+        //            var eduIsChecked = new EducationGroupIsCheckedViewModel()
+        //            {
+        //                EducationGroupId = item.EducationGroupId,
+        //                Name = item.EducatioGroupName,
+        //                IsChecked = item.IsChecked
+        //            };
+        //            var subGroups = _educationSubGroups
+        //                .Where(current => current.EducationGroupId == educationGroupkeySearch)
+        //                .Select(current => new EducationSubGroupLessonViewModel
+        //                {
+        //                    EducationSubGroupId = current.Id,
+        //                    Name = current.Name
+
+
+        //                }).ToList();
+        //            var model = new EducationGroupWithSubGroupsViewModel()
+        //            {
+        //                EducationGroup = eduIsChecked,
+        //                SubGroups = subGroups
+        //            };
+        //            returnVal.Add(model);
+        //        }
+        //    }
+        //    return returnVal;
+        //}
 
 
         /// <summary>
@@ -148,7 +173,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _uow.MarkAsChanged(educationGroup);
             return _uow.CommitChanges(CrudType.Update, Title);
-            
+
         }
 
 
@@ -168,7 +193,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _uow.MarkAsDeleted(educationGroup);
             return _uow.CommitChanges(CrudType.Delete, Title);
-            
+
         }
 
 

@@ -1,37 +1,72 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using NasleGhalam.ViewModels.Ratio;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Lesson
+namespace NasleGhalam.ViewModels.Question
 {
-	public class LessonViewModel
+	public class QuestionViewModel
 	{
-	    
-        public int Id { get; set; }
+		[Display(Name = "")]
+		public int Id { get; set; }
 
 
-	    [Display(Name = "نام")]
-	    [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-	    [MaxLength(200, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        public string Name { get; set; }
+		[Display(Name = "")]
+		public string Context { get; set; }
 
 
-		[Display(Name = "اختصاصی")]
-		public bool IsMain { get; set; }
-
-	    [Display(Name = "گروه آموزشی")]
-	    [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
-        public List<int> EducationGroupId { get; set; }
-
-	    [Display(Name = "ضرایب")]
-	    [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
-
-	    public List<List<Rate>> List1 { get; set; }
+		[Display(Name = "")]
+		public int QuestionNumber { get; set; }
 
 
+		[Display(Name = "")]
+		public int LookupId_QuestionType { get; set; }
 
 
+		[Display(Name = "")]
+		public int QuestionPoint { get; set; }
 
 
-    }
+		[Display(Name = "")]
+		public int LookupId_QuestionHardnessType { get; set; }
+
+
+		[Display(Name = "")]
+		public int LookupId_ReapetnessType { get; set; }
+
+
+		[Display(Name = "")]
+		public bool UseEvaluation { get; set; }
+
+
+		[Display(Name = "")]
+		public bool IsStandard { get; set; }
+
+
+		[Display(Name = "")]
+		public byte AuthorType { get; set; }
+
+
+		[Display(Name = "")]
+		public string AuthorName { get; set; }
+
+
+		[Display(Name = "")]
+		public short ResponseSecond { get; set; }
+
+
+		[Display(Name = "")]
+		public string Description { get; set; }
+
+
+		[Display(Name = "")]
+		public DateTime InsertDateTime { get; set; }
+
+
+		[Display(Name = "")]
+		public int UserId { get; set; }
+
+
+		[Display(Name = "")]
+		public int AxillaryBookId { get; set; }
+
+
+	}
 }

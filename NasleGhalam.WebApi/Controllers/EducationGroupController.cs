@@ -27,9 +27,9 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.EducationGroupReadAccess)]
-        public IHttpActionResult GetAllEducationWithSubGroups(int id)
+        public IHttpActionResult GetAllEducationWithSubGroups()
         {
-            return Ok(_educationGroupService.GetAllEducationGroupWithsubGroups(id));
+            return Ok(_educationGroupService.GetAllEducationGroupWithSubGroups());
         }
 
 

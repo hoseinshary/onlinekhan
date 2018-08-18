@@ -32,7 +32,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-        public LessonService(IUnitOfWork uow)
+        
         public LessonService(IUnitOfWork uow , EducationGroup_LessonService educationGroupLessonService, RatioService ratioService, TopicService topicService)
         {
             _uow = uow;

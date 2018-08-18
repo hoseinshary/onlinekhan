@@ -87,7 +87,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
-            var currentLesson = _lessons.FirstOrDefault(current => current.Name == lessonCreateViewModel.Name);
+            var currentLesson = _lessons.FirstOrDefault(current => current.Name == lessonCreateViewModel.Name.Replace(" ", ""));
             if (currentLesson != null)
             {
                 MessageResult msg = new MessageResult();

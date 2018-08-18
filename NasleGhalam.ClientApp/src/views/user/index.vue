@@ -63,7 +63,7 @@ export default {
         },
         {
           title: 'جنسیت',
-          data: 'Gender'
+          data: 'GenderName'
           // render(data, type, row) {
           //   return data ? 'پسر' : 'دختر';
           // }

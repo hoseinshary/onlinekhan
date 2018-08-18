@@ -17,8 +17,8 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
             }
 
             bindingContext.Model = valueResult.AttemptedValue.ToMiladiDateTime();
-            string temp = "asd";
-            temp.ToMiladiDateTime();
+            //string temp = "asd";
+            //temp.ToMiladiDateTime();
             return true;
         }
     }

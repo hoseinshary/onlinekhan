@@ -8,7 +8,7 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
     public class CustomJsonFormatter : JsonConverter
     {
         public override bool CanWrite => false;
-		
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
@@ -27,7 +27,9 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
 
             if (objectType.IsString())
             {
-                return val.Trim();
+                return val
+                    .Replace("ي", "ی").Replace("ك", "ک")
+                    .Trim();
             }
 
             return null;

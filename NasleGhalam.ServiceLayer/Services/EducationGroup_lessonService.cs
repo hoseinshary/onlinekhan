@@ -71,14 +71,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonId, educationGroupId"></param>
         /// <returns></returns>
-        public IList<EducationGroup_LessonViewModel> GetAllEduLessonByEducationGroupIdAndLessonId(int eduId, int lessonId)
+        public EducationGroup_LessonViewModel GetAllEduLessonByEducationGroupIdAndLessonId(int eduId, int lessonId)
         {
             return _educationGroup_Lessons
             .Where(current => current.EducationGroupId == eduId && current.LessonId == lessonId)
                 .Select(current => new EducationGroup_LessonViewModel
                 {
                     Id = current.Id
-                }).ToList();
+                }).FirstOrDefault();
         }
 
         /// <summary>

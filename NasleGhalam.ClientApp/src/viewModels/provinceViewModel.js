@@ -9,7 +9,7 @@ export default {
     },
     Code: {
       displayName: displayName('کد'),
-      maxLength: maxLength(10),
+      maxLength: maxLength(5),
       required
     }
   }

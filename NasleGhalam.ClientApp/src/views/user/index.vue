@@ -30,8 +30,8 @@
     </my-panel>
 
     <!-- modals -->
-    <!-- <modal-create v-if="pageAccess.canCreate"></modal-create> -->
-    <!--<modal-edit v-if="pageAccess.canEdit"></modal-edit> -->
+    <modal-create v-if="pageAccess.canCreate"></modal-create>
+    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
@@ -41,8 +41,8 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
-    // 'modal-create': () => import('./create'),
-    // 'modal-edit': () => import('./edit'),
+    'modal-create': () => import('./create'),
+    'modal-edit': () => import('./edit'),
     'modal-delete': () => import('./delete')
   },
   /**

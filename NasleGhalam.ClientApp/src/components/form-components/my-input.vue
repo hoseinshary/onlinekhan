@@ -62,7 +62,8 @@ export default {
     min: String,
     max: String,
     step: String,
-    autocomplete: String
+    autocomplete: String,
+    ltr: Boolean
   },
   /**
    * data
@@ -220,6 +221,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

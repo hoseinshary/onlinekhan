@@ -24,7 +24,8 @@ const store = {
       ProvinceName: ''
     },
     cityGridData: [],
-    cityDdl: [],
+    // cityDdl: [],
+    cityByProvinceDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
@@ -106,6 +107,20 @@ const store = {
           state.ddlModelChanged = false;
         });
       }
+    },
+
+    /**
+     *  fill dropDwonList cityByProvince
+     * @param {*} param0
+     * @param {Number} provinceId
+     */
+    fillCityByProvinceIdDdlStore({ state }, provinceId) {
+      // get data
+      axios
+        .get(`${baseUrl}/GetAllByProvinceIdDdl/${provinceId}`)
+        .then(response => {
+          state.cityByProvinceDdl = response.data;
+        });
     },
 
     /**

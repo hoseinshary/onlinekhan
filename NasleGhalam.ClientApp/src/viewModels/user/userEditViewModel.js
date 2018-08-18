@@ -32,7 +32,6 @@ export default {
       displayName: displayName('رمز عبور'),
       maxLength: maxLength(50),
       minLength: minLength(5),
-      required,
       notPersianChar: notPersianChar()
     },
     IsActive: {

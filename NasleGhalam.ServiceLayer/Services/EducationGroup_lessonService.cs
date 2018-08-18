@@ -62,11 +62,24 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(current => new EducationGroup_LessonViewModel
                 {
                     Id = current.Id,
-                    LessonName = current.Lesson.Name,
-
+                    LessonName = current.Lesson.Name
                 }).ToList();
         }
 
+        /// <summary>
+        /// گرفتن  رابط گروه آموزشی  با آی دی درس و آی دی گروه آموزشی
+        /// </summary>
+        /// <param name="lessonId, educationGroupId"></param>
+        /// <returns></returns>
+        public IList<EducationGroup_LessonViewModel> GetAllEduLessonByEducationGroupIdAndLessonId(int eduId, int lessonId)
+        {
+            return _educationGroup_Lessons
+            .Where(current => current.EducationGroupId == eduId && current.LessonId == lessonId)
+                .Select(current => new EducationGroup_LessonViewModel
+                {
+                    Id = current.Id
+                }).ToList();
+        }
 
         /// <summary>
         /// گرفتن همه گروه های آموزشی با آی دی درس

@@ -19,16 +19,19 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "درس";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Lesson> _lessons;
-        //private readonly Services.EducationGroup_LessonService _educationGroupLessonService;
-        
+        private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lesson;
+        private readonly EducationGroup_LessonService _educationGroupLessonService;
+        private readonly RatioService _ratioService;
+        private readonly TopicService _topicService;
 
 
-
-        public LessonService(IUnitOfWork uow , Services.EducationGroup_LessonService educationGroupLessonService)
+        public LessonService(IUnitOfWork uow , EducationGroup_LessonService educationGroupLessonService, RatioService ratioService, TopicService topicService)
         {
             _uow = uow;
             _lessons = uow.Set<Lesson>();
-          //  _educationGroupLessonService = educationGroupLessonService;
+            _educationGroupLessonService = educationGroupLessonService;
+            _ratioService = ratioService;
+            _topicService = topicService;
         }
 
 
@@ -262,6 +265,36 @@ namespace NasleGhalam.ServiceLayer.Services
             return _uow.CommitChanges(CrudType.Delete, Title);
 
         }
+
+        /// <summary>
+        /// حذف درس در گرو های آموزشی
+        /// </summary>
+        /// <param name="int[educationGroupId]"></param>
+        /// <returns></returns>
+        public MessageResult Delete(int lessonId, int[] educationGroupId)
+        {
+            var lessonViewModel = GetById(lessonId);
+            if (lessonViewModel == null)
+            {
+                return Utility.NotFoundMessage();
+            }
+
+            
+            foreach (int eduId in educationGroupId)
+            {
+                var eduLesson = _educationGroupLessonService.GetAllEduLessonByEducationGroupIdAndLessonId(eduId, lessonId);
+                
+
+            }
+
+            var lesson = Mapper.Map<Lesson>(lessonViewModel);
+            _uow.MarkAsDeleted(lesson);
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
+        }
+
+
 
 
         /// <summary>

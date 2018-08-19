@@ -6,7 +6,7 @@ namespace NasleGhalam.ViewModels.EducationSubGroup
     public class EducationSubGroupViewModel
     {
 
-        public int EducationSubGroupId { get; set; }
+        public int Id { get; set; }
 
 
         [Display(Name = "نام")]

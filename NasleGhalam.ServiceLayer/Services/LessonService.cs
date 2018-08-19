@@ -52,62 +52,118 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public LessonCreateAndUpdateViewModel GetById(int id)
         {
-            LessonCreateAndUpdateViewModel returnVal = new LessonCreateAndUpdateViewModel();
-            var lesson = _lessons.Where(current => current.Id == id).FirstOrDefault();
-            returnVal.Id = lesson.Id;
-            returnVal.Name = lesson.Name;
-            returnVal.IsMain = lesson.IsMain;
-
-
             
-            var educationGroups = _educationGroups
-
-                 .Select(current => new
-                 {
-                     current.Id,
-                     current.Name,
-
-                     EducationGroups_Lessons = current.EducationGroups_Lessons
-                     .Where(x => x.LessonId == id).DefaultIfEmpty()
-                 })
-                 .SelectMany(curent => curent.EducationGroups_Lessons,
-                 (education, edu_lesson) => new EducationGroup_LessonViewModel
-                 {
-                     Id = edu_lesson.Id,
-                     EducatioGroupName = education.Name,
-                     EducationGroupId = education.Id,
-                     LessonId = edu_lesson == null ? 0 : edu_lesson.LessonId,
-                     LessonName = edu_lesson.Lesson.Name,
-                     IsChecked = edu_lesson != null
-                 }).OrderByDescending(current => current.IsChecked).ToList();
-
-            foreach (var item in educationGroups)
-            {
-                List<RatioLessonViewModel> subGroups = new List<RatioLessonViewModel>();
-                if (item.LessonId != 0)
+            return _lessons.Where(less => less.Id == id)
+                .Select(less => new LessonCreateAndUpdateViewModel
                 {
-                     subGroups = _ratios
-                        .Where(current => current.EducationSubGroup.EducationGroupId == item.EducationGroupId)
-                        .Select(x => new RatioLessonViewModel
+                    Name = less.Name,
+                    IsMain = less.IsMain,
+                    Id = less.Id,
+                    EducationGroups =
+                    _educationGroups.Select(edg => new EducationGroupLessonViewModel
+                    {
+                        IsChecked = edg.EducationGroups_Lessons.Any(edl => edl.LessonId == id),
+                        EducationGroupId=  edg.Id,
+                        EducationGroupName= edg.Name,
+                        SubGroups = edg.EducationSubGroups.Select(eds => new RatioLessonViewModel
                         {
-                            Id = x.Id,
-                            EducationSubGroupId = x.Id,
-                            EducationSubGroupName = x.EducationSubGroup.Name,
-                            Ratio = x.Rate
+                            Id = eds.Ratios.Any() ? eds.Ratios.FirstOrDefault().Id : 0,
+                            Ratio = eds.Ratios.Any() ? eds.Ratios.FirstOrDefault().Rate : (byte)0,
+                            EducationSubGroupId =  eds.Id,
+                            EducationSubGroupName= eds.Name
+                        })
+                    })
+                }).DefaultIfEmpty().FirstOrDefault();
 
-                        }).ToList();
-                }
-                
-                returnVal.EducationGroups.Add(new EducationGroupLessonViewModel()
-                {
-                    EducationGroupId = item.EducationGroupId,
-                    IsChecked = item.LessonId == 0 ? false : true,
-                    EducationGroupName = item.EducatioGroupName,
-                    SubGroups =subGroups.Count == 0 ? null : subGroups
-                });
+            //var x = _educationGroup_Lessons.Where(edul => edul.LessonId == id)
+            //    .SelectMany(edul => _educationGroups.Where(edug => edug.Id == edul.EducationGroupId).DefaultIfEmpty(new { }),
+            //    (edul, edug) => new
+            //    {
+            //        IsChecked = true,
+            //        edug.Id,
+            //        edug.Name,
+            //        groups = edug.EducationSubGroups.Select(edusg => new
+            //        {
+            //            edusg.Id,
+            //            edusg.Ratios.FirstOrDefault(ra => ra.LessonId == id).Rate,
+            //            RatioId = edusg.Ratios.FirstOrDefault(ra => ra.LessonId == id).Id,
+            //            edusg.Name
+            //        })
+            //    }).ToList();
+            //var lesson = _lessons.Where(current => current.Id == id).Select(x => new {
+            //    x.Id,
+            //    x.Name,
+            //    x.IsMain,
+            //    EducationGroups_Lessons = _educationGroups.Where(ed => ed.Id == x.)
+            //        x.EducationGroups_Lessons.Select(y => new {
+            //            y.EducationGroupId,
+            //            y.EducationGroup.Name,
+            //            IsChecked = y.EducationGroup
+            //            }).SelectMany(c => _educationGroups.Where(ed => ed.Id == c.EducationGroupId).DefaultIfEmpty(),
+            //            (edu, less) => new EducationGroup_LessonViewModel
+            //            {
+            //                Id = edu.,
+            //                EducatioGroupName = edu.Name,
+            //                EducationGroupId = edu.EducationGroupId,
+            //                LessonId = edu == null ? 0 : less.Id,
+            //                LessonName = edu_lesson.Lesson.Name,
+            //                IsChecked = edu_lesson != null
+            //            }
+            //            ) }).FirstOrDefault();
+            //returnVal.Id = lesson.Id;
+            //returnVal.Name = lesson.Name;
+            //returnVal.IsMain = lesson.IsMain;
 
-            }
-            return returnVal;
+
+
+            //var educationGroups = _educationGroups
+
+            //     .Select(current => new
+            //     {
+            //         current.Id,
+            //         current.Name,
+
+            //         EducationGroups_Lessons = current.EducationGroups_Lessons
+            //         .Where(x => x.LessonId == id).DefaultIfEmpty()
+            //     })
+            //     .SelectMany(curent => curent.EducationGroups_Lessons,
+            //     (education, edu_lesson) => new EducationGroup_LessonViewModel
+            //     {
+            //         Id = edu_lesson.Id,
+            //         EducatioGroupName = education.Name,
+            //         EducationGroupId = education.Id,
+            //         LessonId = edu_lesson == null ? 0 : edu_lesson.LessonId,
+            //         LessonName = edu_lesson.Lesson.Name,
+            //         IsChecked = edu_lesson != null
+            //     }).OrderByDescending(current => current.IsChecked).ToList();
+
+            //foreach (var item in educationGroups)
+            //{
+            //    List<RatioLessonViewModel> subGroups = new List<RatioLessonViewModel>();
+            //    if (item.LessonId != 0)
+            //    {
+            //        subGroups = _ratios
+            //           .Where(current => current.EducationSubGroup.EducationGroupId == item.EducationGroupId)
+            //           .Select(x => new RatioLessonViewModel
+            //           {
+            //               Id = x.Id,
+            //               EducationSubGroupId = x.Id,
+            //               EducationSubGroupName = x.EducationSubGroup.Name,
+            //               Ratio = x.Rate
+
+            //           }).ToList();
+            //    }
+
+            //    returnVal.EducationGroups.Add(new EducationGroupLessonViewModel()
+            //    {
+            //        EducationGroupId = item.EducationGroupId,
+            //        IsChecked = item.LessonId == 0 ? false : true,
+            //        EducationGroupName = item.EducatioGroupName,
+            //        SubGroups = subGroups.Count == 0 ? null : subGroups
+            //    });
+
+            //}
+            
         }
 
 
@@ -272,11 +328,13 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.LessonId == lessonCreateViewModel.Id).ToList();
 
             //create 
+            var allRatios = _ratios.AsNoTracking().ToList();
             foreach (var eg in lessonCreateViewModel.EducationGroups)
             {
-                if (!Utility.isExistInArray<int>(previousEducationGroupLesson.Select(x => x.EducationGroupId), eg.EducationGroupId))
+                if ( eg.IsChecked && !Utility.isExistInArray<int>(previousEducationGroupLesson.Select(x => x.EducationGroupId), eg.EducationGroupId))
                 {
                     var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(eg);
+                    educationGroup_Lesson.LessonId = lessonCreateViewModel.Id;
                     _educationGroup_Lessons.Add(educationGroup_Lesson);
                     foreach (var esg in eg.SubGroups)
                     {
@@ -285,13 +343,31 @@ namespace NasleGhalam.ServiceLayer.Services
                         _ratios.Add(ratio);
                     }
                 }
+                else if(eg.IsChecked)
+                {
+           
+                    foreach (var esg in eg.SubGroups)
+                    {
+                        var ratio = Mapper.Map<Ratio>(esg);
+                        if (allRatios.Where(x => x.Id == ratio.Id).Any())
+                        {
+                            _ratios.Attach(ratio);
+                            _uow.UpdateFields(ratio, x => x.Rate);
+                        }
+                        else
+                        {
+                            ratio.LessonId = lessonCreateViewModel.Id;
+                            _ratios.Add(ratio);
+                        }
+                    }
+                }
             }
 
 
             //delete
             foreach (EducationGroup_Lesson egl in previousEducationGroupLesson)
             {
-                if (!Utility.isExistInArray<int>(lessonCreateViewModel.EducationGroups.Select(x => x.EducationGroupId), egl.EducationGroupId))
+                if ( !Utility.isExistInArray<int>(lessonCreateViewModel.EducationGroups.Select(x => x.EducationGroupId), egl.EducationGroupId))
                 {
                     _uow.MarkAsDeleted(egl);
                     foreach (var item in lessonCreateViewModel.EducationGroups.Where(c => c.EducationGroupId == egl.EducationGroupId).First().SubGroups)

@@ -20,7 +20,7 @@ namespace NasleGhalam.ViewModels.Lesson
         [Display(Name = "اختصاصی")]
         public bool IsMain { get; set; }
 
-        public List<EducationGroupLessonViewModel> EducationGroups { get; set; }
+        public IEnumerable<EducationGroupLessonViewModel> EducationGroups { get; set; }
 
 
     }

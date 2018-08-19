@@ -24,6 +24,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<LessonViewModel, Lesson>();
                 config.CreateMap<ViewModels.EducationGroup.EducationGroupViewModel, EducationGroup>();
                 config.CreateMap<EducationGroup_LessonViewModel, EducationGroup_Lesson>();
+                config.CreateMap<EducationGroupLessonViewModel, EducationGroup_Lesson>();
 
                 config.CreateMap<RoleViewModel, Role>();
                 config.CreateMap<UserCreateViewModel, User>();

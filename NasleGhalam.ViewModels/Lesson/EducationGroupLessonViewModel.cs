@@ -19,7 +19,7 @@ namespace NasleGhalam.ViewModels.Lesson
         
 
 
-        public List<RatioLessonViewModel> SubGroups { get; set; }   
+        public IEnumerable<RatioLessonViewModel> SubGroups { get; set; }   
 
     }
 }

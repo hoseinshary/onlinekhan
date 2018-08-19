@@ -7,7 +7,18 @@
                    @open="getAllEduGroupAndEduSubGroupStore()">
 
     <my-input :model="$v.instanceObj.Name"
-              class="col-md-12" />
+              class="col-md-6" />
+    <my-field class="col-md-6"
+              :model="$v.instanceObj.IsMain">
+      <template slot-scope="data">
+        <q-radio v-model="data.obj.$model"
+                 val="false"
+                 label="خیر" />
+        <q-radio v-model="data.obj.$model"
+                 val="true"
+                 label="بلی" />
+      </template>
+    </my-field>
     <fieldset class="col-12">
       <legend>گروههای آموزشی</legend>
       <div class="row"

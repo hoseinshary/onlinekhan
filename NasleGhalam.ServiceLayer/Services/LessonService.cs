@@ -25,15 +25,15 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<Ratio> _ratios;
         private readonly IDbSet<EducationGroup> _educationGroups;
 
-
+        private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lesson;
         private readonly EducationGroup_LessonService _educationGroupLessonService;
         private readonly RatioService _ratioService;
         private readonly TopicService _topicService;
 
 
 
-
-        public LessonService(IUnitOfWork uow, EducationGroup_LessonService educationGroupLessonService, RatioService ratioService, TopicService topicService)
+        
+        public LessonService(IUnitOfWork uow , EducationGroup_LessonService educationGroupLessonService, RatioService ratioService, TopicService topicService)
         {
             _uow = uow;
             _lessons = uow.Set<Lesson>();
@@ -42,8 +42,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _topicService = topicService;
             _educationGroup_Lessons = uow.Set<EducationGroup_Lesson>();
             _ratios = uow.Set<Ratio>();
-            _educationGroups = uow.Set<EducationGroup>();
-
         }
 
 
@@ -206,14 +204,15 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
-            var currentLesson = _lessons.FirstOrDefault(current => current.Name == lessonCreateViewModel.Name.Replace(" ", ""));
-            if (currentLesson != null)
-            {
-                MessageResult msg = new MessageResult();
-                msg.FaMessage = "این درس قبلا ثبت شده است. برای تغییر از منوی ویرایش استفاده کنید";
-                msg.MessageType = MessageType.Error;
-                return msg;
-            }
+            //var currentLesson = _lessons.FirstOrDefault(current => current.Name == lessonCreateViewModel.Name.Replace(" ", ""));
+            //if (currentLesson != null)
+            //{
+            //    return new MessageResult
+            //    {
+            //        FaMessage = "این درس قبلا ثبت شده است. برای تغییر از منوی ویرایش استفاده کنید",
+            //        MessageType = MessageType.Error
+            //    };
+            //}
 
             Lesson l = new Lesson()
             {
@@ -391,49 +390,43 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-            var lessonViewModel = GetById(id);
-            if (lessonViewModel == null)
+            var lesson = _lessons
+                .Where(current => current.Id == id)
+                .Select(current => new 
+                {
+                    HasTopic = current.EducationGroups_Lessons.Any(edu_Lesson => edu_Lesson.Topics.Any()),
+                    Ratios = current.Ratios,
+                    EducationGroups_Lessons = current.EducationGroups_Lessons
+                }).FirstOrDefault();
+
+            if (lesson == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var lesson = Mapper.Map<Lesson>(lessonViewModel);
-            _uow.MarkAsDeleted(lesson);
+            var ratios = lesson.Ratios;
+            foreach (var ratio in ratios)
+            {
+                _uow.MarkAsDeleted(ratio);
+            }
+
+            var eduLesson = lesson.EducationGroups_Lessons;
+            foreach (var educationGroupsLesson in eduLesson)
+            {
+                _uow.MarkAsDeleted(educationGroupsLesson);
+            }
+
+            Lesson entityLesson = new Lesson()
+            {
+                Id = id
+            };
+
+            _uow.MarkAsDeleted(entityLesson);
+
 
             return _uow.CommitChanges(CrudType.Delete, Title);
 
         }
-
-        /// <summary>
-        /// حذف درس در گرو های آموزشی
-        /// </summary>
-        /// <param name="int[educationGroupId]"></param>
-        /// <returns></returns>
-        public MessageResult Delete(int lessonId, int[] educationGroupId)
-        {
-            var lessonViewModel = GetById(lessonId);
-            if (lessonViewModel == null)
-            {
-                return Utility.NotFoundMessage();
-            }
-
-
-            foreach (int eduId in educationGroupId)
-            {
-                var eduLesson = _educationGroupLessonService.GetAllEduLessonByEducationGroupIdAndLessonId(eduId, lessonId);
-
-
-            }
-
-            var lesson = Mapper.Map<Lesson>(lessonViewModel);
-            _uow.MarkAsDeleted(lesson);
-
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
-        }
-
-
-
 
         /// <summary>
         /// گرفتن همه درس ها برای لیست کشویی

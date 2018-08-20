@@ -101,6 +101,10 @@
     <Compile Include="Migrations\201808171446256_question-ratio-changed.Designer.cs">
       <DependentUpon>201808171446256_question-ratio-changed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808201151207_unique.cs" />
+    <Compile Include="Migrations\201808201151207_unique.Designer.cs">
+      <DependentUpon>201808201151207_unique.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -157,6 +161,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808171446256_question-ratio-changed.resx">
       <DependentUpon>201808171446256_question-ratio-changed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808201151207_unique.resx">
+      <DependentUpon>201808201151207_unique.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

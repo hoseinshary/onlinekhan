@@ -9,6 +9,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             this.HasKey(x => x.Id);
             this.Property(x => x.Name).HasMaxLength(50);
+            this.HasIndex(x => x.Name).IsUnique().HasName("UK_EducationGroup_Name");
         }
     }
 }

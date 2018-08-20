@@ -8,15 +8,19 @@ namespace NasleGhalam.ViewModels.Lookup
         public int Id { get; set; }
 
 
-        [Display(Name = "لوک آپ")]
+        [Display(Name = "نام")]
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Name { get; set; }
 
 
-        [Display(Name = "")]
+        [Display(Name = "ارزش")]
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Value { get; set; }
 
 
-        [Display(Name = "")]
+        [Display(Name = "وضعیت")]
         public int State { get; set; }
 
 

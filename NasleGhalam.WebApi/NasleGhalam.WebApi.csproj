@@ -112,6 +112,7 @@
     <Compile Include="Controllers\EducationSubGroupController.cs" />
     <Compile Include="Controllers\EducationYearController.cs" />
     <Compile Include="Controllers\ExamController.cs" />
+    <Compile Include="Controllers\LookupController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\RatioController.cs" />

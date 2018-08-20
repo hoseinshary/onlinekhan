@@ -9,26 +9,26 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: هاشم معین
-	///     date: 29/05/1397
+	///     name: 
+	///     date: 
 	/// </author>
 	public class LookupController : ApiController
-	{
+    {
         private readonly LookupService _lookupService;
-		public LookupController(LookupService lookupService)
+        public LookupController(LookupService lookupService)
         {
             _lookupService = lookupService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_lookupService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var lookup = _lookupService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.LookupCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(LookupViewModel lookupViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

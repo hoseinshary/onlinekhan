@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.Lookup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class LookupService
-	{
-		private const string Title = "لوک آپ";
+    public class LookupService
+    {
+        private const string Title = "لوک آپ";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Lookup> _lookups;
-       
-	    public LookupService(IUnitOfWork uow)
+
+        public LookupService(IUnitOfWork uow)
         {
             _uow = uow;
             _lookups = uow.Set<Lookup>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  لوک آپ با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -35,12 +35,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new LookupViewModel
                 {
-                    Id = current.Id
+                    Id = current.Id,
+                    Name = current.Name,
+                    Value = current.Value,
+                    State = current.State
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه لوک آپ ها
         /// </summary>
         /// <returns></returns>
@@ -49,11 +52,14 @@ namespace NasleGhalam.ServiceLayer.Services
             return _lookups.Select(current => new LookupViewModel()
             {
                 Id = current.Id,
+                Name = current.Name,
+                Value = current.Value,
+                State = current.State
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت لوک آپ
         /// </summary>
         /// <param name="lookupViewModel"></param>
@@ -63,13 +69,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var lookup = Mapper.Map<Lookup>(lookupViewModel);
             _lookups.Add(lookup);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = lookup.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = lookup.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش لوک آپ
         /// </summary>
         /// <param name="lookupViewModel"></param>
@@ -79,20 +85,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var lookup = Mapper.Map<Lookup>(lookupViewModel);
             _uow.MarkAsChanged(lookup);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف لوک آپ
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  lookupViewModel = GetById(id);
+            var lookupViewModel = GetById(id);
             if (lookupViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -100,9 +106,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var lookup = Mapper.Map<Lookup>(lookupViewModel);
             _uow.MarkAsDeleted(lookup);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
@@ -118,5 +124,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

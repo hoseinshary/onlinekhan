@@ -79,5 +79,10 @@
         QuestionUpdateAccess = 55,
         QuestionDeleteAccess = 56,
         QuestionReadAccess = 57,
+
+        LookupReadAccess = 58,
+        LookupCreateAccess = 59,
+        LookupUpdateAccess = 60,
+        LookupDeleteAccess = 61,
     }
 }

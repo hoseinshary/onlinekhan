@@ -9,6 +9,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             this.HasKey(x => x.Id);
             this.Property(x => x.Name).HasMaxLength(200).IsRequired();
+            this.HasIndex(x => x.Name).IsUnique().HasName("UK_EducationBook_Name");
 
             this.HasRequired(x => x.GradeLevel)
                 .WithMany(x => x.EducationBooks)

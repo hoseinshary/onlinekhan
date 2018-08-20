@@ -14,6 +14,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             this.HasIndex(x => x.Username).IsUnique().HasName("UK_User_Username");
             this.Property(x => x.Password).HasMaxLength(50).IsRequired();
             this.Property(x => x.NationalNo).HasMaxLength(10);
+            this.HasIndex(x => x.NationalNo).IsUnique().HasName("UK_User_NationalNo");
             this.Property(x => x.Phone).HasMaxLength(8);
             this.Property(x => x.Mobile).HasMaxLength(10);
 

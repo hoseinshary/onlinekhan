@@ -34,13 +34,13 @@ namespace NasleGhalam.ViewModels.Topic
 
 
         [Display(Name = "درجه سختی")]
-        //TODO:Complate Lookup Instance
-        public int HardnessTypeId { get; set; }
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        public int LookupId_HardnessType { get; set; }
 
 
         [Display(Name = "حیطه مبحث")]
-        //TODO:Complate Lookup Instance
-        public int AreaTypeId { get; set; }
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        public int LookupId_AreaType { get; set; }
 
 
         [Display(Name = "فعال")]
@@ -52,7 +52,6 @@ namespace NasleGhalam.ViewModels.Topic
         public int EducationGroup_LessonId { get; set; }
 
         [Display(Name = "مبحث پدر")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int? ParentTopicId { get; set; }
 
 

@@ -83,6 +83,7 @@
     <Compile Include="Topic\TopicCreateViewModel.cs" />
     <Compile Include="Topic\TopicGetNameViewModel.cs" />
     <Compile Include="Topic\TopicGetViewModel.cs" />
+    <Compile Include="Topic\TopicTreeViewModel.cs" />
     <Compile Include="User\LoginResultViewModel.cs" />
     <Compile Include="User\LoginViewModel.cs" />
     <Compile Include="User\UserGetViewModel.cs" />

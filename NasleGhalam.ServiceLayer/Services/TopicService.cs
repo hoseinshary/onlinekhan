@@ -28,29 +28,38 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// گرفتن  تمام مبحث ها مربوط به یک گروه آموزشی درس به صورت درختی
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
-        public TopicGetNameViewModel GetAllTree(int educationGroup_LessonId)
+        public IList<TopicGetNameViewModel> GetAllTree(int educationGroup_LessonId)
         {
-            return _topics
-                .Where(current => current.EducationGroup_LessonId == educationGroup_LessonId )
-                .Select(current => new TopicGetNameViewModel
+
+            return _topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId)
+                .Include(e => e.ParentTopics).Select(current => new TopicGetNameViewModel
                 {
                     Id = current.Id,
                     Title = current.Title,
-                    ParentTopicId = current.ParentTopicId,
+                    ParentTopicId = current.ParentTopicId
+                }).ToList();
+
+            //_topics
+            //   .Where(current => current.EducationGroup_LessonId == educationGroup_LessonId)
+            //   .Select(current => new TopicGetNameViewModel
+            //   {
+            //       Id = current.Id,
+            //       Title = current.Title,
+            //       ParentTopicId = current.ParentTopicId,
 
 
-                }).FirstOrDefault();
+            //   }).ToList();
         }
 
 
         /// <summary>
         /// گرفتن  تمام مبحث های ریشه مربوط به یک گروه آموزشی درس
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
-        public TopicGetNameViewModel GetAllRoot(int educationGroup_LessonId)
+        public IList<TopicGetNameViewModel> GetAllRoot(int educationGroup_LessonId)
         {
             return _topics
                 .Where(current => current.EducationGroup_LessonId == educationGroup_LessonId && current.ParentTopicId == null)
@@ -61,16 +70,17 @@ namespace NasleGhalam.ServiceLayer.Services
                     ParentTopicId = current.ParentTopicId,
                     
 
-                }).FirstOrDefault();
+                }).ToList();
         }
 
 
         /// <summary>
         /// گرفتن  مبحث های فرزند یک مبحث مربوط به یک گروه آموزشی درس
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="educationGroup_LessonId"></param>
+        /// <param name="parentTopicId"></param>
         /// <returns></returns>
-        public TopicGetNameViewModel GetAllChild(int educationGroup_LessonId , int parentTopicId)
+        public IList<TopicGetNameViewModel> GetAllChild(int educationGroup_LessonId , int parentTopicId)
         {
             return _topics
                 .Where(current => current.ParentTopicId == parentTopicId && current.EducationGroup_LessonId == educationGroup_LessonId)
@@ -80,7 +90,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Title = current.Title,
                     ParentTopicId = current.ParentTopicId
 
-                }).FirstOrDefault();
+                }).ToList();
         }
 
 
@@ -98,11 +108,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Title = current.Title,
-                   // AreaType = current.AreaType,
+                    LookupId_AreaType = current.LookupId_AreaType,
                     EducationGroup_LessonId = current.EducationGroup_LessonId,
                     ExamStock = current.ExamStock,
                     ExamStockSystem = current.ExamStockSystem,
-                   // HardnessType = current.HardnessType,
+                    LookupId_HardnessType = current.LookupId_HardnessType,
                     Importance = current.Importance,
                     IsActive = current.IsActive,
                     IsExamSource = current.IsExamSource,
@@ -116,6 +126,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// گرفتن همه مبحث های مربوط به یک گروه آموزشی درس
         /// </summary>
+        /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
         public IList<TopicGetViewModel> GetAllByEducationGroup_LessonId(int educationGroup_LessonId)
         {
@@ -123,11 +134,11 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 Id = current.Id,
                 Title = current.Title,
-                //AreaType = current.AreaType,
+                LookupId_AreaType = current.LookupId_AreaType,
                 EducationGroup_LessonId = current.EducationGroup_LessonId,
                 ExamStock = current.ExamStock,
                 ExamStockSystem = current.ExamStockSystem,
-                //HardnessType = current.HardnessType,
+                LookupId_HardnessType = current.LookupId_HardnessType,
                 Importance = current.Importance,
                 IsActive = current.IsActive,
                 IsExamSource = current.IsExamSource,

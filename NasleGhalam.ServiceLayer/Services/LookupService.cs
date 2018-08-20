@@ -42,6 +42,23 @@ namespace NasleGhalam.ServiceLayer.Services
                 }).FirstOrDefault();
         }
 
+        /// <summary>
+        /// گرفتن همه ی لوکاپ ها با نام
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IList<SelectViewModel> GetAllByName(string name)
+        {
+            return _lookups.Where(x => x.Name == name)
+                .Select(current => new SelectViewModel()
+            {
+                label = current.Value,
+                value = current.Id
+            }).ToList();
+        }
+
+
+
 
         /// <summary>
         /// گرفتن همه لوک آپ ها

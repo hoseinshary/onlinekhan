@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="Exam\ExamViewModel.cs" />
     <Compile Include="Lesson\LessonCreateAndUpdateViewModel.cs" />
+    <Compile Include="Lookup\LookupViewModel.cs" />
     <Compile Include="Province\ProvinceViewModel.cs" />
     <Compile Include="Lesson\RatioLessonViewModel.cs" />
     <Compile Include="Question\QuestionViewModel.cs" />

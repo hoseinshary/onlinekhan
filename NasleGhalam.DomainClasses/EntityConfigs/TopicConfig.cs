@@ -17,7 +17,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             .HasForeignKey(x => x.EducationGroup_LessonId)
             .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.ParentTopic)
+            this.HasOptional(x => x.ParentTopic)
                 .WithMany(x => x.ParentTopics)
                 .HasForeignKey(x => x.ParentTopicId)
                 .WillCascadeOnDelete(false);

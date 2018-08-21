@@ -47,7 +47,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllByName(string name)
+        public IList<SelectViewModel> GetAllDdlByName(string name)
         {
             return _lookups.Where(x => x.Name == name)
                 .Select(current => new SelectViewModel()
@@ -57,6 +57,22 @@ namespace NasleGhalam.ServiceLayer.Services
             }).ToList();
         }
 
+        /// <summary>
+        /// گرفتن کامل همه لوکاپ ها با نام
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IList<LookupGetViewModel> GetAllByName(string name)
+        {
+            return _lookups
+                .Where(current => current.Name == "PmOperation")
+                .Select(current => new LookupGetViewModel()
+                {
+                    value = current.Id,
+                    lable = current.Value,
+                    state = current.State
+                }).ToList();
+        }
 
 
 

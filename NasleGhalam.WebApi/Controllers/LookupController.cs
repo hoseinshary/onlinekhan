@@ -9,8 +9,8 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: حسین شریعتمداری
+	///     date: 29/5/1397
 	/// </author>
 	public class LookupController : ApiController
     {
@@ -18,6 +18,68 @@ namespace NasleGhalam.WebApi.Controllers
         public LookupController(LookupService lookupService)
         {
             _lookupService = lookupService;
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllAnswerType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("AnswerType"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllPaperType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("PaperType"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllPrintType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("PrintType"));
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllBookType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("BookType"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllQuestionType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("QuestionType"));
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllTopicHardnessType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("TopicHardnessType"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllQuestionHardnessType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("QuestionHardnessType"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllAreaType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("AreaType"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllRepeatnessType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("RepeatnessType"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllAuthorType()
+        {
+            return Ok(_lookupService.GetAllDdlByName("AuthorType"));
         }
 
 

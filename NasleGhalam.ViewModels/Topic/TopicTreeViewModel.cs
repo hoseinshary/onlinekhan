@@ -4,7 +4,9 @@ namespace NasleGhalam.ViewModels.Topic
 {
     public class TopicTreeViewModel
     {
-        public TopicGetNameViewModel Topic { get; set; }
+        public int Id { get; set; }
+
+        public string Title { get; set; }
 
         public IEnumerable<TopicTreeViewModel> Children { get; set; }
 

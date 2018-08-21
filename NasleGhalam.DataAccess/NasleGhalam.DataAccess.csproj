@@ -53,6 +53,10 @@
     <Compile Include="Migrations\201808201417081_initDb.Designer.cs">
       <DependentUpon>201808201417081_initDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808211145217_nullableParentTopic.cs" />
+    <Compile Include="Migrations\201808211145217_nullableParentTopic.Designer.cs">
+      <DependentUpon>201808211145217_nullableParentTopic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -73,6 +77,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201808201417081_initDb.resx">
       <DependentUpon>201808201417081_initDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808211145217_nullableParentTopic.resx">
+      <DependentUpon>201808211145217_nullableParentTopic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

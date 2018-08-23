@@ -11,7 +11,9 @@ using NasleGhalam.ViewModels.City;
 using NasleGhalam.ViewModels.EducationYear;
 using NasleGhalam.ViewModels.Exam;
 using NasleGhalam.ViewModels.EducationSubGroup;
+using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.Ratio;
+using NasleGhalam.ViewModels.Topic;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -44,6 +46,10 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
                 config.CreateMap<ViewModels.Ratio.RatioViewModel, Ratio>();
                 config.CreateMap<RatioLessonViewModel, Ratio>();
+
+                config.CreateMap<LookupViewModel, Lookup>();
+
+                config.CreateMap<TopicCreateViewModel, Topic>();
 
 
             });

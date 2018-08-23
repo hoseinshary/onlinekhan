@@ -73,6 +73,8 @@
     </Compile>
     <Compile Include="Exam\ExamViewModel.cs" />
     <Compile Include="Lesson\LessonCreateAndUpdateViewModel.cs" />
+    <Compile Include="Lookup\LookupGetViewModel.cs" />
+    <Compile Include="Lookup\LookupViewModel.cs" />
     <Compile Include="Province\ProvinceViewModel.cs" />
     <Compile Include="Lesson\RatioLessonViewModel.cs" />
     <Compile Include="Question\QuestionViewModel.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="Topic\TopicCreateViewModel.cs" />
     <Compile Include="Topic\TopicGetNameViewModel.cs" />
     <Compile Include="Topic\TopicGetViewModel.cs" />
+    <Compile Include="Topic\TopicTreeViewModel.cs" />
     <Compile Include="User\LoginResultViewModel.cs" />
     <Compile Include="User\LoginViewModel.cs" />
     <Compile Include="User\UserGetViewModel.cs" />

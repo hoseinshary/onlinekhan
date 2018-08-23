@@ -25,32 +25,117 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-        /// <summary>
-        /// گرفتن  تمام مبحث ها مربوط به یک گروه آموزشی درس به صورت درختی
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public TopicGetNameViewModel GetAllTree(int educationGroup_LessonId)
+        public IEnumerable<TopicTreeViewModel> children(int id )
         {
-            return _topics
-                .Where(current => current.EducationGroup_LessonId == educationGroup_LessonId )
-                .Select(current => new TopicGetNameViewModel
+            
+            if (_topics.Any(x => x.ParentTopicId == id))
+            {
+                yield return _topics.Where(x=>x.Id == id).Select(current =>new TopicTreeViewModel {
+                    Id = current.Id,
+                    Title = current.Title,
+                    
+                }).FirstOrDefault();
+            }
+            foreach (var item  in _topics.Where(x=> x.ParentTopicId == id))
+            {
+                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
                 {
                     Id = current.Id,
                     Title = current.Title,
-                    ParentTopicId = current.ParentTopicId,
+                    Children = children(item.Id)
+                    
+                }).FirstOrDefault();
+            }
+            
+            
+        }
 
+        /// <summary>
+        /// گرفتن  تمام مبحث ها مربوط به یک گروه آموزشی درس به صورت درختی
+        /// </summary>
+        /// <param name="educationGroup_LessonId"></param>
+        /// <returns></returns>
+        public IEnumerable<TopicTreeViewModel> GetAllTree(int id)
+        {
+            if (!_topics.Any(x => x.ParentTopicId == id))
+            {
+                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                {
+                    Id = current.Id,
+                    Title = current.Title,
+                    
+                }).FirstOrDefault();
+            }
+            foreach (var item in _topics.Where(x => x.ParentTopicId == id))
+            {
+                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                {
+                    Id = current.Id,
+                    Title = current.Title,
+                    Children = GetAllTree(item.Id)
 
                 }).FirstOrDefault();
+            }
+
+
+
+
+
+            //List<TopicTreeViewModel> returnVal = new List<TopicTreeViewModel>();
+            //var alltopic = _topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId).ToList();
+            //foreach (var VARIABLE in alltopic)
+            //{
+            //    if (VARIABLE.ParentTopicId == null)
+            //    {
+            //        returnVal.Add(new TopicTreeViewModel
+            //        {
+            //            Id = VARIABLE.Id,
+            //            Title = VARIABLE.Title,
+            //            Children = 
+            //        });
+            //    }
+            //}
+
+            //_topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId)
+            //    .Select(current => new TopicTreeViewModel[0]
+
+            //        //Id = current.Id,
+            //        //Title = current.Title,
+            //        //Children = _topics.Any(x=> x.ParentTopicId == current.Id) ? _topics.Where(x => x.ParentTopicId == current.Id)
+            //        //.Select(y => new ) : null
+            //    );
+
+
+
+
+
+            //return _topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId)
+            //    .Include(e => e.ParentTopics).Select(current => new TopicGetNameViewModel
+            //    {
+            //        Id = current.Id,
+            //        Title = current.Title,
+            //        ParentTopicId = current.ParentTopicId
+            //    }).ToList();
+
+            //return  _topics
+            //    .Where(current => current.EducationGroup_LessonId == educationGroup_LessonId)
+            //    .Select(current => new TopicGetNameViewModel
+            //    {
+            //        Id = current.Id,
+            //        Title = current.Title,
+            //        ParentTopicId = current.ParentTopicId,
+
+
+            //    }).ToList();
         }
 
 
         /// <summary>
         /// گرفتن  تمام مبحث های ریشه مربوط به یک گروه آموزشی درس
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
-        public TopicGetNameViewModel GetAllRoot(int educationGroup_LessonId)
+        public IList<TopicGetNameViewModel> GetAllRoot(int educationGroup_LessonId)
         {
             return _topics
                 .Where(current => current.EducationGroup_LessonId == educationGroup_LessonId && current.ParentTopicId == null)
@@ -61,16 +146,17 @@ namespace NasleGhalam.ServiceLayer.Services
                     ParentTopicId = current.ParentTopicId,
                     
 
-                }).FirstOrDefault();
+                }).ToList();
         }
 
 
         /// <summary>
         /// گرفتن  مبحث های فرزند یک مبحث مربوط به یک گروه آموزشی درس
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="educationGroup_LessonId"></param>
+        /// <param name="parentTopicId"></param>
         /// <returns></returns>
-        public TopicGetNameViewModel GetAllChild(int educationGroup_LessonId , int parentTopicId)
+        public IList<TopicGetNameViewModel> GetAllChild(int educationGroup_LessonId , int parentTopicId)
         {
             return _topics
                 .Where(current => current.ParentTopicId == parentTopicId && current.EducationGroup_LessonId == educationGroup_LessonId)
@@ -80,7 +166,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Title = current.Title,
                     ParentTopicId = current.ParentTopicId
 
-                }).FirstOrDefault();
+                }).ToList();
         }
 
 
@@ -98,11 +184,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Title = current.Title,
-                   // AreaType = current.AreaType,
+                    LookupId_AreaType = current.LookupId_AreaType,
                     EducationGroup_LessonId = current.EducationGroup_LessonId,
                     ExamStock = current.ExamStock,
                     ExamStockSystem = current.ExamStockSystem,
-                   // HardnessType = current.HardnessType,
+                    LookupId_HardnessType = current.LookupId_HardnessType,
                     Importance = current.Importance,
                     IsActive = current.IsActive,
                     IsExamSource = current.IsExamSource,
@@ -116,6 +202,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// گرفتن همه مبحث های مربوط به یک گروه آموزشی درس
         /// </summary>
+        /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
         public IList<TopicGetViewModel> GetAllByEducationGroup_LessonId(int educationGroup_LessonId)
         {
@@ -123,11 +210,11 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 Id = current.Id,
                 Title = current.Title,
-                //AreaType = current.AreaType,
+                LookupId_AreaType = current.LookupId_AreaType,
                 EducationGroup_LessonId = current.EducationGroup_LessonId,
                 ExamStock = current.ExamStock,
                 ExamStockSystem = current.ExamStockSystem,
-                //HardnessType = current.HardnessType,
+                LookupId_HardnessType = current.LookupId_HardnessType,
                 Importance = current.Importance,
                 IsActive = current.IsActive,
                 IsExamSource = current.IsExamSource,

@@ -49,57 +49,13 @@
   <ItemGroup>
     <Compile Include="Context\DBContext.cs" />
     <Compile Include="Context\IUnitOfWork.cs" />
-    <Compile Include="Migrations\201805231641424_initDb.cs" />
-    <Compile Include="Migrations\201805231641424_initDb.Designer.cs">
-      <DependentUpon>201805231641424_initDb.cs</DependentUpon>
+    <Compile Include="Migrations\201808201417081_initDb.cs" />
+    <Compile Include="Migrations\201808201417081_initDb.Designer.cs">
+      <DependentUpon>201808201417081_initDb.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806021945198_init2.cs" />
-    <Compile Include="Migrations\201806021945198_init2.Designer.cs">
-      <DependentUpon>201806021945198_init2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806061509052_init3.cs" />
-    <Compile Include="Migrations\201806061509052_init3.Designer.cs">
-      <DependentUpon>201806061509052_init3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806171418275_addTopicQuestion.cs" />
-    <Compile Include="Migrations\201806171418275_addTopicQuestion.Designer.cs">
-      <DependentUpon>201806171418275_addTopicQuestion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806181746162_changeUserTbl.cs" />
-    <Compile Include="Migrations\201806181746162_changeUserTbl.Designer.cs">
-      <DependentUpon>201806181746162_changeUserTbl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807240809238_EducationSubGroupRelation.cs" />
-    <Compile Include="Migrations\201807240809238_EducationSubGroupRelation.Designer.cs">
-      <DependentUpon>201807240809238_EducationSubGroupRelation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807311642432_addModule.cs" />
-    <Compile Include="Migrations\201807311642432_addModule.Designer.cs">
-      <DependentUpon>201807311642432_addModule.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807311650201_addModuleRelation.cs" />
-    <Compile Include="Migrations\201807311650201_addModuleRelation.Designer.cs">
-      <DependentUpon>201807311650201_addModuleRelation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808081821255_addLookupTbl.cs" />
-    <Compile Include="Migrations\201808081821255_addLookupTbl.Designer.cs">
-      <DependentUpon>201808081821255_addLookupTbl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808081830542_addLookupTbl2.cs" />
-    <Compile Include="Migrations\201808081830542_addLookupTbl2.Designer.cs">
-      <DependentUpon>201808081830542_addLookupTbl2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808081853344_addLookupRelation.cs" />
-    <Compile Include="Migrations\201808081853344_addLookupRelation.Designer.cs">
-      <DependentUpon>201808081853344_addLookupRelation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808151404365_RatioChange.cs" />
-    <Compile Include="Migrations\201808151404365_RatioChange.Designer.cs">
-      <DependentUpon>201808151404365_RatioChange.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808171446256_question-ratio-changed.cs" />
-    <Compile Include="Migrations\201808171446256_question-ratio-changed.Designer.cs">
-      <DependentUpon>201808171446256_question-ratio-changed.cs</DependentUpon>
+    <Compile Include="Migrations\201808211145217_nullableParentTopic.cs" />
+    <Compile Include="Migrations\201808211145217_nullableParentTopic.Designer.cs">
+      <DependentUpon>201808211145217_nullableParentTopic.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -119,44 +75,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805231641424_initDb.resx">
-      <DependentUpon>201805231641424_initDb.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201808201417081_initDb.resx">
+      <DependentUpon>201808201417081_initDb.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806021945198_init2.resx">
-      <DependentUpon>201806021945198_init2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806061509052_init3.resx">
-      <DependentUpon>201806061509052_init3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806171418275_addTopicQuestion.resx">
-      <DependentUpon>201806171418275_addTopicQuestion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806181746162_changeUserTbl.resx">
-      <DependentUpon>201806181746162_changeUserTbl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807240809238_EducationSubGroupRelation.resx">
-      <DependentUpon>201807240809238_EducationSubGroupRelation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807311642432_addModule.resx">
-      <DependentUpon>201807311642432_addModule.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807311650201_addModuleRelation.resx">
-      <DependentUpon>201807311650201_addModuleRelation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808081821255_addLookupTbl.resx">
-      <DependentUpon>201808081821255_addLookupTbl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808081830542_addLookupTbl2.resx">
-      <DependentUpon>201808081830542_addLookupTbl2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808081853344_addLookupRelation.resx">
-      <DependentUpon>201808081853344_addLookupRelation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808151404365_RatioChange.resx">
-      <DependentUpon>201808151404365_RatioChange.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808171446256_question-ratio-changed.resx">
-      <DependentUpon>201808171446256_question-ratio-changed.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201808211145217_nullableParentTopic.resx">
+      <DependentUpon>201808211145217_nullableParentTopic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

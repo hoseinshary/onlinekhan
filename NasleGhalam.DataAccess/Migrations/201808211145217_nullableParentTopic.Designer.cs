@@ -7,13 +7,13 @@ namespace NasleGhalam.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class addLookupRelation : IMigrationMetadata
+    public sealed partial class nullableParentTopic : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addLookupRelation));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(nullableParentTopic));
         
         string IMigrationMetadata.Id
         {
-            get { return "201808081853344_addLookupRelation"; }
+            get { return "201808211145217_nullableParentTopic"; }
         }
         
         string IMigrationMetadata.Source

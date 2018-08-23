@@ -2,50 +2,50 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Question;
+using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 29/05/1397
 	/// </author>
-	public class QuestionController : ApiController
+	public class LookupController : ApiController
 	{
-        private readonly QuestionService _questionService;
-		public QuestionController(QuestionService questionService)
+        private readonly LookupService _lookupService;
+		public LookupController(LookupService lookupService)
         {
-            _questionService = questionService;
+            _lookupService = lookupService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_questionService.GetAll());
+            return Ok(_lookupService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var question = _questionService.GetById(id);
-            if (question == null)
+            var lookup = _lookupService.GetById(id);
+            if (lookup == null)
             {
                 return NotFound();
             }
-            return Ok(question);
+            return Ok(lookup);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.QuestionCreateAccess)]
+        [CheckUserAccess(ActionBits.LookupCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(QuestionViewModel questionViewModel)
+        public IHttpActionResult Create(LookupViewModel lookupViewModel)
         {
-            var msgRes = _questionService.Create(questionViewModel);
+            var msgRes = _lookupService.Create(lookupViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -56,11 +56,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
+        [CheckUserAccess(ActionBits.LookupUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(QuestionViewModel questionViewModel)
+        public IHttpActionResult Update(LookupViewModel lookupViewModel)
         {
-            var msgRes = _questionService.Update(questionViewModel);
+            var msgRes = _lookupService.Update(lookupViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -69,10 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.QuestionDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.LookupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _questionService.Delete(id);
+            var msgRes = _lookupService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

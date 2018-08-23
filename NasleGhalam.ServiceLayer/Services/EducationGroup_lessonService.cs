@@ -5,6 +5,7 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
+using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.EducationGroup_Lesson;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -55,31 +56,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IList<EducationGroup_LessonViewModel> GetAllLessonByEducationGroupId(int id)
+        public IList<SelectViewModel> GetAllLessonByEducationGroupId(int id)
         {
             return _educationGroup_Lessons
                 .Where(current => current.EducationGroupId == id)
-                .Select(current => new EducationGroup_LessonViewModel
+                .Select(current => new SelectViewModel
                 {
-                    Id = current.Id,
-                    LessonName = current.Lesson.Name
+                    value = current.Id,
+                    label = current.Lesson.Name
                 }).ToList();
         }
 
-        /// <summary>
-        /// گرفتن  رابط گروه آموزشی  با آی دی درس و آی دی گروه آموزشی
-        /// </summary>
-        /// <param name="lessonId, educationGroupId"></param>
-        /// <returns></returns>
-        public EducationGroup_LessonViewModel GetAllEduLessonByEducationGroupIdAndLessonId(int eduId, int lessonId)
-        {
-            return _educationGroup_Lessons
-            .Where(current => current.EducationGroupId == eduId && current.LessonId == lessonId)
-                .Select(current => new EducationGroup_LessonViewModel
-                {
-                    Id = current.Id
-                }).FirstOrDefault();
-        }
+        
 
         /// <summary>
         /// گرفتن همه گروه های آموزشی با آی دی درس

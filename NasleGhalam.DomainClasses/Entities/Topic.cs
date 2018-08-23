@@ -5,6 +5,7 @@ namespace NasleGhalam.DomainClasses.Entities
 {
     public class Topic
     {
+        
         public Topic()
         {
             ParentTopics = new HashSet<Topic>();

@@ -25,7 +25,7 @@
                clearable
                @change="setCityName" />
 
-    <my-hr/>
+    <!-- <my-hr/> -->
 
     <my-input :model="$v.userObj.Name"
               class="col-sm-6 col-md-4" />

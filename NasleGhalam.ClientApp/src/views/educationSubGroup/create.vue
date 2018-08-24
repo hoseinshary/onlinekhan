@@ -1,8 +1,8 @@
 <template>
   <my-modal-create :title="modelName"
                    :show="isOpenModalCreate"
-                   @confirm="submitCreateStore"
-                   @reset="resetCreateStore"
+                   @confirm="submit"
+                   @reset="resetCreateStor"
                    @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
 
@@ -10,7 +10,7 @@
                :options="educationGroupDdl"
                class="col-md-6"
                clearable
-               @change="setEducationGroupName" />
+               ref="educationGroupId" />
 
     <my-input :model="$v.educationSubGroupObj.Name"
               class="col-md-6" />
@@ -36,8 +36,9 @@ export default {
     ...mapActions('educationGroupStore', {
       fillEducationSubGroupDdlStore: 'fillDdlStore'
     }),
-    setEducationGroupName(item) {
-      this.educationSubGroupObj.EducationGroupName = item.label;
+    submit() {
+      this.educationSubGroupObj.EducationGroupName = this.$refs.educationSubGroupId.getSelectedLabel();
+      this.submitCreateStore();
     },
     modalOpen() {
       this.fillEducationSubGroupDdlStore();

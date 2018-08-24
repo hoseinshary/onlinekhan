@@ -83,6 +83,9 @@ export default {
    * methods
    */
   methods: {
+    fn(a) {
+      console.log(a);
+    },
     ...mapActions('userStore', [
       'toggleModalCreateStore',
       'createVueStore',
@@ -98,8 +101,8 @@ export default {
       this.fillRoleDdl();
       this.fillProvinceDdl();
     },
-    provinceChange(item) {
-      this.fillCityByProvincIdDdl(item.value);
+    provinceChange(value) {
+      this.fillCityByProvincIdDdl(value);
     },
     submit() {
       this.userObj.CityName = this.$refs.cityId.getSelectedLabel();

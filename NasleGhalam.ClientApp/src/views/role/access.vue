@@ -89,13 +89,13 @@ export default {
       'fillActionByControllerIdAndModuleIdGridStore',
       'changeAccessStore'
     ]),
-    fillControllerDdl(item) {
-      this.moduleId = item.value;
-      this.fillControllerByModuleIdDdlStore(item.value);
+    fillControllerDdl(moduleId) {
+      this.moduleId = moduleId;
+      this.fillControllerByModuleIdDdlStore(moduleId);
     },
-    fillActionGrid(item) {
+    fillActionGrid(value) {
       this.fillActionByControllerIdAndModuleIdGridStore({
-        controllerId: item.value,
+        controllerId: value,
         moduleId: this.moduleId
       });
     },

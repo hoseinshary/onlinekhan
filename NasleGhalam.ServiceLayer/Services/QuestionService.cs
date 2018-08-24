@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
-using Microsoft.Office.Interop.Word;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -108,38 +106,38 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-        public void f()
-        {
-            string inputWordFile = @"C:\Users\hosein\Desktop\nasleghalam temp word file\adabiat-sarasari-95.docx";
+        //public void f()
+        //{
+        //    string inputWordFile = @"C:\Users\hosein\Desktop\nasleghalam temp word file\adabiat-sarasari-95.docx";
 
-            object missing = Type.Missing;
-            Application app = new Application();
-            Document doc = app.Documents.OpenNoRepairDialog(inputWordFile,
-                ref missing, ref missing, ref missing, ref missing,
-                ref missing, ref missing, ref missing, ref missing,
-                ref missing, ref missing, ref missing, ref missing,
-                ref missing, ref missing, ref missing);
-
-
-            string temp = "";
-            foreach (Paragraph p in doc.Paragraphs)
-            {
-                if (p.Range.Text[0].ToString().All(Char.IsDigit))
-                {
-                    temp = "";
-                    temp += p.Range.Text;
-                }
-                else
-                {
-                    temp += p.Range.Text;
-                }
-            }
+        //    object missing = Type.Missing;
+        //    Application app = new Application();
+        //    Document doc = app.Documents.OpenNoRepairDialog(inputWordFile,
+        //        ref missing, ref missing, ref missing, ref missing,
+        //        ref missing, ref missing, ref missing, ref missing,
+        //        ref missing, ref missing, ref missing, ref missing,
+        //        ref missing, ref missing, ref missing);
 
 
+        //    string temp = "";
+        //    foreach (Paragraph p in doc.Paragraphs)
+        //    {
+        //        if (p.Range.Text[0].ToString().All(Char.IsDigit))
+        //        {
+        //            temp = "";
+        //            temp += p.Range.Text;
+        //        }
+        //        else
+        //        {
+        //            temp += p.Range.Text;
+        //        }
+        //    }
 
-            doc.Close();
-            app.Quit();
-        }
+
+
+        //    doc.Close();
+        //    app.Quit();
+        //}
         
 
 

@@ -25,16 +25,29 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-        public IList<TopicTreeViewModel> children(int id )
+        public IEnumerable<TopicTreeViewModel> children(int id )
         {
             
             if (_topics.Any(x => x.ParentTopicId == id))
             {
-                return null;
+                yield return _topics.Where(x=>x.Id == id).Select(current =>new TopicTreeViewModel {
+                    Id = current.Id,
+                    Title = current.Title,
+                    
+                }).FirstOrDefault();
             }
-            TopicTreeViewModel returnVal = new TopicTreeViewModel();
+            foreach (var item  in _topics.Where(x=> x.ParentTopicId == id))
+            {
+                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                {
+                    Id = current.Id,
+                    Title = current.Title,
+                    Children = children(item.Id)
+                    
+                }).FirstOrDefault();
+            }
             
-            return ;
+            
         }
 
         /// <summary>
@@ -42,8 +55,32 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
-        public IList<TopicTreeViewModel> GetAllTree(int educationGroup_LessonId)
+        public IEnumerable<TopicTreeViewModel> GetAllTree(int id)
         {
+            if (!_topics.Any(x => x.ParentTopicId == id))
+            {
+                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                {
+                    Id = current.Id,
+                    Title = current.Title,
+                    
+                }).FirstOrDefault();
+            }
+            foreach (var item in _topics.Where(x => x.ParentTopicId == id))
+            {
+                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                {
+                    Id = current.Id,
+                    Title = current.Title,
+                    Children = GetAllTree(item.Id)
+
+                }).FirstOrDefault();
+            }
+
+
+
+
+
             //List<TopicTreeViewModel> returnVal = new List<TopicTreeViewModel>();
             //var alltopic = _topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId).ToList();
             //foreach (var VARIABLE in alltopic)
@@ -58,15 +95,15 @@ namespace NasleGhalam.ServiceLayer.Services
             //        });
             //    }
             //}
-           
-            _topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId)
-                .Select(current => new TopicTreeViewModel[0]
-                
-                    //Id = current.Id,
-                    //Title = current.Title,
-                    //Children = _topics.Any(x=> x.ParentTopicId == current.Id) ? _topics.Where(x => x.ParentTopicId == current.Id)
-                    //.Select(y => new ) : null
-                );
+
+            //_topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId)
+            //    .Select(current => new TopicTreeViewModel[0]
+
+            //        //Id = current.Id,
+            //        //Title = current.Title,
+            //        //Children = _topics.Any(x=> x.ParentTopicId == current.Id) ? _topics.Where(x => x.ParentTopicId == current.Id)
+            //        //.Select(y => new ) : null
+            //    );
 
 
 

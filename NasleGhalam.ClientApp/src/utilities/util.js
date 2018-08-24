@@ -33,8 +33,8 @@ const clearObject = function(obj) {
       // obj[key] = 0;
       obj[key] = undefined;
     } else if (isBoolean(obj[key])) {
-      obj[key] = false;
-      // obj[key] = undefined;
+      //obj[key] = false;
+      obj[key] = undefined;
     } else if (isArray(obj[key])) {
       clearArray(obj[key]);
     } else if (isObject(obj[key])) {

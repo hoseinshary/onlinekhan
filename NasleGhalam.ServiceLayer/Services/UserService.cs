@@ -54,7 +54,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     Gender = current.Gender,
                     Mobile = current.Mobile,
                     NationalNo = current.NationalNo,
-                    Phone = current.Phone
+                    Phone = current.Phone,
+                    ProvinceId = current.City.ProvinceId
                 }).FirstOrDefault();
         }
 

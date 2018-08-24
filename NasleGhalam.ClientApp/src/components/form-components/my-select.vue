@@ -80,6 +80,26 @@ export default {
       this.$refs.input.clear();
     },
     /**
+     * get selected item
+     */
+    getSelectedItem() {
+      return this.options.find(o => o.value == this.model.$model);
+    },
+    /**
+     * get selected label
+     */
+    getSelectedLabel() {
+      var item = this.options.find(o => o.value == this.model.$model);
+      return item ? item.label : '';
+    },
+    /**
+     * get selected value
+     */
+    getSelectedValue() {
+      var item = this.options.find(o => o.value == this.model.$model);
+      return item ? item.value : 0;
+    },
+    /**
      * get model error
      */
     errorLabel() {
@@ -110,12 +130,11 @@ export default {
     },
     value: {
       get() {
-        var value = this.model.$model;
-        var item = this.options.find(o => o.value == value);
-        if (item) this.$emit('change', item);
-        return value;
+        return this.model.$model;
       },
       set(newVal) {
+        var item = this.options.find(o => o.value == newVal);
+        this.$emit('change', item ? item : { label: '', value: 0 });
         this.model.$model = newVal;
       }
     }

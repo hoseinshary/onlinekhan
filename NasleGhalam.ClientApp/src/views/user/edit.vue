@@ -2,7 +2,7 @@
   <my-modal-edit :title="modelName"
                  :show="isOpenModalEdit"
                  size="xl"
-                 @confirm="submitEditStore"
+                 @confirm="submit"
                  @reset="resetEditStore"
                  @open="modalOpen"
                  @close="toggleModalEditStore(false)">
@@ -11,7 +11,7 @@
                :options="roleDdl"
                class="col-sm-6 col-md-4"
                clearable
-               @change="setRoleName" />
+               ref="roleId" />
 
     <my-select :model="$v.userObj.ProvinceId"
                :options="provinceDdl"
@@ -23,8 +23,7 @@
                :options="cityByProvinceDdl"
                class="col-sm-6 col-md-4"
                clearable
-               @change="setCityName" />
-
+               ref="cityId" />
     <my-hr/>
 
     <my-input :model="$v.userObj.Name"
@@ -37,10 +36,10 @@
               :model="$v.userObj.Gender">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 val="false"
+                 :val="false"
                  label="دختر" />
         <q-radio v-model="data.obj.$model"
-                 val="true"
+                 :val="true"
                  label="پسر" />
       </template>
     </my-field>
@@ -59,12 +58,7 @@
     <my-field class="col-sm-6 col-md-4"
               :model="$v.userObj.IsActive">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="فعال" />
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="غیر فعال" />
+        <q-toggle v-model="data.obj.$model" />
       </template>
     </my-field>
 
@@ -98,20 +92,17 @@ export default {
       fillProvinceDdl: 'provinceStore/fillDdlStore',
       fillCityByProvincIdDdl: 'cityStore/fillCityByProvinceIdDdlStore'
     }),
-    setRoleName(item) {
-      this.userObj.RoleName = item.label;
-    },
-    setCityName(item) {
-      this.userObj.CityName = item.label;
-    },
     modalOpen() {
       this.fillRoleDdl();
       this.fillProvinceDdl();
     },
     provinceChange(item) {
-      if (item) {
-        this.fillCityByProvincIdDdl(item.value);
-      }
+      this.fillCityByProvincIdDdl(item.value);
+    },
+    submit() {
+      this.userObj.CityName = this.$refs.cityId.getSelectedLabel();
+      this.userObj.RoleName = this.$refs.roleId.getSelectedLabel();
+      this.submitEditStore();
     }
   },
   /**

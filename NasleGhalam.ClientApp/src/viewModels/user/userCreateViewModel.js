@@ -36,8 +36,7 @@ export default {
       notPersianChar: notPersianChar()
     },
     IsActive: {
-      displayName: displayName('وضعیت'),
-      required
+      displayName: displayName('فعال')
     },
     NationalNo: {
       displayName: displayName('کد ملی'),

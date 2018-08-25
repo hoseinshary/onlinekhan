@@ -28,18 +28,18 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lesson;
         private readonly EducationGroup_LessonService _educationGroupLessonService;
         private readonly RatioService _ratioService;
-        private readonly TopicService _topicService;
+        //private readonly TopicService _topicService;
 
 
 
         
-        public LessonService(IUnitOfWork uow , EducationGroup_LessonService educationGroupLessonService, RatioService ratioService, TopicService topicService)
+        public LessonService(IUnitOfWork uow , EducationGroup_LessonService educationGroupLessonService, RatioService ratioService/*, TopicService topicService*/)
         {
             _uow = uow;
             _lessons = uow.Set<Lesson>();
             _educationGroupLessonService = educationGroupLessonService;
             _ratioService = ratioService;
-            _topicService = topicService;
+            //_topicService = topicService;
             _educationGroup_Lessons = uow.Set<EducationGroup_Lesson>();
             _ratios = uow.Set<Ratio>();
             _educationGroups = uow.Set<EducationGroup>();

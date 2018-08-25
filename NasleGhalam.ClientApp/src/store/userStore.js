@@ -53,7 +53,9 @@ const store = {
      * insert new userObj to userGridData
      */
     insert(state, id) {
+      state.userObj.GenderName = state.userObj.Gender ? 'پسر' : 'دختر';
       let createdObj = util.cloneObject(state.userObj);
+
       createdObj.Id = id;
       state.userGridData.push(createdObj);
     },
@@ -64,6 +66,8 @@ const store = {
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
+
+      state.userObj.GenderName = state.userObj.Gender ? 'پسر' : 'دختر';
       util.mapObject(state.userObj, state.userGridData[index]);
     },
 
@@ -81,6 +85,7 @@ const store = {
      */
     reset(state, $v) {
       util.clearObject(state.userObj);
+      state.userObj.IsActive = true;
       if ($v) {
         $v.$reset();
       }
@@ -91,9 +96,10 @@ const store = {
      * get data by id
      */
     getByIdStore({ state }, id) {
-      axios.get(`${baseUrl}/GetById/${id}`).then(response => {
+      return axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.userObj);
+        return response.data;
       });
     },
 
@@ -318,7 +324,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.userObj.Name;
+      return `${state.userObj.Name} ${state.userObj.Family}`;
     }
   }
 };

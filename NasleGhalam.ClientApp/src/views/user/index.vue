@@ -13,7 +13,7 @@
                   hasIndex>
           <template slot="IsActive"
                     slot-scope="data">
-            <q-checkbox v-model="data.row.Gender"
+            <q-checkbox v-model="data.row.IsActive"
                         readonly />
           </template>
           <template slot="Id"
@@ -119,6 +119,9 @@ export default {
       'resetCreateStore',
       'resetEditStore'
     ]),
+    ...mapActions({
+      fillCityByProvincIdDdl: 'cityStore/fillCityByProvinceIdDdlStore'
+    }),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
@@ -129,7 +132,9 @@ export default {
       // reset data on modal show
       this.resetEditStore();
       // get data by id
-      this.getByIdStore(id).then(() => {
+      this.getByIdStore(id).then(data => {
+        // fill cityDdl by provinceId
+        this.fillCityByProvincIdDdl(data.ProvinceId);
         // show modal
         this.toggleModalEditStore(true);
       });

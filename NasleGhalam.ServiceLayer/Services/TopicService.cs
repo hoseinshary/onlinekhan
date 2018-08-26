@@ -37,18 +37,31 @@ namespace NasleGhalam.ServiceLayer.Services
                     lable = current.Title,
                 }).FirstOrDefault();
             }
-            foreach (var item  in topics.Where(x=> x.ParentTopicId == id))
+            if (topics.FirstOrDefault(x => x.Id == id).ParentTopicId == null)
             {
                 yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
                 {
                     Id = current.Id,
                     lable = current.Title,
-                    children = children(item.Id)
-                    
+                    children = children(id)
+
                 }).FirstOrDefault();
             }
-            
-            
+            else
+            {
+
+                foreach (var item in topics.Where(x => x.ParentTopicId == id))
+                {
+                    yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                    {
+                        Id = current.Id,
+                        lable = current.Title,
+                        children = children(item.Id)
+
+                    }).FirstOrDefault();
+                }
+
+            }
         }
 
         /// <summary>

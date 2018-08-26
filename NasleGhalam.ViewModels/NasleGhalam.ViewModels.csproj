@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_MediaFormatter\IMultiPartMediaTypeFormatter.cs" />
     <Content Include="%40CodeTemplates\ViewModelGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -73,6 +74,7 @@
     </Compile>
     <Compile Include="Exam\ExamViewModel.cs" />
     <Compile Include="Lesson\LessonCreateAndUpdateViewModel.cs" />
+    <Compile Include="Lesson\LessonDdlViewModel.cs" />
     <Compile Include="Lookup\LookupGetViewModel.cs" />
     <Compile Include="Lookup\LookupViewModel.cs" />
     <Compile Include="Province\ProvinceViewModel.cs" />

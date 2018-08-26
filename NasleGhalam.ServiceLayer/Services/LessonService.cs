@@ -69,7 +69,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         SubGroups = edg.EducationSubGroups.Select(eds => new RatioLessonViewModel
                         {
                             Id = eds.Ratios.Any(x => x.LessonId == id) ? eds.Ratios.FirstOrDefault(x=>  x.LessonId == id).Id : 0,
-                            Ratio = eds.Ratios.Any(x =>  x.LessonId == id) ? eds.Ratios.FirstOrDefault(x => x.LessonId == id).Rate : (byte)0,
+                            Rate = eds.Ratios.Any(x =>  x.LessonId == id) ? eds.Ratios.FirstOrDefault(x => x.LessonId == id).Rate : (byte)0,
                             EducationSubGroupId = eds.Id,
                             EducationSubGroupName = eds.Name
                         })
@@ -232,7 +232,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     l.Ratios.Add(new Ratio()
                     {
-                        Rate = ratio.Ratio,
+                        Rate = ratio.Rate,
                         EducationSubGroupId = ratio.EducationSubGroupId
                     });
                 }

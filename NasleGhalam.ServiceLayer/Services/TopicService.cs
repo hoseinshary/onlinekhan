@@ -59,7 +59,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IEnumerable<TopicTreeViewModel> GetAllTree(int id)
         {
             topics = _topics.Where(x => x.EducationGroup_LessonId == id).ToList();
-            var topic = topics.Where(x => x.ParentTopicId == null).FirstOrDefault();
+            var topic = topics.Where(x => x.ParentTopicId == null && x.EducationGroup_LessonId == id).FirstOrDefault();
             var returnval =  children(topic.Id);
             return returnval;
 

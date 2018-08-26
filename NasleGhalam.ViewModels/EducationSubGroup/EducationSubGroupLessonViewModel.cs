@@ -15,7 +15,7 @@ namespace NasleGhalam.ViewModels.EducationSubGroup
         public string Name { get; set; }
 
 
-        public byte Ratio { get; set; }
+        public byte Rate { get; set; }
 
 
     }

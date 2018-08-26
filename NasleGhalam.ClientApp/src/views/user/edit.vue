@@ -96,8 +96,8 @@ export default {
       this.fillRoleDdl();
       this.fillProvinceDdl();
     },
-    provinceChange(item) {
-      this.fillCityByProvincIdDdl(item.value);
+    provinceChange(value) {
+      this.fillCityByProvincIdDdl(value);
     },
     submit() {
       this.userObj.CityName = this.$refs.cityId.getSelectedLabel();

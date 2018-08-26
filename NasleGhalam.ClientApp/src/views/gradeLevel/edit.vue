@@ -1,7 +1,7 @@
 <template>
   <my-modal-edit :title="modelName"
                  :show="isOpenModalEdit"
-                 @confirm="submitEditStore"
+                 @confirm="submit"
                  @reset="resetEditStore"
                  @open="modalOpen"
                  @close="toggleModalEditStore(false)">
@@ -10,7 +10,7 @@
                :options="gradeDdl"
                class="col-md-6"
                clearable
-               @change="setGradeName" />
+               ref="gradeLevelId" />
 
     <my-input :model="$v.gradeLevelObj.Name"
               class="col-md-6">
@@ -40,8 +40,9 @@ export default {
     ...mapActions('gradeStore', {
       fillGradeDdlStore: 'fillDdlStore'
     }),
-    setGradeName(item) {
-      this.gradeLevelObj.GradeName = item.label;
+    submit() {
+      this.gradeLevelObj.GradeName = this.$refs.gradeLevelId.getSelectedLabel();
+      this.submitEditStore();
     },
     modalOpen() {
       this.fillGradeDdlStore();

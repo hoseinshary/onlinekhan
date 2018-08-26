@@ -2,8 +2,10 @@
   <q-field count
            :helper="helper"
            :error-label="errorLabel()">
+    <!-- v-model="model.$model" -->
     <q-select ref="input"
-              v-model="value"
+              :value="model.$model"
+              @change="val => { model.$model = val; $emit('change', val); }"
               :options="options"
               :float-label="displayName"
               :multiple="multiple"
@@ -83,21 +85,20 @@ export default {
      * get selected item
      */
     getSelectedItem() {
-      return this.options.find(o => o.value == this.model.$model);
+      return this.getSelected;
     },
     /**
      * get selected label
      */
     getSelectedLabel() {
-      var item = this.options.find(o => o.value == this.model.$model);
+      var item = this.getSelected;
       return item ? item.label : '';
     },
     /**
      * get selected value
      */
     getSelectedValue() {
-      var item = this.options.find(o => o.value == this.model.$model);
-      return item ? item.value : 0;
+      return this.model.$model;
     },
     /**
      * get model error
@@ -128,15 +129,8 @@ export default {
       }
       return '';
     },
-    value: {
-      get() {
-        return this.model.$model;
-      },
-      set(newVal) {
-        var item = this.options.find(o => o.value == newVal);
-        this.$emit('change', item ? item : { label: '', value: 0 });
-        this.model.$model = newVal;
-      }
+    getSelected() {
+      return this.options.find(o => o.value == this.model.$model);
     }
   }
 };

@@ -1,7 +1,7 @@
 <template>
   <my-modal-edit :title="modelName"
                  :show="isOpenModalEdit"
-                 @confirm="submitEditStore"
+                 @confirm="submit"
                  @reset="resetEditStore"
                  @open="modalOpen"
                  @close="toggleModalEditStore(false)">
@@ -10,7 +10,7 @@
                :options="educationGroupDdl"
                class="col-md-6"
                clearable
-               @change="setEducationGroupName" />
+               ref="educationSubGroupId" />
 
     <my-input :model="$v.educationSubGroupObj.Name"
               class="col-md-6" />
@@ -36,8 +36,9 @@ export default {
     ...mapActions('educationGroupStore', {
       fillEducationSubGroupDdlStore: 'fillDdlStore'
     }),
-    setEducationGroupName(item) {
-      this.educationSubGroupObj.EducationGroupName = item.label;
+    submit() {
+      this.educationSubGroupObj.EducationGroupName = this.$refs.educationSubGroupId.getSelectedLabel();
+      this.submitEditStore();
     },
     modalOpen() {
       this.fillEducationSubGroupDdlStore();

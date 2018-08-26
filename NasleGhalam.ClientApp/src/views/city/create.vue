@@ -1,7 +1,7 @@
 <template>
   <my-modal-create :title="modelName"
                    :show="isOpenModalCreate"
-                   @confirm="submitCreateStore"
+                   @confirm="submit"
                    @reset="resetCreateStore"
                    @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
@@ -9,7 +9,8 @@
     <my-select :model="$v.cityObj.ProvinceId"
                :options="provinceDdl"
                class="col-md-6"
-               clearable />
+               clearable
+               ref="provinceId" />
 
     <my-input :model="$v.cityObj.Name"
               class="col-md-6" />
@@ -35,8 +36,9 @@ export default {
     ...mapActions('provinceStore', {
       fillProvinceDdlStore: 'fillDdlStore'
     }),
-    setProvinceName(item) {
-      this.cityObj.ProvinceName = item.label;
+    submit() {
+      this.cityObj.ProvinceName = this.$refs.provinceId.getSelectedLabel();
+      this.submitCreateStore();
     },
     modalOpen() {
       this.fillProvinceDdlStore();

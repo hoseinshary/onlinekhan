@@ -15,7 +15,8 @@ export default {
     instanceObj: {
       Id: 0,
       Name: '',
-      IsMain: undefined
+      IsMain: undefined,
+      EducationGroups: []
     },
     allObj: [],
     allObjDdl: [],
@@ -23,7 +24,7 @@ export default {
     selectedId: 0,
     createVue: null,
     editVue: null,
-    eduGroupAndEduSubGroupLst: []
+    EducationGroups: []
   },
   mutations: {
     /**
@@ -58,14 +59,12 @@ export default {
      */
     reset(state, $v) {
       util.clearObject(state.instanceObj);
-      state.eduGroupAndEduSubGroupLst
-        .filter(x => x.IsChecked)
-        .forEach(element => {
-          element.IsChecked = false;
-          element.SubGroups.forEach(item => {
-            item.Ratio = 0;
-          });
+      state.EducationGroups.filter(x => x.IsChecked).forEach(element => {
+        element.IsChecked = false;
+        element.SubGroups.forEach(item => {
+          item.Rate = 0;
         });
+      });
       if ($v) {
         $v.$reset();
       }
@@ -114,16 +113,14 @@ export default {
     validateFormStore({ state, dispatch }, vm) {
       var flag = true;
       var message = '';
-      state.eduGroupAndEduSubGroupLst
-        .filter(x => x.IsChecked)
-        .forEach(groups => {
-          groups.SubGroups.forEach(group => {
-            if (group.Ratio < 0 || group.Ratio > 10) {
-              flag = false;
-              message += group.Name + ' و ';
-            }
-          });
+      state.EducationGroups.filter(x => x.IsChecked).forEach(groups => {
+        groups.SubGroups.forEach(group => {
+          if (group.Rate < 0 || group.Rate > 10) {
+            flag = false;
+            message += group.Name + ' و ';
+          }
         });
+      });
       debugger;
       if (!flag) {
         var cnt = message.split(' و ').length;
@@ -157,7 +154,7 @@ export default {
       axios
         .get(`${EDUCATION_GROUP_URL}/GetAllEducationWithSubGroups`)
         .then(response => {
-          state.eduGroupAndEduSubGroupLst = response.data;
+          state.EducationGroups = response.data;
         });
     },
 
@@ -184,7 +181,7 @@ export default {
       dispatch('validateFormStore', vm).then(isValid => {
         debugger;
         if (!isValid) return;
-        state.instanceObj.EducationGroups = state.eduGroupAndEduSubGroupLst.filter(
+        state.instanceObj.EducationGroups = state.EducationGroups.filter(
           x => x.IsChecked
         );
         axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {

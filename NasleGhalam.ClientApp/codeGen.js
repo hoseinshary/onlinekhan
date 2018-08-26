@@ -210,6 +210,19 @@ if (!configUrl.includes(configProp)) {
 
 //--------------------------------------------------------------------------
 
+// insert lazy router  into router/routes.js
+let routerProp = `\r\n        path: '/${modelName}',\r\n        component: () => import('views/${modelName}')`;
+var configFile = fs.readFileSync(`${__dirname}/src/router/routes.js`, 'utf8');
+if (!configFile.includes(routerProp)) {
+  configFile = configFile.replace(
+    `')\r\n      }\r\n    ]\r\n  },`,
+    `')\r\n      },\r\n      {${routerProp}\r\n      }\r\n    ]\r\n  },`
+  );
+  fs.writeFileSync(`${__dirname}/src/router/routes.js`, configFile, 'utf8');
+}
+
+//--------------------------------------------------------------------------
+
 /**
  * check dir or file exist
  * @param {String} path

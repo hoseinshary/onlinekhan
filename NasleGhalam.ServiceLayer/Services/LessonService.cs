@@ -42,6 +42,7 @@ namespace NasleGhalam.ServiceLayer.Services
             //_topicService = topicService;
             _educationGroup_Lessons = uow.Set<EducationGroup_Lesson>();
             _ratios = uow.Set<Ratio>();
+            _educationGroups = uow.Set<EducationGroup>();
         }
 
 
@@ -63,14 +64,14 @@ namespace NasleGhalam.ServiceLayer.Services
                     _educationGroups.Select(edg => new EducationGroupLessonViewModel
                     {
                         IsChecked = edg.EducationGroups_Lessons.Any(edl => edl.LessonId == id),
-                        EducationGroupId=  edg.Id,
-                        EducationGroupName= edg.Name,
+                        EducationGroupId = edg.Id,
+                        EducationGroupName = edg.Name,
                         SubGroups = edg.EducationSubGroups.Select(eds => new RatioLessonViewModel
                         {
-                            Id = eds.Ratios.Any() ? eds.Ratios.FirstOrDefault().Id : 0,
-                            Ratio = eds.Ratios.Any() ? eds.Ratios.FirstOrDefault().Rate : (byte)0,
-                            EducationSubGroupId =  eds.Id,
-                            EducationSubGroupName= eds.Name
+                            Id = eds.Ratios.Any(x => x.LessonId == id) ? eds.Ratios.FirstOrDefault(x=>  x.LessonId == id).Id : 0,
+                            Rate = eds.Ratios.Any(x =>  x.LessonId == id) ? eds.Ratios.FirstOrDefault(x => x.LessonId == id).Rate : (byte)0,
+                            EducationSubGroupId = eds.Id,
+                            EducationSubGroupName = eds.Name
                         })
                     })
                 }).DefaultIfEmpty().FirstOrDefault();
@@ -231,7 +232,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     l.Ratios.Add(new Ratio()
                     {
-                        Rate = ratio.Ratio,
+                        Rate = ratio.Rate,
                         EducationSubGroupId = ratio.EducationSubGroupId
                     });
                 }

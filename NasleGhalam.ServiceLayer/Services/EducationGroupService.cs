@@ -62,7 +62,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه گروه های آموزشی همراه با زیر گروه آموزشی 
         /// </summary>
         /// <returns></returns>
-        public IList<EducationGroupWithSubGroupsViewModel> GetAllEducationGroupWithSubGroups()
+        public IList<EducationGroupWithSubGroupsViewModel> GetAllWithSubGroups()
         {
             return _educationGroups
                 .Where(current => current.EducationSubGroups.Any())

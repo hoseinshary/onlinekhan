@@ -1,82 +1,79 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import {
-  LESSON_URL as baseUrl,
-  EDUCATION_GROUP_URL
-} from 'utilities/site-config';
+import { TOPIC_URL as baseUrl } from 'utilities/site-config';
 
-export default {
+/**
+ * find index of object in topicGridData by id
+ * @param {Number} id
+ */
+function getIndexById(id) {
+  return store.state.topicGridData.findIndex(o => o.Id == id);
+}
+
+const store = {
   namespaced: true,
   state: {
-    modelName: 'درس',
+    modelName: 'مبحث',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    instanceObj: {
+    topicObj: {
       Id: 0,
-      Name: '',
-      IsMain: undefined,
-      EducationGroups: []
+      Title: '',
+      ExamStock: 0,
+      ExamStockSystem: 0,
+      Importance: 0,
+      IsExamSource: false,
+      LookupId_HardnessType: 0,
+      LookupId_AreaType: 0,
+      IsActive: false,
+      ParentTopicId: 0,
+      EducationGroup_LessonId: 0
     },
-    allObj: [],
-    allObjDdl: [],
-    selectedIndex: -1,
+    topicGridData: [],
+    topicDdl: [],
     selectedId: 0,
+    ddlModelChanged: true,
+    gridModelChanged: true,
     createVue: null,
-    editVue: null,
-    EducationGroups: []
+    editVue: null
   },
   mutations: {
     /**
-     * insert new instanceObj to allObj
+     * insert new topicObj to topicGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.instanceObj);
+      let createdObj = util.cloneObject(state.topicObj);
       createdObj.Id = id;
-      state.allObj.push(createdObj);
+      state.topicGridData.push(createdObj);
     },
 
     /**
-     * update instanceObj of allObj
+     * update topicObj of topicGridData
      */
     update(state) {
-      let index = state.selectedIndex;
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.instanceObj, state.allObj[index]);
+      util.mapObject(state.topicObj, state.topicGridData[index]);
     },
 
     /**
-     * delete from allObj
+     * delete from topicGridData
      */
     delete(state) {
-      let index = state.selectedIndex;
+      let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.allObj.splice(index, 1);
+      state.topicGridData.splice(index, 1);
     },
 
     /**
-     * rest value of instanceObj
+     * rest value of topicObj
      */
     reset(state, $v) {
-      util.clearObject(state.instanceObj);
-      state.EducationGroups.filter(x => x.IsChecked).forEach(element => {
-        element.IsChecked = false;
-        element.SubGroups.forEach(item => {
-          item.Rate = 0;
-        });
-      });
+      util.clearObject(state.topicObj);
       if ($v) {
         $v.$reset();
       }
-    },
-
-    /**
-     * set selectedIndex
-     */
-    setIndex(state) {
-      state.selectedIndex = state.allObj.findIndex(
-        o => o.Id == state.instanceObj.Id
-      );
     }
   },
   actions: {
@@ -86,7 +83,7 @@ export default {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.instanceObj);
+        util.mapObject(response.data, state.topicObj);
       });
     },
 
@@ -94,68 +91,50 @@ export default {
      * fill grid data
      */
     fillGridStore({ state }) {
-      axios.get(`${baseUrl}/GetAll`).then(response => {
-        state.allObj = response.data;
-      });
+      // fill grid if modelChanged
+      if (state.gridModelChanged) {
+        // get data
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.topicGridData = response.data;
+          state.gridModelChanged = false;
+        });
+      }
     },
 
     /**
      * fill dropDwonList
      */
     fillDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.allObjDdl = response.data;
-      });
+      // fill grid if modelChanged
+      if (state.ddlModelChanged) {
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.topicDdl = response.data;
+          state.ddlModelChanged = false;
+        });
+      }
     },
+
     /**
      * vlidate form
      */
-    validateFormStore({ state, dispatch }, vm) {
-      var flag = true;
-      var message = '';
-      state.EducationGroups.filter(x => x.IsChecked).forEach(groups => {
-        groups.SubGroups.forEach(group => {
-          if (group.Rate < 0 || group.Rate > 10) {
-            flag = false;
-            message += group.Name + ' و ';
-          }
-        });
-      });
-      debugger;
-      if (!flag) {
-        var cnt = message.split(' و ').length;
-        dispatch(
-          'notify',
-          {
-            body:
-              message.substring(0, message.length - 2) +
-              '، باید بین 0 تا 10 ' +
-              (cnt > 2 ? 'باشند.' : 'باشد.'),
-            type: 0,
-            vm: vm
-          },
-          { root: true }
-        );
-      }
-      debugger;
-      vm.$v.instanceObj.$touch();
-      if (vm.$v.instanceObj.$error) {
+    validateFormStore({ dispatch }, vm) {
+      // check instance validation
+      vm.$v.topicObj.$touch();
+      if (vm.$v.topicObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
-        flag = false;
+        return false;
       }
 
-      return flag;
+      return true;
     },
 
     /**
-     * fill dropDwon EduGroupAndEduSubGroup
+     * model changed
      */
-    getAllEduGroupAndEduSubGroupStore({ state }) {
-      axios
-        .get(`${EDUCATION_GROUP_URL}/GetAllEducationWithSubGroups`)
-        .then(response => {
-          state.EducationGroups = response.data;
-        });
+    modelChangedStore({ state }) {
+      state.ddlModelChanged = true;
+      state.gridModelChanged = true;
     },
 
     //### create section ###
@@ -179,23 +158,25 @@ export default {
     submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
-        debugger;
         if (!isValid) return;
-        state.instanceObj.EducationGroups = state.EducationGroups.filter(
-          x => x.IsChecked
-        );
-        axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
+
+        axios.post(`${baseUrl}/Create`, state.topicObj).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
             commit('insert', data.Id);
+            dispatch('modelChangedStore');
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
 
           dispatch(
             'notify',
-            { body: data.Message, type: data.MessageType, vm: vm },
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
             { root: true }
           );
         });
@@ -232,12 +213,12 @@ export default {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.instanceObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
+        state.topicObj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.topicObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
-            commit('setIndex');
             commit('update');
+            dispatch('modelChangedStore');
             dispatch('resetEditStore');
             dispatch('toggleModalEditStore', false);
           }
@@ -278,9 +259,9 @@ export default {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
-          commit('setIndex');
           commit('delete');
           commit('reset');
+          dispatch('modelChangedStore');
           dispatch('toggleModalDeleteStore', false);
         }
 
@@ -299,7 +280,9 @@ export default {
   },
   getters: {
     recordName(state) {
-      return state.instanceObj.Name;
+      return state.topicObj.Name;
     }
   }
 };
+
+export default store;

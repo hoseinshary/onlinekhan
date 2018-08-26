@@ -11,7 +11,7 @@ namespace NasleGhalam.ViewModels.Lesson
         [Display(Name = "ضریب")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [Range(0, byte.MaxValue, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
-        public byte Ratio { get; set; }
+        public byte Rate { get; set; }
 
         [Display(Name = "زیر گروه درسی")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]

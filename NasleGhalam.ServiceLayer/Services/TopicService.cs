@@ -17,6 +17,7 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Topic> _topics;
 
+        private IList<Topic> topics;
         public TopicService(IUnitOfWork uow)
         {
             _uow = uow;
@@ -28,21 +29,21 @@ namespace NasleGhalam.ServiceLayer.Services
         public IEnumerable<TopicTreeViewModel> children(int id )
         {
             
-            if (_topics.Any(x => x.ParentTopicId == id))
+            if (!topics.Any(x => x.ParentTopicId == id))
             {
-                yield return _topics.Where(x=>x.Id == id).Select(current =>new TopicTreeViewModel {
-                    Id = current.Id,
-                    Title = current.Title,
-                    
-                }).FirstOrDefault();
-            }
-            foreach (var item  in _topics.Where(x=> x.ParentTopicId == id))
-            {
-                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
                 {
                     Id = current.Id,
-                    Title = current.Title,
-                    Children = children(item.Id)
+                    lable = current.Title,
+                }).FirstOrDefault();
+            }
+            foreach (var item  in topics.Where(x=> x.ParentTopicId == id))
+            {
+                yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                {
+                    Id = current.Id,
+                    lable = current.Title,
+                    children = children(item.Id)
                     
                 }).FirstOrDefault();
             }
@@ -57,76 +58,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IEnumerable<TopicTreeViewModel> GetAllTree(int id)
         {
-            if (!_topics.Any(x => x.ParentTopicId == id))
-            {
-                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
-                {
-                    Id = current.Id,
-                    Title = current.Title,
-                    
-                }).FirstOrDefault();
-            }
-            foreach (var item in _topics.Where(x => x.ParentTopicId == id))
-            {
-                yield return _topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
-                {
-                    Id = current.Id,
-                    Title = current.Title,
-                    Children = GetAllTree(item.Id)
+            topics = _topics.Where(x => x.EducationGroup_LessonId == id).ToList();
+            var topic = topics.Where(x => x.ParentTopicId == null && x.EducationGroup_LessonId == id).FirstOrDefault();
+            var returnval =  children(topic.Id);
+            return returnval;
 
-                }).FirstOrDefault();
-            }
-
-
-
-
-
-            //List<TopicTreeViewModel> returnVal = new List<TopicTreeViewModel>();
-            //var alltopic = _topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId).ToList();
-            //foreach (var VARIABLE in alltopic)
-            //{
-            //    if (VARIABLE.ParentTopicId == null)
-            //    {
-            //        returnVal.Add(new TopicTreeViewModel
-            //        {
-            //            Id = VARIABLE.Id,
-            //            Title = VARIABLE.Title,
-            //            Children = 
-            //        });
-            //    }
-            //}
-
-            //_topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId)
-            //    .Select(current => new TopicTreeViewModel[0]
-
-            //        //Id = current.Id,
-            //        //Title = current.Title,
-            //        //Children = _topics.Any(x=> x.ParentTopicId == current.Id) ? _topics.Where(x => x.ParentTopicId == current.Id)
-            //        //.Select(y => new ) : null
-            //    );
-
-
-
-
-
-            //return _topics.Where(x => x.EducationGroup_LessonId == educationGroup_LessonId)
-            //    .Include(e => e.ParentTopics).Select(current => new TopicGetNameViewModel
-            //    {
-            //        Id = current.Id,
-            //        Title = current.Title,
-            //        ParentTopicId = current.ParentTopicId
-            //    }).ToList();
-
-            //return  _topics
-            //    .Where(current => current.EducationGroup_LessonId == educationGroup_LessonId)
-            //    .Select(current => new TopicGetNameViewModel
-            //    {
-            //        Id = current.Id,
-            //        Title = current.Title,
-            //        ParentTopicId = current.ParentTopicId,
-
-
-            //    }).ToList();
         }
 
 
@@ -229,12 +165,30 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Create(TopicCreateViewModel topicViewModel)
         {
-            var topic = Mapper.Map<Topic>(topicViewModel);
-            _topics.Add(topic);
+            if (topicViewModel.ParentTopicId != null )
+            {
+                var topic = Mapper.Map<Topic>(topicViewModel);
+                _topics.Add(topic);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = topic.Id;
-            return msgRes;
+                MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+                msgRes.Id = topic.Id;
+                return msgRes;
+            }
+            else if( topicViewModel.ParentTopicId == null && !_topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
+            {
+                var topic = Mapper.Map<Topic>(topicViewModel);
+                _topics.Add(topic);
+
+                MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+                msgRes.Id = topic.Id;
+                return msgRes;
+            }
+            else
+            {
+                MessageResult msgRes = new MessageResult();
+                msgRes.FaMessage = "برای این درس مبحث ریشه ثبت شده است!(تنها یک مبحث ریشه برای هر درس قابل ثبت است.)";
+                return msgRes;
+            }
         }
 
 

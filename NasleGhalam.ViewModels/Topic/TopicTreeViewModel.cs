@@ -6,9 +6,9 @@ namespace NasleGhalam.ViewModels.Topic
     {
         public int Id { get; set; }
 
-        public string Title { get; set; }
+        public string lable { get; set; }
 
-        public IEnumerable<TopicTreeViewModel> Children { get; set; }
+        public IEnumerable<TopicTreeViewModel> children { get; set; }
 
     }
 }

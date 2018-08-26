@@ -21,13 +21,13 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "درس";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Lesson> _lessons;
-        private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lessons;
         private readonly IDbSet<Ratio> _ratios;
         private readonly IDbSet<EducationGroup> _educationGroups;
-
         private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lesson;
+
         private readonly EducationGroup_LessonService _educationGroupLessonService;
         private readonly RatioService _ratioService;
+
         //private readonly TopicService _topicService;
 
 
@@ -40,7 +40,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _educationGroupLessonService = educationGroupLessonService;
             _ratioService = ratioService;
             //_topicService = topicService;
-            _educationGroup_Lessons = uow.Set<EducationGroup_Lesson>();
+        
             _ratios = uow.Set<Ratio>();
             _educationGroups = uow.Set<EducationGroup>();
             _educationGroup_Lesson = uow.Set<EducationGroup_Lesson>();
@@ -326,7 +326,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
 
             //خواندن اطلاعات واسط 
-            var previousEducationGroupLesson = _educationGroup_Lessons
+            var previousEducationGroupLesson = _educationGroup_Lesson
                 .Where(current => current.LessonId == lessonCreateViewModel.Id).ToList();
 
             //create 
@@ -337,7 +337,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(eg);
                     educationGroup_Lesson.LessonId = lessonCreateViewModel.Id;
-                    _educationGroup_Lessons.Add(educationGroup_Lesson);
+                    _educationGroup_Lesson.Add(educationGroup_Lesson);
                     foreach (var esg in eg.SubGroups)
                     {
                         var ratio = Mapper.Map<Ratio>(esg);

@@ -11,49 +11,53 @@
               :model="$v.instanceObj.IsMain">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 val="false"
+                 :val="false"
                  label="خیر" />
         <q-radio v-model="data.obj.$model"
-                 val="true"
+                 :val="true"
                  label="بلی" />
       </template>
     </my-field>
-    <fieldset class="col-12">
-      <legend>گروههای آموزشی</legend>
-      <div class="row"
-           v-if="eduGroupAndEduSubGroupLst">
+    <!-- <div v-if="instanceObj.EducationGroups != undefined"> -->
+    <div v-if="instanceObj.EducationGroups.length > 0">
+      <fieldset class="col-12">
+        <legend> گروههای آموزشی</legend>
+        <div class="row"
+             v-if="instanceObj.EducationGroups">
 
-        <div class="col-sm-2"
-             v-for="group in eduGroupAndEduSubGroupLst"
-             :key="group.Name">
-          <q-checkbox v-model="group.IsChecked"
-                      :label="group.Name" />
-        </div>
-      </div>
-    </fieldset>
-
-    <div class="col-12"
-         v-for="group in eduGroupAndEduSubGroupLst.filter(x => x.IsChecked)"
-         :key="group.Id">
-      <q-slide-transition>
-
-        <fieldset class="col-12">
-          <legend>گروههای آموزشی</legend>
-          <div class="inline col-sm-4"
-               style="padding-top:5px;"
-               v-for="subGroup in group.SubGroups"
-               :key="subGroup.EducationSubGroupId">
-            <div style="margin-top:20px;">{{subGroup.Name}}:</div>
-            <q-input type="number"
-                     style="margin-right:10px; width:20%;"
-                     v-model="subGroup.Ratio"
-                     float-label='ضریب'></q-input>
+          <div class="col-sm-2"
+               v-for="group in instanceObj.EducationGroups"
+               :key="group.EducationGroupName">
+            <q-checkbox v-model="group.IsChecked"
+                        :label="group.EducationGroupName" />
           </div>
-        </fieldset>
-      </q-slide-transition>
+        </div>
+      </fieldset>
 
+      <div class="col-12"
+           v-for="group in instanceObj.EducationGroups.filter(x => x.IsChecked)"
+           :key="group.EducationGroupId">
+        <q-slide-transition>
+
+          <fieldset class="col-12">
+            <legend>زیر گروههای آموزشی</legend>
+            <div class="row">
+              <div class="inline col-sm-4"
+                   style="padding-top:5px;"
+                   v-for="subGroup in group.SubGroups"
+                   :key="subGroup.EducationSubGroupId">
+                <div style="margin-top:20px;">{{subGroup.EducationSubGroupName}}:</div>
+                <q-input type="number"
+                         style="margin-right:10px; width:20%;"
+                         v-model="subGroup.Rate"
+                         float-label='ضریب'></q-input>
+              </div>
+            </div>
+          </fieldset>
+        </q-slide-transition>
+
+      </div>
     </div>
-
   </my-modal-edit>
 </template>
 
@@ -96,3 +100,8 @@ export default {
 };
 </script>
 
+<style scoped>
+div >>> .inline {
+  display: inline-flex;
+}
+</style>

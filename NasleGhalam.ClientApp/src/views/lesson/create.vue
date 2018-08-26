@@ -22,10 +22,10 @@
     <fieldset class="col-12">
       <legend>گروههای آموزشی</legend>
       <div class="row"
-           v-if="eduGroupAndEduSubGroupLst">
+           v-if="EducationGroups">
 
         <div class="col-sm-2"
-             v-for="group in eduGroupAndEduSubGroupLst"
+             v-for="group in EducationGroups"
              :key="group.Name">
           <q-checkbox v-model="group.IsChecked"
                       :label="group.Name" />
@@ -34,21 +34,23 @@
     </fieldset>
 
     <div class="col-12"
-         v-for="group in eduGroupAndEduSubGroupLst.filter(x => x.IsChecked)"
+         v-for="group in EducationGroups.filter(x => x.IsChecked)"
          :key="group.Id">
       <q-slide-transition>
 
         <fieldset class="col-12">
-          <legend>گروههای آموزشی</legend>
-          <div class="inline col-sm-4"
-               style="padding-top:5px;"
-               v-for="subGroup in group.SubGroups"
-               :key="subGroup.EducationSubGroupId">
-            <div style="margin-top:20px;">{{subGroup.Name}}:</div>
-            <q-input type="number"
-                     style="margin-right:10px; width:20%;"
-                     v-model="subGroup.Ratio"
-                     float-label='ضریب'></q-input>
+          <legend>زیر گروههای آموزشی</legend>
+          <div class="row">
+            <div class="inline col-sm-4"
+                 style="padding-top:5px;"
+                 v-for="subGroup in group.SubGroups"
+                 :key="subGroup.EducationSubGroupId">
+              <div style="margin-top:20px;">{{subGroup.Name}}:</div>
+              <q-input type="number"
+                       style="margin-right:10px; width:20%;"
+                       v-model="subGroup.Rate"
+                       float-label='ضریب'></q-input>
+            </div>
           </div>
         </fieldset>
       </q-slide-transition>
@@ -86,7 +88,7 @@ export default {
       modelName: 'modelName',
       instanceObj: 'instanceObj',
       isOpenModalCreate: 'isOpenModalCreate',
-      eduGroupAndEduSubGroupLst: 'eduGroupAndEduSubGroupLst'
+      EducationGroups: 'EducationGroups'
     })
   },
   /**

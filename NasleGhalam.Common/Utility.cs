@@ -252,6 +252,12 @@ namespace NasleGhalam.Common
         //} 
         #endregion
 
+        public static bool CheckImageExtention(String extention)
+        {
+            extention = extention.ToLower();
+            return (extention == ".jpg" || extention == ".gif" || extention == ".jpeg"
+                    || extention == ".png" || extention == ".bmp" || extention == ".icn");
+        }
 
         #region ### utility ###
         public static bool isExistInArray<T>(IEnumerable<T> list , T key )

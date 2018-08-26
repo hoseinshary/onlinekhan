@@ -125,6 +125,7 @@
     <Compile Include="Controllers\GradeLevelController.cs" />
     <Compile Include="Controllers\LessonController.cs" />
     <Compile Include="Extentions\RequestExtention.cs" />
+    <Compile Include="FilterAttribute\CheckImageValidation.cs" />
     <Compile Include="FilterAttribute\CheckModelValidation.cs" />
     <Compile Include="FilterAttribute\CheckUserAccess.cs" />
     <Compile Include="Global.asax.cs">
@@ -132,6 +133,7 @@
     </Compile>
     <Compile Include="ModelBinderAndFormatter\DateTimeModelBinder.cs" />
     <Compile Include="ModelBinderAndFormatter\CustomJsonFormatter.cs" />
+    <Compile Include="ModelBinderAndFormatter\MultiPartMediaTypeFormatter.cs" />
     <Compile Include="ModelBinderAndFormatter\StringModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

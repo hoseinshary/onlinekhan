@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_MediaFormatter\IMultiPartMediaTypeFormatter.cs" />
     <Content Include="%40CodeTemplates\ViewModelGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

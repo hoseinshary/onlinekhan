@@ -43,6 +43,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _educationGroup_Lessons = uow.Set<EducationGroup_Lesson>();
             _ratios = uow.Set<Ratio>();
             _educationGroups = uow.Set<EducationGroup>();
+            _educationGroup_Lesson = uow.Set<EducationGroup_Lesson>();
         }
 
 
@@ -60,8 +61,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     Name = less.Name,
                     IsMain = less.IsMain,
                     Id = less.Id,
-                    EducationGroups =
-                    _educationGroups.Select(edg => new EducationGroupLessonViewModel
+                    EducationGroups = 
+                    _educationGroups.Where(x=> x.EducationSubGroups.Any()).Select(edg => new EducationGroupLessonViewModel
                     {
                         IsChecked = edg.EducationGroups_Lessons.Any(edl => edl.LessonId == id),
                         EducationGroupId = edg.Id,
@@ -74,7 +75,7 @@ namespace NasleGhalam.ServiceLayer.Services
                             EducationSubGroupName = eds.Name
                         })
                     })
-                }).DefaultIfEmpty().FirstOrDefault();
+                }).DefaultIfEmpty().FirstOrDefault() ;
 
             //var x = _educationGroup_Lessons.Where(edul => edul.LessonId == id)
             //    .SelectMany(edul => _educationGroups.Where(edug => edug.Id == edul.EducationGroupId).DefaultIfEmpty(new { }),
@@ -350,7 +351,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     foreach (var esg in eg.SubGroups)
                     {
                         var ratio = Mapper.Map<Ratio>(esg);
-                        if (allRatios.Where(x => x.Id == ratio.Id).Any())
+                        if (allRatios.Any(x => x.Id == ratio.Id))
                         {
                             _ratios.Attach(ratio);
                             _uow.UpdateFields(ratio, x => x.Rate);
@@ -433,12 +434,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه درس ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
+        public IList<LessonDdlViewModel> GetAllDdl()
         {
-            return _lessons.Select(current => new SelectViewModel
+            return _educationGroup_Lesson.Select(current => new LessonDdlViewModel
             {
                 value = current.Id,
-                label = current.Name
+                label = current.Lesson.Name,
+                educationGroupId = current.EducationGroupId
             }).ToList();
         }
     }

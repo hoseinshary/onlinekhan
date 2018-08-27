@@ -28,7 +28,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
         public IEnumerable<TopicTreeViewModel> children(int id )
         {
-            
             if (!topics.Any(x => x.ParentTopicId == id))
             {
                 yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
@@ -37,19 +36,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     lable = current.Title,
                 }).FirstOrDefault();
             }
-            if (topics.FirstOrDefault(x => x.Id == id).ParentTopicId == null)
-            {
-                yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
-                {
-                    Id = current.Id,
-                    lable = current.Title,
-                    children = children(id)
-
-                }).FirstOrDefault();
-            }
             else
             {
-
                 foreach (var item in topics.Where(x => x.ParentTopicId == id))
                 {
                     yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
@@ -60,7 +48,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
                     }).FirstOrDefault();
                 }
-
             }
         }
 

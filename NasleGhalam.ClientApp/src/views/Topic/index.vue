@@ -1,5 +1,5 @@
 <template>
-<section class="col-md-8">
+  <section class="col-md-8">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
@@ -8,7 +8,18 @@
                        :label="`ایجاد (${modelName}) جدید`"
                        @click="showModalCreate" />
         <br>
-        <my-table :grid-data="topicGridData"
+        <my-select :model="$v.accessObj.ModuleId"
+                   :options="moduleDdl"
+                   class="col-md-6"
+                   filter
+                   @change="fillControllerDdl" />
+
+        <my-select :model="$v.accessObj.ControllerId"
+                   :options="controllerDdl"
+                   class="col-md-6"
+                   filter
+                   @change="fillActionGrid" />
+        <!-- <my-table :grid-data="topicGridData"
                   :columns="topicGridColumn"
                   hasIndex>
           <template slot="Id"
@@ -20,11 +31,11 @@
                            round
                            @click="showModalDelete(data.row.Id)" />
           </template>
-        </my-table>
+        </my-table> -->
       </div>
     </my-panel>
 
-  <!-- modals -->
+    <!-- modals -->
     <modal-create v-if="pageAccess.canCreate"></modal-create>
     <modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
@@ -44,49 +55,9 @@ export default {
    * data
    */
   data() {
-    var pageAccess = this.$util.initAccess('/topic'); 
+    var pageAccess = this.$util.initAccess('/topic');
     return {
-      pageAccess,
-      topicGridColumn: [
-        {
-      title:'Title',
-      data:'Title'
-    },{
-      title:'ExamStock',
-      data:'ExamStock'
-    },{
-      title:'ExamStockSystem',
-      data:'ExamStockSystem'
-    },{
-      title:'Importance',
-      data:'Importance'
-    },{
-      title:'IsExamSource',
-      data:'IsExamSource'
-    },{
-      title:'LookupId_HardnessType',
-      data:'LookupId_HardnessType'
-    },{
-      title:'LookupId_AreaType',
-      data:'LookupId_AreaType'
-    },{
-      title:'IsActive',
-      data:'IsActive'
-    },{
-      title:'ParentTopicId',
-      data:'ParentTopicId'
-    },{
-      title:'EducationGroup_LessonId',
-      data:'EducationGroup_LessonId'
-    }
-        ,{
-          title: 'عملیات',
-          data: 'Id',
-          searchable: false,
-          sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
-        }
-      ]
+      pageAccess
     };
   },
   /**
@@ -102,6 +73,10 @@ export default {
       'resetCreateStore',
       'resetEditStore'
     ]),
+    ...mapActions('educationGroupStore', [
+      (fillEduGrpDdlStore = 'fillDdlStore')
+    ]),
+    ...mapActions('lessonStore', [(fillLessonDdlStore = 'fillDdlStore')]),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
@@ -129,10 +104,17 @@ export default {
     ...mapState('topicStore', {
       modelName: 'modelName',
       topicGridData: 'topicGridData'
+    }),
+    ...mapState('educationGroupStore', {
+      educationGroupDdl: 'educationGroupDdl'
+    }),
+    ...mapState('lessonStore', {
+      lessonDdl: 'allObjDdl'
     })
   },
   created() {
-    this.fillGridStore();
+    this.fillEduGrpDdlStore();
+    this.fillLessonDdlStore();
   }
 };
 </script>

@@ -405,6 +405,15 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 return Utility.NotFoundMessage();
             }
+            else if (lesson.HasTopic)
+            {
+                return new MessageResult
+                {
+                    FaMessage = "برای این درس قبلا عنوان تعریف شده است.درس مورد نظر حذف نگردید",
+                    MessageType = MessageType.Error
+                };
+
+            }
 
             var ratios = lesson.Ratios;
             foreach (var ratio in ratios)

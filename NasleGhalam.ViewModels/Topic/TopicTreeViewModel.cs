@@ -8,7 +8,7 @@ namespace NasleGhalam.ViewModels.Topic
 
         public string lable { get; set; }
 
-        public IEnumerable<TopicTreeViewModel> children { get; set; }
+        public List<TopicTreeViewModel> children { get; set; }
 
     }
 }

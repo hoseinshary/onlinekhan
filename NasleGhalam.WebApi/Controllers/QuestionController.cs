@@ -43,9 +43,9 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(QuestionViewModel questionViewModel)
+        public IHttpActionResult Create(QuestionTempViewModel questionViewModel)
         {
-            var msgRes = _questionService.Create(questionViewModel);
+            var msgRes = _questionService.Create(null);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -58,7 +58,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(QuestionViewModel questionViewModel)
+        public IHttpActionResult Update(QuestionCreateViewModel questionViewModel)
         {
             var msgRes = _questionService.Update(questionViewModel);
             return Ok(new MessageResultApi

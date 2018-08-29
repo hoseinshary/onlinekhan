@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Question\QuestionTempViewModel.cs" />
     <Compile Include="_MediaFormatter\IMultiPartMediaTypeFormatter.cs" />
     <Content Include="%40CodeTemplates\ViewModelGenerator.cs">
       <AutoGen>True</AutoGen>
@@ -79,7 +80,7 @@
     <Compile Include="Lookup\LookupViewModel.cs" />
     <Compile Include="Province\ProvinceViewModel.cs" />
     <Compile Include="Lesson\RatioLessonViewModel.cs" />
-    <Compile Include="Question\QuestionViewModel.cs" />
+    <Compile Include="Question\QuestionCreateViewModel.cs" />
     <Compile Include="Ratio\RatioViewModel.cs" />
     <Compile Include="Lesson\EducationGroupLessonViewModel.cs" />
     <Compile Include="Role\RoleAccessViewModel.cs" />

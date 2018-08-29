@@ -19,6 +19,7 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<Topic> _topics;
 
         private IList<Topic> topics;
+
         public TopicService(IUnitOfWork uow)
         {
             _uow = uow;

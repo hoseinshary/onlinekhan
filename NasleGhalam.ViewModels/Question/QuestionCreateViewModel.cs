@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
+using NasleGhalam.ViewModels._MediaFormatter;
 
 namespace NasleGhalam.ViewModels.Question
 {
-    public class QuestionViewModel
+    public class QuestionCreateViewModel :IMultiPartMediaTypeFormatter
     {
         [Display(Name = "")]
         public int Id { get; set; }

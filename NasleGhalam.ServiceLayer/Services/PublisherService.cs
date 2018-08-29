@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.Publisher;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class PublisherService
-	{
-		private const string Title = "انتشارات";
+    public class PublisherService
+    {
+        private const string Title = "انتشارات";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Publisher> _publishers;
-       
-	    public PublisherService(IUnitOfWork uow)
+
+        public PublisherService(IUnitOfWork uow)
         {
             _uow = uow;
             _publishers = uow.Set<Publisher>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  انتشارات با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -35,13 +35,13 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new PublisherViewModel
                 {
-                    Id = current.Id
-                    
+                    Id = current.Id,
+                    Name = current.Name
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه انتشارات ها
         /// </summary>
         /// <returns></returns>
@@ -50,11 +50,12 @@ namespace NasleGhalam.ServiceLayer.Services
             return _publishers.Select(current => new PublisherViewModel()
             {
                 Id = current.Id,
+                Name = current.Name
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت انتشارات
         /// </summary>
         /// <param name="publisherViewModel"></param>
@@ -64,13 +65,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _publishers.Add(publisher);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = publisher.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = publisher.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش انتشارات
         /// </summary>
         /// <param name="publisherViewModel"></param>
@@ -80,20 +81,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _uow.MarkAsChanged(publisher);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف انتشارات
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  publisherViewModel = GetById(id);
+            var publisherViewModel = GetById(id);
             if (publisherViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -101,9 +102,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _uow.MarkAsDeleted(publisher);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
@@ -119,5 +120,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

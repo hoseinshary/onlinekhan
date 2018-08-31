@@ -28,8 +28,11 @@ const store = {
       LookupId_AreaType: 0,
       IsActive: false,
       ParentTopicId: 0,
-      EducationGroup_LessonId: 0
+      EducationGroup_LessonId: 0,
+      EducationGroupId: 0
     },
+    moduleDdl: [],
+    controllerDdl: [],
     topicGridData: [],
     topicDdl: [],
     selectedId: 0,

@@ -1,3 +1,5 @@
+// example => node codeGen city1 Name:string:'shirez',Province:array,Code:number:71
+
 var fs = require('fs');
 
 var arg = process.argv.slice(2);

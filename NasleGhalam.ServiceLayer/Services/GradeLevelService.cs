@@ -114,16 +114,18 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه پایه ها برای لیست کشویی
+        /// گرفتن پایه های یک مقطع تحصیلی برای لیست کشویی
         /// </summary>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
+        public IList<SelectViewModel> GetAllByGradeIdDdl(int gradeId)
         {
-            return _gradeLevels.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
+            return _gradeLevels
+                .Where(current => current.GradeId == gradeId)
+                .Select(current => new SelectViewModel
+                {
+                    value = current.Id,
+                    label = current.Name
+                }).ToList();
         }
     }
 }

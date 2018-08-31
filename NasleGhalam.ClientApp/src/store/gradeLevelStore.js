@@ -26,6 +26,7 @@ const store = {
     },
     gradeLevelGridData: [],
     gradeLevelDdl: [],
+    gradeLevelByGradeDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
@@ -98,12 +99,26 @@ const store = {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      // get data if model changed
-      if (state.ddlModelChanged) {
-        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-          state.gradeDdl = response.data;
-          state.ddlModelChanged = false;
+    // fillDdlStore({ state }) {
+    //   // get data if model changed
+    //   if (state.ddlModelChanged) {
+    //     axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+    //       state.gradeDdl = response.data;
+    //       state.ddlModelChanged = false;
+    //     });
+    //   }
+    // },
+
+    /**
+     *  fill dropDwonList gradeLevelByGradeId
+     * @param {*} param0
+     * @param {Number} gradeId
+     */
+    fillGradeLevelByGradeId({ state }, gradeId) {
+      // get data
+      if (gradeId) {
+        axios.get(`${baseUrl}/GetAllByGradeIdDdl/${gradeId}`).then(response => {
+          state.gradeLevelByGradeDdl = response.data;
         });
       }
     },

@@ -9,7 +9,8 @@ const ROLE_URL = '/api/role';
 const USER_URL = '/api/user';
 const EDUCATION_GROUP_URL = '/api/educationGroup';
 const EDUCATION_SUB_GROUP_URL = '/api/educationSubGroup';
-const TOPIC_URL =  '/api/topic';
+const TOPIC_URL = '/api/topic';
+const EDUCATION_BOOK_URL = '/api/educationBook';
 
 export {
   API_URL,
@@ -22,5 +23,6 @@ export {
   USER_URL,
   EDUCATION_GROUP_URL,
   EDUCATION_SUB_GROUP_URL,
-  TOPIC_URL
+  TOPIC_URL,
+  EDUCATION_BOOK_URL
 };

@@ -78,5 +78,12 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
+        public IHttpActionResult GetAllByGradeIdDdl(int id)
+        {
+            return Ok(_gradeLevelService.GetAllByGradeIdDdl(id));
+        }
     }
 }

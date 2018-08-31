@@ -9,9 +9,9 @@
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#
-	string modelName = "Publisher";
-	string instanceName = "publisher";
-	string faName = "انتشارات";
+	string modelName = "EducationBook";
+	string instanceName = "educationBook";
+	string faName = "کتاب درسی";
 #>
 using System;
 using System.Collections.Generic;
@@ -93,10 +93,8 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _uow.MarkAsChanged(<#= instanceName #>);
-
 			
 			return  _uow.CommitChanges(CrudType.Update, Title);
-			
         }
 
 
@@ -117,7 +115,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(<#= instanceName #>);
             
 			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
         }
 
 

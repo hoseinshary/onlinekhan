@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Publisher\PublisherViewModel.cs" />
+    <Compile Include="Question\QuestionCreateViewModel.cs" />
+    <Compile Include="Question\QuestionTempViewModel.cs" />
     <Compile Include="_MediaFormatter\IMultiPartMediaTypeFormatter.cs" />
     <Content Include="%40CodeTemplates\ViewModelGenerator.cs">
       <AutoGen>True</AutoGen>
@@ -67,8 +69,7 @@
     <Compile Include="EducationGroup_Lesson\EducationGroup_LessonViewModel.cs" />
     <Compile Include="EducationSubGroup\EducationSubGroupViewModel.cs" />
     <Compile Include="EducationYear\EducationYearViewModel.cs" />
-    <Compile Include="ErrorResources.Designer.cs" />
-    <Compile Include="ErrorResources1.Designer.cs">
+    <Compile Include="ErrorResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorResources.resx</DependentUpon>
@@ -80,7 +81,6 @@
     <Compile Include="Lookup\LookupViewModel.cs" />
     <Compile Include="Province\ProvinceViewModel.cs" />
     <Compile Include="Lesson\RatioLessonViewModel.cs" />
-    <Compile Include="Question\QuestionViewModel.cs" />
     <Compile Include="Ratio\RatioViewModel.cs" />
     <Compile Include="Lesson\EducationGroupLessonViewModel.cs" />
     <Compile Include="Role\RoleAccessViewModel.cs" />
@@ -123,7 +123,7 @@
   <ItemGroup>
     <EmbeddedResource Include="ErrorResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorResources1.Designer.cs</LastGenOutput>
+      <LastGenOutput>ErrorResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

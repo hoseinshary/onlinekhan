@@ -30,10 +30,6 @@ namespace NasleGhalam.WebApi.FilterAttribute
                 token = values.FirstOrDefault();
             }
 
-            ////todo: remove later, for test
-            if (token == null)
-                token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJWYWx1ZSI6IjFfVHJ1ZV8xIiwiQWNjZXNzIjoiMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMCIsIkV4cCI6NjM2NzExODQ4NTY2NDYzMjY2fQ.4bYAdEDimYWio6xz66zVOHwu2dlwLHnkAHw6FWB_jgGb8uSWPvI-4JUaYNe5hUe7SJ3Mqe4_Zhx_cPoGZmtmTA";
-
             if (token != null)
             {
                 try

@@ -84,9 +84,15 @@
         LookupCreateAccess = 59,
         LookupUpdateAccess = 60,
         LookupDeleteAccess = 61,
+
         PublisherReadAccess = 62,
         PublisherCreateAccess = 63,
         PublisherUpdateAccess = 64,
         PublisherDeleteAccess = 65,
+
+        EducationBookReadAccess = 66,
+        EducationBookCreateAccess = 67,
+        EducationBookUpdateAccess = 68,
+        EducationBookDeleteAccess = 69
     }
 }

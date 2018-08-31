@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Matin.Abfa.ViewModels {
+namespace NasleGhalam.ViewModels {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Matin.Abfa.ViewModels {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Matin.Abfa.ViewModels.ErrorResources", typeof(ErrorResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NasleGhalam.ViewModels.ErrorResources", typeof(ErrorResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -176,9 +176,5 @@ namespace Matin.Abfa.ViewModels {
                 return ResourceManager.GetString("RequiredDll", resourceCulture);
             }
         }
-
-
-
-
     }
 }

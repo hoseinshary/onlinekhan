@@ -1,4 +1,5 @@
-﻿using NasleGhalam.DomainClasses.Entities;
+﻿using System.Linq;
+using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels.EducationGroup;
 using NasleGhalam.ViewModels.Role;
@@ -8,6 +9,7 @@ using NasleGhalam.ViewModels.GradeLevel;
 using NasleGhalam.ViewModels.EducationGroup_Lesson;
 using NasleGhalam.ViewModels.Province;
 using NasleGhalam.ViewModels.City;
+using NasleGhalam.ViewModels.EducationBook;
 using NasleGhalam.ViewModels.EducationYear;
 using NasleGhalam.ViewModels.Exam;
 using NasleGhalam.ViewModels.EducationSubGroup;
@@ -33,7 +35,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<UserCreateViewModel, User>();
                 config.CreateMap<UserUpdateViewModel, User>();
                 config.CreateMap<UserGetViewModel, User>();
-                config.CreateMap<GradeViewModel, Grade>() ;
+                config.CreateMap<GradeViewModel, Grade>();
                 config.CreateMap<GradeLevelViewModel, GradeLevel>();
 
                 config.CreateMap<ProvinceViewModel, Province>();
@@ -45,7 +47,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<ExamViewModel, Exam>();
 
                 config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
-                config.CreateMap<ViewModels.Ratio.RatioViewModel, Ratio>();
+                config.CreateMap<RatioViewModel, Ratio>();
                 config.CreateMap<RatioLessonViewModel, Ratio>();
 
                 config.CreateMap<LookupViewModel, Lookup>();
@@ -53,6 +55,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<TopicCreateViewModel, Topic>();
                 config.CreateMap<PublisherViewModel, Publisher>();
 
+                config.CreateMap<EducationBookViewModel, EducationBook>();
             });
         }
     }

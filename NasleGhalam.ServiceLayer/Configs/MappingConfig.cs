@@ -14,6 +14,7 @@ using NasleGhalam.ViewModels.EducationSubGroup;
 using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.Ratio;
 using NasleGhalam.ViewModels.Topic;
+using NasleGhalam.ViewModels.Publisher;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -50,7 +51,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<LookupViewModel, Lookup>();
 
                 config.CreateMap<TopicCreateViewModel, Topic>();
-
+                config.CreateMap<PublisherViewModel, Publisher>();
 
             });
         }

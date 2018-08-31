@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using AutoMapper;
 using NasleGhalam.Common;
@@ -18,6 +19,7 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<Topic> _topics;
 
         private IList<Topic> topics;
+
         public TopicService(IUnitOfWork uow)
         {
             _uow = uow;
@@ -26,41 +28,29 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-        public IEnumerable<TopicTreeViewModel> children(int id )
+        public TopicTreeViewModel children(int id )
         {
-            
-            if (!topics.Any(x => x.ParentTopicId == id))
-            {
-                yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
-                {
-                    Id = current.Id,
-                    lable = current.Title,
-                }).FirstOrDefault();
-            }
-            if (topics.FirstOrDefault(x => x.Id == id).ParentTopicId == null)
-            {
-                yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
-                {
-                    Id = current.Id,
-                    lable = current.Title,
-                    children = children(id)
 
+            if (topics.All(x => x.ParentTopicId != id))
+            {
+                return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                {
+                    Id = current.Id,
+                    lable = current.Title,
                 }).FirstOrDefault();
             }
             else
             {
-
-                foreach (var item in topics.Where(x => x.ParentTopicId == id))
+                var returnvalue = new TopicTreeViewModel();
+                var currentTopic = topics.FirstOrDefault(x => x.Id == id);
+                returnvalue.Id = currentTopic.Id;
+                returnvalue.lable = currentTopic.Title;
+                returnvalue.children = new List<TopicTreeViewModel>();
+                foreach (var item in topics.Where(x => x.ParentTopicId == id).ToList())
                 {
-                    yield return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
-                    {
-                        Id = current.Id,
-                        lable = current.Title,
-                        children = children(item.Id)
-
-                    }).FirstOrDefault();
+                    returnvalue.children.Add(children(item.Id));
                 }
-
+                return returnvalue;
             }
         }
 
@@ -69,10 +59,10 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
-        public IEnumerable<TopicTreeViewModel> GetAllTree(int id)
+        public TopicTreeViewModel GetAllTree(int id)
         {
             topics = _topics.Where(x => x.EducationGroup_LessonId == id).ToList();
-            var topic = topics.Where(x => x.ParentTopicId == null && x.EducationGroup_LessonId == id).FirstOrDefault();
+            var topic = topics.FirstOrDefault(x => x.ParentTopicId == null && x.EducationGroup_LessonId == id);
             var returnval =  children(topic.Id);
             return returnval;
 

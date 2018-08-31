@@ -9,26 +9,26 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 07/06/1397
 	/// </author>
 	public class PublisherController : ApiController
-	{
+    {
         private readonly PublisherService _publisherService;
-		public PublisherController(PublisherService publisherService)
+        public PublisherController(PublisherService publisherService)
         {
             _publisherService = publisherService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_publisherService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var publisher = _publisherService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.PublisherCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(PublisherViewModel publisherViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

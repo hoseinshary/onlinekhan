@@ -28,11 +28,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public QuestionViewModel GetById(int id)
+        public QuestionCreateViewModel GetById(int id)
         {
             return _questions
                 .Where(current => current.Id == id)
-                .Select(current => new QuestionViewModel
+                .Select(current => new QuestionCreateViewModel
                 {
                     Id = current.Id
                 }).FirstOrDefault();
@@ -43,9 +43,9 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionViewModel> GetAll()
+        public IList<QuestionCreateViewModel> GetAll()
         {
-            return _questions.Select(current => new QuestionViewModel()
+            return _questions.Select(current => new QuestionCreateViewModel()
             {
                 Id = current.Id,
             }).ToList();
@@ -57,7 +57,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(QuestionViewModel questionViewModel)
+        public MessageResult Create(QuestionCreateViewModel questionViewModel)
         {
             var question = Mapper.Map<Question>(questionViewModel);
             _questions.Add(question);
@@ -73,7 +73,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(QuestionViewModel questionViewModel)
+        public MessageResult Update(QuestionCreateViewModel questionViewModel)
         {
             var question = Mapper.Map<Question>(questionViewModel);
             _uow.MarkAsChanged(question);

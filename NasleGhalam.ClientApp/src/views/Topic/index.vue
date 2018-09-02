@@ -4,9 +4,7 @@
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
-        <my-btn-create v-if="pageAccess.canCreate"
-                       :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate" />
+
         <br>
         <div class="row">
           <my-select :model="$v.topicObj.EducationGroupId"
@@ -18,25 +16,45 @@
                      :options="lessonFilteredDdl"
                      class="col-md-6"
                      filter
-                     @change="getByIdStore($event)" />
-          <!-- <my-table :grid-data="topicGridData"
-                  :columns="topicGridColumn"
-                  hasIndex>
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
-          </template>
-        </my-table> -->
+                     @change="GetAllTreeStore($event);lessonId =topicObj.EducationGroup_LessonId;"
+          />
+          <q-tree :nodes="treeLst"
+                  class="col-md-2"
+                  :selected.sync="selectedNodeId"
+                  default-expand-all
+                  node-key="Id"
+                  style="overflow: auto;" />
+          <q-slide-transition>
+
+            <div class="col-md-10"
+                 v-if="treeLst.length>0">
+              <div class="col-12"
+                   style="margin:10px;">مبحث انتخابی : {{selectedTreePath}}</div>
+              <q-slide-transition>
+                <div class="col-12"
+                     v-if="selectedNodeId > 0">
+                  <my-btn-create label="مشاهده جزئیات"
+                                 color='light'
+                                 icon='list'
+                                 @click="showModalDetails" />
+                  <my-btn-create v-if="pageAccess.canCreate"
+                                 label='ایجاد زیر مبحث جدید'
+                                 @click="showModalCreate" />
+                  <my-btn-edit v-if="pageAccess.canEdit"
+                               @click="showModalEdit" />
+                  <my-btn-delete v-if="pageAccess.canDelete"
+                                 @click="showModalDelete" />
+                </div>
+              </q-slide-transition>
+            </div>
+          </q-slide-transition>
+
         </div>
       </div>
     </my-panel>
 
     <!-- modals -->
+    <modal-details></modal-details>
     <modal-create v-if="pageAccess.canCreate"></modal-create>
     <modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
@@ -49,6 +67,7 @@ import viewModel from 'viewModels/topicViewModel';
 
 export default {
   components: {
+    'modal-details': () => import('./details'),
     'modal-create': () => import('./create'),
     'modal-edit': () => import('./edit'),
     'modal-delete': () => import('./delete')
@@ -60,7 +79,10 @@ export default {
   data() {
     var pageAccess = this.$util.initAccess('/topic');
     return {
-      pageAccess
+      pageAccess,
+      selectedNodeId: null,
+      selectedTreePath: '',
+      lessonId: 0
     };
   },
   /**
@@ -69,35 +91,59 @@ export default {
   methods: {
     ...mapActions('topicStore', [
       'toggleModalCreateStore',
+      'toggleModalDetailsStore',
       'toggleModalEditStore',
       'toggleModalDeleteStore',
       'getByIdStore',
+      'change',
+      'change2',
+      'GetAllTreeStore',
       'fillGridStore',
       'resetCreateStore',
-      'resetEditStore'
+      'resetEditStore',
+      'setLessonIdQndParentIdStore'
     ]),
     ...mapActions('educationGroupStore', {
       fillEduGrpDdlStore: 'fillDdlStore'
     }),
+    ...mapActions('lookupStore', [
+      'getLookupTopicHardnessType',
+      'getLookupTopicAreaType'
+    ]),
     ...mapActions('lessonStore', { fillLessonDdlStore: 'fillDdlStore' }),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
       // show modal
       this.toggleModalCreateStore(true);
+      this.setLessonIdQndParentIdStore({
+        lessonid: this.lessonId,
+        parentId: this.selectedNodeId
+      });
     },
-    showModalEdit(id) {
+    showModalDetails() {
+      // get data by id
+      this.getByIdStore(this.selectedNodeId).then(() => {
+        // show modal
+        this.toggleModalDetailsStore(true);
+      });
+    },
+    showModalEdit() {
       // reset data on modal show
       this.resetEditStore();
       // get data by id
-      this.getByIdStore(id).then(() => {
+      this.getByIdStore(this.selectedNodeId).then(() => {
         // show modal
         this.toggleModalEditStore(true);
+        this.setLessonIdQndParentIdStore({
+          lessonid: this.lessonId,
+          parentId: this.selectedNodeId
+        });
       });
     },
-    showModalDelete(id) {
+    showModalDelete() {
       // get data by id
-      this.getByIdStore(id).then(() => {
+      this.getByIdStore(this.selectedNodeId).then(() => {
         // show modal
         this.toggleModalDeleteStore(true);
       });
@@ -106,7 +152,8 @@ export default {
   computed: {
     ...mapState('topicStore', {
       modelName: 'modelName',
-      topicObj: 'topicObj'
+      topicObj: 'topicObj',
+      treeLst: 'treeLst'
     }),
     ...mapState('educationGroupStore', {
       educationGroupDdl: 'educationGroupDdl'
@@ -125,7 +172,42 @@ export default {
   created() {
     this.fillEduGrpDdlStore();
     this.fillLessonDdlStore();
+    this.getLookupTopicHardnessType();
+    this.getLookupTopicAreaType();
+  },
+  watch: {
+    selectedNodeId: function(val) {
+      if (val == null) this.selectedTreePath = '';
+      else {
+        var str = [];
+        var founded = false;
+        function findNested(obj, value) {
+          str.push(obj.label);
+          if (obj.Id === value) {
+            founded = true;
+          } else if (obj.children) {
+            obj.children.forEach(child => {
+              if (!founded) {
+                var flag = findNested(child, value);
+                if (!flag && !founded) {
+                  str.pop();
+                }
+              }
+            });
+          }
+        }
+        var lst = findNested(this.treeLst[0], this.selectedNodeId);
+        this.selectedTreePath = str.join(' => ');
+      }
+    }
   }
 };
 </script>
+<style scoped>
+.myTreeDiv {
+  width: 120px;
+  overflow: auto;
+}
+</style>
+
 

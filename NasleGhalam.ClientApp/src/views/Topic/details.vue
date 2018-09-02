@@ -1,19 +1,28 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 @confirm="submitEditStore"
-                 @reset="resetEditStore"
-                 @close="toggleModalEditStore(false)">
+  <my-modal-create :title="modelName"
+                   :show="isOpenModalDetails"
+                   @confirm="submitDetailsStore"
+                   @reset="resetDetailsStore"
+                   @close="toggleModalDetailsStore(false)">
+
     <my-input :model="$v.topicObj.Title"
+              readonly
+              disabled
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.ExamStock"
+              readonly
+              disabled
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.ExamStockSystem"
+              readonly
+              disabled
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.Importance"
+              readonly
+              disabled
               class="col-md-6" />
 
     <my-field class="col-md-6"
@@ -21,20 +30,28 @@
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
                  :val="false"
+                 readonly
+                 disabled
                  label="خیر" />
         <q-radio v-model="data.obj.$model"
                  :val="true"
+                 readonly
+                 disabled
                  label="بلی" />
       </template>
     </my-field>
 
     <my-select :model="$v.topicObj.LookupId_HardnessType"
                :options="lookupTopicHardnessType"
+               readonly
+               disabled
                class="col-md-6"
                clearable />
 
     <my-select :model="$v.topicObj.LookupId_AreaType"
                :options="lookupTopicAreaType"
+               readonly
+               disabled
                class="col-md-6"
                clearable />
 
@@ -43,61 +60,24 @@
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
                  :val="false"
+                 readonly
+                 disabled
                  label="خیر" />
         <q-radio v-model="data.obj.$model"
                  :val="true"
+                 readonly
+                 disabled
                  label="بلی" />
       </template>
     </my-field>
-    <!-- <my-input :model="$v.topicObj.Title"
-              class="col-md-6" />
 
-    <my-input :model="$v.topicObj.ExamStock"
-              class="col-md-6" />
-
-    <my-input :model="$v.topicObj.ExamStockSystem"
-              class="col-md-6" />
-
-    <my-input :model="$v.topicObj.Importance"
-              class="col-md-6" />
-
-    <my-field class="col-md-6"
-              :model="$v.topicObj.IsExamSource">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
-      </template>
-    </my-field>
-
-    <my-input :model="$v.topicObj.LookupId_HardnessType"
-              class="col-md-6" />
-
-    <my-input :model="$v.topicObj.LookupId_AreaType"
-              class="col-md-6" />
-
-    <my-field class="col-md-6"
-              :model="$v.topicObj.IsActive">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
-      </template>
-    </my-field>
-
-    <my-input :model="$v.topicObj.ParentTopicId"
+    <!-- <my-input :model="$v.topicObj.ParentTopicId"
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.EducationGroup_LessonId"
               class="col-md-6" /> -->
 
-  </my-modal-edit>
+  </my-modal-create>
 </template>
 
 <script>
@@ -110,10 +90,10 @@ export default {
    */
   methods: {
     ...mapActions('topicStore', [
-      'toggleModalEditStore',
-      'editVueStore',
-      'submitEditStore',
-      'resetEditStore'
+      'toggleModalDetailsStore',
+      'createVueStore',
+      'submitDetailsStore',
+      'resetDetailsStore'
     ])
   },
   /**
@@ -123,7 +103,7 @@ export default {
     ...mapState('topicStore', {
       modelName: 'modelName',
       topicObj: 'topicObj',
-      isOpenModalEdit: 'isOpenModalEdit'
+      isOpenModalDetails: 'isOpenModalDetails'
     }),
     ...mapState('lookupStore', [
       'lookupTopicHardnessType',
@@ -138,7 +118,7 @@ export default {
    * created
    */
   created() {
-    this.editVueStore(this);
+    this.createVueStore(this);
   }
 };
 </script>

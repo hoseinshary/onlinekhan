@@ -101,8 +101,14 @@ namespace NasleGhalam.ServiceLayer.Services
             string strPictureName = questionViewModel.Context;
             string strFullPictureName = $"{strPictureName}.{strextension}";
             string strPhysicalPathName = strFullPictureName.GetQuestionMultiPhysicalPath();
-            wordFile.SaveAs(strPhysicalPathName);
-
+            try
+            {
+                wordFile.SaveAs(strPhysicalPathName);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
 
 
             var question = Mapper.Map<Question>(questionViewModel);

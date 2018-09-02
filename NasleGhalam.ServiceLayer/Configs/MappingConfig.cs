@@ -15,6 +15,7 @@ using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.Ratio;
 using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.ViewModels.Publisher;
+using  NasleGhalam.ViewModels.AxillaryBook;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -52,6 +53,7 @@ namespace NasleGhalam.ServiceLayer.Configs
 
                 config.CreateMap<TopicCreateViewModel, Topic>();
                 config.CreateMap<PublisherViewModel, Publisher>();
+                config.CreateMap<AxillaryBookViewModel, AxillaryBook>();
 
             });
         }

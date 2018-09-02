@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.AxillaryBook;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class AxillaryBookService
-	{
-		private const string Title = "کتاب کمک درسی";
+    public class AxillaryBookService
+    {
+        private const string Title = "کتاب کمک درسی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<AxillaryBook> _axillaryBooks;
-       
-	    public AxillaryBookService(IUnitOfWork uow)
+
+        public AxillaryBookService(IUnitOfWork uow)
         {
             _uow = uow;
             _axillaryBooks = uow.Set<AxillaryBook>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  کتاب کمک درسی با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -35,12 +35,31 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new AxillaryBookViewModel
                 {
-                    Id = current.Id
+                    Id = current.Id,
+                    Name = current.Name,
+                    Author = current.Author,
+                    PublishYear = current.PublishYear,
+                    Description = current.Description,
+                    Font = current.Font,
+                    Isbn = current.Isbn,
+                    Price = current.Price,
+                    OriginalPrice = current.OriginalPrice,
+                    LookupId_BookType = current.LookupId_BookType,
+                    BookTypeName = current.Lookup_BookType.Name,
+                    LookupId_PaperType = current.LookupId_PaperType,
+                    PaperTypeName = current.Lookup_PaperType.Name,
+                    LookupId_PrintType = current.LookupId_PrintType,
+                    PrintTypeName = current.Lookup_PrintType.Name,
+                    PublisherId = current.PublisherId,
+                    PublisherName = current.Publisher.Name,
+                    HasImage = current.HasImage,
+                    ImgPath = current.ImgPath
+                    
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه کتاب کمک درسی ها
         /// </summary>
         /// <returns></returns>
@@ -49,11 +68,25 @@ namespace NasleGhalam.ServiceLayer.Services
             return _axillaryBooks.Select(current => new AxillaryBookViewModel()
             {
                 Id = current.Id,
+                Name = current.Name,
+                Author = current.Author,
+                PublishYear = current.PublishYear,
+                Description = current.Description,
+                Font = current.Font,
+                Isbn = current.Isbn,
+                Price = current.Price,
+                OriginalPrice = current.OriginalPrice,
+                LookupId_BookType = current.LookupId_BookType,
+                LookupId_PaperType = current.LookupId_PaperType,
+                LookupId_PrintType = current.LookupId_PrintType,
+                PublisherId = current.PublisherId,
+                HasImage = current.HasImage,
+                ImgPath = current.ImgPath
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت کتاب کمک درسی
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
@@ -63,13 +96,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _axillaryBooks.Add(axillaryBook);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = axillaryBook.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = axillaryBook.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش کتاب کمک درسی
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
@@ -79,20 +112,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _uow.MarkAsChanged(axillaryBook);
 
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف کتاب کمک درسی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  axillaryBookViewModel = GetById(id);
+            var axillaryBookViewModel = GetById(id);
             if (axillaryBookViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -100,9 +133,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _uow.MarkAsDeleted(axillaryBook);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
+
         }
 
 
@@ -118,5 +151,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

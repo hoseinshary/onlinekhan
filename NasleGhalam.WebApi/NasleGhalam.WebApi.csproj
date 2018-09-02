@@ -107,6 +107,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WebApiControllerGenerator.tt</DependentUpon>
     </Content>
+    <Compile Include="Controllers\AxillaryBookController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\EducationGroup_LessonController.cs" />
     <Compile Include="Controllers\EducationSubGroupController.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Controllers\GradeController.cs" />
     <Compile Include="Controllers\GradeLevelController.cs" />
     <Compile Include="Controllers\LessonController.cs" />
+    <Compile Include="Extentions\PhysicalAddress.cs" />
     <Compile Include="Extentions\RequestExtention.cs" />
     <Compile Include="FilterAttribute\CheckImageValidation.cs" />
     <Compile Include="FilterAttribute\CheckModelValidation.cs" />
@@ -150,7 +152,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\Content\AxillaryBooksPictures\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -2,50 +2,50 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Publisher;
+using NasleGhalam.ViewModels.AxillaryBook;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 08/06/1397
 	/// </author>
-	public class PublisherController : ApiController
+	public class AxillaryBookController : ApiController
 	{
-        private readonly PublisherService _publisherService;
-		public PublisherController(PublisherService publisherService)
+        private readonly AxillaryBookService _axillaryBookService;
+		public AxillaryBookController(AxillaryBookService axillaryBookService)
         {
-            _publisherService = publisherService;
+            _axillaryBookService = axillaryBookService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.AxillaryBookReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_publisherService.GetAll());
+            return Ok(_axillaryBookService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.AxillaryBookReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var publisher = _publisherService.GetById(id);
-            if (publisher == null)
+            var axillaryBook = _axillaryBookService.GetById(id);
+            if (axillaryBook == null)
             {
                 return NotFound();
             }
-            return Ok(publisher);
+            return Ok(axillaryBook);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.PublisherCreateAccess)]
+        [CheckUserAccess(ActionBits.AxillaryBookCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(PublisherViewModel publisherViewModel)
+        public IHttpActionResult Create(AxillaryBookViewModel axillaryBookViewModel)
         {
-            var msgRes = _publisherService.Create(publisherViewModel);
+            var msgRes = _axillaryBookService.Create(axillaryBookViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -56,11 +56,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.PublisherUpdateAccess)]
+        [CheckUserAccess(ActionBits.AxillaryBookUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(PublisherViewModel publisherViewModel)
+        public IHttpActionResult Update(AxillaryBookViewModel axillaryBookViewModel)
         {
-            var msgRes = _publisherService.Update(publisherViewModel);
+            var msgRes = _axillaryBookService.Update(axillaryBookViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -69,10 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.PublisherDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.AxillaryBookDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _publisherService.Delete(id);
+            var msgRes = _axillaryBookService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

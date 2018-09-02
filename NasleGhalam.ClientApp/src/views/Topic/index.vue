@@ -16,12 +16,14 @@
                      :options="lessonFilteredDdl"
                      class="col-md-6"
                      filter
-                     @change="GetAllTreeStore($event)" />
+                     @change="GetAllTreeStore($event);lessonId =topicObj.EducationGroup_LessonId;"
+          />
           <q-tree :nodes="treeLst"
                   class="col-md-2"
                   :selected.sync="selectedNodeId"
                   default-expand-all
-                  node-key="Id" />
+                  node-key="Id"
+                  style="overflow: auto;" />
           <q-slide-transition>
 
             <div class="col-md-10"
@@ -79,7 +81,8 @@ export default {
     return {
       pageAccess,
       selectedNodeId: null,
-      selectedTreePath: ''
+      selectedTreePath: '',
+      lessonId: 0
     };
   },
   /**
@@ -97,17 +100,26 @@ export default {
       'GetAllTreeStore',
       'fillGridStore',
       'resetCreateStore',
-      'resetEditStore'
+      'resetEditStore',
+      'setLessonIdQndParentIdStore'
     ]),
     ...mapActions('educationGroupStore', {
       fillEduGrpDdlStore: 'fillDdlStore'
     }),
+    ...mapActions('lookupStore', [
+      'getLookupTopicHardnessType',
+      'getLookupTopicAreaType'
+    ]),
     ...mapActions('lessonStore', { fillLessonDdlStore: 'fillDdlStore' }),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
       // show modal
       this.toggleModalCreateStore(true);
+      this.setLessonIdQndParentIdStore({
+        lessonid: this.lessonId,
+        parentId: this.selectedNodeId
+      });
     },
     showModalDetails() {
       // get data by id
@@ -123,6 +135,10 @@ export default {
       this.getByIdStore(this.selectedNodeId).then(() => {
         // show modal
         this.toggleModalEditStore(true);
+        this.setLessonIdQndParentIdStore({
+          lessonid: this.lessonId,
+          parentId: this.selectedNodeId
+        });
       });
     },
     showModalDelete() {
@@ -156,6 +172,8 @@ export default {
   created() {
     this.fillEduGrpDdlStore();
     this.fillLessonDdlStore();
+    this.getLookupTopicHardnessType();
+    this.getLookupTopicAreaType();
   },
   watch: {
     selectedNodeId: function(val) {
@@ -179,7 +197,7 @@ export default {
           }
         }
         var lst = findNested(this.treeLst[0], this.selectedNodeId);
-        this.selectedTreePath = str.join('=>');
+        this.selectedTreePath = str.join(' => ');
       }
     }
   }

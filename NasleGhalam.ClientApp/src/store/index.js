@@ -11,6 +11,7 @@ import roleStore from './roleStore';
 import educationGroupStore from './educationGroupStore';
 import educationSubGroupStore from './educationSubGroupStore';
 import topicStore from './topicStore';
+import lookupStore from './lookupStore';
 
 Vue.use(Vuex);
 
@@ -66,7 +67,8 @@ const store = new Vuex.Store({
     roleStore,
     educationGroupStore,
     educationSubGroupStore,
-    topicStore
+    topicStore,
+    lookupStore
   }
 });
 

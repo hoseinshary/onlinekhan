@@ -91,6 +91,7 @@ const store = {
         util.mapObject(response.data, state.topicObj);
       });
     },
+
     /**
      * get data by id
      */
@@ -114,7 +115,10 @@ const store = {
         });
       }
     },
-
+    setLessonIdQndParentIdStore({ state }, obj) {
+      state.topicObj.EducationGroup_LessonId = obj.lessonid;
+      state.topicObj.ParentTopicId = obj.parentId;
+    },
     /**
      * fill dropDwonList
      */
@@ -178,6 +182,7 @@ const store = {
           let data = response.data;
 
           if (data.MessageType == 1) {
+            dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
             commit('insert', data.Id);
             dispatch('modelChangedStore');
             dispatch('resetCreateStore');
@@ -234,6 +239,7 @@ const store = {
         axios.post(`${baseUrl}/Update`, state.topicObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
+            dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
             commit('update');
             dispatch('modelChangedStore');
             dispatch('resetEditStore');

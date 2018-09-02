@@ -7,18 +7,22 @@
 
     <my-input :model="$v.topicObj.Title"
               readonly
+              disabled
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.ExamStock"
               readonly
+              disabled
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.ExamStockSystem"
               readonly
+              disabled
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.Importance"
               readonly
+              disabled
               class="col-md-6" />
 
     <my-field class="col-md-6"
@@ -27,37 +31,51 @@
         <q-radio v-model="data.obj.$model"
                  :val="false"
                  readonly
-                 label="false" />
+                 disabled
+                 label="خیر" />
         <q-radio v-model="data.obj.$model"
                  :val="true"
                  readonly
-                 label="true" />
+                 disabled
+                 label="بلی" />
       </template>
     </my-field>
 
-    <my-input :model="$v.topicObj.LookupId_HardnessType"
-              class="col-md-6" />
+    <my-select :model="$v.topicObj.LookupId_HardnessType"
+               :options="lookupTopicHardnessType"
+               readonly
+               disabled
+               class="col-md-6"
+               clearable />
 
-    <my-input :model="$v.topicObj.LookupId_AreaType"
-              class="col-md-6" />
+    <my-select :model="$v.topicObj.LookupId_AreaType"
+               :options="lookupTopicAreaType"
+               readonly
+               disabled
+               class="col-md-6"
+               clearable />
 
     <my-field class="col-md-6"
               :model="$v.topicObj.IsActive">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
+                 :val="false"
+                 readonly
+                 disabled
+                 label="خیر" />
         <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+                 :val="true"
+                 readonly
+                 disabled
+                 label="بلی" />
       </template>
     </my-field>
 
-    <my-input :model="$v.topicObj.ParentTopicId"
+    <!-- <my-input :model="$v.topicObj.ParentTopicId"
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.EducationGroup_LessonId"
-              class="col-md-6" />
+              class="col-md-6" /> -->
 
   </my-modal-create>
 </template>
@@ -86,7 +104,11 @@ export default {
       modelName: 'modelName',
       topicObj: 'topicObj',
       isOpenModalDetails: 'isOpenModalDetails'
-    })
+    }),
+    ...mapState('lookupStore', [
+      'lookupTopicHardnessType',
+      'lookupTopicAreaType'
+    ])
   },
   /**
    * validations

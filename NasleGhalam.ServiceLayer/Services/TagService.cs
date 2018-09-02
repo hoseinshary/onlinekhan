@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.Tag;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class TagService
-	{
-		private const string Title = "برچسب";
+    public class TagService
+    {
+        private const string Title = "برچسب";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Tag> _tags;
-       
-	    public TagService(IUnitOfWork uow)
+
+        public TagService(IUnitOfWork uow)
         {
             _uow = uow;
             _tags = uow.Set<Tag>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  برچسب با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -35,12 +35,13 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new TagViewModel
                 {
-                    Id = current.Id
+                    Id = current.Id,
+                    Name = current.Name
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه برچسب ها
         /// </summary>
         /// <returns></returns>
@@ -49,11 +50,12 @@ namespace NasleGhalam.ServiceLayer.Services
             return _tags.Select(current => new TagViewModel()
             {
                 Id = current.Id,
+                Name = current.Name
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت برچسب
         /// </summary>
         /// <param name="tagViewModel"></param>
@@ -63,13 +65,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var tag = Mapper.Map<Tag>(tagViewModel);
             _tags.Add(tag);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = tag.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = tag.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش برچسب
         /// </summary>
         /// <param name="tagViewModel"></param>
@@ -78,19 +80,19 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var tag = Mapper.Map<Tag>(tagViewModel);
             _uow.MarkAsChanged(tag);
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
+
+            return _uow.CommitChanges(CrudType.Update, Title);
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف برچسب
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  tagViewModel = GetById(id);
+            var tagViewModel = GetById(id);
             if (tagViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -98,8 +100,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var tag = Mapper.Map<Tag>(tagViewModel);
             _uow.MarkAsDeleted(tag);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
         }
 
 
@@ -115,5 +117,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

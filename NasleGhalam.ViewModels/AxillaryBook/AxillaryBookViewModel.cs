@@ -86,6 +86,6 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 
         public string PublisherName { get; set; }
 
-
+        public byte[] Picture { get; set; }
     }
 }

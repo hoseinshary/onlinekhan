@@ -13,22 +13,22 @@ namespace NasleGhalam.WebApi.Controllers
 	///     date: 11/06/1397
 	/// </author>
 	public class TagController : ApiController
-	{
+    {
         private readonly TagService _tagService;
-		public TagController(TagService tagService)
+        public TagController(TagService tagService)
         {
             _tagService = tagService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_tagService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var tag = _tagService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.TagCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(TagViewModel tagViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

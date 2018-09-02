@@ -92,6 +92,7 @@
     <Compile Include="Services\QuestionService.cs" />
     <Compile Include="Services\RatioService.cs" />
     <Compile Include="Services\RoleService.cs" />
+    <Compile Include="Services\TagService.cs" />
     <Compile Include="Services\TopicService.cs" />
     <Compile Include="Services\EducationBook.cs" />
     <Compile Include="Services\UserService.cs" />

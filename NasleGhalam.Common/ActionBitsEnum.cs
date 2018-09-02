@@ -99,5 +99,10 @@
         AxillaryBookCreateAccess = 71,
         AxillaryBookUpdateAccess = 72,
         AxillaryBookDeleteAccess = 73,
+
+        TagReadAccess = 74,
+        TagCreateAccess = 75,
+        TagUpdateAccess = 76,
+        TagDeleteAccess = 77,
     }
 }

@@ -58,12 +58,13 @@ namespace NasleGhalam.WebApi.Controllers
                 const int picSize = 1024;
                 bool upload = false;
                 string picUpload = null;
-                CheckPicForUplode checkPic = new CheckPicForUplode();
+                
                 HttpPostedFileBase filebase = new HttpPostedFileWrapper(postedFile);
-                checkPic.filesize = picSize;
-                picUpload = checkPic.UploadUserFile(filebase);
+                picUpload = CheckFile.UploadPictureFile(filebase, picSize);
+                
                 if (picUpload.Equals("Check Picture Is Successfully"))
                 {
+                    
                     string strextension = System.IO.Path.GetExtension(postedFile.FileName).Substring(1);
                     string strPictureName = axillaryBookViewModel.Name;
                     string strFullPictureName = string.Format("{0}.{1}", strPictureName, strextension);

@@ -13,6 +13,7 @@ namespace NasleGhalam.ViewModels.Question
 
         public byte[] wordFile { get; set; }
 
+   
 
     }
 }

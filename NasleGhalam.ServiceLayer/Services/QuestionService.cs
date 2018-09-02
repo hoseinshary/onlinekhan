@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Web;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Question;
+using NasleGhalam.WebApi.Extentions;
+
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -57,8 +60,51 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(QuestionCreateViewModel questionViewModel)
+        public MessageResult Create(QuestionCreateViewModel questionViewModel , HttpPostedFile wordFile )
         {
+            var question = Mapper.Map<Question>(questionViewModel);
+            _questions.Add(question);
+
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = question.Id;
+            if (msgRes.MessageType == MessageType.Success)
+            {
+
+                HttpPostedFileBase filebase = new HttpPostedFileWrapper(wordFile);
+                string strextension = System.IO.Path.GetExtension(wordFile.FileName).Substring(1);
+                string strPictureName = questionViewModel.Context;
+                string strFullPictureName = $"{strPictureName}.{strextension}";
+                string strPhysicalPathName = strFullPictureName.GetQuestionPhysicalPath();
+                try
+                {
+                    wordFile.SaveAs(strPhysicalPathName);
+                }
+                catch (Exception e)
+                {
+                    msgRes.EnMessage += e.Message;
+                }
+            }
+
+            return msgRes;
+        }
+
+
+        /// <summary>
+        /// ثبت سوال به صورت گروهی
+        /// </summary>
+        /// <param name="questionViewModel"></param>
+        /// <returns></returns>
+        public MessageResult CreateMulti(QuestionTempViewModel questionViewModel, HttpPostedFile wordFile, HttpPostedFile excelFile)
+        {
+            HttpPostedFileBase filebase = new HttpPostedFileWrapper(wordFile);
+            string strextension = System.IO.Path.GetExtension(wordFile.FileName).Substring(1);
+            string strPictureName = questionViewModel.Context;
+            string strFullPictureName = $"{strPictureName}.{strextension}";
+            string strPhysicalPathName = strFullPictureName.GetQuestionMultiPhysicalPath();
+            wordFile.SaveAs(strPhysicalPathName);
+
+
+
             var question = Mapper.Map<Question>(questionViewModel);
             _questions.Add(question);
 
@@ -66,6 +112,8 @@ namespace NasleGhalam.ServiceLayer.Services
             msgRes.Id = question.Id;
             return msgRes;
         }
+
+
 
 
         /// <summary>

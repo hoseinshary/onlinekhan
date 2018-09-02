@@ -7,39 +7,102 @@ using System.Web;
 
 namespace NasleGhalam.Common
 {
-    public class CheckPicForUplode
+    public class CheckFile
     {
-        public string ErrorMessage { get; set; }
-        public decimal filesize { get; set; }
-        public string UploadUserFile(HttpPostedFileBase file)
+        
+        public static string UploadPictureFile(HttpPostedFileBase file , decimal fileSize)
         {
             try
             {
                 var supportedTypes = new[] { "jpg", "jpeg", "png" };
-              //var supportedTypes = new[] { "txt", "doc", "docx", "pdf", "xls", "xlsx" }; 
+              
                 var fileExt = System.IO.Path.GetExtension(file.FileName).Substring(1);
                 if (!supportedTypes.Contains(fileExt))
                 {
-                    ErrorMessage = "File Extension Is InValid - Only Upload jpg/jpeg/png File";
-                    return ErrorMessage;
+                    return "File Extension Is InValid - Only Upload jpg/jpeg/png File";
+                    
                 }
-                else if (file.ContentLength > (filesize * 1024))
+                else if (file.ContentLength > (fileSize * 1024))
                 {
-                    ErrorMessage = "File size Should Be UpTo " + filesize + "KB";
-                    return ErrorMessage;
+                    return "File size Should Be UpTo " + fileSize + "KB";
+                    
                 }
                 else
                 {
-                    ErrorMessage = "Check Picture Is Successfully";
-                    return ErrorMessage;
+                    return "Check Picture Is Successfully";
+                    
                 }
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Check Picture Error";
-                return ErrorMessage;
+                return ex.InnerException.Message;
+                
             }
         }
+
+
+        public static string UploadWordFile(HttpPostedFileBase file, decimal fileSize)
+        {
+            try
+            {
+                var supportedTypes = new[] { "docx","doc" };
+                
+                var fileExt = System.IO.Path.GetExtension(file.FileName).Substring(1);
+                if (!supportedTypes.Contains(fileExt))
+                {
+                    return "File Extension Is InValid - Only Upload docx/doc File";
+
+                }
+                else if (file.ContentLength > (fileSize * 1024))
+                {
+                    return "File size Should Be UpTo " + fileSize + "KB";
+
+                }
+                else
+                {
+                    return "OK";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.InnerException.Message;
+
+            }
+        }
+
+
+        public static string UploadExcelFile(HttpPostedFileBase file, decimal fileSize)
+        {
+            try
+            {
+                var supportedTypes = new[] { "xlsx", "xls" };
+                
+                var fileExt = System.IO.Path.GetExtension(file.FileName).Substring(1);
+                if (!supportedTypes.Contains(fileExt))
+                {
+                    return "File Extension Is InValid - Only Upload jpg/jpeg/png File";
+
+                }
+                else if (file.ContentLength > (fileSize * 1024))
+                {
+                    return "File size Should Be UpTo " + fileSize + "KB";
+
+                }
+                else
+                {
+                    return "Check Picture Is Successfully";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.InnerException.Message;
+
+            }
+        }
+
+
     }
 }
 

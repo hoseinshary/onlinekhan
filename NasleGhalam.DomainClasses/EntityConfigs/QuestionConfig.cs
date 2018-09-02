@@ -18,10 +18,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.UserId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.AxillaryBook)
-                .WithMany(x => x.Questions)
-                .HasForeignKey(x => x.AxillaryBookId)
-                .WillCascadeOnDelete(false);
+         
 
             this.HasRequired(x => x.Lookup_QuestionType)
                 .WithMany(x => x.Question_QuestionTypes)
@@ -45,6 +42,16 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                     config.MapLeftKey("QuestionId");
                     config.MapRightKey("TagId");
                     config.ToTable("Questions_Tags");
+                });
+
+
+            this.HasMany(x => x.AxillaryBooks)
+                .WithMany(x => x.Questions)
+                .Map(config =>
+                {
+                    config.MapLeftKey("QuestionId");
+                    config.MapRightKey("AxillaryBookId");
+                    config.ToTable("Questions_AxillaryBooks");
                 });
 
             this.HasMany(x => x.Boxes)

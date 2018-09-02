@@ -51,6 +51,9 @@
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.web.4.0.0.315\lib\net40\StructureMap.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -66,7 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="%40CodeTemplates\ServiceLayerGenerator1.cs">
+    <Content Include="%40CodeTemplates\ServiceLayerGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ServiceLayerGenerator.tt</DependentUpon>
@@ -88,6 +91,7 @@
     <Compile Include="Services\RatioService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\TopicService.cs" />
+    <Compile Include="Services\EducationBook.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Configs\MappingConfig.cs" />
     <Compile Include="Configs\SiteConfig.cs" />
@@ -122,7 +126,7 @@
   <ItemGroup>
     <Content Include="%40CodeTemplates\ServiceLayerGenerator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ServiceLayerGenerator1.cs</LastGenOutput>
+      <LastGenOutput>ServiceLayerGenerator.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

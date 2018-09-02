@@ -26,8 +26,8 @@ namespace NasleGhalam.WebApi
 
 
             // config formatter
+            //config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
             config.Formatters.Add(new MultiPartMediaTypeFormatter());
-           // config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new CustomJsonFormatter());
             //------------------------------
 

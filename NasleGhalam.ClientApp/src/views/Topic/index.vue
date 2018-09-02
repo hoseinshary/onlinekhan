@@ -8,18 +8,18 @@
                        :label="`ایجاد (${modelName}) جدید`"
                        @click="showModalCreate" />
         <br>
-        <my-select :model="$v.accessObj.ModuleId"
-                   :options="moduleDdl"
-                   class="col-md-6"
-                   filter
-                   @change="fillControllerDdl" />
+        <div class="row">
+          <my-select :model="$v.topicObj.EducationGroupId"
+                     :options="educationGroupDdl"
+                     class="col-md-6"
+                     filter />
 
-        <my-select :model="$v.accessObj.ControllerId"
-                   :options="controllerDdl"
-                   class="col-md-6"
-                   filter
-                   @change="fillActionGrid" />
-        <!-- <my-table :grid-data="topicGridData"
+          <my-select :model="$v.topicObj.EducationGroup_LessonId"
+                     :options="lessonFilteredDdl"
+                     class="col-md-6"
+                     filter
+                     @change="getByIdStore($event)" />
+          <!-- <my-table :grid-data="topicGridData"
                   :columns="topicGridColumn"
                   hasIndex>
           <template slot="Id"
@@ -32,6 +32,7 @@
                            @click="showModalDelete(data.row.Id)" />
           </template>
         </my-table> -->
+        </div>
       </div>
     </my-panel>
 
@@ -44,6 +45,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import viewModel from 'viewModels/topicViewModel';
 
 export default {
   components: {
@@ -54,6 +56,7 @@ export default {
   /**
    * data
    */
+  validations: viewModel,
   data() {
     var pageAccess = this.$util.initAccess('/topic');
     return {
@@ -73,10 +76,10 @@ export default {
       'resetCreateStore',
       'resetEditStore'
     ]),
-    ...mapActions('educationGroupStore', [
-      (fillEduGrpDdlStore = 'fillDdlStore')
-    ]),
-    ...mapActions('lessonStore', [(fillLessonDdlStore = 'fillDdlStore')]),
+    ...mapActions('educationGroupStore', {
+      fillEduGrpDdlStore: 'fillDdlStore'
+    }),
+    ...mapActions('lessonStore', { fillLessonDdlStore: 'fillDdlStore' }),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
@@ -103,14 +106,21 @@ export default {
   computed: {
     ...mapState('topicStore', {
       modelName: 'modelName',
-      topicGridData: 'topicGridData'
+      topicObj: 'topicObj'
     }),
     ...mapState('educationGroupStore', {
       educationGroupDdl: 'educationGroupDdl'
     }),
     ...mapState('lessonStore', {
       lessonDdl: 'allObjDdl'
-    })
+    }),
+    lessonFilteredDdl: function() {
+      return this.topicObj.EducationGroupId == 0
+        ? []
+        : this.lessonDdl.filter(
+            x => x.educationGroupId == this.topicObj.EducationGroupId
+          );
+    }
   },
   created() {
     this.fillEduGrpDdlStore();

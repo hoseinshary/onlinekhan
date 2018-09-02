@@ -89,15 +89,5 @@
         PublisherCreateAccess = 63,
         PublisherUpdateAccess = 64,
         PublisherDeleteAccess = 65,
-
-        EducationBookReadAccess = 66,
-        EducationBookCreateAccess = 67,
-        EducationBookUpdateAccess = 68,
-        EducationBookDeleteAccess = 69,
-
-        AxillaryBookReadAccess = 70,
-        AxillaryBookCreateAccess = 71,
-        AxillaryBookUpdateAccess = 72,
-        AxillaryBookDeleteAccess = 73,
     }
 }

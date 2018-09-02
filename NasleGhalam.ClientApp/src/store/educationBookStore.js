@@ -1,70 +1,76 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { CITY_URL as baseUrl } from 'utilities/site-config';
+import { EDUCATION_BOOK_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in cityGridData by id
+ * find index of object in educationBookGridData by id
  * @param {Number} id
  */
 function getIndexById(id) {
-  return store.state.cityGridData.findIndex(o => o.Id == id);
+  return store.state.educationBookGridData.findIndex(o => o.Id == id);
 }
 
 const store = {
   namespaced: true,
   state: {
-    modelName: 'شهر',
+    modelName: 'کتاب درسی',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    cityObj: {
+    educationBookObj: {
       Id: 0,
       Name: '',
-      ProvinceId: 0,
-      ProvinceName: ''
+      PublishYear: 1350,
+      IsExamSource: false,
+      IsActive: false,
+      IsChanged: false,
+      GradeId: 0,
+      GradeLevelId: 0,
+      EducationGroup_LessonId: 0
     },
-    cityGridData: [],
-    // cityDdl: [],
-    cityByProvinceDdl: [],
+    educationBookGridData: [],
+    educationBookDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
-    gridModelChanged: true,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new cityObj to cityGridData
+     * insert new educationBookObj to educationBookGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.cityObj);
+      let createdObj = util.cloneObject(state.educationBookObj);
       createdObj.Id = id;
-      state.cityGridData.push(createdObj);
+      state.educationBookGridData.push(createdObj);
     },
 
     /**
-     * update cityObj of cityGridData
+     * update educationBookObj of educationBookGridData
      */
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.cityObj, state.cityGridData[index]);
+      util.mapObject(
+        state.educationBookObj,
+        state.educationBookGridData[index]
+      );
     },
 
     /**
-     * delete from cityGridData
+     * delete from educationBookGridData
      */
     delete(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.cityGridData.splice(index, 1);
+      state.educationBookGridData.splice(index, 1);
     },
 
     /**
-     * rest value of cityObj
+     * rest value of educationBookObj
      */
     reset(state, $v) {
-      util.clearObject(state.cityObj);
+      util.clearObject(state.educationBookObj);
       if ($v) {
         $v.$reset();
       }
@@ -77,50 +83,36 @@ const store = {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.cityObj);
+        util.mapObject(response.data, state.educationBookObj);
       });
     },
 
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      // fill grid if modelChanged
-      if (state.gridModelChanged) {
+    fillGridStore({ state }, gradeLevelId) {
+      if (gradeLevelId) {
         // get data
-        axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.cityGridData = response.data;
-          state.gridModelChanged = false;
-        });
+        axios
+          .get(`${baseUrl}/GetAllByGradeLevelId/${gradeLevelId}`)
+          .then(response => {
+            state.educationBookGridData = response.data;
+          });
       }
     },
 
     /**
      * fill dropDwonList
      */
-    // fillDdlStore({ state }) {
-    //   // fill ddl if modelChanged
-    //   if (state.ddlModelChanged) {
-    //     // get data
-    //     axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-    //       state.cityDdl = response.data;
-    //       state.ddlModelChanged = false;
-    //     });
-    //   }
-    // },
-
-    /**
-     *  fill dropDwonList cityByProvince
-     * @param {*} param0
-     * @param {Number} provinceId
-     */
-    fillCityByProvinceIdDdlStore({ state }, provinceId) {
-      // get data
-      axios
-        .get(`${baseUrl}/GetAllByProvinceIdDdl/${provinceId}`)
-        .then(response => {
-          state.cityByProvinceDdl = response.data;
+    fillDdlStore({ state }) {
+      // fill grid if modelChanged
+      if (state.ddlModelChanged) {
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.educationBookDdl = response.data;
+          state.ddlModelChanged = false;
         });
+      }
     },
 
     /**
@@ -128,8 +120,8 @@ const store = {
      */
     validateFormStore({ dispatch }, vm) {
       // check instance validation
-      vm.$v.cityObj.$touch();
-      if (vm.$v.cityObj.$error) {
+      vm.$v.educationBookObj.$touch();
+      if (vm.$v.educationBookObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
@@ -142,7 +134,6 @@ const store = {
      */
     modelChangedStore({ state }) {
       state.ddlModelChanged = true;
-      state.gridModelChanged = true;
     },
 
     //### create section ###
@@ -168,26 +159,28 @@ const store = {
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.cityObj).then(response => {
-          let data = response.data;
+        axios
+          .post(`${baseUrl}/Create`, state.educationBookObj)
+          .then(response => {
+            let data = response.data;
 
-          if (data.MessageType == 1) {
-            commit('insert', data.Id);
-            dispatch('modelChangedStore');
-            dispatch('resetCreateStore');
-            dispatch('toggleModalCreateStore', !closeModal);
-          }
+            if (data.MessageType == 1) {
+              commit('insert', data.Id);
+              dispatch('modelChangedStore');
+              dispatch('resetCreateStore');
+              dispatch('toggleModalCreateStore', !closeModal);
+            }
 
-          dispatch(
-            'notify',
-            {
-              body: data.Message,
-              type: data.MessageType,
-              vm: vm
-            },
-            { root: true }
-          );
-        });
+            dispatch(
+              'notify',
+              {
+                body: data.Message,
+                type: data.MessageType,
+                vm: vm
+              },
+              { root: true }
+            );
+          });
       });
     },
 
@@ -221,26 +214,28 @@ const store = {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.cityObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.cityObj).then(response => {
-          let data = response.data;
-          if (data.MessageType == 1) {
-            commit('update');
-            dispatch('modelChangedStore');
-            dispatch('resetEditStore');
-            dispatch('toggleModalEditStore', false);
-          }
+        state.educationBookObj.Id = state.selectedId;
+        axios
+          .post(`${baseUrl}/Update`, state.educationBookObj)
+          .then(response => {
+            let data = response.data;
+            if (data.MessageType == 1) {
+              commit('update');
+              dispatch('modelChangedStore');
+              dispatch('resetEditStore');
+              dispatch('toggleModalEditStore', false);
+            }
 
-          dispatch(
-            'notify',
-            {
-              body: data.Message,
-              type: data.MessageType,
-              vm: vm
-            },
-            { root: true }
-          );
-        });
+            dispatch(
+              'notify',
+              {
+                body: data.Message,
+                type: data.MessageType,
+                vm: vm
+              },
+              { root: true }
+            );
+          });
       });
     },
 
@@ -288,7 +283,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.cityObj.Name;
+      return state.educationBookObj.Name;
     }
   }
 };

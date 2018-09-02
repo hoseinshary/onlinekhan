@@ -54,7 +54,12 @@ export default {
       required
     },
     EducationGroup_LessonId: {
-      displayName: displayName('گروه تحصیلی_درس'),
+      displayName: displayName('درس'),
+      numeric,
+      required
+    },
+    EducationGroupId: {
+      displayName: displayName('گروه تحصیلی'),
       numeric,
       required
     }

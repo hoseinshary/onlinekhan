@@ -9,26 +9,26 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: علیرضا اعتمادی
+	///     date: 1397/06/09
 	/// </author>
 	public class EducationBookController : ApiController
-	{
+    {
         private readonly EducationBookService _educationBookService;
-		public EducationBookController(EducationBookService educationBookService)
+        public EducationBookController(EducationBookService educationBookService)
         {
             _educationBookService = educationBookService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
-        public IHttpActionResult GetAll()
+        [HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
+        public IHttpActionResult GetAllByGradeLevelId(int id)
         {
-            return Ok(_educationBookService.GetAll());
+            return Ok(_educationBookService.GetAllByGradeLevelId(id));
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var educationBook = _educationBookService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.EducationBookCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(EducationBookViewModel educationBookViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

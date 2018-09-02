@@ -50,6 +50,10 @@ export default [
       {
         path: '/topic',
         component: () => import('views/topic')
+      },
+      {
+        path: '/educationBook',
+        component: () => import('views/educationBook')
       }
     ]
   },

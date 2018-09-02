@@ -70,8 +70,7 @@
     <Compile Include="EducationGroup_Lesson\EducationGroup_LessonViewModel.cs" />
     <Compile Include="EducationSubGroup\EducationSubGroupViewModel.cs" />
     <Compile Include="EducationYear\EducationYearViewModel.cs" />
-    <Compile Include="ErrorResources.Designer.cs" />
-    <Compile Include="ErrorResources1.Designer.cs">
+    <Compile Include="ErrorResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorResources.resx</DependentUpon>
@@ -125,7 +124,7 @@
   <ItemGroup>
     <EmbeddedResource Include="ErrorResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorResources1.Designer.cs</LastGenOutput>
+      <LastGenOutput>ErrorResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

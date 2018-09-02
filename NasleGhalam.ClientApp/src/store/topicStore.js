@@ -15,6 +15,7 @@ const store = {
   state: {
     modelName: 'مبحث',
     isOpenModalCreate: false,
+    isOpenModalDetails: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
     topicObj: {
@@ -32,6 +33,7 @@ const store = {
       EducationGroupId: 0
     },
     moduleDdl: [],
+    treeLst: [],
     controllerDdl: [],
     topicGridData: [],
     topicDdl: [],
@@ -89,6 +91,15 @@ const store = {
         util.mapObject(response.data, state.topicObj);
       });
     },
+    /**
+     * get data by id
+     */
+    GetAllTreeStore({ state }, id) {
+      axios.get(`${baseUrl}/GetAllTree/${id}`).then(response => {
+        state.treeLst = [response.data];
+      });
+    },
+    change({ state }, id) {},
 
     /**
      * fill grid data
@@ -198,6 +209,9 @@ const store = {
     /**
      * toggle modal edit
      */
+    toggleModalDetailsStore({ state }, isOpen) {
+      state.isOpenModalDetails = isOpen;
+    },
     toggleModalEditStore({ state }, isOpen) {
       state.isOpenModalEdit = isOpen;
     },

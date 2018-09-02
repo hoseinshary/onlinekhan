@@ -94,7 +94,8 @@ module.exports = function(ctx) {
         'QSpinnerIos',
         'QPopover',
         'QCollapsible',
-        'QSlideTransition'
+        'QSlideTransition',
+        'QTree'
       ],
       directives: ['Ripple', 'CloseOverlay'],
       // Quasar plugins

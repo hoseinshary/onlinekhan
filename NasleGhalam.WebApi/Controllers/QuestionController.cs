@@ -40,19 +40,19 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost]
-        [CheckUserAccess(ActionBits.QuestionCreateAccess)]
-        [CheckModelValidation]
-        public IHttpActionResult Create(QuestionTempViewModel questionViewModel)
-        {
-            var msgRes = _questionService.Create(null);
-            return Ok(new MessageResultApi
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
-        }
+        //[HttpPost]
+        //[CheckUserAccess(ActionBits.QuestionCreateAccess)]
+        //[CheckModelValidation]
+        //public IHttpActionResult Create(QuestionTempViewModel questionViewModel)
+        //{
+        //    var msgRes = _questionService.Create(null);
+        //    return Ok(new MessageResultApi
+        //    {
+        //        Message = msgRes.FaMessage,
+        //        MessageType = msgRes.MessageType,
+        //        Id = msgRes.Id
+        //    });
+        //}
 
 
         [HttpPost]

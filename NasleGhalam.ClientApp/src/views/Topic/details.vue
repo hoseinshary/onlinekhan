@@ -1,30 +1,36 @@
 <template>
   <my-modal-create :title="modelName"
-                   :show="isOpenModalCreate"
-                   @confirm="submitCreateStore"
-                   @reset="resetCreateStore"
-                   @close="toggleModalCreateStore(false)">
+                   :show="isOpenModalDetails"
+                   @confirm="submitDetailsStore"
+                   @reset="resetDetailsStore"
+                   @close="toggleModalDetailsStore(false)">
 
     <my-input :model="$v.topicObj.Title"
+              readonly
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.ExamStock"
+              readonly
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.ExamStockSystem"
+              readonly
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.Importance"
+              readonly
               class="col-md-6" />
 
     <my-field class="col-md-6"
               :model="$v.topicObj.IsExamSource">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 val="false"
+                 :val="false"
+                 readonly
                  label="false" />
         <q-radio v-model="data.obj.$model"
-                 val="true"
+                 :val="true"
+                 readonly
                  label="true" />
       </template>
     </my-field>
@@ -66,10 +72,10 @@ export default {
    */
   methods: {
     ...mapActions('topicStore', [
-      'toggleModalCreateStore',
+      'toggleModalDetailsStore',
       'createVueStore',
-      'submitCreateStore',
-      'resetCreateStore'
+      'submitDetailsStore',
+      'resetDetailsStore'
     ])
   },
   /**
@@ -79,7 +85,7 @@ export default {
     ...mapState('topicStore', {
       modelName: 'modelName',
       topicObj: 'topicObj',
-      isOpenModalCreate: 'isOpenModalCreate'
+      isOpenModalDetails: 'isOpenModalDetails'
     })
   },
   /**

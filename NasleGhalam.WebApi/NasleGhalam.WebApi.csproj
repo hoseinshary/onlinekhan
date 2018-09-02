@@ -135,6 +135,7 @@
     <Compile Include="Extentions\PhysicalAddress.cs" />
     <Compile Include="Extentions\RequestExtention.cs" />
     <Compile Include="FilterAttribute\CheckImageValidation.cs" />
+    <Compile Include="FilterAttribute\CheckImageValidatioNotRequired.cs" />
     <Compile Include="FilterAttribute\CheckModelValidation.cs" />
     <Compile Include="FilterAttribute\CheckUserAccess.cs" />
     <Compile Include="Global.asax.cs">

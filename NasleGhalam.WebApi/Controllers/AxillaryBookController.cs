@@ -50,6 +50,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(AxillaryBookViewModel axillaryBookViewModel)
         {
+           
             var files = HttpContext.Current.Request.Files;
             var postedFile = files.Get("Picture");
             if (postedFile != null)
@@ -64,7 +65,7 @@ namespace NasleGhalam.WebApi.Controllers
                 
                 if (picUpload.Equals("Check Picture Is Successfully"))
                 {
-                    
+                    //Url.Content();
                     string strextension = System.IO.Path.GetExtension(postedFile.FileName).Substring(1);
                     string strPictureName = axillaryBookViewModel.Name;
                     string strFullPictureName = string.Format("{0}.{1}", strPictureName, strextension);
@@ -121,7 +122,8 @@ namespace NasleGhalam.WebApi.Controllers
                 {
                     return Ok(new MessageResultApi
                     {
-                        Message = "باشد" + "KB" + picSize.ToString() + "عکس ارسالی باید کمتر از",
+                        //Message = "باشد" + "KB" + picSize.ToString() + "عکس ارسالی باید کمتر از",
+                        Message = $"عکس ارسالی باید کمتر از {picSize} کیلو بایت باشد.",
                         MessageType = MessageType.Error
                     });
                 }

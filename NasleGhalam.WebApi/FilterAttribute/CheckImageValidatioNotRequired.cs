@@ -8,10 +8,10 @@ using NasleGhalam.Common;
 
 namespace NasleGhalam.WebApi.FilterAttribute
 {
-    public class CheckImageValidation : ActionFilterAttribute
+    public class CheckImageValidatioNotRequired : ActionFilterAttribute
     {
         private readonly string _imageName;
-        public CheckImageValidation(string imageName)
+        public CheckImageValidatioNotRequired(string imageName)
         {
             _imageName = imageName;
         }

@@ -69,8 +69,7 @@ namespace NasleGhalam.ViewModels.Question
         public int UserId { get; set; }
 
 
-        [Display(Name = "کتاب کمک آموزشی")]
-        public int AxillaryBookId { get; set; }
+
 
 
     }

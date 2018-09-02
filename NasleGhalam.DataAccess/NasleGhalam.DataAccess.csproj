@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201808211145217_nullableParentTopic.Designer.cs">
       <DependentUpon>201808211145217_nullableParentTopic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809021349424_questionAxillaryBook.cs" />
+    <Compile Include="Migrations\201809021349424_questionAxillaryBook.Designer.cs">
+      <DependentUpon>201809021349424_questionAxillaryBook.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -80,6 +84,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808211145217_nullableParentTopic.resx">
       <DependentUpon>201808211145217_nullableParentTopic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809021349424_questionAxillaryBook.resx">
+      <DependentUpon>201809021349424_questionAxillaryBook.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

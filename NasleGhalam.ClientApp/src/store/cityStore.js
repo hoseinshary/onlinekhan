@@ -98,16 +98,16 @@ const store = {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      // fill grid if modelChanged
-      if (state.ddlModelChanged) {
-        // get data
-        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-          state.cityDdl = response.data;
-          state.ddlModelChanged = false;
-        });
-      }
-    },
+    // fillDdlStore({ state }) {
+    //   // fill ddl if modelChanged
+    //   if (state.ddlModelChanged) {
+    //     // get data
+    //     axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+    //       state.cityDdl = response.data;
+    //       state.ddlModelChanged = false;
+    //     });
+    //   }
+    // },
 
     /**
      *  fill dropDwonList cityByProvince

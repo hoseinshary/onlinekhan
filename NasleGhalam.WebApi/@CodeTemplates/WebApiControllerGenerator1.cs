@@ -2,50 +2,50 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Publisher;
+using NasleGhalam.ViewModels.Tag;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 11/06/1397
 	/// </author>
-	public class PublisherController : ApiController
+	public class TagController : ApiController
 	{
-        private readonly PublisherService _publisherService;
-		public PublisherController(PublisherService publisherService)
+        private readonly TagService _tagService;
+		public TagController(TagService tagService)
         {
-            _publisherService = publisherService;
+            _tagService = tagService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_publisherService.GetAll());
+            return Ok(_tagService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var publisher = _publisherService.GetById(id);
-            if (publisher == null)
+            var tag = _tagService.GetById(id);
+            if (tag == null)
             {
                 return NotFound();
             }
-            return Ok(publisher);
+            return Ok(tag);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.PublisherCreateAccess)]
+        [CheckUserAccess(ActionBits.TagCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(PublisherViewModel publisherViewModel)
+        public IHttpActionResult Create(TagViewModel tagViewModel)
         {
-            var msgRes = _publisherService.Create(publisherViewModel);
+            var msgRes = _tagService.Create(tagViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -56,11 +56,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.PublisherUpdateAccess)]
+        [CheckUserAccess(ActionBits.TagUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(PublisherViewModel publisherViewModel)
+        public IHttpActionResult Update(TagViewModel tagViewModel)
         {
-            var msgRes = _publisherService.Update(publisherViewModel);
+            var msgRes = _tagService.Update(tagViewModel);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -69,10 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.PublisherDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.TagDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _publisherService.Delete(id);
+            var msgRes = _tagService.Delete(id);
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

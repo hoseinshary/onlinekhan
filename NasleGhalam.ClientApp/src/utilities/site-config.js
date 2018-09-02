@@ -11,6 +11,7 @@ const EDUCATION_GROUP_URL = '/api/educationGroup';
 const EDUCATION_SUB_GROUP_URL = '/api/educationSubGroup';
 const TOPIC_URL = '/api/topic';
 const LOOKUP_URL = '/api/lookup';
+const EDUCATION_BOOK_URL = '/api/educationBook';
 
 export {
   API_URL,
@@ -24,5 +25,6 @@ export {
   EDUCATION_GROUP_URL,
   EDUCATION_SUB_GROUP_URL,
   TOPIC_URL,
-  LOOKUP_URL
+  LOOKUP_URL,
+  EDUCATION_BOOK_URL
 };

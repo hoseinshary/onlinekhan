@@ -1,4 +1,5 @@
-﻿using NasleGhalam.DomainClasses.Entities;
+﻿using System.Linq;
+using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels.EducationGroup;
 using NasleGhalam.ViewModels.Role;
@@ -8,6 +9,7 @@ using NasleGhalam.ViewModels.GradeLevel;
 using NasleGhalam.ViewModels.EducationGroup_Lesson;
 using NasleGhalam.ViewModels.Province;
 using NasleGhalam.ViewModels.City;
+using NasleGhalam.ViewModels.EducationBook;
 using NasleGhalam.ViewModels.EducationYear;
 using NasleGhalam.ViewModels.Exam;
 using NasleGhalam.ViewModels.EducationSubGroup;
@@ -15,6 +17,8 @@ using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.Ratio;
 using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.ViewModels.Publisher;
+using  NasleGhalam.ViewModels.AxillaryBook;
+using NasleGhalam.ViewModels.Tag;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -33,7 +37,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<UserCreateViewModel, User>();
                 config.CreateMap<UserUpdateViewModel, User>();
                 config.CreateMap<UserGetViewModel, User>();
-                config.CreateMap<GradeViewModel, Grade>() ;
+                config.CreateMap<GradeViewModel, Grade>();
                 config.CreateMap<GradeLevelViewModel, GradeLevel>();
 
                 config.CreateMap<ProvinceViewModel, Province>();
@@ -45,14 +49,18 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<ExamViewModel, Exam>();
 
                 config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
-                config.CreateMap<ViewModels.Ratio.RatioViewModel, Ratio>();
+                config.CreateMap<RatioViewModel, Ratio>();
                 config.CreateMap<RatioLessonViewModel, Ratio>();
 
                 config.CreateMap<LookupViewModel, Lookup>();
 
                 config.CreateMap<TopicCreateViewModel, Topic>();
                 config.CreateMap<PublisherViewModel, Publisher>();
+                config.CreateMap<AxillaryBookViewModel, AxillaryBook>();
 
+                config.CreateMap<EducationBookViewModel, EducationBook>();
+
+                config.CreateMap<TagViewModel, Tag>();
             });
         }
     }

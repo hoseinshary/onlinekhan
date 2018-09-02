@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using NasleGhalam.ServiceLayer.Configs;
+using StructureMap.Web.Pipeline;
 
 namespace NasleGhalam.WebApi
 {
@@ -9,6 +10,11 @@ namespace NasleGhalam.WebApi
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             MappingConfig.RegisterMaps();
+        }
+
+        protected void Application_EndRequest()
+        {
+            new HybridLifecycle().FindCache(null).DisposeAndClear();
         }
     }
 }

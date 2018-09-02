@@ -16,6 +16,7 @@ namespace NasleGhalam.DomainClasses.Entities
             Boxes = new HashSet<Box>();
             Answers = new HashSet<QuestionAnswer>();
             Topics = new HashSet<Topic>();
+            AxillaryBooks = new HashSet<AxillaryBook>();
         }
         public int Id { get; set; }
 
@@ -54,9 +55,9 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public User User { get; set; }
 
-        public int AxillaryBookId { get; set; }
+        public string WordFilePath { get; set; }
 
-        public AxillaryBook AxillaryBook { get; set; }
+
 
         public virtual ICollection<QuestionJudge> QuestionJudges { get; set; }
                
@@ -69,6 +70,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public virtual ICollection<Tag> Tags { get; set; }
 
         public virtual ICollection<Box> Boxes { get; set; }
+        public virtual ICollection<AxillaryBook> AxillaryBooks { get; set; }
 
         public virtual ICollection<QuestionAnswer> Answers { get; set; }
 

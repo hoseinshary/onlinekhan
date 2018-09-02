@@ -1,0 +1,83 @@
+﻿using System.Web.Http;
+using NasleGhalam.Common;
+using NasleGhalam.ServiceLayer.Services;
+using NasleGhalam.WebApi.FilterAttribute;
+using NasleGhalam.ViewModels.EducationBook;
+using NasleGhalam.WebApi.Extentions;
+
+namespace NasleGhalam.WebApi.Controllers
+{
+    /// <inheritdoc />
+	/// <author>
+	///     name: علیرضا اعتمادی
+	///     date: 1397/06/09
+	/// </author>
+	public class EducationBookController : ApiController
+    {
+        private readonly EducationBookService _educationBookService;
+        public EducationBookController(EducationBookService educationBookService)
+        {
+            _educationBookService = educationBookService;
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
+        public IHttpActionResult GetAllByGradeLevelId(int id)
+        {
+            return Ok(_educationBookService.GetAllByGradeLevelId(id));
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
+        public IHttpActionResult GetById(int id)
+        {
+            var educationBook = _educationBookService.GetById(id);
+            if (educationBook == null)
+            {
+                return NotFound();
+            }
+            return Ok(educationBook);
+        }
+
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.EducationBookCreateAccess)]
+        [CheckModelValidation]
+        public IHttpActionResult Create(EducationBookViewModel educationBookViewModel)
+        {
+            var msgRes = _educationBookService.Create(educationBookViewModel);
+            return Ok(new MessageResultApi
+            {
+                Message = msgRes.FaMessage,
+                MessageType = msgRes.MessageType,
+                Id = msgRes.Id
+            });
+        }
+
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.EducationBookUpdateAccess)]
+        [CheckModelValidation]
+        public IHttpActionResult Update(EducationBookViewModel educationBookViewModel)
+        {
+            var msgRes = _educationBookService.Update(educationBookViewModel);
+            return Ok(new MessageResultApi
+            {
+                Message = msgRes.FaMessage,
+                MessageType = msgRes.MessageType
+            });
+        }
+
+
+        [HttpPost, CheckUserAccess(ActionBits.EducationBookDeleteAccess)]
+        public IHttpActionResult Delete(int id)
+        {
+            var msgRes = _educationBookService.Delete(id);
+            return Ok(new MessageResultApi
+            {
+                Message = msgRes.FaMessage,
+                MessageType = msgRes.MessageType
+            });
+        }
+    }
+}

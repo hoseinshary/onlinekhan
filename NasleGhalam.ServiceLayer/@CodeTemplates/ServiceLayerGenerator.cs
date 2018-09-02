@@ -7,47 +7,46 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.Publisher;
+using NasleGhalam.ViewModels.Tag;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class PublisherService
+	public class TagService
 	{
-		private const string Title = "انتشارات";
+		private const string Title = "برچسب";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Publisher> _publishers;
+        private readonly IDbSet<Tag> _tags;
        
-	    public PublisherService(IUnitOfWork uow)
+	    public TagService(IUnitOfWork uow)
         {
             _uow = uow;
-            _publishers = uow.Set<Publisher>();
+            _tags = uow.Set<Tag>();
         }
 
 
 		/// <summary>
-        /// گرفتن  انتشارات با آی دی
+        /// گرفتن  برچسب با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public PublisherViewModel GetById(int id)
+        public TagViewModel GetById(int id)
         {
-            return _publishers
+            return _tags
                 .Where(current => current.Id == id)
-                .Select(current => new PublisherViewModel
+                .Select(current => new TagViewModel
                 {
                     Id = current.Id
-                    
                 }).FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه انتشارات ها
+        /// گرفتن همه برچسب ها
         /// </summary>
         /// <returns></returns>
-        public IList<PublisherViewModel> GetAll()
+        public IList<TagViewModel> GetAll()
         {
-            return _publishers.Select(current => new PublisherViewModel()
+            return _tags.Select(current => new TagViewModel()
             {
                 Id = current.Id,
             }).ToList();
@@ -55,65 +54,62 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// ثبت انتشارات
+        /// ثبت برچسب
         /// </summary>
-        /// <param name="publisherViewModel"></param>
+        /// <param name="tagViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(PublisherViewModel publisherViewModel)
+        public MessageResult Create(TagViewModel tagViewModel)
         {
-            var publisher = Mapper.Map<Publisher>(publisherViewModel);
-            _publishers.Add(publisher);
+            var tag = Mapper.Map<Tag>(tagViewModel);
+            _tags.Add(tag);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = publisher.Id;
+			msgRes.Id = tag.Id;
             return msgRes;
         }
 
 
 		/// <summary>
-        /// ویرایش انتشارات
+        /// ویرایش برچسب
         /// </summary>
-        /// <param name="publisherViewModel"></param>
+        /// <param name="tagViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(PublisherViewModel publisherViewModel)
+        public MessageResult Update(TagViewModel tagViewModel)
         {
-            var publisher = Mapper.Map<Publisher>(publisherViewModel);
-            _uow.MarkAsChanged(publisher);
-
+            var tag = Mapper.Map<Tag>(tagViewModel);
+            _uow.MarkAsChanged(tag);
 			
 			return  _uow.CommitChanges(CrudType.Update, Title);
-			
         }
 
 
 		/// <summary>
-        /// حذف انتشارات
+        /// حذف برچسب
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  publisherViewModel = GetById(id);
-            if (publisherViewModel == null)
+			var  tagViewModel = GetById(id);
+            if (tagViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var publisher = Mapper.Map<Publisher>(publisherViewModel);
-            _uow.MarkAsDeleted(publisher);
+            var tag = Mapper.Map<Tag>(tagViewModel);
+            _uow.MarkAsDeleted(tag);
             
 			return  _uow.CommitChanges(CrudType.Delete, Title);
-			
         }
 
 
         /// <summary>
-        /// گرفتن همه انتشارات ها برای لیست کشویی
+        /// گرفتن همه برچسب ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _publishers.Select(current => new SelectViewModel
+            return _tags.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

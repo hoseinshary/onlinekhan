@@ -1,17 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Publisher
+namespace NasleGhalam.ViewModels.Tag
 {
-	public class PublisherViewModel
+	public class TagViewModel
 	{
 		
 		public int Id { get; set; }
 
 
-		[Display(Name = "انتشارات")]
-		[Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-		[MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        public string Name { get; set; }
+		[Display(Name = "نام")]
+		public string Name { get; set; }
 
 
 	}

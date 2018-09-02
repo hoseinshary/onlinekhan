@@ -51,6 +51,9 @@
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.web.4.0.0.315\lib\net40\StructureMap.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -58,6 +61,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,11 +70,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="%40CodeTemplates\ServiceLayerGenerator1.cs">
+    <Content Include="%40CodeTemplates\ServiceLayerGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ServiceLayerGenerator.tt</DependentUpon>
     </Content>
+    <Compile Include="Extentions\PhysicalAddress.cs" />
+    <Compile Include="Services\AxillaryBookService.cs" />
     <Compile Include="Services\CityService.cs" />
     <Compile Include="Services\EducationGroupService.cs" />
     <Compile Include="Services\EducationGroup_lessonService.cs" />
@@ -86,7 +92,9 @@
     <Compile Include="Services\QuestionService.cs" />
     <Compile Include="Services\RatioService.cs" />
     <Compile Include="Services\RoleService.cs" />
+    <Compile Include="Services\TagService.cs" />
     <Compile Include="Services\TopicService.cs" />
+    <Compile Include="Services\EducationBook.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Configs\MappingConfig.cs" />
     <Compile Include="Configs\SiteConfig.cs" />
@@ -121,7 +129,7 @@
   <ItemGroup>
     <Content Include="%40CodeTemplates\ServiceLayerGenerator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ServiceLayerGenerator1.cs</LastGenOutput>
+      <LastGenOutput>ServiceLayerGenerator.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +163,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\Question\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

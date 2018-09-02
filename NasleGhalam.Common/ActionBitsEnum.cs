@@ -84,9 +84,25 @@
         LookupCreateAccess = 59,
         LookupUpdateAccess = 60,
         LookupDeleteAccess = 61,
+
         PublisherReadAccess = 62,
         PublisherCreateAccess = 63,
         PublisherUpdateAccess = 64,
         PublisherDeleteAccess = 65,
+
+        EducationBookReadAccess = 66,
+        EducationBookCreateAccess = 67,
+        EducationBookUpdateAccess = 68,
+        EducationBookDeleteAccess = 69,
+
+        AxillaryBookReadAccess = 70,
+        AxillaryBookCreateAccess = 71,
+        AxillaryBookUpdateAccess = 72,
+        AxillaryBookDeleteAccess = 73,
+
+        TagReadAccess = 74,
+        TagCreateAccess = 75,
+        TagUpdateAccess = 76,
+        TagDeleteAccess = 77,
     }
 }

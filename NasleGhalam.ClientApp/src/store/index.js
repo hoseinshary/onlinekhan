@@ -12,6 +12,7 @@ import educationGroupStore from './educationGroupStore';
 import educationSubGroupStore from './educationSubGroupStore';
 import topicStore from './topicStore';
 import lookupStore from './lookupStore';
+import educationBookStore from './educationBookStore';
 
 Vue.use(Vuex);
 
@@ -68,7 +69,8 @@ const store = new Vuex.Store({
     educationGroupStore,
     educationSubGroupStore,
     topicStore,
-    lookupStore
+    lookupStore,
+    educationBookStore
   }
 });
 

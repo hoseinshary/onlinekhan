@@ -48,6 +48,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.AxillaryBookCreateAccess)]
         [CheckModelValidation]
+        [CheckImageValidatioNotRequired("Picture",1024)]
         public IHttpActionResult Create(AxillaryBookViewModel axillaryBookViewModel)
         {
            

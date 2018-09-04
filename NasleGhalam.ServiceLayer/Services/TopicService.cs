@@ -36,7 +36,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
                 {
                     Id = current.Id,
-                    lable = current.Title,
+                    label = current.Title,
                 }).FirstOrDefault();
             }
             else
@@ -44,7 +44,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 var returnvalue = new TopicTreeViewModel();
                 var currentTopic = topics.FirstOrDefault(x => x.Id == id);
                 returnvalue.Id = currentTopic.Id;
-                returnvalue.lable = currentTopic.Title;
+                returnvalue.label = currentTopic.Title;
                 returnvalue.children = new List<TopicTreeViewModel>();
                 foreach (var item in topics.Where(x => x.ParentTopicId == id).ToList())
                 {

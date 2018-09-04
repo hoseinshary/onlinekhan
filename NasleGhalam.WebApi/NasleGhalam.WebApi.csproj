@@ -135,8 +135,11 @@
     <Compile Include="Extentions\PhysicalAddress.cs" />
     <Compile Include="Extentions\RequestExtention.cs" />
     <Compile Include="FilterAttribute\CheckImageValidation.cs" />
+    <Compile Include="FilterAttribute\CheckImageValidatioNotRequired.cs" />
     <Compile Include="FilterAttribute\CheckModelValidation.cs" />
     <Compile Include="FilterAttribute\CheckUserAccess.cs" />
+    <Compile Include="FilterAttribute\CheckWordFileValidation.cs" />
+    <Compile Include="FilterAttribute\CheckٍExcelFileValidation.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -157,8 +160,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Content\AxillaryBooksPictures\" />
-    <Folder Include="App_Data\Content\Question\" />
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\AxillaryBooksPictures\" />
+    <Folder Include="Content\Question\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

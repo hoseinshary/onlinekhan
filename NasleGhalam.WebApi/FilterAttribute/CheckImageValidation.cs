@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                     .CreateResponse(HttpStatusCode.OK,
                         new MessageResultApi
                         {
-                            Message = "فرمت عکس معتبر نمیباشد.",
+                            Message = "فرمت عکس معتبر نمی باشد.",
                             MessageType = MessageType.Error
                         });
             }

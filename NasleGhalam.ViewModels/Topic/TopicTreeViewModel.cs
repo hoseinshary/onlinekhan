@@ -6,7 +6,7 @@ namespace NasleGhalam.ViewModels.Topic
     {
         public int Id { get; set; }
 
-        public string lable { get; set; }
+        public string label { get; set; }
 
         public List<TopicTreeViewModel> children { get; set; }
 

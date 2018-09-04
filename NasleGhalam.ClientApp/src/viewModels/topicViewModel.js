@@ -49,19 +49,19 @@ export default {
       required
     },
     ParentTopicId: {
-      displayName: displayName('مبحث پدر'),
-      numeric,
-      required
+      displayName: displayName('مبحث پدر')
+      // numeric,
+      // required
     },
     EducationGroup_LessonId: {
-      displayName: displayName('درس'),
-      numeric,
-      required
+      displayName: displayName('درس')
+      // numeric,
+      // required
     },
     EducationGroupId: {
-      displayName: displayName('گروه تحصیلی'),
-      numeric,
-      required
+      displayName: displayName('گروه تحصیلی')
+      // numeric,
+      // required
     }
   }
 };

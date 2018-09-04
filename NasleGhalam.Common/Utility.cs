@@ -259,6 +259,18 @@ namespace NasleGhalam.Common
                     || extention == ".png" || extention == ".bmp" || extention == ".icn");
         }
 
+        public static bool CheckWordFileExtention(String extention)
+        {
+            extention = extention.ToLower();
+            return (extention == ".doc" || extention == ".docx");
+        }
+
+        public static bool CheckExcelFileExtention(String extention)
+        {
+            extention = extention.ToLower();
+            return (extention == ".xls" || extention == ".xlsx");
+        }
+
         #region ### utility ###
         public static bool isExistInArray<T>(IEnumerable<T> list , T key )
         {

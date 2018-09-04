@@ -16,7 +16,7 @@ namespace NasleGhalam.DomainClasses.Entities
             Boxes = new HashSet<Box>();
             Answers = new HashSet<QuestionAnswer>();
             Topics = new HashSet<Topic>();
-            AxillaryBooks = new HashSet<AxillaryBook>();
+            
         }
         public int Id { get; set; }
 
@@ -32,18 +32,21 @@ namespace NasleGhalam.DomainClasses.Entities
         public int LookupId_QuestionHardnessType { get; set; }
         public Lookup Lookup_QuestionHardnessType { get; set; }
 
-        public int LookupId_ReapetnessType { get; set; }
-        public Lookup Lookup_ReapetnessType { get; set; }
+        public int LookupId_RepeatnessType { get; set; }
+        public Lookup Lookup_RepeatnessType { get; set; }
 
         public bool UseEvaluation { get; set; }
 
         public bool IsStandard { get; set; }
 
-        public byte AuthorType { get; set; }
+        public int LookupId_AuthorType { get; set; }
+        public Lookup Lookup_AuthorType { get; set; }
 
         public string AuthorName { get; set; }
 
         public short ResponseSecond { get; set; }
+        public int LookupId_AreaType { get; set; }
+        public Lookup Lookup_AreaType { get; set; }
 
         public string Description { get; set; }
 
@@ -70,7 +73,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public virtual ICollection<Tag> Tags { get; set; }
 
         public virtual ICollection<Box> Boxes { get; set; }
-        public virtual ICollection<AxillaryBook> AxillaryBooks { get; set; }
+     
 
         public virtual ICollection<QuestionAnswer> Answers { get; set; }
 

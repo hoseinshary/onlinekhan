@@ -9,7 +9,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public AxillaryBook()
         {
             EducationBooks = new HashSet<EducationBook>();
-            Questions = new HashSet<Question>();
+            
         }
         public int Id { get; set; }
 
@@ -48,6 +48,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public virtual ICollection<EducationBook> EducationBooks { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+       
     }
 }

@@ -13,6 +13,8 @@ namespace NasleGhalam.ViewModels.Tag
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Name { get; set; }
 
+        public bool isSource { get; set; }
+
 
     }
 }

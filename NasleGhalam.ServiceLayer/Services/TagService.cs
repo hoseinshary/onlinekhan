@@ -36,7 +36,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(current => new TagViewModel
                 {
                     Id = current.Id,
-                    Name = current.Name
+                    Name = current.Name,
+                    isSource = current.isSource
                 }).FirstOrDefault();
         }
 
@@ -50,7 +51,8 @@ namespace NasleGhalam.ServiceLayer.Services
             return _tags.Select(current => new TagViewModel()
             {
                 Id = current.Id,
-                Name = current.Name
+                Name = current.Name,
+                isSource = current.isSource
             }).ToList();
         }
 

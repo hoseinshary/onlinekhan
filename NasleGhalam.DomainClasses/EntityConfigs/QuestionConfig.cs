@@ -30,9 +30,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.LookupId_QuestionHardnessType)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.Lookup_ReapetnessType)
+            this.HasRequired(x => x.Lookup_RepeatnessType)
                 .WithMany(x => x.Question_ReapetnessTypes)
-                .HasForeignKey(x => x.LookupId_ReapetnessType)
+                .HasForeignKey(x => x.LookupId_RepeatnessType)
                 .WillCascadeOnDelete(false);
 
             this.HasMany(x => x.Tags)
@@ -45,14 +45,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 });
 
 
-            this.HasMany(x => x.AxillaryBooks)
-                .WithMany(x => x.Questions)
-                .Map(config =>
-                {
-                    config.MapLeftKey("QuestionId");
-                    config.MapRightKey("AxillaryBookId");
-                    config.ToTable("Questions_AxillaryBooks");
-                });
+
 
             this.HasMany(x => x.Boxes)
                 .WithMany(x => x.Questions)

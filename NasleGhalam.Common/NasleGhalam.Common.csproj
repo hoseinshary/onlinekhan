@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionBitsEnum.cs" />
-    <Compile Include="CheckPicForUplode.cs" />
+    <Compile Include="CheckFile.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="MessageResult.cs" />
     <Compile Include="MessageResultApi.cs" />

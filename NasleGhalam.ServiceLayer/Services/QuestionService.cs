@@ -72,7 +72,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 HttpPostedFileBase filebase = new HttpPostedFileWrapper(wordFile);
                 string strextension = System.IO.Path.GetExtension(wordFile.FileName).Substring(1);
-                string strPictureName = questionViewModel.Context;
+                string strPictureName = questionViewModel.Context; //todo: guid
                 string strFullPictureName = $"{strPictureName}.{strextension}";
                 string strPhysicalPathName = strFullPictureName.GetQuestionPhysicalPath();
                 try

@@ -55,6 +55,8 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<LookupViewModel, Lookup>();
 
                 config.CreateMap<TopicCreateViewModel, Topic>();
+                config.CreateMap<TopicGetViewModel, Topic>();
+
                 config.CreateMap<PublisherViewModel, Publisher>();
                 config.CreateMap<AxillaryBookViewModel, AxillaryBook>();
 

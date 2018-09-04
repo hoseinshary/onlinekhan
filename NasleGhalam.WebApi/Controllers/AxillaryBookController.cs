@@ -48,95 +48,67 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.AxillaryBookCreateAccess)]
         [CheckModelValidation]
-        [CheckImageValidatioNotRequired("Picture",1024)]
+        [CheckImageValidatioNotRequired("Picture", 1024)]
         public IHttpActionResult Create(AxillaryBookViewModel axillaryBookViewModel)
         {
-           
+
             var files = HttpContext.Current.Request.Files;
             var postedFile = files.Get("Picture");
             if (postedFile != null)
             {
                 MessageResult message = new MessageResult();
-                const int picSize = 1024;
                 bool upload = false;
                 string picUpload = null;
-                
-                HttpPostedFileBase filebase = new HttpPostedFileWrapper(postedFile);
-                picUpload = CheckFile.UploadPictureFile(filebase, picSize);
-                
-                if (picUpload.Equals("Check Picture Is Successfully"))
-                {
-                    //Url.Content();
-                    string strextension = System.IO.Path.GetExtension(postedFile.FileName).Substring(1);
-                    string strPictureName = axillaryBookViewModel.Name;
-                    string strFullPictureName = string.Format("{0}.{1}", strPictureName, strextension);
-                    string strPhysicalPathName = strFullPictureName.GetAxillaryBookImagePhysicalPath();
-                    axillaryBookViewModel.ImgPath = strPhysicalPathName;
-                    message = _axillaryBookService.Create(axillaryBookViewModel);
-                    if (message.MessageType == MessageType.Success)
-                    {
-                        
-                        try
-                        {
-                            postedFile.SaveAs(strPhysicalPathName);
-                        }
-                        catch (Exception)
-                        {
-                            throw;
-                        }
-                        if(System.IO.File.Exists(strPhysicalPathName))
-                        {
-                            upload = true;
-                        }
-                        if(upload)
-                        {
-                            return Ok(new MessageResultApi
-                            {
-                                Message = message.FaMessage,
-                                MessageType = message.MessageType,
-                                Id = message.Id
-                            });
-                        }
-                        else
-                        {
-                            message.FaMessage += "ولی عکس کتاب آپلود نشد.";
-                            message.MessageType = MessageType.Error;
-                            return Ok(new MessageResultApi
-                            {
-                                Message = message.FaMessage,
-                                MessageType = message.MessageType,
-                                Id = message.Id
-                            });
-                        }
 
+                //this line convert HttpPostedFile to HttpPostedFileBase
+                // HttpPostedFileBase filebase = new HttpPostedFileWrapper(postedFile);
+                // this line resolves a virtual path into an absolute path Example:
+                //Url.Content();
+
+                Guid g = Guid.NewGuid();
+                string strextension = System.IO.Path.GetExtension(postedFile.FileName).Substring(1);
+                string strPictureName = g.ToString();
+                string strFullPictureName = string.Format("{0}.{1}", strPictureName, strextension);
+                string strPhysicalPathName = strFullPictureName.GetAxillaryBookImagePhysicalPath();
+                axillaryBookViewModel.ImgPath = strPhysicalPathName;
+                message = _axillaryBookService.Create(axillaryBookViewModel);
+                if (message.MessageType == MessageType.Success)
+                {
+
+                    try
+                    {
+                        postedFile.SaveAs(strPhysicalPathName);
                     }
-                }
-                else if (picUpload.Equals("File Extension Is InValid - Only Upload jpg/jpeg/png File"))
-                {
-                    return Ok(new MessageResultApi
+                    catch (Exception)
                     {
-                        Message = "قابل قبول هستند" + "jpg/jpeg/png" + "پسوند فایل ارسالی اشتباه است.فقط فایل هایی با پسوند",
-                        MessageType = MessageType.Error
-                    });
-                }
-                else if (picUpload.Equals("File size Should Be UpTo " + picSize.ToString() + "KB"))
-                {
-                    return Ok(new MessageResultApi
+                        throw;
+                    }
+                    if (System.IO.File.Exists(strPhysicalPathName))
                     {
-                        //Message = "باشد" + "KB" + picSize.ToString() + "عکس ارسالی باید کمتر از",
-                        Message = $"عکس ارسالی باید کمتر از {picSize} کیلو بایت باشد.",
-                        MessageType = MessageType.Error
-                    });
-                }
-                else
-                {
-                    return Ok(new MessageResultApi
+                        upload = true;
+                    }
+                    if (upload)
                     {
-                        Message = "فایل عکس خوانا نمی باشد",
-                        MessageType = MessageType.Error
-                    });
-                }
+                        return Ok(new MessageResultApi
+                        {
+                            Message = message.FaMessage,
+                            MessageType = message.MessageType,
+                            Id = message.Id
+                        });
+                    }
+                    else
+                    {
+                        message.FaMessage += "ولی عکس کتاب آپلود نشد.";
+                        message.MessageType = MessageType.Error;
+                        return Ok(new MessageResultApi
+                        {
+                            Message = message.FaMessage,
+                            MessageType = message.MessageType,
+                            Id = message.Id
+                        });
+                    }
 
+                }
             }
 
             var msgRes = _axillaryBookService.Create(axillaryBookViewModel);
@@ -146,6 +118,7 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType,
                 Id = msgRes.Id
             });
+
         }
 
 

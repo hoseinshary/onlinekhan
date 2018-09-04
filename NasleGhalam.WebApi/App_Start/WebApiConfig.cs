@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Dispatcher;
@@ -29,6 +30,7 @@ namespace NasleGhalam.WebApi
             //config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
             config.Formatters.Add(new MultiPartMediaTypeFormatter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new CustomJsonFormatter());
+            //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
             //------------------------------
 
 

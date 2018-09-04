@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels._MediaFormatter;
@@ -17,6 +18,7 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
         public MultiPartMediaTypeFormatter()
         {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("multipart/form-data"));
+            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
         }
 
         public override bool CanReadType(Type type)
@@ -65,26 +67,49 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
                     }
                     else
                     {
-                        string rawVal = await data.ReadAsStringAsync();
-                        object val = Convert.ChangeType(rawVal, propType);
+                        var rawVal = await data.ReadAsStringAsync();
 
-                        if (propType == typeof(DateTime))
+
+
+                        if (rawVal.Contains(",") && rawVal.StartsWith("[") && rawVal.EndsWith("]"))
                         {
-                            prop.SetValue(modelInstance, rawVal.ToMiladiDateTime());
-                        }
-                        else if (propType == typeof(string))
-                        {
-                            prop.SetValue(modelInstance, rawVal.Trim());
+                            rawVal = rawVal.Substring(1, rawVal.Length - 3);
+                            var rawvals = rawVal.Split(',');
+                            foreach (var val in rawvals)
+                            {
+                                
+                                List<string> temp = new List<string> ();
+                                temp.Add(val);
+                                prop.SetValue(modelInstance, temp);
+                            }
                         }
                         else
                         {
-                            prop.SetValue(modelInstance, val);
+                            object val = Convert.ChangeType(rawVal, propType);
+
+                            if (propType == typeof(DateTime))
+                            {
+                                prop.SetValue(modelInstance, rawVal.ToMiladiDateTime());
+                            }
+                            else if (propType == typeof(string))
+                            {
+                                prop.SetValue(modelInstance, rawVal.Trim());
+                            }
+                            else
+                            {
+                                prop.SetValue(modelInstance, val);
+                            }
                         }
                     }
                 }
             }
 
             return modelInstance;
+        }
+
+        class something
+        {
+            public List<string> strings;
         }
     }
 }

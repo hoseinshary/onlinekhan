@@ -140,10 +140,25 @@ namespace NasleGhalam.WebApi.Controllers
                 string strPhysicalPathName = strFullPictureName.GetAxillaryBookImagePhysicalPath();
                 axillaryBookViewModel.ImgPath = strPhysicalPathName;
                 axillaryBookViewModel.HasImage = true;
+                var axillary = _axillaryBookService.GetById(axillaryBookViewModel.Id);
                 message = _axillaryBookService.Update(axillaryBookViewModel);
                 if (message.MessageType == MessageType.Success)
                 {
+                    if (axillary.HasImage)
+                    {
+                        if (System.IO.File.Exists(axillary.ImgPath))
+                        {
+                            try
+                            {
+                                System.IO.File.Delete(axillary.ImgPath);
+                            }
+                            catch (Exception)
+                            {
 
+                                throw;
+                            }
+                        }
+                    }
                     try
                     {
                         postedFile.SaveAs(strPhysicalPathName);

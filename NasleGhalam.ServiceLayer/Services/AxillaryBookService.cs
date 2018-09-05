@@ -110,9 +110,15 @@ namespace NasleGhalam.ServiceLayer.Services
         public MessageResult Update(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
-            _uow.MarkAsChanged(axillaryBook);
-
-
+            if (!axillaryBook.HasImage)
+            {
+                _uow.ExcludeFieldsFromUpdate(axillaryBook, x => x.ImgPath, x => x.HasImage);
+            }
+            else
+            {
+                _uow.MarkAsChanged(axillaryBook);
+            }
+            
             return _uow.CommitChanges(CrudType.Update, Title);
 
         }

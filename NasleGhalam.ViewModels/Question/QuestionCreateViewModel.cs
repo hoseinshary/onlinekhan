@@ -52,6 +52,9 @@ namespace NasleGhalam.ViewModels.Question
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_AuthorType { get; set; }
 
+        [Display(Name = "نام طراح")]
+        public string AuthorName { get; set; }
+
 
         [Display(Name = "نوع طراح")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
@@ -78,9 +81,9 @@ namespace NasleGhalam.ViewModels.Question
 
 
 
-        public List<int> topics { get; set; }
+        public List<int> TopicsId { get; set; }
 
-        public List<int> tags { set; get; }
+        public List<int> TagsId { set; get; }
 
 
 

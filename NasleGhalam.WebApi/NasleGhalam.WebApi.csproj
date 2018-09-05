@@ -160,7 +160,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\Content\Question\" />
     <Folder Include="Content\AxillaryBooksPictures\" />
     <Folder Include="Content\Question\" />
     <Folder Include="Models\" />

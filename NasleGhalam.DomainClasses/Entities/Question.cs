@@ -58,7 +58,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public User User { get; set; }
 
-        public string WordFilePath { get; set; }
+
 
 
 

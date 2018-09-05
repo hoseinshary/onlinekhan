@@ -19,6 +19,7 @@ using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.ViewModels.Publisher;
 using  NasleGhalam.ViewModels.AxillaryBook;
 using NasleGhalam.ViewModels.Tag;
+using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -63,6 +64,8 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<EducationBookViewModel, EducationBook>();
 
                 config.CreateMap<TagViewModel, Tag>();
+
+                config.CreateMap<QuestionCreateViewModel, Question>();
             });
         }
     }

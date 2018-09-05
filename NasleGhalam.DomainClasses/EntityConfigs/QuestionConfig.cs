@@ -9,7 +9,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             this.HasKey(x => x.Id);
             this.Property(x => x.Context).IsRequired().HasColumnType("nvarchar(max)");
-            this.Property(x => x.AuthorName).HasMaxLength(100).IsRequired();
+            this.Property(x => x.AuthorName).HasMaxLength(100);
             this.Property(x => x.Description).HasMaxLength(300);
             this.Property(x => x.FileName).IsRequired();
 

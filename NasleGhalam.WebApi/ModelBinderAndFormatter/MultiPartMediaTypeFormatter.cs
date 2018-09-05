@@ -71,17 +71,16 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
 
 
 
-                        if (rawVal.Contains(",") && rawVal.StartsWith("[") && rawVal.EndsWith("]"))
+                        if (rawVal.StartsWith("[") && rawVal.EndsWith("]"))
                         {
                             rawVal = rawVal.Substring(1, rawVal.Length - 3);
                             var rawvals = rawVal.Split(',');
+                            List<int> temp = new List<int>();
                             foreach (var val in rawvals)
                             {
-                                
-                                List<string> temp = new List<string> ();
-                                temp.Add(val);
-                                prop.SetValue(modelInstance, temp);
+                                temp.Add(Convert.ToInt32(val));
                             }
+                            prop.SetValue(modelInstance, temp);
                         }
                         else
                         {

@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201809050540491_axillaryBook.Designer.cs">
       <DependentUpon>201809050540491_axillaryBook.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809050847114_questionisrequire.cs" />
+    <Compile Include="Migrations\201809050847114_questionisrequire.Designer.cs">
+      <DependentUpon>201809050847114_questionisrequire.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -101,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809050540491_axillaryBook.resx">
       <DependentUpon>201809050540491_axillaryBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809050847114_questionisrequire.resx">
+      <DependentUpon>201809050847114_questionisrequire.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

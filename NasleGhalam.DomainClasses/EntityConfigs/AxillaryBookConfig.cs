@@ -13,6 +13,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             this.Property(x => x.Author).HasMaxLength(100).IsRequired();
             this.Property(x => x.Isbn).HasMaxLength(100).IsRequired();
             this.Property(x => x.Description).HasMaxLength(300).IsRequired();
+            this.Property(x => x.ImgPath).HasMaxLength(200);
 
             this.HasRequired(x => x.Publisher)
                 .WithMany(x => x.AxillaryBooks)

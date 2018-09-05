@@ -71,6 +71,7 @@ namespace NasleGhalam.WebApi.Controllers
                 string strFullPictureName = string.Format("{0}.{1}", strPictureName, strextension);
                 string strPhysicalPathName = strFullPictureName.GetAxillaryBookImagePhysicalPath();
                 axillaryBookViewModel.ImgPath = strPhysicalPathName;
+                axillaryBookViewModel.HasImage = true;
                 message = _axillaryBookService.Create(axillaryBookViewModel);
                 if (message.MessageType == MessageType.Success)
                 {

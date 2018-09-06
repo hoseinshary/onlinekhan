@@ -105,9 +105,10 @@ namespace NasleGhalam.ServiceLayer.Services
                     Id = item
                 });
             }
+            var options = doc.Lists[1].ListParagraphs[3].Range.Text;
 
 
-
+            
 
 
             doc.Close();

@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Permissions;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels._MediaFormatter;
 
@@ -69,10 +70,13 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
                     {
                         var rawVal = await data.ReadAsStringAsync();
 
-
+                        
 
                         if (rawVal.StartsWith("[") && rawVal.EndsWith("]"))
                         {
+                            var jsSer = new JavaScriptSerializer();
+                            var note = jsSer.Deserialize<int []>(rawVal );
+
                             rawVal = rawVal.Substring(1, rawVal.Length - 3);
                             var rawvals = rawVal.Split(',');
                             List<int> temp = new List<int>();

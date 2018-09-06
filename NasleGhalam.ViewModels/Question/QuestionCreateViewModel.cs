@@ -81,14 +81,11 @@ namespace NasleGhalam.ViewModels.Question
 
 
 
-        public List<int> TopicsId { get; set; }
+        private List<int> topicsId = new List<int>();
 
-        public List<int> TagsId { set; get; }
+        private List<int> tagsId = new List<int>();
 
-
-
-
-
-
+        public List<int> TopicsId { get => topicsId; set => topicsId = value; }
+        public List<int> TagsId { get => tagsId; set => tagsId = value; }
     }
 }

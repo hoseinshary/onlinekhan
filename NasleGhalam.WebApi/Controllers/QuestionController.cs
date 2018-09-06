@@ -47,6 +47,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(QuestionCreateViewModel questionViewModel)
         {
             var files = HttpContext.Current.Request.Files;
+            
             var wordFile = files.Get("wordFile");
             
             if (wordFile != null )
@@ -58,7 +59,7 @@ namespace NasleGhalam.WebApi.Controllers
 
                 if (resualtWord == "OK" )
                 {
-                    var msgRes = _questionService.Create(questionViewModel, wordFile);
+                    var msgRes = _questionService.Create(questionViewModel, wordFile, Request.GetUserId() );
                     return Ok(new MessageResultApi
                     {
                         Message = msgRes.FaMessage,

@@ -10,7 +10,7 @@ namespace NasleGhalam.WebApi.Extentions
     {
         public static string GetQuestionPhysicalPath(this string pictureNameWithExtention)
         {
-            string strRootRalativePath = "~/App_Data/Content/QuestionWordFile";
+            string strRootRalativePath = "~/App_Data/Content/Question";
             string strRootRalativePathName = string.Format("{0}/{1}", strRootRalativePath, pictureNameWithExtention);
             string strPathName = HostingEnvironment.MapPath(strRootRalativePathName);
             return strPathName;
@@ -18,7 +18,7 @@ namespace NasleGhalam.WebApi.Extentions
 
         public static string GetQuestionMultiPhysicalPath(this string pictureNameWithExtention)
         {
-            string strRootRalativePath = "~/App_Data/Content/QuestionWordFile/Multi";
+            string strRootRalativePath = "~/App_Data/Content/Question";
             string strRootRalativePathName = string.Format("{0}/{1}", strRootRalativePath, pictureNameWithExtention);
             string strPathName = HostingEnvironment.MapPath(strRootRalativePathName);
             return strPathName;

@@ -8,7 +8,7 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
     public class CustomJsonFormatter : JsonConverter
     {
         public override bool CanWrite => false;
-
+       
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();

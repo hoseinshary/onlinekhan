@@ -10,6 +10,8 @@ using System.Security.Permissions;
 using System.Threading.Tasks;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels._MediaFormatter;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace NasleGhalam.WebApi.ModelBinderAndFormatter
 {
@@ -19,6 +21,7 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
         {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("multipart/form-data"));
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
+           
         }
 
         public override bool CanReadType(Type type)
@@ -68,8 +71,14 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
                     else
                     {
                         var rawVal = await data.ReadAsStringAsync();
+                        var qw = JsonConvert.SerializeObject(rawVal);
 
-
+                        // var x = JObject.Parse(json);
+                        JsonReader read = new JsonTextReader(new StringReader(qw));
+                        CustomJsonFormatter s = new CustomJsonFormatter();
+                        JsonSerializer ser = new JsonSerializer();
+                        s.ReadJson(read, type, null,ser);
+                        
 
                         if (rawVal.StartsWith("[") && rawVal.EndsWith("]"))
                         {

@@ -9,9 +9,9 @@
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#
-	string modelName = "Tag";
-	string instanceName = "tag";
-	string faName = "برچسب";
+	string modelName = "UniversityBranch";
+	string instanceName = "universityBranch";
+	string faName = "رشته دانشگاهی";
 #>
 using System;
 using System.Collections.Generic;

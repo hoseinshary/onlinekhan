@@ -55,6 +55,7 @@
     <Compile Include="Question\QuestionCreateViewModel.cs" />
     <Compile Include="Question\QuestionTempViewModel.cs" />
     <Compile Include="Tag\TagViewModel.cs" />
+    <Compile Include="UniversityBranch\UniversityBranchViewModel.cs" />
     <Compile Include="_MediaFormatter\IMultiPartMediaTypeFormatter.cs" />
     <Content Include="%40CodeTemplates\ViewModelGenerator.cs">
       <AutoGen>True</AutoGen>

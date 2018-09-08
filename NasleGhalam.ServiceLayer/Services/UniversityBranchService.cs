@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.UniversityBranch;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class UniversityBranchService
-	{
-		private const string Title = "رشته دانشگاهی";
+    public class UniversityBranchService
+    {
+        private const string Title = "رشته دانشگاهی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<UniversityBranch> _universityBranchs;
-       
-	    public UniversityBranchService(IUnitOfWork uow)
+
+        public UniversityBranchService(IUnitOfWork uow)
         {
             _uow = uow;
             _universityBranchs = uow.Set<UniversityBranch>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  رشته دانشگاهی با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -36,12 +36,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(current => new UniversityBranchViewModel
                 {
                     Id = current.Id,
-                    
+                    Name = current.Name,
+                    Balance = current.Balance,
+                    EducationSubGroupId = current.EducationSubGroupId,
+                    EducationSubGroupName = current.EducationSubGroup.Name
                 }).FirstOrDefault();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه رشته دانشگاهی ها
         /// </summary>
         /// <returns></returns>
@@ -50,11 +53,14 @@ namespace NasleGhalam.ServiceLayer.Services
             return _universityBranchs.Select(current => new UniversityBranchViewModel()
             {
                 Id = current.Id,
+                Name = current.Name,
+                Balance = current.Balance,
+                EducationSubGroupId = current.EducationSubGroupId
             }).ToList();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت رشته دانشگاهی
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
@@ -64,13 +70,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _universityBranchs.Add(universityBranch);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = universityBranch.Id;
+            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = universityBranch.Id;
             return msgRes;
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش رشته دانشگاهی
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
@@ -79,19 +85,19 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _uow.MarkAsChanged(universityBranch);
-			
-			return  _uow.CommitChanges(CrudType.Update, Title);
+
+            return _uow.CommitChanges(CrudType.Update, Title);
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف رشته دانشگاهی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  universityBranchViewModel = GetById(id);
+            var universityBranchViewModel = GetById(id);
             if (universityBranchViewModel == null)
             {
                 return Utility.NotFoundMessage();
@@ -99,8 +105,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _uow.MarkAsDeleted(universityBranch);
-            
-			return  _uow.CommitChanges(CrudType.Delete, Title);
+
+            return _uow.CommitChanges(CrudType.Delete, Title);
         }
 
 
@@ -116,5 +122,5 @@ namespace NasleGhalam.ServiceLayer.Services
                 label = current.Name
             }).ToList();
         }
-	}
+    }
 }

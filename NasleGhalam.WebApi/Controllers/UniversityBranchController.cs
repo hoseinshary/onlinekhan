@@ -9,26 +9,26 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 17/06/1397
 	/// </author>
 	public class UniversityBranchController : ApiController
-	{
+    {
         private readonly UniversityBranchService _universityBranchService;
-		public UniversityBranchController(UniversityBranchService universityBranchService)
+        public UniversityBranchController(UniversityBranchService universityBranchService)
         {
             _universityBranchService = universityBranchService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.UniversityBranchReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.UniversityBranchReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_universityBranchService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.UniversityBranchReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.UniversityBranchReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var universityBranch = _universityBranchService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.UniversityBranchCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(UniversityBranchViewModel universityBranchViewModel)
@@ -79,5 +79,5 @@ namespace NasleGhalam.WebApi.Controllers
                 MessageType = msgRes.MessageType
             });
         }
-	}
+    }
 }

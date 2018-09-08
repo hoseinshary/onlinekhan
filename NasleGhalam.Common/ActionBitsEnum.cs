@@ -104,5 +104,10 @@
         TagCreateAccess = 75,
         TagUpdateAccess = 76,
         TagDeleteAccess = 77,
+
+        UniversityBranchReadAccess = 78,
+        UniversityBranchCreateAccess = 79,
+        UniversityBranchUpdateAccess = 80,
+        UniversityBranchDeleteAccess = 81,
     }
 }

@@ -125,6 +125,7 @@
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\EducationBookController.cs" />
+    <Compile Include="Controllers\UniversityBranchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="App_Start\StructureMapHttpControllerActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />

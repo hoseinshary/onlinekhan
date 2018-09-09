@@ -41,6 +41,10 @@ export default {
     EducationGroup_LessonId: {
       displayName: displayName('درس'),
       requiredDdl: requiredDdl(0)
+    },
+    EducationGroupId: {
+      displayName: displayName('گروه آموزشی'),
+      requiredDdl: requiredDdl(0)
     }
   }
 };

@@ -75,6 +75,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ServiceLayerGenerator.tt</DependentUpon>
     </Content>
+    <Compile Include="Extentions\LinqTreeExtension.cs" />
     <Compile Include="Extentions\PhysicalAddress.cs" />
     <Compile Include="Services\AxillaryBookService.cs" />
     <Compile Include="Services\CityService.cs" />

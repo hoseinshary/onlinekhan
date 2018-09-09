@@ -443,7 +443,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه درس ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
-        public IList<LessonDdlViewModel> GetAllDdl()
+        public IList<LessonDdlViewModel> GetAllDdl() // todo: چرا در سرویس گروه آموزشس_درس نوشته نشده؟
         {
             return _educationGroup_Lesson.Select(current => new LessonDdlViewModel
             {

@@ -1,7 +1,8 @@
 <template>
-  <q-field count :helper="helper"
-    :error-label="errorLabel()"
-    :error="model.$error">
+  <q-field count
+           :helper="helper"
+           :error-label="errorLabel()"
+           :error="model.$error">
     <label class="lbl">{{displayName}}</label>
     <br>
     <div class="gutter-sm">
@@ -26,17 +27,17 @@ export default {
    * data
    */
   data() {
-    return {}
+    return {};
   },
   methods: {
     errorLabel() {
       if (!this.model.$dirty) {
-        return ''
+        return '';
       }
       if (this.model.required !== undefined && !this.model.required) {
-        return `(${this.displayName}) انتخاب نشده است`
+        return `(${this.displayName}) انتخاب نشده است`;
       }
-      return ''
+      return '';
     }
   },
   /**
@@ -45,12 +46,12 @@ export default {
   computed: {
     displayName() {
       if (this.model && this.model.$params && this.model.$params.displayName) {
-        return this.model.$params.displayName.value
+        return this.model.$params.displayName.value;
       }
-      return ''
+      return '';
     }
   }
-}
+};
 </script>
 
 <style scoped>

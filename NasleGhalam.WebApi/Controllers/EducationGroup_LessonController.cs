@@ -14,6 +14,7 @@ namespace NasleGhalam.WebApi.Controllers
 	/// </author>
 	public class EducationGroup_LessonController : ApiController
     {
+        // todo: دسترسی ها با شهر یکی شده! لزوم استفاده از این کنترولر چیست؟
         private readonly EducationGroup_LessonService _educationGroup_LessonService;
         public EducationGroup_LessonController(EducationGroup_LessonService educationGroup_LessonService)
         {
@@ -28,11 +29,11 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.EducationGroup_LessonReadAccess)]
-        public IHttpActionResult GetAllLessonByEducationGroupId(int id)
+        [HttpGet, CheckUserAccess(ActionBits.EducationGroup_LessonReadAccess)] // todo: correct permision
+        public IHttpActionResult GetAllLessonByEducationGroupId(int id)//todo: correct name 
         {
             var educationGroup_Lesson = _educationGroup_LessonService.GetAllLessonByEducationGroupId(id);
-            if (educationGroup_Lesson == null)
+            if (educationGroup_Lesson == null) //todo: no need null checking
             {
                 return NotFound();
             }

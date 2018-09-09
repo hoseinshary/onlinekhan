@@ -61,7 +61,7 @@
 
     <!-- modals -->
     <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
+    <!-- <modal-edit v-if="pageAccess.canEdit"></modal-edit> -->
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>

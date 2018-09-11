@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.ViewModels.Lesson;
@@ -14,10 +15,13 @@ namespace NasleGhalam.WebApi.Controllers
     public class LessonController : ApiController
     {
         private readonly LessonService _lessonService;
+        private readonly Lazy<EducationGroup_LessonService> _educationGroupLessonService;
 
-        public LessonController(LessonService lessonService)
+        public LessonController(LessonService lessonService,
+            Lazy<EducationGroup_LessonService> educationGroupLessonService)
         {
             _lessonService = lessonService;
+            _educationGroupLessonService = educationGroupLessonService;
         }
 
 
@@ -94,13 +98,19 @@ namespace NasleGhalam.WebApi.Controllers
             });
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)] // todo: wrong permision!
         public IHttpActionResult GetAllDdl()
         {
             return Ok(_lessonService.GetAllDdl());
         }
 
 
+        [HttpGet, CheckUserAccess(ActionBits.EducationBookCreateAccess, 
+            ActionBits.EducationBookUpdateAccess)]
+        public IHttpActionResult GetAllByEducationGroupIdDdl(int id)
+        {
+            return Ok(_educationGroupLessonService.Value.GetAllByEducationGroupIdDdl(id));
+        }
 
     }
 }

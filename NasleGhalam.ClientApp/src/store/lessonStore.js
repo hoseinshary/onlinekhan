@@ -24,7 +24,8 @@ export default {
     selectedId: 0,
     createVue: null,
     editVue: null,
-    EducationGroups: []
+    EducationGroups: [],
+    educationGroup_LessonDdl: []
   },
   mutations: {
     /**
@@ -100,6 +101,17 @@ export default {
     },
 
     /**
+     * fill dropDwonList lesson by educationGroupId
+     */
+    fillLessonByEducationGroupDdlStore({ state }, educationGroupId) {
+      axios
+        .get(`${baseUrl}/GetAllByEducationGroupIdDdl/${educationGroupId}`)
+        .then(response => {
+          state.educationGroup_LessonDdl = response.data;
+        });
+    },
+
+    /**
      * fill dropDwonList
      */
     fillDdlStore({ state }) {
@@ -152,7 +164,7 @@ export default {
      */
     getAllEduGroupAndEduSubGroupStore({ state }) {
       axios
-        .get(`${EDUCATION_GROUP_URL}/GetAllEducationWithSubGroups`)
+        .get(`${EDUCATION_GROUP_URL}/GetAllEducationWithSubGroups`) // todo: چرا از استور گروه آموزشی استفاده نشده؟
         .then(response => {
           state.EducationGroups = response.data;
         });

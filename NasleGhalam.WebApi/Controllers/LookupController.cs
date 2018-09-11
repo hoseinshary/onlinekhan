@@ -20,8 +20,8 @@ namespace NasleGhalam.WebApi.Controllers
             _lookupService = lookupService;
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllAnswerType()
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)] // todo: correct permision
+        public IHttpActionResult GetAllAnswerType() // todo: correct name
         {
             return Ok(_lookupService.GetAllDdlByName("AnswerType"));
         }

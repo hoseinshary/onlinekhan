@@ -26,7 +26,8 @@ const store = {
       IsChanged: false,
       GradeId: 0,
       GradeLevelId: 0,
-      EducationGroup_LessonId: 0
+      EducationGroup_LessonId: 0,
+      EducationGroupId: 0
     },
     educationBookGridData: [],
     educationBookDdl: [],
@@ -71,6 +72,10 @@ const store = {
      */
     reset(state, $v) {
       util.clearObject(state.educationBookObj);
+      state.educationBookObj.IsExamSource = false;
+      state.educationBookObj.IsActive = false;
+      state.educationBookObj.IsChanged = false;
+
       if ($v) {
         $v.$reset();
       }

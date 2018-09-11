@@ -56,7 +56,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllLessonByEducationGroupId(int id)
+        public IList<SelectViewModel> GetAllLessonByEducationGroupId(int id) //todo: currect name
         {
             return _educationGroup_Lessons
                 .Where(current => current.EducationGroupId == id)
@@ -67,7 +67,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 }).ToList();
         }
 
-        
+
 
         /// <summary>
         /// گرفتن همه گروه های آموزشی با آی دی درس
@@ -224,6 +224,19 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-
+        /// <summary>
+        /// گرفتن همه درس های یک گروه آموزشی برای لیست کشویی
+        /// </summary>
+        /// <returns></returns>
+        public IList<SelectViewModel> GetAllByEducationGroupIdDdl(int educationGroupId)
+        {
+            return _educationGroup_Lessons
+                .Where(current => current.EducationGroupId == educationGroupId)
+                .Select(current => new SelectViewModel
+                {
+                    value = current.Id,
+                    label = current.Lesson.Name,
+                }).ToList();
+        }
     }
 }

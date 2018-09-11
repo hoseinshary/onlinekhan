@@ -77,6 +77,10 @@
     <Compile Include="Migrations\201809061137367_questionchanged.Designer.cs">
       <DependentUpon>201809061137367_questionchanged.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809111138073_oneToOneStudentAndUser.cs" />
+    <Compile Include="Migrations\201809111138073_oneToOneStudentAndUser.Designer.cs">
+      <DependentUpon>201809111138073_oneToOneStudentAndUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -115,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809061137367_questionchanged.resx">
       <DependentUpon>201809061137367_questionchanged.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809111138073_oneToOneStudentAndUser.resx">
+      <DependentUpon>201809111138073_oneToOneStudentAndUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

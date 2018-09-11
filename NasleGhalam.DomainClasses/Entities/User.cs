@@ -7,7 +7,6 @@ namespace NasleGhalam.DomainClasses.Entities
     {
         public User()
         {
-            Students = new HashSet<Student>();
             Teachers = new HashSet<Teacher>();
             Questions = new HashSet<Question>();
             QuestionAnswers = new HashSet<QuestionAnswer>();
@@ -44,7 +43,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int CityId { get; set; }
 
-        public virtual ICollection<Student> Students { get; set; }
+        public virtual Student Student { get; set; }
 
         public virtual ICollection<Teacher> Teachers { get; set; }
 

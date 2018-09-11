@@ -14,7 +14,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int ProvinceId { get; set; }
 
-        public Province Province { get; set; }
+        public  Province Province { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
     }

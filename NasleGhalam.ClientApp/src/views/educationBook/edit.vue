@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import viewModel from 'viewModels/educationBookViewModel';
+import viewModel from 'viewModels/educationBook/educationBookCrudViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {

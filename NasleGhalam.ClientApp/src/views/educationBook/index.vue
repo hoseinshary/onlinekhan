@@ -5,12 +5,12 @@
       <span slot="title">{{modelName}}</span>
       <div slot="body">
         <section class="row gutter-md">
-          <my-select :model="$v.educationBookObj.GradeId"
+          <my-select :model="$v.educationBookIndexObj.GradeId"
                      :options="gradeDdl"
                      class="col-md-3 col-sm-4"
                      @change="fillGradeLevelByGradeIdDdl($event)" />
 
-          <my-select :model="$v.educationBookObj.GradeLevelId"
+          <my-select :model="$v.educationBookIndexObj.GradeLevelId"
                      :options="gradeLevelByGradeDdl"
                      class="col-md-3 col-sm-4"
                      @change="fillGridStore($event)" />
@@ -68,7 +68,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import viewModel from 'viewModels/educationBookViewModel';
+import viewModel from 'viewModels/educationBook/educationBookIndexViewModel';
 
 export default {
   components: {
@@ -83,13 +83,17 @@ export default {
     var pageAccess = this.$util.initAccess('/educationBook');
     return {
       pageAccess,
+      educationBookIndexObj: {
+        GradeId: undefined,
+        GradeLevelId: undefined
+      },
       educationBookGridColumn: [
         {
           title: 'درس',
           data: 'LessonName'
         },
         {
-          title: 'نام',
+          title: 'نام کتاب',
           data: 'Name'
         },
         {
@@ -136,8 +140,14 @@ export default {
       fillGradeLevelByGradeIdDdl: 'gradeLevelStore/fillGradeLevelByGradeId'
     }),
     showModalCreate() {
+      this.$v.educationBookIndexObj.$touch();
+      if (this.$v.educationBookIndexObj.$error) {
+        return;
+      }
       // reset data on modal show
       this.resetCreateStore();
+      //set GradeLevelId
+      this.educationBookObj.GradeLevelId = this.educationBookIndexObj.GradeLevelId;
       // show modal
       this.toggleModalCreateStore(true);
     },

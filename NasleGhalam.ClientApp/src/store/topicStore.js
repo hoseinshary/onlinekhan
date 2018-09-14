@@ -96,7 +96,7 @@ const store = {
      * get data by id
      */
     GetAllTreeStore({ state }, id) {
-      axios.get(`${baseUrl}/GetAllTree/${id}`).then(response => {
+      return axios.get(`${baseUrl}/GetAllTree/${id}`).then(response => {
         state.treeLst = [response.data];
       });
     },

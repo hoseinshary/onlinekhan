@@ -99,10 +99,10 @@ export default {
     provinceChange(value) {
       this.fillCityByProvincIdDdl(value);
     },
-    submit() {
+    submit(closeModal) {
       this.userObj.CityName = this.$refs.cityId.getSelectedLabel();
       this.userObj.RoleName = this.$refs.roleId.getSelectedLabel();
-      this.submitEditStore();
+      this.submitEditStore(closeModal);
     }
   },
   /**

@@ -2,7 +2,7 @@
   <my-modal-create :title="modelName"
                    :show="isOpenModalCreate"
                    size="lg"
-                   @confirm="submitCreateStore"
+                   @confirm="submit"
                    @reset="resetCreateStore"
                    @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
@@ -12,13 +12,13 @@
         <my-select :model="$v.educationBookObj.EducationGroupId"
                    :options="educationGroupDdl"
                    class="col-md-6"
-                   clearable
                    @change="educationGroupChange" />
 
         <my-select :model="$v.educationBookObj.EducationGroup_LessonId"
                    :options="educationGroup_LessonDdl"
                    class="col-md-6"
-                   clearable />
+                   @change="fillTopicTree"
+                   ref="EducationGroup_LessonId" />
 
         <my-input :model="$v.educationBookObj.Name"
                   class="col-md-6" />
@@ -51,18 +51,19 @@
     <section class="col-md-4">
       <div class="row gutter-sm q-ma-sm q-px-sm shadow-1">
         <q-field class="col-12">
-          <q-input v-model="filter"
-                   float-label="درس"
+          <q-input v-model="topicFilter.value"
+                   float-label="جستجوی مبحث"
                    clearable/>
         </q-field>
-        <q-tree :nodes="tickable"
+        <q-tree :nodes="topicTree"
                 color="primary"
                 default-expand-all
-                :ticked.sync="ticked"
-                :tick-strategy="tickStrategy"
+                :ticked.sync="educationBookObj.TopicIds"
+                tick-strategy="leaf"
                 accordion
-                node-key="label"
-                :filter="filter" />
+                node-key="Id"
+                :filter="topicFilter.value"
+                ref="topicTree" />
       </div>
     </section>
 
@@ -70,76 +71,10 @@
 </template>
 
 <script>
-import viewModel from 'viewModels/educationBookViewModel';
+import viewModel from 'viewModels/educationBook/educationBookCrudViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
-  data: () => ({
-    filter: null,
-    ticked: [],
-    tickStrategy: 'leaf',
-    tickable: [
-      {
-        label: 'Satisfied customers',
-        children: [
-          {
-            label: 'Good food',
-            icon: 'restaurant_menu',
-            children: [
-              { label: 'Quality ingredients' },
-              { label: 'Good recipe' }
-            ]
-          },
-          {
-            label: 'Good service',
-            icon: 'room_service',
-            children: [
-              { label: 'Prompt attention' },
-              { label: 'Professional waiter' }
-            ]
-          },
-          {
-            label: 'Pleasant surroundings',
-            icon: 'photo',
-            children: [
-              {
-                label: 'Happy atmosphere (not tickable)',
-                tickable: false
-              },
-              {
-                label: 'Good table presentation (disabled node)',
-                disabled: true
-              },
-              {
-                label: 'Pleasing decor'
-              }
-            ]
-          },
-          {
-            label: 'Extra information (has no tick)',
-            noTick: true,
-            icon: 'photo'
-          },
-          {
-            label: 'Forced tick strategy (to "strict" in this case)',
-            tickStrategy: 'strict',
-            icon: 'school',
-            children: [
-              {
-                label: 'Happy atmosphere'
-              },
-              {
-                label: 'Good table presentation'
-              },
-              {
-                label: 'Very pleasing decor'
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }),
   /**
    * methods
    */
@@ -153,13 +88,24 @@ export default {
     ...mapActions({
       fillEducationGroupDdlStore: 'educationGroupStore/fillDdlStore',
       fillLessonByEducationGroupDdlStore:
-        'lessonStore/fillLessonByEducationGroupDdlStore'
+        'lessonStore/fillLessonByEducationGroupDdlStore',
+      fillTopicTreeStore: 'topicStore/GetAllTreeStore'
     }),
     modalOpen() {
       this.fillEducationGroupDdlStore();
     },
     educationGroupChange(value) {
       this.fillLessonByEducationGroupDdlStore(value);
+    },
+    fillTopicTree(value) {
+      this.fillTopicTreeStore(value).then(() => {
+        // after tree loaded
+        this.$refs.topicTree.expandAll();
+      });
+    },
+    submit(closeModal) {
+      this.educationBookObj.LessonName = this.$refs.EducationGroup_LessonId.getSelectedLabel();
+      this.submitCreateStore(closeModal);
     }
   },
   /**
@@ -169,11 +115,13 @@ export default {
     ...mapState('educationBookStore', {
       modelName: 'modelName',
       educationBookObj: 'educationBookObj',
-      isOpenModalCreate: 'isOpenModalCreate'
+      isOpenModalCreate: 'isOpenModalCreate',
+      topicFilter: 'topicFilter'
     }),
     ...mapState({
       educationGroupDdl: s => s.educationGroupStore.educationGroupDdl,
-      educationGroup_LessonDdl: s => s.lessonStore.educationGroup_LessonDdl
+      educationGroup_LessonDdl: s => s.lessonStore.educationGroup_LessonDdl,
+      topicTree: s => s.topicStore.treeLst
     })
   },
   /**

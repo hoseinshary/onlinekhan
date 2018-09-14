@@ -9,7 +9,7 @@ import {
 export default {
   educationBookObj: {
     Name: {
-      displayName: displayName('نام'),
+      displayName: displayName('نام کتاب'),
       maxLength: maxLength(50),
       required
     },
@@ -29,14 +29,6 @@ export default {
     IsChanged: {
       displayName: displayName('تغییر نسبت به سال قبل'),
       required
-    },
-    GradeId: {
-      displayName: displayName('مقطع تحصیلی'),
-      requiredDdl: requiredDdl(0)
-    },
-    GradeLevelId: {
-      displayName: displayName('پایه تحصیلی'),
-      requiredDdl: requiredDdl(0)
     },
     EducationGroup_LessonId: {
       displayName: displayName('درس'),

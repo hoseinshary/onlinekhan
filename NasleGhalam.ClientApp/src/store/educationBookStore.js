@@ -24,17 +24,21 @@ const store = {
       IsExamSource: false,
       IsActive: false,
       IsChanged: false,
-      GradeId: 0,
-      GradeLevelId: 0,
+      LessonName: '',
+      GradeLevelId: undefined,
       EducationGroup_LessonId: 0,
-      EducationGroupId: 0
+      EducationGroupId: 0,
+      TopicIds: []
     },
     educationBookGridData: [],
     educationBookDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     createVue: null,
-    editVue: null
+    editVue: null,
+    topicFilter: {
+      value: ''
+    }
   },
   mutations: {
     /**
@@ -71,10 +75,15 @@ const store = {
      * rest value of educationBookObj
      */
     reset(state, $v) {
-      util.clearObject(state.educationBookObj);
+      state.educationBookObj.Name = '';
+      state.educationBookObj.PublishYear = undefined;
+      state.educationBookObj.EducationGroup_LessonId = undefined;
+      state.educationBookObj.EducationGroupId = undefined;
       state.educationBookObj.IsExamSource = false;
       state.educationBookObj.IsActive = false;
       state.educationBookObj.IsChanged = false;
+      util.clearArray(state.educationBookObj.TopicIds);
+      state.topicFilter.value = '';
 
       if ($v) {
         $v.$reset();
@@ -192,8 +201,9 @@ const store = {
     /**
      * reset create vue
      */
-    resetCreateStore({ state, commit }) {
+    resetCreateStore({ state, commit, rootState }) {
       commit('reset', state.createVue.$v);
+      util.clearArray(rootState.topicStore.treeLst);
     },
     //------------------------------------------------
 
@@ -249,6 +259,7 @@ const store = {
      */
     resetEditStore({ state, commit }) {
       commit('reset', state.editVue.$v);
+      util.clearArray(rootState.topicStore.treeLst);
     },
     //------------------------------------------------
 

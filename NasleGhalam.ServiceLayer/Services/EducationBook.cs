@@ -117,13 +117,20 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-            var educationBookViewModel = GetById(id);
-            if (educationBookViewModel == null)
+            var educationBook = _educationBooks
+                .Include(current => current.Topics)
+                .FirstOrDefault(current => current.Id == id);
+
+            if (educationBook == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
+            var topics = educationBook.Topics.ToList();
+            foreach (var topic in topics)
+            {
+                _uow.MarkAsDeleted(topic);
+            }
             _uow.MarkAsDeleted(educationBook);
 
             return _uow.CommitChanges(CrudType.Delete, Title);

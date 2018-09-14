@@ -40,9 +40,9 @@ export default {
     ...mapActions('gradeStore', {
       fillGradeDdlStore: 'fillDdlStore'
     }),
-    submit() {
+    submit(closeModal) {
       this.gradeLevelObj.GradeName = this.$refs.gradeLevelId.getSelectedLabel();
-      this.submitEditStore();
+      this.submitEditStore(closeModal);
     },
     modalOpen() {
       this.fillGradeDdlStore();

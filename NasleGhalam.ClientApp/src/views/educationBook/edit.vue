@@ -1,59 +1,69 @@
 <template>
   <my-modal-edit :title="modelName"
                  :show="isOpenModalEdit"
-                 @confirm="submitEditStore"
+                 size="lg"
+                 @confirm="submit"
                  @reset="resetEditStore"
                  @close="toggleModalEditStore(false)">
 
-    <my-input :model="$v.educationBookObj.Name"
-              class="col-md-6" />
+    <section class="col-md-8">
+      <div class="row gutter-sm q-ma-sm q-px-sm shadow-1">
+        <my-select :model="$v.educationBookObj.EducationGroupId"
+                   :options="educationGroupDdl"
+                   class="col-md-6"
+                   @change="educationGroupChange" />
 
-    <my-input :model="$v.educationBookObj.PublishYear"
-              class="col-md-6" />
+        <my-select :model="$v.educationBookObj.EducationGroup_LessonId"
+                   :options="educationGroup_LessonDdl"
+                   class="col-md-6"
+                   @change="fillTopicTree"
+                   ref="EducationGroup_LessonId" />
 
-    <my-field class="col-md-6"
-              :model="$v.educationBookObj.IsExamSource">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
-      </template>
-    </my-field>
+        <my-input :model="$v.educationBookObj.Name"
+                  class="col-md-6" />
 
-    <my-field class="col-md-6"
-              :model="$v.educationBookObj.IsActive">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
-      </template>
-    </my-field>
+        <my-input :model="$v.educationBookObj.PublishYear"
+                  class="col-md-6" />
 
-    <my-field class="col-md-6"
-              :model="$v.educationBookObj.IsChanged">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
-      </template>
-    </my-field>
+        <my-field class="col-md-4"
+                  :model="$v.educationBookObj.IsExamSource">
+          <template slot-scope="data">
+            <q-toggle v-model="data.obj.$model" />
+          </template>
+        </my-field>
 
-    <my-input :model="$v.educationBookObj.GradeLevelId"
-              class="col-md-6" />
+        <my-field class="col-md-4"
+                  :model="$v.educationBookObj.IsActive">
+          <template slot-scope="data">
+            <q-toggle v-model="data.obj.$model" />
+          </template>
+        </my-field>
 
-    <!-- <my-select :model="$v.educationBookObj.EducationGroup_LessonId"
-               :options=""
-               class="col-md-6"
-               clearable /> -->
+        <my-field class="col-md-4"
+                  :model="$v.educationBookObj.IsChanged">
+          <template slot-scope="data">
+            <q-toggle v-model="data.obj.$model" />
+          </template>
+        </my-field>
+      </div>
+    </section>
+    <section class="col-md-4">
+      <div class="row gutter-sm q-ma-sm q-px-sm shadow-1">
+        <q-field class="col-12">
+          <q-input v-model="topicFilter.value"
+                   float-label="جستجوی مبحث"
+                   clearable/>
+        </q-field>
+        <q-tree :nodes="topicTree"
+                color="primary"
+                :ticked.sync="educationBookObj.TopicIds"
+                tick-strategy="leaf"
+                accordion
+                node-key="Id"
+                :filter="topicFilter.value"
+                ref="topicTree" />
+      </div>
+    </section>
 
   </my-modal-edit>
 </template>
@@ -72,7 +82,29 @@ export default {
       'editVueStore',
       'submitEditStore',
       'resetEditStore'
-    ])
+    ]),
+    ...mapActions({
+      fillEducationGroupDdlStore: 'educationGroupStore/fillDdlStore',
+      fillLessonByEducationGroupDdlStore:
+        'lessonStore/fillLessonByEducationGroupDdlStore',
+      fillTopicTreeStore: 'topicStore/GetAllTreeStore'
+    }),
+    modalOpen() {
+      this.fillEducationGroupDdlStore();
+    },
+    educationGroupChange(value) {
+      this.fillLessonByEducationGroupDdlStore(value);
+    },
+    fillTopicTree(value) {
+      this.fillTopicTreeStore(value).then(() => {
+        // after tree loaded
+        this.$refs.topicTree.expandAll();
+      });
+    },
+    submit() {
+      this.educationBookObj.LessonName = this.$refs.EducationGroup_LessonId.getSelectedLabel();
+      this.submitEditStore();
+    }
   },
   /**
    * computed
@@ -81,7 +113,13 @@ export default {
     ...mapState('educationBookStore', {
       modelName: 'modelName',
       educationBookObj: 'educationBookObj',
-      isOpenModalEdit: 'isOpenModalEdit'
+      isOpenModalEdit: 'isOpenModalEdit',
+      topicFilter: 'topicFilter'
+    }),
+    ...mapState({
+      educationGroupDdl: s => s.educationGroupStore.educationGroupDdl,
+      educationGroup_LessonDdl: s => s.lessonStore.educationGroup_LessonDdl,
+      topicTree: s => s.topicStore.treeLst
     })
   },
   /**

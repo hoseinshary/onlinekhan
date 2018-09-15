@@ -57,7 +57,6 @@
         </q-field>
         <q-tree :nodes="topicTree"
                 color="primary"
-                default-expand-all
                 :ticked.sync="educationBookObj.TopicIds"
                 tick-strategy="leaf"
                 accordion

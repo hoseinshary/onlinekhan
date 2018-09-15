@@ -186,7 +186,7 @@ namespace NasleGhalam.DataAccess.Context
             return this.Database.BeginTransaction();
         }
 
-        public DbRawSqlQuery<T> RunQuery<T>(string sqlQuery, params object[] sqlParam)
+        public DbRawSqlQuery<T> SqlQuery<T>(string sqlQuery, params object[] sqlParam)
         {
             return this.Database.SqlQuery<T>(sqlQuery, sqlParam);
         }

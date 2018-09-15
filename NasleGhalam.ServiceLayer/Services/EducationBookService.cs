@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using AutoMapper;
 using NasleGhalam.Common;
@@ -41,6 +42,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     IsChanged = current.IsChanged,
                     IsExamSource = current.IsExamSource,
                     PublishYear = current.PublishYear,
+                    EducationGroupId = current.EducationGroup_Lesson.EducationGroupId,
                     EducationGroup_LessonId = current.EducationGroup_LessonId,
                     GradeLevelId = current.GradeLevelId,
                     TopicIds = current.Topics.Select(topic => topic.Id)
@@ -103,10 +105,34 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Update(EducationBookViewModel educationBookViewModel)
         {
+            var transaction = _uow.BeginTransaction();
+            _uow.ExecuteSqlCommand("delete from Topics_EducationBooks where EducationBookId=@id", 
+                new SqlParameter("@id", educationBookViewModel.Id));
+
             var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
             _uow.MarkAsChanged(educationBook);
+            var topics = _uow.Set<Topic>();
 
-            return _uow.CommitChanges(CrudType.Update, Title);
+            foreach (var topicId in educationBookViewModel.TopicIds)
+            {
+                var topic = new Topic()
+                {
+                    Id = topicId
+                };
+                topics.Attach(topic);
+                educationBook.Topics.Add(topic);
+            }
+
+            var result = _uow.CommitChanges(CrudType.Update, Title);
+            if (result.MessageType == MessageType.Success)
+            {
+                transaction.Commit();
+            }
+            else
+            {
+                transaction.Rollback();
+            }
+            return result;
         }
 
 
@@ -117,20 +143,20 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-            var educationBook = _educationBooks
-                .Include(current => current.Topics)
-                .FirstOrDefault(current => current.Id == id);
-
-            if (educationBook == null)
+            var educationBookViewModel = GetById(id);
+            if (educationBookViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
-
-            var topics = educationBook.Topics.ToList();
-            foreach (var topic in topics)
+            var topics = _uow.Set<Topic>();
+            foreach (var topicId in educationBookViewModel.TopicIds)
             {
+                var topic = new Topic() { Id = topicId };
+                topics.Attach(topic);
                 _uow.MarkAsDeleted(topic);
             }
+
+            var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
             _uow.MarkAsDeleted(educationBook);
 
             return _uow.CommitChanges(CrudType.Delete, Title);

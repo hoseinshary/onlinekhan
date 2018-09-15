@@ -43,6 +43,7 @@ namespace NasleGhalam.ViewModels.EducationBook
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationGroup_LessonId { get; set; }
 
+        public int EducationGroupId { get; set; }
 
         public string LessonName { get; set; }
         //public string GradeLevelName { get; set; }

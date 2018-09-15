@@ -61,7 +61,8 @@
 
     <!-- modals -->
     <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <!-- <modal-edit v-if="pageAccess.canEdit"></modal-edit> -->
+    <modal-edit v-if="pageAccess.canEdit"
+                ref="modalEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
@@ -137,7 +138,10 @@ export default {
     ]),
     ...mapActions({
       fillGradeDdl: 'gradeStore/fillDdlStore',
-      fillGradeLevelByGradeIdDdl: 'gradeLevelStore/fillGradeLevelByGradeId'
+      fillGradeLevelByGradeIdDdl: 'gradeLevelStore/fillGradeLevelByGradeId',
+      fillLessonByEducationGroupDdlStore:
+        'lessonStore/fillLessonByEducationGroupDdlStore',
+      fillTopicTreeStore: 'topicStore/GetAllTreeStore'
     }),
     showModalCreate() {
       this.$v.educationBookIndexObj.$touch();
@@ -152,10 +156,20 @@ export default {
       this.toggleModalCreateStore(true);
     },
     showModalEdit(id) {
+      this.$v.educationBookIndexObj.$touch();
+      if (this.$v.educationBookIndexObj.$error) {
+        return;
+      }
       // reset data on modal show
       this.resetEditStore();
+      var vm = this;
       // get data by id
-      this.getByIdStore(id).then(() => {
+      this.getByIdStore(id).then(data => {
+        this.fillLessonByEducationGroupDdlStore(data.EducationGroupId);
+        this.fillTopicTreeStore(data.EducationGroup_LessonId).then(() => {
+          // after tree loaded
+          vm.$refs.modalEdit.$refs.topicTree.expandAll();
+        });
         // show modal
         this.toggleModalEditStore(true);
       });

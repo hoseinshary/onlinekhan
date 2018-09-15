@@ -25,6 +25,6 @@ namespace NasleGhalam.DataAccess.Context
         void Dispose();
         DbContextTransaction BeginTransaction();
         int ExecuteSqlCommand(string sqlQuery, params object[] sqlParam);
-        DbRawSqlQuery<T> RunQuery<T>(string sqlQuery, params object[] sqlParam);
+        DbRawSqlQuery<T> SqlQuery<T>(string sqlQuery, params object[] sqlParam);
     }
 }

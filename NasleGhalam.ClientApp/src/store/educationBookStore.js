@@ -95,9 +95,10 @@ const store = {
      * get data by id
      */
     getByIdStore({ state }, id) {
-      axios.get(`${baseUrl}/GetById/${id}`).then(response => {
+      return axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.educationBookObj);
+        return response.data;
       });
     },
 
@@ -257,7 +258,7 @@ const store = {
     /**
      * reset edit vue
      */
-    resetEditStore({ state, commit }) {
+    resetEditStore({ state, commit, rootState }) {
       commit('reset', state.editVue.$v);
       util.clearArray(rootState.topicStore.treeLst);
     },

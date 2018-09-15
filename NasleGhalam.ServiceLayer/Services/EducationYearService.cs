@@ -63,7 +63,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Create(EducationYearViewModel educationYearViewModel)
         {
-            if(educationYearViewModel.IsActiveYear == true)
+            if (educationYearViewModel.IsActiveYear == true)
             {
                 _educationYears.ToList().ForEach(current => current.IsActiveYear = false);
             }
@@ -83,6 +83,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Update(EducationYearViewModel educationYearViewModel)
         {
+            // todo: check isActiveYear
             if(educationYearViewModel.IsActiveYear == true)
             {
                 _educationYears.ToList<EducationYear>().ForEach(current => current.IsActiveYear = false);
@@ -90,9 +91,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _uow.MarkAsChanged(educationYear);
 
-
             return _uow.CommitChanges(CrudType.Update, Title);
-
         }
 
 
@@ -113,7 +112,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(educationYear);
 
             return _uow.CommitChanges(CrudType.Delete, Title);
-
         }
 
 

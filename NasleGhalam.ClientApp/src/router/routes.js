@@ -66,6 +66,10 @@ export default [
       {
         path: '/tag',
         component: () => import('views/tag')
+      },
+      {
+        path: '/educationYear',
+        component: () => import('views/educationYear')
       }
     ]
   },

@@ -13,6 +13,9 @@ import educationSubGroupStore from './educationSubGroupStore';
 import topicStore from './topicStore';
 import lookupStore from './lookupStore';
 import educationBookStore from './educationBookStore';
+import examStore from './examStore';
+import publisherStore from './publisherStore';
+import tagStore from './tagStore';
 
 Vue.use(Vuex);
 
@@ -70,7 +73,10 @@ const store = new Vuex.Store({
     educationSubGroupStore,
     topicStore,
     lookupStore,
-    educationBookStore
+    educationBookStore,
+    examStore,
+    publisherStore,
+    tagStore
   }
 });
 

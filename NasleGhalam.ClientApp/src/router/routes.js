@@ -54,6 +54,18 @@ export default [
       {
         path: '/educationBook',
         component: () => import('views/educationBook')
+      },
+      {
+        path: '/exam',
+        component: () => import('views/exam')
+      },
+      {
+        path: '/publisher',
+        component: () => import('views/publisher')
+      },
+      {
+        path: '/tag',
+        component: () => import('views/tag')
       }
     ]
   },

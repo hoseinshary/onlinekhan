@@ -1,5 +1,6 @@
 // Configuration for your app
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = function(ctx) {
   return {
@@ -24,7 +25,7 @@ module.exports = function(ctx) {
       // extractCSS: false,
       extendWebpack(cfg) {
         var rules = cfg.module.rules;
-
+        cfg.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
         rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
@@ -170,3 +171,8 @@ module.exports = function(ctx) {
     }
   };
 };
+module.exports.plugins = [
+  //...
+  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+  //...
+];

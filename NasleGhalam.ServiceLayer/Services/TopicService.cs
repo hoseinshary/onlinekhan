@@ -59,13 +59,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
-        public TopicTreeViewModel GetAllTree(int id)
+        public IEnumerable<TopicTreeViewModel> GetAllTree(int id)
         {
-            topics = _topics.Where(x => x.EducationGroup_LessonId == id).ToList();
-            var topic = topics.FirstOrDefault(x => x.ParentTopicId == null && x.EducationGroup_LessonId == id);
-            var returnval =  children(topic.Id);
-            return returnval;
+            var topic = _topics
+                .FirstOrDefault(x => x.ParentTopicId == null 
+                && x.EducationGroup_LessonId == id);
 
+            var result = new List<TopicTreeViewModel>();
+            if (topic != null)
+            {
+                result.Add(children(topic.Id));
+            }
+            return result;
         }
 
 

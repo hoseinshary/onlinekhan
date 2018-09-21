@@ -19,67 +19,75 @@ namespace NasleGhalam.WebApi.Controllers
             _lookupService = lookupService;
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)] // todo: correct permision
-        public IHttpActionResult GetAllAnswerType() // todo: correct name
+        #region ### Drop Dwon List ###
+        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
+        public IHttpActionResult GetAllAnswerTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("AnswerType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllPaperType()
+        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess,
+             ActionBits.AxillaryBookUpdateAccess)]
+        public IHttpActionResult GetAllPaperTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("PaperType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllPrintType()
+        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess,
+             ActionBits.AxillaryBookUpdateAccess)]
+        public IHttpActionResult GetAllPrintTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("PrintType"));
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllBookType()
+        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess,
+             ActionBits.AxillaryBookUpdateAccess)]
+        public IHttpActionResult GetAllBookTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("BookType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllQuestionType()
+        public IHttpActionResult GetAllQuestionTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("QuestionType"));
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllTopicHardnessType()
+        [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
+        public IHttpActionResult GetAllTopicHardnessTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("TopicHardnessType"));
         }
 
+
         [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllQuestionHardnessType()
+        public IHttpActionResult GetAllQuestionHardnessTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("QuestionHardnessType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllAreaType()
+
+        [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
+        public IHttpActionResult GetAllAreaTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("AreaType"));
         }
 
+
         [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllRepeatnessType()
+        public IHttpActionResult GetAllRepeatnessTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("RepeatnessType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        public IHttpActionResult GetAllAuthorType()
+        public IHttpActionResult GetAllAuthorTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("AuthorType"));
         }
+        #endregion
 
 
         [HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]

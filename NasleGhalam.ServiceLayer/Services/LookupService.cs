@@ -48,32 +48,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdlByName(string name)
         {
-            return _lookups.Where(x => x.Name == name)
-                .Select(current => new SelectViewModel()
-            {
-                label = current.Value,
-                value = current.Id
-            }).ToList();
-        }
-
-        /// <summary>
-        /// گرفتن کامل همه لوکاپ ها با نام
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public IList<LookupGetViewModel> GetAllByName(string name)
-        {
             return _lookups
-                .Where(current => current.Name == "PmOperation")
-                .Select(current => new LookupGetViewModel()
+                .Where(x => x.Name == name)
+                .Select(current => new SelectViewModel()
                 {
-                    value = current.Id,
-                    lable = current.Value,
-                    state = current.State
+                    label = current.Value,
+                    value = current.Id
                 }).ToList();
         }
-
-
 
         /// <summary>
         /// گرفتن همه لوک آپ ها
@@ -141,20 +123,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
             return _uow.CommitChanges(CrudType.Delete, Title);
 
-        }
-
-
-        /// <summary>
-        /// گرفتن همه لوک آپ ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _lookups.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

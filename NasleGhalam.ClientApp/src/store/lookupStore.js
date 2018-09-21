@@ -1,35 +1,42 @@
-import util from 'utilities/util';
 import axios from 'utilities/axios';
 import { LOOKUP_URL as baseUrl } from 'utilities/site-config';
-
-/**
- * find index of object in gradeGridData by id
- * @param {Number} id
- */
-function getIndexById(id) {
-  return store.state.gradeGridData.findIndex(o => o.Id == id);
-}
 
 const store = {
   namespaced: true,
   state: {
-    lookupTopicHardnessType: [],
-    lookupTopicAreaType: []
+    lookupTopicHardnessTypeDdl: [],
+    lookupTopicAreaTypeDdl: [],
+    lookupPrintTypeDdl: [],
+    lookupBookTypeDdl: [],
+    lookupPaperTypeDdl: []
   },
-  mutations: {},
   actions: {
-    getLookupTopicHardnessType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllTopicHardnessType/`).then(response => {
-        state.lookupTopicHardnessType = response.data;
+    fillTopicHardnessTypeDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllTopicHardnessTypeDdl/`).then(response => {
+        state.lookupTopicHardnessTypeDdl = response.data;
       });
     },
-    getLookupTopicAreaType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllAreaType/`).then(response => {
-        state.lookupTopicAreaType = response.data;
+    fillTopicAreaTypeDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllAreaTypeDdl/`).then(response => {
+        state.lookupTopicAreaTypeDdl = response.data;
+      });
+    },
+    fillPrintTypeDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllPrintTypeDdl/`).then(response => {
+        state.lookupPrintTypeDdl = response.data;
+      });
+    },
+    fillBookTypeDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllBookTypeDdl/`).then(response => {
+        state.lookupBookTypeDdl = response.data;
+      });
+    },
+    fillPaperTypeDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllPaperTypeDdl/`).then(response => {
+        state.lookupPaperTypeDdl = response.data;
       });
     }
-  },
-  getters: {}
+  }
 };
 
 export default store;

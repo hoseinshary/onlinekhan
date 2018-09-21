@@ -47,7 +47,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     LookupId_PaperType = current.LookupId_PaperType,
                     LookupId_PrintType = current.LookupId_PrintType,
                     PublisherId = current.PublisherId,
-                    ImgPath = current.ImgPath
+                    ImgName = current.ImgName
                 }).FirstOrDefault();
         }
 
@@ -73,7 +73,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 PaperTypeName = current.Lookup_PaperType.Name,
                 PrintTypeName = current.Lookup_PrintType.Name,
                 PublisherName = current.Publisher.Name,
-                ImgPath = current.ImgPath
+                ImgPath = current.ImgName
             }).ToList();
         }
 
@@ -102,17 +102,16 @@ namespace NasleGhalam.ServiceLayer.Services
         public MessageResult Update(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
-            //if (!axillaryBook.HasImage)
-            //{
-            //    _uow.ExcludeFieldsFromUpdate(axillaryBook, x => x.ImgPath, x => x.HasImage);
-            //}
-            //else
-            //{
-            _uow.MarkAsChanged(axillaryBook);
-            //}
+            if (string.IsNullOrEmpty(axillaryBook.ImgName))
+            {
+                _uow.ExcludeFieldsFromUpdate(axillaryBook, x => x.ImgName);
+            }
+            else
+            {
+                _uow.MarkAsChanged(axillaryBook);
+            }
 
             return _uow.CommitChanges(CrudType.Update, Title);
-
         }
 
 

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.AxillaryBook;
-using NasleGhalam.WebApi.Extentions;
+using NasleGhalam.WebApi.Util;
 
 
 namespace NasleGhalam.WebApi.Controllers
@@ -46,69 +47,21 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.AxillaryBookCreateAccess)]
         [CheckModelValidation]
-        [CheckImageValidatioNotRequired("Picture", 1024)]
+        [CheckImageValidatioNotRequired("img", 1024)]
         public IHttpActionResult Create(AxillaryBookViewModel axillaryBookViewModel)
         {
-
-            var files = HttpContext.Current.Request.Files;
-            var postedFile = files.Get("Picture");
-            if (postedFile != null)
+            var postedFile = HttpContext.Current.Request.Files.Get("img");
+            if (postedFile != null && postedFile.ContentLength > 0)
             {
-                MessageResult message = new MessageResult();
-                bool upload = false;
-
-                //this line convert HttpPostedFile to HttpPostedFileBase
-                // HttpPostedFileBase filebase = new HttpPostedFileWrapper(postedFile);
-                // this line resolves a virtual path into an absolute path Example:
-                //Url.Content();
-                Guid g = Guid.NewGuid();
-                string strextension = System.IO.Path.GetExtension(postedFile.FileName).Substring(1);
-                string strPictureName = g.ToString();
-                string strFullPictureName = string.Format("{0}.{1}", strPictureName, strextension);
-                string strPhysicalPathName = strFullPictureName.GetAxillaryBookImagePhysicalPath();
-                axillaryBookViewModel.ImgPath = strPhysicalPathName;
-                //axillaryBookViewModel.HasImage = true;
-                message = _axillaryBookService.Create(axillaryBookViewModel);
-                if (message.MessageType == MessageType.Success)
-                {
-                    try
-                    {
-                        postedFile.SaveAs(strPhysicalPathName);
-                        upload = true;
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                    //if (System.IO.File.Exists(strPhysicalPathName))
-                    //{
-                    //    upload = true;
-                    //}
-                    if (upload)
-                    {
-                            return Ok(new MessageResultApi
-                            {
-                                Message = message.FaMessage,
-                                MessageType = message.MessageType,
-                                Id = message.Id
-                            });
-                    }
-                    else
-                    {
-                        message.FaMessage += "ولی عکس کتاب آپلود نشد.";
-                        message.MessageType = MessageType.Error;
-                        return Ok(new MessageResultApi
-                        {
-                            Message = message.FaMessage,
-                            MessageType = message.MessageType,
-                            Id = message.Id
-                        });
-                    }
-
-                }
+                axillaryBookViewModel.ImgName = $"{Guid.NewGuid()}{Path.GetExtension(postedFile.FileName)}";
             }
 
             var msgRes = _axillaryBookService.Create(axillaryBookViewModel);
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBookViewModel.ImgName))
+            {
+                postedFile.SaveAs(SitePath.GetAxillaryBookAbsPath(axillaryBookViewModel.ImgName));
+            }
+
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -122,73 +75,28 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.AxillaryBookUpdateAccess)]
         [CheckModelValidation]
-        [CheckImageValidatioNotRequired("Picture", 1024)]
+        [CheckImageValidatioNotRequired("img", 1024)]
         public IHttpActionResult Update(AxillaryBookViewModel axillaryBookViewModel)
         {
-            var files = HttpContext.Current.Request.Files;
-            var postedFile = files.Get("Picture");
-            if (postedFile != null)
+            var axillaryBook = _axillaryBookService.GetById(axillaryBookViewModel.Id);
+            if (axillaryBook == null)
+                return NotFound();
+
+            string oldImgName = axillaryBook.ImgName;
+            var postedFile = HttpContext.Current.Request.Files.Get("img");
+
+            if (postedFile != null && postedFile.ContentLength > 0)
             {
-                MessageResult message = new MessageResult();
-                bool upload = false;
-                Guid g = Guid.NewGuid();
-                string strextension = System.IO.Path.GetExtension(postedFile.FileName).Substring(1);
-                string strPictureName = g.ToString();
-                string strFullPictureName = string.Format("{0}.{1}", strPictureName, strextension);
-                string strPhysicalPathName = strFullPictureName.GetAxillaryBookImagePhysicalPath();
-                axillaryBookViewModel.ImgPath = strPhysicalPathName;
-                //axillaryBookViewModel.HasImage = true;
-                var axillary = _axillaryBookService.GetById(axillaryBookViewModel.Id);
-                message = _axillaryBookService.Update(axillaryBookViewModel);
-                if (message.MessageType == MessageType.Success)
-                {
-                    //if (axillary.HasImage)
-                    //{
-                    //    if (System.IO.File.Exists(axillary.ImgPath))
-                    //    {
-                    //        try
-                    //        {
-                    //            System.IO.File.Delete(axillary.ImgPath);
-                    //        }
-                    //        catch (Exception)
-                    //        {
-
-                    //            throw;
-                    //        }
-                    //    }
-                    //}
-                    try
-                    {
-                        postedFile.SaveAs(strPhysicalPathName);
-                        upload = true;
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                    if (upload)
-                    {
-                        return Ok(new MessageResultApi
-                        {
-                            Message = message.FaMessage,
-                            MessageType = message.MessageType
-                        });
-                    }
-                    else
-                    {
-                        message.FaMessage += "ولی عکس کتاب آپلود نشد.";
-                        message.MessageType = MessageType.Error;
-                        return Ok(new MessageResultApi
-                        {
-                            Message = message.FaMessage,
-                            MessageType = message.MessageType
-                        });
-                    }
-
-                }
+                axillaryBookViewModel.ImgName = string.IsNullOrEmpty(oldImgName) ?
+                    $"{Guid.NewGuid()}{Path.GetExtension(postedFile.FileName)}" :
+                    $"{Path.GetFileNameWithoutExtension(oldImgName)}{Path.GetExtension(postedFile.FileName)}";
             }
 
             var msgRes = _axillaryBookService.Update(axillaryBookViewModel);
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBookViewModel.ImgName))
+            {
+                postedFile.SaveAs(SitePath.GetAxillaryBookAbsPath(axillaryBookViewModel.ImgName)); // update image if exist
+            }
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,
@@ -200,25 +108,16 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.AxillaryBookDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-
-            var axillary = _axillaryBookService.GetById(id);
-            //if (axillary.HasImage)
-            //{
-            //    if (System.IO.File.Exists(axillary.ImgPath))
-            //    {
-            //        try
-            //        {
-            //            System.IO.File.Delete(axillary.ImgPath);
-            //        }
-            //        catch (Exception)
-            //        {
-
-            //            throw;
-            //        }
-            //    }
-            //}
+            var axillaryBook = _axillaryBookService.GetById(id);
+            if (axillaryBook == null)
+                return NotFound();
 
             var msgRes = _axillaryBookService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBook.ImgName))
+            {
+                File.Delete(SitePath.GetAxillaryBookAbsPath(axillaryBook.ImgName));
+            }
+
             return Ok(new MessageResultApi
             {
                 Message = msgRes.FaMessage,

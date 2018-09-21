@@ -42,7 +42,8 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         public int LookupId_PrintType { get; set; }
 
 
-        [Display(Name = "نام عکس کتاب")]
+        public string ImgName{ get; set; }
+
         public string ImgPath { get; set; }
 
 

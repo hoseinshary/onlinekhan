@@ -105,6 +105,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Util\SitePath.cs" />
     <Content Include="%40CodeTemplates\WebApiControllerGenerator1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -133,7 +134,6 @@
     <Compile Include="Controllers\GradeController.cs" />
     <Compile Include="Controllers\GradeLevelController.cs" />
     <Compile Include="Controllers\LessonController.cs" />
-    <Compile Include="Extentions\PhysicalAddress.cs" />
     <Compile Include="Extentions\RequestExtention.cs" />
     <Compile Include="FilterAttribute\CheckImageValidation.cs" />
     <Compile Include="FilterAttribute\CheckImageValidatioNotRequired.cs" />
@@ -162,7 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Content\Question\" />
-    <Folder Include="Content\AxillaryBooksPictures\" />
+    <Folder Include="Content\AxillaryBook\" />
     <Folder Include="Content\Question\" />
     <Folder Include="Models\" />
   </ItemGroup>

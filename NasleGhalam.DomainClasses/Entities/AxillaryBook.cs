@@ -20,7 +20,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Font { get; set; }
 
-        public string ImgPath { get; set; }
+        public string ImgName { get; set; }
 
         public int Price { get; set; }
 

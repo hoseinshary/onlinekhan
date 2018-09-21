@@ -89,6 +89,10 @@
     <Compile Include="Migrations\201809210628224_RemoveHasImageFromAxillaryBook.Designer.cs">
       <DependentUpon>201809210628224_RemoveHasImageFromAxillaryBook.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809210708404_RenameImgPathFromAxillaryBook.cs" />
+    <Compile Include="Migrations\201809210708404_RenameImgPathFromAxillaryBook.Designer.cs">
+      <DependentUpon>201809210708404_RenameImgPathFromAxillaryBook.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -136,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809210628224_RemoveHasImageFromAxillaryBook.resx">
       <DependentUpon>201809210628224_RemoveHasImageFromAxillaryBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809210708404_RenameImgPathFromAxillaryBook.resx">
+      <DependentUpon>201809210708404_RenameImgPathFromAxillaryBook.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

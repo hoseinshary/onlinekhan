@@ -28,14 +28,16 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_axillaryBookService.GetAll());
+            var imgUrlPath = Url.Content(SitePath.AxillaryBookRelPath);
+            return Ok(_axillaryBookService.GetAll(imgUrlPath));
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var axillaryBook = _axillaryBookService.GetById(id);
+            var imgUrlPath = Url.Content(SitePath.AxillaryBookRelPath);
+            var axillaryBook = _axillaryBookService.GetById(id, imgUrlPath);
             if (axillaryBook == null)
             {
                 return NotFound();

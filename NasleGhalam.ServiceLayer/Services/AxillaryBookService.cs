@@ -27,8 +27,9 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن  کتاب کمک درسی با آی دی
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="imgUrlPath"></param>
         /// <returns></returns>
-        public AxillaryBookViewModel GetById(int id)
+        public AxillaryBookViewModel GetById(int id, string imgUrlPath = "")
         {
             return _axillaryBooks
                 .Where(current => current.Id == id)
@@ -47,7 +48,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     LookupId_PaperType = current.LookupId_PaperType,
                     LookupId_PrintType = current.LookupId_PrintType,
                     PublisherId = current.PublisherId,
-                    ImgName = current.ImgName
+                    ImgName = current.ImgName,
+                    ImgPath = string.IsNullOrEmpty(current.ImgName) ? "" : imgUrlPath + current.ImgName
                 }).FirstOrDefault();
         }
 
@@ -56,7 +58,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کتاب کمک درسی ها
         /// </summary>
         /// <returns></returns>
-        public IList<AxillaryBookViewModel> GetAll()
+        public IList<AxillaryBookViewModel> GetAll(string imgUrlPath)
         {
             return _axillaryBooks.Select(current => new AxillaryBookViewModel()
             {
@@ -73,7 +75,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 PaperTypeName = current.Lookup_PaperType.Name,
                 PrintTypeName = current.Lookup_PrintType.Name,
                 PublisherName = current.Publisher.Name,
-                ImgPath = current.ImgName
+                ImgPath = string.IsNullOrEmpty(current.ImgName) ? "" : imgUrlPath + current.ImgName
             }).ToList();
         }
 

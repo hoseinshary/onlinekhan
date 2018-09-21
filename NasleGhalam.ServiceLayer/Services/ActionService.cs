@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
-using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Action;
 using Action = NasleGhalam.DomainClasses.Entities.Action;

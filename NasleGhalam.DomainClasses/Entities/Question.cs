@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NasleGhalam.Common;
 
 namespace NasleGhalam.DomainClasses.Entities
 {

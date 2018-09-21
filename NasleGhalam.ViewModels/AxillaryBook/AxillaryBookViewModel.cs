@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Security.AccessControl;
 using NasleGhalam.ViewModels._Attributes;
 using NasleGhalam.ViewModels._MediaFormatter;
 
@@ -15,6 +14,7 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Name { get; set; }
+
 
         [Display(Name = "سال انتشار")]
         [Range(1350, 1500, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
@@ -41,7 +41,6 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_PrintType { get; set; }
 
-        public string PrintTypeName { get; set; }
 
         [Display(Name = "نام عکس کتاب")]
         public string ImgPath { get; set; }
@@ -61,17 +60,10 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_BookType { get; set; }
 
-        public string BookTypeName { get; set; }
 
         [Display(Name = "نوع کاغذ")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_PaperType { get; set; }
-
-        public string PaperTypeName { get; set; }
-
-
-        [Display(Name = "؟تصویر دارد")]
-        public bool HasImage { get; set; }
 
 
         [Display(Name = "توضیحات")]
@@ -85,5 +77,11 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         public int PublisherId { get; set; }
 
         public string PublisherName { get; set; }
+
+        public string BookTypeName { get; set; }
+
+        public string PaperTypeName { get; set; }
+
+        public string PrintTypeName { get; set; }
     }
 }

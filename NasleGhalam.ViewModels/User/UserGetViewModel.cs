@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using NasleGhalam.ViewModels._Attributes;
-
-namespace NasleGhalam.ViewModels.User
+﻿namespace NasleGhalam.ViewModels.User
 {
     public class UserGetViewModel
     {

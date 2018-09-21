@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace NasleGhalam.ViewModels.EducationGroup
+﻿namespace NasleGhalam.ViewModels.EducationGroup
 {
     public class EducationGroupIsCheckedViewModel
     {

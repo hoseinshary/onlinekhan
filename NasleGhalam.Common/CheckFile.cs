@@ -4,7 +4,7 @@ using System.Web;
 
 namespace NasleGhalam.Common
 {
-    public class CheckFile
+    public class CheckFile // todo: hossein, use filter attribute
     {
         
         public static string UploadPictureFile(HttpPostedFileBase file , decimal fileSize)

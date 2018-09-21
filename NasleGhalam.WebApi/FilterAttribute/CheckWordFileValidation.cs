@@ -47,17 +47,16 @@ namespace NasleGhalam.WebApi.FilterAttribute
                         });
             }
 
-            if (postedFile.ContentLength > (_WordFileSize * 1024))
+            if (postedFile.ContentLength > (_WordFileSize * 1024)) // todo: check length necessary?
             {
                 actionContext.Response = actionContext
                     .ControllerContext.Request
                     .CreateResponse(HttpStatusCode.OK,
                         new MessageResultApi
                         {
-                            Message = $" عکس ارسالی باید کمتر از {_WordFileSize} کیلو بایت باشد.",
+                            Message = $" عکس ارسالی باید کمتر از {_WordFileSize} کیلو بایت باشد.", // todo: عکس :D
                             MessageType = MessageType.Error
                         });
-                return;
             }
         }
     }

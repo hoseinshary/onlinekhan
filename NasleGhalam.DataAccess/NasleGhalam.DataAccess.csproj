@@ -85,6 +85,10 @@
     <Compile Include="Migrations\201809111829150_OneToOneStudentAndUser.Designer.cs">
       <DependentUpon>201809111829150_OneToOneStudentAndUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809210628224_RemoveHasImageFromAxillaryBook.cs" />
+    <Compile Include="Migrations\201809210628224_RemoveHasImageFromAxillaryBook.Designer.cs">
+      <DependentUpon>201809210628224_RemoveHasImageFromAxillaryBook.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -129,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809111829150_OneToOneStudentAndUser.resx">
       <DependentUpon>201809111829150_OneToOneStudentAndUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809210628224_RemoveHasImageFromAxillaryBook.resx">
+      <DependentUpon>201809210628224_RemoveHasImageFromAxillaryBook.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

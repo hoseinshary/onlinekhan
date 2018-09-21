@@ -140,7 +140,7 @@
     <Compile Include="FilterAttribute\CheckModelValidation.cs" />
     <Compile Include="FilterAttribute\CheckUserAccess.cs" />
     <Compile Include="FilterAttribute\CheckWordFileValidation.cs" />
-    <Compile Include="FilterAttribute\CheckٍExcelFileValidation.cs" />
+    <Compile Include="FilterAttribute\CheckExcelFileValidation.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -272,7 +272,7 @@ namespace NasleGhalam.Common
         }
 
         #region ### utility ###
-        public static bool isExistInArray<T>(IEnumerable<T> list , T key )
+        public static bool isExistInArray<T>(IEnumerable<T> list , T key ) // todo: hossein, remove
         {
             foreach(T temp in list)
             {

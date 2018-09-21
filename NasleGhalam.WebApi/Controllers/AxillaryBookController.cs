@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Web;
-using System.Web.Hosting;
 using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.AxillaryBook;
 using NasleGhalam.WebApi.Extentions;
-using NasleGhalam.Common;
 
 
 namespace NasleGhalam.WebApi.Controllers

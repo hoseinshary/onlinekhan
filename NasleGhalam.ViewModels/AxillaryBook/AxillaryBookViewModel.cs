@@ -7,9 +7,9 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 {
     public class AxillaryBookViewModel : IMultiPartMediaTypeFormatter
     {
-       
+
         public int Id { get; set; }
-                                                                
+
 
         [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
@@ -85,9 +85,5 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         public int PublisherId { get; set; }
 
         public string PublisherName { get; set; }
-
-        public byte[] Picture { get; set; }
-
-        public int[] asd { get; set; }
-}
+    }
 }

@@ -37,8 +37,8 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         public string Font { get; set; }
 
 
-        [Display(Name = "چاپ")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [Display(Name = "نوع چاپ")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_PrintType { get; set; }
 
 
@@ -57,13 +57,13 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         public int OriginalPrice { get; set; }
 
 
-        [Display(Name = "قطع")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [Display(Name = "نوع قطع")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_BookType { get; set; }
 
 
         [Display(Name = "نوع کاغذ")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_PaperType { get; set; }
 
 
@@ -74,7 +74,7 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 
 
         [Display(Name = "انتشارات")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int PublisherId { get; set; }
 
         public string PublisherName { get; set; }

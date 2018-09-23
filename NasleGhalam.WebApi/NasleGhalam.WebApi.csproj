@@ -120,7 +120,6 @@
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\PublisherController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
-    <Compile Include="Controllers\RatioController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TopicController.cs" />

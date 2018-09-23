@@ -37,7 +37,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Name = current.Name,
-                    isSource = current.isSource
+                    IsSource = current.isSource
                 }).FirstOrDefault();
         }
 
@@ -52,7 +52,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 Id = current.Id,
                 Name = current.Name,
-                isSource = current.isSource
+                IsSource = current.isSource
             }).ToList();
         }
 

@@ -20,6 +20,9 @@ namespace NasleGhalam.ViewModels.Exam
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         public DateTime Date { get; set; }
 
+
+        public string PDate { get; set; }
+
         [Display(Name = "گروه آموزشی")]
         public string EducationGroupName { get; set; }
 

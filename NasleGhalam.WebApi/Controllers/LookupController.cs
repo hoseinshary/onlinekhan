@@ -21,63 +21,63 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AnswerCreateAccess ,ActionBits.AnswerReadAccess , ActionBits.AnswerUpdateAccess)] 
-        public IHttpActionResult GetAllAnswerType() // todo: correct name
+        public IHttpActionResult GetAllAnswerTypeDdl() // todo: correct name
         {
             return Ok(_lookupService.GetAllDdlByName("AnswerType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess , ActionBits.AxillaryBookReadAccess , ActionBits.AxillaryBookUpdateAccess)]
-        public IHttpActionResult GetAllPaperType()
+        public IHttpActionResult GetAllPaperTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("PaperType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
-        public IHttpActionResult GetAllPrintType()
+        public IHttpActionResult GetAllPrintTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("PrintType"));
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
-        public IHttpActionResult GetAllBookType()
+        public IHttpActionResult GetAllBookTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("BookType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess,ActionBits.QuestionReadAccess , ActionBits.QuestionUpdateAccess)]
-        public IHttpActionResult GetAllQuestionType()
+        public IHttpActionResult GetAllQuestionTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("QuestionType"));
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.TopicCreateAccess,ActionBits.TopicReadAccess,ActionBits.TopicUpdateAccess)]
-        public IHttpActionResult GetAllTopicHardnessType()
+        public IHttpActionResult GetAllTopicHardnessTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("TopicHardnessType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
-        public IHttpActionResult GetAllQuestionHardnessType()
+        public IHttpActionResult GetAllQuestionHardnessTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("QuestionHardnessType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess, ActionBits.TopicCreateAccess, ActionBits.TopicReadAccess, ActionBits.TopicUpdateAccess)]
-        public IHttpActionResult GetAllAreaType()
+        public IHttpActionResult GetAllAreaTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("AreaType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
-        public IHttpActionResult GetAllRepeatnessType()
+        public IHttpActionResult GetAllRepeatnessTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("RepeatnessType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
-        public IHttpActionResult GetAllAuthorType()
+        public IHttpActionResult GetAllAuthorTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("AuthorType"));
         }

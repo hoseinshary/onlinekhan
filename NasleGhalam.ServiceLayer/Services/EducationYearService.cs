@@ -63,15 +63,22 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Create(EducationYearViewModel educationYearViewModel)
         {
-            if (educationYearViewModel.IsActiveYear == true)
+            var transacion = _uow.BeginTransaction();
+            if (educationYearViewModel.IsActiveYear)
             {
-                _educationYears.ToList().ForEach(current => current.IsActiveYear = false);
+                _uow.ExecuteSqlCommand("update EducationYears set IsActiveYear = 0");
+                //_educationYears.ToList().ForEach(current => current.IsActiveYear = false);
             }
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _educationYears.Add(educationYear);
 
             MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationYear.Id;
+            if (msgRes.MessageType == MessageType.Success)
+                transacion.Commit();
+            else
+                transacion.Rollback();
+
             return msgRes;
 
         }
@@ -83,15 +90,21 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Update(EducationYearViewModel educationYearViewModel)
         {
-            // todo: check isActiveYear
-            if(educationYearViewModel.IsActiveYear == true)
+            var transacion = _uow.BeginTransaction();
+            if(educationYearViewModel.IsActiveYear)
             {
-                _educationYears.ToList<EducationYear>().ForEach(current => current.IsActiveYear = false);
+                _uow.ExecuteSqlCommand("update EducationYears set IsActiveYear = 0");
             }
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _uow.MarkAsChanged(educationYear);
+            var result = _uow.CommitChanges(CrudType.Update, Title);
 
-            return _uow.CommitChanges(CrudType.Update, Title);
+            if (result.MessageType == MessageType.Success)
+                transacion.Commit();
+            else
+                transacion.Rollback();
+
+            return result;
         }
 
 

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
-using NasleGhalam.ViewModels._MediaFormatter;
+﻿using NasleGhalam.ViewModels._MediaFormatter;
 
 namespace NasleGhalam.ViewModels.Question
 {

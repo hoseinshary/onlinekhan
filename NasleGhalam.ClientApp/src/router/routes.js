@@ -70,6 +70,10 @@ export default [
       {
         path: '/educationYear',
         component: () => import('views/educationYear')
+      },
+      {
+        path: '/axillaryBook',
+        component: () => import('views/axillaryBook')
       }
     ]
   },

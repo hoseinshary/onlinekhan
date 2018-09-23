@@ -6,12 +6,9 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
-using System.Security.Permissions;
 using System.Threading.Tasks;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels._MediaFormatter;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace NasleGhalam.WebApi.ModelBinderAndFormatter
 {
@@ -20,8 +17,6 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
         public MultiPartMediaTypeFormatter()
         {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("multipart/form-data"));
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
-           
         }
 
         public override bool CanReadType(Type type)
@@ -38,7 +33,7 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
             IFormatterLogger formatterLogger)
         {
             MultipartMemoryStreamProvider provider = await content.ReadAsMultipartAsync();
-            IEnumerable<HttpContent> formData = provider.Contents.AsEnumerable();
+            var formData = provider.Contents.AsEnumerable();
 
             var modelInstance = Activator.CreateInstance(type);
             IEnumerable<PropertyInfo> properties = type.GetProperties();
@@ -54,70 +49,40 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
                     .Replace("\"", "").Replace("\'", "")
                     .Trim() == propName);
 
+                if (data == null) continue;
 
-                if (data != null)
+                if (data.Headers.ContentType != null)
                 {
-                    if (data.Headers.ContentType != null)
+                    using (var fileStream = await data.ReadAsStreamAsync())
                     {
-                        using (var fileStream = await data.ReadAsStreamAsync())
+                        using (MemoryStream ms = new MemoryStream())
                         {
-                            using (MemoryStream ms = new MemoryStream())
-                            {
-                                fileStream.CopyTo(ms);
-                                prop.SetValue(modelInstance, ms.ToArray());
-                            }
+                            fileStream.CopyTo(ms);
+                            prop.SetValue(modelInstance, ms.ToArray());
                         }
+                    }
+                }
+                else
+                {
+                    var rawVal = await data.ReadAsStringAsync();
+                    object val = Convert.ChangeType(rawVal, propType);
+
+                    if (propType == typeof(DateTime))
+                    {
+                        prop.SetValue(modelInstance, rawVal.ToMiladiDateTime());
+                    }
+                    else if (propType == typeof(string))
+                    {
+                        prop.SetValue(modelInstance, rawVal.Trim());
                     }
                     else
                     {
-                        var rawVal = await data.ReadAsStringAsync();
-                        var qw = JsonConvert.SerializeObject(rawVal);
-
-                        // var x = JObject.Parse(json);
-                        JsonReader read = new JsonTextReader(new StringReader(qw));
-                        CustomJsonFormatter s = new CustomJsonFormatter();
-                        JsonSerializer ser = new JsonSerializer();
-                        s.ReadJson(read, type, null,ser);
-                        
-
-                        if (rawVal.StartsWith("[") && rawVal.EndsWith("]"))
-                        {
-                            rawVal = rawVal.Substring(1, rawVal.Length - 3);
-                            var rawvals = rawVal.Split(',');
-                            List<int> temp = new List<int>();
-                            foreach (var val in rawvals)
-                            {
-                                temp.Add(Convert.ToInt32(val));
-                            }
-                            prop.SetValue(modelInstance, temp);
-                        }
-                        else
-                        {
-                            object val = Convert.ChangeType(rawVal, propType);
-
-                            if (propType == typeof(DateTime))
-                            {
-                                prop.SetValue(modelInstance, rawVal.ToMiladiDateTime());
-                            }
-                            else if (propType == typeof(string))
-                            {
-                                prop.SetValue(modelInstance, rawVal.Trim());
-                            }
-                            else
-                            {
-                                prop.SetValue(modelInstance, val);
-                            }
-                        }
+                        prop.SetValue(modelInstance, val);
                     }
                 }
             }
 
             return modelInstance;
-        }
-
-        class something
-        {
-            public List<string> strings;
         }
     }
 }

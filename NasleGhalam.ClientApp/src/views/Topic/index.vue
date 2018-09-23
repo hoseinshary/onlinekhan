@@ -107,8 +107,8 @@ export default {
       fillEduGrpDdlStore: 'fillDdlStore'
     }),
     ...mapActions('lookupStore', [
-      'getLookupTopicHardnessType',
-      'getLookupTopicAreaType'
+      'fillTopicHardnessTypeDdlStore',
+      'fillTopicAreaTypeDdlStore'
     ]),
     ...mapActions('lessonStore', { fillLessonDdlStore: 'fillDdlStore' }),
     showModalCreate() {
@@ -172,8 +172,8 @@ export default {
   created() {
     this.fillEduGrpDdlStore();
     this.fillLessonDdlStore();
-    this.getLookupTopicHardnessType();
-    this.getLookupTopicAreaType();
+    this.fillTopicHardnessTypeDdlStore(); // todo: better go to create and update modal
+    this.fillTopicAreaTypeDdlStore(); // todo: better go to create and update modal
   },
   watch: {
     selectedNodeId: function(val) {

@@ -1,42 +1,43 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { TOPIC_URL as baseUrl } from 'utilities/site-config';
+import { AXILLARY_BOOK_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in topicGridData by id
+ * find index of object in axillaryBookGridData by id
  * @param {Number} id
  */
 function getIndexById(id) {
-  return store.state.topicGridData.findIndex(o => o.Id == id);
+  return store.state.axillaryBookGridData.findIndex(o => o.Id == id);
 }
 
 const store = {
   namespaced: true,
   state: {
-    modelName: 'مبحث',
+    modelName: 'عنوان',
     isOpenModalCreate: false,
-    isOpenModalDetails: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    topicObj: {
+    axillaryBookObj: {
       Id: 0,
-      Title: '',
-      ExamStock: 0,
-      ExamStockSystem: 0,
-      Importance: 0,
-      IsExamSource: false,
-      LookupId_HardnessType: 0,
-      LookupId_AreaType: 0,
-      IsActive: false,
-      ParentTopicId: 0,
-      EducationGroup_LessonId: 0,
-      EducationGroupId: 0
+      Name: '',
+      PublishYear: 0,
+      Author: '',
+      Isbn: '',
+      Font: '',
+      LookupId_PrintType: 0,
+      Price: 0,
+      OriginalPrice: 0,
+      LookupId_BookType: 0,
+      LookupId_PaperType: 0,
+      Description: '',
+      PublisherId: 0,
+      PublisherName: '',
+      BookTypeName: '',
+      PaperTypeName: '',
+      PrintTypeName: ''
     },
-    moduleDdl: [],
-    treeLst: [],
-    controllerDdl: [],
-    topicGridData: [],
-    topicDdl: [],
+    axillaryBookGridData: [],
+    axillaryBookDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
@@ -45,37 +46,37 @@ const store = {
   },
   mutations: {
     /**
-     * insert new topicObj to topicGridData
+     * insert new axillaryBookObj to axillaryBookGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.topicObj);
+      let createdObj = util.cloneObject(state.axillaryBookObj);
       createdObj.Id = id;
-      state.topicGridData.push(createdObj);
+      state.axillaryBookGridData.push(createdObj);
     },
 
     /**
-     * update topicObj of topicGridData
+     * update axillaryBookObj of axillaryBookGridData
      */
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(state.topicObj, state.topicGridData[index]);
+      util.mapObject(state.axillaryBookObj, state.axillaryBookGridData[index]);
     },
 
     /**
-     * delete from topicGridData
+     * delete from axillaryBookGridData
      */
     delete(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.topicGridData.splice(index, 1);
+      state.axillaryBookGridData.splice(index, 1);
     },
 
     /**
-     * rest value of topicObj
+     * rest value of axillaryBookObj
      */
     reset(state, $v) {
-      util.clearObject(state.topicObj);
+      util.clearObject(state.axillaryBookObj);
       if ($v) {
         $v.$reset();
       }
@@ -88,19 +89,9 @@ const store = {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.topicObj);
+        util.mapObject(response.data, state.axillaryBookObj);
       });
     },
-
-    /**
-     * get data by id
-     */
-    GetAllTreeStore({ state }, id) {
-      return axios.get(`${baseUrl}/GetAllTree/${id}`).then(response => {
-        state.treeLst = response.data;
-      });
-    },
-    change({ state }, id) {},
 
     /**
      * fill grid data
@@ -110,15 +101,12 @@ const store = {
       if (state.gridModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.topicGridData = response.data;
+          state.axillaryBookGridData = response.data;
           state.gridModelChanged = false;
         });
       }
     },
-    setLessonIdQndParentIdStore({ state }, obj) {
-      state.topicObj.EducationGroup_LessonId = obj.lessonid;
-      state.topicObj.ParentTopicId = obj.parentId;
-    },
+
     /**
      * fill dropDwonList
      */
@@ -127,7 +115,7 @@ const store = {
       if (state.ddlModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-          state.topicDdl = response.data;
+          state.axillaryBookDdl = response.data;
           state.ddlModelChanged = false;
         });
       }
@@ -138,8 +126,8 @@ const store = {
      */
     validateFormStore({ dispatch }, vm) {
       // check instance validation
-      vm.$v.topicObj.$touch();
-      if (vm.$v.topicObj.$error) {
+      vm.$v.axillaryBookObj.$touch();
+      if (vm.$v.axillaryBookObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
@@ -178,27 +166,28 @@ const store = {
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.topicObj).then(response => {
-          let data = response.data;
+        axios
+          .post(`${baseUrl}/Create`, state.axillaryBookObj)
+          .then(response => {
+            let data = response.data;
 
-          if (data.MessageType == 1) {
-            dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
-            commit('insert', data.Id);
-            dispatch('modelChangedStore');
-            dispatch('resetCreateStore');
-            dispatch('toggleModalCreateStore', !closeModal);
-          }
+            if (data.MessageType == 1) {
+              commit('insert', data.Id);
+              dispatch('modelChangedStore');
+              dispatch('resetCreateStore');
+              dispatch('toggleModalCreateStore', !closeModal);
+            }
 
-          dispatch(
-            'notify',
-            {
-              body: data.Message,
-              type: data.MessageType,
-              vm: vm
-            },
-            { root: true }
-          );
-        });
+            dispatch(
+              'notify',
+              {
+                body: data.Message,
+                type: data.MessageType,
+                vm: vm
+              },
+              { root: true }
+            );
+          });
       });
     },
 
@@ -214,9 +203,6 @@ const store = {
     /**
      * toggle modal edit
      */
-    toggleModalDetailsStore({ state }, isOpen) {
-      state.isOpenModalDetails = isOpen;
-    },
     toggleModalEditStore({ state }, isOpen) {
       state.isOpenModalEdit = isOpen;
     },
@@ -235,27 +221,28 @@ const store = {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.topicObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.topicObj).then(response => {
-          let data = response.data;
-          if (data.MessageType == 1) {
-            dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
-            commit('update');
-            dispatch('modelChangedStore');
-            dispatch('resetEditStore');
-            dispatch('toggleModalEditStore', false);
-          }
+        state.axillaryBookObj.Id = state.selectedId;
+        axios
+          .post(`${baseUrl}/Update`, state.axillaryBookObj)
+          .then(response => {
+            let data = response.data;
+            if (data.MessageType == 1) {
+              commit('update');
+              dispatch('modelChangedStore');
+              dispatch('resetEditStore');
+              dispatch('toggleModalEditStore', false);
+            }
 
-          dispatch(
-            'notify',
-            {
-              body: data.Message,
-              type: data.MessageType,
-              vm: vm
-            },
-            { root: true }
-          );
-        });
+            dispatch(
+              'notify',
+              {
+                body: data.Message,
+                type: data.MessageType,
+                vm: vm
+              },
+              { root: true }
+            );
+          });
       });
     },
 
@@ -303,7 +290,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.topicObj.Name;
+      return state.axillaryBookObj.Name;
     }
   }
 };

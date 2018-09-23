@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Lesson;
-using NasleGhalam.ViewModels.EducationGroup_Lesson;
-using NasleGhalam.ViewModels.Ratio;
-using NasleGhalam.ViewModels.EducationSubGroup;
-using NasleGhalam.ViewModels.EducationGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {

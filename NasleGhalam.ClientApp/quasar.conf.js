@@ -91,7 +91,7 @@ module.exports = function(ctx) {
         'QToggle',
         'QPagination',
         'QTooltip',
-        // 'Loading',
+        'QUploader',
         'QSpinnerIos',
         'QPopover',
         'QCollapsible',

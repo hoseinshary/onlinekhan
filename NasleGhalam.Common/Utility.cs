@@ -8,6 +8,19 @@ namespace NasleGhalam.Common
     public static class Utility
     {
         #region ### DateTime ###
+
+        public static string ToPersianDate(this DateTime mDateTime)
+        {
+            PersianCalendar pc = new PersianCalendar();
+
+            DateTime mDate = DateTime.Parse(mDateTime.ToString());
+            int day = pc.GetDayOfMonth(mDate);
+            int month = pc.GetMonth(mDate);
+            int year = pc.GetYear(mDate);
+
+            return String.Format("{0:0000}/{1:00}/{2:00}", year, month, day);
+        }
+
         public static string ToPersianDateTime(this DateTime mDateTime)
         {
             PersianCalendar pc = new PersianCalendar();

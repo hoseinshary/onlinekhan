@@ -71,9 +71,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 Isbn = current.Isbn,
                 Price = current.Price,
                 OriginalPrice = current.OriginalPrice,
-                BookTypeName = current.Lookup_BookType.Name,
-                PaperTypeName = current.Lookup_PaperType.Name,
-                PrintTypeName = current.Lookup_PrintType.Name,
+                BookTypeName = current.Lookup_BookType.Value,
+                PaperTypeName = current.Lookup_PaperType.Value,
+                PrintTypeName = current.Lookup_PrintType.Value,
                 PublisherName = current.Publisher.Name,
                 ImgPath = string.IsNullOrEmpty(current.ImgName) ? "" : imgUrlPath + current.ImgName
             }).ToList();

@@ -1,5 +1,5 @@
 <template>
-<section class="col-md-8">
+  <section class="col-xs-12 q-px-md">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
@@ -24,7 +24,7 @@
       </div>
     </my-panel>
 
-  <!-- modals -->
+    <!-- modals -->
     <modal-create v-if="pageAccess.canCreate"></modal-create>
     <modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
@@ -44,48 +44,55 @@ export default {
    * data
    */
   data() {
-    var pageAccess = this.$util.initAccess('/axillaryBook'); 
+    var pageAccess = this.$util.initAccess('/axillaryBook');
     return {
       pageAccess,
       axillaryBookGridColumn: [
         {
-      title:'Name',
-      data:'Name'
-    },{
-      title:'PublishYear',
-      data:'PublishYear'
-    },{
-      title:'Author',
-      data:'Author'
-    },{
-      title:'Isbn',
-      data:'Isbn'
-    },{
-      title:'Font',
-      data:'Font'
-    },{
-      title:'LookupId_PrintType',
-      data:'LookupId_PrintType'
-    },{
-      title:'Price',
-      data:'Price'
-    },{
-      title:'OriginalPrice',
-      data:'OriginalPrice'
-    },{
-      title:'LookupId_BookType',
-      data:'LookupId_BookType'
-    },{
-      title:'LookupId_PaperType',
-      data:'LookupId_PaperType'
-    },{
-      title:'Description',
-      data:'Description'
-    },{
-      title:'PublisherId',
-      data:'PublisherId'
-    }
-        ,{
+          title: 'نام',
+          data: 'Name'
+        },
+        {
+          title: 'سال انتشار',
+          data: 'PublishYear'
+        },
+        {
+          title: 'نویسنده',
+          data: 'Author'
+        },
+        {
+          title: 'شابک',
+          data: 'Isbn'
+        },
+        {
+          title: 'قلم',
+          data: 'Font'
+        },
+        {
+          title: 'قیمت',
+          data: 'Price'
+        },
+        {
+          title: 'قیمت پشت جلد',
+          data: 'OriginalPrice'
+        },
+        {
+          title: 'انتشارات',
+          data: 'PublisherName'
+        },
+        {
+          title: 'نوع چاپ',
+          data: 'PrintTypeName'
+        },
+        {
+          title: 'نوع قطع',
+          data: 'BookTypeName'
+        },
+        {
+          title: 'نوع کاغذ',
+          data: 'PaperTypeName'
+        },
+        {
           title: 'عملیات',
           data: 'Id',
           searchable: false,

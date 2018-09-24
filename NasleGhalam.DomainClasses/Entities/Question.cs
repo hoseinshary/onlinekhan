@@ -57,7 +57,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public User User { get; set; }
 
-
+        public bool IsActive { get; set; }
 
 
 

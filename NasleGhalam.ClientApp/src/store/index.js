@@ -17,6 +17,7 @@ import examStore from './examStore';
 import publisherStore from './publisherStore';
 import tagStore from './tagStore';
 import educationYearStore from './educationYearStore';
+import questionStore from './questionStore';
 
 Vue.use(Vuex);
 
@@ -78,7 +79,8 @@ const store = new Vuex.Store({
     examStore,
     publisherStore,
     tagStore,
-    educationYearStore
+    educationYearStore,
+    questionStore
   }
 });
 

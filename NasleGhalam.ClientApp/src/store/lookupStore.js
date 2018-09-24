@@ -14,7 +14,11 @@ const store = {
   namespaced: true,
   state: {
     lookupTopicHardnessType: [],
-    lookupTopicAreaType: []
+    lookupTopicAreaType: [],
+    lookupQuestionType: [],
+    lookupQuestionHardnessType: [],
+    lookupQuestionRepeatnessType: [],
+    lookupQuestionAuthorType: []
   },
   mutations: {},
   actions: {
@@ -26,6 +30,26 @@ const store = {
     getLookupTopicAreaType({ state }, id) {
       axios.get(`${baseUrl}/GetAllAreaType/`).then(response => {
         state.lookupTopicAreaType = response.data;
+      });
+    },
+    getLookupQuestionType({ state }, id) {
+      axios.get(`${baseUrl}/GetAllQuestionType/`).then(response => {
+        state.lookupQuestionType = response.data;
+      });
+    },
+    getLookupQuestionHardnessType({ state }, id) {
+      axios.get(`${baseUrl}/GetAllQuestionHardnessType/`).then(response => {
+        state.lookupQuestionHardnessType = response.data;
+      });
+    },
+    getLookupQuestionRepeatnessType({ state }, id) {
+      axios.get(`${baseUrl}/GetAllRepeatnessType/`).then(response => {
+        state.lookupQuestionRepeatnessType = response.data;
+      });
+    },
+    getLookupQuestionAuthorType({ state }, id) {
+      axios.get(`${baseUrl}/GetAllAuthorType/`).then(response => {
+        state.lookupQuestionAuthorType = response.data;
       });
     }
   },

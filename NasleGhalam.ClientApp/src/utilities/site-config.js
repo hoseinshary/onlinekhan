@@ -16,6 +16,7 @@ const EXAM_URL = '/api/exam';
 const PUBLISHER_URL = '/api/publisher';
 const TAG_URL = '/api/tag';
 const EDUCATION_YEAR_URL = '/api/educationYear';
+const QUESTION_URL =  '/api/question';
 
 export {
   API_URL,
@@ -34,5 +35,6 @@ export {
   EXAM_URL,
   PUBLISHER_URL,
   TAG_URL,
-  EDUCATION_YEAR_URL
+  EDUCATION_YEAR_URL,
+  QUESTION_URL
 };

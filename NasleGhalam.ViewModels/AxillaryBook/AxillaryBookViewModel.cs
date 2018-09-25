@@ -67,7 +67,6 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 
 
         [Display(Name = "توضیحات")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(300, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Description { get; set; }
 

@@ -26,15 +26,15 @@ namespace NasleGhalam.WebApi
 
 
             // config formatter
-            //config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
-            config.Formatters.Add(new MultiPartMediaTypeFormatter());
+            config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
+            //config.Formatters.Add(new MultiPartMediaTypeFormatter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new CustomJsonFormatter());
-            //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
             //------------------------------
 
 
             // config binder
             config.BindParameter(typeof(string), new StringModelBinder());
+            config.BindParameter(typeof(int), new IntegerModelBinder());
             config.BindParameter(typeof(DateTime), new DateTimeModelBinder());
             //------------------------------
 

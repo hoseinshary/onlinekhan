@@ -54,6 +54,16 @@ const clearArray = function(arr) {
 };
 
 /**
+ * turn an object into query string parameters
+ * @param {Object} obj
+ */
+const toParam = function(obj) {
+  return Object.keys(obj)
+    .map(key => key + '=' + obj[key])
+    .join('&');
+};
+
+/**
  * check type value be string
  * @param {*} value
  */
@@ -167,6 +177,7 @@ export default {
   cloneObject,
   clearObject,
   clearArray,
+  toParam,
   isString,
   isNumber,
   isArray,

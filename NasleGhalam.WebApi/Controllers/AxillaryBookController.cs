@@ -50,7 +50,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.AxillaryBookCreateAccess)]
         [CheckModelValidation]
         [CheckImageValidatioNotRequired("img", 1024)]
-        public IHttpActionResult Create(AxillaryBookViewModel axillaryBookViewModel)
+        public IHttpActionResult Create([FromUri]AxillaryBookViewModel axillaryBookViewModel)
         {
             var postedFile = HttpContext.Current.Request.Files.Get("img");
             if (postedFile != null && postedFile.ContentLength > 0)

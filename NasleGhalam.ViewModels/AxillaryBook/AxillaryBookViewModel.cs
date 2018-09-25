@@ -4,9 +4,8 @@ using NasleGhalam.ViewModels._MediaFormatter;
 
 namespace NasleGhalam.ViewModels.AxillaryBook
 {
-    public class AxillaryBookViewModel : IMultiPartMediaTypeFormatter
+    public class AxillaryBookViewModel
     {
-
         public int Id { get; set; }
 
 

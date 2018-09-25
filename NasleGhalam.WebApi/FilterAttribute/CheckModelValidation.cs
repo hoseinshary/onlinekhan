@@ -13,7 +13,6 @@ namespace NasleGhalam.WebApi.FilterAttribute
         {
             if (actionContext.ModelState.IsValid) return;
 
-
             StringBuilder sb = new StringBuilder();
             foreach (var modelState in actionContext.ModelState)
             {

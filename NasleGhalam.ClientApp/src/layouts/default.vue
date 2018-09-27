@@ -3,7 +3,7 @@
     <q-layout-header>
       <q-toolbar :glossy="$q.theme === 'mat'"
                  text-color="white"
-                 color="cyan-10">
+                 color="amber-10">
         <q-btn flat
                dense
                round
@@ -60,51 +60,11 @@
                      :overlay="true"
                      side="left"
                      :mini="miniState"
-                     @click.capture="drawerClick">
-      <!-- :content-class="$q.theme === 'mat' ? 'bg-cyan-14' : null" -->
-
-      <!-- <router-link to="/grade">
-        <q-item>
-          <q-item-side icon="receipt" />
-          <q-item-main label="دوره تحصیلی" />
-        </q-item>
-      </router-link>
-      <router-link to="/gradeLevel">
-        <q-item>
-          <q-item-side icon="reorder" />
-          <q-item-main label="پایه تحصیلی" />
-        </q-item>
-      </router-link>
-      <router-link to="/province">
-        <q-item>
-          <q-item-side icon="reorder" />
-          <q-item-main label="استان" />
-        </q-item>
-      </router-link>
-      <router-link to="/city">
-        <q-item>
-          <q-item-side icon="reorder" />
-          <q-item-main label="شهر" />
-        </q-item>
-      </router-link>
-      <router-link to="/lesson">
-        <q-item>
-          <q-item-side icon="reorder" />
-          <q-item-main label="درس" />
-        </q-item>
-      </router-link>
-      <router-link to="/role">
-        <q-item>
-          <q-item-side icon="reorder" />
-          <q-item-main label="نقش" />
-        </q-item>
-      </router-link>
-      <router-link to="/user">
-        <q-item>
-          <q-item-side icon="reorder" />
-          <q-item-main label="کاربر" />
-        </q-item>
-      </router-link> -->
+                     @click.capture="drawerClick"
+                     bg-color = "amber-14"
+                     >
+                     
+     
       <q-list no-border
               link
               inset-delimiter>
@@ -117,22 +77,13 @@
                        :key="item.EnName"
                        :to="item.EnName">
             <q-item>
-              <q-item-side icon='map' />
+              <!-- <q-item-side icon='map' /> -->
               <!--"item.Icon" />-->
               <q-item-main :label="item.FaName"
                            sublabel="" />
             </q-item>
           </router-link>
         </q-collapsible>
-        <!-- <router-link v-for="menu in subMenuList"
-                     :key="menu.EnName"
-                     :to="menu.EnName">
-          <q-item>
-            <q-item-side :icon="menu.Icon" />
-            <q-item-main :label="menu.FaName"
-                         sublabel="" />
-          </q-item>
-        </router-link> -->
       </q-list>
     </q-layout-drawer>
 
@@ -195,7 +146,7 @@ export default {
 
 <style>
 .q-item.q-item-division.relative-position:hover {
-  background: #0c8799;
+  background: #719ee6;
 }
 aside a {
   text-decoration: none;
@@ -205,14 +156,14 @@ aside a {
   overflow-x: hidden;
 }
 .q-layout-drawer.q-layout-drawer.q-layout-transition.q-layout-drawer-left.scroll.fixed {
-  background: #294f70;
+  background: #f87352;
   /* background: #1f4037;  fallback for old browsers */
   /* background: -webkit-linear-gradient(to right, #99f2c8, #1f4037);  Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
+  /* background: linear-gradient(
     to top,
     #136b6fad,
     #00585c
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  ); W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   width: 220px;
   color: white;

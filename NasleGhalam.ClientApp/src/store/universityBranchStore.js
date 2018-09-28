@@ -1,71 +1,75 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { EDUCATION_SUB_GROUP_URL as baseUrl } from 'utilities/site-config';
+import { UNIVERSITY_BRANCH_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in educationSubGroupGridData by id
+ * find index of object in universityBranchGridData by id
  * @param {Number} id
  */
 function getIndexById(id) {
-  return store.state.educationSubGroupGridData.findIndex(o => o.Id == id);
+  return store.state.universityBranchGridData.findIndex(o => o.Id == id);
 }
 
 const store = {
   namespaced: true,
   state: {
-    modelName: 'زیر گروه آموزشی',
+    modelName: 'رشته دانشگاهی',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    educationSubGroupObj: {
+    universityBranchObj: {
       Id: 0,
       Name: '',
-      EducationGroupId: 0,
-      EducationGroupName: ''
+      Balance: 0,
+      EducationSubGroupId: 0,
+      EducationSubGroupName: ''
     },
-    educationSubGroupGridData: [],
-    educationSubGroupDdl: [],
+    universityBranchIndexObj: {
+      EducationGroupId: undefined
+    },
+    universityBranchGridData: [],
+    universityBranchDdl: [],
     selectedId: 0,
-    gridModelChanged: true,
+    ddlModelChanged: true,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new educationSubGroupObj to educationSubGroupGridData
+     * insert new universityBranchObj to universityBranchGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.educationSubGroupObj);
+      let createdObj = util.cloneObject(state.universityBranchObj);
       createdObj.Id = id;
-      state.educationSubGroupGridData.push(createdObj);
+      state.universityBranchGridData.push(createdObj);
     },
 
     /**
-     * update educationSubGroupObj of educationSubGroupGridData
+     * update universityBranchObj of universityBranchGridData
      */
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
       util.mapObject(
-        state.educationSubGroupObj,
-        state.educationSubGroupGridData[index]
+        state.universityBranchObj,
+        state.universityBranchGridData[index]
       );
     },
 
     /**
-     * delete from educationSubGroupGridData
+     * delete from universityBranchGridData
      */
     delete(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.educationSubGroupGridData.splice(index, 1);
+      state.universityBranchGridData.splice(index, 1);
     },
 
     /**
-     * rest value of educationSubGroupObj
+     * rest value of universityBranchObj
      */
     reset(state, $v) {
-      util.clearObject(state.educationSubGroupObj);
+      util.clearObject(state.universityBranchObj);
       if ($v) {
         $v.$reset();
       }
@@ -78,38 +82,34 @@ const store = {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.educationSubGroupObj);
+        util.mapObject(response.data, state.universityBranchObj);
       });
     },
 
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      // fill grid if modelChanged
-      if (state.gridModelChanged) {
-        // get data
-        axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.educationSubGroupGridData = response.data;
-          state.gridModelChanged = false;
+    fillGridStore({ state }, educationGroupId) {
+      // get data
+      axios
+        .get(`${baseUrl}/GetAllByEducationGroupId/${educationGroupId}`)
+        .then(response => {
+          state.universityBranchGridData = response.data;
         });
-      }
     },
 
     /**
      * fill dropDwonList
      */
-    fillEducationSubGroupByEducationGroupIdDdlStore(
-      { state },
-      educationGroupId
-    ) {
+    fillDdlStore({ state }) {
       // fill grid if modelChanged
-      // get data
-      axios
-        .get(`${baseUrl}/GetAllByEducationGroupIdDdl/${educationGroupId}`)
-        .then(response => {
-          state.educationSubGroupDdl = response.data;
+      if (state.ddlModelChanged) {
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.universityBranchDdl = response.data;
+          state.ddlModelChanged = false;
         });
+      }
     },
 
     /**
@@ -117,8 +117,8 @@ const store = {
      */
     validateFormStore({ dispatch }, vm) {
       // check instance validation
-      vm.$v.educationSubGroupObj.$touch();
-      if (vm.$v.educationSubGroupObj.$error) {
+      vm.$v.universityBranchObj.$touch();
+      if (vm.$v.universityBranchObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
@@ -130,7 +130,7 @@ const store = {
      * model changed
      */
     modelChangedStore({ state }) {
-      state.gridModelChanged = true;
+      state.ddlModelChanged = true;
     },
 
     //### create section ###
@@ -157,7 +157,7 @@ const store = {
         if (!isValid) return;
 
         axios
-          .post(`${baseUrl}/Create`, state.educationSubGroupObj)
+          .post(`${baseUrl}/Create`, state.universityBranchObj)
           .then(response => {
             let data = response.data;
 
@@ -211,9 +211,9 @@ const store = {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.educationSubGroupObj.Id = state.selectedId;
+        state.universityBranchObj.Id = state.selectedId;
         axios
-          .post(`${baseUrl}/Update`, state.educationSubGroupObj)
+          .post(`${baseUrl}/Update`, state.universityBranchObj)
           .then(response => {
             let data = response.data;
             if (data.MessageType == 1) {
@@ -280,7 +280,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.educationSubGroupObj.Name;
+      return state.universityBranchObj.Name;
     }
   }
 };

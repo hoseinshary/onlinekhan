@@ -60,11 +60,8 @@
                      :overlay="true"
                      side="left"
                      :mini="miniState"
-                     @click.capture="drawerClick"
-                     bg-color = "amber-14"
-                     >
-                     
-     
+                     @click.capture="drawerClick">
+
       <q-list no-border
               link
               inset-delimiter>
@@ -87,10 +84,9 @@
       </q-list>
     </q-layout-drawer>
 
-    <q-page-container>
-
-      <br />
-      <div class="row justify-center">
+    <q-page-container class="">
+      <br>
+      <div class="row justify-center q-mt-lg">
         <transition name="transitions"
                     enter-active-class="animated bounceInDown"
                     leave-active-class="animated bounceOutUp"

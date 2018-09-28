@@ -34,14 +34,14 @@ export default {
       'resetCreateStore'
     ]),
     ...mapActions('educationGroupStore', {
-      fillEducationSubGroupDdlStore: 'fillDdlStore'
+      fillEducationGroupDdlStore: 'fillDdlStore'
     }),
-    submit() {
+    submit(closeModal) {
       this.educationSubGroupObj.EducationGroupName = this.$refs.educationSubGroupId.getSelectedLabel();
-      this.submitCreateStore();
+      this.submitCreateStore(closeModal);
     },
     modalOpen() {
-      this.fillEducationSubGroupDdlStore();
+      this.fillEducationGroupDdlStore();
     }
   },
   /**

@@ -1,5 +1,5 @@
-// const API_URL = 'http://localhost:63839';
-const API_URL = 'http://hoseinshary.ir';
+const API_URL = 'http://localhost:63839';
+// const API_URL = 'http://hoseinshary.ir';
 const GRADE_URL = '/api/grade';
 const GRADE_LEVEL_URL = '/api/gradeLevel';
 const CITY_URL = '/api/city';
@@ -17,6 +17,7 @@ const PUBLISHER_URL = '/api/publisher';
 const TAG_URL = '/api/tag';
 const EDUCATION_YEAR_URL = '/api/educationYear';
 const AXILLARY_BOOK_URL = '/api/axillaryBook';
+const UNIVERSITY_BRANCH_URL = '/api/universityBranch';
 
 export {
   API_URL,
@@ -36,5 +37,6 @@ export {
   PUBLISHER_URL,
   TAG_URL,
   EDUCATION_YEAR_URL,
-  AXILLARY_BOOK_URL
+  AXILLARY_BOOK_URL,
+  UNIVERSITY_BRANCH_URL
 };

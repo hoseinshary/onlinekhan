@@ -31,8 +31,8 @@ const store = {
     createVue: null,
     editVue: null,
     accessObj: {
-      ModuleId: 0,
-      ControllerId: 0
+      ModuleId: undefined,
+      ControllerId: undefined
     },
     moduleDdl: [],
     controllerDdl: [],
@@ -304,7 +304,7 @@ const store = {
         .get(`${baseUrl}/GetAllControllerByModuleIdDdl/${id}`)
         .then(response => {
           state.controllerDdl = response.data;
-          state.accessObj.ControllerId = 0;
+          state.accessObj.ControllerId = undefined;
         });
     },
 

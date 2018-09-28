@@ -18,6 +18,7 @@ import publisherStore from './publisherStore';
 import tagStore from './tagStore';
 import educationYearStore from './educationYearStore';
 import axillaryBookStore from './axillaryBookStore';
+import universityBranchStore from './universityBranchStore';
 
 Vue.use(Vuex);
 
@@ -80,7 +81,8 @@ const store = new Vuex.Store({
     publisherStore,
     tagStore,
     educationYearStore,
-    axillaryBookStore
+    axillaryBookStore,
+    universityBranchStore
   }
 });
 

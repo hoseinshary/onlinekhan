@@ -44,7 +44,10 @@ export default {
       type: Boolean,
       required: true
     },
-    center: Boolean,
+    center: {
+      type: Boolean,
+      default: false
+    },
     closeOnClick: Boolean,
     closeOnEsc: {
       type: Boolean,
@@ -140,7 +143,7 @@ export default {
 
 .bs-modal {
   position: fixed;
-  top: 0;
+  top: 50px;
   right: 0;
   bottom: 0;
   left: 0;

@@ -12,7 +12,7 @@
                      @change="fillGridStore($event)"
                      clearable />
 
-          <div class="col-md-3 col-sm-4">
+          <div class="col-md-5">
             <my-btn-create v-if="pageAccess.canCreate"
                            :label="`ایجاد (${modelName}) جدید`"
                            @click="showModalCreate" />

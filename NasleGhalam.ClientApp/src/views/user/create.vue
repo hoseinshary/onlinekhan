@@ -83,9 +83,6 @@ export default {
    * methods
    */
   methods: {
-    fn(a) {
-      console.log(a);
-    },
     ...mapActions('userStore', [
       'toggleModalCreateStore',
       'createVueStore',

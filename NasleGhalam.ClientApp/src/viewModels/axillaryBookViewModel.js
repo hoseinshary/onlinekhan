@@ -56,8 +56,7 @@ export default {
     },
     Description: {
       displayName: displayName('توضیحات'),
-      maxLength: maxLength(300),
-      required
+      maxLength: maxLength(300)
     },
     PublisherId: {
       displayName: displayName('انتشارات')

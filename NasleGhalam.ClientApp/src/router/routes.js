@@ -78,6 +78,10 @@ export default [
       {
         path: '/universityBranch',
         component: () => import('views/universityBranch')
+      },
+      {
+        path: '/question',
+        component: () => import('views/question')
       }
     ]
   },

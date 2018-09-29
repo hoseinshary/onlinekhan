@@ -35,6 +35,7 @@ import modalDelete from 'components/modals/my-modal-delete';
 import myField from 'components/form-components/my-field';
 import myInput from 'components/form-components/my-input';
 import mySelect from 'components/form-components/my-select';
+import myUploader from 'components/form-components/my-uploader';
 
 /* util js file */
 import util from 'utilities/util';
@@ -73,6 +74,7 @@ export default ({ app, router, Vue }) => {
   Vue.component('my-field', myField);
   Vue.component('my-input', myInput);
   Vue.component('my-select', mySelect);
+  Vue.component('my-uploader', myUploader);
 
   // register this.util
   Object.defineProperty(Vue.prototype, '$util', {

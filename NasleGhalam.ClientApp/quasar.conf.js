@@ -97,7 +97,8 @@ module.exports = function(ctx) {
         'QPopover',
         'QCollapsible',
         'QSlideTransition',
-        'QTree'
+        'QTree',
+        'QUploader'
       ],
       directives: ['Ripple', 'CloseOverlay'],
       // Quasar plugins

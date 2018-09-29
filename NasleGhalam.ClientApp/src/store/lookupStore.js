@@ -42,9 +42,11 @@ const store = {
       }
     },
     fillPaperTypeDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllPaperTypeDdl/`).then(response => {
-        state.lookupPaperTypeDdl = response.data;
-      });
+      if (!state.lookupPaperTypeDdl.length) {
+        axios.get(`${baseUrl}/GetAllPaperTypeDdl/`).then(response => {
+          state.lookupPaperTypeDdl = response.data;
+        });
+      }
     },
     getLookupQuestionType({ state }, id) {
       axios.get(`${baseUrl}/GetAllQuestionTypeDdl/`).then(response => {
@@ -65,13 +67,6 @@ const store = {
       axios.get(`${baseUrl}/GetAllAuthorTypeDdl/`).then(response => {
         state.lookupQuestionAuthorType = response.data;
       });
-    }
-  }
-      if (!state.lookupPaperTypeDdl.length) {
-        axios.get(`${baseUrl}/GetAllPaperTypeDdl/`).then(response => {
-          state.lookupPaperTypeDdl = response.data;
-        });
-      }
     }
   }
 };

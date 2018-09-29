@@ -83,7 +83,7 @@ const store = new Vuex.Store({
     tagStore,
     educationYearStore,
     axillaryBookStore,
-    universityBranchStore
+    universityBranchStore,
     questionStore,
     axillaryBookStore
   }

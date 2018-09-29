@@ -1,5 +1,4 @@
-﻿using NasleGhalam.Common;
-using NasleGhalam.ViewModels._Attributes;
+﻿using NasleGhalam.ViewModels._Attributes;
 using System.ComponentModel.DataAnnotations;
 
 

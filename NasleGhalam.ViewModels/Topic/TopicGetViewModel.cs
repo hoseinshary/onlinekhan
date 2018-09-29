@@ -1,7 +1,4 @@
-﻿using NasleGhalam.Common;
-
-
-namespace NasleGhalam.ViewModels.Topic
+﻿namespace NasleGhalam.ViewModels.Topic
 {
     public class TopicGetViewModel
     {

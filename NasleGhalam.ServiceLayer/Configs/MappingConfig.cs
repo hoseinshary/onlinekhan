@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using NasleGhalam.DomainClasses.Entities;
+﻿using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Lesson;
-using NasleGhalam.ViewModels.EducationGroup;
 using NasleGhalam.ViewModels.Role;
 using NasleGhalam.ViewModels.User;
 using NasleGhalam.ViewModels.Grade;

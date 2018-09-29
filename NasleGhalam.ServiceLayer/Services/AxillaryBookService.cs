@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -28,8 +27,9 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن  کتاب کمک درسی با آی دی
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="imgUrlPath"></param>
         /// <returns></returns>
-        public AxillaryBookViewModel GetById(int id)
+        public AxillaryBookViewModel GetById(int id, string imgUrlPath = "")
         {
             return _axillaryBooks
                 .Where(current => current.Id == id)
@@ -45,16 +45,11 @@ namespace NasleGhalam.ServiceLayer.Services
                     Price = current.Price,
                     OriginalPrice = current.OriginalPrice,
                     LookupId_BookType = current.LookupId_BookType,
-                    BookTypeName = current.Lookup_BookType.Name,
                     LookupId_PaperType = current.LookupId_PaperType,
-                    PaperTypeName = current.Lookup_PaperType.Name,
                     LookupId_PrintType = current.LookupId_PrintType,
-                    PrintTypeName = current.Lookup_PrintType.Name,
                     PublisherId = current.PublisherId,
-                    PublisherName = current.Publisher.Name,
-                    HasImage = current.HasImage,
-                    ImgPath = current.ImgPath
-                    
+                    ImgName = current.ImgName,
+                    ImgPath = string.IsNullOrEmpty(current.ImgName) ? "" : imgUrlPath + current.ImgName
                 }).FirstOrDefault();
         }
 
@@ -63,7 +58,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کتاب کمک درسی ها
         /// </summary>
         /// <returns></returns>
-        public IList<AxillaryBookViewModel> GetAll()
+        public IList<AxillaryBookViewModel> GetAll(string imgUrlPath)
         {
             return _axillaryBooks.Select(current => new AxillaryBookViewModel()
             {
@@ -76,12 +71,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 Isbn = current.Isbn,
                 Price = current.Price,
                 OriginalPrice = current.OriginalPrice,
-                LookupId_BookType = current.LookupId_BookType,
-                LookupId_PaperType = current.LookupId_PaperType,
-                LookupId_PrintType = current.LookupId_PrintType,
-                PublisherId = current.PublisherId,
-                HasImage = current.HasImage,
-                ImgPath = current.ImgPath
+                BookTypeName = current.Lookup_BookType.Value,
+                PaperTypeName = current.Lookup_PaperType.Value,
+                PrintTypeName = current.Lookup_PrintType.Value,
+                PublisherName = current.Publisher.Name,
+                ImgPath = string.IsNullOrEmpty(current.ImgName) ? "" : imgUrlPath + current.ImgName
             }).ToList();
         }
 
@@ -110,17 +104,16 @@ namespace NasleGhalam.ServiceLayer.Services
         public MessageResult Update(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
-            if (!axillaryBook.HasImage)
+            if (string.IsNullOrEmpty(axillaryBook.ImgName))
             {
-                _uow.ExcludeFieldsFromUpdate(axillaryBook, x => x.ImgPath, x => x.HasImage);
+                _uow.ExcludeFieldsFromUpdate(axillaryBook, x => x.ImgName);
             }
             else
             {
                 _uow.MarkAsChanged(axillaryBook);
             }
-            
-            return _uow.CommitChanges(CrudType.Update, Title);
 
+            return _uow.CommitChanges(CrudType.Update, Title);
         }
 
 

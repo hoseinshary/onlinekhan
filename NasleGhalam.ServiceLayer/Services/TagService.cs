@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -37,7 +36,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Name = current.Name,
-                    isSource = current.isSource
+                    IsSource = current.isSource
                 }).FirstOrDefault();
         }
 
@@ -52,7 +51,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 Id = current.Id,
                 Name = current.Name,
-                isSource = current.isSource
+                IsSource = current.isSource
             }).ToList();
         }
 

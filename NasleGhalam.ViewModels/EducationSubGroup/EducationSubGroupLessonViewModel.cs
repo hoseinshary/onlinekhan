@@ -1,5 +1,4 @@
-﻿using NasleGhalam.ViewModels._Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace NasleGhalam.ViewModels.EducationSubGroup
 {

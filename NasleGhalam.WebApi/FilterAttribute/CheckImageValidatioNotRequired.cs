@@ -8,7 +8,7 @@ using NasleGhalam.Common;
 
 namespace NasleGhalam.WebApi.FilterAttribute
 {
-    public class CheckImageValidatioNotRequired : ActionFilterAttribute
+    public class CheckImageValidatioNotRequired : ActionFilterAttribute // todo: why not required?
     {
         private readonly string _imageName;
         private readonly int _imageSize;
@@ -38,7 +38,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                
             }
 
-            if (postedFile != null && postedFile.ContentLength > 0)
+            if (postedFile != null && postedFile.ContentLength > 0) // todo: hashem, posted file is not null
             {
                 string fileExt = Path.GetExtension(postedFile.FileName);
                 if (!Utility.CheckImageExtention(fileExt))

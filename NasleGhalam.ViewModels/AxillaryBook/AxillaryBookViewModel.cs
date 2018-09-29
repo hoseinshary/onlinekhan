@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Security.AccessControl;
 using NasleGhalam.ViewModels._Attributes;
 using NasleGhalam.ViewModels._MediaFormatter;
 
@@ -7,14 +6,15 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 {
     public class AxillaryBookViewModel : IMultiPartMediaTypeFormatter
     {
-       
+
         public int Id { get; set; }
-                                                                
+
 
         [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Name { get; set; }
+
 
         [Display(Name = "سال انتشار")]
         [Range(1350, 1500, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
@@ -37,13 +37,13 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         public string Font { get; set; }
 
 
-        [Display(Name = "چاپ")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [Display(Name = "نوع چاپ")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_PrintType { get; set; }
 
-        public string PrintTypeName { get; set; }
 
-        [Display(Name = "نام عکس کتاب")]
+        public string ImgName{ get; set; }
+
         public string ImgPath { get; set; }
 
 
@@ -57,21 +57,14 @@ namespace NasleGhalam.ViewModels.AxillaryBook
         public int OriginalPrice { get; set; }
 
 
-        [Display(Name = "قطع")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [Display(Name = "نوع قطع")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_BookType { get; set; }
 
-        public string BookTypeName { get; set; }
 
         [Display(Name = "نوع کاغذ")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_PaperType { get; set; }
-
-        public string PaperTypeName { get; set; }
-
-
-        [Display(Name = "؟تصویر دارد")]
-        public bool HasImage { get; set; }
 
 
         [Display(Name = "توضیحات")]
@@ -81,13 +74,15 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 
 
         [Display(Name = "انتشارات")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int PublisherId { get; set; }
 
         public string PublisherName { get; set; }
 
-        public byte[] Picture { get; set; }
+        public string BookTypeName { get; set; }
 
-        public int[] asd { get; set; }
-}
+        public string PaperTypeName { get; set; }
+
+        public string PrintTypeName { get; set; }
+    }
 }

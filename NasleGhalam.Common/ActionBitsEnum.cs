@@ -70,20 +70,25 @@
         ExamUpdateAccess = 48,
         ExamDeleteAccess = 49,
 
-        RatioReadAccess = 50,
-        RatioCreateAccess = 51,
-        RatioUpdateAccess = 52,
-        RatioDeleteAccess = 53,
+        //RatioReadAccess = 50,
+        //RatioCreateAccess = 51,
+        //RatioUpdateAccess = 52,
+        //RatioDeleteAccess = 53,
 
         QuestionCreateAccess = 54,
         QuestionUpdateAccess = 55,
         QuestionDeleteAccess = 56,
         QuestionReadAccess = 57,
 
-        LookupReadAccess = 58,
-        LookupCreateAccess = 59,
-        LookupUpdateAccess = 60,
-        LookupDeleteAccess = 61,
+        //LookupReadAccess = 58,
+        //LookupCreateAccess = 59,
+        //LookupUpdateAccess = 60,
+        //LookupDeleteAccess = 61,
+
+        AnswerReadAccess = 58,
+        AnswerCreateAccess = 59,
+        AnswerUpdateAccess = 60,
+        AnswerDeleteAccess = 61,
 
         PublisherReadAccess = 62,
         PublisherCreateAccess = 63,

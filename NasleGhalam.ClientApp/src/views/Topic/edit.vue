@@ -29,12 +29,12 @@
     </my-field>
 
     <my-select :model="$v.topicObj.LookupId_HardnessType"
-               :options="lookupTopicHardnessType"
+               :options="lookupTopicHardnessTypeDdl"
                class="col-md-6"
                clearable />
 
     <my-select :model="$v.topicObj.LookupId_AreaType"
-               :options="lookupTopicAreaType"
+               :options="lookupTopicAreaTypeDdl"
                class="col-md-6"
                clearable />
 
@@ -126,8 +126,8 @@ export default {
       isOpenModalEdit: 'isOpenModalEdit'
     }),
     ...mapState('lookupStore', [
-      'lookupTopicHardnessType',
-      'lookupTopicAreaType'
+      'lookupTopicHardnessTypeDdl',
+      'lookupTopicAreaTypeDdl'
     ])
   },
   /**

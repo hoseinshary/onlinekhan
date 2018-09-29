@@ -32,15 +32,16 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _exams
                 .Where(current => current.Id == id)
+                .AsEnumerable()
                 .Select(current => new ExamViewModel
                 {
                     Id = current.Id,
                     Name = current.Name,
-                    Date = current.Date,
+                    PDate = current.Date.ToPersianDate(),
                     EducationGroupId = current.EducationGroupId,
-                   // EducationGroupName = current.EducationGroup.Name,
+                    // EducationGroupName = current.EducationGroup.Name,
                     EducationYearId = current.EducationYearId,
-                   // EducationYearName = current.EducationYear.Name
+                    // EducationYearName = current.EducationYear.Name
                 }).FirstOrDefault();
         }
 
@@ -51,16 +52,38 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<ExamViewModel> GetAll()
         {
-            return _exams.Select(current => new ExamViewModel()
+            var a = _exams.Select(current => new
+            {
+                current.Id,
+                current.Name,
+                current.Date,
+                current.EducationGroupId,
+                EducationGroupName = current.EducationGroup.Name,
+                current.EducationYearId,
+                EducationYearName = current.EducationYear.Name
+            }).AsEnumerable();
+            a.First();
+            return _exams.Select(current => new
+            {
+                current.Id,
+                current.Name,
+                current.Date,
+                current.EducationGroupId,
+                EducationGroupName = current.EducationGroup.Name,
+                current.EducationYearId,
+                EducationYearName = current.EducationYear.Name
+            }).AsEnumerable()
+            .Select(current => new ExamViewModel()
             {
                 Id = current.Id,
                 Name = current.Name,
-                Date = current.Date,
+                PDate = current.Date.ToPersianDate(),
                 EducationGroupId = current.EducationGroupId,
-                EducationGroupName = current.EducationGroup.Name,
+                EducationGroupName = current.EducationGroupName,
                 EducationYearId = current.EducationYearId,
-                EducationYearName = current.EducationYear.Name
-            }).ToList();
+                EducationYearName = current.EducationYearName
+            })
+            .ToList();
         }
 
 

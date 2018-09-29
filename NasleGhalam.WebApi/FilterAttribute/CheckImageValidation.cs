@@ -16,7 +16,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
             _imageName = imageName;
         }
 
-        public override void OnActionExecuting(HttpActionContext actionContext)
+        public override void OnActionExecuting(HttpActionContext actionContext) // todo: hashem, length of file did'nt checked
         {
             HttpPostedFile postedFile = HttpContext.Current.Request.Files.Get(_imageName);
             if (postedFile == null || postedFile.ContentLength <= 0)

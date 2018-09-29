@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Lesson;
-using NasleGhalam.ViewModels.EducationGroup_Lesson;
-using NasleGhalam.ViewModels.Ratio;
-using NasleGhalam.ViewModels.EducationSubGroup;
-using NasleGhalam.ViewModels.EducationGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -55,14 +48,17 @@ namespace NasleGhalam.ServiceLayer.Services
         public LessonCreateAndUpdateViewModel GetById(int id)
         {
             
-            return _lessons.Where(less => less.Id == id)
+            return _lessons
+                .Where(less => less.Id == id)
                 .Select(less => new LessonCreateAndUpdateViewModel
                 {
                     Name = less.Name,
                     IsMain = less.IsMain,
                     Id = less.Id,
                     EducationGroups = 
-                    _educationGroups.Where(x=> x.EducationSubGroups.Any()).Select(edg => new EducationGroupLessonViewModel
+                    _educationGroups
+                    .Where(x=> x.EducationSubGroups.Any())
+                    .Select(edg => new EducationGroupLessonViewModel
                     {
                         IsChecked = edg.EducationGroups_Lessons.Any(edl => edl.LessonId == id),
                         EducationGroupId = edg.Id,

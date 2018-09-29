@@ -3,7 +3,6 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Publisher;
-using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -78,6 +77,13 @@ namespace NasleGhalam.WebApi.Controllers
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
             });
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess,
+             ActionBits.AxillaryBookUpdateAccess)]
+        public IHttpActionResult GetAllDdl()
+        {
+            return Ok(_publisherService.GetAllDdl());
         }
     }
 }

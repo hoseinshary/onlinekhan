@@ -128,6 +128,7 @@ const store = {
      * vlidate form
      */
     validateFormStore({ dispatch }, vm) {
+      debugger;
       // check instance validation
       vm.$v.questionObj.$touch();
       if (vm.$v.questionObj.$error) {
@@ -165,6 +166,12 @@ const store = {
      * submit create data
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
+      debugger;
+      state.questionObj.UserId = 0;
+      state.questionObj.Context = '1';
+      state.questionObj.InsertDateTime = '1';
+      state.questionObj.FileName = '1';
+
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;

@@ -8,15 +8,16 @@
                    @open="getAllDdls()">
     <my-select :model="$v.questionObj.EducationGroupId"
                :options="educationGroupDdl"
-               class="col-md-6"
+               class="col-md-4"
                filter />
 
     <my-select :model="$v.questionObj.EducationGroup_LessonId"
                :options="lessonFilteredDdl"
-               class="col-md-6"
+               class="col-md-4"
                filter
                @change="GetAllTreeStore($event);" />
     <my-uploader :model="$v.questionObj"
+    classes="col-sm-4"
                  myRef="file1"
                  @add="fileAdd($event,'questionObj','File',1,true)"
                  @remove="fileRemove('questionObj','File',true)"
@@ -24,67 +25,81 @@
                  label='فایل سوال' />
 
     <my-input :model="$v.questionObj.QuestionNumber"
-              class="col-md-6" />
+              class="col-md-4" />
 
-    <my-input :model="$v.questionObj.LookupId_QuestionType"
-              class="col-md-6" />
+ <my-select :model="$v.questionObj.LookupId_QuestionType"
+               :options="lookupQuestionType"
+               class="col-md-4"
+               filter />
+
 
     <my-input :model="$v.questionObj.QuestionPoint"
-              class="col-md-6" />
+              class="col-md-4" />
 
-    <my-input :model="$v.questionObj.LookupId_QuestionHardnessType"
-              class="col-md-6" />
+ <my-select :model="$v.questionObj.LookupId_QuestionHardnessType"
+               :options="lookupQuestionHardnessType"
+               class="col-md-4"
+               filter />
 
-    <my-input :model="$v.questionObj.LookupId_RepeatnessType"
-              class="col-md-6" />
+ <my-select :model="$v.questionObj.LookupId_RepeatnessType"
+               :options="lookupQuestionRepeatnessType"
+               class="col-md-4"
+               filter />
 
-    <my-field class="col-md-6"
+
+    <my-field class="col-md-4"
               :model="$v.questionObj.UseEvaluation">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
                  val="false"
-                 label="false" />
+                 label="خیر" />
         <q-radio v-model="data.obj.$model"
                  val="true"
-                 label="true" />
+                 label="بلی" />
       </template>
     </my-field>
 
-    <my-field class="col-md-6"
+    <my-field class="col-md-4"
               :model="$v.questionObj.IsStandard">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
                  val="false"
-                 label="false" />
+                 label="خیر" />
         <q-radio v-model="data.obj.$model"
                  val="true"
-                 label="true" />
+                 label="بلی" />
       </template>
     </my-field>
 
-    <my-input :model="$v.questionObj.LookupId_AuthorType"
-              class="col-md-6" />
+ <my-select :model="$v.questionObj.LookupId_AuthorType"
+               :options="lookupQuestionAuthorType"
+               class="col-md-4"
+               filter />
+
 
     <my-input :model="$v.questionObj.AuthorName"
-              class="col-md-6" />
+              class="col-md-4" />
 
-    <my-input :model="$v.questionObj.LookupId_AreaType"
-              class="col-md-6" />
+ <my-select :model="$v.questionObj.LookupId_AreaType"
+               :options="lookupTopicAreaTypeDdl"
+               class="col-md-4"
+               filter />
+  
 
     <my-input :model="$v.questionObj.ResponseSecond"
-              class="col-md-6" />
+              class="col-md-4" />
 
     <my-input :model="$v.questionObj.Description"
-              class="col-md-6" />
+              class="col-md-4" />
 
-    <my-input :model="$v.questionObj.FileName"
-              class="col-md-6" />
+    <!-- <my-input :model="$v.questionObj.FileName"
+              class="col-md-4" />
 
     <my-input :model="$v.questionObj.InsertDateTime"
-              class="col-md-6" />
+              class="col-md-4" />
 
     <my-input :model="$v.questionObj.UserId"
-              class="col-md-6" />
+              class="col-md-4" /> -->
 
   </my-modal-create>
 </template>
@@ -108,7 +123,7 @@ export default {
     ...mapActions('educationGroupStore', { fillEduGrpDdl: 'fillDdlStore' }),
     ...mapActions('lessonStore', { fillLessonDdl: 'fillDdlStore' }),
     ...mapActions('lookupStore', [
-      'getLookupTopicAreaType',
+      'fillTopicAreaTypeDdlStore',
       'getLookupQuestionType',
       'getLookupQuestionHardnessType',
       'getLookupQuestionRepeatnessType',
@@ -122,7 +137,7 @@ export default {
       this.getLookupQuestionHardnessType();
       this.getLookupQuestionRepeatnessType();
       this.getLookupQuestionAuthorType();
-      this.getLookupTopicAreaType();
+      this.fillTopicAreaTypeDdlStore();
     },
     fileAdd(chObj, model, prop, number, isRequired) {
       util.fileAdd(model, prop, number, isRequired, chObj, this);
@@ -143,7 +158,7 @@ export default {
     ...mapState('educationGroupStore', ['educationGroupDdl']),
     ...mapState('lessonStore', { lessonDdl: 'allObjDdl' }),
     ...mapState('lookupStore', [
-      'lookupTopicAreaType',
+      'lookupTopicAreaTypeDdl',
       'lookupQuestionType',
       'lookupQuestionHardnessType',
       'lookupQuestionRepeatnessType',

@@ -1,7 +1,7 @@
 <template>
   <my-modal-edit :title="modelName"
                  :show="isOpenModalEdit"
-                 size="xl"
+                 size="lg"
                  @confirm="submit"
                  @reset="resetEditStore"
                  @open="modalOpen"
@@ -24,7 +24,7 @@
                class="col-sm-6 col-md-4"
                clearable
                ref="cityId" />
-    <my-hr/>
+    <!-- <my-hr/> -->
 
     <my-input :model="$v.userObj.Name"
               class="col-sm-6 col-md-4" />

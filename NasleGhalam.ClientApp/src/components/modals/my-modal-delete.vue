@@ -44,7 +44,10 @@ export default {
   props: {
     title: String,
     recordName: String,
-    center: Boolean,
+    center: {
+      type: Boolean,
+      default: false
+    },
     show: {
       type: Boolean,
       required: true

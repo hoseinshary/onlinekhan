@@ -12,8 +12,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             this.HasIndex(x => x.Name).IsUnique().HasName("UK_AxillaryBook_Name");
             this.Property(x => x.Author).HasMaxLength(100).IsRequired();
             this.Property(x => x.Isbn).HasMaxLength(100).IsRequired();
-            this.Property(x => x.Description).HasMaxLength(300).IsRequired(); // todo: why required?
+            this.Property(x => x.Description).HasMaxLength(300);
             this.Property(x => x.ImgName).HasMaxLength(200);
+
 
             this.HasRequired(x => x.Publisher)
                 .WithMany(x => x.AxillaryBooks)

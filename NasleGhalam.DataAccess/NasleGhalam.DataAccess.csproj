@@ -93,6 +93,10 @@
     <Compile Include="Migrations\201809210708404_RenameImgPathFromAxillaryBook.Designer.cs">
       <DependentUpon>201809210708404_RenameImgPathFromAxillaryBook.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809241421031_changedAxillaryAndQuestion.cs" />
+    <Compile Include="Migrations\201809241421031_changedAxillaryAndQuestion.Designer.cs">
+      <DependentUpon>201809241421031_changedAxillaryAndQuestion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -143,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809210708404_RenameImgPathFromAxillaryBook.resx">
       <DependentUpon>201809210708404_RenameImgPathFromAxillaryBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809241421031_changedAxillaryAndQuestion.resx">
+      <DependentUpon>201809241421031_changedAxillaryAndQuestion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

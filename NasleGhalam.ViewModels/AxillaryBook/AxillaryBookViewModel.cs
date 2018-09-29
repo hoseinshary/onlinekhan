@@ -4,9 +4,8 @@ using NasleGhalam.ViewModels._MediaFormatter;
 
 namespace NasleGhalam.ViewModels.AxillaryBook
 {
-    public class AxillaryBookViewModel : IMultiPartMediaTypeFormatter
+    public class AxillaryBookViewModel
     {
-
         public int Id { get; set; }
 
 
@@ -68,7 +67,6 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 
 
         [Display(Name = "توضیحات")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(300, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Description { get; set; }
 

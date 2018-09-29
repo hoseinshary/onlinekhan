@@ -60,8 +60,7 @@ export default {
       required
     },
     PublisherId: {
-      displayName: displayName('انتشارات'),
-      requiredDdl: requiredDdl(0)
+      displayName: displayName('انتشارات')
     }
   }
 };

@@ -7,6 +7,18 @@
                    @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
 
+    <q-field class="col-sm-6">
+      <q-uploader url="url"
+                  float-label="تصویر"
+                  name="img"
+                  hide-upload-button
+                  auto-expand
+                  ref="fileUpload"
+                  extensions=".jpg,.jpeg,.png" />
+    </q-field>
+
+    <div class="col-12"></div>
+
     <my-input :model="$v.axillaryBookObj.Name"
               class="col-sm-6 col-md-4" />
 
@@ -42,23 +54,15 @@
 
     <my-select :model="$v.axillaryBookObj.LookupId_PrintType"
                :options="lookupPrintTypeDdl"
-               class="col-sm-6 col-md-4"
+               class="col-sm-6"
                clearable
                ref="LookupId_PrintType" />
 
     <my-select :model="$v.axillaryBookObj.PublisherId"
                :options="publisherDdl"
-               class="col-sm-6 col-md-4"
+               class="col-sm-6"
                clearable
                ref="PublisherId" />
-
-    <q-field class="col-sm-6 col-md-4">
-      <q-uploader url="url"
-                  float-label="تصویر"
-                  name="pic"
-                  hide-upload-button
-                  auto-expand/>
-    </q-field>
 
     <my-input :model="$v.axillaryBookObj.Description"
               type="textarea"

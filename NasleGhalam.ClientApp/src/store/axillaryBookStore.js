@@ -166,28 +166,38 @@ const store = {
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios
-          .post(`${baseUrl}/Create`, state.axillaryBookObj)
-          .then(response => {
-            let data = response.data;
+        var formData = new FormData();
+        var fileUpload = state.createVue.$refs.fileUpload;
+        //todo: check file ext
+        if (fileUpload && fileUpload.files) {
+          formData.append(fileUpload.name, fileUpload.files[0]);
+        }
 
-            if (data.MessageType == 1) {
-              commit('insert', data.Id);
-              dispatch('modelChangedStore');
-              dispatch('resetCreateStore');
-              dispatch('toggleModalCreateStore', !closeModal);
-            }
+        axios({
+          method: 'post',
+          url: `${baseUrl}/Create?${util.toParam(state.axillaryBookObj)}`,
+          data: formData,
+          config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        }).then(response => {
+          let data = response.data;
 
-            dispatch(
-              'notify',
-              {
-                body: data.Message,
-                type: data.MessageType,
-                vm: vm
-              },
-              { root: true }
-            );
-          });
+          if (data.MessageType == 1) {
+            commit('insert', data.Id);
+            dispatch('modelChangedStore');
+            dispatch('resetCreateStore');
+            dispatch('toggleModalCreateStore', !closeModal);
+          }
+
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            { root: true }
+          );
+        });
       });
     },
 
@@ -196,6 +206,11 @@ const store = {
      */
     resetCreateStore({ state, commit }) {
       commit('reset', state.createVue.$v);
+
+      var fileUpload = state.createVue.$refs.fileUpload;
+      if (fileUpload) {
+        fileUpload.reset();
+      }
     },
     //------------------------------------------------
 

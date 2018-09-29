@@ -26,7 +26,6 @@ const store = {
     educationSubGroupGridData: [],
     educationSubGroupDdl: [],
     selectedId: 0,
-    ddlModelChanged: true,
     gridModelChanged: true,
     createVue: null,
     editVue: null
@@ -100,15 +99,17 @@ const store = {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
+    fillEducationSubGroupByEducationGroupIdDdlStore(
+      { state },
+      educationGroupId
+    ) {
       // fill grid if modelChanged
-      if (state.ddlModelChanged) {
-        // get data
-        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+      // get data
+      axios
+        .get(`${baseUrl}/GetAllByEducationGroupIdDdl/${educationGroupId}`)
+        .then(response => {
           state.educationSubGroupDdl = response.data;
-          state.ddlModelChanged = false;
         });
-      }
     },
 
     /**
@@ -129,7 +130,6 @@ const store = {
      * model changed
      */
     modelChangedStore({ state }) {
-      state.ddlModelChanged = true;
       state.gridModelChanged = true;
     },
 

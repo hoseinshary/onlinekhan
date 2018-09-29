@@ -21,7 +21,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AnswerCreateAccess ,ActionBits.AnswerReadAccess , ActionBits.AnswerUpdateAccess)] 
-        public IHttpActionResult GetAllAnswerTypeDdl() // todo: correct name
+        public IHttpActionResult GetAllAnswerTypeDdl() 
         {
             return Ok(_lookupService.GetAllDdlByName("AnswerType"));
         }

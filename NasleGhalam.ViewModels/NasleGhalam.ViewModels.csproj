@@ -115,10 +115,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="%40CodeTemplates\ViewModelGenerator.tt">
+    <None Include="%40CodeTemplates\ViewModelGenerator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ViewModelGenerator.cs</LastGenOutput>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

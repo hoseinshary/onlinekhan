@@ -80,7 +80,9 @@ const store = new Vuex.Store({
     examStore,
     publisherStore,
     tagStore,
-    educationYearStore
+    educationYearStore,
+    questionStore,
+    axillaryBookStore
   }
 });
 

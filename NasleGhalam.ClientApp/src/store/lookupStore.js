@@ -8,7 +8,7 @@ const store = {
     lookupTopicAreaTypeDdl: [],
     lookupPrintTypeDdl: [],
     lookupBookTypeDdl: [],
-    lookupPaperTypeDdl: []
+    lookupPaperTypeDdl: [],
     lookupTopicHardnessType: [],
     lookupTopicAreaType: [],
     lookupQuestionType: [],
@@ -43,22 +43,22 @@ const store = {
       });
     },
     getLookupQuestionType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllQuestionType/`).then(response => {
+      axios.get(`${baseUrl}/GetAllQuestionTypeDdl/`).then(response => {
         state.lookupQuestionType = response.data;
       });
     },
     getLookupQuestionHardnessType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllQuestionHardnessType/`).then(response => {
+      axios.get(`${baseUrl}/GetAllQuestionHardnessTypeDdl/`).then(response => {
         state.lookupQuestionHardnessType = response.data;
       });
     },
     getLookupQuestionRepeatnessType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllRepeatnessType/`).then(response => {
+      axios.get(`${baseUrl}/GetAllRepeatnessTypeDdl/`).then(response => {
         state.lookupQuestionRepeatnessType = response.data;
       });
     },
     getLookupQuestionAuthorType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllAuthorType/`).then(response => {
+      axios.get(`${baseUrl}/GetAllAuthorTypeDdl/`).then(response => {
         state.lookupQuestionAuthorType = response.data;
       });
     }

@@ -137,7 +137,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     IsActive = current.IsActive,
                     IsExamSource = current.IsExamSource,
                     ParentTopicId = current.ParentTopicId,
-                    
+                    EducationGroupId = current.EducationGroup_Lesson.EducationGroupId
 
                 }).FirstOrDefault();
         }

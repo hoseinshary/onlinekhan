@@ -16,7 +16,7 @@ namespace NasleGhalam.ViewModels.Exam
         public string Name { get; set; }
 
         //TODO: complate data anotation
-        [Display(Name = "تاریخ امتحان")]
+        [Display(Name = "تاریخ کنکور")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         public DateTime Date { get; set; }
 

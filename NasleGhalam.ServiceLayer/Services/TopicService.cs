@@ -22,11 +22,11 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             _uow = uow;
             _topics = uow.Set<Topic>();
-            
+
         }
 
 
-        public TopicTreeViewModel children(int id )
+        public TopicTreeViewModel children(int id)
         {
 
             if (_topicsByEducationGroup_Lesson.All(x => x.ParentTopicId != id))
@@ -63,7 +63,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _topicsByEducationGroup_Lesson = _topics.Where(x => x.EducationGroup_LessonId == id).ToList();
 
             var topic = _topicsByEducationGroup_Lesson
-                .FirstOrDefault(x => x.ParentTopicId == null );
+                .FirstOrDefault(x => x.ParentTopicId == null);
 
             var result = new List<TopicTreeViewModel>();
             if (topic != null)
@@ -88,7 +88,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Id = current.Id,
                     Title = current.Title,
                     ParentTopicId = current.ParentTopicId,
-                    
+
 
                 }).ToList();
         }
@@ -100,7 +100,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="educationGroup_LessonId"></param>
         /// <param name="parentTopicId"></param>
         /// <returns></returns>
-        public IList<TopicGetNameViewModel> GetAllChild(int educationGroup_LessonId , int parentTopicId)
+        public IList<TopicGetNameViewModel> GetAllChild(int educationGroup_LessonId, int parentTopicId)
         {
             return _topics
                 .Where(current => current.ParentTopicId == parentTopicId && current.EducationGroup_LessonId == educationGroup_LessonId)
@@ -137,7 +137,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     IsActive = current.IsActive,
                     IsExamSource = current.IsExamSource,
                     ParentTopicId = current.ParentTopicId,
-                    
+
 
                 }).FirstOrDefault();
         }
@@ -173,7 +173,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResult Create(TopicCreateViewModel topicViewModel)
         {
-            if (topicViewModel.ParentTopicId != null )
+            if (topicViewModel.ParentTopicId != null)
             {
                 var topic = Mapper.Map<Topic>(topicViewModel);
                 _topics.Add(topic);
@@ -182,7 +182,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 msgRes.Id = topic.Id;
                 return msgRes;
             }
-            else if( topicViewModel.ParentTopicId == null && !_topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
+            else if (topicViewModel.ParentTopicId == null && !_topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
             {
                 var topic = Mapper.Map<Topic>(topicViewModel);
                 _topics.Add(topic);

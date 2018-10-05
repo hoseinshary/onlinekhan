@@ -54,7 +54,7 @@ export default {
         },
         {
           title: 'تاریخ امتحان',
-          data: 'Date'
+          data: 'PDate'
         },
         {
           title: 'گروه آموزشی',

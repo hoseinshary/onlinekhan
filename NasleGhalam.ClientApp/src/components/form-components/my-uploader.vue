@@ -1,5 +1,5 @@
 <template>
-  <div class="col-sm-6">
+  <div :class=classes>
     <div v-if="needValidation">
       <!-- <form-group :validator="model.Img"> -->
       <span v-if="hasSpan"
@@ -37,7 +37,8 @@ export default {
     label: { default: 'تصویر' },
     myRef: '',
     hasSpan: { default: false },
-    extensions: { default: '.gif,.jpg,.jpeg,.png,.bmp,.icn' }
+    extensions: { default: '.gif,.jpg,.jpeg,.png,.bmp,.icn' },
+    classes: { default:"col-sm-6"}
   },
   methods: {
     emitAdd: function() {

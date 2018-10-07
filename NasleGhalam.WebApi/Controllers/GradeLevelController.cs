@@ -45,7 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(GradeLevelViewModel gradeLevelViewModel)
         {
             var msgRes = _gradeLevelService.Create(gradeLevelViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
@@ -60,7 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(GradeLevelViewModel gradeLevelViewModel)
         {
             var msgRes = _gradeLevelService.Update(gradeLevelViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -72,7 +72,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _gradeLevelService.Delete(id);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType

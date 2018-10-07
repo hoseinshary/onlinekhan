@@ -26,7 +26,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                 actionContext.Response = actionContext
                     .ControllerContext.Request
                     .CreateResponse(HttpStatusCode.OK,
-                        new MessageResultApi
+                        new MessageResultClient
                         {
                             Message = $"وارد نشده است Excel فایل ",
                             MessageType = MessageType.Error
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                 actionContext.Response = actionContext
                     .ControllerContext.Request
                     .CreateResponse(HttpStatusCode.OK,
-                        new MessageResultApi
+                        new MessageResultClient
                         {
                             Message = $"صحیح نمی باشد Excel فرمت فایل",
                             MessageType = MessageType.Error
@@ -52,7 +52,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                 actionContext.Response = actionContext
                     .ControllerContext.Request
                     .CreateResponse(HttpStatusCode.OK,
-                        new MessageResultApi
+                        new MessageResultClient
                         {
                             Message = $" عکس ارسالی باید کمتر از {_ExcelFileSize} کیلو بایت باشد.",
                             MessageType = MessageType.Error

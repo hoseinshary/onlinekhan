@@ -60,7 +60,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(QuestionCreateViewModel questionViewModel , HttpPostedFile wordFile ,int userId)
+        public MessageResultServer Create(QuestionCreateViewModel questionViewModel , HttpPostedFile wordFile ,int userId)
         {
             //var str2 = wordFile.FileName;
             string strextension = System.IO.Path.GetExtension(wordFile.FileName).Substring(1);
@@ -117,7 +117,7 @@ namespace NasleGhalam.ServiceLayer.Services
             
             _questions.Add(question);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = question.Id;
             if (msgRes.MessageType == MessageType.Success)
             {
@@ -134,7 +134,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResult CreateMulti(QuestionTempViewModel questionViewModel, HttpPostedFile wordFile, HttpPostedFile excelFile)
+        public MessageResultServer CreateMulti(QuestionTempViewModel questionViewModel, HttpPostedFile wordFile, HttpPostedFile excelFile)
         {
             HttpPostedFileBase filebase = new HttpPostedFileWrapper(wordFile);
             string strextension = System.IO.Path.GetExtension(wordFile.FileName).Substring(1);
@@ -154,7 +154,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var question = Mapper.Map<Question>(questionViewModel);
             _questions.Add(question);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = question.Id;
             return msgRes;
         }
@@ -167,7 +167,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(QuestionCreateViewModel questionViewModel)
+        public MessageResultServer Update(QuestionCreateViewModel questionViewModel)
         {
             var question = Mapper.Map<Question>(questionViewModel);
             _uow.MarkAsChanged(question);
@@ -183,7 +183,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var questionViewModel = GetById(id);
             if (questionViewModel == null)

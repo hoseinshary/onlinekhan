@@ -61,12 +61,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="tagViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(TagViewModel tagViewModel)
+        public MessageResultServer Create(TagViewModel tagViewModel)
         {
             var tag = Mapper.Map<Tag>(tagViewModel);
             _tags.Add(tag);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = tag.Id;
             return msgRes;
         }
@@ -77,7 +77,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="tagViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(TagViewModel tagViewModel)
+        public MessageResultServer Update(TagViewModel tagViewModel)
         {
             var tag = Mapper.Map<Tag>(tagViewModel);
             _uow.MarkAsChanged(tag);
@@ -91,7 +91,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var tagViewModel = GetById(id);
             if (tagViewModel == null)

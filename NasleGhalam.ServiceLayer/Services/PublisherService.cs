@@ -59,12 +59,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="publisherViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(PublisherViewModel publisherViewModel)
+        public MessageResultServer Create(PublisherViewModel publisherViewModel)
         {
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _publishers.Add(publisher);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = publisher.Id;
             return msgRes;
         }
@@ -75,7 +75,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="publisherViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(PublisherViewModel publisherViewModel)
+        public MessageResultServer Update(PublisherViewModel publisherViewModel)
         {
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _uow.MarkAsChanged(publisher);
@@ -91,7 +91,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var publisherViewModel = GetById(id);
             if (publisherViewModel == null)

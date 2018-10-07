@@ -64,12 +64,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="provinceViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(ProvinceViewModel provinceViewModel)
+        public MessageResultServer Create(ProvinceViewModel provinceViewModel)
         {
             var province = Mapper.Map<Province>(provinceViewModel);
             _provinces.Add(province);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = province.Id;
             return msgRes;
         }
@@ -80,7 +80,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="provinceViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(ProvinceViewModel provinceViewModel)
+        public MessageResultServer Update(ProvinceViewModel provinceViewModel)
         {
             var province = Mapper.Map<Province>(provinceViewModel);
             _uow.MarkAsChanged(province);
@@ -96,7 +96,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var provinceViewModel = GetById(id);
             if (provinceViewModel == null)

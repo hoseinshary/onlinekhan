@@ -152,12 +152,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(EducationGroupViewModel educationGroupViewModel)
+        public MessageResultServer Create(EducationGroupViewModel educationGroupViewModel)
         {
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _educationGroups.Add(educationGroup);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationGroup.Id;
             return msgRes;
         }
@@ -168,7 +168,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(EducationGroupViewModel educationGroupViewModel)
+        public MessageResultServer Update(EducationGroupViewModel educationGroupViewModel)
         {
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _uow.MarkAsChanged(educationGroup);
@@ -182,7 +182,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var educationGroupViewModel = GetById(id);
             if (educationGroupViewModel == null)

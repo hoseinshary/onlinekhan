@@ -1,6 +1,6 @@
 ﻿namespace NasleGhalam.Common
 {
-    public class MessageResultApi
+    public class MessageResultClient
     {
         public string Message { get; set; }
 

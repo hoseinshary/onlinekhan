@@ -60,7 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
                 if (resualtWord == "OK" )
                 {
                     var msgRes = _questionService.Create(questionViewModel, wordFile, Request.GetUserId() );
-                    return Ok(new MessageResultApi
+                    return Ok(new MessageResultClient
                     {
                         Message = msgRes.FaMessage,
                         MessageType = msgRes.MessageType,
@@ -69,7 +69,7 @@ namespace NasleGhalam.WebApi.Controllers
                 }
                 else
                 {
-                    return Ok(new MessageResultApi
+                    return Ok(new MessageResultClient
                     {
                         Message = resualtWord 
                     });
@@ -77,7 +77,7 @@ namespace NasleGhalam.WebApi.Controllers
             }
             else
             {
-                return Ok(new MessageResultApi
+                return Ok(new MessageResultClient
                 {
                     Message = "خطای فایل!"
                 });
@@ -109,7 +109,7 @@ namespace NasleGhalam.WebApi.Controllers
                 if (resualtWord == "OK" && resualtExcel == "OK")
                 {
                     var msgRes = _questionService.CreateMulti(questionViewModel, wordFile, excelFile);
-                    return Ok(new MessageResultApi
+                    return Ok(new MessageResultClient
                     {
                         Message = msgRes.FaMessage,
                         MessageType = msgRes.MessageType,
@@ -118,7 +118,7 @@ namespace NasleGhalam.WebApi.Controllers
                 }
                 else
                 {
-                    return Ok(new MessageResultApi
+                    return Ok(new MessageResultClient
                     {
                         Message = resualtWord + resualtExcel
                     });
@@ -126,7 +126,7 @@ namespace NasleGhalam.WebApi.Controllers
             }
             else
             {
-                return Ok(new MessageResultApi
+                return Ok(new MessageResultClient
                 {
                     Message = "خطای فایل!"
                 });
@@ -144,7 +144,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(QuestionCreateViewModel questionViewModel)
         {
             var msgRes = _questionService.Update(questionViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -156,7 +156,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _questionService.Delete(id);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType

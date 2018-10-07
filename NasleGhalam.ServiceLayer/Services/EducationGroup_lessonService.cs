@@ -123,12 +123,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
+        public MessageResultServer Create(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
         {
             var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
             _educationGroup_Lessons.Add(educationGroup_Lesson);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationGroup_Lesson.Id;
             return msgRes;
         }
@@ -139,7 +139,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
+        public MessageResultServer Update(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
         {
             var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
             _uow.MarkAsChanged(educationGroup_Lesson);
@@ -153,7 +153,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var educationGroup_LessonViewModel = GetById(id);
             if (educationGroup_LessonViewModel == null)
@@ -173,9 +173,9 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonViewModel"></param>
         /// <returns></returns>
-        public MessageResult Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
+        public MessageResultServer Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
         {
-            MessageResult msgRes;
+            MessageResultServer msgRes;
 
             // educationGroup_LessonViewModel.GroupBy(current => current.LessonId)
             //  .Select(current => current.Key).ToList();
@@ -185,7 +185,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 if (educationGroup_LessonViewModel[i].LessonId != educationGroup_LessonViewModel[i + 1].LessonId)
                 {
-                    msgRes = new MessageResult();
+                    msgRes = new MessageResultServer();
                     msgRes.MessageType = MessageType.Error;
                     msgRes.FaMessage = "خطا در یکی نبودن آی دی درس ها ";
                     return msgRes;

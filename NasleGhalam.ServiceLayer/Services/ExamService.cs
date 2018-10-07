@@ -92,12 +92,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="examViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(ExamViewModel examViewModel)
+        public MessageResultServer Create(ExamViewModel examViewModel)
         {
             var exam = Mapper.Map<Exam>(examViewModel);
             _exams.Add(exam);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = exam.Id;
             return msgRes;
         }
@@ -108,7 +108,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="examViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(ExamViewModel examViewModel)
+        public MessageResultServer Update(ExamViewModel examViewModel)
         {
             var exam = Mapper.Map<Exam>(examViewModel);
             _uow.MarkAsChanged(exam);
@@ -124,7 +124,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var examViewModel = GetById(id);
             if (examViewModel == null)

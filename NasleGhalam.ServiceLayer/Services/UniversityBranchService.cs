@@ -70,12 +70,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResultServer Create(UniversityBranchViewModel universityBranchViewModel)
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _universityBranchs.Add(universityBranch);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = universityBranch.Id;
             return msgRes;
         }
@@ -86,7 +86,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResultServer Update(UniversityBranchViewModel universityBranchViewModel)
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _uow.MarkAsChanged(universityBranch);
@@ -100,7 +100,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var universityBranchViewModel = GetById(id);
             if (universityBranchViewModel == null)

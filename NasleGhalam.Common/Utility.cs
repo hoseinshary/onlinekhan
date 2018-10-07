@@ -245,9 +245,9 @@ namespace NasleGhalam.Common
 
 
         #region ### Return Message ###
-        public static MessageResult NotFoundMessage()
+        public static MessageResultServer NotFoundMessage()
         {
-            return new MessageResult
+            return new MessageResultServer
             {
                 FaMessage = "رکورد مورد نظر یافت نگردید.",
                 MessageType = MessageType.NotFound

@@ -85,12 +85,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(AxillaryBookViewModel axillaryBookViewModel)
+        public MessageResultServer Create(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _axillaryBooks.Add(axillaryBook);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = axillaryBook.Id;
             return msgRes;
         }
@@ -101,7 +101,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(AxillaryBookViewModel axillaryBookViewModel)
+        public MessageResultServer Update(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             if (string.IsNullOrEmpty(axillaryBook.ImgName))
@@ -122,7 +122,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var axillaryBookViewModel = GetById(id);
             if (axillaryBookViewModel == null)

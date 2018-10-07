@@ -28,7 +28,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                     actionContext.Response = actionContext
                         .ControllerContext.Request
                         .CreateResponse(HttpStatusCode.OK,
-                            new MessageResultApi
+                            new MessageResultClient
                             {
                                 Message = $"عکس ارسالی باید کمتر از {_imageSize} کیلو بایت باشد.",
                                 MessageType = MessageType.Error
@@ -46,7 +46,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                     actionContext.Response = actionContext
                         .ControllerContext.Request
                         .CreateResponse(HttpStatusCode.OK,
-                            new MessageResultApi
+                            new MessageResultClient
                             {
                                 Message = "فرمت عکس معتبر نمی باشد.",
                                 MessageType = MessageType.Error

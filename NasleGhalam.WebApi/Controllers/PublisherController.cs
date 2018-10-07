@@ -45,7 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(PublisherViewModel publisherViewModel)
         {
             var msgRes = _publisherService.Create(publisherViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
@@ -60,7 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(PublisherViewModel publisherViewModel)
         {
             var msgRes = _publisherService.Update(publisherViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -72,7 +72,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _publisherService.Delete(id);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType

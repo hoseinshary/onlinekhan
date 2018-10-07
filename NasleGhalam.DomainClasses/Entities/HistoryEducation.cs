@@ -6,13 +6,16 @@ namespace NasleGhalam.DomainClasses.Entities
     {
         public HistoryEducation()
         {
-            UniversityBranches_HistoryEducations = new HashSet<UniversityBranch_HistoryEducation>();
+            UniversityBranches = new HashSet<UniversityBranch>();
+            Cities = new HashSet<City>();
         }
         public int Id { get; set; }
 
         public int StudentId { get; set; }
 
         public Student Student { get; set; }
+
+        public int RankGoal { get; set; }
 
         public int ExamId { get; set; }
 
@@ -30,6 +33,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public GradeLevel GradeLevel { get; set; }
 
-        public virtual ICollection<UniversityBranch_HistoryEducation> UniversityBranches_HistoryEducations { get; set; }
+        public virtual ICollection<UniversityBranch> UniversityBranches { get; set; }
+        public virtual ICollection<City> Cities { get; set; }
     }
 }

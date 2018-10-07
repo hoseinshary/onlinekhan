@@ -14,8 +14,16 @@ namespace NasleGhalam.ViewModels.UniversityBranch
         public string Name { get; set; }
 
 
-        [Display(Name = "تراز")]
-        public int Balance { get; set; }
+        [Display(Name = "کمینه تراز 1")]
+        public int Balance1Low { get; set; }
+
+        [Display(Name = "بیشینه تراز 1")]
+        public int Balance1High { get; set; }
+
+        [Display(Name = "کمینه تراز 2")]
+        public int Balance2Low { get; set; }
+        [Display(Name = "بیشینه تراز 2")]
+        public int Balance2High { get; set; }
 
 
         [Display(Name = "زیرگروه درسی")]

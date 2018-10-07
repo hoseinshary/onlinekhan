@@ -55,6 +55,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     Name = less.Name,
                     IsMain = less.IsMain,
                     Id = less.Id,
+                    GradeLevelId = less.GradeLevelId,
+                    LookupId_Nezam = less.LookupId_Nezam,
                     EducationGroups = 
                     _educationGroups
                     .Where(x=> x.EducationSubGroups.Any())

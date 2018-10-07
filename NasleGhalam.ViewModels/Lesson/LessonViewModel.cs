@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NasleGhalam.ViewModels._Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace NasleGhalam.ViewModels.Lesson
 {
@@ -16,6 +17,18 @@ namespace NasleGhalam.ViewModels.Lesson
 
         [Display(Name = "اختصاصی")]
         public bool IsMain { get; set; }
+
+
+        [Display(Name = "نظام")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        public int LookupId_Nezam { get; set; }
+
+
+        [Display(Name = "پایه")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        public int GradeLevelId { get; set; }
+
+
 
     }
 }

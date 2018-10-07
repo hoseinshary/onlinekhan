@@ -38,6 +38,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllDdlByName("PrintType"));
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.LessonCreateAccess, ActionBits.LessonUpdateAccess, ActionBits.LessonReadAccess)]
+        public IHttpActionResult GetAllNezamDdl()
+        {
+            return Ok(_lookupService.GetAllDdlByName("Nezam"));
+        }
+
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
         public IHttpActionResult GetAllBookTypeDdl()

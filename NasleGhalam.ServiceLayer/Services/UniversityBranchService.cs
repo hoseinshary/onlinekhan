@@ -36,7 +36,10 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Name = current.Name,
-                    Balance = current.Balance,
+                    Balance1Low = current.Balance1Low,
+                    Balance1High = current.Balance1High,
+                    Balance2Low = current.Balance2Low,
+                    Balance2High = current.Balance2High,
                     EducationSubGroupId = current.EducationSubGroupId,
                     EducationSubGroupName = current.EducationSubGroup.Name
                 }).FirstOrDefault();
@@ -53,7 +56,10 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 Id = current.Id,
                 Name = current.Name,
-                Balance = current.Balance,
+                Balance1Low = current.Balance1Low,
+                Balance1High = current.Balance1High,
+                Balance2Low = current.Balance2Low,
+                Balance2High = current.Balance2High,
                 EducationSubGroupId = current.EducationSubGroupId
             }).ToList();
         }

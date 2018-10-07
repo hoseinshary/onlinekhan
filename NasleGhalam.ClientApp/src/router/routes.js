@@ -74,6 +74,14 @@ export default [
       {
         path: '/axillaryBook',
         component: () => import('views/axillaryBook')
+      },
+      {
+        path: '/universityBranch',
+        component: () => import('views/universityBranch')
+      },
+      {
+        path: '/question',
+        component: () => import('views/question')
       }
     ]
   },

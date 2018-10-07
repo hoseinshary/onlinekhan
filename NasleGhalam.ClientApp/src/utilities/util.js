@@ -143,7 +143,25 @@ const initAccess = function(modelName) {
   });
   return pageAccess;
 };
-
+/**
+ * تبدیل obj به formData
+ */
+const objToFormdata = function(obj) {
+  var formdata = new FormData();
+  Object.keys(obj).forEach(key => formdata.append(key, obj[key]));
+  return formdata;
+};
+const fileAdd = function(model, prop, number, isRequired, chObj, vueObj) {
+  debugger;
+  if (chObj.$refs['file' + number + ''].files.length > 0)
+    vueObj[model][prop] = chObj.$refs['file' + number + ''].files[0];
+  if (isRequired) vueObj.$v[model][prop].$touch();
+};
+const fileRemove = function(model, prop, isRequired, vueObj) {
+  debugger;
+  vueObj[model][prop] = '';
+  if (isRequired) vueObj.$v[model][prop].$touch();
+};
 //   isNull(value) {
 //     return value === null;
 //   },
@@ -184,5 +202,8 @@ export default {
   isObject,
   isBoolean,
   logout,
-  initAccess
+  initAccess,
+  objToFormdata,
+  fileAdd,
+  fileRemove
 };

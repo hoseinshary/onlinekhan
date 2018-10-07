@@ -16,7 +16,7 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Topic> _topics;
 
-        private IList<Topic> topics;
+        private IList<Topic> _topicsByEducationGroup_Lesson;
 
         public TopicService(IUnitOfWork uow)
         {
@@ -29,9 +29,9 @@ namespace NasleGhalam.ServiceLayer.Services
         public TopicTreeViewModel children(int id )
         {
 
-            if (topics.All(x => x.ParentTopicId != id))
+            if (_topicsByEducationGroup_Lesson.All(x => x.ParentTopicId != id))
             {
-                return topics.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
+                return _topicsByEducationGroup_Lesson.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
                 {
                     Id = current.Id,
                     label = current.Title,
@@ -40,11 +40,11 @@ namespace NasleGhalam.ServiceLayer.Services
             else
             {
                 var returnvalue = new TopicTreeViewModel();
-                var currentTopic = topics.FirstOrDefault(x => x.Id == id);
+                var currentTopic = _topicsByEducationGroup_Lesson.FirstOrDefault(x => x.Id == id);
                 returnvalue.Id = currentTopic.Id;
                 returnvalue.label = currentTopic.Title;
                 returnvalue.children = new List<TopicTreeViewModel>();
-                foreach (var item in topics.Where(x => x.ParentTopicId == id).ToList())
+                foreach (var item in _topicsByEducationGroup_Lesson.Where(x => x.ParentTopicId == id).ToList())
                 {
                     returnvalue.children.Add(children(item.Id));
                 }
@@ -59,9 +59,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IEnumerable<TopicTreeViewModel> GetAllTree(int id)
         {
-            var topic = _topics
-                .FirstOrDefault(x => x.ParentTopicId == null 
-                && x.EducationGroup_LessonId == id);
+
+            _topicsByEducationGroup_Lesson = _topics.Where(x => x.EducationGroup_LessonId == id).ToList();
+
+            var topic = _topicsByEducationGroup_Lesson
+                .FirstOrDefault(x => x.ParentTopicId == null );
 
             var result = new List<TopicTreeViewModel>();
             if (topic != null)
@@ -135,7 +137,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     IsActive = current.IsActive,
                     IsExamSource = current.IsExamSource,
                     ParentTopicId = current.ParentTopicId,
-                    
+                    EducationGroupId = current.EducationGroup_Lesson.EducationGroupId
 
                 }).FirstOrDefault();
         }

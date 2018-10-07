@@ -20,7 +20,6 @@
                            :label="`ایجاد (${modelName}) جدید`"
                            @click="showModalCreate" />
           </div>
-
         </section>
 
         <br>

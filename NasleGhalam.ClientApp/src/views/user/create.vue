@@ -1,7 +1,7 @@
 <template>
   <my-modal-create :title="modelName"
                    :show="isOpenModalCreate"
-                   size="xl"
+                   size="lg"
                    @confirm="submit"
                    @reset="resetCreateStore"
                    @open="modalOpen"
@@ -25,7 +25,7 @@
                clearable
                ref="cityId" />
 
-    <my-hr/>
+    <!-- <my-hr /> -->
 
     <my-input :model="$v.userObj.Name"
               class="col-sm-6 col-md-4" />
@@ -83,9 +83,6 @@ export default {
    * methods
    */
   methods: {
-    fn(a) {
-      console.log(a);
-    },
     ...mapActions('userStore', [
       'toggleModalCreateStore',
       'createVueStore',

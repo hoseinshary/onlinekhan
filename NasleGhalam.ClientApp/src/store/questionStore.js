@@ -1,71 +1,85 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { EDUCATION_SUB_GROUP_URL as baseUrl } from 'utilities/site-config';
+import { QUESTION_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in educationSubGroupGridData by id
+ * find index of object in questionGridData by id
  * @param {Number} id
  */
 function getIndexById(id) {
-  return store.state.educationSubGroupGridData.findIndex(o => o.Id == id);
+  return store.state.questionGridData.findIndex(o => o.Id == id);
 }
 
 const store = {
   namespaced: true,
   state: {
-    modelName: 'زیر گروه آموزشی',
+    modelName: 'سوال تکی',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    educationSubGroupObj: {
+    questionObj: {
       Id: 0,
-      Name: '',
+      Context: '',
+      QuestionNumber: 0,
+      LookupId_QuestionType: 0,
+      QuestionPoint: 0,
+      LookupId_QuestionHardnessType: 0,
+      LookupId_RepeatnessType: 0,
+      UseEvaluation: false,
+      IsStandard: false,
+      LookupId_AuthorType: 0,
+      AuthorName: '',
+      LookupId_AreaType: 0,
+      ResponseSecond: 0,
+      Description: '',
+      FileName: '',
+      InsertDateTime: '',
+      UserId: 0,
+      File: '',
       EducationGroupId: 0,
-      EducationGroupName: ''
+      EducationGroup_LessonId: 0
     },
-    educationSubGroupGridData: [],
-    educationSubGroupDdl: [],
+    questionGridData: [],
+    questionDdl: [],
     selectedId: 0,
+    ddlModelChanged: true,
     gridModelChanged: true,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new educationSubGroupObj to educationSubGroupGridData
+     * insert new questionObj to questionGridData
      */
     insert(state, id) {
-      let createdObj = util.cloneObject(state.educationSubGroupObj);
+      let createdObj = util.cloneObject(state.questionObj);
       createdObj.Id = id;
-      state.educationSubGroupGridData.push(createdObj);
+      state.questionGridData.push(createdObj);
     },
 
     /**
-     * update educationSubGroupObj of educationSubGroupGridData
+     * update questionObj of questionGridData
      */
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      util.mapObject(
-        state.educationSubGroupObj,
-        state.educationSubGroupGridData[index]
-      );
+      util.mapObject(state.questionObj, state.questionGridData[index]);
     },
 
     /**
-     * delete from educationSubGroupGridData
+     * delete from questionGridData
      */
     delete(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.educationSubGroupGridData.splice(index, 1);
+      state.questionGridData.splice(index, 1);
     },
 
     /**
-     * rest value of educationSubGroupObj
+     * rest value of questionObj
      */
     reset(state, $v) {
-      util.clearObject(state.educationSubGroupObj);
+      util.clearObject(state.questionObj);
       if ($v) {
         $v.$reset();
       }
@@ -78,7 +92,7 @@ const store = {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.educationSubGroupObj);
+        util.mapObject(response.data, state.questionObj);
       });
     },
 
@@ -90,7 +104,7 @@ const store = {
       if (state.gridModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.educationSubGroupGridData = response.data;
+          state.questionGridData = response.data;
           state.gridModelChanged = false;
         });
       }
@@ -99,26 +113,25 @@ const store = {
     /**
      * fill dropDwonList
      */
-    fillEducationSubGroupByEducationGroupIdDdlStore(
-      { state },
-      educationGroupId
-    ) {
+    fillDdlStore({ state }) {
       // fill grid if modelChanged
-      // get data
-      axios
-        .get(`${baseUrl}/GetAllByEducationGroupIdDdl/${educationGroupId}`)
-        .then(response => {
-          state.educationSubGroupDdl = response.data;
+      if (state.ddlModelChanged) {
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.questionDdl = response.data;
+          state.ddlModelChanged = false;
         });
+      }
     },
 
     /**
      * vlidate form
      */
     validateFormStore({ dispatch }, vm) {
+      debugger;
       // check instance validation
-      vm.$v.educationSubGroupObj.$touch();
-      if (vm.$v.educationSubGroupObj.$error) {
+      vm.$v.questionObj.$touch();
+      if (vm.$v.questionObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
@@ -130,6 +143,7 @@ const store = {
      * model changed
      */
     modelChangedStore({ state }) {
+      state.ddlModelChanged = true;
       state.gridModelChanged = true;
     },
 
@@ -152,32 +166,36 @@ const store = {
      * submit create data
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
+      debugger;
+      state.questionObj.UserId = 0;
+      state.questionObj.Context = '1';
+      state.questionObj.InsertDateTime = '1';
+      state.questionObj.FileName = '1';
+
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios
-          .post(`${baseUrl}/Create`, state.educationSubGroupObj)
-          .then(response => {
-            let data = response.data;
+        axios.post(`${baseUrl}/Create`, state.questionObj).then(response => {
+          let data = response.data;
 
-            if (data.MessageType == 1) {
-              commit('insert', data.Id);
-              dispatch('modelChangedStore');
-              dispatch('resetCreateStore');
-              dispatch('toggleModalCreateStore', !closeModal);
-            }
+          if (data.MessageType == 1) {
+            commit('insert', data.Id);
+            dispatch('modelChangedStore');
+            dispatch('resetCreateStore');
+            dispatch('toggleModalCreateStore', !closeModal);
+          }
 
-            dispatch(
-              'notify',
-              {
-                body: data.Message,
-                type: data.MessageType,
-                vm: vm
-              },
-              { root: true }
-            );
-          });
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            { root: true }
+          );
+        });
       });
     },
 
@@ -211,28 +229,26 @@ const store = {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.educationSubGroupObj.Id = state.selectedId;
-        axios
-          .post(`${baseUrl}/Update`, state.educationSubGroupObj)
-          .then(response => {
-            let data = response.data;
-            if (data.MessageType == 1) {
-              commit('update');
-              dispatch('modelChangedStore');
-              dispatch('resetEditStore');
-              dispatch('toggleModalEditStore', false);
-            }
+        state.questionObj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.questionObj).then(response => {
+          let data = response.data;
+          if (data.MessageType == 1) {
+            commit('update');
+            dispatch('modelChangedStore');
+            dispatch('resetEditStore');
+            dispatch('toggleModalEditStore', false);
+          }
 
-            dispatch(
-              'notify',
-              {
-                body: data.Message,
-                type: data.MessageType,
-                vm: vm
-              },
-              { root: true }
-            );
-          });
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            { root: true }
+          );
+        });
       });
     },
 
@@ -280,7 +296,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.educationSubGroupObj.Name;
+      return state.questionObj.Name;
     }
   }
 };

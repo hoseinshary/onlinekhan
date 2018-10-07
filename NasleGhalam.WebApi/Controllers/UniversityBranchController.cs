@@ -21,9 +21,9 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.UniversityBranchReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllByEducationGroupId(int id)
         {
-            return Ok(_universityBranchService.GetAll());
+            return Ok(_universityBranchService.GetAllByEducationGroupId(id));
         }
 
 

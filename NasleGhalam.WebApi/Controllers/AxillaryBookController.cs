@@ -78,7 +78,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.AxillaryBookUpdateAccess)]
         [CheckModelValidation]
         [CheckImageValidatioNotRequired("img", 1024)]
-        public IHttpActionResult Update(AxillaryBookViewModel axillaryBookViewModel)
+        public IHttpActionResult Update([FromUri] AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = _axillaryBookService.GetById(axillaryBookViewModel.Id);
             if (axillaryBook == null)

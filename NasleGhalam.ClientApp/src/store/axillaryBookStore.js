@@ -34,7 +34,8 @@ const store = {
       PublisherName: '',
       BookTypeName: '',
       PaperTypeName: '',
-      PrintTypeName: ''
+      PrintTypeName: '',
+      ImgPath: ''
     },
     axillaryBookGridData: [],
     axillaryBookDdl: [],
@@ -90,6 +91,10 @@ const store = {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.axillaryBookObj);
+        if (state.axillaryBookObj.ImgPath.length > 0) {
+          state.axillaryBookObj.ImgPath =
+            state.axillaryBookObj.ImgPath + '?' + Math.random();
+        }
       });
     },
 
@@ -237,27 +242,37 @@ const store = {
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.axillaryBookObj.Id = state.selectedId;
-        axios
-          .post(`${baseUrl}/Update`, state.axillaryBookObj)
-          .then(response => {
-            let data = response.data;
-            if (data.MessageType == 1) {
-              commit('update');
-              dispatch('modelChangedStore');
-              dispatch('resetEditStore');
-              dispatch('toggleModalEditStore', false);
-            }
 
-            dispatch(
-              'notify',
-              {
-                body: data.Message,
-                type: data.MessageType,
-                vm: vm
-              },
-              { root: true }
-            );
-          });
+        var formData = new FormData();
+        var fileUpload = state.editVue.$refs.fileUpload;
+        //todo: check file ext
+        if (fileUpload && fileUpload.files) {
+          formData.append(fileUpload.name, fileUpload.files[0]);
+        }
+        axios({
+          method: 'post',
+          url: `${baseUrl}/Update?${util.toParam(state.axillaryBookObj)}`,
+          data: formData,
+          config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        }).then(response => {
+          let data = response.data;
+          if (data.MessageType == 1) {
+            commit('update');
+            dispatch('modelChangedStore');
+            dispatch('resetEditStore');
+            dispatch('toggleModalEditStore', false);
+          }
+
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            { root: true }
+          );
+        });
       });
     },
 
@@ -266,6 +281,11 @@ const store = {
      */
     resetEditStore({ state, commit }) {
       commit('reset', state.editVue.$v);
+
+      var fileUpload = state.editVue.$refs.fileUpload;
+      if (fileUpload) {
+        fileUpload.reset();
+      }
     },
     //------------------------------------------------
 

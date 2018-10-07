@@ -49,7 +49,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _educationSubGroups.Select(current => new EducationSubGroupViewModel()
             {
-                
+
                 Id = current.Id,
                 Name = current.Name,
                 EducationGroupId = current.EducationGroupId,
@@ -115,13 +115,15 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه زیر گروه آموزشی ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
+        public IList<SelectViewModel> GetAllByEducationGroupIdDdl(int educationGroupId)
         {
-            return _educationSubGroups.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
+            return _educationSubGroups
+                .Where(current => current.EducationGroupId == educationGroupId)
+                .Select(current => new SelectViewModel
+                {
+                    value = current.Id,
+                    label = current.Name
+                }).ToList();
         }
     }
 }

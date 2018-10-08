@@ -6,7 +6,7 @@
       <div slot="body">
 
         <br>
-        <div class="row">
+        <div class="row gutter-sm">
           <my-select :model="$v.topicObj.EducationGroupId"
                      :options="educationGroupDdl"
                      class="col-md-6"
@@ -45,11 +45,11 @@
           </q-slide-transition>
           <q-slide-transition>
   <q-tree :nodes="treeLst"
-                  class="col-md-2"
+                  class="col-md-12"
+                  color="blue"
                   :selected.sync="selectedNodeId"
                   default-expand-all
                   node-key="Id"
-                  style="overflow: auto;"
                   ref="topicTree"  />
           </q-slide-transition>
         </div>
@@ -213,11 +213,5 @@ export default {
   }
 };
 </script>
-<style scoped>
-.myTreeDiv {
-  width: 120px;
-  overflow: auto;
-}
-</style>
 
 

@@ -14,7 +14,8 @@ const store = {
     lookupQuestionType: [],
     lookupQuestionHardnessType: [],
     lookupQuestionRepeatnessType: [],
-    lookupQuestionAuthorType: []
+    lookupQuestionAuthorType: [],
+    lookupTopicNezamDdl: []
   },
   actions: {
     fillTopicHardnessTypeDdlStore({ state }) {
@@ -66,6 +67,11 @@ const store = {
     getLookupQuestionAuthorType({ state }, id) {
       axios.get(`${baseUrl}/GetAllAuthorTypeDdl/`).then(response => {
         state.lookupQuestionAuthorType = response.data;
+      });
+    },
+    fillTopicNezamStore({ state }) {
+      axios.get(`${baseUrl}/GetAllNezamDdl/`).then(response => {
+        state.lookupTopicNezamDdl = response.data;
       });
     }
   }

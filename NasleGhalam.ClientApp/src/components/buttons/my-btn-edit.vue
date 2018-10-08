@@ -6,7 +6,8 @@
          color="purple"
          size="sm"
          class="shadow-1 bg-white q-mr-sm"
-         @click="$emit('click')">
+         @click="$emit('click')"
+         :disabled='disabled'>
     <q-tooltip>
       ویرایش
     </q-tooltip>
@@ -16,7 +17,8 @@
          color="purple"
          class="shadow-1 bg-white q-mr-sm"
          type="submit"
-         @click="$emit('click')">
+         @click="$emit('click')"
+          :disabled='disabled'>
     <q-icon name="create" /> ویرایش
   </q-btn>
 </template>
@@ -24,7 +26,10 @@
 <script>
 export default {
   props: {
-    round: Boolean
+    round: Boolean,
+    disabled: {
+      default: false
+    }
   }
 };
 </script>

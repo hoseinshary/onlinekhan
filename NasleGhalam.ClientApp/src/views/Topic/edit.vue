@@ -3,6 +3,7 @@
                  :show="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
+                   @open="modalOpen"
                  @close="toggleModalEditStore(false)">
     <my-input :model="$v.topicObj.Title"
               class="col-md-6" />
@@ -10,8 +11,8 @@
     <my-input :model="$v.topicObj.ExamStock"
               class="col-md-6" />
 
-    <my-input :model="$v.topicObj.ExamStockSystem"
-              class="col-md-6" />
+    <!-- <my-input :model="$v.topicObj.ExamStockSystem"
+              class="col-md-6" /> -->
 
     <my-input :model="$v.topicObj.Importance"
               class="col-md-6" />
@@ -114,7 +115,15 @@ export default {
       'editVueStore',
       'submitEditStore',
       'resetEditStore'
-    ])
+    ]),
+    ...mapActions('lookupStore', [
+      'fillTopicHardnessTypeDdlStore',
+      'fillTopicAreaTypeDdlStore'
+    ]),
+    modalOpen:function(){
+      this.fillTopicHardnessTypeDdlStore();
+      this.fillTopicAreaTypeDdlStore(); 
+    }
   },
   /**
    * computed

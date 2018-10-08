@@ -3,6 +3,7 @@
                    :show="isOpenModalDetails"
                    @confirm="submitDetailsStore"
                    @reset="resetDetailsStore"
+                   @open="modalOpen"
                    @close="toggleModalDetailsStore(false)">
 
     <my-input :model="$v.topicObj.Title"
@@ -94,7 +95,15 @@ export default {
       'createVueStore',
       'submitDetailsStore',
       'resetDetailsStore'
-    ])
+    ]),
+    ...mapActions('lookupStore', [
+      'fillTopicHardnessTypeDdlStore',
+      'fillTopicAreaTypeDdlStore'
+    ]),
+    modalOpen:function(){
+      this.fillTopicHardnessTypeDdlStore();
+      this.fillTopicAreaTypeDdlStore(); 
+    }
   },
   /**
    * computed

@@ -4,7 +4,8 @@
          class="shadow-1 bg-white q-mr-sm"
          :icon="icon"
          :label="label"
-         @click="$emit('click')">
+         @click="$emit('click')"
+         :disabled='disabled'>
   </q-btn>
 </template>
 
@@ -22,6 +23,9 @@ export default {
     icon: {
       type: String,
       default: 'library_add'
+    },
+    disabled: {
+      default: false
     }
   }
 };

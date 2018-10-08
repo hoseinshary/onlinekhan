@@ -31,13 +31,18 @@
                   <my-btn-create label="مشاهده جزئیات"
                                  color='light'
                                  icon='list'
-                                 @click="showModalDetails" />
+                                 @click="showModalDetails" 
+                                 :disabled="selectedNodeId == null"
+                                 />
                   <my-btn-create v-if="pageAccess.canCreate"
                                  label='ایجاد زیر مبحث جدید'
-                                 @click="showModalCreate" />
+                                 @click="showModalCreate" 
+                                 :disabled="treeLst.length == 0 ? false : selectedNodeId == null"/>
                   <my-btn-edit v-if="pageAccess.canEdit"
+                                 :disabled="selectedNodeId == null"
                                @click="showModalEdit" />
                   <my-btn-delete v-if="pageAccess.canDelete"
+                                 :disabled="selectedNodeId == null"
                                  @click="showModalDelete" />
                 </div>
               </q-slide-transition>
@@ -109,10 +114,7 @@ export default {
     ...mapActions('educationGroupStore', {
       fillEduGrpDdlStore: 'fillDdlStore'
     }),
-    ...mapActions('lookupStore', [
-      'fillTopicHardnessTypeDdlStore',
-      'fillTopicAreaTypeDdlStore'
-    ]),
+
     ...mapActions('lessonStore', { fillLessonDdlStore: 'fillDdlStore' }),
     showModalCreate() {
       // reset data on modal show
@@ -176,14 +178,13 @@ export default {
   created() {
     this.fillEduGrpDdlStore();
     this.fillLessonDdlStore();
-    this.fillTopicHardnessTypeDdlStore(); // todo: better go to create and update modal
-    this.fillTopicAreaTypeDdlStore(); // todo: better go to create and update modal
+   
   },
   watch: {
     treeLst:function(){
       setTimeout(() => {
       this.$refs.topicTree.expandAll();
-        
+        this.selectedNodeId = null;
       }, 500);
     },
     selectedNodeId: function(val) {

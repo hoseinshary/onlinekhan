@@ -10,6 +10,18 @@ export default {
     IsMain: {
       displayName: displayName('اختصاصی'),
       required
+    },
+    LookupId_Nezam: {
+      displayName: displayName('نظام'),
+      required
+    },
+    GradeId: {
+      displayName: displayName('مقطع'),
+      required
+    },
+    GradeLevelId: {
+      displayName: displayName('پایه'),
+      required
     }
   }
 };

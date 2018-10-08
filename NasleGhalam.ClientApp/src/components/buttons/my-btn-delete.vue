@@ -7,7 +7,8 @@
          color="red"
          size="sm"
          class="shadow-1 bg-white"
-         @click="$emit('click')">
+         @click="$emit('click')"
+         :disabled='disabled'>
     <q-tooltip>
       حذف
     </q-tooltip>
@@ -16,7 +17,8 @@
          outline
          color="red"
          class="shadow-1 bg-white q-mr-sm"
-         @click="$emit('click')">
+         @click="$emit('click')"
+          :disabled='disabled'>
     <q-icon name="delete" /> حذف
   </q-btn>
 </template>
@@ -24,7 +26,10 @@
 <script>
 export default {
   props: {
-    round: Boolean
+    round: Boolean,
+    disabled: {
+      default: false
+    }
   }
 };
 </script>

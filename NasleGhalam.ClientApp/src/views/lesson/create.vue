@@ -4,7 +4,7 @@
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
                    @close="toggleModalCreateStore(false)"
-                   @open="getAllEduGroupAndEduSubGroupStore()">
+                   @open="modalOpen">
 
     <my-input :model="$v.instanceObj.Name"
               class="col-md-6" />
@@ -19,6 +19,21 @@
                  label="بلی" />
       </template>
     </my-field>
+    <my-select 
+            :model="$v.instanceObj.LookupId_Nezam"
+            :options="lookupTopicNezamDdl"
+            class="col-md-4"
+            clearable />
+    <my-select 
+            :model="$v.instanceObj.GradeId"
+            :options="gradeDdl"
+            class="col-md-4"
+            clearable />
+    <my-select 
+            :model="$v.instanceObj.GradeLevelId"
+            :options="gradeLavelFilteredDdl"
+            class="col-md-4"
+            clearable />
     <fieldset class="col-12">
       <legend>گروههای آموزشی</legend>
       <div class="row"
@@ -78,7 +93,22 @@ export default {
       'submitCreateStore',
       'resetCreateStore',
       'getAllEduGroupAndEduSubGroupStore'
-    ])
+    ]),
+    ...mapActions('lookupStore', [
+      'fillTopicNezamStore'
+    ]),
+    ...mapActions('gradeStore', {
+      'fillGradeDdlStore':'fillDdlStore'}
+    ),
+    ...mapActions('gradeLevelStore', {
+      'fillGradeLevel':'fillDdlStore'}
+    ),
+    modalOpen:function(){
+      this.getAllEduGroupAndEduSubGroupStore();
+      this.fillTopicNezamStore();
+      this.fillGradeDdlStore();
+      this.fillGradeLevel();
+    }
   },
   /**
    * computed
@@ -89,7 +119,21 @@ export default {
       instanceObj: 'instanceObj',
       isOpenModalCreate: 'isOpenModalCreate',
       EducationGroups: 'EducationGroups'
-    })
+    }),
+    ...mapState('lookupStore', [
+      'lookupTopicNezamDdl'
+    ]),
+    ...mapState('gradeStore', {gradeDdl:'gradeDdl'}
+    ),
+    ...mapState('gradeLevelStore',{gradeLevelDdl:'gradeLevelDdl'}
+    ),
+     gradeLavelFilteredDdl: function() {
+      return this.instanceObj.GradeId == 0
+        ? []
+        : this.gradeLevelDdl.filter(
+            x => x.gradeId == this.instanceObj.GradeId
+          );
+    }
   },
   /**
    * validations

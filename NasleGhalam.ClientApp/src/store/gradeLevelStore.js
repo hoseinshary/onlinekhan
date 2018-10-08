@@ -99,15 +99,19 @@ const store = {
     /**
      * fill dropDwonList
      */
-    // fillDdlStore({ state }) {
-    //   // get data if model changed
-    //   if (state.ddlModelChanged) {
-    //     axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-    //       state.gradeDdl = response.data;
-    //       state.ddlModelChanged = false;
-    //     });
-    //   }
-    // },
+    fillDdlStore({ state }) {
+      // get data if model changed
+      if (state.ddlModelChanged) {
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.gradeLevelDdl = response.data.map(x => ({
+            label: x.GradeName,
+            value: x.Id,
+            gradeId: x.GradeId
+          }));
+          state.ddlModelChanged = false;
+        });
+      }
+    },
 
     /**
      *  fill dropDwonList gradeLevelByGradeId

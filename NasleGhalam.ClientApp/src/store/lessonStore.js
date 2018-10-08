@@ -16,7 +16,10 @@ export default {
       Id: 0,
       Name: '',
       IsMain: undefined,
-      EducationGroups: []
+      EducationGroups: [],
+      LookupId_Nezam: 0,
+      GradeId: 0,
+      GradeLevelId: 0
     },
     allObj: [],
     allObjDdl: [],

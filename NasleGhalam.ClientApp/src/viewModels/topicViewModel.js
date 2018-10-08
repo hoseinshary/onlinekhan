@@ -19,9 +19,9 @@ export default {
       required
     },
     ExamStockSystem: {
-      displayName: displayName('سهمیه در کنکور سیستمی'),
-      numeric,
-      required
+      displayName: displayName('سهمیه در کنکور سیستمی')
+      // numeric,
+      // required
     },
     Importance: {
       displayName: displayName('ضریب اهمیت'),

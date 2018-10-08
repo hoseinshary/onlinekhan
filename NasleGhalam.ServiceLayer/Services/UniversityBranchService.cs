@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -20,6 +21,24 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             _uow = uow;
             _universityBranchs = uow.Set<UniversityBranch>();
+        }
+
+        /// <summary>
+        /// گرفتن همه رشته دانشگاهی ها با ای دی گروه آموزشی
+        /// </summary>
+        /// <returns></returns>
+        public IList<UniversityBranchViewModel> GetAllByEducationGroupId(int id )
+        {
+            return _universityBranchs.Where(current => current.EducationSubGroup.EducationGroupId == id ).Select(current => new UniversityBranchViewModel()
+            {
+                Id = current.Id,
+                Name = current.Name,
+                Balance1Low = current.Balance1Low,
+                Balance1High = current.Balance1High,
+                Balance2Low = current.Balance2Low,
+                Balance2High = current.Balance2High,
+                EducationSubGroupId = current.EducationSubGroupId
+            }).ToList();
         }
 
 

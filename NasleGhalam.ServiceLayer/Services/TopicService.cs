@@ -173,7 +173,21 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultServer Create(TopicCreateViewModel topicViewModel)
         {
-            if (topicViewModel.ParentTopicId != null)
+
+            if (!_topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
+            {
+                var topic = Mapper.Map<Topic>(topicViewModel);
+
+                topic.ParentTopic = null;
+                topic.ParentTopicId = null;
+
+                _topics.Add(topic);
+
+                MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+                msgRes.Id = topic.Id;
+                return msgRes;
+            }
+            else if (topicViewModel.ParentTopicId != null && _topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
             {
                 var topic = Mapper.Map<Topic>(topicViewModel);
                 _topics.Add(topic);
@@ -182,21 +196,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 msgRes.Id = topic.Id;
                 return msgRes;
             }
-            else if (topicViewModel.ParentTopicId == null && !_topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
-            {
-                var topic = Mapper.Map<Topic>(topicViewModel);
-                _topics.Add(topic);
-
-                MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
-                msgRes.Id = topic.Id;
-                return msgRes;
-            }
-            else
+            else 
             {
                 MessageResultServer msgRes = new MessageResultServer();
                 msgRes.FaMessage = "برای این درس مبحث ریشه ثبت شده است!(تنها یک مبحث ریشه برای هر درس قابل ثبت است.)";
                 return msgRes;
             }
+            
+            
+            
         }
 
 

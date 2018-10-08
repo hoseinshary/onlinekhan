@@ -18,7 +18,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             .WillCascadeOnDelete(false);
 
             this.HasOptional(x => x.ParentTopic)
-                .WithMany(x => x.ParentTopics)
+                .WithMany(x => x.ChildrenTopic)
                 .HasForeignKey(x => x.ParentTopicId)
                 .WillCascadeOnDelete(false);
 

@@ -1,6 +1,6 @@
 ﻿namespace NasleGhalam.Common
 {
-    public class MessageResult
+    public class MessageResultServer
     {
 
 

@@ -36,8 +36,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Name = current.Name,
-                    Balance = current.Balance,
-                    EducationSubGroupId = current.EducationSubGroupId
+                    Balance1Low = current.Balance1Low,
+                    Balance1High = current.Balance1High,
+                    Balance2Low = current.Balance2Low,
+                    Balance2High = current.Balance2High,
+                    EducationSubGroupId = current.EducationSubGroupId,
+                    EducationSubGroupName = current.EducationSubGroup.Name
                 }).FirstOrDefault();
         }
 
@@ -46,18 +50,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه رشته دانشگاهی ها
         /// </summary>
         /// <returns></returns>
-        public IList<UniversityBranchViewModel> GetAllByEducationGroupId(int educationGroupId)
+        public IList<UniversityBranchViewModel> GetAll()
         {
-            return _universityBranchs
-                .Where(current => current.EducationSubGroup.EducationGroupId == educationGroupId)
-                .Select(current => new UniversityBranchViewModel()
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    Balance = current.Balance,
-                    EducationSubGroupId = current.EducationSubGroupId,
-                    EducationSubGroupName = current.EducationSubGroup.Name
-                }).ToList();
+            return _universityBranchs.Select(current => new UniversityBranchViewModel()
+            {
+                Id = current.Id,
+                Name = current.Name,
+                Balance1Low = current.Balance1Low,
+                Balance1High = current.Balance1High,
+                Balance2Low = current.Balance2Low,
+                Balance2High = current.Balance2High,
+                EducationSubGroupId = current.EducationSubGroupId
+            }).ToList();
         }
 
 
@@ -66,12 +70,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResultServer Create(UniversityBranchViewModel universityBranchViewModel)
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _universityBranchs.Add(universityBranch);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = universityBranch.Id;
             return msgRes;
         }
@@ -82,7 +86,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResultServer Update(UniversityBranchViewModel universityBranchViewModel)
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _uow.MarkAsChanged(universityBranch);
@@ -96,7 +100,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var universityBranchViewModel = GetById(id);
             if (universityBranchViewModel == null)

@@ -61,7 +61,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationYearViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(EducationYearViewModel educationYearViewModel)
+        public MessageResultServer Create(EducationYearViewModel educationYearViewModel)
         {
             var transacion = _uow.BeginTransaction();
             if (educationYearViewModel.IsActiveYear)
@@ -72,7 +72,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _educationYears.Add(educationYear);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationYear.Id;
             if (msgRes.MessageType == MessageType.Success)
                 transacion.Commit();
@@ -88,7 +88,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationYearViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(EducationYearViewModel educationYearViewModel)
+        public MessageResultServer Update(EducationYearViewModel educationYearViewModel)
         {
             var transacion = _uow.BeginTransaction();
             if(educationYearViewModel.IsActiveYear)
@@ -113,7 +113,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var educationYearViewModel = GetById(id);
             if (educationYearViewModel == null)

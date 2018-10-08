@@ -24,7 +24,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
 
             actionContext.Response = actionContext.ControllerContext.Request
                 .CreateResponse(HttpStatusCode.OK,
-                    new MessageResultApi
+                    new MessageResultClient
                     {
                         Message = sb.ToString(),
                         MessageType = MessageType.Error

@@ -78,12 +78,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lookupViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(LookupViewModel lookupViewModel)
+        public MessageResultServer Create(LookupViewModel lookupViewModel)
         {
             var lookup = Mapper.Map<Lookup>(lookupViewModel);
             _lookups.Add(lookup);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = lookup.Id;
             return msgRes;
         }
@@ -94,7 +94,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lookupViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(LookupViewModel lookupViewModel)
+        public MessageResultServer Update(LookupViewModel lookupViewModel)
         {
             var lookup = Mapper.Map<Lookup>(lookupViewModel);
             _uow.MarkAsChanged(lookup);
@@ -110,7 +110,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var lookupViewModel = GetById(id);
             if (lookupViewModel == null)

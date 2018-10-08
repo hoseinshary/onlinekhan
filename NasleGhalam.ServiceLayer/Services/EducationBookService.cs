@@ -75,7 +75,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationBookViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(EducationBookViewModel educationBookViewModel)
+        public MessageResultServer Create(EducationBookViewModel educationBookViewModel)
         {
             var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
             var topics = _uow.Set<Topic>();
@@ -91,7 +91,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
             _educationBooks.Add(educationBook);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationBook.Id;
             return msgRes;
         }
@@ -102,7 +102,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationBookViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(EducationBookViewModel educationBookViewModel)
+        public MessageResultServer Update(EducationBookViewModel educationBookViewModel)
         {
             var transaction = _uow.BeginTransaction();
             _uow.ExecuteSqlCommand("delete from Topics_EducationBooks where EducationBookId=@id", 
@@ -140,7 +140,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var educationBookViewModel = GetById(id);
             if (educationBookViewModel == null)

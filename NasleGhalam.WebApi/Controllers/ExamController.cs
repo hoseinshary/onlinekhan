@@ -45,7 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(ExamViewModel examViewModel)
         {
             var msgRes = _examService.Create(examViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
@@ -60,7 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(ExamViewModel examViewModel)
         {
             var msgRes = _examService.Update(examViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -72,7 +72,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _examService.Delete(id);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType

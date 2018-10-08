@@ -95,12 +95,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="userViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResult Create(UserCreateViewModel userViewModel, byte userRoleLevel)
+        public MessageResultServer Create(UserCreateViewModel userViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
             if (role.Level <= userRoleLevel)
-                return new MessageResult()
+                return new MessageResultServer()
                 {
                     FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
@@ -109,7 +109,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var user = Mapper.Map<User>(userViewModel);
             user.LastLogin = DateTime.Now;
             _users.Add(user);
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = user.Id;
             return msgRes;
         }
@@ -121,19 +121,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="userViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResult Update(UserUpdateViewModel userViewModel, byte userRoleLevel)
+        public MessageResultServer Update(UserUpdateViewModel userViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
             if (role == null)
-                return new MessageResult()
+                return new MessageResultServer()
                 {
                     FaMessage = "نقش یافت نگردید",
                     MessageType = MessageType.Error
                 };
 
             if (role.Level <= userRoleLevel)
-                return new MessageResult()
+                return new MessageResultServer()
                 {
                     FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
@@ -161,7 +161,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id, byte userRoleLevel)
+        public MessageResultServer Delete(int id, byte userRoleLevel)
         {
             var userViewModel = GetById(id, userRoleLevel);
             if (userViewModel == null)

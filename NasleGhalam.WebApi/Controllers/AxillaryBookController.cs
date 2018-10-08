@@ -64,7 +64,7 @@ namespace NasleGhalam.WebApi.Controllers
                 postedFile.SaveAs(SitePath.GetAxillaryBookAbsPath(axillaryBookViewModel.ImgName));
             }
 
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
@@ -99,7 +99,7 @@ namespace NasleGhalam.WebApi.Controllers
             {
                 postedFile.SaveAs(SitePath.GetAxillaryBookAbsPath(axillaryBookViewModel.ImgName)); // update image if exist
             }
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -120,7 +120,7 @@ namespace NasleGhalam.WebApi.Controllers
                 File.Delete(SitePath.GetAxillaryBookAbsPath(axillaryBook.ImgName));
             }
 
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType

@@ -63,12 +63,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="cityViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(CityViewModel cityViewModel)
+        public MessageResultServer Create(CityViewModel cityViewModel)
         {
             var city = Mapper.Map<City>(cityViewModel);
             _cities.Add(city);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = city.Id;
             return msgRes;
         }
@@ -79,7 +79,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="cityViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(CityViewModel cityViewModel)
+        public MessageResultServer Update(CityViewModel cityViewModel)
         {
             var city = Mapper.Map<City>(cityViewModel);
             _uow.MarkAsChanged(city);
@@ -95,7 +95,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var cityViewModel = GetById(id);
             if (cityViewModel == null)

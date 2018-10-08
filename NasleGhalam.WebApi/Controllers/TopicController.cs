@@ -83,7 +83,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(TopicCreateViewModel topicViewModel)
         {
             var msgRes = _topicService.Create(topicViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
@@ -98,7 +98,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(TopicCreateViewModel topicViewModel)
         {
             var msgRes = _topicService.Update(topicViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -110,7 +110,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _topicService.Delete(id);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType

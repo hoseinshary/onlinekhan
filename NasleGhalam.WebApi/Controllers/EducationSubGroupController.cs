@@ -45,7 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(EducationSubGroupViewModel educationSubGroupViewModel)
         {
             var msgRes = _educationSubGroupService.Create(educationSubGroupViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
@@ -60,7 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(EducationSubGroupViewModel educationSubGroupViewModel)
         {
             var msgRes = _educationSubGroupService.Update(educationSubGroupViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -72,7 +72,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _educationSubGroupService.Delete(id);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType

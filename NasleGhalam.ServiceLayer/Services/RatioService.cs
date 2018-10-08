@@ -65,12 +65,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="ratioViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(RatioViewModel ratioViewModel)
+        public MessageResultServer Create(RatioViewModel ratioViewModel)
         {
             var ratio = Mapper.Map<Ratio>(ratioViewModel);
             _ratios.Add(ratio);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = ratio.Id;
             return msgRes;
         }
@@ -81,7 +81,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="ratioViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(RatioViewModel ratioViewModel)
+        public MessageResultServer Update(RatioViewModel ratioViewModel)
         {
             var ratio = Mapper.Map<Ratio>(ratioViewModel);
             _uow.MarkAsChanged(ratio);
@@ -97,7 +97,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var ratioViewModel = GetById(id);
             if (ratioViewModel == null)

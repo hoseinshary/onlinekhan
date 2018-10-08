@@ -7,6 +7,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public City()
         {
             Users = new HashSet<User>();
+            HistoryEducations = new HashSet<HistoryEducation>();
         }
         public int Id { get; set; }
 
@@ -17,5 +18,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public  Province Province { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<HistoryEducation> HistoryEducations { get; set; }
+
     }
 }

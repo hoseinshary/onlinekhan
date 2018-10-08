@@ -70,7 +70,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
         {
             var msgRes = _educationGroup_LessonService.Create(educationGroup_LessonViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
@@ -85,7 +85,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
         {
             var msgRes = _educationGroup_LessonService.Update(educationGroup_LessonViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -97,7 +97,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _educationGroup_LessonService.Delete(id);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -110,7 +110,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
         {
             var msgRes = _educationGroup_LessonService.Change(educationGroup_LessonViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,

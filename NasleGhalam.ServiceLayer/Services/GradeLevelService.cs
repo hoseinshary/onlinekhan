@@ -66,12 +66,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="gradeLevelViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(GradeLevelViewModel gradeLevelViewModel)
+        public MessageResultServer Create(GradeLevelViewModel gradeLevelViewModel)
         {
             var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
             _gradeLevels.Add(gradeLevel);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = gradeLevel.Id;
             return msgRes;
         }
@@ -82,7 +82,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="gradeLevelViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(GradeLevelViewModel gradeLevelViewModel)
+        public MessageResultServer Update(GradeLevelViewModel gradeLevelViewModel)
         {
             var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
             _uow.MarkAsChanged(gradeLevel);
@@ -97,7 +97,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var gradeLevelViewModel = GetById(id);
             if (gradeLevelViewModel == null)

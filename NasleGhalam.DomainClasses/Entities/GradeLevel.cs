@@ -8,6 +8,7 @@ namespace NasleGhalam.DomainClasses.Entities
         {
             HistoryEducations = new HashSet<HistoryEducation>();
             EducationBooks = new HashSet<EducationBook>();
+            Lessons = new HashSet<Lesson>();
         }
         public int Id { get; set; }
 
@@ -22,5 +23,6 @@ namespace NasleGhalam.DomainClasses.Entities
         public virtual ICollection<HistoryEducation> HistoryEducations { get; set; }
 
         public virtual ICollection<EducationBook> EducationBooks { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

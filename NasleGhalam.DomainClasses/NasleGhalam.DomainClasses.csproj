@@ -65,7 +65,6 @@
     <Compile Include="Entities\Ratio.cs" />
     <Compile Include="Entities\HistoryEducation.cs" />
     <Compile Include="Entities\EducationGroup_Lesson.cs" />
-    <Compile Include="Entities\UniversityBranch_HistoryEducation.cs" />
     <Compile Include="Entities\UniversityBranch.cs" />
     <Compile Include="Entities\Teacher.cs" />
     <Compile Include="Entities\Tag.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="EntityConfigs\RatioConfig.cs" />
     <Compile Include="EntityConfigs\HistoryEducationConfig.cs" />
     <Compile Include="EntityConfigs\EducationGroup_LessonConfig.cs" />
-    <Compile Include="EntityConfigs\UniversityBranch_HistoryEducationConfig.cs" />
     <Compile Include="EntityConfigs\UniversityBranchConfig.cs" />
     <Compile Include="EntityConfigs\TagConfig.cs" />
     <Compile Include="EntityConfigs\GradeLevelConfig.cs" />

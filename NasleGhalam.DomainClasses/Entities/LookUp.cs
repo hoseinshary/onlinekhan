@@ -19,6 +19,11 @@ namespace NasleGhalam.DomainClasses.Entities
 
             Topic_AreaTypes = new HashSet<Topic>();
             Topic_Hardnesses = new HashSet<Topic>();
+
+
+            Lesson_Nezams = new HashSet<Lesson>();
+
+
         }
 
         public int Id { get; set; }
@@ -38,5 +43,6 @@ namespace NasleGhalam.DomainClasses.Entities
         public virtual ICollection<Question> Question_ReapetnessTypes { get; set; }
         public virtual ICollection<Topic> Topic_Hardnesses { get; set; }
         public virtual ICollection<Topic> Topic_AreaTypes { get; set; }
+        public virtual ICollection<Lesson> Lesson_Nezams { get; set; }
     }
 }

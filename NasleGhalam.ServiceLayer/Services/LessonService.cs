@@ -55,6 +55,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     Name = less.Name,
                     IsMain = less.IsMain,
                     Id = less.Id,
+                    GradeLevelId = less.GradeLevelId,
+                    LookupId_Nezam = less.LookupId_Nezam,
                     EducationGroups = 
                     _educationGroups
                     .Where(x=> x.EducationSubGroups.Any())
@@ -185,12 +187,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(LessonViewModel lessonViewModel)
+        public MessageResultServer Create(LessonViewModel lessonViewModel)
         {
             var lesson = Mapper.Map<Lesson>(lessonViewModel);
             _lessons.Add(lesson);
 
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = lesson.Id;
             return msgRes;
         }
@@ -200,7 +202,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="LessonCreateAndUpdateViewModel"></param>
         /// <returns></returns>
-        public MessageResult CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateViewModel)
+        public MessageResultServer CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
             //var currentLesson = _lessons.FirstOrDefault(current => current.Name == lessonCreateViewModel.Name.Replace(" ", ""));
             //if (currentLesson != null)
@@ -236,7 +238,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             _lessons.Add(l);
-            MessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = l.Id;
             return msgRes;
 
@@ -318,7 +320,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(LessonCreateAndUpdateViewModel lessonCreateViewModel)
+        public MessageResultServer Update(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
 
             //خواندن اطلاعات واسط 
@@ -386,7 +388,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultServer Delete(int id)
         {
             var lesson = _lessons
                 .Where(current => current.Id == id)
@@ -403,7 +405,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
             else if (lesson.HasTopic)
             {
-                return new MessageResult
+                return new MessageResultServer
                 {
                     FaMessage = "برای این درس قبلا عنوان تعریف شده است.درس مورد نظر حذف نگردید",
                     MessageType = MessageType.Error

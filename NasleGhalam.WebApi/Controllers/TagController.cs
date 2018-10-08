@@ -45,7 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(TagViewModel tagViewModel)
         {
             var msgRes = _tagService.Create(tagViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType,
@@ -60,7 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(TagViewModel tagViewModel)
         {
             var msgRes = _tagService.Update(tagViewModel);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType
@@ -72,7 +72,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _tagService.Delete(id);
-            return Ok(new MessageResultApi
+            return Ok(new MessageResultClient
             {
                 Message = msgRes.FaMessage,
                 MessageType = msgRes.MessageType

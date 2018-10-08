@@ -32,6 +32,7 @@ const store = {
       EducationGroup_LessonId: 0,
       EducationGroupId: 0
     },
+    EducationGroupId: 0,
     moduleDdl: [],
     treeLst: [],
     controllerDdl: [],
@@ -75,9 +76,12 @@ const store = {
      * rest value of topicObj
      */
     reset(state, $v) {
+      debugger;
+      state.EducationGroupId = state.topicObj.EducationGroupId;
       util.clearObject(state.topicObj);
       if ($v) {
         $v.$reset();
+        $v.topicObj.EducationGroupId.$model = state.EducationGroupId;
       }
     }
   },
@@ -116,6 +120,7 @@ const store = {
       }
     },
     setLessonIdQndParentIdStore({ state }, obj) {
+      debugger;
       state.topicObj.EducationGroup_LessonId = obj.lessonid;
       state.topicObj.ParentTopicId = obj.parentId;
     },
@@ -177,10 +182,11 @@ const store = {
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
+        debugger;
 
         axios.post(`${baseUrl}/Create`, state.topicObj).then(response => {
           let data = response.data;
-
+          debugger;
           if (data.MessageType == 1) {
             dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
             commit('insert', data.Id);
@@ -283,6 +289,7 @@ const store = {
         let data = response.data;
         if (data.MessageType == 1) {
           commit('delete');
+          dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
           commit('reset');
           dispatch('modelChangedStore');
           dispatch('toggleModalDeleteStore', false);
@@ -303,7 +310,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.topicObj.Name;
+      return state.topicObj.Title;
     }
   }
 };

@@ -6,7 +6,7 @@
       <div slot="body">
 
         <br>
-        <div class="row">
+        <div class="row gutter-sm">
           <my-select :model="$v.topicObj.EducationGroupId"
                      :options="educationGroupDdl"
                      class="col-md-6"
@@ -18,21 +18,16 @@
                      filter
                      @change="GetAllTreeStore($event);lessonId =topicObj.EducationGroup_LessonId;"
           />
-          <q-tree :nodes="treeLst"
-                  class="col-md-2"
-                  :selected.sync="selectedNodeId"
-                  default-expand-all
-                  node-key="Id"
-                  style="overflow: auto;" />
+        
           <q-slide-transition>
 
-            <div class="col-md-10"
-                 v-if="treeLst.length>0">
+            <div class="col-md-12"
+                 v-if="topicObj.EducationGroup_LessonId!=0">
               <div class="col-12"
                    style="margin:10px;">مبحث انتخابی : {{selectedTreePath}}</div>
               <q-slide-transition>
                 <div class="col-12"
-                     v-if="selectedNodeId > 0">
+                     >
                   <my-btn-create label="مشاهده جزئیات"
                                  color='light'
                                  icon='list'
@@ -48,7 +43,15 @@
               </q-slide-transition>
             </div>
           </q-slide-transition>
-
+          <q-slide-transition>
+  <q-tree :nodes="treeLst"
+                  class="col-md-12"
+                  color="blue"
+                  :selected.sync="selectedNodeId"
+                  default-expand-all
+                  node-key="Id"
+                  ref="topicTree"  />
+          </q-slide-transition>
         </div>
       </div>
     </my-panel>
@@ -116,6 +119,7 @@ export default {
       this.resetCreateStore();
       // show modal
       this.toggleModalCreateStore(true);
+      debugger
       this.setLessonIdQndParentIdStore({
         lessonid: this.lessonId,
         parentId: this.selectedNodeId
@@ -176,6 +180,12 @@ export default {
     this.fillTopicAreaTypeDdlStore(); // todo: better go to create and update modal
   },
   watch: {
+    treeLst:function(){
+      setTimeout(() => {
+      this.$refs.topicTree.expandAll();
+        
+      }, 500);
+    },
     selectedNodeId: function(val) {
       if (val == null) this.selectedTreePath = '';
       else {
@@ -203,11 +213,5 @@ export default {
   }
 };
 </script>
-<style scoped>
-.myTreeDiv {
-  width: 120px;
-  overflow: auto;
-}
-</style>
 
 

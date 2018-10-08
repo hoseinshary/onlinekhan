@@ -59,7 +59,7 @@ export default {
       // required
     },
     EducationGroupId: {
-      displayName: displayName('گروه تحصیلی')
+      displayName: displayName('گروه آموزشی')
       // numeric,
       // required
     }

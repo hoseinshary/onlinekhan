@@ -105,6 +105,10 @@
     <Compile Include="Migrations\201810071549300_lesson_historyEducaiton_changes2.Designer.cs">
       <DependentUpon>201810071549300_lesson_historyEducaiton_changes2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810081640071_lesson_fix.cs" />
+    <Compile Include="Migrations\201810081640071_lesson_fix.Designer.cs">
+      <DependentUpon>201810081640071_lesson_fix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -164,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810071549300_lesson_historyEducaiton_changes2.resx">
       <DependentUpon>201810071549300_lesson_historyEducaiton_changes2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810081640071_lesson_fix.resx">
+      <DependentUpon>201810081640071_lesson_fix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

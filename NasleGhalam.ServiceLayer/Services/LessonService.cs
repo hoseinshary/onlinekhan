@@ -57,6 +57,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Id = less.Id,
                     GradeLevelId = less.GradeLevelId,
                     LookupId_Nezam = less.LookupId_Nezam,
+                    GradeId = less.GradeLevel.GradeId,
                     EducationGroups = 
                     _educationGroups
                     .Where(x=> x.EducationSubGroups.Any())
@@ -217,7 +218,9 @@ namespace NasleGhalam.ServiceLayer.Services
             Lesson l = new Lesson()
             {
                 Name = lessonCreateViewModel.Name,
-                IsMain = lessonCreateViewModel.IsMain
+                IsMain = lessonCreateViewModel.IsMain,
+                GradeLevelId = lessonCreateViewModel.GradeLevelId,
+                LookupId_Nezam = lessonCreateViewModel.LookupId_Nezam
             };
 
             foreach (var educationGroup in lessonCreateViewModel.EducationGroups)

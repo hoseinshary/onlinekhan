@@ -16,6 +16,11 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                .HasForeignKey(x => x.GradeLevelId)
                .WillCascadeOnDelete(false);
 
+
+            this.HasRequired(x => x.Lookup_Nezam)
+              .WithMany(x => x.Lesson_Nezams)
+              .HasForeignKey(x => x.LookupId_Nezam)
+              .WillCascadeOnDelete(false);
         }
     }
 }

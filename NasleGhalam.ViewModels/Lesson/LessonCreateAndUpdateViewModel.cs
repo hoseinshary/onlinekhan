@@ -27,6 +27,11 @@ namespace NasleGhalam.ViewModels.Lesson
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int GradeLevelId { get; set; }
 
+        
+
+        public int GradeId { get; set; }
+
+
 
         public IEnumerable<EducationGroupLessonViewModel> EducationGroups { get; set; }
 

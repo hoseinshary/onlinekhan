@@ -14,6 +14,10 @@ namespace NasleGhalam.ViewModels.UniversityBranch
         public string Name { get; set; }
 
 
+        [Display(Name = "معدل سایت")]
+        public int SiteAverage { get; set; }
+
+
         [Display(Name = "کمینه تراز 1")]
         public int Balance1Low { get; set; }
 

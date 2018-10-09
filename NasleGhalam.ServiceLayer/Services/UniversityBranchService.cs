@@ -33,6 +33,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 Id = current.Id,
                 Name = current.Name,
+                SiteAverage = current.SiteAverage,
                 Balance1Low = current.Balance1Low,
                 Balance1High = current.Balance1High,
                 Balance2Low = current.Balance2Low,
@@ -55,6 +56,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Id = current.Id,
                     Name = current.Name,
+                    SiteAverage = current.SiteAverage,
                     Balance1Low = current.Balance1Low,
                     Balance1High = current.Balance1High,
                     Balance2Low = current.Balance2Low,
@@ -75,6 +77,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 Id = current.Id,
                 Name = current.Name,
+                SiteAverage = current.SiteAverage,
                 Balance1Low = current.Balance1Low,
                 Balance1High = current.Balance1High,
                 Balance2Low = current.Balance2Low,

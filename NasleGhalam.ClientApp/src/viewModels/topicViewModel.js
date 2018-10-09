@@ -62,6 +62,15 @@ export default {
       displayName: displayName('گروه آموزشی')
       // numeric,
       // required
+    },
+    LookupId_Nezam: {
+      displayName: displayName('نظانم (اختیاری)')
+    },
+    GradeId: {
+      displayName: displayName('مقطع (اختیاری)')
+    },
+    GradeLevelId: {
+      displayName: displayName('پایه (اختیاری)')
     }
   }
 };

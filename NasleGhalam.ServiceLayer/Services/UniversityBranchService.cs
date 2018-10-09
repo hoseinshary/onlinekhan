@@ -38,7 +38,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 Balance1High = current.Balance1High,
                 Balance2Low = current.Balance2Low,
                 Balance2High = current.Balance2High,
-                EducationSubGroupId = current.EducationSubGroupId
+                EducationSubGroupId = current.EducationSubGroupId,
+                EducationSubGroupName = current.EducationSubGroup.Name
             }).ToList();
         }
 

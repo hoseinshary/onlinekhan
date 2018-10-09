@@ -109,6 +109,10 @@
     <Compile Include="Migrations\201810081640071_lesson_fix.Designer.cs">
       <DependentUpon>201810081640071_lesson_fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810091426248_changeuniversitybranch.cs" />
+    <Compile Include="Migrations\201810091426248_changeuniversitybranch.Designer.cs">
+      <DependentUpon>201810091426248_changeuniversitybranch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -171,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810081640071_lesson_fix.resx">
       <DependentUpon>201810081640071_lesson_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810091426248_changeuniversitybranch.resx">
+      <DependentUpon>201810091426248_changeuniversitybranch.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

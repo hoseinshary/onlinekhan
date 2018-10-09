@@ -10,6 +10,9 @@ namespace NasleGhalam.ViewModels.Lesson
 
         public string label { get; set; }
         
+        public int LookupId_Nezam { get; set; }
+
+        public int GradeLevelId { get; set; }
 
 
     }

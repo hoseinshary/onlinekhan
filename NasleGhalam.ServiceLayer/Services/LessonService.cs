@@ -450,7 +450,10 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 value = current.Id,
                 label = current.Lesson.Name,
-                educationGroupId = current.EducationGroupId
+                educationGroupId = current.EducationGroupId,
+                GradeLevelId = current.Lesson.GradeLevelId,
+                LookupId_Nezam = current.Lesson.LookupId_Nezam
+
             }).ToList();
         }
     }

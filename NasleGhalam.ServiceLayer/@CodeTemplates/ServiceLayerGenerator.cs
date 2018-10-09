@@ -7,47 +7,46 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.UniversityBranch;
+using NasleGhalam.ViewModels.Student;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class UniversityBranchService
+	public class StudentService
 	{
-		private const string Title = "رشته دانشگاهی";
+		private const string Title = "دانش آموز";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<UniversityBranch> _universityBranchs;
+        private readonly IDbSet<Student> _students;
        
-	    public UniversityBranchService(IUnitOfWork uow)
+	    public StudentService(IUnitOfWork uow)
         {
             _uow = uow;
-            _universityBranchs = uow.Set<UniversityBranch>();
+            _students = uow.Set<Student>();
         }
 
 
 		/// <summary>
-        /// گرفتن  رشته دانشگاهی با آی دی
+        /// گرفتن  دانش آموز با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public UniversityBranchViewModel GetById(int id)
+        public StudentViewModel GetById(int id)
         {
-            return _universityBranchs
+            return _students
                 .Where(current => current.Id == id)
-                .Select(current => new UniversityBranchViewModel
+                .Select(current => new StudentViewModel
                 {
-                    Id = current.Id,
-                    
+                    Id = current.Id
                 }).FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه رشته دانشگاهی ها
+        /// گرفتن همه دانش آموز ها
         /// </summary>
         /// <returns></returns>
-        public IList<UniversityBranchViewModel> GetAll()
+        public IList<StudentViewModel> GetAll()
         {
-            return _universityBranchs.Select(current => new UniversityBranchViewModel()
+            return _students.Select(current => new StudentViewModel()
             {
                 Id = current.Id,
             }).ToList();
@@ -55,62 +54,62 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// ثبت رشته دانشگاهی
+        /// ثبت دانش آموز
         /// </summary>
-        /// <param name="universityBranchViewModel"></param>
+        /// <param name="studentViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResult Create(StudentViewModel studentViewModel)
         {
-            var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
-            _universityBranchs.Add(universityBranch);
+            var student = Mapper.Map<Student>(studentViewModel);
+            _students.Add(student);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = universityBranch.Id;
+			msgRes.Id = student.Id;
             return msgRes;
         }
 
 
 		/// <summary>
-        /// ویرایش رشته دانشگاهی
+        /// ویرایش دانش آموز
         /// </summary>
-        /// <param name="universityBranchViewModel"></param>
+        /// <param name="studentViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResult Update(StudentViewModel studentViewModel)
         {
-            var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
-            _uow.MarkAsChanged(universityBranch);
+            var student = Mapper.Map<Student>(studentViewModel);
+            _uow.MarkAsChanged(student);
 			
 			return  _uow.CommitChanges(CrudType.Update, Title);
         }
 
 
 		/// <summary>
-        /// حذف رشته دانشگاهی
+        /// حذف دانش آموز
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResult Delete(int id)
         {
-			var  universityBranchViewModel = GetById(id);
-            if (universityBranchViewModel == null)
+			var  studentViewModel = GetById(id);
+            if (studentViewModel == null)
             {
                 return Utility.NotFoundMessage();
             }
 
-            var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
-            _uow.MarkAsDeleted(universityBranch);
+            var student = Mapper.Map<Student>(studentViewModel);
+            _uow.MarkAsDeleted(student);
             
 			return  _uow.CommitChanges(CrudType.Delete, Title);
         }
 
 
         /// <summary>
-        /// گرفتن همه رشته دانشگاهی ها برای لیست کشویی
+        /// گرفتن همه دانش آموز ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _universityBranchs.Select(current => new SelectViewModel
+            return _students.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

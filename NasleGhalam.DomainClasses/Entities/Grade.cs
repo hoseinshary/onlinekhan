@@ -14,6 +14,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public byte Priority { get; set; }
 
-        public virtual ICollection<GradeLevel> GradeLevels { get; set; }
+        public ICollection<GradeLevel> GradeLevels { get; set; }
     }
 }

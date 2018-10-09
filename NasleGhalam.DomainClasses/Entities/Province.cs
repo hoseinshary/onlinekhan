@@ -16,6 +16,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Code { get; set; }
 
-        public virtual ICollection<City> Cities { get; set; }
+        public ICollection<City> Cities { get; set; }
     }
 }

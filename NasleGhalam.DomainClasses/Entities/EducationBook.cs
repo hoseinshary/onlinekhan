@@ -29,8 +29,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public EducationGroup_Lesson EducationGroup_Lesson { get; set; }
 
-        public virtual ICollection<Topic> Topics { get; set; }
+        public ICollection<Topic> Topics { get; set; }
 
-        public virtual ICollection<AxillaryBook> AxillaryBooks { get; set; }
+        public ICollection<AxillaryBook> AxillaryBooks { get; set; }
     }
 }

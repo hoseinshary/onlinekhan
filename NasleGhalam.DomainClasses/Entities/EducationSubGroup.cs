@@ -18,11 +18,11 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public EducationGroup EducationGroup { get; set; }
 
-        public virtual ICollection<UniversityBranch> UniversityBranches { get; set; }
+        public ICollection<UniversityBranch> UniversityBranches { get; set; }
 
-        public virtual ICollection<Ratio> Ratios { get; set; }
+        public ICollection<Ratio> Ratios { get; set; }
 
-        public virtual ICollection<HistoryEducation> HistoryEducations { get; set; }
+        public ICollection<HistoryEducation> HistoryEducations { get; set; }
 
     }
 }

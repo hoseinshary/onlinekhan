@@ -2,10 +2,7 @@
 {
     public class MessageResultServer
     {
-
-
         public string FaMessage { get; set; }
-
 
         public string EnMessage { get; set; }
 

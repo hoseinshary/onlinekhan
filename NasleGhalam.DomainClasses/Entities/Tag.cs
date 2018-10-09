@@ -12,8 +12,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Name { get; set; }
 
-        public bool isSource { get; set; }
+        public bool IsSource { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+        public ICollection<Question> Questions { get; set; }
     }
 }

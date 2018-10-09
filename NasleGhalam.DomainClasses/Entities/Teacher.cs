@@ -18,7 +18,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public User User { get; set; }
 
-        public virtual ICollection<Box> Boxes { get; set; }
+        public ICollection<Box> Boxes { get; set; }
 
     }
 }

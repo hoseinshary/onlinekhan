@@ -19,7 +19,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Lesson Lesson { get; set; }
 
-        public virtual ICollection<EducationBook> EducationBooks { get; set; }
-        public virtual ICollection<Topic> Topics { get; set; }
+        public ICollection<EducationBook> EducationBooks { get; set; }
+        public ICollection<Topic> Topics { get; set; }
     }
 }

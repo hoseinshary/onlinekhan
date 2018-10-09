@@ -26,6 +26,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public EducationSubGroup EducationSubGroup { get; set; }
 
-        public virtual ICollection<HistoryEducation> HistoryEducations { get; set; }
+        public ICollection<HistoryEducation> HistoryEducations { get; set; }
     }
 }

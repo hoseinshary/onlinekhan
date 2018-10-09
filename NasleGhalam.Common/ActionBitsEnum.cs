@@ -70,10 +70,10 @@
         ExamUpdateAccess = 48,
         ExamDeleteAccess = 49,
 
-        //RatioReadAccess = 50,
-        //RatioCreateAccess = 51,
-        //RatioUpdateAccess = 52,
-        //RatioDeleteAccess = 53,
+        StudentReadAccess = 50,
+        StudentCreateAccess = 51,
+        StudentUpdateAccess = 52,
+        StudentDeleteAccess = 53,
 
         QuestionCreateAccess = 54,
         QuestionUpdateAccess = 55,

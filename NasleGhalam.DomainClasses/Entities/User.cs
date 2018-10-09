@@ -17,17 +17,17 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Family { get; set; }
 
-        public String Username { get; set; }
+        public string Username { get; set; }
 
-        public String Password { get; set; }
+        public string Password { get; set; }
 
-        public String NationalNo { get; set; }
+        public string NationalNo { get; set; }
 
         public bool Gender { get; set; }
 
-        public String Phone { get; set; }
+        public string Phone { get; set; }
 
-        public String Mobile { get; set; }
+        public string Mobile { get; set; }
 
         public bool IsAdmin { get; set; }
 
@@ -43,12 +43,12 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int CityId { get; set; }
 
-        public virtual Student Student { get; set; }
+        public Student Student { get; set; }
 
-        public virtual ICollection<Teacher> Teachers { get; set; }
+        public ICollection<Teacher> Teachers { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+        public ICollection<Question> Questions { get; set; }
 
-        public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; }
+        public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
     }
 }

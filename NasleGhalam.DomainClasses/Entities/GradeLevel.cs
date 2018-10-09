@@ -20,9 +20,10 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Grade Grade { get; set; }
 
-        public virtual ICollection<HistoryEducation> HistoryEducations { get; set; }
+        public ICollection<HistoryEducation> HistoryEducations { get; set; }
 
-        public virtual ICollection<EducationBook> EducationBooks { get; set; }
-        public virtual ICollection<Lesson> Lessons { get; set; }
+        public ICollection<EducationBook> EducationBooks { get; set; }
+
+        public ICollection<Lesson> Lessons { get; set; }
     }
 }

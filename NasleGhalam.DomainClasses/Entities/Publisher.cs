@@ -12,6 +12,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Name { get; set; }
 
-        public virtual ICollection<AxillaryBook> AxillaryBooks { get; set; }
+        public ICollection<AxillaryBook> AxillaryBooks { get; set; }
     }
 }

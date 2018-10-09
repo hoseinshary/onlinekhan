@@ -29,6 +29,7 @@ namespace NasleGhalam.ServiceLayer.Configs
             AutoMapper.Mapper.Initialize(config =>
             {
                 config.CreateMap<LessonViewModel, Lesson>();
+                config.CreateMap<LessonCreateAndUpdateViewModel, Lesson>();
                 config.CreateMap<ViewModels.EducationGroup.EducationGroupViewModel, EducationGroup>();
                 config.CreateMap<EducationGroup_LessonViewModel, EducationGroup_Lesson>();
                 config.CreateMap<EducationGroupLessonViewModel, EducationGroup_Lesson>();

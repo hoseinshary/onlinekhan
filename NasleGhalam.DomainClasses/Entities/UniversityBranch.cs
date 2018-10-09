@@ -12,6 +12,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Name { get; set; }
 
+        public int SiteAverage { get; set; }
+
         public int Balance1Low { get; set; }
 
         public int Balance1High { get; set; }

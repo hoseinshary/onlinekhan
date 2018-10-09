@@ -20,7 +20,11 @@ const store = {
     universityBranchObj: {
       Id: 0,
       Name: '',
-      Balance: 0,
+      SiteAverage: 0,
+      Balance1Low: 0,
+      Balance1High: 0,
+      Balance2Low: 0,
+      Balance2High: 0,
       EducationSubGroupId: 0,
       EducationSubGroupName: ''
     },

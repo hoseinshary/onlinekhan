@@ -9,12 +9,27 @@
         <div class="row gutter-sm">
           <my-select :model="$v.topicObj.EducationGroupId"
                      :options="educationGroupDdl"
-                     class="col-md-6"
+                     class="col-md-3"
                      filter />
 
+          <my-select :model="$v.topicObj.LookupId_Nezam"
+                     :options="lookupTopicNezamDdl"
+                     class="col-md-2"
+                     filter
+          />
+          <my-select :model="$v.topicObj.GradeId"
+                     :options="gradeDdl"
+                     class="col-md-2"
+                     filter
+          />
+          <my-select :model="$v.topicObj.GradeLevelId"
+                     :options="gradeLavelFilteredDdl"
+                     class="col-md-2"
+                     filter
+          />
           <my-select :model="$v.topicObj.EducationGroup_LessonId"
                      :options="lessonFilteredDdl"
-                     class="col-md-6"
+                     class="col-md-3"
                      filter
                      @change="GetAllTreeStore($event);lessonId =topicObj.EducationGroup_LessonId;"
           />
@@ -116,6 +131,15 @@ export default {
     }),
 
     ...mapActions('lessonStore', { fillLessonDdlStore: 'fillDdlStore' }),
+    ...mapActions('lookupStore', [
+      'fillTopicNezamStore'
+    ]),
+    ...mapActions('gradeStore', {
+      'fillGradeDdlStore':'fillDdlStore'}
+    ),
+    ...mapActions('gradeLevelStore', {
+      'fillGradeLevel':'fillDdlStore'}
+    ),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
@@ -167,18 +191,40 @@ export default {
     ...mapState('lessonStore', {
       lessonDdl: 'allObjDdl'
     }),
+    ...mapState('lookupStore', [
+      'lookupTopicNezamDdl'
+    ]),
+    ...mapState('gradeStore', {gradeDdl:'gradeDdl'}
+    ),
+    ...mapState('gradeLevelStore',
+      {gradeLevelDdl:'gradeLevelDdl'}
+    ),
+    gradeLavelFilteredDdl: function() {
+      return this.topicObj.GradeId == 0
+        ? []
+        : this.gradeLevelDdl.filter(
+            x => x.gradeId == this.topicObj.GradeId
+          );
+    },
     lessonFilteredDdl: function() {
+      debugger
       return this.topicObj.EducationGroupId == 0
         ? []
         : this.lessonDdl.filter(
-            x => x.educationGroupId == this.topicObj.EducationGroupId
+            x => x.educationGroupId == this.topicObj.EducationGroupId 
+            &&  
+              (this.topicObj.LookupId_Nezam == 0 ||  x.LookupId_Nezam == this.topicObj.LookupId_Nezam) 
+            &&
+              (this.topicObj.GradeLevelId == 0 ||  x.GradeLevelId == this.topicObj.GradeLevelId) 
           );
     }
   },
   created() {
     this.fillEduGrpDdlStore();
     this.fillLessonDdlStore();
-   
+    this.fillTopicNezamStore();
+    this.fillGradeDdlStore();
+    this.fillGradeLevel();
   },
   watch: {
     treeLst:function(){

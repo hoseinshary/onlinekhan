@@ -30,7 +30,10 @@ const store = {
       IsActive: false,
       ParentTopicId: 0,
       EducationGroup_LessonId: 0,
-      EducationGroupId: 0
+      EducationGroupId: 0,
+      LookupId_Nezam: 0,
+      GradeId: 0,
+      GradeLevelId: 0
     },
     EducationGroupId: 0,
     moduleDdl: [],

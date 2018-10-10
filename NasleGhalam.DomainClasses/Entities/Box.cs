@@ -16,6 +16,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Teacher Teacher { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+        public ICollection<Question> Questions { get; set; }
     }
 }

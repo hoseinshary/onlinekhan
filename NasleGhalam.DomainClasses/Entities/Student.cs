@@ -17,8 +17,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public User User { get; set; }
 
-        public virtual ICollection<HistoryEducation> HistoryEducations { get; set; }
+        public ICollection<HistoryEducation> HistoryEducations { get; set; }
 
-        public virtual ICollection<QuestionAnswerView> QuestionAnswerViews { get; set; }
+        public ICollection<QuestionAnswerView> QuestionAnswerViews { get; set; }
     }
 }

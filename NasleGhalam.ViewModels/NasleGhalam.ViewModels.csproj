@@ -54,8 +54,11 @@
     <Compile Include="Publisher\PublisherViewModel.cs" />
     <Compile Include="Question\QuestionCreateViewModel.cs" />
     <Compile Include="Question\QuestionTempViewModel.cs" />
+    <Compile Include="Student\StudentUpdateViewModel.cs" />
     <Compile Include="Tag\TagViewModel.cs" />
     <Compile Include="UniversityBranch\UniversityBranchViewModel.cs" />
+    <Compile Include="Student\StudentCreateViewModel .cs" />
+    <Compile Include="Student\StudentViewModel.cs" />
     <Compile Include="_MediaFormatter\IMultiPartMediaTypeFormatter.cs" />
     <Content Include="%40CodeTemplates\ViewModelGenerator.cs">
       <AutoGen>True</AutoGen>
@@ -94,7 +97,7 @@
     <Compile Include="Topic\TopicTreeViewModel.cs" />
     <Compile Include="User\LoginResultViewModel.cs" />
     <Compile Include="User\LoginViewModel.cs" />
-    <Compile Include="User\UserGetViewModel.cs" />
+    <Compile Include="User\UserViewModel.cs" />
     <Compile Include="User\UserUpdateViewModel.cs" />
     <Compile Include="User\UserCreateViewModel .cs" />
     <Compile Include="_Attributes\MinLengthExcludeEmptyAndNullAttribute.cs" />

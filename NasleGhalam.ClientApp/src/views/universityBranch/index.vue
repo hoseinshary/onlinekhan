@@ -70,8 +70,8 @@ export default {
           data: 'Name'
         },
         {
-          title: 'تراز',
-          data: 'Balance'
+          title: 'معدل سایت',
+          data: 'SiteAverage'
         },
         {
           title: 'عملیات',

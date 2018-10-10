@@ -33,7 +33,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public GradeLevel GradeLevel { get; set; }
 
-        public virtual ICollection<UniversityBranch> UniversityBranches { get; set; }
-        public virtual ICollection<City> Cities { get; set; }
+        public ICollection<UniversityBranch> UniversityBranches { get; set; }
+
+        public ICollection<City> Cities { get; set; }
     }
 }

@@ -330,6 +330,10 @@ namespace NasleGhalam.ServiceLayer.Services
             var previousEducationGroupLesson = _educationGroup_Lesson
                 .Where(current => current.LessonId == lessonCreateViewModel.Id).ToList();
 
+
+            
+
+
             //create 
             var allRatios = _ratios.AsNoTracking().ToList();
             foreach (var eg in lessonCreateViewModel.EducationGroups)
@@ -381,8 +385,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
             }
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+
+            var lesson = Mapper.Map<Lesson>(lessonCreateViewModel);
+            _uow.MarkAsChanged(lesson);
+
+            return _uow.CommitChanges(CrudType.Update, Title);
+
         }
 
 

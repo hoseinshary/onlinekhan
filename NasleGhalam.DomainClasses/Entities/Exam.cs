@@ -23,7 +23,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public EducationYear EducationYear { get; set; }
 
-        public virtual ICollection<HistoryEducation> HistoryEducations { get; set; }
+        public ICollection<HistoryEducation> HistoryEducations { get; set; }
 
     }
 }

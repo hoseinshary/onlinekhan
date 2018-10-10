@@ -35,15 +35,15 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Topic ParentTopic { get; set; }
 
-        public virtual ICollection<Topic> ChildrenTopic { get; set; }
+        public ICollection<Topic> ChildrenTopic { get; set; }
 
         public int EducationGroup_LessonId { get; set; }
 
         public EducationGroup_Lesson EducationGroup_Lesson { get; set; }
 
-        public virtual ICollection<EducationBook> EducationBooks { get; set; }
+        public ICollection<EducationBook> EducationBooks { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+        public ICollection<Question> Questions { get; set; }
 
     }
 }

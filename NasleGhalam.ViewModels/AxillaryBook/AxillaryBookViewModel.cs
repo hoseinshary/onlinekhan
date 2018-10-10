@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using NasleGhalam.ViewModels._Attributes;
-using NasleGhalam.ViewModels._MediaFormatter;
 
 namespace NasleGhalam.ViewModels.AxillaryBook
 {

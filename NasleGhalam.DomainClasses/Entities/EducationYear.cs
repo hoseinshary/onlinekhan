@@ -14,6 +14,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public bool IsActiveYear { get; set; }
 
-        public virtual ICollection<Exam> Exams { get; set; }
+        public ICollection<Exam> Exams { get; set; }
     }
 }

@@ -34,6 +34,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Question Question { get; set; }
 
-        public virtual ICollection<QuestionAnswerView> QuestionAnswerViews { get; set; }
+        public ICollection<QuestionAnswerView> QuestionAnswerViews { get; set; }
     }
 }

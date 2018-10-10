@@ -15,7 +15,15 @@
     <my-input :model="$v.universityBranchObj.Name"
               class="col-md-6" />
 
-    <my-input :model="$v.universityBranchObj.Balance"
+    <my-input :model="$v.universityBranchObj.SiteAverage"
+              class="col-md-6 offset-md-3" />
+    <my-input :model="$v.universityBranchObj.Balance1Low"
+              class="col-md-6" />
+    <my-input :model="$v.universityBranchObj.Balance1High"
+              class="col-md-6" />
+    <my-input :model="$v.universityBranchObj.Balance2Low"
+              class="col-md-6" />
+    <my-input :model="$v.universityBranchObj.Balance2High"
               class="col-md-6" />
 
   </my-modal-create>

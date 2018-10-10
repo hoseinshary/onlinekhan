@@ -37,12 +37,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public UserGetViewModel GetById(int id, byte userRoleLevel)
+        public UserViewModel GetById(int id, byte userRoleLevel)
         {
             return _users
                 .Where(current => current.Id == id)
                 .Where(current => current.Role.Level > userRoleLevel)
-                .Select(current => new UserGetViewModel
+                .Select(current => new UserViewModel
                 {
                     Id = current.Id,
                     Name = current.Name,
@@ -65,11 +65,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public IList<UserGetViewModel> GetAll(byte userRoleLevel)
+        public IList<UserViewModel> GetAll(byte userRoleLevel)
         {
             return _users
                 .Where(current => current.Role.Level > userRoleLevel)
-                .Select(current => new UserGetViewModel()
+                .Select(current => new UserViewModel()
                 {
                     Id = current.Id,
                     Name = current.Name,

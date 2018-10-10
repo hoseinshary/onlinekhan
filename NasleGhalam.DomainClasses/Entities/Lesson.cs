@@ -16,15 +16,15 @@ namespace NasleGhalam.DomainClasses.Entities
         public bool IsMain { get; set; }
 
         public int LookupId_Nezam { get; set; }
-        public Lookup Lookup_Nezam { get; set; }
 
+        public Lookup Lookup_Nezam { get; set; }
 
         public int GradeLevelId { get; set; }
 
         public GradeLevel GradeLevel { get; set; }
 
-        public virtual ICollection<Ratio> Ratios { get; set; }
+        public ICollection<Ratio> Ratios { get; set; }
 
-        public virtual ICollection<EducationGroup_Lesson> EducationGroups_Lessons { get; set; }
+        public ICollection<EducationGroup_Lesson> EducationGroups_Lessons { get; set; }
     }
 }

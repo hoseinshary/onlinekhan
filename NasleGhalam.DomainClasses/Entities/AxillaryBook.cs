@@ -44,6 +44,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Lookup Lookup_PaperType { get; set; }
 
-        public virtual ICollection<EducationBook> EducationBooks { get; set; }
+        public ICollection<EducationBook> EducationBooks { get; set; }
     }
 }

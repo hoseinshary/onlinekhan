@@ -39,6 +39,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public bool IsStandard { get; set; }
 
         public int LookupId_AuthorType { get; set; }
+
         public Lookup Lookup_AuthorType { get; set; }
 
         public string AuthorName { get; set; }
@@ -59,23 +60,20 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public bool IsActive { get; set; }
 
+        public ICollection<QuestionJudge> QuestionJudges { get; set; }
+               
+        public ICollection<QuestionOption> QuestionOptions { get; set; }
+               
+        public ICollection<QuestionEqual> QuestionEquals1 { get; set; }
+               
+        public ICollection<QuestionEqual> QuestionEquals2 { get; set; }
+               
+        public ICollection<Tag> Tags { get; set; }
 
-
-        public virtual ICollection<QuestionJudge> QuestionJudges { get; set; }
-               
-        public virtual ICollection<QuestionOption> QuestionOptions { get; set; }
-               
-        public virtual ICollection<QuestionEqual> QuestionEquals1 { get; set; }
-               
-        public virtual ICollection<QuestionEqual> QuestionEquals2 { get; set; }
-               
-        public virtual ICollection<Tag> Tags { get; set; }
-
-        public virtual ICollection<Box> Boxes { get; set; }
+        public ICollection<Box> Boxes { get; set; }
      
+        public ICollection<QuestionAnswer> Answers { get; set; }
 
-        public virtual ICollection<QuestionAnswer> Answers { get; set; }
-
-        public virtual ICollection<Topic> Topics { get; set; }
+        public ICollection<Topic> Topics { get; set; }
     }
 }

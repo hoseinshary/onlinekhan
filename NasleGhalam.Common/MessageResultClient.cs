@@ -8,6 +8,6 @@
 
         public int Id { get; set; }
 
-        public object obj { get; set; }
+        public object Obj { get; set; }
     }
 }

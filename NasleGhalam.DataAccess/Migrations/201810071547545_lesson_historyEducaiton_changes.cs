@@ -1,6 +1,5 @@
 namespace NasleGhalam.DataAccess.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
     
     public partial class lesson_historyEducaiton_changes : DbMigration

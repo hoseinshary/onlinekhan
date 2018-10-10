@@ -15,12 +15,12 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Name { get; set; }
 
-        public virtual ICollection<EducationSubGroup> EducationSubGroups { get; set; }
+        public ICollection<EducationSubGroup> EducationSubGroups { get; set; }
 
-        public virtual ICollection<Exam> Exams { get; set; }
+        public ICollection<Exam> Exams { get; set; }
 
-        public virtual ICollection<HistoryEducation> HistoryEducations { get; set; }
+        public ICollection<HistoryEducation> HistoryEducations { get; set; }
 
-        public virtual ICollection<EducationGroup_Lesson> EducationGroups_Lessons { get; set; }
+        public ICollection<EducationGroup_Lesson> EducationGroups_Lessons { get; set; }
     }
 }

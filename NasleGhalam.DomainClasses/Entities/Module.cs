@@ -14,6 +14,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public byte Priority { get; set; }
 
-        public virtual ICollection<Controller> Controllers { get; set; }
+        public ICollection<Controller> Controllers { get; set; }
     }
 }

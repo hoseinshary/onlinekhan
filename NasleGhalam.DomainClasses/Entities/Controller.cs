@@ -22,6 +22,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Module Module { get; set; }
 
-        public virtual ICollection<Action> Actions { get; set; }
+        public ICollection<Action> Actions { get; set; }
     }
 }

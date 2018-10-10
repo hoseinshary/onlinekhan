@@ -45,20 +45,28 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<StudentViewModel> GetAll()
         {
-            var a = _students
-                .Include(current => current.User.City)
-                .Include(current => current.User.Role)
-                .AsNoTracking()
-                .ToList();
+            //var a = _students
+            //    .Include(current => current.User.City)
+            //    .Include(current => current.User.Role)
+            //    .AsNoTracking()
+            //    .ToList();
 
-            var a1 = Mapper.Map<IList<StudentViewModel>>(a);
+            //var a1 = Mapper.Map<IList<StudentViewModel>>(a);
+
+
 
             var b = _students
                 .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<StudentViewModel>)
                 .ToList();
 
+
+
+            var b1 = Mapper.Map<IList<StudentViewModel>>(b);
+
             // lazy loading
-            //var b1 = b.First().User.Role.Name;
+            //var b = b.First().User.Role.Name;
 
             return _students
                 //.Include(current => current.User)

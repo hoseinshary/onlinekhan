@@ -72,7 +72,7 @@ namespace NasleGhalam.ServiceLayer.Configs
 
                 config.CreateMap<MessageResultServer, MessageResultClient>()
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.FaMessage))
-                .ForMember(dest => dest.obj, opt => opt.Ignore());
+                .ForMember(dest => dest.Obj, opt => opt.Ignore());
 
             });
         }

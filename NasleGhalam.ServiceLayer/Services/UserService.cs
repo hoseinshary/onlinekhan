@@ -101,12 +101,11 @@ namespace NasleGhalam.ServiceLayer.Services
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
             if (role.Level <= userRoleLevel)
             {
-                MessageResultServer msgRes1 = new MessageResultServer()
+                return new MessageResultClient()
                 {
-                    FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
+                    Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
-                return Mapper.Map<MessageResultClient>(msgRes1);
             }
 
             var user = Mapper.Map<User>(userViewModel);

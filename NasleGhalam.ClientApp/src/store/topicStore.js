@@ -36,6 +36,10 @@ const store = {
       GradeLevelId: 0
     },
     EducationGroupId: 0,
+    EducationGroup_LessonId: 0,
+    LookupId_Nezam: 0,
+    GradeId: 0,
+    GradeLevelId: 0,
     moduleDdl: [],
     treeLst: [],
     controllerDdl: [],
@@ -79,12 +83,20 @@ const store = {
      * rest value of topicObj
      */
     reset(state, $v) {
-      debugger;
       state.EducationGroupId = state.topicObj.EducationGroupId;
+      state.EducationGroup_LessonId = state.topicObj.EducationGroup_LessonId;
+      state.LookupId_Nezam = state.topicObj.LookupId_Nezam;
+      state.GradeId = state.topicObj.GradeId;
+      state.GradeLevelId = state.topicObj.GradeLevelId;
       util.clearObject(state.topicObj);
       if ($v) {
         $v.$reset();
         $v.topicObj.EducationGroupId.$model = state.EducationGroupId;
+        $v.topicObj.EducationGroup_LessonId.$model =
+          state.EducationGroup_LessonId;
+        $v.topicObj.LookupId_Nezam.$model = state.LookupId_Nezam;
+        $v.topicObj.GradeId.$model = state.GradeId;
+        $v.topicObj.GradeLevelId.$model = state.GradeLevelId;
       }
     }
   },

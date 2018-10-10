@@ -213,9 +213,9 @@ export default {
         : this.lessonDdl.filter(
             x => x.educationGroupId == this.topicObj.EducationGroupId 
             &&  
-              (this.topicObj.LookupId_Nezam == 0 ||  x.LookupId_Nezam == this.topicObj.LookupId_Nezam) 
+              (this.topicObj.LookupId_Nezam == 0 || this.topicObj.LookupId_Nezam == null ||  x.LookupId_Nezam == this.topicObj.LookupId_Nezam) 
             &&
-              (this.topicObj.GradeLevelId == 0 ||  x.GradeLevelId == this.topicObj.GradeLevelId) 
+              (this.topicObj.GradeLevelId == 0 || this.topicObj.GradeLevelId == null || x.GradeLevelId == this.topicObj.GradeLevelId) 
           );
     }
   },

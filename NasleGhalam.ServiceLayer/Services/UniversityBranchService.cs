@@ -92,14 +92,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResultClient Create(UniversityBranchViewModel universityBranchViewModel)
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _universityBranchs.Add(universityBranch);
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = universityBranch.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -108,12 +108,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResultClient Update(UniversityBranchViewModel universityBranchViewModel)
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _uow.MarkAsChanged(universityBranch);
 
-            return _uow.CommitChanges(CrudType.Update, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -122,18 +123,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var universityBranchViewModel = GetById(id);
             if (universityBranchViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _uow.MarkAsDeleted(universityBranch);
 
-            return _uow.CommitChanges(CrudType.Delete, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

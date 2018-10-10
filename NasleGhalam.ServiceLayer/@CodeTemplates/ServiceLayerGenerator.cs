@@ -35,8 +35,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Id == id)
                 .Select(current => new UniversityBranchViewModel
                 {
-                    Id = current.Id,
-                    
+                    Id = current.Id
                 }).FirstOrDefault();
         }
 
@@ -59,14 +58,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
         /// <returns></returns>
-        public MessageResult Create(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResultClient Create(UniversityBranchViewModel universityBranchViewModel)
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _universityBranchs.Add(universityBranch);
 
 			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
 			msgRes.Id = universityBranch.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -75,12 +74,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="universityBranchViewModel"></param>
         /// <returns></returns>
-        public MessageResult Update(UniversityBranchViewModel universityBranchViewModel)
+        public MessageResultClient Update(UniversityBranchViewModel universityBranchViewModel)
         {
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _uow.MarkAsChanged(universityBranch);
 			
-			return  _uow.CommitChanges(CrudType.Update, Title);
+			MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+			Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -89,18 +89,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResult Delete(int id)
+        public MessageResultClient Delete(int id)
         {
 			var  universityBranchViewModel = GetById(id);
             if (universityBranchViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var universityBranch = Mapper.Map<UniversityBranch>(universityBranchViewModel);
             _uow.MarkAsDeleted(universityBranch);
             
-			return  _uow.CommitChanges(CrudType.Delete, Title);
+			MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+			Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

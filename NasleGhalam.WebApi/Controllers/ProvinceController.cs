@@ -45,12 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(ProvinceViewModel provinceViewModel)
         {
             var msgRes = _provinceService.Create(provinceViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -60,11 +55,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(ProvinceViewModel provinceViewModel)
         {
             var msgRes = _provinceService.Update(provinceViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -72,11 +63,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _provinceService.Delete(id);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
         [HttpGet, CheckUserAccess(ActionBits.UserCreateAccess,

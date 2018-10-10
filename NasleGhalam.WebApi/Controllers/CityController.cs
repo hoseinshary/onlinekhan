@@ -45,12 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(CityViewModel cityViewModel)
         {
             var msgRes = _cityService.Create(cityViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -60,11 +55,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(CityViewModel cityViewModel)
         {
             var msgRes = _cityService.Update(cityViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -72,11 +63,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _cityService.Delete(id);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 

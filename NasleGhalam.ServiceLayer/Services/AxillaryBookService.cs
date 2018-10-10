@@ -85,14 +85,15 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(AxillaryBookViewModel axillaryBookViewModel)
+        public MessageResultClient Create(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _axillaryBooks.Add(axillaryBook);
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = axillaryBook.Id;
-            return msgRes;
+
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -101,7 +102,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(AxillaryBookViewModel axillaryBookViewModel)
+        public MessageResultClient Update(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             if (string.IsNullOrEmpty(axillaryBook.ImgName))
@@ -113,7 +114,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.MarkAsChanged(axillaryBook);
             }
 
-            return _uow.CommitChanges(CrudType.Update, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -122,19 +125,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var axillaryBookViewModel = GetById(id);
             if (axillaryBookViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                 
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _uow.MarkAsDeleted(axillaryBook);
-
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

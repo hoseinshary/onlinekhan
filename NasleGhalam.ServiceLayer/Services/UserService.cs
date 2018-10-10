@@ -95,23 +95,26 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="userViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(UserCreateViewModel userViewModel, byte userRoleLevel)
+        public MessageResultClient Create(UserCreateViewModel userViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
             if (role.Level <= userRoleLevel)
-                return new MessageResultServer()
+            {
+                MessageResultServer msgRes1 = new MessageResultServer()
                 {
                     FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
+                return Mapper.Map<MessageResultClient>(msgRes1);
+            }
 
             var user = Mapper.Map<User>(userViewModel);
             user.LastLogin = DateTime.Now;
             _users.Add(user);
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = user.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -121,23 +124,29 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="userViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(UserUpdateViewModel userViewModel, byte userRoleLevel)
+        public MessageResultClient Update(UserUpdateViewModel userViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
             if (role == null)
-                return new MessageResultServer()
+            {
+                MessageResultServer msgRes1 = new MessageResultServer()
                 {
                     FaMessage = "نقش یافت نگردید",
                     MessageType = MessageType.Error
                 };
+                return Mapper.Map<MessageResultClient>(msgRes1);
+            }
 
             if (role.Level <= userRoleLevel)
-                return new MessageResultServer()
+            {
+                MessageResultServer msgRes2 = new MessageResultServer()
                 {
                     FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
+                return Mapper.Map<MessageResultClient>(msgRes2);
+            }
 
             var user = Mapper.Map<UserUpdateViewModel, User>(userViewModel);
             if (string.IsNullOrEmpty(user.Password))
@@ -151,7 +160,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             }
 
-            return _uow.CommitChanges(CrudType.Update, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -161,18 +171,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id, byte userRoleLevel)
+        public MessageResultClient Delete(int id, byte userRoleLevel)
         {
             var userViewModel = GetById(id, userRoleLevel);
             if (userViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var user = Mapper.Map<User>(userViewModel);
             _uow.MarkAsDeleted(user);
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

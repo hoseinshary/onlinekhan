@@ -46,12 +46,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(UniversityBranchViewModel universityBranchViewModel)
         {
             var msgRes = _universityBranchService.Create(universityBranchViewModel);
-            return Ok(new MessageResultApi
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -61,11 +56,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(UniversityBranchViewModel universityBranchViewModel)
         {
             var msgRes = _universityBranchService.Update(universityBranchViewModel);
-            return Ok(new MessageResultApi
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -73,11 +64,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _universityBranchService.Delete(id);
-            return Ok(new MessageResultApi
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 	}
 }

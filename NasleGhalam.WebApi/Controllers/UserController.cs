@@ -46,12 +46,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(UserCreateViewModel userViewModel)
         {
             var msgRes = _userService.Create(userViewModel, Request.GetRoleLevel());
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -61,11 +56,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(UserUpdateViewModel userViewModel)
         {
             var msgRes = _userService.Update(userViewModel, Request.GetRoleLevel());
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -73,11 +64,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _userService.Delete(id, Request.GetRoleLevel());
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 

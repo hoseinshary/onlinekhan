@@ -123,14 +123,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
+        public MessageResultClient Create(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
         {
             var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
             _educationGroup_Lessons.Add(educationGroup_Lesson);
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationGroup_Lesson.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -139,11 +139,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
+        public MessageResultClient Update(EducationGroup_LessonViewModel educationGroup_LessonViewModel)
         {
             var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
             _uow.MarkAsChanged(educationGroup_Lesson);
-            return _uow.CommitChanges(CrudType.Update, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
 
         }
 
@@ -153,18 +154,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var educationGroup_LessonViewModel = GetById(id);
             if (educationGroup_LessonViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var educationGroup_Lesson = Mapper.Map<EducationGroup_Lesson>(educationGroup_LessonViewModel);
             _uow.MarkAsDeleted(educationGroup_Lesson);
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -173,7 +174,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroup_LessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
+        public MessageResultClient Change(IList<EducationGroup_LessonViewModel> educationGroup_LessonViewModel)
         {
             MessageResultServer msgRes;
 
@@ -188,7 +189,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     msgRes = new MessageResultServer();
                     msgRes.MessageType = MessageType.Error;
                     msgRes.FaMessage = "خطا در یکی نبودن آی دی درس ها ";
-                    return msgRes;
+                    return Mapper.Map<MessageResultClient>(msgRes);
                 }
             }
 
@@ -220,7 +221,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
             msgRes = _uow.CommitChanges(CrudType.None, Title);
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

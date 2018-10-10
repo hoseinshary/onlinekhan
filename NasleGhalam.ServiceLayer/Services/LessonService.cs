@@ -188,14 +188,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(LessonViewModel lessonViewModel)
+        public MessageResultClient Create(LessonViewModel lessonViewModel)
         {
             var lesson = Mapper.Map<Lesson>(lessonViewModel);
             _lessons.Add(lesson);
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = lesson.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="LessonCreateAndUpdateViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateViewModel)
+        public MessageResultClient CreateLessonWithRatio(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
             //var currentLesson = _lessons.FirstOrDefault(current => current.Name == lessonCreateViewModel.Name.Replace(" ", ""));
             //if (currentLesson != null)
@@ -243,7 +243,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _lessons.Add(l);
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = l.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
 
 
             //_lessons.
@@ -323,7 +323,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(LessonCreateAndUpdateViewModel lessonCreateViewModel)
+        public MessageResultClient Update(LessonCreateAndUpdateViewModel lessonCreateViewModel)
         {
 
             //خواندن اطلاعات واسط 
@@ -381,8 +381,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
             }
 
-            return _uow.CommitChanges(CrudType.Update, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -391,7 +391,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var lesson = _lessons
                 .Where(current => current.Id == id)
@@ -404,16 +404,16 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (lesson == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
             else if (lesson.HasTopic)
             {
-                return new MessageResultServer
+                MessageResultServer msgRes1 = new MessageResultServer
                 {
                     FaMessage = "برای این درس قبلا عنوان تعریف شده است.درس مورد نظر حذف نگردید",
                     MessageType = MessageType.Error
                 };
-
+                return Mapper.Map<MessageResultClient>(msgRes1);
             }
 
             var ratios = lesson.Ratios;
@@ -436,8 +436,8 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(entityLesson);
 
 
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
         /// <summary>

@@ -75,7 +75,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationBookViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(EducationBookViewModel educationBookViewModel)
+        public MessageResultClient Create(EducationBookViewModel educationBookViewModel)
         {
             var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
             var topics = _uow.Set<Topic>();
@@ -93,7 +93,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationBook.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -102,7 +102,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationBookViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(EducationBookViewModel educationBookViewModel)
+        public MessageResultClient Update(EducationBookViewModel educationBookViewModel)
         {
             var transaction = _uow.BeginTransaction();
             _uow.ExecuteSqlCommand("delete from Topics_EducationBooks where EducationBookId=@id", 
@@ -131,7 +131,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 transaction.Rollback();
             }
-            return result;
+            return Mapper.Map<MessageResultClient>(result);
         }
 
 
@@ -140,12 +140,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var educationBookViewModel = GetById(id);
             if (educationBookViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
             var topics = _uow.Set<Topic>();
             foreach (var topicId in educationBookViewModel.TopicIds)
@@ -158,7 +158,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
             _uow.MarkAsDeleted(educationBook);
 
-            return _uow.CommitChanges(CrudType.Delete, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

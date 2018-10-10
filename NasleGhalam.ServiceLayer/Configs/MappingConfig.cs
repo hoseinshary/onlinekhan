@@ -19,6 +19,7 @@ using  NasleGhalam.ViewModels.AxillaryBook;
 using NasleGhalam.ViewModels.Tag;
 using NasleGhalam.ViewModels.Question;
 using NasleGhalam.ViewModels.UniversityBranch;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -67,6 +68,11 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<QuestionCreateViewModel, Question>();
 
                 config.CreateMap<UniversityBranchViewModel, UniversityBranch>();
+
+                config.CreateMap<MessageResultServer, MessageResultClient>()
+                .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.FaMessage))
+                .ForMember(dest => dest.obj, opt => opt.Ignore());
+
             });
         }
     }

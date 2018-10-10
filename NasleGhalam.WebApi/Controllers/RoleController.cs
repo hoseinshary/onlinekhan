@@ -50,12 +50,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(RoleViewModel roleViewModel)
         {
             var msgRes = _roleService.Create(roleViewModel, Request.GetRoleLevel());
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -65,11 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(RoleViewModel roleViewModel)
         {
             var msgRes = _roleService.Update(roleViewModel, Request.GetRoleLevel());
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -77,11 +68,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _roleService.Delete(id, Request.GetRoleLevel());
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -120,11 +107,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult ChangeAccess(RoleAccessViewModel roleAccess)
         {
             var msgRes = _roleService.ChangeAccess(roleAccess, Request.GetAccess(), Request.GetRoleLevel());
-            return Ok(new MessageResultClient()
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
         #endregion
 

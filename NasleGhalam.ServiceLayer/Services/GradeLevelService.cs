@@ -66,14 +66,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="gradeLevelViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(GradeLevelViewModel gradeLevelViewModel)
+        public MessageResultClient Create(GradeLevelViewModel gradeLevelViewModel)
         {
             var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
             _gradeLevels.Add(gradeLevel);
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = gradeLevel.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -82,13 +82,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="gradeLevelViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(GradeLevelViewModel gradeLevelViewModel)
+        public MessageResultClient Update(GradeLevelViewModel gradeLevelViewModel)
         {
             var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
             _uow.MarkAsChanged(gradeLevel);
 
-            return _uow.CommitChanges(CrudType.Update, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -97,19 +97,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var gradeLevelViewModel = GetById(id);
             if (gradeLevelViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var gradeLevel = Mapper.Map<GradeLevel>(gradeLevelViewModel);
             _uow.MarkAsDeleted(gradeLevel);
 
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

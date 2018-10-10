@@ -61,12 +61,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
         {
             var msgRes = _<#= instanceName #>Service.Create(<#= instanceName #>ViewModel);
-            return Ok(new MessageResultApi
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -76,11 +71,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
         {
             var msgRes = _<#= instanceName #>Service.Update(<#= instanceName #>ViewModel);
-            return Ok(new MessageResultApi
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -88,11 +79,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _<#= instanceName #>Service.Delete(id);
-            return Ok(new MessageResultApi
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 	}
 }

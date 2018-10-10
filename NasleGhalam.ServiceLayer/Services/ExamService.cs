@@ -92,14 +92,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="examViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(ExamViewModel examViewModel)
+        public MessageResultClient Create(ExamViewModel examViewModel)
         {
             var exam = Mapper.Map<Exam>(examViewModel);
             _exams.Add(exam);
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = exam.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -108,14 +108,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="examViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(ExamViewModel examViewModel)
+        public MessageResultClient Update(ExamViewModel examViewModel)
         {
             var exam = Mapper.Map<Exam>(examViewModel);
             _uow.MarkAsChanged(exam);
 
 
-            return _uow.CommitChanges(CrudType.Update, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -124,19 +124,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var examViewModel = GetById(id);
             if (examViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var exam = Mapper.Map<Exam>(examViewModel);
             _uow.MarkAsDeleted(exam);
 
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

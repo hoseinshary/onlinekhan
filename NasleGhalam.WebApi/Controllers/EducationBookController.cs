@@ -45,12 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(EducationBookViewModel educationBookViewModel)
         {
             var msgRes = _educationBookService.Create(educationBookViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -60,11 +55,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(EducationBookViewModel educationBookViewModel)
         {
             var msgRes = _educationBookService.Update(educationBookViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -72,11 +63,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _educationBookService.Delete(id);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
     }
 }

@@ -50,12 +50,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create2(LessonViewModel lessonViewModel)
         {
             var msgRes = _lessonService.Create(lessonViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -64,12 +59,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(LessonCreateAndUpdateViewModel lessonCreateAndUpdateViewModel)
         {
             var msgRes = _lessonService.CreateLessonWithRatio(lessonCreateAndUpdateViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -79,11 +69,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(LessonCreateAndUpdateViewModel lessonViewModel)
         {
             var msgRes = _lessonService.Update(lessonViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -91,11 +77,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _lessonService.Delete(id);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
         [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)] // todo: wrong permision!

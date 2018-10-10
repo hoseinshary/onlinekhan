@@ -60,12 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
                 if (resualtWord == "OK" )
                 {
                     var msgRes = _questionService.Create(questionViewModel, wordFile, Request.GetUserId() );
-                    return Ok(new MessageResultClient
-                    {
-                        Message = msgRes.FaMessage,
-                        MessageType = msgRes.MessageType,
-                        Id = msgRes.Id
-                    });
+                    return Ok(msgRes);
                 }
                 else
                 {
@@ -109,12 +104,7 @@ namespace NasleGhalam.WebApi.Controllers
                 if (resualtWord == "OK" && resualtExcel == "OK")
                 {
                     var msgRes = _questionService.CreateMulti(questionViewModel, wordFile, excelFile);
-                    return Ok(new MessageResultClient
-                    {
-                        Message = msgRes.FaMessage,
-                        MessageType = msgRes.MessageType,
-                        Id = msgRes.Id
-                    });
+                    return Ok(msgRes);
                 }
                 else
                 {
@@ -144,11 +134,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(QuestionCreateViewModel questionViewModel)
         {
             var msgRes = _questionService.Update(questionViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -156,11 +142,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _questionService.Delete(id);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
     }
 }

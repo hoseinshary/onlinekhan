@@ -45,12 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(GradeViewModel gradeViewModel)
         {
             var msgRes = _gradeService.Create(gradeViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(msgRes);
         }
 
 
@@ -60,11 +55,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(GradeViewModel gradeViewModel)
         {
             var msgRes = _gradeService.Update(gradeViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
 
@@ -72,11 +63,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _gradeService.Delete(id);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(msgRes);
         }
 
         [HttpGet, CheckUserAccess(ActionBits.GradeLevelCreateAccess,

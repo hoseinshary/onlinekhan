@@ -152,14 +152,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(EducationGroupViewModel educationGroupViewModel)
+        public MessageResultClient Create(EducationGroupViewModel educationGroupViewModel)
         {
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _educationGroups.Add(educationGroup);
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationGroup.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -168,12 +168,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(EducationGroupViewModel educationGroupViewModel)
+        public MessageResultClient Update(EducationGroupViewModel educationGroupViewModel)
         {
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _uow.MarkAsChanged(educationGroup);
-            return _uow.CommitChanges(CrudType.Update, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -182,18 +182,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var educationGroupViewModel = GetById(id);
             if (educationGroupViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
             _uow.MarkAsDeleted(educationGroup);
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

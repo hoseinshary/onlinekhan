@@ -171,7 +171,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="topicViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(TopicCreateViewModel topicViewModel)
+        public MessageResultClient Create(TopicCreateViewModel topicViewModel)
         {
 
             if (!_topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
@@ -185,7 +185,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
                 msgRes.Id = topic.Id;
-                return msgRes;
+                return Mapper.Map<MessageResultClient>(msgRes);
             }
             else if (topicViewModel.ParentTopicId != null && _topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
             {
@@ -194,13 +194,13 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
                 msgRes.Id = topic.Id;
-                return msgRes;
+                return Mapper.Map<MessageResultClient>(msgRes);
             }
             else 
             {
                 MessageResultServer msgRes = new MessageResultServer();
                 msgRes.FaMessage = "برای این درس مبحث ریشه ثبت شده است!(تنها یک مبحث ریشه برای هر درس قابل ثبت است.)";
-                return msgRes;
+                return Mapper.Map<MessageResultClient>(msgRes);
             }
             
             
@@ -213,14 +213,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="topicViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(TopicCreateViewModel topicViewModel)
+        public MessageResultClient Update(TopicCreateViewModel topicViewModel)
         {
             var topic = Mapper.Map<Topic>(topicViewModel);
             _uow.MarkAsChanged(topic);
 
 
-            return _uow.CommitChanges(CrudType.Update, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -229,19 +229,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var topicViewModel = GetById(id);
             if (topicViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var topic = Mapper.Map<Topic>(topicViewModel);
             _uow.MarkAsDeleted(topic);
 
-            return _uow.CommitChanges(CrudType.Delete, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

@@ -389,8 +389,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var lesson = Mapper.Map<Lesson>(lessonCreateViewModel);
             _uow.MarkAsChanged(lesson);
 
-            return _uow.CommitChanges(CrudType.Update, Title);
-
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

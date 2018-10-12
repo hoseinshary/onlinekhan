@@ -48,10 +48,10 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _<#= instanceName #>s
                 .Where(current => current.Id == id)
-                .Select(current => new <#= modelName #>ViewModel
-                {
-                    Id = current.Id
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<<#= modelName #>ViewModel>)
+                .FirstOrDefault();
         }
 
 
@@ -61,10 +61,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<<#= modelName #>ViewModel> GetAll()
         {
-            return _<#= instanceName #>s.Select(current => new <#= modelName #>ViewModel()
-            {
-                Id = current.Id,
-            }).ToList();
+            return _<#= instanceName #>s
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<<#= modelName #>ViewModel>)
+                .ToList();
         }
 
 
@@ -78,7 +79,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _<#= instanceName #>s.Add(<#= instanceName #>);
 
-			MessageResult msgRes =  _uow.CommitChanges(CrudType.Create, Title);
+			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
 			msgRes.Id = <#= instanceName #>.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
@@ -94,8 +95,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _uow.MarkAsChanged(<#= instanceName #>);
 			
-			MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
-			Mapper.Map<MessageResultClient>(msgRes);
+			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
+			return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -115,8 +116,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _uow.MarkAsDeleted(<#= instanceName #>);
             
-			MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-			Mapper.Map<MessageResultClient>(msgRes);
+			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+			return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

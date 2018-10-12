@@ -60,8 +60,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
         {
-            var msgRes = _<#= instanceName #>Service.Create(<#= instanceName #>ViewModel);
-            return Ok(msgRes);
+            return Ok(_<#= instanceName #>Service.Create(<#= instanceName #>ViewModel));
         }
 
 
@@ -70,16 +69,14 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
         {
-            var msgRes = _<#= instanceName #>Service.Update(<#= instanceName #>ViewModel);
-            return Ok(msgRes);
+            return Ok(_<#= instanceName #>Service.Update(<#= instanceName #>ViewModel));
         }
 
 
         [HttpPost, CheckUserAccess(ActionBits.<#= modelName #>DeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _<#= instanceName #>Service.Delete(id);
-            return Ok(msgRes);
+            return Ok(_<#= instanceName #>Service.Delete(id));
         }
 	}
 }

@@ -2,7 +2,6 @@
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
@@ -34,8 +33,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.User)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
-                .ProjectTo<StudentViewModel>()
-               .FirstOrDefault();
+                .AsEnumerable()
+                .Select(Mapper.Map<StudentViewModel>)
+                .FirstOrDefault();
         }
 
 
@@ -45,33 +45,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<StudentViewModel> GetAll()
         {
-            //var a = _students
-            //    .Include(current => current.User.City)
-            //    .Include(current => current.User.Role)
-            //    .AsNoTracking()
-            //    .ToList();
-
-            //var a1 = Mapper.Map<IList<StudentViewModel>>(a);
-
-
-
-            var b = _students
+            return _students
+                .Include(current => current.User)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<StudentViewModel>)
-                .ToList();
-
-
-
-            var b1 = Mapper.Map<IList<StudentViewModel>>(b);
-
-            // lazy loading
-            //var b = b.First().User.Role.Name;
-
-            return _students
-                //.Include(current => current.User)
-                .AsNoTracking()
-                .ProjectTo<StudentViewModel>()
                 .ToList();
         }
 
@@ -81,14 +59,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="studentViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Create(StudentViewModel studentViewModel)
+        public MessageResultClient Create(StudentViewModel studentViewModel)
         {
             var student = Mapper.Map<Student>(studentViewModel);
             _students.Add(student);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = student.Id;
-            return msgRes;
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -97,12 +75,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="studentViewModel"></param>
         /// <returns></returns>
-        public MessageResultServer Update(StudentViewModel studentViewModel)
+        public MessageResultClient Update(StudentViewModel studentViewModel)
         {
             var student = Mapper.Map<Student>(studentViewModel);
             _uow.MarkAsChanged(student);
 
-            return _uow.CommitChanges(CrudType.Update, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -111,18 +90,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultServer Delete(int id)
+        public MessageResultClient Delete(int id)
         {
             var studentViewModel = GetById(id);
             if (studentViewModel == null)
             {
-                return Utility.NotFoundMessage();
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
             var student = Mapper.Map<Student>(studentViewModel);
             _uow.MarkAsDeleted(student);
 
-            return _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 

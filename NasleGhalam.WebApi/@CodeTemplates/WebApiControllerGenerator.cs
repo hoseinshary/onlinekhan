@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.UniversityBranch;
+using NasleGhalam.ViewModels.Student;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,59 +12,56 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class UniversityBranchController : ApiController
+	public class StudentController : ApiController
 	{
-        private readonly UniversityBranchService _universityBranchService;
-		public UniversityBranchController(UniversityBranchService universityBranchService)
+        private readonly StudentService _studentService;
+		public StudentController(StudentService studentService)
         {
-            _universityBranchService = universityBranchService;
+            _studentService = studentService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.UniversityBranchReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.StudentReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_universityBranchService.GetAll());
+            return Ok(_studentService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.UniversityBranchReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.StudentReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var universityBranch = _universityBranchService.GetById(id);
-            if (universityBranch == null)
+            var student = _studentService.GetById(id);
+            if (student == null)
             {
                 return NotFound();
             }
-            return Ok(universityBranch);
+            return Ok(student);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.UniversityBranchCreateAccess)]
+        [CheckUserAccess(ActionBits.StudentCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(UniversityBranchViewModel universityBranchViewModel)
+        public IHttpActionResult Create(StudentViewModel studentViewModel)
         {
-            var msgRes = _universityBranchService.Create(universityBranchViewModel);
-            return Ok(msgRes);
+            return Ok(_studentService.Create(studentViewModel));
         }
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.UniversityBranchUpdateAccess)]
+        [CheckUserAccess(ActionBits.StudentUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(UniversityBranchViewModel universityBranchViewModel)
+        public IHttpActionResult Update(StudentViewModel studentViewModel)
         {
-            var msgRes = _universityBranchService.Update(universityBranchViewModel);
-            return Ok(msgRes);
+            return Ok(_studentService.Update(studentViewModel));
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.UniversityBranchDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.StudentDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _universityBranchService.Delete(id);
-            return Ok(msgRes);
+            return Ok(_studentService.Delete(id));
         }
 	}
 }

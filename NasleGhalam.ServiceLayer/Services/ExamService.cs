@@ -53,38 +53,48 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<ExamViewModel> GetAll()
         {
-            var a = _exams.Select(current => new
-            {
-                current.Id,
-                current.Name,
-                current.Date,
-                current.EducationGroupId,
-                EducationGroupName = current.EducationGroup.Name,
-                current.EducationYearId,
-                EducationYearName = current.EducationYear.Name
-            }).AsEnumerable();
-            a.First();
-            return _exams.Select(current => new
-            {
-                current.Id,
-                current.Name,
-                current.Date,
-                current.EducationGroupId,
-                EducationGroupName = current.EducationGroup.Name,
-                current.EducationYearId,
-                EducationYearName = current.EducationYear.Name
-            }).AsEnumerable()
-            .Select(current => new ExamViewModel()
+            return _exams.Select(current => new ExamViewModel()
             {
                 Id = current.Id,
                 Name = current.Name,
-                PDate = current.Date.ToPersianDate(),
+                Date = current.Date,
                 EducationGroupId = current.EducationGroupId,
-                EducationGroupName = current.EducationGroupName,
+                EducationGroupName = current.EducationGroup.Name,
                 EducationYearId = current.EducationYearId,
-                EducationYearName = current.EducationYearName
-            })
-            .ToList();
+                EducationYearName = current.EducationYear.Name
+            }).ToList();
+            //var a = _exams.Select(current => new
+            //{
+            //    current.Id,
+            //    current.Name,
+            //    current.Date,
+            //    current.EducationGroupId,
+            //    EducationGroupName = current.EducationGroup.Name,
+            //    current.EducationYearId,
+            //    EducationYearName = current.EducationYear.Name
+            //}).AsEnumerable();
+            //a.First();
+            //return _exams.Select(current => new
+            //{
+            //    current.Id,
+            //    current.Name,
+            //    current.Date,
+            //    current.EducationGroupId,
+            //    EducationGroupName = current.EducationGroup.Name,
+            //    current.EducationYearId,
+            //    EducationYearName = current.EducationYear.Name
+            //}).AsEnumerable()
+            //.Select(current => new ExamViewModel()
+            //{
+            //    Id = current.Id,
+            //    Name = current.Name,
+            //    PDate = current.Date.ToPersianDate(),
+            //    EducationGroupId = current.EducationGroupId,
+            //    EducationGroupName = current.EducationGroupName,
+            //    EducationYearId = current.EducationYearId,
+            //    EducationYearName = current.EducationYearName
+            //})
+            //.ToList();
         }
 
 
@@ -125,7 +135,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+          public MessageResultClient Delete(int id)
         {
             var examViewModel = GetById(id);
             if (examViewModel == null)

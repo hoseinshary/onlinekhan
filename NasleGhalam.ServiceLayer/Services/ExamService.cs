@@ -32,6 +32,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _exams
                 .Where(current => current.Id == id)
+                .AsNoTracking()
                 .AsEnumerable()
                 .Select(current => new ExamViewModel
                 {

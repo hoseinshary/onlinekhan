@@ -113,7 +113,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _grades.Where(x => x.GradeLevels.Any()).Select(current => new SelectViewModel
+            return _grades.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

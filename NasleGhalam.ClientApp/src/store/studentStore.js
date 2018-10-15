@@ -1,91 +1,91 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { USER_URL as baseUrl } from 'utilities/site-config';
-import { LocalStorage } from 'quasar';
-import router from 'router';
+import { STUDENT_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in userGridData by id
+ * find index of object in studentGridData by id
  * @param {Number} id
  */
 function getIndexById(id) {
-  return store.state.userGridData.findIndex(o => o.Id == id);
+  return store.state.studentGridData.findIndex(o => o.Id == id);
 }
 
 const store = {
   namespaced: true,
   state: {
-    modelName: 'کاربر',
+    modelName: 'دانش آموز',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    userObj: {
+    studentObj: {
       Id: 0,
-      Name: '',
-      Family: '',
-      Username: '',
-      Password: '',
-      IsActive: true,
-      NationalNo: '',
-      Gender: '',
-      Phone: '',
-      Mobile: '',
-      RoleId: 0,
-      CityId: 0,
-      ProvinceId: 0,
-      RoleName: '',
-      CityName: ''
+      FatherName: '',
+      Address: '',
+      User: {
+        Id: 0,
+        Name: '',
+        Family: '',
+        Username: '',
+        Password: undefined,
+        IsActive: true,
+        NationalNo: '',
+        Gender: '',
+        Phone: '',
+        Mobile: '',
+        RoleId: 0,
+        CityId: 0,
+        ProvinceId: 0,
+        RoleName: '',
+        CityName: ''
+      }
     },
-    userGridData: [],
-    userDdl: [],
+    studentGridData: [],
+    studentDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
     createVue: null,
-    editVue: null,
-    loginObj: {
-      UserName: '',
-      Password: ''
-    }
+    editVue: null
   },
   mutations: {
     /**
-     * insert new userObj to userGridData
+     * insert new studentObj to studentGridData
      */
     insert(state, id) {
-      state.userObj.GenderName = state.userObj.Gender ? 'پسر' : 'دختر';
-      let createdObj = util.cloneObject(state.userObj);
-
+      state.studentObj.User.GenderName = state.studentObj.User.Gender
+        ? 'پسر'
+        : 'دختر';
+      let createdObj = util.cloneObject(state.studentObj);
       createdObj.Id = id;
-      state.userGridData.push(createdObj);
+      state.studentGridData.push(createdObj);
     },
 
     /**
-     * update userObj of userGridData
+     * update studentObj of studentGridData
      */
     update(state) {
+      state.studentObj.User.GenderName = state.studentObj.User.Gender
+        ? 'پسر'
+        : 'دختر';
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-
-      state.userObj.GenderName = state.userObj.Gender ? 'پسر' : 'دختر';
-      util.mapObject(state.userObj, state.userGridData[index]);
+      util.mapObject(state.studentObj, state.studentGridData[index]);
     },
 
     /**
-     * delete from userGridData
+     * delete from studentGridData
      */
     delete(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      state.userGridData.splice(index, 1);
+      state.studentGridData.splice(index, 1);
     },
 
     /**
-     * rest value of userObj
+     * rest value of studentObj
      */
     reset(state, $v) {
-      util.clearObject(state.userObj);
-      state.userObj.IsActive = true;
+      //util.clearObject(state.studentObj);
       if ($v) {
         $v.$reset();
       }
@@ -98,7 +98,7 @@ const store = {
     getByIdStore({ state }, id) {
       return axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.userObj);
+        util.mapObject(response.data, state.studentObj);
         return response.data;
       });
     },
@@ -111,7 +111,7 @@ const store = {
       if (state.gridModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.userGridData = response.data;
+          state.studentGridData = response.data;
           state.gridModelChanged = false;
         });
       }
@@ -125,7 +125,7 @@ const store = {
       if (state.ddlModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-          state.userDdl = response.data;
+          state.studentDdl = response.data;
           state.ddlModelChanged = false;
         });
       }
@@ -136,8 +136,8 @@ const store = {
      */
     validateFormStore({ dispatch }, vm) {
       // check instance validation
-      vm.$v.userObj.$touch();
-      if (vm.$v.userObj.$error) {
+      vm.$v.studentObj.$touch();
+      if (vm.$v.studentObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
@@ -176,7 +176,7 @@ const store = {
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.userObj).then(response => {
+        axios.post(`${baseUrl}/Create`, state.studentObj).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
@@ -229,8 +229,8 @@ const store = {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.userObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.userObj).then(response => {
+        state.studentObj.Id = state.selectedId;
+        axios.post(`${baseUrl}/Update`, state.studentObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
@@ -291,40 +291,12 @@ const store = {
           { root: true }
         );
       });
-    },
-    //------------------------------------------------
-
-    /**
-     * login to website
-     */
-    loginStore({ dispatch, state }, vm) {
-      axios.post(`${baseUrl}/Login`, state.loginObj).then(response => {
-        let data = response.data;
-
-        if (data.MessageType == 1) {
-          axios.defaults.headers.common['Token'] = data.Token;
-          LocalStorage.set('Token', data.Token);
-          LocalStorage.set('FullName', data.FullName);
-          LocalStorage.set(
-            'authList',
-            data.SubMenus.map(x => x.EnName.toLowerCase())
-          );
-          LocalStorage.set('menuList', data.Menus);
-          LocalStorage.set('subMenuList', data.SubMenus);
-          router.push(data.DefaultPage);
-        } else {
-          dispatch(
-            'notify',
-            { body: data.Message, type: data.MessageType, vm: vm },
-            { root: true }
-          );
-        }
-      });
     }
+    //------------------------------------------------
   },
   getters: {
     recordName(state) {
-      return `${state.userObj.Name} ${state.userObj.Family}`;
+      return `${state.studentObj.User.Name} ${state.studentObj.User.Family}`;
     }
   }
 };

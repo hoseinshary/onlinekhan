@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Student;
+using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -42,18 +43,18 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.StudentCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(StudentViewModel studentViewModel)
+        public IHttpActionResult Create(StudentCreateViewModel studentViewModel)
         {
-            return Ok(_studentService.Create(studentViewModel));
+            return Ok(_studentService.Create(studentViewModel, Request.GetRoleLevel()));
         }
 
 
         [HttpPost]
         [CheckUserAccess(ActionBits.StudentUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(StudentViewModel studentViewModel)
+        public IHttpActionResult Update(StudentUpdateViewModel studentViewModel)
         {
-            return Ok(_studentService.Update(studentViewModel));
+            return Ok(_studentService.Update(studentViewModel, Request.GetRoleLevel()));
         }
 
 

@@ -104,7 +104,7 @@ const store = {
       if (state.ddlModelChanged) {
         axios.get(`${baseUrl}/GetAll`).then(response => {
           state.gradeLevelDdl = response.data.map(x => ({
-            label: x.GradeName,
+            label: x.Name,
             value: x.Id,
             gradeId: x.GradeId
           }));

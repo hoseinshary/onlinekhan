@@ -9,7 +9,12 @@ import axios from 'utilities/axios';
  */
 const mapObject = function(cloneFrom, cloneTo) {
   Object.keys(cloneTo).forEach(key => {
-    if (cloneFrom[key] !== undefined) cloneTo[key] = cloneFrom[key];
+    if (cloneFrom[key] !== undefined) {
+      if (isObject(cloneFrom[key])) {
+        mapObject(cloneFrom[key], cloneTo[key]);
+      }
+      cloneTo[key] = cloneFrom[key];
+    }
   });
 };
 
@@ -61,6 +66,27 @@ const toParam = function(obj) {
   return Object.keys(obj)
     .map(key => key + '=' + obj[key])
     .join('&');
+};
+
+/**
+ * access to nested object by string
+ * @param {*} theObject
+ * @param {String} path
+ */
+const getNested = function(theObject, path) {
+  try {
+    var separator = '.';
+
+    return path
+      .replace('[', separator)
+      .replace(']', '')
+      .split(separator)
+      .reduce(function(obj, property) {
+        return obj[property];
+      }, theObject);
+  } catch (err) {
+    return undefined;
+  }
 };
 
 /**
@@ -196,6 +222,7 @@ export default {
   clearObject,
   clearArray,
   toParam,
+  getNested,
   isString,
   isNumber,
   isArray,

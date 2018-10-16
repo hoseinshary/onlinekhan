@@ -82,6 +82,10 @@ export default [
       {
         path: '/question',
         component: () => import('views/question')
+      },
+      {
+        path: '/student',
+        component: () => import('views/student')
       }
     ]
   },

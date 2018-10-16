@@ -40,23 +40,13 @@ namespace NasleGhalam.ServiceLayer.Services
         public UserViewModel GetById(int id, byte userRoleLevel)
         {
             return _users
+                .Include(current => current.City)
                 .Where(current => current.Id == id)
                 .Where(current => current.Role.Level > userRoleLevel)
-                .Select(current => new UserViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    Family = current.Family,
-                    Username = current.Username,
-                    IsActive = current.IsActive,
-                    RoleId = current.RoleId,
-                    CityId = current.CityId,
-                    Gender = current.Gender,
-                    Mobile = current.Mobile,
-                    NationalNo = current.NationalNo,
-                    Phone = current.Phone,
-                    ProvinceId = current.City.ProvinceId
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<UserViewModel>)
+                .FirstOrDefault();
         }
 
 
@@ -68,24 +58,13 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<UserViewModel> GetAll(byte userRoleLevel)
         {
             return _users
+                .Include(current => current.City)
+                .Include(current => current.Role)
                 .Where(current => current.Role.Level > userRoleLevel)
-                .Select(current => new UserViewModel()
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    Family = current.Family,
-                    Username = current.Username,
-                    IsActive = current.IsActive,
-                    RoleId = current.RoleId,
-                    CityId = current.CityId,
-                    Gender = current.Gender,
-                    Mobile = current.Mobile,
-                    NationalNo = current.NationalNo,
-                    Phone = current.Phone,
-                    RoleName = current.Role.Name,
-                    CityName = current.City.Name,
-                    GenderName = current.Gender ? "پسر" : "دختر"
-                }).ToList();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<UserViewModel>)
+                .ToList();
         }
 
 
@@ -111,7 +90,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var user = Mapper.Map<User>(userViewModel);
             user.LastLogin = DateTime.Now;
             _users.Add(user);
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = user.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
@@ -129,22 +109,20 @@ namespace NasleGhalam.ServiceLayer.Services
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
             if (role == null)
             {
-                MessageResultServer msgRes1 = new MessageResultServer()
+                return  new MessageResultClient()
                 {
-                    FaMessage = "نقش یافت نگردید",
+                    Message = "نقش یافت نگردید",
                     MessageType = MessageType.Error
                 };
-                return Mapper.Map<MessageResultClient>(msgRes1);
             }
 
             if (role.Level <= userRoleLevel)
             {
-                MessageResultServer msgRes2 = new MessageResultServer()
+                return new MessageResultClient()
                 {
-                    FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
+                    Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
-                return Mapper.Map<MessageResultClient>(msgRes2);
             }
 
             var user = Mapper.Map<UserUpdateViewModel, User>(userViewModel);
@@ -156,10 +134,9 @@ namespace NasleGhalam.ServiceLayer.Services
             else
             {
                 _uow.ExcludeFieldsFromUpdate(user, x => x.LastLogin);
-
             }
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
@@ -180,7 +157,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var user = Mapper.Map<User>(userViewModel);
             _uow.MarkAsDeleted(user);
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 

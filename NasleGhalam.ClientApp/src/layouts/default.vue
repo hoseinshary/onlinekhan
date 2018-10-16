@@ -20,7 +20,8 @@
         <div class="gt-xs inline">
           <img src="/assets/img/User.jpg"
                class="img-circle"
-               style="width: 20px;height: 20px;border-radius: 50%;"> {{FullName}}،
+               style="width: 20px;height: 20px;border-radius: 50%;">
+          {{FullName}}،
           خوش آمدید
           <a @click="logout"
              style="text-decoration: none;color: white;padding-right: 20px;cursor: pointer;">

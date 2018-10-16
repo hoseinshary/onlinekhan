@@ -3,13 +3,14 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Student;
+using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: علیرضا اعتمادی
+	///     date: 1397.07.20
 	/// </author>
 	public class StudentController : ApiController
     {
@@ -42,41 +43,25 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.StudentCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(StudentViewModel studentViewModel)
+        public IHttpActionResult Create(StudentCreateViewModel studentViewModel)
         {
-            var msgRes = _studentService.Create(studentViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType,
-                Id = msgRes.Id
-            });
+            return Ok(_studentService.Create(studentViewModel, Request.GetRoleLevel()));
         }
 
 
         [HttpPost]
         [CheckUserAccess(ActionBits.StudentUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(StudentViewModel studentViewModel)
+        public IHttpActionResult Update(StudentUpdateViewModel studentViewModel)
         {
-            var msgRes = _studentService.Update(studentViewModel);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(_studentService.Update(studentViewModel, Request.GetRoleLevel()));
         }
 
 
         [HttpPost, CheckUserAccess(ActionBits.StudentDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _studentService.Delete(id);
-            return Ok(new MessageResultClient
-            {
-                Message = msgRes.FaMessage,
-                MessageType = msgRes.MessageType
-            });
+            return Ok(_studentService.Delete(id));
         }
     }
 }

@@ -20,6 +20,7 @@ const EDUCATION_YEAR_URL = '/api/educationYear';
 const QUESTION_URL = '/api/question';
 const AXILLARY_BOOK_URL = '/api/axillaryBook';
 const UNIVERSITY_BRANCH_URL = '/api/universityBranch';
+const STUDENT_URL = '/api/student';
 
 export {
   API_URL,
@@ -41,5 +42,6 @@ export {
   EDUCATION_YEAR_URL,
   AXILLARY_BOOK_URL,
   QUESTION_URL,
-  UNIVERSITY_BRANCH_URL
+  UNIVERSITY_BRANCH_URL,
+  STUDENT_URL
 };

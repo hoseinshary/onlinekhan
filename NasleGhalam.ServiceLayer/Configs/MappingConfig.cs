@@ -15,11 +15,12 @@ using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.Ratio;
 using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.ViewModels.Publisher;
-using  NasleGhalam.ViewModels.AxillaryBook;
+using NasleGhalam.ViewModels.AxillaryBook;
 using NasleGhalam.ViewModels.Tag;
 using NasleGhalam.ViewModels.Question;
 using NasleGhalam.ViewModels.UniversityBranch;
 using NasleGhalam.Common;
+using NasleGhalam.ViewModels.Student;
 
 namespace NasleGhalam.ServiceLayer.Configs
 {
@@ -36,9 +37,21 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<EducationGroupLessonViewModel, EducationGroup_Lesson>();
 
                 config.CreateMap<RoleViewModel, Role>();
+
                 config.CreateMap<UserCreateViewModel, User>();
                 config.CreateMap<UserUpdateViewModel, User>();
-                config.CreateMap<UserViewModel, User>();
+                config.CreateMap<UserViewModel, User>()
+                    .ReverseMap()
+                    .ForMember(dst => dst.GenderName, opt => opt.MapFrom(src => src.Gender ? "پسر" : "دختر"))
+                    .ForMember(dst => dst.ProvinceId, opt => opt.MapFrom(src => src.City.ProvinceId));
+
+                config.CreateMap<StudentCreateViewModel, Student>();
+                config.CreateMap<StudentUpdateViewModel, Student>();
+                config.CreateMap<StudentViewModel, Student>()
+                    .ReverseMap()
+                    .ForPath(dst => dst.User.ProvinceId, opt => opt.MapFrom(src => src.User.City.ProvinceId))
+                    .ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User));
+
                 config.CreateMap<GradeViewModel, Grade>();
                 config.CreateMap<GradeLevelViewModel, GradeLevel>();
 

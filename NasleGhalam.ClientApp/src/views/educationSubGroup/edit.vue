@@ -10,7 +10,7 @@
                :options="educationGroupDdl"
                class="col-md-6"
                clearable
-               ref="educationSubGroupId" />
+               ref="educationGroupId" />
 
     <my-input :model="$v.educationSubGroupObj.Name"
               class="col-md-6" />
@@ -37,7 +37,7 @@ export default {
       fillEducationGroupDdlStore: 'fillDdlStore'
     }),
     submit() {
-      this.educationSubGroupObj.EducationGroupName = this.$refs.educationSubGroupId.getSelectedLabel();
+      this.educationSubGroupObj.EducationGroupName = this.$refs.educationGroupId.getSelectedLabel();
       this.submitEditStore();
     },
     modalOpen() {

@@ -2,7 +2,7 @@
   <my-modal-create :title="modelName"
                    :show="isOpenModalCreate"
                    @confirm="submit"
-                   @reset="resetCreateStor"
+                   @reset="resetCreateStore"
                    @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
 
@@ -37,7 +37,7 @@ export default {
       fillEducationGroupDdlStore: 'fillDdlStore'
     }),
     submit(closeModal) {
-      this.educationSubGroupObj.EducationGroupName = this.$refs.educationSubGroupId.getSelectedLabel();
+      this.educationSubGroupObj.EducationGroupName = this.$refs.educationGroupId.getSelectedLabel();
       this.submitCreateStore(closeModal);
     },
     modalOpen() {

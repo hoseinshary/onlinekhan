@@ -85,7 +85,7 @@ const store = {
      * rest value of studentObj
      */
     reset(state, $v) {
-      //util.clearObject(state.studentObj);
+      util.clearObject(state.studentObj);
       if ($v) {
         $v.$reset();
       }

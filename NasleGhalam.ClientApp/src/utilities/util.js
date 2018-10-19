@@ -12,8 +12,9 @@ const mapObject = function(cloneFrom, cloneTo) {
     if (cloneFrom[key] !== undefined) {
       if (isObject(cloneFrom[key])) {
         mapObject(cloneFrom[key], cloneTo[key]);
+      } else {
+        cloneTo[key] = cloneFrom[key];
       }
-      cloneTo[key] = cloneFrom[key];
     }
   });
 };
@@ -32,21 +33,27 @@ const cloneObject = function(obj) {
  */
 const clearObject = function(obj) {
   Object.keys(obj).forEach(key => {
-    if (isString(obj[key])) {
-      obj[key] = '';
-    } else if (isNumber(obj[key])) {
-      // obj[key] = 0;
-      obj[key] = undefined;
-    } else if (isBoolean(obj[key])) {
-      //obj[key] = false;
-      obj[key] = undefined;
-    } else if (isArray(obj[key])) {
-      clearArray(obj[key]);
-    } else if (isObject(obj[key])) {
+    if (isObject(obj[key])) {
       clearObject(obj[key]);
     } else {
       obj[key] = undefined;
     }
+
+    // if (isString(obj[key])) {
+    //   obj[key] = '';
+    // } else if (isNumber(obj[key])) {
+    //   // obj[key] = 0;
+    //   obj[key] = undefined;
+    // } else if (isBoolean(obj[key])) {
+    //   //obj[key] = false;
+    //   obj[key] = undefined;
+    // } else if (isArray(obj[key])) {
+    //   clearArray(obj[key]);
+    // } else if (isObject(obj[key])) {
+    //   clearObject(obj[key]);
+    // } else {
+    //   obj[key] = undefined;
+    // }
   });
 };
 

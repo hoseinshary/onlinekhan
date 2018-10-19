@@ -355,8 +355,10 @@ export default {
                   .indexOf(filterKey) > -1;
             } else {
               // get value of col
+              //todo: check later. use slot if posible
               result =
-                String(row[col.data])
+                // String(row[col.data])
+                String(util.getNested(row, col.data))
                   .toLowerCase()
                   .indexOf(filterKey) > -1;
             }
@@ -364,13 +366,16 @@ export default {
           });
         });
       }
+      debugger;
 
       if (sortKey) {
         // gridData = gridData.slice().sort(function(a, b) {
         gridData = gridData.sort(function(a, b) {
-          //
-          a = a[sortKey];
-          b = b[sortKey];
+          //todo: check later. use slot if posible
+          a = util.getNested(a, sortKey);
+          b = util.getNested(b, sortKey);
+          // a = a[sortKey];
+          // b = b[sortKey];
           return (a === b ? 0 : a > b ? 1 : -1) * order;
         });
       }

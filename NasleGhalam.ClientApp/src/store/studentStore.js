@@ -86,6 +86,7 @@ const store = {
      */
     reset(state, $v) {
       util.clearObject(state.studentObj);
+      state.studentObj.User.IsActive = true;
       if ($v) {
         $v.$reset();
       }

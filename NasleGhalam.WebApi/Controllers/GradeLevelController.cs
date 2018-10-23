@@ -20,7 +20,8 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.GradeLevelReadAccess,
+             ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_gradeLevelService.GetAll());

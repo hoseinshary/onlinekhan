@@ -80,7 +80,8 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(msgRes);
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)] // todo: wrong permision!
+        [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess,
+             ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAllDdl()
         {
             return Ok(_lessonService.GetAllDdl());

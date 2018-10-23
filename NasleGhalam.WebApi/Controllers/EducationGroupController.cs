@@ -74,7 +74,8 @@ namespace NasleGhalam.WebApi.Controllers
 
         [HttpGet, CheckUserAccess(ActionBits.EducationSubGroupCreateAccess,
              ActionBits.EducationSubGroupUpdateAccess,
-             ActionBits.UniversityBranchReadAccess)]
+             ActionBits.UniversityBranchReadAccess,
+             ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAllDdl()
         {
             return Ok(_educationGroupService.GetAllDdl());

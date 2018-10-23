@@ -68,7 +68,8 @@ namespace NasleGhalam.WebApi.Controllers
 
         [HttpGet, CheckUserAccess(ActionBits.GradeLevelCreateAccess,
             ActionBits.GradeLevelUpdateAccess,
-             ActionBits.EducationBookReadAccess)]
+             ActionBits.EducationBookReadAccess,
+             ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAllDdl()
         {
             return Ok(_gradeService.GetAllDdl());

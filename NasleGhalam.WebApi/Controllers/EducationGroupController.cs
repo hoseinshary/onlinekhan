@@ -13,8 +13,8 @@ namespace NasleGhalam.WebApi.Controllers
 	/// </author>
 	public class EducationGroupController : ApiController
     {
-        private readonly EducationGroupService _educationGroupService;
-        public EducationGroupController(EducationGroupService educationGroupService)
+        private readonly EducationTreeService _educationGroupService;
+        public EducationGroupController(EducationTreeService educationGroupService)
         {
             _educationGroupService = educationGroupService;
         }

@@ -7,7 +7,9 @@ namespace NasleGhalam.DomainClasses.Entities
         public Lesson()
         {
             Ratios = new HashSet<Ratio>();
-            EducationGroups_Lessons = new HashSet<EducationGroup_Lesson>();
+            EducationTrees = new HashSet<EducationTree>();
+            Topics = new HashSet<Topic>();
+            EducationBooks = new HashSet<EducationBook>();
         }
         public int Id { get; set; }
 
@@ -19,12 +21,13 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Lookup Lookup_Nezam { get; set; }
 
-        public int GradeLevelId { get; set; }
-
-        public GradeLevel GradeLevel { get; set; }
+      
 
         public ICollection<Ratio> Ratios { get; set; }
 
-        public ICollection<EducationGroup_Lesson> EducationGroups_Lessons { get; set; }
+        public ICollection<EducationTree> EducationTrees { get; set; }
+
+        public ICollection<Topic> Topics { get; set; }
+        public ICollection<EducationBook> EducationBooks { get; set; }
     }
 }

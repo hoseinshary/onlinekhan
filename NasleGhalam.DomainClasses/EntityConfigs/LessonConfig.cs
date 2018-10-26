@@ -11,10 +11,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             this.Property(x => x.Name).HasMaxLength(200).IsRequired();
             this.HasIndex(x => x.Name).IsUnique().HasName("UK_Lesson_Name");
 
-            this.HasRequired(x => x.GradeLevel)
-               .WithMany(x => x.Lessons)
-               .HasForeignKey(x => x.GradeLevelId)
-               .WillCascadeOnDelete(false);
+
 
 
             this.HasRequired(x => x.Lookup_Nezam)

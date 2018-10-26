@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\EducationTree.cs" />
     <Compile Include="Entities\Lookup.cs" />
     <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\QuestionAnswerView.cs" />
@@ -64,15 +65,11 @@
     <Compile Include="Entities\Lesson.cs" />
     <Compile Include="Entities\Ratio.cs" />
     <Compile Include="Entities\HistoryEducation.cs" />
-    <Compile Include="Entities\EducationGroup_Lesson.cs" />
     <Compile Include="Entities\UniversityBranch.cs" />
     <Compile Include="Entities\Teacher.cs" />
     <Compile Include="Entities\Tag.cs" />
     <Compile Include="Entities\EducationSubGroup.cs" />
-    <Compile Include="Entities\EducationGroup.cs" />
     <Compile Include="Entities\Exam.cs" />
-    <Compile Include="Entities\GradeLevel.cs" />
-    <Compile Include="Entities\Grade.cs" />
     <Compile Include="Entities\EducationYear.cs" />
     <Compile Include="Entities\Controller.cs" />
     <Compile Include="Entities\City.cs" />
@@ -81,11 +78,11 @@
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="EntityConfigs\ActionConfig.cs" />
+    <Compile Include="EntityConfigs\EducationTreeConfig.cs" />
     <Compile Include="EntityConfigs\LookupConfig.cs" />
     <Compile Include="EntityConfigs\ModuleConfig.cs" />
     <Compile Include="EntityConfigs\QuestionAnswerViewConfig.cs" />
     <Compile Include="EntityConfigs\EducationSubGroupConfig.cs" />
-    <Compile Include="EntityConfigs\EducationGroupConfig.cs" />
     <Compile Include="EntityConfigs\ExamConfig.cs" />
     <Compile Include="EntityConfigs\BoxConfig.cs" />
     <Compile Include="EntityConfigs\EducationBookConfig.cs" />
@@ -100,11 +97,8 @@
     <Compile Include="EntityConfigs\LessonConfig.cs" />
     <Compile Include="EntityConfigs\RatioConfig.cs" />
     <Compile Include="EntityConfigs\HistoryEducationConfig.cs" />
-    <Compile Include="EntityConfigs\EducationGroup_LessonConfig.cs" />
     <Compile Include="EntityConfigs\UniversityBranchConfig.cs" />
     <Compile Include="EntityConfigs\TagConfig.cs" />
-    <Compile Include="EntityConfigs\GradeLevelConfig.cs" />
-    <Compile Include="EntityConfigs\GradeConfig.cs" />
     <Compile Include="EntityConfigs\ProvinceConfig.cs" />
     <Compile Include="EntityConfigs\ControllerConfig.cs" />
     <Compile Include="EntityConfigs\CityConfig.cs" />

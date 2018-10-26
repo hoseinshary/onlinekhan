@@ -19,19 +19,12 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.ExamId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.EducationGroup)
-                .WithMany(x => x.HistoryEducations)
-                .HasForeignKey(x => x.EducationGroupId)
-                .WillCascadeOnDelete(false);
+            
 
-            this.HasRequired(x => x.EducationSubGroup)
+            
+            this.HasRequired(x => x.EducationTree)
                 .WithMany(x => x.HistoryEducations)
-                .HasForeignKey(x => x.EducationSubGroupId)
-                .WillCascadeOnDelete(false);
-
-            this.HasRequired(x => x.GradeLevel)
-                .WithMany(x => x.HistoryEducations)
-                .HasForeignKey(x => x.GradeLevelId)
+                .HasForeignKey(x => x.EducationTreeId)
                 .WillCascadeOnDelete(false);
 
             this.HasMany(x => x.Cities)

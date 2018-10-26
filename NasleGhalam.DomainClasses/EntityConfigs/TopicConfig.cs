@@ -12,9 +12,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             //this.HasIndex(x => x.Title).IsUnique().HasName("UK_Topic_Name");
             this.Property(x => x.ParentTopicId).IsOptional();
 
-            this.HasRequired(x => x.EducationGroup_Lesson)
+            this.HasRequired(x => x.Lesson)
             .WithMany(x => x.Topics)
-            .HasForeignKey(x => x.EducationGroup_LessonId)
+            .HasForeignKey(x => x.LessonId)
             .WillCascadeOnDelete(false);
 
             this.HasOptional(x => x.ParentTopic)

@@ -20,6 +20,7 @@ namespace NasleGhalam.DomainClasses.Entities
             Topic_AreaTypes = new HashSet<Topic>();
             Topic_Hardnesses = new HashSet<Topic>();
             Lesson_Nezams = new HashSet<Lesson>();
+            EducationTree_States = new HashSet<EducationTree>();
         }
 
         public int Id { get; set; }
@@ -40,5 +41,6 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<Topic> Topic_Hardnesses { get; set; }
         public ICollection<Topic> Topic_AreaTypes { get; set; }
         public ICollection<Lesson> Lesson_Nezams { get; set; }
+        public ICollection<EducationTree> EducationTree_States { get; set; }
     }
 }

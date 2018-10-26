@@ -14,29 +14,29 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "درس";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Lesson> _lessons;
-        private readonly IDbSet<Ratio> _ratios;
-        private readonly IDbSet<EducationGroup> _educationGroups;
-        private readonly IDbSet<EducationGroup_Lesson> _educationGroup_Lesson;
 
-        private readonly EducationGroup_LessonService _educationGroupLessonService;
-        private readonly RatioService _ratioService;
+        private readonly IDbSet<Ratio> _ratios;
+        private readonly IDbSet<EducationTree> _educationTrees;
+        
+
+        
+        
 
         //private readonly TopicService _topicService;
 
 
 
         
-        public LessonService(IUnitOfWork uow , EducationGroup_LessonService educationGroupLessonService, RatioService ratioService/*, TopicService topicService*/)
+        public LessonService(IUnitOfWork uow  )
         {
             _uow = uow;
             _lessons = uow.Set<Lesson>();
-            _educationGroupLessonService = educationGroupLessonService;
-            _ratioService = ratioService;
+            
             //_topicService = topicService;
         
             _ratios = uow.Set<Ratio>();
-            _educationGroups = uow.Set<EducationGroup>();
-            _educationGroup_Lesson = uow.Set<EducationGroup_Lesson>();
+            _educationTrees = uow.Set<EducationTree>();
+            
         }
 
 
@@ -55,7 +55,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Name = less.Name,
                     IsMain = less.IsMain,
                     Id = less.Id,
-                    GradeLevelId = less.GradeLevelId,
+                    EducationTreeId = less.,
                     LookupId_Nezam = less.LookupId_Nezam,
                     GradeId = less.GradeLevel.GradeId,
                     EducationGroups = 

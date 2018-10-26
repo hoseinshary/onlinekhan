@@ -11,17 +11,17 @@ using NasleGhalam.ViewModels.EducationSubGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-    public class EducationGroupService
+    public class EducationTreeService
     {
         private const string Title = "گروه آموزشی";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<EducationGroup> _educationGroups;
+        private readonly IDbSet<EducationTree> _educationTrees;
         private readonly IDbSet<EducationSubGroup> _educationSubGroups;
 
-        public EducationGroupService(IUnitOfWork uow)
+        public EducationTreeService(IUnitOfWork uow)
         {
             _uow = uow;
-            _educationGroups = uow.Set<EducationGroup>();
+            _educationTrees = uow.Set<EducationTree>();
             _educationSubGroups = uow.Set<EducationSubGroup>();
         }
 
@@ -33,7 +33,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public EducationGroupViewModel GetById(int id)
         {
-            return _educationGroups
+            return _educationTrees
                 .Where(current => current.Id == id)
                 .Select(current => new EducationGroupViewModel
                 {
@@ -49,7 +49,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<EducationGroupViewModel> GetAll()
         {
-            return _educationGroups.Select(current => new EducationGroupViewModel()
+            return _educationTrees.Select(current => new EducationGroupViewModel()
             {
                 Id = current.Id,
                 Name = current.Name
@@ -64,7 +64,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<EducationGroupWithSubGroupsViewModel> GetAllWithSubGroups()
         {
-            return _educationGroups
+            return _educationTrees
                 .Where(current => current.EducationSubGroups.Any())
                 .Select(current => new EducationGroupWithSubGroupsViewModel()
                 {
@@ -155,7 +155,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public MessageResultClient Create(EducationGroupViewModel educationGroupViewModel)
         {
             var educationGroup = Mapper.Map<EducationGroup>(educationGroupViewModel);
-            _educationGroups.Add(educationGroup);
+            _educationTrees.Add(educationGroup);
 
             MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationGroup.Id;
@@ -203,7 +203,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _educationGroups.Select(current => new SelectViewModel
+            return _educationTrees.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

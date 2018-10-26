@@ -10,9 +10,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             this.HasKey(x => x.Id);
             this.Property(x => x.Name).HasMaxLength(50).IsRequired();
 
-            this.HasRequired(x => x.EducationGroup)
+            this.HasRequired(x => x.EducationTree)
                 .WithMany(x => x.Exams)
-                .HasForeignKey(x => x.EducationGroupId)
+                .HasForeignKey(x => x.EducationTreeId)
                 .WillCascadeOnDelete(false);
 
             this.HasRequired(x => x.EducationYear)

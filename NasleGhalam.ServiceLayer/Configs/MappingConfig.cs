@@ -32,9 +32,7 @@ namespace NasleGhalam.ServiceLayer.Configs
             {
                 config.CreateMap<LessonViewModel, Lesson>();
                 config.CreateMap<LessonCreateAndUpdateViewModel, Lesson>();
-                config.CreateMap<ViewModels.EducationGroup.EducationGroupViewModel, EducationGroup>();
-                config.CreateMap<EducationGroup_LessonViewModel, EducationGroup_Lesson>();
-                config.CreateMap<EducationGroupLessonViewModel, EducationGroup_Lesson>();
+                
 
                 config.CreateMap<RoleViewModel, Role>();
 
@@ -52,8 +50,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                     .ForPath(dst => dst.User.ProvinceId, opt => opt.MapFrom(src => src.User.City.ProvinceId))
                     .ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User));
 
-                config.CreateMap<GradeViewModel, Grade>();
-                config.CreateMap<GradeLevelViewModel, GradeLevel>();
+                
 
                 config.CreateMap<ProvinceViewModel, Province>();
 

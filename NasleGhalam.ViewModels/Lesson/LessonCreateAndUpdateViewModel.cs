@@ -25,11 +25,11 @@ namespace NasleGhalam.ViewModels.Lesson
 
         [Display(Name = "پایه")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
-        public int GradeLevelId { get; set; }
+        public int EducationTreeId { get; set; }
 
         
 
-        public int GradeId { get; set; }
+        
 
 
 

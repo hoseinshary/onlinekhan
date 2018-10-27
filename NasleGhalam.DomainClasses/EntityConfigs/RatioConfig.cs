@@ -7,15 +7,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public RatioConfig()
         {
-            this.HasKey(x => x.Id);
+            HasKey(x => x.Id);
             
 
-            this.HasRequired(x => x.EducationSubGroup)
+            HasRequired(x => x.EducationSubGroup)
                 .WithMany(x => x.Ratios)
                 .HasForeignKey(x => x.EducationSubGroupId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.Lesson)
+            HasRequired(x => x.Lesson)
                 .WithMany(x => x.Ratios)
                 .HasForeignKey(x => x.LessonId)
                 .WillCascadeOnDelete(false);

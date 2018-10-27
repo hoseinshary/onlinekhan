@@ -7,10 +7,10 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public ProvinceConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(50).IsRequired();
-            this.HasIndex(x => x.Name).IsUnique().HasName("UK_Province_Name");
-            this.Property(x => x.Code).HasMaxLength(5).IsRequired();
+            HasKey(x => x.Id);
+            Property(x => x.Name).HasMaxLength(50).IsRequired();
+            HasIndex(x => x.Name).IsUnique().HasName("UK_Province_Name");
+            Property(x => x.Code).HasMaxLength(5).IsRequired();
         }
     }
 }

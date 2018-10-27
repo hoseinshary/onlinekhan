@@ -7,10 +7,10 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public EducationSubGroupConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(50).IsRequired();
+            HasKey(x => x.Id);
+            Property(x => x.Name).HasMaxLength(50).IsRequired();
 
-            this.HasRequired(x => x.EducationTree)
+            HasRequired(x => x.EducationTree)
                 .WithMany(x => x.EducationSubGroups)
                 .HasForeignKey(x => x.EducationTreeId)
                 .WillCascadeOnDelete(false);

@@ -152,11 +152,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه نقش ها برای لیست کشویی
         /// </summary>
         /// <param name="userRoleLevel"></param>
+        /// <param name="userType"></param>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl(byte userRoleLevel)
+        public IList<SelectViewModel> GetAllDdl(byte userRoleLevel, UserType userType)
         {
             return _roles
                 .Where(current => current.Level > userRoleLevel)
+                .Where(current => current.UserType == userType)
                 .Select(current => new SelectViewModel
                 {
                     value = current.Id,

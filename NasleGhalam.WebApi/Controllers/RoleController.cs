@@ -76,7 +76,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.UserCreateAccess, ActionBits.UserUpdateAccess)]
         public IHttpActionResult GetAllDdl()
         {
-            return Ok(_roleService.GetAllDdl(Request.GetRoleLevel()));
+            return Ok(_roleService.GetAllDdl(Request.GetRoleLevel(), Request.GetUserType()));
         }
         #endregion
 

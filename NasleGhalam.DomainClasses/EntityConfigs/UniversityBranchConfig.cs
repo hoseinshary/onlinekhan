@@ -7,11 +7,11 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public UniversityBranchConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(50).IsRequired();
-            this.HasIndex(x => x.Name).IsUnique().HasName("UK_UniversityBranch_Name");
+            HasKey(x => x.Id);
+            Property(x => x.Name).HasMaxLength(50).IsRequired();
+            HasIndex(x => x.Name).IsUnique().HasName("UK_UniversityBranch_Name");
 
-            this.HasRequired(x => x.EducationSubGroup)
+            HasRequired(x => x.EducationSubGroup)
                 .WithMany(x => x.UniversityBranches)
                 .HasForeignKey(x => x.EducationSubGroupId)
                 .WillCascadeOnDelete(false);

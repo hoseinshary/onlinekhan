@@ -21,10 +21,6 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Exam Exam { get; set; }
 
-        
-
-        
-
         public int EducationTreeId { get; set; }
 
         public EducationTree  EducationTree { get; set; }

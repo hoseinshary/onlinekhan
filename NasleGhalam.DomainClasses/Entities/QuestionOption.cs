@@ -2,9 +2,6 @@
 {
     public class QuestionOption
     {
-        public QuestionOption()
-        {
-        }
         public int Id { get; set; }
 
         public string Context { get; set; }

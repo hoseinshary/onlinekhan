@@ -10,7 +10,7 @@ namespace NasleGhalam.ServiceLayer.Jwt
 {
     public class JsonWebToken
     {
-        private const String _secretKey = "$#@!gklKme#ad@(DrCTJk|EEcc$)(#$%8524)34*90==^%$#@!";
+        private const string SecretKey = "$#@!gklKme#ad@(DrCTJk|EEcc$)(#$%8524)34*90==^%$#@!";
 
         private static readonly Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
 
@@ -28,7 +28,7 @@ namespace NasleGhalam.ServiceLayer.Jwt
         {
             var segments = new List<string>();
             var header = new { alg = algorithm.ToString(), typ = "JWT" };
-            var keyBytes = Encoding.UTF8.GetBytes(_secretKey);
+            var keyBytes = Encoding.UTF8.GetBytes(SecretKey);
 
             byte[] headerBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(header, Formatting.None));
             byte[] payloadBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload, Formatting.None));
@@ -61,7 +61,7 @@ namespace NasleGhalam.ServiceLayer.Jwt
             //payloadData.ToObject(typeof(JWTPayloadObject));
 
             var bytesToSign = Encoding.UTF8.GetBytes(string.Concat(header, ".", payload));
-            var keyBytes = Encoding.UTF8.GetBytes(_secretKey);
+            var keyBytes = Encoding.UTF8.GetBytes(SecretKey);
             var algorithm = (string)headerData["alg"];
 
             var signature = HashAlgorithms[GetHashAlgorithm(algorithm)](keyBytes, bytesToSign);
@@ -109,7 +109,7 @@ namespace NasleGhalam.ServiceLayer.Jwt
                 case 0: break; // No pad chars in this case
                 case 2: output += "=="; break; // Two pad chars
                 case 3: output += "="; break; // One pad char
-                default: throw new System.Exception("Illegal base64url string!");
+                default: throw new Exception("Illegal base64url string!");
             }
             var converted = Convert.FromBase64String(output); // Standard base64 decoder
             return converted;
@@ -118,19 +118,16 @@ namespace NasleGhalam.ServiceLayer.Jwt
 
         public static string CreateToken(byte roleLevel, 
             bool isAdmin, 
-            int user_id, 
-            string user_access)
+            int userId, 
+            string userAccess,
+            UserType userType)
         {
-            long expire = DateTime.Now.ToUniversalTime().AddMinutes(6000).Ticks;
-
-            JwtPayload payload = new JwtPayload()
+            var expire = DateTime.Now.ToUniversalTime().AddMinutes(6000).Ticks;
+            var payload = new JwtPayload()
             {
-                Access = user_access,
+                Access = userAccess,
                 Exp = expire,
-                Value = string.Format("{0}_{1}_{2}",
-                    roleLevel,
-                    isAdmin,
-                    user_id)
+                Value = $"{roleLevel}_{isAdmin}_{userId}_{(int)userType}"
             };
 
             return Encode(payload, JwtHashAlgorithm.HS512);

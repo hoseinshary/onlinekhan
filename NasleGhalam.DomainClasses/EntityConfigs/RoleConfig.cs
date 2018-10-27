@@ -7,10 +7,10 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public RoleConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(50).IsRequired();
-            this.HasIndex(x => x.Name).IsUnique().HasName("UK_Role_Name");
-            this.Property(x => x.SumOfActionBit).HasMaxLength(300).IsRequired();
+            HasKey(x => x.Id);
+            Property(x => x.Name).HasMaxLength(50).IsRequired();
+            HasIndex(x => x.Name).IsUnique().HasName("UK_Role_Name");
+            Property(x => x.SumOfActionBit).HasMaxLength(300).IsRequired();
         }
     }
 }

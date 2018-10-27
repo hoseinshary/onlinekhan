@@ -29,6 +29,14 @@
         Equal = 0,
         Same = 1
     }
+
+    public enum UserType
+    {
+        Organ = 0,
+        Student = 1,
+        Teacher = 2
+    }
+
    
     //public enum AnswerType : byte
     //{

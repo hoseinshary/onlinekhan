@@ -24,6 +24,9 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
+
+
+
         /// <summary>
         /// گرفتن  درخت آموزش با آی دی
         /// </summary>
@@ -39,6 +42,22 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<EducationTreeViewModel>)
                 .FirstOrDefault();
         }
+
+
+        /// <summary>
+        /// گرفتن همه درخت آموزش ها به وسیله وضعیت
+        /// </summary>
+        /// <returns></returns>
+        public IList<EducationTreeViewModel> GetAllByLookupId(int lookupId)
+        {
+            return _educationTrees
+                .Where(current => current.LookupId_EducationTreeState == lookupId)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<EducationTreeViewModel>)
+                .ToList();
+        }
+
 
 
         /// <summary>

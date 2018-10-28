@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapperProfile\EducationTreeProfile.cs" />
     <Compile Include="MapperProfile\PublicProfile.cs" />
     <Compile Include="MapperProfile\UnivercityBranchProfile.cs" />
     <Compile Include="MapperProfile\QuestionProfile.cs" />

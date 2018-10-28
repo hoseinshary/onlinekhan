@@ -29,13 +29,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public EducationTreeGetByIdViewModel GetById(int id)
+        public EducationTreeViewModel GetById(int id)
         {
             return _educationTrees
+                .Include(current => current.Lookup_EducationTreeState)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeGetByIdViewModel>)
+                .Select(Mapper.Map<EducationTreeViewModel>)
                 .FirstOrDefault();
         }
 
@@ -44,12 +45,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه درخت آموزش ها
         /// </summary>
         /// <returns></returns>
-        public IList<EducationTreeGetAllViewModel> GetAll()
+        public IList<EducationTreeViewModel> GetAll()
         {
             return _educationTrees
+                .Include(current => current.Lookup_EducationTreeState)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeGetAllViewModel>)
+                .Select(Mapper.Map<EducationTreeViewModel>)
                 .ToList();
         }
 

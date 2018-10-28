@@ -49,6 +49,10 @@
   <ItemGroup>
     <Compile Include="Context\DBContext.cs" />
     <Compile Include="Context\IUnitOfWork.cs" />
+    <Compile Include="Migrations\201810271805157_fixState.cs" />
+    <Compile Include="Migrations\201810271805157_fixState.Designer.cs">
+      <DependentUpon>201810271805157_fixState.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,6 +69,11 @@
       <Project>{164402ef-47af-4c7b-bd43-0d7d6558ff21}</Project>
       <Name>NasleGhalam.DomainClasses</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201810271805157_fixState.resx">
+      <DependentUpon>201810271805157_fixState.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

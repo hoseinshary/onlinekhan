@@ -24,6 +24,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllDdlByName("AnswerType"));
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.EducationTreeCreateAccess, ActionBits.EducationTreeReadAccess, ActionBits.EducationTreeUpdateAccess)]
+        public IHttpActionResult GetAllEducationTreeStateDdl()
+        {
+            return Ok(_lookupService.GetAllDdlByName("EducationTreeState"));
+        }
+
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess , ActionBits.AxillaryBookReadAccess , ActionBits.AxillaryBookUpdateAccess)]
         public IHttpActionResult GetAllPaperTypeDdl()
         {

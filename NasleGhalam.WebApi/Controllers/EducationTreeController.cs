@@ -9,26 +9,26 @@ namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 06/08/97
 	/// </author>
 	public class EducationTreeController : ApiController
-	{
+    {
         private readonly EducationTreeService _educationTreeService;
-		public EducationTreeController(EducationTreeService educationTreeService)
+        public EducationTreeController(EducationTreeService educationTreeService)
         {
             _educationTreeService = educationTreeService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_educationTreeService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var educationTree = _educationTreeService.GetById(id);
@@ -40,10 +40,10 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-		[HttpPost]
+        [HttpPost]
         [CheckUserAccess(ActionBits.EducationTreeCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(EducationTreeViewModel educationTreeViewModel)
+        public IHttpActionResult Create(EducationTreeCreateViewModel educationTreeViewModel)
         {
             return Ok(_educationTreeService.Create(educationTreeViewModel));
         }
@@ -52,7 +52,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationTreeUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(EducationTreeViewModel educationTreeViewModel)
+        public IHttpActionResult Update(EducationTreeUpdateViewModel educationTreeViewModel)
         {
             return Ok(_educationTreeService.Update(educationTreeViewModel));
         }
@@ -63,5 +63,5 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_educationTreeService.Delete(id));
         }
-	}
+    }
 }

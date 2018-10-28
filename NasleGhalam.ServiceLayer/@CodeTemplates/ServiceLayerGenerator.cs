@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.Student;
+using NasleGhalam.ViewModels.EducationTree;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class StudentService
+	public class EducationTreeService
 	{
-		private const string Title = "دانش آموز";
+		private const string Title = "درخت آموزش";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Student> _students;
+        private readonly IDbSet<EducationTree> _educationTrees;
        
-	    public StudentService(IUnitOfWork uow)
+	    public EducationTreeService(IUnitOfWork uow)
         {
             _uow = uow;
-            _students = uow.Set<Student>();
+            _educationTrees = uow.Set<EducationTree>();
         }
 
 
 		/// <summary>
-        /// گرفتن  دانش آموز با آی دی
+        /// گرفتن  درخت آموزش با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public StudentViewModel GetById(int id)
+        public EducationTreeViewModel GetById(int id)
         {
-            return _students
+            return _educationTrees
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<StudentViewModel>)
+                .Select(Mapper.Map<EducationTreeViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه دانش آموز ها
+        /// گرفتن همه درخت آموزش ها
         /// </summary>
         /// <returns></returns>
-        public IList<StudentViewModel> GetAll()
+        public IList<EducationTreeViewModel> GetAll()
         {
-            return _students
+            return _educationTrees
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<StudentViewModel>)
+                .Select(Mapper.Map<EducationTreeViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت دانش آموز
+        /// ثبت درخت آموزش
         /// </summary>
-        /// <param name="studentViewModel"></param>
+        /// <param name="educationTreeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(StudentViewModel studentViewModel)
+        public MessageResultClient Create(EducationTreeViewModel educationTreeViewModel)
         {
-            var student = Mapper.Map<Student>(studentViewModel);
-            _students.Add(student);
+            var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
+            _educationTrees.Add(educationTree);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = student.Id;
+			msgRes.Id = educationTree.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش دانش آموز
+        /// ویرایش درخت آموزش
         /// </summary>
-        /// <param name="studentViewModel"></param>
+        /// <param name="educationTreeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(StudentViewModel studentViewModel)
+        public MessageResultClient Update(EducationTreeViewModel educationTreeViewModel)
         {
-            var student = Mapper.Map<Student>(studentViewModel);
-            _uow.MarkAsChanged(student);
+            var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
+            _uow.MarkAsChanged(educationTree);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف دانش آموز
+        /// حذف درخت آموزش
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-			var  studentViewModel = GetById(id);
-            if (studentViewModel == null)
+			var  educationTreeViewModel = GetById(id);
+            if (educationTreeViewModel == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var student = Mapper.Map<Student>(studentViewModel);
-            _uow.MarkAsDeleted(student);
+            var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
+            _uow.MarkAsDeleted(educationTree);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه دانش آموز ها برای لیست کشویی
+        /// گرفتن همه درخت آموزش ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _students.Select(current => new SelectViewModel
+            return _educationTrees.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

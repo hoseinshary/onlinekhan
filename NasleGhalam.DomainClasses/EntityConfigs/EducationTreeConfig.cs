@@ -15,9 +15,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             this.HasKey(x => x.Id);
             this.Property(x => x.Name).HasMaxLength(50);
 
-            this.HasRequired(x => x.Lookup_EducationTree)
+            this.HasRequired(x => x.Lookup_EducationTreeState)
                 .WithMany(x => x.EducationTree_States)
-                .HasForeignKey(x => x.LookupId_EducationTree)
+                .HasForeignKey(x => x.LookupId_EducationTreeState)
                 .WillCascadeOnDelete(false);
 
 

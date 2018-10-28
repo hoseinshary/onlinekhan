@@ -9,10 +9,10 @@
         LessonUpdateAccess = 3,
         LessonDeleteAccess = 4,
 
-        EducationGroupReadAccess = 5,
-        EducationGroupCreateAccess = 6,
-        EducationGroupUpdateAccess = 7,
-        EducationGroupDeleteAccess = 8,
+        EducationTreeReadAccess = 5,
+        EducationTreeCreateAccess = 6,
+        EducationTreeUpdateAccess = 7,
+        EducationTreeDeleteAccess = 8,
 
         ProvinceReadAccess = 9,
         ProvinceCreateAccess = 10,

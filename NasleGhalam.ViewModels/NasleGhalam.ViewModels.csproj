@@ -51,6 +51,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
+    <Compile Include="EducationTree\EducationGroupGetAllViewModel.cs" />
+    <Compile Include="EducationTree\EducationTreeCreateViewModel.cs" />
+    <Compile Include="EducationTree\EducationTreeGetAllViewModel.cs" />
+    <Compile Include="EducationTree\EducationTreeGetByIdViewModel.cs" />
+    <Compile Include="EducationTree\EducationTreeUpdateViewModel.cs" />
+    <Compile Include="EducationTree\GetAllEducationGroupChildrenByIdViewModel.cs" />
+    <Compile Include="EducationTree\GradeGetAllViewModel.cs" />
     <Compile Include="Publisher\PublisherViewModel.cs" />
     <Compile Include="Question\QuestionCreateViewModel.cs" />
     <Compile Include="Question\QuestionTempViewModel.cs" />

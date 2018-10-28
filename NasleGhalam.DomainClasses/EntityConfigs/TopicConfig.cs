@@ -7,32 +7,32 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public TopicConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Title).HasMaxLength(200).IsRequired();
+            HasKey(x => x.Id);
+            Property(x => x.Title).HasMaxLength(200).IsRequired();
             //this.HasIndex(x => x.Title).IsUnique().HasName("UK_Topic_Name");
-            this.Property(x => x.ParentTopicId).IsOptional();
+            Property(x => x.ParentTopicId).IsOptional();
 
-            this.HasRequired(x => x.Lesson)
+            HasRequired(x => x.Lesson)
             .WithMany(x => x.Topics)
             .HasForeignKey(x => x.LessonId)
             .WillCascadeOnDelete(false);
 
-            this.HasOptional(x => x.ParentTopic)
+            HasOptional(x => x.ParentTopic)
                 .WithMany(x => x.ChildrenTopic)
                 .HasForeignKey(x => x.ParentTopicId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.Lookup_HardnessType)
+            HasRequired(x => x.Lookup_HardnessType)
                 .WithMany(x => x.Topic_Hardnesses)
                 .HasForeignKey(x => x.LookupId_HardnessType)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.Lookup_AreaType)
+            HasRequired(x => x.Lookup_AreaType)
                 .WithMany(x => x.Topic_AreaTypes)
                 .HasForeignKey(x => x.LookupId_AreaType)
                 .WillCascadeOnDelete(false);
 
-            this.HasMany(x => x.EducationBooks)
+            HasMany(x => x.EducationBooks)
                 .WithMany(x => x.Topics)
                 .Map(config =>
                 {
@@ -42,7 +42,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 });
 
 
-            this.HasMany(x => x.Questions)
+            HasMany(x => x.Questions)
                 .WithMany(x => x.Topics)
                 .Map(config =>
                 {

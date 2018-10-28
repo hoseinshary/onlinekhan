@@ -49,9 +49,9 @@
   <ItemGroup>
     <Compile Include="Context\DBContext.cs" />
     <Compile Include="Context\IUnitOfWork.cs" />
-    <Compile Include="Migrations\201810271805157_fixState.cs" />
-    <Compile Include="Migrations\201810271805157_fixState.Designer.cs">
-      <DependentUpon>201810271805157_fixState.cs</DependentUpon>
+    <Compile Include="Migrations\201810271900171_UpdateRole.cs" />
+    <Compile Include="Migrations\201810271900171_UpdateRole.Designer.cs">
+      <DependentUpon>201810271900171_UpdateRole.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,8 +71,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201810271805157_fixState.resx">
-      <DependentUpon>201810271805157_fixState.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201810271900171_UpdateRole.resx">
+      <DependentUpon>201810271900171_UpdateRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

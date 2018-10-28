@@ -7,9 +7,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public QuestionJudgConfig()
         {
-            this.HasKey(x => x.Id);
+            HasKey(x => x.Id);
 
-            this.HasRequired(x => x.Question)
+            HasRequired(x => x.Question)
                 .WithMany(x => x.QuestionJudges)
                 .HasForeignKey(x => x.QuestionId)
                 .WillCascadeOnDelete(false);

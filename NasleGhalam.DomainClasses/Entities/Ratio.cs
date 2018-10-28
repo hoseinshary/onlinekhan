@@ -7,8 +7,6 @@
         }
         public int Id { get; set; }
 
-        
-
         public byte Rate { get; set; }
 
         public int LessonId { get; set; }

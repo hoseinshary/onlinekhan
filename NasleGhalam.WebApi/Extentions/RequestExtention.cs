@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.WebApi.Extentions
 {
@@ -7,26 +8,33 @@ namespace NasleGhalam.WebApi.Extentions
     {
         public static int GetUserId(this HttpRequestMessage request)
         {
-            Object obj = request.Properties["_user_id"];
+            var obj = request.Properties["_user_id"];
             return Convert.ToInt32(obj);
         }
 
         public static bool GetIsAdmin(this HttpRequestMessage request)
         {
-            Object obj = request.Properties["_isAdmin"];
+            var obj = request.Properties["_isAdmin"];
             return Convert.ToBoolean(obj);
         }
 
-        public static String GetAccess(this HttpRequestMessage request)
+        public static string GetAccess(this HttpRequestMessage request)
         {
-            Object obj = request.Properties["_access"];
+            var obj = request.Properties["_access"];
             return Convert.ToString(obj);
         }
 
         public static byte GetRoleLevel(this HttpRequestMessage request)
         {
-            Object obj = request.Properties["_roleLevel"];
+            var obj = request.Properties["_roleLevel"];
             return Convert.ToByte(obj);
+        }
+
+        public static UserType GetUserType(this HttpRequestMessage request)
+        {
+            var obj = request.Properties["_userType"];
+            //return (UserType)obj;
+            return (UserType)Enum.ToObject(typeof(UserType), obj);
         }
     }
 }

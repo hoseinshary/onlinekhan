@@ -7,12 +7,12 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public TeacherConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.FatherName).HasMaxLength(50).IsRequired();
-            this.Property(x => x.Address).HasMaxLength(300).IsRequired();
-            this.HasIndex(x => x.UserId).IsUnique();
+            HasKey(x => x.Id);
+            Property(x => x.FatherName).HasMaxLength(50).IsRequired();
+            Property(x => x.Address).HasMaxLength(300).IsRequired();
+            HasIndex(x => x.UserId).IsUnique();
 
-            this.HasRequired(x => x.User)
+            HasRequired(x => x.User)
                 .WithMany(x => x.Teachers)
                 .HasForeignKey(x => x.UserId)
                 .WillCascadeOnDelete(false);

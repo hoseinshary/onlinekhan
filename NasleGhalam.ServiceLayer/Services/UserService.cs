@@ -43,6 +43,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.City)
                 .Where(current => current.Id == id)
                 .Where(current => current.Role.Level > userRoleLevel)
+                .Where(current => current.Role.UserType == UserType.Organ)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<UserViewModel>)
@@ -54,6 +55,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کاربر ها
         /// </summary>
         /// <param name="userRoleLevel"></param>
+        /// <param name="userType"></param>
         /// <returns></returns>
         public IList<UserViewModel> GetAll(byte userRoleLevel)
         {
@@ -61,6 +63,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.City)
                 .Include(current => current.Role)
                 .Where(current => current.Role.Level > userRoleLevel)
+                .Where(current => current.Role.UserType == UserType.Organ)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<UserViewModel>)
@@ -109,7 +112,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
             if (role == null)
             {
-                return  new MessageResultClient()
+                return new MessageResultClient()
                 {
                     Message = "نقش یافت نگردید",
                     MessageType = MessageType.Error
@@ -236,7 +239,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                         loginResult.FullName = usr.Name + " " + usr.Family;
                         loginResult.Token = JsonWebToken.CreateToken(usr.Role.Level,
-                            usr.IsAdmin, usr.Id, usr.Role.SumOfActionBit);
+                            usr.IsAdmin, usr.Id, usr.Role.SumOfActionBit, usr.Role.UserType);
                     }
                 }
             }

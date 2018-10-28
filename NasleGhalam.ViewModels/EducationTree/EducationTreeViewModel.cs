@@ -6,7 +6,7 @@ namespace NasleGhalam.ViewModels.EducationTree
 {
     public class EducationTreeViewModel
     {
-       
+        
         public int Id { get; set; }
 
         [Display(Name = "نام")]

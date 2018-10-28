@@ -2,9 +2,8 @@
 using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels.Role;
 using NasleGhalam.ViewModels.User;
-using NasleGhalam.ViewModels.Grade;
-using NasleGhalam.ViewModels.GradeLevel;
-using NasleGhalam.ViewModels.EducationGroup_Lesson;
+using NasleGhalam.ViewModels.EducationTree;
+
 using NasleGhalam.ViewModels.Province;
 using NasleGhalam.ViewModels.City;
 using NasleGhalam.ViewModels.EducationBook;
@@ -79,6 +78,10 @@ namespace NasleGhalam.ServiceLayer.Configs
                 config.CreateMap<QuestionCreateViewModel, Question>();
 
                 config.CreateMap<UniversityBranchViewModel, UniversityBranch>();
+
+                config.CreateMap<EducationTreeViewModel, EducationTree>();
+                config.CreateMap<EducationTreeCreateViewModel, EducationTree> ();
+                config.CreateMap<EducationTreeUpdateViewModel, EducationTree>();
 
                 config.CreateMap<MessageResultServer, MessageResultClient>()
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.FaMessage))

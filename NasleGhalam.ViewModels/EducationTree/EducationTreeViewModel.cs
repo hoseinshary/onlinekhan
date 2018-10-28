@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using NasleGhalam.ViewModels._Attributes;
-using NasleGhalam.ViewModels.Lookup;
-
+using  NasleGhalam.ViewModels.Lookup;
 namespace NasleGhalam.ViewModels.EducationTree
 {
-    public class EducationTreeGetByIdViewModel
+    public class EducationTreeViewModel
     {
-
+        
         public int Id { get; set; }
 
         [Display(Name = "نام")]
@@ -20,8 +20,7 @@ namespace NasleGhalam.ViewModels.EducationTree
         public int? ParentEducationTreeId { get; set; }
 
         [Display(Name = "گروه آموزشی")]
-        public LookupGetViewModel EducationTree { get; set; }
-
+        public LookupViewModel Lookup_EducationTreeState { get; set; }
 
     }
 }

@@ -27,6 +27,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_educationTreeService.GetAll());
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
+        public IHttpActionResult GetAllByLookupId(int id)
+        {
+            return Ok(_educationTreeService.GetAllByLookupId(id));
+        }
+
 
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
         public IHttpActionResult GetById(int id)

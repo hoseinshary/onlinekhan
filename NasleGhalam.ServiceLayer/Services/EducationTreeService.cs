@@ -24,32 +24,53 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
+
+
+
         /// <summary>
         /// گرفتن  درخت آموزش با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public EducationTreeGetByIdViewModel GetById(int id)
+        public EducationTreeViewModel GetById(int id)
         {
             return _educationTrees
+                .Include(current => current.Lookup_EducationTreeState)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeGetByIdViewModel>)
+                .Select(Mapper.Map<EducationTreeViewModel>)
                 .FirstOrDefault();
         }
+
+
+        /// <summary>
+        /// گرفتن همه درخت آموزش ها به وسیله وضعیت
+        /// </summary>
+        /// <returns></returns>
+        public IList<EducationTreeViewModel> GetAllByLookupId(int lookupId)
+        {
+            return _educationTrees
+                .Where(current => current.LookupId_EducationTreeState == lookupId)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<EducationTreeViewModel>)
+                .ToList();
+        }
+
 
 
         /// <summary>
         /// گرفتن همه درخت آموزش ها
         /// </summary>
         /// <returns></returns>
-        public IList<EducationTreeGetAllViewModel> GetAll()
+        public IList<EducationTreeViewModel> GetAll()
         {
             return _educationTrees
+                .Include(current => current.Lookup_EducationTreeState)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeGetAllViewModel>)
+                .Select(Mapper.Map<EducationTreeViewModel>)
                 .ToList();
         }
 

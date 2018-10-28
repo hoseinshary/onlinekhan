@@ -61,6 +61,8 @@
     <Compile Include="Publisher\PublisherViewModel.cs" />
     <Compile Include="Question\QuestionCreateViewModel.cs" />
     <Compile Include="Question\QuestionTempViewModel.cs" />
+    <Compile Include="Role\RoleUpdateViewModel.cs" />
+    <Compile Include="Role\RoleCreateViewModel.cs" />
     <Compile Include="Student\StudentUpdateViewModel.cs" />
     <Compile Include="Tag\TagViewModel.cs" />
     <Compile Include="UniversityBranch\UniversityBranchViewModel.cs" />

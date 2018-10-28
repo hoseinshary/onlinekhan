@@ -11,6 +11,21 @@
     <my-input :model="$v.roleObj.Level"
               class="col-md-6" />
 
+    <my-field class="col-12"
+              :model="$v.roleObj.UserType">
+      <template slot-scope="data">
+        <q-radio v-model="data.obj.$model"
+                 :val="0"
+                 label="سازمانی" />
+        <q-radio v-model="data.obj.$model"
+                 :val="1"
+                 label="دانش آموز" />
+        <q-radio v-model="data.obj.$model"
+                 :val="2"
+                 label="معلم" />
+      </template>
+    </my-field>
+
   </my-modal-create>
 </template>
 

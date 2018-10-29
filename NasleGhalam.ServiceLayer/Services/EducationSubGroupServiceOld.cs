@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -13,7 +12,7 @@ namespace NasleGhalam.ServiceLayer.Services
 {
     public class EducationSubGroupService
     {
-        private const string Title = "زیر گروه";
+        private const string Title = "زیر گروه آموزشی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<EducationSubGroup> _educationSubGroups;
 
@@ -25,7 +24,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن  زیر گروه با آی دی
+        /// گرفتن  زیر گروه آموزشی با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -33,29 +32,34 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _educationSubGroups
                 .Where(current => current.Id == id)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<EducationSubGroupViewModel>)
-                .FirstOrDefault();
+                .Select(current => new EducationSubGroupViewModel
+                {
+                    Id = current.Id,
+                    Name = current.Name,
+                    EducationGroupId = current.EducationGroupId
+                }).FirstOrDefault();
         }
 
 
         /// <summary>
-        /// گرفتن همه زیر گروه ها
+        /// گرفتن همه زیر گروه آموزشی ها
         /// </summary>
         /// <returns></returns>
         public IList<EducationSubGroupViewModel> GetAll()
         {
-            return _educationSubGroups
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<EducationSubGroupViewModel>)
-                .ToList();
+            return _educationSubGroups.Select(current => new EducationSubGroupViewModel()
+            {
+
+                Id = current.Id,
+                Name = current.Name,
+                EducationGroupId = current.EducationGroupId,
+                EducationGroupName = current.EducationGroup.Name
+            }).ToList();
         }
 
 
         /// <summary>
-        /// ثبت زیر گروه
+        /// ثبت زیر گروه آموزشی
         /// </summary>
         /// <param name="educationSubGroupViewModel"></param>
         /// <returns></returns>
@@ -64,14 +68,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
             _educationSubGroups.Add(educationSubGroup);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationSubGroup.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
         /// <summary>
-        /// ویرایش زیر گروه
+        /// ویرایش زیر گروه آموزشی
         /// </summary>
         /// <param name="educationSubGroupViewModel"></param>
         /// <returns></returns>
@@ -80,13 +84,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
             _uow.MarkAsChanged(educationSubGroup);
 
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
+
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
         /// <summary>
-        /// حذف زیر گروه
+        /// حذف زیر گروه آموزشی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -101,19 +106,19 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
             _uow.MarkAsDeleted(educationSubGroup);
 
-            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
         /// <summary>
-        /// گرفتن همه زیر گروه های یک گروه آموزشی برای لیست کشویی
+        /// گرفتن همه زیر گروه آموزشی ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllByEducationTreeIdDdl(int educationTreeId)
+        public IList<SelectViewModel> GetAllByEducationGroupIdDdl(int educationGroupId)
         {
             return _educationSubGroups
-                .Where(current => current.EducationTreeId == educationTreeId)
+                .Where(current => current.EducationGroupId == educationGroupId)
                 .Select(current => new SelectViewModel
                 {
                     value = current.Id,

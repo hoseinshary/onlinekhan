@@ -3,13 +3,14 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.EducationSubGroup;
+using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
 	///     name: هاشم معین
-	///     date: 01/05/1397
+	///     date: 06/08/1397
 	/// </author>
 	public class EducationSubGroupController : ApiController
     {
@@ -44,8 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            var msgRes = _educationSubGroupService.Create(educationSubGroupViewModel);
-            return Ok(msgRes);
+            return Ok(_educationSubGroupService.Create(educationSubGroupViewModel));
         }
 
 
@@ -54,23 +54,20 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            var msgRes = _educationSubGroupService.Update(educationSubGroupViewModel);
-            return Ok(msgRes);
+            return Ok(_educationSubGroupService.Update(educationSubGroupViewModel));
         }
 
 
         [HttpPost, CheckUserAccess(ActionBits.EducationSubGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _educationSubGroupService.Delete(id);
-            return Ok(msgRes);
+            return Ok(_educationSubGroupService.Delete(id));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.UniversityBranchCreateAccess,
-             ActionBits.UniversityBranchUpdateAccess)]
-        public IHttpActionResult GetAllByEducationGroupIdDdl(int id)
+        [HttpGet, CheckUserAccess(ActionBits.UniversityBranchCreateAccess, ActionBits.UniversityBranchUpdateAccess)]
+        public IHttpActionResult GetAllByEducationTreeIdDdl(int id)
         {
-            return Ok(_educationSubGroupService.GetAllByEducationGroupIdDdl(id));
+            return Ok(_educationSubGroupService.GetAllByEducationTreeIdDdl(id));
         }
     }
 }

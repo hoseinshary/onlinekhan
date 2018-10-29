@@ -51,6 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
+    <Compile Include="EducationSubGroup\EducationSubGroupCreateViewModel.cs" />
+    <Compile Include="EducationSubGroup\EducationSubGroupUpdateViewModel.cs" />
+    <Compile Include="EducationSubGroup\EducationSubGroupViewModel.cs" />
     <Compile Include="EducationTree\EducationTreeCreateViewModel.cs" />
     <Compile Include="EducationTree\EducationTreeViewModel.cs" />
     <Compile Include="EducationTree\EducationTreeUpdateViewModel.cs" />
@@ -73,10 +76,8 @@
     <Compile Include="City\CityViewModel.cs" />
     <Compile Include="Action\SubMenuViewModel .cs" />
     <Compile Include="EducationGroup\EducationGroupIsCheckedViewModel.cs" />
-    <Compile Include="EducationSubGroup\EducationSubGroupLessonViewModel.cs" />
     <Compile Include="EducationGroup\EducationGroupWithSubGroupsViewModel.cs" />
     <Compile Include="EducationGroup_Lesson\EducationGroup_LessonViewModel.cs" />
-    <Compile Include="EducationSubGroup\EducationSubGroupViewModel.cs" />
     <Compile Include="EducationYear\EducationYearViewModel.cs" />
     <Compile Include="ErrorResources.Designer.cs">
       <AutoGen>True</AutoGen>

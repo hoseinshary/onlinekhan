@@ -19,7 +19,6 @@ namespace NasleGhalam.ViewModels.EducationTree
         [Display(Name = "درخت آموزش پدر")]
         public int? ParentEducationTreeId { get; set; }
 
-        [Display(Name = "گروه آموزشی")]
         public LookupViewModel Lookup_EducationTreeState { get; set; }
 
     }

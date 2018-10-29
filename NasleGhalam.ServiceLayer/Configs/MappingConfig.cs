@@ -59,7 +59,7 @@ namespace NasleGhalam.ServiceLayer.Configs
 
                 config.CreateMap<ExamViewModel, Exam>();
 
-                config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
+         //       config.CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
                 config.CreateMap<RatioViewModel, Ratio>();
                 config.CreateMap<RatioLessonViewModel, Ratio>();
 

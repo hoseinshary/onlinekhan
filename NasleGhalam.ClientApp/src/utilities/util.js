@@ -12,8 +12,9 @@ const mapObject = function(cloneFrom, cloneTo) {
     if (cloneFrom[key] !== undefined) {
       if (isObject(cloneFrom[key])) {
         mapObject(cloneFrom[key], cloneTo[key]);
+      } else {
+        cloneTo[key] = cloneFrom[key];
       }
-      cloneTo[key] = cloneFrom[key];
     }
   });
 };

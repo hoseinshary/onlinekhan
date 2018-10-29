@@ -9,7 +9,7 @@ namespace NasleGhalam.WebApi
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            MappingConfig.RegisterMaps();
+            SiteConfig.RegisterAutoMapper();
         }
 
         protected void Application_EndRequest()

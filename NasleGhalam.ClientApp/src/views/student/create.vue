@@ -96,7 +96,7 @@ export default {
       'resetCreateStore'
     ]),
     ...mapActions({
-      fillRoleDdl: 'roleStore/fillDdlStore',
+      fillRoleDdl: 'roleStore/fillDdlByStudentStore',
       fillProvinceDdl: 'provinceStore/fillDdlStore',
       fillCityByProvincIdDdl: 'cityStore/fillCityByProvinceIdDdlStore'
     }),

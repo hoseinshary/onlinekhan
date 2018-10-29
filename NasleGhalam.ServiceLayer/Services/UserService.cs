@@ -55,7 +55,6 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کاربر ها
         /// </summary>
         /// <param name="userRoleLevel"></param>
-        /// <param name="userType"></param>
         /// <returns></returns>
         public IList<UserViewModel> GetAll(byte userRoleLevel)
         {

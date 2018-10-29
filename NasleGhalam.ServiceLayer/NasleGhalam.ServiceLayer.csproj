@@ -74,6 +74,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapperProfile\EducationTreeProfile.cs" />
+    <Compile Include="MapperProfile\PublicProfile.cs" />
+    <Compile Include="MapperProfile\UnivercityBranchProfile.cs" />
+    <Compile Include="MapperProfile\QuestionProfile.cs" />
+    <Compile Include="MapperProfile\TagProfile.cs" />
+    <Compile Include="MapperProfile\EducationBookProfile.cs" />
+    <Compile Include="MapperProfile\AxillaryBookProfile.cs" />
+    <Compile Include="MapperProfile\PublisherProfile.cs" />
+    <Compile Include="MapperProfile\TopicProfile.cs" />
+    <Compile Include="MapperProfile\RatioProfile.cs" />
+    <Compile Include="MapperProfile\EducationSubGroupProfile.cs" />
+    <Compile Include="MapperProfile\LessonProfile .cs" />
+    <Compile Include="MapperProfile\StudentProfile.cs" />
+    <Compile Include="MapperProfile\ProvinceProfile.cs" />
+    <Compile Include="MapperProfile\CityProfile.cs" />
+    <Compile Include="MapperProfile\EducationYearProfile.cs" />
+    <Compile Include="MapperProfile\ExamProfile.cs" />
+    <Compile Include="MapperProfile\LookupProfile.cs" />
+    <Compile Include="MapperProfile\UserProfile.cs" />
+    <Compile Include="MapperProfile\RoleProfile.cs" />
     <Compile Include="Services\ActionService.cs" />
     <Compile Include="Services\AxillaryBookService.cs" />
     <Compile Include="Services\CityService.cs" />
@@ -94,7 +114,6 @@
     </Content>
     <Compile Include="Extentions\LinqTreeExtension.cs" />
     <Compile Include="Extentions\PhysicalAddress.cs" />
-    <Compile Include="Configs\MappingConfig.cs" />
     <Compile Include="Configs\SiteConfig.cs" />
     <Compile Include="Configs\StructureMapConfig.cs" />
     <Compile Include="Jwt\JsonWebToken.cs" />

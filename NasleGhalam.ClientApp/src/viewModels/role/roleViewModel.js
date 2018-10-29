@@ -11,6 +11,10 @@ export default {
       displayName: displayName('سطح نقش'),
       required,
       numeric
+    },
+    UserType: {
+      displayName: displayName('نوع کاربری'),
+      required
     }
   }
 };

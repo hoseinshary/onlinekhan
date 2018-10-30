@@ -9,6 +9,8 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         public EducationSubGroupProfile()
         {
             CreateMap<EducationSubGroupViewModel, EducationSubGroup>();
+            CreateMap<EducationSubGroupUpdateViewModel, EducationSubGroup>();
+            CreateMap<EducationSubGroupCreateViewModel, EducationSubGroup>();
         }
     }
 }

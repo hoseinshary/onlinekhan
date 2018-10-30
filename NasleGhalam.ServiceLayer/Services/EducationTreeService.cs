@@ -51,6 +51,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<EducationTreeViewModel> GetAllByLookupId(int lookupId)
         {
             return _educationTrees
+                .Include(current => current.Lookup_EducationTreeState)
                 .Where(current => current.LookupId_EducationTreeState == lookupId)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -124,6 +125,24 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
+        }
+
+        /// <summary>
+        /// گرفتن درخت آموزش هایی که گروه اموزشی هستند برای لیت کشویی
+        /// </summary>
+        /// <returns></returns>
+        public IList<SelectViewModel> GetAllEducationGroupsDdl()
+        {
+            return _educationTrees
+                .Include(current => current.Lookup_EducationTreeState)
+                .Where(current => current.Lookup_EducationTreeState.Name == "EducationTreeState" && current.Lookup_EducationTreeState.State == 3)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(current => new SelectViewModel
+                {
+                    value = current.Id,
+                    label = current.Name
+                }).ToList();
         }
 
 

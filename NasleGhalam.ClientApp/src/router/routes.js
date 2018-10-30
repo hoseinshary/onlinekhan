@@ -86,6 +86,10 @@ export default [
       {
         path: '/student',
         component: () => import('views/student')
+      },
+      {
+        path: '/educationTree',
+        component: () => import('views/educationTree')
       }
     ]
   },

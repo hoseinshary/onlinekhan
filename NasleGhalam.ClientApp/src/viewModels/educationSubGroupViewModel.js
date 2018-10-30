@@ -12,7 +12,7 @@ export default {
       maxLength: maxLength(50),
       required
     },
-    EducationGroupId: {
+    EducationTreeId: {
       displayName: displayName('گروه آموزشی'),
       requiredDdl: requiredDdl(0)
     }

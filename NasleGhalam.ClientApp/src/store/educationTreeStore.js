@@ -1,72 +1,101 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { EDUCATION_SUB_GROUP_URL as baseUrl } from 'utilities/site-config';
+import { EDUCATIONTREE_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in educationSubGroupGridData by id
+ * find index of object in educationTreeData by id
  * @param {Number} id
  */
-function getIndexById(id) {
-  return store.state.educationSubGroupGridData.findIndex(o => o.Id == id);
+function getIndexById(children, id) {
+  return children.findIndex(o => o.Id == id);
 }
 
 const store = {
   namespaced: true,
   state: {
-    modelName: 'زیر گروه آموزشی',
+    modelName: 'درخت آموزش',
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
-    educationSubGroupObj: {
+    educationTreeObj: {
       Id: 0,
       Name: '',
-      EducationTreeId: 0,
-      EducationTreeName: ''
+      LookupId_EducationTreeState: 0,
+      ParentEducationTreeId: 0
     },
-    educationSubGroupGridData: [],
-    educationSubGroupDdl: [],
+    educationTreeData: [],
+    educationTreeDdl: [],
+    educationGroupDdl: [],
     selectedId: 0,
+    ddlModelChanged: true,
     gridModelChanged: true,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new educationSubGroupObj to educationSubGroupGridData
+     * insert new educationTreeObj to educationTreeData
      */
-    insert(state, id) {
-      let createdObj = util.cloneObject(state.educationSubGroupObj);
+    insertToTree(state, id) {
+      let createdObj = util.cloneObject(state.educationTreeObj);
       createdObj.Id = id;
-      state.educationSubGroupGridData.push(createdObj);
-    },
+      createdObj.label = createdObj.Name;
+      createdObj.children = [];
 
-    /**
-     * update educationSubGroupObj of educationSubGroupGridData
-     */
-    update(state) {
-      let index = getIndexById(state.selectedId);
-      if (index < 0) return;
-      debugger;
-      util.mapObject(
-        state.educationSubGroupObj,
-        state.educationSubGroupGridData[index]
+      let node = util.searchTreeArray(
+        state.educationTreeData,
+        'Id',
+        createdObj.ParentEducationTreeId
       );
+
+      if (node != null) node.children.push(createdObj);
+      else state.educationTreeData.push(createdObj);
     },
 
     /**
-     * delete from educationSubGroupGridData
+     * update educationTreeObj of educationTreeData
      */
-    delete(state) {
-      let index = getIndexById(state.selectedId);
-      if (index < 0) return;
-      state.educationSubGroupGridData.splice(index, 1);
+    updateTree(state) {
+      let node = util.searchTreeArray(
+        state.educationTreeData,
+        'Id',
+        state.educationTreeObj.Id
+      );
+
+      if (node != null) node.label = state.educationTreeObj.Name;
     },
 
     /**
-     * rest value of educationSubGroupObj
+     * delete from educationTreeData
+     */
+    deleteTree(state) {
+      if (state.educationTreeObj.ParentEducationTreeId != null) {
+        let parentNode = util.searchTreeArray(
+          state.educationTreeData,
+          'Id',
+          state.educationTreeObj.ParentEducationTreeId
+        );
+        let index = getIndexById(
+          parentNode.children,
+          state.educationTreeObj.Id
+        );
+        if (index < 0) return;
+        parentNode.children.splice(index, 1);
+      } else {
+        let index = getIndexById(
+          state.educationTreeData,
+          state.educationTreeObj.Id
+        );
+        if (index < 0) return;
+        state.educationTreeData.splice(index, 1);
+      }
+    },
+
+    /**
+     * rest value of educationTreeObj
      */
     reset(state, $v) {
-      util.clearObject(state.educationSubGroupObj);
+      util.clearObject(state.educationTreeObj);
       if ($v) {
         $v.$reset();
       }
@@ -79,35 +108,53 @@ const store = {
     getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
-        util.mapObject(response.data, state.educationSubGroupObj);
+        util.mapObject(response.data, state.educationTreeObj);
       });
     },
 
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
+    fillTreeStore({ state }) {
       // fill grid if modelChanged
       if (state.gridModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.educationSubGroupGridData = response.data;
+          state.educationTreeData = util.listToTree(
+            response.data.map(x => ({
+              Id: x.Id,
+              LookupId_EducationTreeState: x.LookupId_EducationTreeState,
+              Lookup_EducationTreeState: x.Lookup_EducationTreeState,
+              label: x.Name,
+              ParentEducationTreeId: x.ParentEducationTreeId
+            })),
+            'Id',
+            'ParentEducationTreeId'
+          );
           state.gridModelChanged = false;
         });
       }
     },
-
+    /**
+     * fill dropDwonListFromEducationGroups
+     */
+    fillEducationGroupDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllEducationGroupsDdl`).then(response => {
+        state.educationGroupDdl = response.data;
+      });
+    },
     /**
      * fill dropDwonList
      */
-    fillEducationSubGroupByEducationTreeIdDdlStore({ state }, EducationTreeId) {
+    fillDdlStore({ state }) {
       // fill grid if modelChanged
-      // get data
-      axios
-        .get(`${baseUrl}/GetAllByEducationTreeIdDdl/${EducationTreeId}`)
-        .then(response => {
-          state.educationSubGroupDdl = response.data;
+      if (state.ddlModelChanged) {
+        // get data
+        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
+          state.educationTreeDdl = response.data;
+          state.ddlModelChanged = false;
         });
+      }
     },
 
     /**
@@ -115,8 +162,8 @@ const store = {
      */
     validateFormStore({ dispatch }, vm) {
       // check instance validation
-      vm.$v.educationSubGroupObj.$touch();
-      if (vm.$v.educationSubGroupObj.$error) {
+      vm.$v.educationTreeObj.$touch();
+      if (vm.$v.educationTreeObj.$error) {
         dispatch('notifyInvalidForm', vm, { root: true });
         return false;
       }
@@ -128,6 +175,7 @@ const store = {
      * model changed
      */
     modelChangedStore({ state }) {
+      state.ddlModelChanged = true;
       state.gridModelChanged = true;
     },
 
@@ -150,17 +198,20 @@ const store = {
      * submit create data
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
+      debugger;
+      console.log(state);
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
         axios
-          .post(`${baseUrl}/Create`, state.educationSubGroupObj)
+          .post(`${baseUrl}/Create`, state.educationTreeObj)
           .then(response => {
             let data = response.data;
 
             if (data.MessageType == 1) {
-              commit('insert', data.Id);
+              debugger;
+              commit('insertToTree', data.Id);
               dispatch('modelChangedStore');
               dispatch('resetCreateStore');
               dispatch('toggleModalCreateStore', !closeModal);
@@ -209,13 +260,13 @@ const store = {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        state.educationSubGroupObj.Id = state.selectedId;
+        state.educationTreeObj.Id = state.selectedId;
         axios
-          .post(`${baseUrl}/Update`, state.educationSubGroupObj)
+          .post(`${baseUrl}/Update`, state.educationTreeObj)
           .then(response => {
             let data = response.data;
             if (data.MessageType == 1) {
-              commit('update');
+              commit('updateTree');
               dispatch('modelChangedStore');
               dispatch('resetEditStore');
               dispatch('toggleModalEditStore', false);
@@ -257,7 +308,7 @@ const store = {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
-          commit('delete');
+          commit('deleteTree');
           commit('reset');
           dispatch('modelChangedStore');
           dispatch('toggleModalDeleteStore', false);
@@ -278,7 +329,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.educationSubGroupObj.Name;
+      return state.educationTreeObj.Name;
     }
   }
 };

@@ -213,7 +213,47 @@ const fileRemove = function(model, prop, isRequired, vueObj) {
 //   isSymbol(value) {
 //     return typeof value === 'symbol';
 //   }
-
+const listToTree = function(list, key, parentKey) {
+  var map = {},
+    node,
+    roots = [],
+    i;
+  for (i = 0; i < list.length; i += 1) {
+    map[list[i][key]] = i; // initialize the map
+    list[i].children = []; // initialize the children
+  }
+  for (i = 0; i < list.length; i += 1) {
+    node = list[i];
+    if (node[parentKey] !== null) {
+      // if you have dangling branches check that map[node.parentId] exists
+      list[map[node[parentKey]]].children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+  return roots;
+};
+const searchTreeArray = function(array, key, matchingKey) {
+  var i;
+  var parentNode = null;
+  for (i = 0; parentNode == null && i < array.length; i++) {
+    parentNode = searchTree(array[i], key, matchingKey);
+  }
+  return parentNode;
+};
+const searchTree = function(element, key, matchingKey) {
+  if (element[key] == matchingKey) {
+    return element;
+  } else if (element.children != null) {
+    var i;
+    var result = null;
+    for (i = 0; result == null && i < element.children.length; i++) {
+      result = searchTree(element.children[i], key, matchingKey);
+    }
+    return result;
+  }
+  return null;
+};
 /**
  * export data
  */
@@ -233,5 +273,8 @@ export default {
   initAccess,
   objToFormdata,
   fileAdd,
-  fileRemove
+  fileRemove,
+  listToTree,
+  searchTree,
+  searchTreeArray
 };

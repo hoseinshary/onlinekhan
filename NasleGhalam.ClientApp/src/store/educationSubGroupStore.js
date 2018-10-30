@@ -91,7 +91,12 @@ const store = {
       if (state.gridModelChanged) {
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.educationSubGroupGridData = response.data;
+          state.educationSubGroupGridData = response.data.map(x => ({
+            Id: x.Id,
+            EducationTreeId: x.EducationTreeId,
+            Name: x.Name,
+            EducationTreeName: x.EducationTree.Name
+          }));
           state.gridModelChanged = false;
         });
       }

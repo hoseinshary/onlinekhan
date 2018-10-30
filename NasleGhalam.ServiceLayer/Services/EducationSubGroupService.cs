@@ -47,6 +47,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<EducationSubGroupViewModel> GetAll()
         {
             return _educationSubGroups
+                .Include(current => current.EducationTree)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<EducationSubGroupViewModel>)

@@ -2,66 +2,66 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.EducationTree;
+using NasleGhalam.ViewModels.EducationSubGroup;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: هاشم معین
+	///     date: 06/08/1397
 	/// </author>
-	public class EducationTreeController : ApiController
+	public class EducationSubGroupController : ApiController
 	{
-        private readonly EducationTreeService _educationTreeService;
-		public EducationTreeController(EducationTreeService educationTreeService)
+        private readonly EducationSubGroupService _educationSubGroupService;
+		public EducationSubGroupController(EducationSubGroupService educationSubGroupService)
         {
-            _educationTreeService = educationTreeService;
+            _educationSubGroupService = educationSubGroupService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_educationTreeService.GetAll());
+            return Ok(_educationSubGroupService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var educationTree = _educationTreeService.GetById(id);
-            if (educationTree == null)
+            var educationSubGroup = _educationSubGroupService.GetById(id);
+            if (educationSubGroup == null)
             {
                 return NotFound();
             }
-            return Ok(educationTree);
+            return Ok(educationSubGroup);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.EducationTreeCreateAccess)]
+        [CheckUserAccess(ActionBits.EducationSubGroupCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(EducationTreeViewModel educationTreeViewModel)
+        public IHttpActionResult Create(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            return Ok(_educationTreeService.Create(educationTreeViewModel));
+            return Ok(_educationSubGroupService.Create(educationSubGroupViewModel));
         }
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.EducationTreeUpdateAccess)]
+        [CheckUserAccess(ActionBits.EducationSubGroupUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(EducationTreeViewModel educationTreeViewModel)
+        public IHttpActionResult Update(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            return Ok(_educationTreeService.Update(educationTreeViewModel));
+            return Ok(_educationSubGroupService.Update(educationSubGroupViewModel));
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.EducationTreeDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.EducationSubGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_educationTreeService.Delete(id));
+            return Ok(_educationSubGroupService.Delete(id));
         }
 	}
 }

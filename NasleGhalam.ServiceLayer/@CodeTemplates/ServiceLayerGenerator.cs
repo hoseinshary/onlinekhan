@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.EducationTree;
+using NasleGhalam.ViewModels.EducationSubGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class EducationTreeService
+	public class EducationSubGroupService
 	{
-		private const string Title = "درخت آموزش";
+		private const string Title = "زیر گروه";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<EducationTree> _educationTrees;
+        private readonly IDbSet<EducationSubGroup> _educationSubGroups;
        
-	    public EducationTreeService(IUnitOfWork uow)
+	    public EducationSubGroupService(IUnitOfWork uow)
         {
             _uow = uow;
-            _educationTrees = uow.Set<EducationTree>();
+            _educationSubGroups = uow.Set<EducationSubGroup>();
         }
 
 
 		/// <summary>
-        /// گرفتن  درخت آموزش با آی دی
+        /// گرفتن  زیر گروه با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public EducationTreeViewModel GetById(int id)
+        public EducationSubGroupViewModel GetById(int id)
         {
-            return _educationTrees
+            return _educationSubGroups
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeViewModel>)
+                .Select(Mapper.Map<EducationSubGroupViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه درخت آموزش ها
+        /// گرفتن همه زیر گروه ها
         /// </summary>
         /// <returns></returns>
-        public IList<EducationTreeViewModel> GetAll()
+        public IList<EducationSubGroupViewModel> GetAll()
         {
-            return _educationTrees
+            return _educationSubGroups
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeViewModel>)
+                .Select(Mapper.Map<EducationSubGroupViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت درخت آموزش
+        /// ثبت زیر گروه
         /// </summary>
-        /// <param name="educationTreeViewModel"></param>
+        /// <param name="educationSubGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(EducationTreeViewModel educationTreeViewModel)
+        public MessageResultClient Create(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
-            _educationTrees.Add(educationTree);
+            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
+            _educationSubGroups.Add(educationSubGroup);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = educationTree.Id;
+			msgRes.Id = educationSubGroup.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش درخت آموزش
+        /// ویرایش زیر گروه
         /// </summary>
-        /// <param name="educationTreeViewModel"></param>
+        /// <param name="educationSubGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(EducationTreeViewModel educationTreeViewModel)
+        public MessageResultClient Update(EducationSubGroupViewModel educationSubGroupViewModel)
         {
-            var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
-            _uow.MarkAsChanged(educationTree);
+            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
+            _uow.MarkAsChanged(educationSubGroup);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف درخت آموزش
+        /// حذف زیر گروه
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-			var  educationTreeViewModel = GetById(id);
-            if (educationTreeViewModel == null)
+			var  educationSubGroupViewModel = GetById(id);
+            if (educationSubGroupViewModel == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
-            _uow.MarkAsDeleted(educationTree);
+            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
+            _uow.MarkAsDeleted(educationSubGroup);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه درخت آموزش ها برای لیست کشویی
+        /// گرفتن همه زیر گروه ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _educationTrees.Select(current => new SelectViewModel
+            return _educationSubGroups.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

@@ -47,7 +47,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.RoleCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(RoleViewModel roleViewModel)
+        public IHttpActionResult Create(RoleCreateViewModel roleViewModel)
         {
             var msgRes = _roleService.Create(roleViewModel, Request.GetRoleLevel());
             return Ok(msgRes);
@@ -57,7 +57,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.RoleUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(RoleViewModel roleViewModel)
+        public IHttpActionResult Update(RoleUpdateViewModel roleViewModel)
         {
             var msgRes = _roleService.Update(roleViewModel, Request.GetRoleLevel());
             return Ok(msgRes);
@@ -73,10 +73,16 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         #region ### Ddl ###
-        [HttpGet, CheckUserAccess(ActionBits.UserCreateAccess, ActionBits.UserUpdateAccess)]
-        public IHttpActionResult GetAllDdl()
+        [HttpGet, CheckUserAccess(ActionBits.StudentCreateAccess, ActionBits.StudentUpdateAccess)]
+        public IHttpActionResult GetAllByStudentDdl()
         {
-            return Ok(_roleService.GetAllDdl(Request.GetRoleLevel(), Request.GetUserType()));
+            return Ok(_roleService.GetAllDdl(Request.GetRoleLevel(), UserType.Student));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.UserCreateAccess, ActionBits.UserUpdateAccess)]
+        public IHttpActionResult GetAllByOrganDdl()
+        {
+            return Ok(_roleService.GetAllDdl(Request.GetRoleLevel(), UserType.Organ));
         }
         #endregion
 

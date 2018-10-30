@@ -73,6 +73,10 @@ export default {
           data: 'Level'
         },
         {
+          title: 'سطح نقش',
+          data: 'UserTypeName'
+        },
+        {
           title: 'انتساب نقش',
           data: 'role',
           searchable: false,

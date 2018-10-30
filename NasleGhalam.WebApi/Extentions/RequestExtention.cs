@@ -33,8 +33,8 @@ namespace NasleGhalam.WebApi.Extentions
         public static UserType GetUserType(this HttpRequestMessage request)
         {
             var obj = request.Properties["_userType"];
-            //return (UserType)obj;
-            return (UserType)Enum.ToObject(typeof(UserType), obj);
+            var userType = Convert.ToInt32(obj);
+            return (UserType)Enum.ToObject(typeof(UserType), userType);
         }
     }
 }

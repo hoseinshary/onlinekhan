@@ -88,7 +88,7 @@ export default {
       'resetEditStore'
     ]),
     ...mapActions({
-      fillRoleDdl: 'roleStore/fillDdlStore',
+      fillRoleDdl: 'roleStore/fillDdlByOrganStore',
       fillProvinceDdl: 'provinceStore/fillDdlStore',
       fillCityByProvincIdDdl: 'cityStore/fillCityByProvinceIdDdlStore'
     }),

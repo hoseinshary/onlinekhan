@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.EducationTree
+namespace NasleGhalam.ViewModels.EducationSubGroup
 {
-	public class EducationTreeViewModel
+	public class EducationSubGroupViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
@@ -13,7 +13,7 @@ namespace NasleGhalam.ViewModels.EducationTree
 
 
 		[Display(Name = "")]
-		public int LookupId_EducationTreeState { get; set; }
+		public int EducationTreeId { get; set; }
 
 
 	}

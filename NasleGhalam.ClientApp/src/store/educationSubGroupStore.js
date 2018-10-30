@@ -20,8 +20,8 @@ const store = {
     educationSubGroupObj: {
       Id: 0,
       Name: '',
-      EducationGroupId: 0,
-      EducationGroupName: ''
+      EducationTreeId: 0,
+      EducationTreeName: ''
     },
     educationSubGroupGridData: [],
     educationSubGroupDdl: [],
@@ -46,6 +46,7 @@ const store = {
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
+      debugger;
       util.mapObject(
         state.educationSubGroupObj,
         state.educationSubGroupGridData[index]
@@ -99,14 +100,11 @@ const store = {
     /**
      * fill dropDwonList
      */
-    fillEducationSubGroupByEducationGroupIdDdlStore(
-      { state },
-      educationGroupId
-    ) {
+    fillEducationSubGroupByEducationTreeIdDdlStore({ state }, EducationTreeId) {
       // fill grid if modelChanged
       // get data
       axios
-        .get(`${baseUrl}/GetAllByEducationGroupIdDdl/${educationGroupId}`)
+        .get(`${baseUrl}/GetAllByEducationTreeIdDdl/${EducationTreeId}`)
         .then(response => {
           state.educationSubGroupDdl = response.data;
         });

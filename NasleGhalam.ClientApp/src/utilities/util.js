@@ -233,6 +233,27 @@ const listToTree = function(list, key, parentKey) {
   }
   return roots;
 };
+const searchTreeArray = function(array, key, matchingKey) {
+  var i;
+  var parentNode = null;
+  for (i = 0; parentNode == null && i < array.length; i++) {
+    parentNode = searchTree(array[i], key, matchingKey);
+  }
+  return parentNode;
+};
+const searchTree = function(element, key, matchingKey) {
+  if (element[key] == matchingKey) {
+    return element;
+  } else if (element.children != null) {
+    var i;
+    var result = null;
+    for (i = 0; result == null && i < element.children.length; i++) {
+      result = searchTree(element.children[i], key, matchingKey);
+    }
+    return result;
+  }
+  return null;
+};
 /**
  * export data
  */
@@ -253,5 +274,7 @@ export default {
   objToFormdata,
   fileAdd,
   fileRemove,
-  listToTree
+  listToTree,
+  searchTree,
+  searchTreeArray
 };

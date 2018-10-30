@@ -4,13 +4,11 @@
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
+        <div style="min-height: 67px;">
         <q-slide-transition>
 
             <div class="col-md-12"
                  v-show="selectedNodeId !=null">
-              <div class="col-12"
-                   style="margin:10px;">مبحث انتخابی : {{selectedTreePath}}</div>
-              <q-slide-transition>
                 <div class="col-12"
                      >
                   <my-btn-create v-if="pageAccess.canCreate"
@@ -23,9 +21,9 @@
                                  :disabled="selectedNodeId == null"
                                  @click="showModalDelete" />
                 </div>
-              </q-slide-transition>
             </div>
           </q-slide-transition>
+          </div>
           <q-slide-transition>
             <q-tree :nodes="educationTreeData"
                   class="col-md-12"
@@ -61,62 +59,7 @@ export default {
     var pageAccess = this.$util.initAccess('/educationTree'); 
     return {
       pageAccess,
-      selectedNodeId: null,
-      selectedTreePath: '',
-      lessonId: 0,
-      treeLst : [
-      {
-        Id:1,
-        label: 'Satisfied customers',
-        children: [
-          {
-        Id:2,
-            label: 'Good food',
-            icon: 'restaurant_menu',
-            children: [
-              { 
-        Id:3,
-                label: 'Quality ingredients' },
-              {
-        Id:4,
-                 label: 'Good recipe' }
-            ]
-          },
-          {
-            label: 'Good service',
-        Id:5,
-            icon: 'room_service',
-            children: [
-              { 
-        Id:6,
-                label: 'Prompt attention' },
-              { 
-        Id:7,
-                label: 'Professional waiter' }
-            ]
-          },
-          {
-        Id:8,
-            label: 'Pleasant surroundings',
-            icon: 'photo',
-            children: [
-              {
-        Id:9,
-                label: 'Happy atmosphere'
-              },
-              {
-        Id:10,
-                label: 'Good table presentation'
-              },
-              {
-        Id:11,
-                label: 'Pleasing decor'
-              }
-            ]
-          }
-        ]
-      }
-    ]
+      selectedNodeId: null
     };
   },
   /**
@@ -137,7 +80,7 @@ export default {
       this.resetCreateStore();
       // show modal
       this.toggleModalCreateStore(true);
-      this.educationTreeObj.ParentEducationTreeId = 14;
+      this.educationTreeObj.ParentEducationTreeId = this.selectedNodeId;
     },
     showModalEdit() {
       // reset data on modal show

@@ -6,8 +6,8 @@ import { EDUCATIONTREE_URL as baseUrl } from 'utilities/site-config';
  * find index of object in educationTreeData by id
  * @param {Number} id
  */
-function getIndexById(id) {
-  return store.state.educationTreeData.findIndex(o => o.Id == id);
+function getIndexById(children, id) {
+  return children.findIndex(o => o.Id == id);
 }
 
 const store = {
@@ -25,6 +25,7 @@ const store = {
     },
     educationTreeData: [],
     educationTreeDdl: [],
+    educationGroupDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
@@ -35,28 +36,59 @@ const store = {
     /**
      * insert new educationTreeObj to educationTreeData
      */
-    insert(state, id) {
+    insertToTree(state, id) {
       let createdObj = util.cloneObject(state.educationTreeObj);
       createdObj.Id = id;
-      state.educationTreeData.push(createdObj);
+      createdObj.label = createdObj.Name;
+      createdObj.children = [];
+
+      let node = util.searchTreeArray(
+        state.educationTreeData,
+        'Id',
+        createdObj.ParentEducationTreeId
+      );
+
+      if (node != null) node.children.push(createdObj);
+      else state.educationTreeData.push(createdObj);
     },
 
     /**
      * update educationTreeObj of educationTreeData
      */
-    update(state) {
-      let index = getIndexById(state.selectedId);
-      if (index < 0) return;
-      util.mapObject(state.educationTreeObj, state.educationTreeData[index]);
+    updateTree(state) {
+      let node = util.searchTreeArray(
+        state.educationTreeData,
+        'Id',
+        state.educationTreeObj.Id
+      );
+
+      if (node != null) node.label = state.educationTreeObj.Name;
     },
 
     /**
      * delete from educationTreeData
      */
-    delete(state) {
-      let index = getIndexById(state.selectedId);
-      if (index < 0) return;
-      state.educationTreeData.splice(index, 1);
+    deleteTree(state) {
+      if (state.educationTreeObj.ParentEducationTreeId != null) {
+        let parentNode = util.searchTreeArray(
+          state.educationTreeData,
+          'Id',
+          state.educationTreeObj.ParentEducationTreeId
+        );
+        let index = getIndexById(
+          parentNode.children,
+          state.educationTreeObj.Id
+        );
+        if (index < 0) return;
+        parentNode.children.splice(index, 1);
+      } else {
+        let index = getIndexById(
+          state.educationTreeData,
+          state.educationTreeObj.Id
+        );
+        if (index < 0) return;
+        state.educationTreeData.splice(index, 1);
+      }
     },
 
     /**
@@ -89,7 +121,13 @@ const store = {
         // get data
         axios.get(`${baseUrl}/GetAll`).then(response => {
           state.educationTreeData = util.listToTree(
-            response.data,
+            response.data.map(x => ({
+              Id: x.Id,
+              LookupId_EducationTreeState: x.LookupId_EducationTreeState,
+              Lookup_EducationTreeState: x.Lookup_EducationTreeState,
+              label: x.Name,
+              ParentEducationTreeId: x.ParentEducationTreeId
+            })),
             'Id',
             'ParentEducationTreeId'
           );
@@ -97,7 +135,14 @@ const store = {
         });
       }
     },
-
+    /**
+     * fill dropDwonListFromEducationGroups
+     */
+    fillEducationGroupDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllEducationGroupsDdl`).then(response => {
+        state.educationGroupDdl = response.data;
+      });
+    },
     /**
      * fill dropDwonList
      */
@@ -153,6 +198,8 @@ const store = {
      * submit create data
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
+      debugger;
+      console.log(state);
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
@@ -163,7 +210,8 @@ const store = {
             let data = response.data;
 
             if (data.MessageType == 1) {
-              commit('insert', data.Id);
+              debugger;
+              commit('insertToTree', data.Id);
               dispatch('modelChangedStore');
               dispatch('resetCreateStore');
               dispatch('toggleModalCreateStore', !closeModal);
@@ -218,7 +266,7 @@ const store = {
           .then(response => {
             let data = response.data;
             if (data.MessageType == 1) {
-              commit('update');
+              commit('updateTree');
               dispatch('modelChangedStore');
               dispatch('resetEditStore');
               dispatch('toggleModalEditStore', false);
@@ -260,7 +308,7 @@ const store = {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
-          commit('delete');
+          commit('deleteTree');
           commit('reset');
           dispatch('modelChangedStore');
           dispatch('toggleModalDeleteStore', false);

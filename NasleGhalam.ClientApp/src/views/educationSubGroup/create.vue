@@ -6,11 +6,11 @@
                    @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
 
-    <my-select :model="$v.educationSubGroupObj.EducationGroupId"
+    <my-select :model="$v.educationSubGroupObj.EducationTreeId"
                :options="educationGroupDdl"
                class="col-md-6"
                clearable
-               ref="educationGroupId" />
+               ref="EducationTreeId" />
 
     <my-input :model="$v.educationSubGroupObj.Name"
               class="col-md-6" />
@@ -33,11 +33,11 @@ export default {
       'submitCreateStore',
       'resetCreateStore'
     ]),
-    ...mapActions('educationGroupStore', {
-      fillEducationGroupDdlStore: 'fillDdlStore'
+    ...mapActions('educationTreeStore', {
+      fillEducationGroupDdlStore: 'fillEducationGroupDdlStore'
     }),
     submit(closeModal) {
-      this.educationSubGroupObj.EducationGroupName = this.$refs.educationGroupId.getSelectedLabel();
+      this.educationSubGroupObj.EducationTreeName = this.$refs.EducationTreeId.getSelectedLabel();
       this.submitCreateStore(closeModal);
     },
     modalOpen() {
@@ -53,7 +53,7 @@ export default {
       educationSubGroupObj: 'educationSubGroupObj',
       isOpenModalCreate: 'isOpenModalCreate'
     }),
-    ...mapState('educationGroupStore', {
+    ...mapState('educationTreeStore', {
       educationGroupDdl: 'educationGroupDdl'
     })
   },

@@ -15,7 +15,8 @@ const store = {
     lookupQuestionHardnessType: [],
     lookupQuestionRepeatnessType: [],
     lookupQuestionAuthorType: [],
-    lookupTopicNezamDdl: []
+    lookupTopicNezamDdl: [],
+    lookupEducationTreeStateDdl: []
   },
   actions: {
     fillTopicHardnessTypeDdlStore({ state }) {
@@ -72,6 +73,11 @@ const store = {
     fillTopicNezamStore({ state }) {
       axios.get(`${baseUrl}/GetAllNezamDdl/`).then(response => {
         state.lookupTopicNezamDdl = response.data;
+      });
+    },
+    fillEducationTreeStateDdlStore({ state }) {
+      axios.get(`${baseUrl}/GetAllEducationTreeStateDdl/`).then(response => {
+        state.lookupEducationTreeStateDdl = response.data;
       });
     }
   }

@@ -21,6 +21,7 @@ import axillaryBookStore from './axillaryBookStore';
 import universityBranchStore from './universityBranchStore';
 import questionStore from './questionStore';
 import studentStore from './studentStore';
+import educationTreeStore from './educationTreeStore';
 
 Vue.use(Vuex);
 
@@ -87,7 +88,8 @@ const store = new Vuex.Store({
     universityBranchStore,
     questionStore,
     axillaryBookStore,
-    studentStore
+    studentStore,
+    educationTreeStore
   }
 });
 

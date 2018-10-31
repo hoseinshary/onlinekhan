@@ -37,7 +37,14 @@
         Teacher = 2
     }
 
-   
+    public enum EducationTreeState
+    {
+        Grade = 1,
+        SubTree = 2,
+        EducationGroup = 3,
+        GradeLevel = 4,
+    }
+
     //public enum AnswerType : byte
     //{
     //}

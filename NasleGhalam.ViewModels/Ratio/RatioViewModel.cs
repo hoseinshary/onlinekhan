@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NasleGhalam.ViewModels.EducationSubGroup;
+using NasleGhalam.ViewModels.EducationTree;
+using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels._Attributes;
 
 namespace NasleGhalam.ViewModels.Ratio
@@ -23,7 +26,7 @@ namespace NasleGhalam.ViewModels.Ratio
         public int LessonId { get; set; }
 
         [Display(Name = "درس")]   
-        public string LessonName { get; set; }
+        public LessonViewModel Lesson { get; set; }
 
 
         [Display(Name = "زیر گروه درسی")]
@@ -31,7 +34,7 @@ namespace NasleGhalam.ViewModels.Ratio
         public int EducationSubGroupId { get; set; }
 
         [Display(Name = "زیر گروه درسی")]
-        public string EducationSubGroupName { get; set; }
+        public EducationSubGroupViewModel EducationSubGroup { get; set; }
 
 
     }

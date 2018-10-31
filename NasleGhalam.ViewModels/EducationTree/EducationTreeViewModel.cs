@@ -9,14 +9,14 @@ namespace NasleGhalam.ViewModels.EducationTree
         
         public int Id { get; set; }
 
-        [Display(Name = "نام")]
+        
         public string Name { get; set; }
 
 
-        [Display(Name = "نوع درخت آموزش")]
+        
         public int LookupId_EducationTreeState { get; set; }
 
-        [Display(Name = "درخت آموزش پدر")]
+        
         public int? ParentEducationTreeId { get; set; }
 
         public LookupViewModel Lookup_EducationTreeState { get; set; }

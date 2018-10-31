@@ -10,7 +10,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         public RatioProfile()
         {
             CreateMap<RatioViewModel, Ratio>();
-            CreateMap<RatioLessonViewModel, Ratio>();
+            CreateMap<RatioCreateViewModel, Ratio>();
         }
     }
 }

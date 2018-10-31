@@ -3,8 +3,6 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Lesson;
-using NasleGhalam.WebApi.Extentions;
-using Newtonsoft.Json;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -30,26 +28,14 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
-        public string GetById(int id)
+        public IHttpActionResult GetById(int id)
         {
             var lesson = _lessonService.GetById(id);
             if (lesson == null)
-            {
-                return null;
-            }
+                return NotFound();
 
-            var resualt = JsonConvert.SerializeObject(lesson, new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-               
-            });
-
-            return resualt;
-
-     
-       
-
-    }
+            return Ok(lesson);
+        }
 
 
         [HttpPost]

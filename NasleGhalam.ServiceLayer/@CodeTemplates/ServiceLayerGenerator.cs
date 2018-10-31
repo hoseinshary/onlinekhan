@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.EducationSubGroup;
+using NasleGhalam.ViewModels.Lesson;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class EducationSubGroupService
+	public class LessonService
 	{
-		private const string Title = "زیر گروه";
+		private const string Title = "درس";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<EducationSubGroup> _educationSubGroups;
+        private readonly IDbSet<Lesson> _lessons;
        
-	    public EducationSubGroupService(IUnitOfWork uow)
+	    public LessonService(IUnitOfWork uow)
         {
             _uow = uow;
-            _educationSubGroups = uow.Set<EducationSubGroup>();
+            _lessons = uow.Set<Lesson>();
         }
 
 
 		/// <summary>
-        /// گرفتن  زیر گروه با آی دی
+        /// گرفتن  درس با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public EducationSubGroupViewModel GetById(int id)
+        public LessonViewModel GetById(int id)
         {
-            return _educationSubGroups
+            return _lessons
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<EducationSubGroupViewModel>)
+                .Select(Mapper.Map<LessonViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه زیر گروه ها
+        /// گرفتن همه درس ها
         /// </summary>
         /// <returns></returns>
-        public IList<EducationSubGroupViewModel> GetAll()
+        public IList<LessonViewModel> GetAll()
         {
-            return _educationSubGroups
+            return _lessons
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<EducationSubGroupViewModel>)
+                .Select(Mapper.Map<LessonViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت زیر گروه
+        /// ثبت درس
         /// </summary>
-        /// <param name="educationSubGroupViewModel"></param>
+        /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(EducationSubGroupViewModel educationSubGroupViewModel)
+        public MessageResultClient Create(LessonCreateViewModel lessonViewModel)
         {
-            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
-            _educationSubGroups.Add(educationSubGroup);
+            var lesson = Mapper.Map<Lesson>(lessonViewModel);
+            _lessons.Add(lesson);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = educationSubGroup.Id;
+			msgRes.Id = lesson.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش زیر گروه
+        /// ویرایش درس
         /// </summary>
-        /// <param name="educationSubGroupViewModel"></param>
+        /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(EducationSubGroupViewModel educationSubGroupViewModel)
+        public MessageResultClient Update(LessonUpdateViewModel lessonViewModel)
         {
-            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
-            _uow.MarkAsChanged(educationSubGroup);
+            var lesson = Mapper.Map<Lesson>(lessonViewModel);
+            _uow.MarkAsChanged(lesson);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف زیر گروه
+        /// حذف درس
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-			var  educationSubGroupViewModel = GetById(id);
-            if (educationSubGroupViewModel == null)
+			var  lessonViewModel = GetById(id);
+            if (lessonViewModel == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var educationSubGroup = Mapper.Map<EducationSubGroup>(educationSubGroupViewModel);
-            _uow.MarkAsDeleted(educationSubGroup);
+            var lesson = Mapper.Map<Lesson>(lessonViewModel);
+            _uow.MarkAsDeleted(lesson);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه زیر گروه ها برای لیست کشویی
+        /// گرفتن همه درس ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _educationSubGroups.Select(current => new SelectViewModel
+            return _lessons.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

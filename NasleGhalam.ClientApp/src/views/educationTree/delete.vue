@@ -3,7 +3,7 @@
                    :recordName="recordName"
                    :show="isOpenModalDelete"
                    @confirm="submitDelete"
-                   @close="toggleModalDeleteStore(false)">
+                   @close="toggleModalDeleteStore(false);">
   </my-modal-delete>
 </template>
 

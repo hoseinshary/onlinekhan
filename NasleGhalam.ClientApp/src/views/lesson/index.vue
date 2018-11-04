@@ -1,10 +1,30 @@
 <template>
-  <section class="col-md-8">
+  <section class="col-md-12">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
-      <div slot="body">
-        <my-btn-create v-if="pageAccess.canCreate"
+      <div slot="body" class="row">
+      <div class="col-md-4 row">
+           <my-select 
+            :model="$v.instanceObj.GradeId"
+            :options="gradeDdl"
+            class="col-md-6 offset-md-3"
+            ref="instanceObjGradeId"
+            clearable />
+
+            <q-slide-transition>
+            <q-tree :nodes="educationTreeData"
+                  class="col-md-12"
+                  color="blue"
+                  :selected.sync="selectedNodeId"
+                  default-expand-all
+                  node-key="Id"
+                   :filter="treeFilter"
+                  ref="topicTree"  />
+          </q-slide-transition>
+      </div>
+      <div class="col-md-8">
+          <my-btn-create v-if="pageAccess.canCreate"
                        :label="`ایجاد (${modelName}) جدید`"
                        @click="showModalCreate" />
         <br>
@@ -22,6 +42,8 @@
           </template>
         </my-table>
       </div>
+      
+      </div>
     </my-panel>
 
     <!-- modals -->
@@ -33,6 +55,7 @@
 
 
 <script>
+import viewModel from 'viewModels/lessonViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -48,6 +71,8 @@ export default {
     var pageAccess = this.$util.initAccess('/lesson');
     return {
       pageAccess,
+      selectedNodeId:null,
+      treeFilter:'',
       gridColumns: [
         {
           title: 'نام',
@@ -76,6 +101,10 @@ export default {
       'resetCreateStore',
       'resetEditStore'
     ]),
+    ...mapActions('educationTreeStore', [
+      'fillTreeStore',
+      'getAllGrade'
+    ]),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
@@ -102,11 +131,26 @@ export default {
   computed: {
     ...mapState('lessonStore', {
       modelName: 'modelName',
+      instanceObj: 'instanceObj',
+      gradeDdl: 'gradeDdl',
       allObj: 'allObj'
+    }),
+    ...mapState('educationTreeStore', {
+      gradeDdl: 'gradeDdl',
+      educationTreeData: 'educationTreeData'
     })
   },
+  validations: viewModel,
   created() {
-    this.fillGridStore();
+    this.fillTreeStore();
+    // this.fillGridStore();
+    this.getAllGrade();
+  },
+  watch:{
+       'instanceObj.GradeId'(newVal){
+          this.treeFilter = this.$refs.instanceObjGradeId.getSelectedLabel();
+        // this.
+    }
   }
 };
 </script>

@@ -37,9 +37,9 @@
     </my-panel>
 
   <!-- modals -->
-    <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete>
+    <modal-create @close="selectedNodeId = null" v-if="pageAccess.canCreate"></modal-create>
+    <modal-edit  @close="selectedNodeId = null" v-if="pageAccess.canEdit"></modal-edit>
+    <modal-delete @close="selectedNodeId = null" v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
 
@@ -98,15 +98,20 @@ export default {
         this.toggleModalDeleteStore(true);
       });
     },
-    listToTree(lst){
-      return [];
+    setSelectedNodeId(isOpen){
+      if(!isOpen)
+        this.selectedNodeId = null;
     }
+
   },
   computed: {
     ...mapState('educationTreeStore', {
       modelName: 'modelName',
       educationTreeData: 'educationTreeData',
-      educationTreeObj:'educationTreeObj'
+      educationTreeObj:'educationTreeObj',
+      isOpenModalCreate:'isOpenModalCreate',
+      isOpenModalEdit:'isOpenModalEdit',
+      isOpenModalDelete:'isOpenModalDelete'
     })
     // ,
     // treeLst: function() {
@@ -115,6 +120,17 @@ export default {
   },
   created() {
     this.fillTreeStore();
+  },
+  watch:{
+    isOpenModalCreate(newVal){
+        this.setSelectedNodeId(newVal)
+    },
+    isOpenModalEdit(newVal){
+        this.setSelectedNodeId(newVal)
+    },
+    isOpenModalDelete(newVal){
+        this.setSelectedNodeId(newVal)
+    }
   }
 };
 </script>

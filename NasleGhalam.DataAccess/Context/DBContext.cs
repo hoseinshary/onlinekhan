@@ -47,6 +47,11 @@ namespace NasleGhalam.DataAccess.Context
             Entry(entity).State = EntityState.Detached;
         }
 
+        public void MarkAsUnChanged<TEntity>(TEntity entity) where TEntity : class
+        {
+            Entry(entity).State = EntityState.Unchanged;
+        }
+
         public void DetachAll()
         {
             foreach (DbEntityEntry dbEntityEntry in this.ChangeTracker.Entries())

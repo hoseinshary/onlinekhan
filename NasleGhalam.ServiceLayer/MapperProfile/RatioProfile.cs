@@ -11,6 +11,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         {
             CreateMap<RatioViewModel, Ratio>();
             CreateMap<RatioCreateViewModel, Ratio>();
+            CreateMap<RatioUpdateViewModel, Ratio>();
         }
     }
 }

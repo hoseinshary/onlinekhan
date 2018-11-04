@@ -43,12 +43,13 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه درس ها
+        /// گرفتن همه درس ها با آی دی درخت آموزشی
         /// </summary>
         /// <returns></returns>
-        public IList<LessonViewModel> GetAll()
+        public IList<LessonViewModel> GetAllByEducationTreeIds(IEnumerable<int> ids)
         {
             return _lessons
+                .Where(current => current.EducationTrees.Any(x => ids.Contains(x.Id)))
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<LessonViewModel>)
@@ -66,22 +67,16 @@ namespace NasleGhalam.ServiceLayer.Services
             var lesson = Mapper.Map<Lesson>(lessonViewModel);
             _lessons.Add(lesson);
 
-            var educationTrees = _uow.Set<EducationTree>();
+            //var educationTrees = _uow.Set<EducationTree>();
             foreach (var TreeId in lessonViewModel.EducationTreeIds)
             {
-                var tree = new EducationTree() {Id = TreeId};
-                educationTrees.Attach(tree);
+                var tree = new EducationTree() { Id = TreeId };
+                //educationTrees.Attach(tree);
+                _uow.MarkAsUnChanged(tree);
                 lesson.EducationTrees.Add(tree);
             }
 
-            //foreach (var ratio in lessonViewModel.Ratios)
-            //{
-            //    lesson.Ratios.Add(new Ratio()
-            //    {
-            //        Rate = ratio.Rate,
-            //        EducationSubGroupId = ratio.EducationSubGroupId
-            //    });
-            //}
+
 
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
@@ -95,10 +90,73 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(LessonViewModel lessonViewModel)
+        public MessageResultClient Update(LessonUpdateViewModel lessonUpdateViewModel)
         {
-            var lesson = Mapper.Map<Lesson>(lessonViewModel);
+
+
+
+
+            var exLesson = GetById(lessonUpdateViewModel.Id);
+
+            var lesson = Mapper.Map<Lesson>(lessonUpdateViewModel);
             _uow.MarkAsChanged(lesson);
+
+            //delete all education tree
+            var list = exLesson.EducationTrees.ToList();
+            foreach (var item in list)
+            {
+                var educationTree = Mapper.Map<EducationTree>(item);
+                _uow.MarkAsDeleted(educationTree);
+            }
+
+
+
+            //insert education tree
+            foreach (var educationTree in lessonUpdateViewModel.EducationTreeIds)
+            {
+                var tree = new EducationTree() { Id = educationTree };
+                //_uow.MarkAsUnChanged(tree);
+                lesson.EducationTrees.Add(tree);
+            }
+
+
+            //delete ratio
+
+            var deleteRatio = exLesson.Ratios
+                .Where(x => !lessonUpdateViewModel.Ratios.Any(y => y.Id == x.Id))
+                .ToList();
+
+            foreach (var exRatio in deleteRatio)
+            {
+
+                _uow.MarkAsDeleted(exRatio);
+
+            }
+
+            //add ratio
+            var addRatio = lessonUpdateViewModel.Ratios
+                .Where(x => exLesson.Ratios.Any(y => y.Id != x.Id)).ToList();
+
+
+            foreach (var newRatio in addRatio)
+            {
+                var ratio = Mapper.Map<Ratio>(newRatio);
+                lesson.Ratios.Add(ratio);
+
+            }
+
+            //update ratio
+            var updateRatio = exLesson.Ratios
+                .Where(x => lessonUpdateViewModel.Ratios.Any(y => y.Id == x.Id))
+                .ToList();
+            foreach (var ratio in updateRatio)
+            {
+                _uow.MarkAsChanged(ratio);
+
+            }
+
+
+
 
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);

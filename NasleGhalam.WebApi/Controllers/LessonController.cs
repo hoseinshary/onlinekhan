@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
@@ -21,9 +22,9 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllByEducationTreeIds([FromUri] IEnumerable<int> ids)
         {
-            return Ok(_lessonService.GetAll());
+            return Ok(_lessonService.GetAllByEducationTreeIds(ids));
         }
 
 
@@ -50,7 +51,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(LessonViewModel lessonViewModel)
+        public IHttpActionResult Update(LessonUpdateViewModel lessonViewModel)
         {
             return Ok(_lessonService.Update(lessonViewModel));
         }

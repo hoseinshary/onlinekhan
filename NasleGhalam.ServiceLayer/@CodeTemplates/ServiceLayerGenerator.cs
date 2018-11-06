@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.Lesson;
+using NasleGhalam.ViewModels.Topic;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class LessonService
+	public class TopicService
 	{
-		private const string Title = "درس";
+		private const string Title = "مبحث";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Lesson> _lessons;
+        private readonly IDbSet<Topic> _topics;
        
-	    public LessonService(IUnitOfWork uow)
+	    public TopicService(IUnitOfWork uow)
         {
             _uow = uow;
-            _lessons = uow.Set<Lesson>();
+            _topics = uow.Set<Topic>();
         }
 
 
 		/// <summary>
-        /// گرفتن  درس با آی دی
+        /// گرفتن  مبحث با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public LessonViewModel GetById(int id)
+        public TopicViewModel GetById(int id)
         {
-            return _lessons
+            return _topics
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<LessonViewModel>)
+                .Select(Mapper.Map<TopicViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه درس ها
+        /// گرفتن همه مبحث ها
         /// </summary>
         /// <returns></returns>
-        public IList<LessonViewModel> GetAll()
+        public IList<TopicViewModel> GetAll()
         {
-            return _lessons
+            return _topics
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<LessonViewModel>)
+                .Select(Mapper.Map<TopicViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت درس
+        /// ثبت مبحث
         /// </summary>
-        /// <param name="lessonViewModel"></param>
+        /// <param name="topicViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(LessonCreateViewModel lessonViewModel)
+        public MessageResultClient Create(TopicCreateViewModel topicViewModel)
         {
-            var lesson = Mapper.Map<Lesson>(lessonViewModel);
-            _lessons.Add(lesson);
+            var topic = Mapper.Map<Topic>(topicViewModel);
+            _topics.Add(topic);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = lesson.Id;
+			msgRes.Id = topic.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش درس
+        /// ویرایش مبحث
         /// </summary>
-        /// <param name="lessonViewModel"></param>
+        /// <param name="topicViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(LessonUpdateViewModel lessonViewModel)
+        public MessageResultClient Update(TopicUpdateViewModel topicViewModel)
         {
-            var lesson = Mapper.Map<Lesson>(lessonViewModel);
-            _uow.MarkAsChanged(lesson);
+            var topic = Mapper.Map<Topic>(topicViewModel);
+            _uow.MarkAsChanged(topic);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف درس
+        /// حذف مبحث
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-			var  lessonViewModel = GetById(id);
-            if (lessonViewModel == null)
+			var  topicViewModel = GetById(id);
+            if (topicViewModel == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var lesson = Mapper.Map<Lesson>(lessonViewModel);
-            _uow.MarkAsDeleted(lesson);
+            var topic = Mapper.Map<Topic>(topicViewModel);
+            _uow.MarkAsDeleted(topic);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه درس ها برای لیست کشویی
+        /// گرفتن همه مبحث ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _lessons.Select(current => new SelectViewModel
+            return _topics.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

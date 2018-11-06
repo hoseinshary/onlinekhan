@@ -158,13 +158,36 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-            var lessonViewModel = GetById(id);
-            if (lessonViewModel == null)
+            var lesson = _lessons
+                .Include(current => current.EducationTrees)
+                .Include(current => current.Ratios)
+                .First(current => current.Id == id);
+
+            if (lesson == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var lesson = Mapper.Map<Lesson>(lessonViewModel);
+            //remove education tree 
+            var educationTrees = lesson.EducationTrees.ToList();
+            foreach (var item in educationTrees)
+            {
+                lesson.EducationTrees.Remove(item);
+                
+            }
+
+            //remove ratios
+            var ratios = lesson.Ratios.ToList();
+            foreach (var item in ratios)
+            {
+                _uow.MarkAsDeleted(item);
+            }
+
+
+            
+            
+
+            
             _uow.MarkAsDeleted(lesson);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);

@@ -12,8 +12,8 @@
 <#@ import namespace="NasleGhalam.DomainClasses.Entities" #>
 <#@ assembly name="$(SolutionDir)\NasleGhalam.DomainClasses\bin\Debug\NasleGhalam.DomainClasses.dll" #>
 <#
-	string modelName = "Lesson";
-	var modelProps = typeof(Lesson).GetProperties();
+	string modelName = "Topic";
+	var modelProps = typeof(Topic).GetProperties();
 
 	Dictionary<Type, string> Aliases = new Dictionary<Type, string>()
     {

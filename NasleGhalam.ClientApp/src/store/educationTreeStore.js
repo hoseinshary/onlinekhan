@@ -113,16 +113,19 @@ const store = {
         util.mapObject(response.data, state.educationTreeObj);
       });
     },
+
     /**
      * get all grades
      */
-    getAllGrade({ state },) {
-      axios.get(`${baseUrl}/GetAllEducationTreeByState/?state=1`).then(response => {
-        state.gradeDdl = response.data.map(x => ({
-          value: x.Id,
-          label: x.Name
-        }));
-      });
+    getAllGrade({ state }) {
+      axios
+        .get(`${baseUrl}/GetAllEducationTreeByState/?state=1`)
+        .then(response => {
+          state.gradeDdl = response.data.map(x => ({
+            value: x.Id,
+            label: x.Name
+          }));
+        });
     },
 
     /**
@@ -147,6 +150,13 @@ const store = {
           state.gridModelChanged = false;
         });
       }
+    },
+
+    /**
+     * fill tree by grade id
+     */
+    fillTreeByGradeIdStore({ state }, gradeId) {
+      return util.searchTreeArray(state.educationTreeData, 'Id', gradeId);
     },
     /**
      * fill dropDwonListFromEducationGroups

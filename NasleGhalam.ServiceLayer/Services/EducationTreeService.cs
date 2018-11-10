@@ -23,9 +23,6 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-
-
-
         /// <summary>
         /// گرفتن  درخت آموزش با آی دی
         /// </summary>

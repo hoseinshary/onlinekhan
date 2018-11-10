@@ -33,7 +33,6 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
         public IHttpActionResult GetAllEducationTreeByState(EducationTreeState state)
         {

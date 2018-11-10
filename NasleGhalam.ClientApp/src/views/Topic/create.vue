@@ -3,16 +3,13 @@
                    :show="isOpenModalCreate"
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
-                   @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
+
     <my-input :model="$v.topicObj.Title"
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.ExamStock"
               class="col-md-6" />
-
-    <!-- <my-input :model="$v.topicObj.ExamStockSystem"
-              class="col-md-6" /> -->
 
     <my-input :model="$v.topicObj.Importance"
               class="col-md-6" />
@@ -21,41 +18,49 @@
               :model="$v.topicObj.IsExamSource">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="خیر" />
+                 val="false"
+                 label="false" />
         <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="بلی" />
+                 val="true"
+                 label="true" />
       </template>
     </my-field>
 
-    <my-select :model="$v.topicObj.LookupId_HardnessType"
-               :options="lookupTopicHardnessTypeDdl"
+    <!-- <my-select :model="$v.topicObj.LookupId_HardnessType"
+               :options=""
                class="col-md-6"
                clearable />
 
     <my-select :model="$v.topicObj.LookupId_AreaType"
-               :options="lookupTopicAreaTypeDdl"
+               :options=""
                class="col-md-6"
-               clearable />
+               clearable /> -->
 
     <my-field class="col-md-6"
               :model="$v.topicObj.IsActive">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="خیر" />
+                 val="false"
+                 label="false" />
         <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="بلی" />
+                 val="true"
+                 label="true" />
       </template>
     </my-field>
+
+    <my-input :model="$v.topicObj.ParentTopicId"
+              class="col-md-6" />
+
+    <!-- <my-select :model="$v.topicObj.LessonId"
+               :options=""
+               class="col-md-6"
+               clearable /> -->
 
   </my-modal-create>
 </template>
 
 <script>
-import viewModel from 'viewModels/topicViewModel';
+import viewModel from 'viewModels/topic/topicViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -68,15 +73,7 @@ export default {
       'createVueStore',
       'submitCreateStore',
       'resetCreateStore'
-    ]),    
-    ...mapActions('lookupStore', [
-      'fillTopicHardnessTypeDdlStore',
-      'fillTopicAreaTypeDdlStore'
-    ]),
-    modalOpen:function(){
-       this.fillTopicHardnessTypeDdlStore();
-       this.fillTopicAreaTypeDdlStore(); 
-    }
+    ])
   },
   /**
    * computed
@@ -86,11 +83,7 @@ export default {
       modelName: 'modelName',
       topicObj: 'topicObj',
       isOpenModalCreate: 'isOpenModalCreate'
-    }),
-    ...mapState('lookupStore', [
-      'lookupTopicHardnessTypeDdl',
-      'lookupTopicAreaTypeDdl'
-    ])
+    })
   },
   /**
    * validations

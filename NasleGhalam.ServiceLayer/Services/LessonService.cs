@@ -182,14 +182,8 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 _uow.MarkAsDeleted(item);
             }
-
-
-            
-            
-
             
             _uow.MarkAsDeleted(lesson);
-
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }

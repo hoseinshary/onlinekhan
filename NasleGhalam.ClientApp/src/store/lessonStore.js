@@ -20,7 +20,7 @@ export default {
       LookupId_Nezam: 0,
       GradeId: 0,
       GradeLevelId: 0,
-      TreeId_Grade:0
+      TreeId_Grade: 0
     },
     allObj: [],
     allObjDdl: [],
@@ -118,10 +118,19 @@ export default {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.allObjDdl = response.data;
-      });
+    fillDdlStore({ state }, ids) {
+      axios
+        .get(
+          `${baseUrl}/GetAllByEducationTreeIds?${util.toParam({
+            ids: ids
+          })}`
+        )
+        .then(response => {
+          state.allObjDdl = response.data.map(x => ({
+            value: x.Id,
+            label: x.Name
+          }));
+        });
     },
     /**
      * vlidate form

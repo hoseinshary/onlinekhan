@@ -9,7 +9,6 @@
             <section class="q-ma-sm q-pa-sm shadow-1">
               <my-select :model="$v.topicIndexObj.EducationTreeId_Grade"
                          :options="educationTree_GradeDdl"
-                         class="col-12"
                          @change="gradeDdlChange" />
 
               <q-tree :nodes="educationTreeData"
@@ -17,7 +16,13 @@
                       tick-strategy="leaf"
                       accordion
                       node-key="Id"
+                      :ticked.sync="topicIndexObj.EducationTreeIds"
                       ref="educationTree" />
+
+              <my-select :model="$v.topicIndexObj.LessonId"
+                         :options="lessonDdl"
+                         class="q-pt-lg"
+                         @change="lessonDdlChange" />
             </section>
           </div>
 
@@ -26,6 +31,14 @@
               <my-btn-create v-if="pageAccess.canCreate"
                              :label="`ایجاد (${modelName}) جدید`"
                              @click="showModalCreate" />
+
+              <q-tree :nodes="topicTreeData"
+                      class="q-pt-lg"
+                      color="primary"
+                      tick-strategy="leaf"
+                      accordion
+                      node-key="Id"
+                      ref="topicTree" />
             </section>
 
           </div>
@@ -79,6 +92,9 @@ export default {
       fillEducationTreeStore: 'fillTreeStore',
       fillEducationTreeByGradeIdStore: 'fillTreeByGradeIdStore'
     }),
+    ...mapActions('lessonStore', {
+      fillLessonDdlStore: 'fillDdlStore'
+    }),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
@@ -104,12 +120,17 @@ export default {
     gradeDdlChange(val) {
       // filter lesson tree by gradeId
       var self = this;
+      this.topicIndexObj.EducationTreeIds = [];
       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
         self.educationTreeData = [treeData];
         setTimeout(() => {
           self.$refs.educationTree.expandAll();
         }, 300);
       });
+    },
+    lessonDdlChange(val) {
+      console.log(val);
+      this.fillTreeStore(val);
     }
   },
   computed: {
@@ -120,9 +141,17 @@ export default {
     }),
     ...mapState('educationTreeStore', {
       educationTree_GradeDdl: 'gradeDdl'
+    }),
+    ...mapState('lessonStore', {
+      lessonDdl: 'allObjDdl'
     })
   },
   validations: viewModel,
+  watch: {
+    'topicIndexObj.EducationTreeIds'(val) {
+      this.fillLessonDdlStore(val);
+    }
+  },
   created() {
     this.getAllGrade();
     this.fillEducationTreeStore();

@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Lesson;
+using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,56 +12,56 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class LessonController : ApiController
+	public class TopicController : ApiController
 	{
-        private readonly LessonService _lessonService;
-		public LessonController(LessonService lessonService)
+        private readonly TopicService _topicService;
+		public TopicController(TopicService topicService)
         {
-            _lessonService = lessonService;
+            _topicService = topicService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_lessonService.GetAll());
+            return Ok(_topicService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var lesson = _lessonService.GetById(id);
-            if (lesson == null)
+            var topic = _topicService.GetById(id);
+            if (topic == null)
             {
                 return NotFound();
             }
-            return Ok(lesson);
+            return Ok(topic);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.LessonCreateAccess)]
+        [CheckUserAccess(ActionBits.TopicCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(LessonCreateViewModel lessonViewModel)
+        public IHttpActionResult Create(TopicCreateViewModel topicViewModel)
         {
-            return Ok(_lessonService.Create(lessonViewModel));
+            return Ok(_topicService.Create(topicViewModel));
         }
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.LessonUpdateAccess)]
+        [CheckUserAccess(ActionBits.TopicUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(LessonUpdateViewModel lessonViewModel)
+        public IHttpActionResult Update(TopicUpdateViewModel topicViewModel)
         {
-            return Ok(_lessonService.Update(lessonViewModel));
+            return Ok(_topicService.Update(topicViewModel));
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.LessonDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.TopicDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_lessonService.Delete(id));
+            return Ok(_topicService.Delete(id));
         }
 	}
 }

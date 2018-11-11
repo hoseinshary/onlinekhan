@@ -10,18 +10,13 @@ export default {
   topicObj: {
     Title: {
       displayName: displayName('عنوان'),
-      maxLength: maxLength(50),
+      maxLength: maxLength(200),
       required
     },
     ExamStock: {
       displayName: displayName('سهمیه در کنکور'),
       numeric,
       required
-    },
-    ExamStockSystem: {
-      displayName: displayName('سهمیه در کنکور سیستمی')
-      // numeric,
-      // required
     },
     Importance: {
       displayName: displayName('ضریب اهمیت'),
@@ -30,47 +25,26 @@ export default {
     },
     IsExamSource: {
       displayName: displayName('مبحث کنکوری'),
-
       required
     },
     LookupId_HardnessType: {
       displayName: displayName('درجه سختی'),
-      numeric,
-      required
+      requiredDdl: requiredDdl(0)
     },
     LookupId_AreaType: {
       displayName: displayName('حیطه مبحث'),
-      numeric,
-      required
+      requiredDdl: requiredDdl(0)
     },
     IsActive: {
       displayName: displayName('فعال'),
-
       required
     },
     ParentTopicId: {
       displayName: displayName('مبحث پدر')
-      // numeric,
-      // required
     },
-    EducationGroup_LessonId: {
-      displayName: displayName('درس')
-      // numeric,
-      // required
-    },
-    EducationGroupId: {
-      displayName: displayName('گروه آموزشی')
-      // numeric,
-      // required
-    },
-    LookupId_Nezam: {
-      displayName: displayName('نظانم (اختیاری)')
-    },
-    GradeId: {
-      displayName: displayName('مقطع (اختیاری)')
-    },
-    GradeLevelId: {
-      displayName: displayName('پایه (اختیاری)')
+    LessonId: {
+      displayName: displayName('درس'),
+      requiredDdl: requiredDdl(0)
     }
   }
 };

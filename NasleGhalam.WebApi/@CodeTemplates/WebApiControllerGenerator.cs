@@ -2,66 +2,66 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.EducationSubGroup;
+using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: هاشم معین
-	///     date: 06/08/1397
+	///     name: 
+	///     date: 
 	/// </author>
-	public class EducationSubGroupController : ApiController
+	public class LessonController : ApiController
 	{
-        private readonly EducationSubGroupService _educationSubGroupService;
-		public EducationSubGroupController(EducationSubGroupService educationSubGroupService)
+        private readonly LessonService _lessonService;
+		public LessonController(LessonService lessonService)
         {
-            _educationSubGroupService = educationSubGroupService;
+            _lessonService = lessonService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_educationSubGroupService.GetAll());
+            return Ok(_lessonService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var educationSubGroup = _educationSubGroupService.GetById(id);
-            if (educationSubGroup == null)
+            var lesson = _lessonService.GetById(id);
+            if (lesson == null)
             {
                 return NotFound();
             }
-            return Ok(educationSubGroup);
+            return Ok(lesson);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.EducationSubGroupCreateAccess)]
+        [CheckUserAccess(ActionBits.LessonCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(EducationSubGroupViewModel educationSubGroupViewModel)
+        public IHttpActionResult Create(LessonCreateViewModel lessonViewModel)
         {
-            return Ok(_educationSubGroupService.Create(educationSubGroupViewModel));
+            return Ok(_lessonService.Create(lessonViewModel));
         }
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.EducationSubGroupUpdateAccess)]
+        [CheckUserAccess(ActionBits.LessonUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(EducationSubGroupViewModel educationSubGroupViewModel)
+        public IHttpActionResult Update(LessonUpdateViewModel lessonViewModel)
         {
-            return Ok(_educationSubGroupService.Update(educationSubGroupViewModel));
+            return Ok(_lessonService.Update(lessonViewModel));
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.EducationSubGroupDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.LessonDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_educationSubGroupService.Delete(id));
+            return Ok(_lessonService.Delete(id));
         }
 	}
 }

@@ -26,6 +26,7 @@ const store = {
     educationTreeData: [],
     educationTreeDdl: [],
     educationGroupDdl: [],
+    gradeDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
@@ -98,6 +99,7 @@ const store = {
       util.clearObject(state.educationTreeObj);
       if ($v) {
         $v.$reset();
+        state.educationTreeObj.ParentEducationTreeId = state.selectedId;
       }
     }
   },
@@ -129,6 +131,20 @@ const store = {
     },
 
     /**
+     * get all grades
+     */
+    getAllGrade({ state }) {
+      axios
+        .get(`${baseUrl}/GetAllEducationTreeByState/?state=1`)
+        .then(response => {
+          state.gradeDdl = response.data.map(x => ({
+            value: x.Id,
+            label: x.Name
+          }));
+        });
+    },
+
+    /**
      * fill grid data
      */
     fillTreeStore({ state }) {
@@ -150,6 +166,13 @@ const store = {
           state.gridModelChanged = false;
         });
       }
+    },
+
+    /**
+     * fill tree by grade id
+     */
+    fillTreeByGradeIdStore({ state }, gradeId) {
+      return util.searchTreeArray(state.educationTreeData, 'Id', gradeId);
     },
     /**
      * fill dropDwonListFromEducationGroups
@@ -217,6 +240,7 @@ const store = {
       debugger;
       console.log(state);
       var vm = state.createVue;
+      state.selectedId = state.educationTreeObj.ParentEducationTreeId;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 

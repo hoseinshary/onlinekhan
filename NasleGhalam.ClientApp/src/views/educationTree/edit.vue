@@ -4,7 +4,7 @@
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
                    @open="modalOpen"
-                 @close="toggleModalEditStore(false)">
+                 @close="toggleModalEditStore(false);">
 
     <my-input :model="$v.educationTreeObj.Name" class="col-md-6" />
           

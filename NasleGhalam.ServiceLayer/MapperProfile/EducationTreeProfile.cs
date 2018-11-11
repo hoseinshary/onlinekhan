@@ -8,7 +8,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
     {
         public EducationTreeProfile()
         {
-            CreateMap<EducationTreeViewModel, EducationTree>();
+            CreateMap<EducationTreeViewModel, EducationTree>().ReverseMap();
             CreateMap<EducationTreeCreateViewModel, EducationTree>();
             CreateMap<EducationTreeUpdateViewModel, EducationTree>();
         }

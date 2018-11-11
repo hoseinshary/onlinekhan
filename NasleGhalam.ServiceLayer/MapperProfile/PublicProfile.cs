@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using NasleGhalam.Common;
-using NasleGhalam.DomainClasses.Entities;
 
 namespace NasleGhalam.ServiceLayer.MapperProfile
 {

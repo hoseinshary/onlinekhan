@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels.Ratio;
 
 namespace NasleGhalam.ServiceLayer.MapperProfile
@@ -10,7 +9,8 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         public RatioProfile()
         {
             CreateMap<RatioViewModel, Ratio>();
-            CreateMap<RatioLessonViewModel, Ratio>();
+            CreateMap<RatioCreateViewModel, Ratio>();
+            CreateMap<RatioUpdateViewModel, Ratio>();
         }
     }
 }

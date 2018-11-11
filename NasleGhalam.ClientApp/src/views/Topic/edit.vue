@@ -3,60 +3,12 @@
                  :show="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
-                   @open="modalOpen"
                  @close="toggleModalEditStore(false)">
+
     <my-input :model="$v.topicObj.Title"
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.ExamStock"
-              class="col-md-6" />
-
-    <!-- <my-input :model="$v.topicObj.ExamStockSystem"
-              class="col-md-6" /> -->
-
-    <my-input :model="$v.topicObj.Importance"
-              class="col-md-6" />
-
-    <my-field class="col-md-6"
-              :model="$v.topicObj.IsExamSource">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="خیر" />
-        <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="بلی" />
-      </template>
-    </my-field>
-
-    <my-select :model="$v.topicObj.LookupId_HardnessType"
-               :options="lookupTopicHardnessTypeDdl"
-               class="col-md-6"
-               clearable />
-
-    <my-select :model="$v.topicObj.LookupId_AreaType"
-               :options="lookupTopicAreaTypeDdl"
-               class="col-md-6"
-               clearable />
-
-    <my-field class="col-md-6"
-              :model="$v.topicObj.IsActive">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="خیر" />
-        <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="بلی" />
-      </template>
-    </my-field>
-    <!-- <my-input :model="$v.topicObj.Title"
-              class="col-md-6" />
-
-    <my-input :model="$v.topicObj.ExamStock"
-              class="col-md-6" />
-
-    <my-input :model="$v.topicObj.ExamStockSystem"
               class="col-md-6" />
 
     <my-input :model="$v.topicObj.Importance"
@@ -74,11 +26,15 @@
       </template>
     </my-field>
 
-    <my-input :model="$v.topicObj.LookupId_HardnessType"
-              class="col-md-6" />
+    <!-- <my-select :model="$v.topicObj.LookupId_HardnessType"
+               :options=""
+               class="col-md-6"
+               clearable />
 
-    <my-input :model="$v.topicObj.LookupId_AreaType"
-              class="col-md-6" />
+    <my-select :model="$v.topicObj.LookupId_AreaType"
+               :options=""
+               class="col-md-6"
+               clearable /> -->
 
     <my-field class="col-md-6"
               :model="$v.topicObj.IsActive">
@@ -95,14 +51,16 @@
     <my-input :model="$v.topicObj.ParentTopicId"
               class="col-md-6" />
 
-    <my-input :model="$v.topicObj.EducationGroup_LessonId"
-              class="col-md-6" /> -->
+    <!-- <my-select :model="$v.topicObj.LessonId"
+               :options=""
+               class="col-md-6"
+               clearable /> -->
 
   </my-modal-edit>
 </template>
 
 <script>
-import viewModel from 'viewModels/topicViewModel';
+import viewModel from 'viewModels/topic/topicViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -115,15 +73,7 @@ export default {
       'editVueStore',
       'submitEditStore',
       'resetEditStore'
-    ]),
-    ...mapActions('lookupStore', [
-      'fillTopicHardnessTypeDdlStore',
-      'fillTopicAreaTypeDdlStore'
-    ]),
-    modalOpen:function(){
-      this.fillTopicHardnessTypeDdlStore();
-      this.fillTopicAreaTypeDdlStore(); 
-    }
+    ])
   },
   /**
    * computed
@@ -133,11 +83,7 @@ export default {
       modelName: 'modelName',
       topicObj: 'topicObj',
       isOpenModalEdit: 'isOpenModalEdit'
-    }),
-    ...mapState('lookupStore', [
-      'lookupTopicHardnessTypeDdl',
-      'lookupTopicAreaTypeDdl'
-    ])
+    })
   },
   /**
    * validations

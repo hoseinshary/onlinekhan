@@ -19,6 +19,7 @@ namespace NasleGhalam.DataAccess.Context
         void MarkAsChanged<TEntity>(TEntity entity) where TEntity : class;
         void MarkAsDeleted<TEntity>(TEntity entity) where TEntity : class;
         void MarkAsDetached<TEntity>(TEntity entity) where TEntity : class;
+        void MarkAsUnChanged<TEntity>(TEntity entity) where TEntity : class;
         void DetachAll();
         void UpdateFields<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] fields) where TEntity : class;
         void ExcludeFieldsFromUpdate<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] fields) where TEntity : class;

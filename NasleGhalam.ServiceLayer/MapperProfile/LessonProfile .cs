@@ -9,7 +9,8 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         public LessonProfile()
         {
             CreateMap<LessonViewModel, Lesson>();
-            CreateMap<LessonCreateAndUpdateViewModel, Lesson>();
+            CreateMap<LessonCreateViewModel, Lesson>();
+            CreateMap<LessonUpdateViewModel, Lesson>();
         }
     }
 }

@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Topic;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -16,103 +15,11 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Topic> _topics;
 
-        private IList<Topic> _topicsByEducationGroup_Lesson;
-
         public TopicService(IUnitOfWork uow)
         {
             _uow = uow;
             _topics = uow.Set<Topic>();
-
         }
-
-
-        public TopicTreeViewModel children(int id)
-        {
-
-            if (_topicsByEducationGroup_Lesson.All(x => x.ParentTopicId != id))
-            {
-                return _topicsByEducationGroup_Lesson.Where(x => x.Id == id).Select(current => new TopicTreeViewModel
-                {
-                    Id = current.Id,
-                    label = current.Title,
-                }).FirstOrDefault();
-            }
-            else
-            {
-                var returnvalue = new TopicTreeViewModel();
-                var currentTopic = _topicsByEducationGroup_Lesson.FirstOrDefault(x => x.Id == id);
-                returnvalue.Id = currentTopic.Id;
-                returnvalue.label = currentTopic.Title;
-                returnvalue.children = new List<TopicTreeViewModel>();
-                foreach (var item in _topicsByEducationGroup_Lesson.Where(x => x.ParentTopicId == id).ToList())
-                {
-                    returnvalue.children.Add(children(item.Id));
-                }
-                return returnvalue;
-            }
-        }
-
-        /// <summary>
-        /// گرفتن  تمام مبحث ها مربوط به یک گروه آموزشی درس به صورت درختی
-        /// </summary>
-        /// <param name="educationGroup_LessonId"></param>
-        /// <returns></returns>
-        public IEnumerable<TopicTreeViewModel> GetAllTree(int id)
-        {
-
-            _topicsByEducationGroup_Lesson = _topics.Where(x => x.EducationGroup_LessonId == id).ToList();
-
-            var topic = _topicsByEducationGroup_Lesson
-                .FirstOrDefault(x => x.ParentTopicId == null);
-
-            var result = new List<TopicTreeViewModel>();
-            if (topic != null)
-            {
-                result.Add(children(topic.Id));
-            }
-            return result;
-        }
-
-
-        /// <summary>
-        /// گرفتن  تمام مبحث های ریشه مربوط به یک گروه آموزشی درس
-        /// </summary>
-        /// <param name="educationGroup_LessonId"></param>
-        /// <returns></returns>
-        public IList<TopicGetNameViewModel> GetAllRoot(int educationGroup_LessonId)
-        {
-            return _topics
-                .Where(current => current.EducationGroup_LessonId == educationGroup_LessonId && current.ParentTopicId == null)
-                .Select(current => new TopicGetNameViewModel
-                {
-                    Id = current.Id,
-                    Title = current.Title,
-                    ParentTopicId = current.ParentTopicId,
-
-
-                }).ToList();
-        }
-
-
-        /// <summary>
-        /// گرفتن  مبحث های فرزند یک مبحث مربوط به یک گروه آموزشی درس
-        /// </summary>
-        /// <param name="educationGroup_LessonId"></param>
-        /// <param name="parentTopicId"></param>
-        /// <returns></returns>
-        public IList<TopicGetNameViewModel> GetAllChild(int educationGroup_LessonId, int parentTopicId)
-        {
-            return _topics
-                .Where(current => current.ParentTopicId == parentTopicId && current.EducationGroup_LessonId == educationGroup_LessonId)
-                .Select(current => new TopicGetNameViewModel
-                {
-                    Id = current.Id,
-                    Title = current.Title,
-                    ParentTopicId = current.ParentTopicId
-
-                }).ToList();
-        }
-
 
 
         /// <summary>
@@ -120,49 +27,29 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public TopicGetViewModel GetById(int id)
+        public TopicViewModel GetById(int id)
         {
             return _topics
                 .Where(current => current.Id == id)
-                .Select(current => new TopicGetViewModel
-                {
-                    Id = current.Id,
-                    Title = current.Title,
-                    LookupId_AreaType = current.LookupId_AreaType,
-                    EducationGroup_LessonId = current.EducationGroup_LessonId,
-                    ExamStock = current.ExamStock,
-                    ExamStockSystem = current.ExamStockSystem,
-                    LookupId_HardnessType = current.LookupId_HardnessType,
-                    Importance = current.Importance,
-                    IsActive = current.IsActive,
-                    IsExamSource = current.IsExamSource,
-                    ParentTopicId = current.ParentTopicId,
-                    EducationGroupId = current.EducationGroup_Lesson.EducationGroupId
-
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<TopicViewModel>)
+                .FirstOrDefault();
         }
 
 
         /// <summary>
-        /// گرفتن همه مبحث های مربوط به یک گروه آموزشی درس
+        /// گرفتن همه مبحث ها
         /// </summary>
-        /// <param name="educationGroup_LessonId"></param>
         /// <returns></returns>
-        public IList<TopicGetViewModel> GetAllByEducationGroup_LessonId(int educationGroup_LessonId)
+        public IList<TopicViewModel> GetAllByLessonId(int id)
         {
-            return _topics.Where(current => current.EducationGroup_LessonId == educationGroup_LessonId).Select(current => new TopicGetViewModel()
-            {
-                Id = current.Id,
-                Title = current.Title,
-                LookupId_AreaType = current.LookupId_AreaType,
-                EducationGroup_LessonId = current.EducationGroup_LessonId,
-                ExamStock = current.ExamStock,
-                ExamStockSystem = current.ExamStockSystem,
-                LookupId_HardnessType = current.LookupId_HardnessType,
-                Importance = current.Importance,
-                IsActive = current.IsActive,
-                IsExamSource = current.IsExamSource,
-            }).ToList();
+            return _topics
+                .Where(current => current.LessonId == id)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<TopicViewModel>)
+                .ToList();
         }
 
 
@@ -173,8 +60,8 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Create(TopicCreateViewModel topicViewModel)
         {
-
-            if (!_topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
+            var hasRoot = _topics.Any(x => x.LessonId == topicViewModel.LessonId);
+            if (!hasRoot)
             {
                 var topic = Mapper.Map<Topic>(topicViewModel);
 
@@ -187,7 +74,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 msgRes.Id = topic.Id;
                 return Mapper.Map<MessageResultClient>(msgRes);
             }
-            else if (topicViewModel.ParentTopicId != null && _topics.Any(x => x.EducationGroup_LessonId == topicViewModel.EducationGroup_LessonId))
+            else if (topicViewModel.ParentTopicId != null )
             {
                 var topic = Mapper.Map<Topic>(topicViewModel);
                 _topics.Add(topic);
@@ -196,15 +83,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 msgRes.Id = topic.Id;
                 return Mapper.Map<MessageResultClient>(msgRes);
             }
-            else 
+            else
             {
                 MessageResultServer msgRes = new MessageResultServer();
                 msgRes.FaMessage = "برای این درس مبحث ریشه ثبت شده است!(تنها یک مبحث ریشه برای هر درس قابل ثبت است.)";
                 return Mapper.Map<MessageResultClient>(msgRes);
             }
-            
-            
-            
         }
 
 
@@ -213,13 +97,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="topicViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(TopicCreateViewModel topicViewModel)
+        public MessageResultClient Update(TopicUpdateViewModel topicViewModel)
         {
             var topic = Mapper.Map<Topic>(topicViewModel);
             _uow.MarkAsChanged(topic);
 
-
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
@@ -240,22 +123,10 @@ namespace NasleGhalam.ServiceLayer.Services
             var topic = Mapper.Map<Topic>(topicViewModel);
             _uow.MarkAsDeleted(topic);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
-        /// <summary>
-        /// گرفتن همه مبحث ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _topics.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Title
-            }).ToList();
-        }
     }
 }

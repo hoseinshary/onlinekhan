@@ -3,7 +3,6 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.EducationTree;
-using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -28,9 +27,16 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
-        public IHttpActionResult GetAllEducationGroupsDdl()
+        public IHttpActionResult GetChildren(int id )
         {
-            return Ok(_educationTreeService.GetAllEducationGroupsDdl());
+            return Ok(_educationTreeService.GetChildren(id));
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
+        public IHttpActionResult GetAllEducationTreeByState(EducationTreeState state)
+        {
+            return Ok(_educationTreeService.GetAllEducationTreeByState(state));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]

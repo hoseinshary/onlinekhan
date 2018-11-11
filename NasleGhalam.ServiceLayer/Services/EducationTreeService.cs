@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -22,9 +21,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow = uow;
             _educationTrees = uow.Set<EducationTree>();
         }
-
-
-
 
 
         /// <summary>
@@ -59,7 +55,19 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
+        /// <summary>
+        /// گرفتن همه درخت آموزش ها یک گره ریشه
+        /// </summary>
+        /// <returns></returns>
+        public IList<EducationTreeViewModel> GetChildren(int id)
+        {
+            return _educationTrees.Where( current =>current.ParentEducationTreeId == id)
+                .Include(current => current.Lookup_EducationTreeState)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<EducationTreeViewModel>)
+                .ToList();
+        }
 
         /// <summary>
         /// گرفتن همه درخت آموزش ها
@@ -131,19 +139,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن درخت آموزش هایی که گروه اموزشی هستند برای لیت کشویی
         /// </summary>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllEducationGroupsDdl()
+        public IList<EducationTreeViewModel> GetAllEducationTreeByState(EducationTreeState state)
         {
             return _educationTrees
-                .Include(current => current.Lookup_EducationTreeState)
-                .Where(current => current.Lookup_EducationTreeState.Name == "EducationTreeState" && current.Lookup_EducationTreeState.State == 3)
+                .Where(current => current.Lookup_EducationTreeState.Name == "EducationTreeState" && current.Lookup_EducationTreeState.State == (int)state)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(current => new SelectViewModel
-                {
-                    value = current.Id,
-                    label = current.Name
-                }).ToList();
+                .Select(Mapper.Map<EducationTreeViewModel>)
+                .ToList();
         }
+
+
+
 
 
         /// <summary>

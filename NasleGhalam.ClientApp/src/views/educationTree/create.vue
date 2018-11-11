@@ -4,7 +4,7 @@
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
                    @open="modalOpen"
-                   @close="toggleModalCreateStore(false)">
+                   @close="toggleModalCreateStore(false);">
 
     <my-input :model="$v.educationTreeObj.Name" class="col-md-6" />
         <my-select :model="$v.educationTreeObj.LookupId_EducationTreeState"

@@ -22,6 +22,9 @@ export default {
     GradeLevelId: {
       displayName: displayName('پایه'),
       required
+    },
+    TreeId_Grade: {
+      displayName: displayName('مقطع')
     }
   }
 };

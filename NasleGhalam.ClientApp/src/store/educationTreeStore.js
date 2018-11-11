@@ -103,6 +103,22 @@ const store = {
   },
   actions: {
     /**
+     * get tree by state
+     */
+    getAllEducationTreeByState({ state }, treeState) {
+      axios
+        .get(`${baseUrl}/getAllEducationTreeByState/${treeState}`)
+        .then(response => {
+          util.mapObject(
+            response.data.map(x => ({
+              value: x.Id,
+              label: x.Name
+            })),
+            state.educationTreeDdl
+          );
+        });
+    },
+    /**
      * get data by id
      */
     getByIdStore({ state }, id) {

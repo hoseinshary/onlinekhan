@@ -19,7 +19,8 @@ export default {
       EducationGroups: [],
       LookupId_Nezam: 0,
       GradeId: 0,
-      GradeLevelId: 0
+      GradeLevelId: 0,
+      TreeId_Grade:0
     },
     allObj: [],
     allObjDdl: [],

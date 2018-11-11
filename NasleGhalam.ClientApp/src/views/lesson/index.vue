@@ -1,26 +1,36 @@
 <template>
-  <section class="col-md-8">
+  <section class="col-md-12 q-px-lg">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
-      <div slot="body">
-        <my-btn-create v-if="pageAccess.canCreate"
-                       :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate" />
-        <br>
-        <my-table :grid-data="allObj"
-                  :columns="gridColumns"
-                  hasIndex>
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit round
-                         v-if="pageAccess.canEdit"
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete round
-                           v-if="pageAccess.canDelete"
-                           @click="showModalDelete(data.row.Id)" />
-          </template>
-        </my-table>
+      <div class="row" slot="body">
+        <div class="col-md-4">
+          <my-select :model="$v.instanceObj.TreeId_Grade"
+               :options="educationTreeDdl"
+               class="col-md-12"
+               clearable />
+        </div>
+        <div class="col-md-8">
+          <my-btn-create v-if="pageAccess.canCreate"
+                        :label="`ایجاد (${modelName}) جدید`"
+                        @click="showModalCreate" />
+          <br>
+          <my-table :grid-data="allObj"
+                    :columns="gridColumns"
+                    hasIndex
+                    class="col-md-8">
+            <template slot="Id"
+                      slot-scope="data">
+              <my-btn-edit round
+                          v-if="pageAccess.canEdit"
+                          @click="showModalEdit(data.row.Id)" />
+              <my-btn-delete round
+                            v-if="pageAccess.canDelete"
+                            @click="showModalDelete(data.row.Id)" />
+                
+            </template>
+          </my-table>
+        </div>
       </div>
     </my-panel>
 
@@ -76,6 +86,9 @@ export default {
       'resetCreateStore',
       'resetEditStore'
     ]),
+    ...mapActions('educationTreeStore', [
+      'getAllEducationTreeByState'
+    ]),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
@@ -103,10 +116,13 @@ export default {
     ...mapState('lessonStore', {
       modelName: 'modelName',
       allObj: 'allObj'
+    }),
+    ...mapState('educationTreeStore', {
+      educationTreeDdl: 'educationTreeDdl'
     })
   },
   created() {
-    this.fillGridStore();
+    this.getAllEducationTreeByState(0);
   }
 };
 </script>

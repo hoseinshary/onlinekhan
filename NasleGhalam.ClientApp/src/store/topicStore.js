@@ -31,13 +31,13 @@ const store = {
     },
     topicIndexObj: {
       LessonId: 0,
-      EducationTreeId_Grade: 0
+      EducationTreeId_Grade: 0,
+      EducationTreeIds: []
     },
     topicTreeData: [],
     topicDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
-    treeModelChanged: true,
     createVue: null,
     editVue: null
   },
@@ -93,15 +93,16 @@ const store = {
     /**
      * fill tree data
      */
-    fillTreeStore({ state }) {
-      // fill tree if modelChanged
-      if (state.treeModelChanged) {
-        // get tree
-        axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.topicTreeData = response.data;
-          state.treeModelChanged = false;
-        });
-      }
+    fillTreeStore({ state }, lessonId) {
+      // get tree
+      axios.get(`${baseUrl}/GetAllByLessonId/${lessonId}`).then(response => {
+        let res = response.data.map(x => ({
+          Id: x.Id,
+          label: x.Title,
+          ParentTopicId: x.ParentTopicId
+        }));
+        state.topicTreeData = util.listToTree(res, 'Id', 'ParentTopicId');
+      });
     },
 
     /**
@@ -137,7 +138,6 @@ const store = {
      */
     modelChangedStore({ state }) {
       state.ddlModelChanged = true;
-      state.treeModelChanged = true;
     },
 
     //### create section ###

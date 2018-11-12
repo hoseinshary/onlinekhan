@@ -3,13 +3,13 @@
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
-      <div slot="body" class="row">
+      <div slot="body"
+           class="row">
         <div class="col-md-4 row">
           <!--  <my-select 
-            :model="$v.instanceObj.GradeId"
-            :options="gradeDdl"
-            class="col-md-6 offset-md-3"
-            ref="instanceObjGradeId"
+                     :options="gradeDdl"
+                     class="col-md-6 offset-md-3"
+                     ref="instanceObjGradeId"
           clearable />-->
           <q-select
             v-model="$v.instanceObj.GradeId.$model"

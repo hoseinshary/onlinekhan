@@ -65,7 +65,16 @@ const clearArray = function(arr) {
  */
 const toParam = function(obj) {
   return Object.keys(obj)
-    .map(key => key + '=' + obj[key])
+    .map(key => {
+      var value = obj[key];
+      if (isObject(value)) {
+        return toParam(value);
+      }
+      if (isArray(value)) {
+        return value.map(x => key + '=' + x).join('&');
+      }
+      return key + '=' + value;
+    })
     .join('&');
 };
 

@@ -4,50 +4,52 @@
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body" class="row">
-      <div class="col-md-4 row">
-           <my-select 
+        <div class="col-md-4 row">
+          <!--  <my-select 
             :model="$v.instanceObj.GradeId"
             :options="gradeDdl"
             class="col-md-6 offset-md-3"
             ref="instanceObjGradeId"
-            clearable />
-
-            <q-slide-transition>
-            <q-tree :nodes="educationTreeData"
-                  class="col-md-12"
-                  color="blue"
-                  :selected.sync="selectedNodeId"
-                  default-expand-all
-                  node-key="Id"
-                   :filter="treeFilter"
-                  ref="topicTree"  />
+          clearable />-->
+          <q-select
+            v-model="$v.instanceObj.GradeId.$model"
+            class="col-md-6 offset-md-3"
+            clearable
+            float-label="مقطع"
+            :options="gradeDdl"
+          />
+          <q-slide-transition>
+            <!-- default-expand-all-->
+            <q-tree
+              :nodes="educationTreeData"
+              class="col-md-12"
+              color="blue"
+              :selected.sync="selectedNodeId"
+              node-key="Id"
+              ref="topicTree"
+            />
           </q-slide-transition>
-      </div>
-      <div class="col-md-8">
-          <my-btn-create v-if="pageAccess.canCreate"
-                        :label="`ایجاد (${modelName}) جدید`"
-                        @click="showModalCreate" />
+        </div>
+        <div class="col-md-8">
+          <my-btn-create
+            v-if="pageAccess.canCreate"
+            :label="`ایجاد (${modelName}) جدید`"
+            @click="showModalCreate"
+          />
           <br>
-          <my-table :grid-data="allObj"
-                    :columns="gridColumns"
-                    hasIndex
-                    class="col-md-8">
-            <template slot="Id"
-                      slot-scope="data">
-              <my-btn-edit round
-                          v-if="pageAccess.canEdit"
-                          @click="showModalEdit(data.row.Id)" />
-              <my-btn-delete round
-                            v-if="pageAccess.canDelete"
-                            @click="showModalDelete(data.row.Id)" />
-                
+          <my-table :grid-data="allObj" :columns="gridColumns" hasIndex class="col-md-8">
+            <template slot="Id" slot-scope="data">
+              <my-btn-edit round v-if="pageAccess.canEdit" @click="showModalEdit(data.row.Id)"/>
+              <my-btn-delete
+                round
+                v-if="pageAccess.canDelete"
+                @click="showModalDelete(data.row.Id)"
+              />
             </template>
           </my-table>
         </div>
-      
       </div>
     </my-panel>
-
     <!-- modals -->
     <modal-create></modal-create>
     <modal-edit></modal-edit>
@@ -57,106 +59,107 @@
 
 
 <script>
-import viewModel from 'viewModels/lessonViewModel';
-import { mapState, mapActions } from 'vuex';
+  import viewModel from "viewModels/lessonViewModel";
+  import { mapState, mapActions } from "vuex";
 
-export default {
-  components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
-  },
-  /**
-   * data
-   */
-  data() {
-    var pageAccess = this.$util.initAccess('/lesson');
-    return {
-      pageAccess,
-      selectedNodeId:null,
-      treeFilter:'',
-      gridColumns: [
-        {
-          title: 'نام',
-          data: 'Name'
-        },
-        {
-          title: 'عملیات',
-          data: 'Id',
-          searchable: false,
-          sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
-        }
-      ]
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('lessonStore', [
-      'toggleModalCreateStore',
-      'toggleModalEditStore',
-      'toggleModalDeleteStore',
-      'getByIdStore',
-      'fillGridStore',
-      'resetCreateStore',
-      'resetEditStore'
-    ]),
-    ...mapActions('educationTreeStore', [
-      'getAllEducationTreeByState'
-    ]),
-      'fillTreeStore',
-      'getAllGrade'
-    ]),
-    showModalCreate() {
-      // reset data on modal show
-      this.resetCreateStore();
-      // show modal
-      this.toggleModalCreateStore(true);
+  export default {
+    components: {
+      "modal-create": () => import("./create"),
+      "modal-edit": () => import("./edit"),
+      "modal-delete": () => import("./delete")
     },
-    showModalEdit(id) {
-      // reset data on modal show
-      this.resetEditStore();
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalEditStore(true);
-      });
+    /**
+     * data
+     */
+    data() {
+      var pageAccess = this.$util.initAccess("/lesson");
+      return {
+        pageAccess,
+        selectedNodeId: null,
+        gridColumns: [
+          {
+            title: "نام",
+            data: "Name"
+          },
+          {
+            title: "عملیات",
+            data: "Id",
+            searchable: false,
+            sortable: false,
+            visible: pageAccess.canEdit || pageAccess.canDelete
+          }
+        ]
+      };
     },
-    showModalDelete(id) {
-      // get data by id
-      this.getByIdStore(id).then(() => {
+    /**
+     * methods
+     */
+    methods: {
+      ...mapActions("lessonStore", [
+        "toggleModalCreateStore",
+        "toggleModalEditStore",
+        "toggleModalDeleteStore",
+        "getByIdStore",
+        "fillGridStore",
+        "resetCreateStore",
+        "resetEditStore"
+      ]),
+      ...mapActions("educationTreeStore", [
+        "getAllEducationTreeByState",
+        "fillTreeStore",
+        "getAllGrade",
+        "changeEducationTree"
+      ]),
+      showModalCreate() {
+        // reset data on modal show
+        this.resetCreateStore();
         // show modal
-        this.toggleModalDeleteStore(true);
-      });
+        this.toggleModalCreateStore(true);
+      },
+      showModalEdit(id) {
+        // reset data on modal show
+        this.resetEditStore();
+        // get data by id
+        this.getByIdStore(id).then(() => {
+          // show modal
+          this.toggleModalEditStore(true);
+        });
+      },
+      showModalDelete(id) {
+        // get data by id
+        this.getByIdStore(id).then(() => {
+          // show modal
+          this.toggleModalDeleteStore(true);
+        });
+      }
+    },
+    computed: {
+      ...mapState("lessonStore", {
+        modelName: "modelName",
+        instanceObj: "instanceObj",
+        gradeDdl: "gradeDdl",
+        allObj: "allObj"
+      }),
+      ...mapState("educationTreeStore", {
+        educationTreeDdl: "educationTreeDdl",
+        gradeDdl: "gradeDdl",
+        educationTreeData: "educationTreeData"
+      })
+    },
+    validations: viewModel,
+    created() {
+      this.fillTreeStore();
+      // this.fillGridStore();
+      this.getAllGrade();
+    },
+    watch: {
+      "instanceObj.GradeId"(newVal) {
+        this.changeEducationTree(newVal);
+      },
+      selectedNodeId(newVal) {
+        this.fillGridStore(newVal);
+      }
     }
-  },
-  computed: {
-    ...mapState('lessonStore', {
-      modelName: 'modelName',
-      instanceObj: 'instanceObj',
-      gradeDdl: 'gradeDdl',
-      allObj: 'allObj'
-    }),
-    ...mapState('educationTreeStore', {
-      educationTreeDdl: 'educationTreeDdl'
-      gradeDdl: 'gradeDdl',
-      educationTreeData: 'educationTreeData'
-    })
-  },
-  validations: viewModel,
-  created() {
-    this.fillTreeStore();
-    // this.fillGridStore();
-    this.getAllGrade();
-  },
-  watch:{
-       'instanceObj.GradeId'(newVal){
-          this.treeFilter = this.$refs.instanceObjGradeId.getSelectedLabel();
-        // this.
-    }
-  }
-};
+  };
 </script>
 

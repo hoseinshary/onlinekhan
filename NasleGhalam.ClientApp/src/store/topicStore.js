@@ -73,7 +73,14 @@ const store = {
      * rest value of topicObj
      */
     reset(state, $v) {
-      util.clearObject(state.topicObj);
+      // util.clearObject(state.topicObj);
+      state.topicObj.Title = '';
+      state.topicObj.ExamStock = 0;
+      state.topicObj.Importance = 0;
+      state.topicObj.IsExamSource = false;
+      state.topicObj.LookupId_HardnessType = 0;
+      state.topicObj.LookupId_AreaType = 0;
+      state.topicObj.IsActive = false;
       if ($v) {
         $v.$reset();
       }
@@ -99,9 +106,12 @@ const store = {
         let res = response.data.map(x => ({
           Id: x.Id,
           label: x.Title,
-          ParentTopicId: x.ParentTopicId
+          ParentTopicId: x.ParentTopicId,
+          header: 'custome',
+          visible: false
         }));
         state.topicTreeData = util.listToTree(res, 'Id', 'ParentTopicId');
+        console.log(state.topicTreeData);
       });
     },
 

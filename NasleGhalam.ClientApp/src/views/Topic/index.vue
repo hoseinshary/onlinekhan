@@ -2,6 +2,7 @@
   <section class="col-12 q-px-sm">
     <!-- panel -->
     <my-panel>
+
       <span slot="title">{{modelName}}</span>
       <div slot="body">
         <section class="row">
@@ -28,19 +29,53 @@
 
           <div class="col-sm-7">
             <section class="q-ma-sm q-pa-sm shadow-1">
-              <my-btn-create v-if="pageAccess.canCreate"
+              <my-btn-create v-if="pageAccess.canCreate && lessonDdl.length && !topicTreeData.length"
                              :label="`ایجاد (${modelName}) جدید`"
                              @click="showModalCreate" />
-
               <q-tree :nodes="topicTreeData"
                       class="q-pt-lg"
                       color="primary"
-                      tick-strategy="leaf"
                       accordion
                       node-key="Id"
-                      ref="topicTree" />
+                      ref="topicTree"
+                      :selected.sync="topicObj.ParentTopicId">
+                <div slot="header-custome"
+                     slot-scope="prop">
+                  {{prop.node.label}}
+                  <template v-if="prop.node.visible && !(prop.node.children && prop.node.children.length)">
+                    <q-btn outline
+                           color="positive"
+                           class="shadow-1 bg-white q-mr-sm q-px-xs"
+                           icon="save"
+                           size="sm"
+                           @click="showModalCreate" />
+                    <q-btn outline
+                           color="purple"
+                           class="shadow-1 bg-white q-mr-sm q-px-xs"
+                           icon="create"
+                           size="sm" />
+                    <q-btn outline
+                           color="red"
+                           class="shadow-1 bg-white q-mr-sm q-px-xs"
+                           icon="delete"
+                           size="sm" />
+                  </template>
+                  <template v-else-if="prop.node.visible">
+                    <q-btn outline
+                           color="positive"
+                           class="shadow-1 bg-white q-mr-sm q-px-xs"
+                           icon="save"
+                           size="sm"
+                           @click="showModalCreate" />
+                    <q-btn outline
+                           color="purple"
+                           class="shadow-1 bg-white q-mr-sm q-px-xs"
+                           icon="create"
+                           size="sm" />
+                  </template>
+                </div>
+              </q-tree>
             </section>
-
           </div>
           <br>
         </section>
@@ -129,7 +164,6 @@ export default {
       });
     },
     lessonDdlChange(val) {
-      console.log(val);
       this.fillTreeStore(val);
     }
   },
@@ -137,7 +171,8 @@ export default {
     ...mapState('topicStore', {
       modelName: 'modelName',
       topicTreeData: 'topicTreeData',
-      topicIndexObj: 'topicIndexObj'
+      topicIndexObj: 'topicIndexObj',
+      topicObj: 'topicObj'
     }),
     ...mapState('educationTreeStore', {
       educationTree_GradeDdl: 'gradeDdl'
@@ -150,6 +185,21 @@ export default {
   watch: {
     'topicIndexObj.EducationTreeIds'(val) {
       this.fillLessonDdlStore(val);
+    },
+    'topicObj.ParentTopicId'(newVal, oldVal) {
+      let node;
+      if (newVal && oldVal) {
+        node = this.$refs.topicTree.getNodeByKey(newVal);
+        node.visible = true;
+        node = this.$refs.topicTree.getNodeByKey(oldVal);
+        node.visible = false;
+      } else if (newVal) {
+        node = this.$refs.topicTree.getNodeByKey(newVal);
+        node.visible = true;
+      } else if (oldVal) {
+        node = this.$refs.topicTree.getNodeByKey(oldVal);
+        node.visible = false;
+      }
     }
   },
   created() {

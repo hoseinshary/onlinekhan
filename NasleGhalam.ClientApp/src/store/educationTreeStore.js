@@ -201,10 +201,10 @@ const store = {
     },
     getEducationGroupsUnderSelectedList({
       state
-    }, lstSelected) {
+    }, params) {
       state.educationGroupList = [];
 
-      lstSelected.forEach(element => {
+      params.lstSelected.forEach(element => {
         var item = state.educationTreeDataMasterList
           .filter(x => x.Id == element &&
             //یا زیر گروه یا مقطع
@@ -225,10 +225,18 @@ const store = {
       });
       state.educationGroupList = state.educationGroupList.map(x => ({
         EducationGroupId: x.Id,
-        IsChecked: false,
+        IsChecked: params.isEdit ? (params.eduGroupsId.includes(x.Id)) : false,
         Name: x.Name,
         SubGroups: []
       }))
+      if (params.isEdit) {
+        state.educationSubGroupList.forEach(element => {
+          var item = params.Ratios.filter(x => x.EducationSubGroup.Id == element.Id);
+          element.Rate = item.length > 0 ?item[0].Rate:0;
+        });
+      }
+      
+
       state.educationGroupList.forEach(element => {
         element.SubGroups = state.educationSubGroupList.filter(x => x.EducationTreeId == element.EducationGroupId)
       });
@@ -325,7 +333,6 @@ const store = {
       dispatch
     }, closeModal) {
 
-      console.log(state);
       var vm = state.createVue;
       state.selectedId = state.educationTreeObj.ParentEducationTreeId;
       dispatch('validateFormStore', vm).then(isValid => {

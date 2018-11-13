@@ -21,9 +21,12 @@ export default {
       LookupId_Nezam: 0,
       GradeId: 0,
       GradeLevelId: 0,
-      TreeId_Grade: 0
+      TreeId_Grade: 0,
+      EducationTrees:[],
+      Ratios:[]
     },
     allObj: [],
+    // selectedNodeIds: [],
     educationGroupList: [],
     allObjDdl: [],
     selectedIndex: -1,
@@ -98,6 +101,9 @@ export default {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.instanceObj);
+        if (state.isOpenModalEdit) {
+          state.instanceObj.EducationTreeIds = response.data.EducationTrees.map(x => x.Id);
+        }
       });
     },
 
@@ -107,7 +113,7 @@ export default {
     fillGridStore({
       state
     }, lstIds) {
-      axios.get(`${baseUrl}/GetAllByEducationTreeIds/?ids=` + lstIds).then(response => {
+      axios.get(`${baseUrl}/GetAllByEducationTreeIds/?`+ util.toParam({Ids:lstIds})).then(response => {
         state.allObj = response.data;
       });
     },
@@ -128,7 +134,9 @@ export default {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }, ids) {
+    fillDdlStore({
+      state
+    }, ids) {
       axios
         .get(
           `${baseUrl}/GetAllByEducationTreeIds?${util.toParam({
@@ -231,8 +239,7 @@ export default {
       state,
       commit,
       dispatch
-    }, closeModal, aaaa) {
-      console.log(aaaa)
+    }, closeModal) {
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
 
@@ -243,8 +250,9 @@ export default {
         state.instanceObj.Ratios = [];
         state.EducationGroupListLesson.forEach(element => {
           element.SubGroups.filter(x => x.Rate != undefined).forEach(item => {
+            debugger
             state.instanceObj.Ratios.push({
-              EducationSubGroupId: item.EducationTreeId,
+              EducationSubGroupId: item.Id,
               Rate: item.Rate
             })
           });
@@ -316,6 +324,24 @@ export default {
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.instanceObj.Id = state.selectedId;
+        state.instanceObj.EducationGroups = state.EducationGroups.filter(
+          x => x.IsChecked
+        );
+        state.instanceObj.Ratios = [];
+        state.EducationGroupListLesson.filter(x => x.IsChecked).forEach(element => {
+          element.SubGroups.filter(x => x.Rate != undefined).forEach(item => {
+            debugger
+            state.instanceObj.Ratios.push({
+              EducationSubGroupId: item.Id,
+              Rate: item.Rate,
+              LessonId: state.instanceObj.Id
+            })
+          });
+        });
+        delete state.instanceObj.TreeId_Grade;
+        delete state.instanceObj.GradeId;
+        delete state.instanceObj.EducationGroups;
+
         axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {

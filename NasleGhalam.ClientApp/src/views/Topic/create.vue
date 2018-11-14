@@ -5,6 +5,8 @@
                    @reset="resetCreateStore"
                    @close="toggleModalCreateStore(false)">
 
+    {{topicObj.ParentTopicId}}
+    123
     <my-input :model="$v.topicObj.Title"
               class="col-md-6" />
 

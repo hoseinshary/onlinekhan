@@ -6,8 +6,8 @@ import { TOPIC_URL as baseUrl } from 'utilities/site-config';
  * find index of object in topicTreeData by id
  * @param {Number} id
  */
-function getIndexById(id) {
-  return store.state.topicTreeData.findIndex(o => o.Id == id);
+function getIndexById(children, id) {
+  return children.findIndex(o => o.Id == id);
 }
 
 const store = {
@@ -32,7 +32,8 @@ const store = {
     topicIndexObj: {
       LessonId: 0,
       EducationTreeId_Grade: 0,
-      EducationTreeIds: []
+      EducationTreeIds: [],
+      selectedTopicId: null
     },
     topicTreeData: [],
     topicDdl: [],
@@ -48,25 +49,47 @@ const store = {
     insert(state, id) {
       let createdObj = util.cloneObject(state.topicObj);
       createdObj.Id = id;
-      state.topicTreeData.push(createdObj);
+      let node = util.searchTreeArray(
+        state.topicTreeData,
+        'Id',
+        createdObj.ParentTopicId
+      );
+      node.children = node.children || [];
+      node.children.push({
+        Id: createdObj.Id,
+        label: createdObj.Title,
+        ParentTopicId: createdObj.ParentTopicId,
+        header: 'custome',
+        visible: false
+      });
+      state.topicIndexObj.selectedTopicId = null;
     },
 
     /**
      * update topicObj of topicTreeData
      */
     update(state) {
-      let index = getIndexById(state.selectedId);
-      if (index < 0) return;
-      util.mapObject(state.topicObj, state.topicTreeData[index]);
+      let node = util.searchTreeArray(
+        state.topicTreeData,
+        'Id',
+        state.selectedId
+      );
+      if (!node) return;
+      node.label = state.topicObj.Title;
     },
 
     /**
      * delete from topicTreeData
      */
     delete(state) {
-      let index = getIndexById(state.selectedId);
+      let node = util.searchTreeArray(
+        state.topicTreeData,
+        'Id',
+        state.topicObj.ParentTopicId
+      );
+      let index = getIndexById(node.children, state.selectedId);
       if (index < 0) return;
-      state.topicTreeData.splice(index, 1);
+      node.children.splice(index, 1);
     },
 
     /**
@@ -77,10 +100,10 @@ const store = {
       state.topicObj.Title = '';
       state.topicObj.ExamStock = 0;
       state.topicObj.Importance = 0;
-      state.topicObj.IsExamSource = false;
+      state.topicObj.IsExamSource = undefined;
       state.topicObj.LookupId_HardnessType = 0;
       state.topicObj.LookupId_AreaType = 0;
-      state.topicObj.IsActive = false;
+      state.topicObj.IsActive = true;
       if ($v) {
         $v.$reset();
       }
@@ -111,7 +134,6 @@ const store = {
           visible: false
         }));
         state.topicTreeData = util.listToTree(res, 'Id', 'ParentTopicId');
-        console.log(state.topicTreeData);
       });
     },
 
@@ -293,7 +315,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.topicObj.Name;
+      return state.topicObj.Title;
     }
   }
 };

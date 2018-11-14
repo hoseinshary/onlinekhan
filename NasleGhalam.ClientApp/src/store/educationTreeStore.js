@@ -129,7 +129,7 @@ const store = {
       state
     }, treeState) {
       axios
-        .get(`${baseUrl}/getAllEducationTreeByState/${treeState}`)
+        .get(`${baseUrl}/getAllEducationTreeByState/?state=${treeState}`)
         .then(response => {
           util.mapObject(
             response.data.map(x => ({
@@ -167,7 +167,21 @@ const store = {
           }));
         });
     },
-
+    /**
+     * get all grades
+     */
+    fillEducationGroupDdl({
+      state
+    }) {
+      axios
+        .get(`${baseUrl}/GetAllEducationTreeByState/?state=3`)
+        .then(response => {
+          state.educationGroupDdl = response.data.map(x => ({
+            value: x.Id,
+            label: x.Name
+          }));
+        });
+    },
     /**
      * fill grid data
      */
@@ -201,10 +215,10 @@ const store = {
     },
     getEducationGroupsUnderSelectedList({
       state
-    }, lstSelected) {
+    }, params) {
       state.educationGroupList = [];
 
-      lstSelected.forEach(element => {
+      params.lstSelected.forEach(element => {
         var item = state.educationTreeDataMasterList
           .filter(x => x.Id == element &&
             //یا زیر گروه یا مقطع
@@ -225,10 +239,18 @@ const store = {
       });
       state.educationGroupList = state.educationGroupList.map(x => ({
         EducationGroupId: x.Id,
-        IsChecked: false,
+        IsChecked: params.isEdit ? (params.eduGroupsId.includes(x.Id)) : false,
         Name: x.Name,
         SubGroups: []
       }))
+      if (params.isEdit) {
+        state.educationSubGroupList.forEach(element => {
+          var item = params.Ratios.filter(x => x.EducationSubGroup.Id == element.Id);
+          element.Rate = item.length > 0 ? item[0].Rate : 0;
+        });
+      }
+
+
       state.educationGroupList.forEach(element => {
         element.SubGroups = state.educationSubGroupList.filter(x => x.EducationTreeId == element.EducationGroupId)
       });
@@ -243,16 +265,7 @@ const store = {
     }, gradeId) {
       return util.searchTreeArray(state.educationTreeData, 'Id', gradeId);
     },
-    /**
-     * fill dropDwonListFromEducationGroups
-     */
-    fillEducationGroupDdlStore({
-      state
-    }) {
-      axios.get(`${baseUrl}/GetAllEducationGroupsDdl`).then(response => {
-        state.educationGroupDdl = response.data;
-      });
-    },
+
     /**
      * fill dropDwonList
      */
@@ -325,7 +338,6 @@ const store = {
       dispatch
     }, closeModal) {
 
-      console.log(state);
       var vm = state.createVue;
       state.selectedId = state.educationTreeObj.ParentEducationTreeId;
       dispatch('validateFormStore', vm).then(isValid => {

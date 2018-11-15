@@ -2,7 +2,6 @@
   <section class="col-12 q-px-sm">
     <!-- panel -->
     <my-panel>
-
       <span slot="title">{{modelName}}</span>
       <div slot="body">
         <section class="row">
@@ -26,10 +25,9 @@
                          @change="lessonDdlChange" />
             </section>
           </div>
-
           <div class="col-sm-7">
             <section class="q-ma-sm q-pa-sm shadow-1">
-              <my-btn-create v-if="pageAccess.canCreate && lessonDdl.length && !topicTreeData.length"
+              <my-btn-create v-if="pageAccess.canCreate && lessonDdl.length && !topicTreeData.length && topicIndexObj.LessonId != 0"
                              :label="`ایجاد (${modelName}) جدید`"
                              @click="showModalCreate" />
               <q-tree :nodes="topicTreeData"
@@ -38,7 +36,7 @@
                       accordion
                       node-key="Id"
                       ref="topicTree"
-                      :selected.sync="topicObj.ParentTopicId">
+                      :selected.sync="topicIndexObj.selectedTopicId">
                 <div slot="header-custome"
                      slot-scope="prop">
                   {{prop.node.label}}
@@ -48,17 +46,19 @@
                            class="shadow-1 bg-white q-mr-sm q-px-xs"
                            icon="save"
                            size="sm"
-                           @click="showModalCreate" />
+                           @click.stop="showModalCreate" />
                     <q-btn outline
                            color="purple"
                            class="shadow-1 bg-white q-mr-sm q-px-xs"
                            icon="create"
-                           size="sm" />
+                           size="sm"
+                           @click.stop="showModalEdit(prop.node.Id)" />
                     <q-btn outline
                            color="red"
                            class="shadow-1 bg-white q-mr-sm q-px-xs"
                            icon="delete"
-                           size="sm" />
+                           size="sm"
+                           @click.stop="showModalDelete(prop.node.Id)" />
                   </template>
                   <template v-else-if="prop.node.visible">
                     <q-btn outline
@@ -66,12 +66,13 @@
                            class="shadow-1 bg-white q-mr-sm q-px-xs"
                            icon="save"
                            size="sm"
-                           @click="showModalCreate" />
+                           @click.stop="showModalCreate" />
                     <q-btn outline
                            color="purple"
                            class="shadow-1 bg-white q-mr-sm q-px-xs"
                            icon="create"
-                           size="sm" />
+                           size="sm"
+                           @click.stop="showModalEdit(prop.node.Id)" />
                   </template>
                 </div>
               </q-tree>
@@ -155,6 +156,8 @@ export default {
     gradeDdlChange(val) {
       // filter lesson tree by gradeId
       var self = this;
+      this.topicIndexObj.LessonId = 0;
+      this.topicTreeData.splice(0, this.topicTreeData.length);
       this.topicIndexObj.EducationTreeIds = [];
       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
         self.educationTreeData = [treeData];
@@ -165,6 +168,7 @@ export default {
     },
     lessonDdlChange(val) {
       this.fillTreeStore(val);
+      this.topicObj.LessonId = val;
     }
   },
   computed: {
@@ -186,7 +190,7 @@ export default {
     'topicIndexObj.EducationTreeIds'(val) {
       this.fillLessonDdlStore(val);
     },
-    'topicObj.ParentTopicId'(newVal, oldVal) {
+    'topicIndexObj.selectedTopicId'(newVal, oldVal) {
       let node;
       if (newVal && oldVal) {
         node = this.$refs.topicTree.getNodeByKey(newVal);
@@ -200,6 +204,7 @@ export default {
         node = this.$refs.topicTree.getNodeByKey(oldVal);
         node.visible = false;
       }
+      this.topicObj.ParentTopicId = newVal;
     }
   },
   created() {

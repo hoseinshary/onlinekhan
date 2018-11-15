@@ -3,10 +3,8 @@
                    :show="isOpenModalCreate"
                    @confirm="submitCreateStore"
                    @reset="resetCreateStore"
+                   @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
-
-    {{topicObj.ParentTopicId}}
-    123
     <my-input :model="$v.topicObj.Title"
               class="col-md-6" />
 
@@ -20,44 +18,35 @@
               :model="$v.topicObj.IsExamSource">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
+                 :val="false"
+                 label="خیر" />
         <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+                 :val="true"
+                 label="بلی" />
       </template>
     </my-field>
 
-    <!-- <my-select :model="$v.topicObj.LookupId_HardnessType"
-               :options=""
+    <my-select :model="$v.topicObj.LookupId_HardnessType"
+               :options="lookupTopicHardnessTypeDdl"
                class="col-md-6"
                clearable />
 
     <my-select :model="$v.topicObj.LookupId_AreaType"
-               :options=""
+               :options="lookupTopicAreaTypeDdl"
                class="col-md-6"
-               clearable /> -->
+               clearable />
 
     <my-field class="col-md-6"
               :model="$v.topicObj.IsActive">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
+                 :val="false"
+                 label="خیر" />
         <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+                 :val="true"
+                 label="بلی" />
       </template>
     </my-field>
-
-    <my-input :model="$v.topicObj.ParentTopicId"
-              class="col-md-6" />
-
-    <!-- <my-select :model="$v.topicObj.LessonId"
-               :options=""
-               class="col-md-6"
-               clearable /> -->
-
   </my-modal-create>
 </template>
 
@@ -75,7 +64,15 @@ export default {
       'createVueStore',
       'submitCreateStore',
       'resetCreateStore'
-    ])
+    ]),
+    ...mapActions('lookupStore', [
+      'fillTopicHardnessTypeDdlStore',
+      'fillTopicAreaTypeDdlStore'
+    ]),
+    modalOpen: function() {
+      this.fillTopicHardnessTypeDdlStore();
+      this.fillTopicAreaTypeDdlStore();
+    }
   },
   /**
    * computed
@@ -85,7 +82,11 @@ export default {
       modelName: 'modelName',
       topicObj: 'topicObj',
       isOpenModalCreate: 'isOpenModalCreate'
-    })
+    }),
+    ...mapState('lookupStore', [
+      'lookupTopicHardnessTypeDdl',
+      'lookupTopicAreaTypeDdl'
+    ])
   },
   /**
    * validations

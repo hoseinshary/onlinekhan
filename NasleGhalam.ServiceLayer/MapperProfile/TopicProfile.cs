@@ -8,8 +8,9 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
     {
         public TopicProfile()
         {
-            CreateMap<TopicCreateViewModel, Topic>();
             CreateMap<TopicViewModel, Topic>();
+            CreateMap<TopicCreateViewModel, Topic>();
+            CreateMap<TopicUpdateViewModel, Topic>();
         }
     }
 }

@@ -6,10 +6,10 @@ using NasleGhalam.ViewModels._Attributes;
 
 namespace NasleGhalam.ViewModels.Question
 {
-    public class QuestionCreateViewModel :IMultiPartMediaTypeFormatter
+    public class QuestionUpdateViewModel :IMultiPartMediaTypeFormatter
     {
         
-     
+        public int Id { get; set; }
 
 
         [Display(Name = "متن")]
@@ -84,9 +84,7 @@ namespace NasleGhalam.ViewModels.Question
         public bool IsActive { get; set; }
 
 
-        
-        public string FilePath { get; set; }
-      
+
 
         private List<int> topicsId = new List<int>();
 

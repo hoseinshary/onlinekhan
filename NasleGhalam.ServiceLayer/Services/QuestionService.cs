@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
+using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Question;
-using NasleGhalam.WebApi.Extentions;
-using Microsoft.Office.Interop.Word;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -31,27 +29,30 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public QuestionCreateViewModel GetById(int id)
+        public QuestionViewModel GetById(int id)
         {
             return _questions
                 .Where(current => current.Id == id)
-                .Select(current => new QuestionCreateViewModel
-                {
-                    Id = current.Id
-                }).FirstOrDefault();
+
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .FirstOrDefault();
         }
 
 
         /// <summary>
-        /// گرفتن همه سوال ها
+        /// گرفتن همه سوال های مباحث
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionCreateViewModel> GetAll()
+        public IList<QuestionViewModel> GetAllByTopicIds(IEnumerable<int> ids)
         {
-            return _questions.Select(current => new QuestionCreateViewModel()
-            {
-                Id = current.Id,
-            }).ToList();
+            return _questions
+                .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
         }
 
 
@@ -60,106 +61,30 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionCreateViewModel questionViewModel , HttpPostedFile wordFile ,int userId)
+        public MessageResultClient Create(QuestionCreateViewModel questionViewModel)
         {
-            //var str2 = wordFile.FileName;
-            string strextension = System.IO.Path.GetExtension(wordFile.FileName).Substring(1);
-            string strPictureName = Guid.NewGuid().ToString(); 
-            string strFullPictureName = $"{strPictureName}.{strextension}";
-            string strPhysicalPathName = strFullPictureName.GetQuestionMultiPhysicalPath();
-            try
-            {
-                wordFile.SaveAs(strPhysicalPathName);
-            }
-            catch (Exception e)
-            {
-               // msgRes.EnMessage += e.Message;
-            }
-
-            var question = Mapper.Map<Question>(questionViewModel);
-
-            object missing = Type.Missing;
-            Application wordApp = new Application();
-            Document doc = wordApp.Documents.OpenNoRepairDialog(strPhysicalPathName,
-                ref missing, ref missing, ref missing, ref missing,
-                ref missing, ref missing, ref missing, ref missing,
-                ref missing, ref missing, ref missing, ref missing,
-                ref missing, ref missing, ref missing);
-
-            question.Context = doc.Content.Text;
-            question.FileName = strFullPictureName;
-            question.InsertDateTime = DateTime.Now;
-            question.UserId = userId;
-            foreach (var item in questionViewModel.TopicsId)
-            {
-                question.Topics.Add(new Topic
-                {
-                    Id = item
-                });
-            }
-            foreach (var item in questionViewModel.TagsId)
-            {
-                question.Tags.Add(new Tag
-                {
-                    Id = item
-                });
-            }
-            var options = doc.Lists[1].ListParagraphs[3].Range.Text;
-
-
-            
-
-
-            doc.Close();
-            wordApp.Quit();
-
-            
-            
-            _questions.Add(question);
-
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = question.Id;
-            if (msgRes.MessageType == MessageType.Success)
-            {
-
-               
-            }
-
-            return Mapper.Map<MessageResultClient>(msgRes);
-        }
-
-
-        /// <summary>
-        /// ثبت سوال به صورت گروهی
-        /// </summary>
-        /// <param name="questionViewModel"></param>
-        /// <returns></returns>
-        public MessageResultClient CreateMulti(QuestionTempViewModel questionViewModel, HttpPostedFile wordFile, HttpPostedFile excelFile)
-        {
-            HttpPostedFileBase filebase = new HttpPostedFileWrapper(wordFile);
-            string strextension = System.IO.Path.GetExtension(wordFile.FileName).Substring(1);
-            string strPictureName = questionViewModel.Context;
-            string strFullPictureName = $"{strPictureName}.{strextension}";
-            string strPhysicalPathName = strFullPictureName.GetQuestionMultiPhysicalPath();
-            try
-            {
-                wordFile.SaveAs(strPhysicalPathName);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-
-
             var question = Mapper.Map<Question>(questionViewModel);
             _questions.Add(question);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            foreach (var topicId in questionViewModel.TopicsId)
+            {
+                var topic = new Topic() { Id = topicId };
+                _uow.MarkAsUnChanged(topic);
+                question.Topics.Add(topic);
+            }
+
+            foreach (var tagId in questionViewModel.TagsId)
+            {
+                var tag = new Tag() { Id = tagId };
+                _uow.MarkAsUnChanged(tag);
+                question.Tags.Add(tag);
+            }
+
+
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = question.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
-
-
 
 
         /// <summary>
@@ -167,13 +92,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(QuestionCreateViewModel questionViewModel)
+        public MessageResultClient Update(QuestionUpdateViewModel questionViewModel)
         {
             var question = Mapper.Map<Question>(questionViewModel);
             _uow.MarkAsChanged(question);
 
-
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
@@ -185,61 +109,40 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-            var questionViewModel = GetById(id);
-            if (questionViewModel == null)
+            var question = _questions
+                .Include(current => current.Topics)
+                .Include(current => current.Tags)
+                .First(current => current.Id == id);
+
+            if (question == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var question = Mapper.Map<Question>(questionViewModel);
+            //remove topics
+            var topics = question.Topics.ToList();
+            foreach (var item in topics)
+            {
+                question.Topics.Remove(item);
+
+            }
+
+            //remove tags
+            var tags = question.Tags.ToList();
+            foreach (var item in tags)
+            {
+                _uow.MarkAsDeleted(item);
+            }
+
+
+
             _uow.MarkAsDeleted(question);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
-
-        //public void f()
-        //{
-        //    string inputWordFile = @"C:\Users\hosein\Desktop\nasleghalam temp word file\adabiat-sarasari-95.docx";
-
-        //    object missing = Type.Missing;
-        //    Application app = new Application();
-        //    Document doc = app.Documents.OpenNoRepairDialog(inputWordFile,
-        //        ref missing, ref missing, ref missing, ref missing,
-        //        ref missing, ref missing, ref missing, ref missing,
-        //        ref missing, ref missing, ref missing, ref missing,
-        //        ref missing, ref missing, ref missing);
-
-
-        //    string temp = "";
-        //    foreach (Paragraph p in doc.Paragraphs)
-        //    {
-        //        if (p.Range.Text[0].ToString().All(Char.IsDigit))
-        //        {
-        //            temp = "";
-        //            temp += p.Range.Text;
-        //        }
-        //        else
-        //        {
-        //            temp += p.Range.Text;
-        //        }
-        //    }
-
-
-
-        //    doc.Close();
-        //    app.Quit();
-        //}
-        
-
-
-
-
-
-
-
-
+       
     }
 }

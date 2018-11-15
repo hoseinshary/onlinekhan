@@ -37,5 +37,15 @@ namespace NasleGhalam.ViewModels.Ratio
         public EducationSubGroupViewModel EducationSubGroup { get; set; }
 
 
+
+        [Display(Name = "زیر گروه درسی")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        public int EducationTreeId { get; set; }
+
+        [Display(Name = "زیر گروه درسی")]
+        public EducationTreeViewModel EducationTree { get; set; }
+
+
+
     }
 }

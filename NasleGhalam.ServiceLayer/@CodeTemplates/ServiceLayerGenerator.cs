@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.Topic;
+using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class TopicService
+	public class QuestionService
 	{
-		private const string Title = "مبحث";
+		private const string Title = "سوال";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Topic> _topics;
+        private readonly IDbSet<Question> _questions;
        
-	    public TopicService(IUnitOfWork uow)
+	    public QuestionService(IUnitOfWork uow)
         {
             _uow = uow;
-            _topics = uow.Set<Topic>();
+            _questions = uow.Set<Question>();
         }
 
 
 		/// <summary>
-        /// گرفتن  مبحث با آی دی
+        /// گرفتن  سوال با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public TopicViewModel GetById(int id)
+        public QuestionViewModel GetById(int id)
         {
-            return _topics
+            return _questions
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<TopicViewModel>)
+                .Select(Mapper.Map<QuestionViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه مبحث ها
+        /// گرفتن همه سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<TopicViewModel> GetAll()
+        public IList<QuestionViewModel> GetAll()
         {
-            return _topics
+            return _questions
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<TopicViewModel>)
+                .Select(Mapper.Map<QuestionViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت مبحث
+        /// ثبت سوال
         /// </summary>
-        /// <param name="topicViewModel"></param>
+        /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(TopicCreateViewModel topicViewModel)
+        public MessageResultClient Create(QuestionCreateViewModel questionViewModel)
         {
-            var topic = Mapper.Map<Topic>(topicViewModel);
-            _topics.Add(topic);
+            var question = Mapper.Map<Question>(questionViewModel);
+            _questions.Add(question);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = topic.Id;
+			msgRes.Id = question.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش مبحث
+        /// ویرایش سوال
         /// </summary>
-        /// <param name="topicViewModel"></param>
+        /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(TopicUpdateViewModel topicViewModel)
+        public MessageResultClient Update(QuestionUpdateViewModel questionViewModel)
         {
-            var topic = Mapper.Map<Topic>(topicViewModel);
-            _uow.MarkAsChanged(topic);
+            var question = Mapper.Map<Question>(questionViewModel);
+            _uow.MarkAsChanged(question);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف مبحث
+        /// حذف سوال
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-			var  topicViewModel = GetById(id);
-            if (topicViewModel == null)
+			var  questionViewModel = GetById(id);
+            if (questionViewModel == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var topic = Mapper.Map<Topic>(topicViewModel);
-            _uow.MarkAsDeleted(topic);
+            var question = Mapper.Map<Question>(questionViewModel);
+            _uow.MarkAsDeleted(question);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه مبحث ها برای لیست کشویی
+        /// گرفتن همه سوال ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _topics.Select(current => new SelectViewModel
+            return _questions.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

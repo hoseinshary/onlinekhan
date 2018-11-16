@@ -4,26 +4,67 @@
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
-        <my-btn-create v-if="pageAccess.canCreate"
-                       :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate" />
+        <section class="row">
+          <div class="col-sm-5">
+            <section class="q-ma-sm q-pa-sm shadow-1">
+              <my-select
+                :model="$v.questionObj.EducationTreeId_Grade"
+                :options="educationTree_GradeDdl"
+                @change="gradeDdlChange"
+              />
+              <q-tree
+                :nodes="educationTreeData"
+                color="primary"
+                tick-strategy="leaf"
+                accordion
+                node-key="Id"
+                :ticked.sync="questionObj.EducationTreeIds"
+                ref="educationTree"
+              />
+              <my-select
+                :model="$v.questionObj.LessonId"
+                :options="lessonDdl"
+                class="q-pt-lg"
+                @change="lessonDdlChange"
+              />
+            </section>
+          </div>
+          <div class="col-sm-7">
+            <section class="q-ma-sm q-pa-sm shadow-1">
+              <!-- <my-btn-create
+                v-if="pageAccess.canCreate && lessonDdl.length && !topicTreeData.length"
+                :label="`ایجاد (${modelName}) جدید`"
+                @click="showModalCreate"
+              />-->
+
+              <q-tree
+                :nodes="topicTreeData"
+                tick-strategy="leaf"
+                class="q-pt-lg"
+                color="primary"
+                accordion
+                node-key="Id"
+                ref="topicTree"
+                :ticked.sync="questionObj.TopicIds"
+              />
+            </section>
+          </div>
+          <br>
+        </section>
+        <my-btn-create
+          v-if="pageAccess.canCreate"
+          :label="`ایجاد (${modelName}) جدید`"
+          @click="showModalCreate"
+        />
         <br>
-        <my-table :grid-data="questionGridData"
-                  :columns="questionGridColumn"
-                  hasIndex>
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
+        <my-table :grid-data="questionGridData" :columns="questionGridColumn" hasIndex>
+          <template slot="Id" slot-scope="data">
+            <my-btn-edit v-if="pageAccess.canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <my-btn-delete v-if="pageAccess.canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
         </my-table>
       </div>
     </my-panel>
-
     <!-- modals -->
     <modal-create v-if="pageAccess.canCreate"></modal-create>
     <modal-edit v-if="pageAccess.canEdit"></modal-edit>
@@ -32,141 +73,140 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+  import { mapState, mapActions } from "vuex";
+  import viewModel from "viewModels/questionViewModel";
 
-export default {
-  components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
-  },
-  /**
-   * data
-   */
-  data() {
-    var pageAccess = this.$util.initAccess('/question');
-    return {
-      pageAccess,
-      questionGridColumn: [
-        // {
-        //   title: 'Context',
-        //   data: 'Context'
-        // },
-        {
-          title: 'شماره سوال',
-          data: 'QuestionNumber'
-        },
-        // {
-        //   title: 'LookupId_QuestionType',
-        //   data: 'LookupId_QuestionType'
-        // },
-        // {
-        //   title: 'QuestionPoint',
-        //   data: 'QuestionPoint'
-        // },
-        // {
-        //   title: 'LookupId_QuestionHardnessType',
-        //   data: 'LookupId_QuestionHardnessType'
-        // },
-        // {
-        //   title: 'LookupId_RepeatnessType',
-        //   data: 'LookupId_RepeatnessType'
-        // },
-        // {
-        //   title: 'UseEvaluation',
-        //   data: 'UseEvaluation'
-        // },
-        // {
-        //   title: 'IsStandard',
-        //   data: 'IsStandard'
-        // },
-        // {
-        //   title: 'LookupId_AuthorType',
-        //   data: 'LookupId_AuthorType'
-        // },
-        // {
-        //   title: 'AuthorName',
-        //   data: 'AuthorName'
-        // },
-        // {
-        //   title: 'LookupId_AreaType',
-        //   data: 'LookupId_AreaType'
-        // },
-        // {
-        //   title: 'ResponseSecond',
-        //   data: 'ResponseSecond'
-        // },
-        // {
-        //   title: 'Description',
-        //   data: 'Description'
-        // },
-        // {
-        //   title: 'FileName',
-        //   data: 'FileName'
-        // },
-        // {
-        //   title: 'InsertDateTime',
-        //   data: 'InsertDateTime'
-        // },
-        // {
-        //   title: 'UserId',
-        //   data: 'UserId'
-        // },
-        {
-          title: 'عملیات',
-          data: 'Id',
-          searchable: false,
-          sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
-        }
-      ]
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('questionStore', [
-      'toggleModalCreateStore',
-      'toggleModalEditStore',
-      'toggleModalDeleteStore',
-      'getByIdStore',
-      'fillGridStore',
-      'resetCreateStore',
-      'resetEditStore'
-    ]),
-    showModalCreate() {
-      // reset data on modal show
-      this.resetCreateStore();
-      // show modal
-      this.toggleModalCreateStore(true);
+  export default {
+    components: {
+      "modal-create": () => import("./create"),
+      "modal-edit": () => import("./edit"),
+      "modal-delete": () => import("./delete")
     },
-    showModalEdit(id) {
-      // reset data on modal show
-      this.resetEditStore();
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalEditStore(true);
-      });
+    /**
+     * data
+     */
+    data() {
+      var pageAccess = this.$util.initAccess("/question");
+      return {
+        pageAccess,
+        educationTreeData: [],
+        questionGridColumn: [
+          {
+            title: "شماره سوال",
+            data: "QuestionNumber"
+          },
+
+          {
+            title: "عملیات",
+            data: "Id",
+            searchable: false,
+            sortable: false,
+            visible: pageAccess.canEdit || pageAccess.canDelete
+          }
+        ]
+      };
     },
-    showModalDelete(id) {
-      // get data by id
-      this.getByIdStore(id).then(() => {
+    /**
+     * methods
+     */
+    methods: {
+      ...mapActions("questionStore", [
+        "toggleModalCreateStore",
+        "toggleModalEditStore",
+        "toggleModalDeleteStore",
+        "getByIdStore",
+        "fillGridStore",
+        "resetCreateStore",
+        "resetEditStore"
+      ]),
+      ...mapActions("topicStore", ["fillTreeStore"]),
+      ...mapActions("educationTreeStore", {
+        getAllGrade: "getAllGrade",
+        fillEducationTreeStore: "fillTreeStore",
+        fillEducationTreeByGradeIdStore: "fillTreeByGradeIdStore"
+      }),
+      ...mapActions("lessonStore", {
+        fillLessonDdlStore: "fillDdlStore"
+      }),
+      showModalCreate() {
+        // reset data on modal show
+        this.resetCreateStore();
         // show modal
-        this.toggleModalDeleteStore(true);
-      });
+        this.toggleModalCreateStore(true);
+      },
+      showModalEdit(id) {
+        // reset data on modal show
+        this.resetEditStore();
+        // get data by id
+        this.getByIdStore(id).then(() => {
+          // show modal
+          this.toggleModalEditStore(true);
+        });
+      },
+      showModalDelete(id) {
+        // get data by id
+        this.getByIdStore(id).then(() => {
+          // show modal
+          this.toggleModalDeleteStore(true);
+        });
+      },
+      gradeDdlChange(val) {
+        // filter lesson tree by gradeId
+        var self = this;
+        this.questionObj.EducationTreeIds = [];
+        this.fillEducationTreeByGradeIdStore(val).then(treeData => {
+          self.educationTreeData = [treeData];
+          setTimeout(() => {
+            self.$refs.educationTree.expandAll();
+          }, 300);
+        });
+      },
+      lessonDdlChange(val) {
+        this.fillTreeStore(val);
+      }
+    },
+    computed: {
+      ...mapState("questionStore", {
+        modelName: "modelName",
+        questionGridData: "questionGridData",
+        questionObj: "questionObj"
+      }),
+      ...mapState("educationTreeStore", {
+        educationTree_GradeDdl: "gradeDdl"
+      }),
+      ...mapState("lessonStore", {
+        lessonDdl: "allObjDdl"
+      }),
+      ...mapState("topicStore", {
+        topicTreeData: "topicTreeData"
+      })
+    },
+    validations: viewModel,
+    watch: {
+      "questionObj.EducationTreeIds"(val) {
+        this.fillLessonDdlStore(val);
+      },
+      "questionObj.TopicIds"(newVal, oldVal) {
+        // let node;
+        // if (newVal && oldVal) {
+        //   node = this.$refs.topicTree.getNodeByKey(newVal);
+        //   node.visible = true;
+        //   node = this.$refs.topicTree.getNodeByKey(oldVal);
+        //   node.visible = false;
+        // } else if (newVal) {
+        //   node = this.$refs.topicTree.getNodeByKey(newVal);
+        //   node.visible = true;
+        // } else if (oldVal) {
+        //   node = this.$refs.topicTree.getNodeByKey(oldVal);
+        //   node.visible = false;
+        // }
+      }
+    },
+    created() {
+      // this.fillGridStore();
+      this.getAllGrade();
+      this.fillEducationTreeStore();
     }
-  },
-  computed: {
-    ...mapState('questionStore', {
-      modelName: 'modelName',
-      questionGridData: 'questionGridData'
-    })
-  },
-  created() {
-    this.fillGridStore();
-  }
-};
+  };
 </script>
 

@@ -1,6 +1,8 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { QUESTION_URL as baseUrl } from 'utilities/site-config';
+import {
+  QUESTION_URL as baseUrl
+} from 'utilities/site-config';
 
 /**
  * find index of object in questionGridData by id
@@ -37,7 +39,11 @@ const store = {
       UserId: 0,
       File: '',
       EducationGroupId: 0,
-      EducationGroup_LessonId: 0
+      EducationGroup_LessonId: 0,
+      EducationTreeId_Grade: 0,
+      LessonId: 0,
+      TopicIds: [],
+      EducationTreeIds: []
     },
     questionGridData: [],
     questionDdl: [],
@@ -89,7 +95,9 @@ const store = {
     /**
      * get data by id
      */
-    getByIdStore({ state }, id) {
+    getByIdStore({
+      state
+    }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.questionObj);
@@ -99,7 +107,9 @@ const store = {
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
+    fillGridStore({
+      state
+    }) {
       // fill grid if modelChanged
       if (state.gridModelChanged) {
         // get data
@@ -113,7 +123,9 @@ const store = {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
+    fillDdlStore({
+      state
+    }) {
       // fill grid if modelChanged
       if (state.ddlModelChanged) {
         // get data
@@ -127,12 +139,16 @@ const store = {
     /**
      * vlidate form
      */
-    validateFormStore({ dispatch }, vm) {
+    validateFormStore({
+      dispatch
+    }, vm) {
       debugger;
       // check instance validation
       vm.$v.questionObj.$touch();
       if (vm.$v.questionObj.$error) {
-        dispatch('notifyInvalidForm', vm, { root: true });
+        dispatch('notifyInvalidForm', vm, {
+          root: true
+        });
         return false;
       }
 
@@ -142,7 +158,9 @@ const store = {
     /**
      * model changed
      */
-    modelChangedStore({ state }) {
+    modelChangedStore({
+      state
+    }) {
       state.ddlModelChanged = true;
       state.gridModelChanged = true;
     },
@@ -151,21 +169,29 @@ const store = {
     /**
      * toggle modal create
      */
-    toggleModalCreateStore({ state }, isOpen) {
+    toggleModalCreateStore({
+      state
+    }, isOpen) {
       state.isOpenModalCreate = isOpen;
     },
 
     /**
      * init create vue on load
      */
-    createVueStore({ state }, vm) {
+    createVueStore({
+      state
+    }, vm) {
       state.createVue = vm;
     },
 
     /**
      * submit create data
      */
-    submitCreateStore({ state, commit, dispatch }, closeModal) {
+    submitCreateStore({
+      state,
+      commit,
+      dispatch
+    }, closeModal) {
       debugger;
       state.questionObj.UserId = 0;
       state.questionObj.Context = '1';
@@ -187,13 +213,13 @@ const store = {
           }
 
           dispatch(
-            'notify',
-            {
+            'notify', {
               body: data.Message,
               type: data.MessageType,
               vm: vm
-            },
-            { root: true }
+            }, {
+              root: true
+            }
           );
         });
       });
@@ -202,7 +228,10 @@ const store = {
     /**
      * reset create vue
      */
-    resetCreateStore({ state, commit }) {
+    resetCreateStore({
+      state,
+      commit
+    }) {
       commit('reset', state.createVue.$v);
     },
     //------------------------------------------------
@@ -211,21 +240,29 @@ const store = {
     /**
      * toggle modal edit
      */
-    toggleModalEditStore({ state }, isOpen) {
+    toggleModalEditStore({
+      state
+    }, isOpen) {
       state.isOpenModalEdit = isOpen;
     },
 
     /**
      * init edit vue on load
      */
-    editVueStore({ state }, vm) {
+    editVueStore({
+      state
+    }, vm) {
       state.editVue = vm;
     },
 
     /**
      * submit edit data
      */
-    submitEditStore({ state, commit, dispatch }) {
+    submitEditStore({
+      state,
+      commit,
+      dispatch
+    }) {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
@@ -240,13 +277,13 @@ const store = {
           }
 
           dispatch(
-            'notify',
-            {
+            'notify', {
               body: data.Message,
               type: data.MessageType,
               vm: vm
-            },
-            { root: true }
+            }, {
+              root: true
+            }
           );
         });
       });
@@ -255,7 +292,10 @@ const store = {
     /**
      * reset edit vue
      */
-    resetEditStore({ state, commit }) {
+    resetEditStore({
+      state,
+      commit
+    }) {
       commit('reset', state.editVue.$v);
     },
     //------------------------------------------------
@@ -264,14 +304,20 @@ const store = {
     /**
      * toggle modal delete
      */
-    toggleModalDeleteStore({ state }, isOpen) {
+    toggleModalDeleteStore({
+      state
+    }, isOpen) {
       state.isOpenModalDelete = isOpen;
     },
 
     /**
      * submit to delete data
      */
-    submitDeleteStore({ state, commit, dispatch }, vm) {
+    submitDeleteStore({
+      state,
+      commit,
+      dispatch
+    }, vm) {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
@@ -282,13 +328,13 @@ const store = {
         }
 
         dispatch(
-          'notify',
-          {
+          'notify', {
             body: data.Message,
             type: data.MessageType,
             vm: vm
-          },
-          { root: true }
+          }, {
+            root: true
+          }
         );
       });
     }

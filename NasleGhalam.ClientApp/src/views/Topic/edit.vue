@@ -3,6 +3,7 @@
                  :show="isOpenModalEdit"
                  @confirm="submitEditStore"
                  @reset="resetEditStore"
+                 @open="modalOpen"
                  @close="toggleModalEditStore(false)">
 
     <my-input :model="$v.topicObj.Title"
@@ -18,43 +19,35 @@
               :model="$v.topicObj.IsExamSource">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
+                 :val="false"
+                 label="خیر" />
         <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+                 :val="true"
+                 label="بلی" />
       </template>
     </my-field>
 
-    <!-- <my-select :model="$v.topicObj.LookupId_HardnessType"
-               :options=""
+    <my-select :model="$v.topicObj.LookupId_HardnessType"
+               :options="lookupTopicHardnessTypeDdl"
                class="col-md-6"
                clearable />
 
     <my-select :model="$v.topicObj.LookupId_AreaType"
-               :options=""
+               :options="lookupTopicAreaTypeDdl"
                class="col-md-6"
-               clearable /> -->
+               clearable />
 
     <my-field class="col-md-6"
               :model="$v.topicObj.IsActive">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
+                 :val="false"
+                 label="خیر" />
         <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+                 :val="true"
+                 label="بلی" />
       </template>
     </my-field>
-
-    <my-input :model="$v.topicObj.ParentTopicId"
-              class="col-md-6" />
-
-    <!-- <my-select :model="$v.topicObj.LessonId"
-               :options=""
-               class="col-md-6"
-               clearable /> -->
 
   </my-modal-edit>
 </template>
@@ -73,7 +66,15 @@ export default {
       'editVueStore',
       'submitEditStore',
       'resetEditStore'
-    ])
+    ]),
+    ...mapActions('lookupStore', [
+      'fillTopicHardnessTypeDdlStore',
+      'fillTopicAreaTypeDdlStore'
+    ]),
+    modalOpen: function() {
+      this.fillTopicHardnessTypeDdlStore();
+      this.fillTopicAreaTypeDdlStore();
+    }
   },
   /**
    * computed
@@ -83,7 +84,11 @@ export default {
       modelName: 'modelName',
       topicObj: 'topicObj',
       isOpenModalEdit: 'isOpenModalEdit'
-    })
+    }),
+    ...mapState('lookupStore', [
+      'lookupTopicHardnessTypeDdl',
+      'lookupTopicAreaTypeDdl'
+    ])
   },
   /**
    * validations

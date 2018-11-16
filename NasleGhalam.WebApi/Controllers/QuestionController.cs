@@ -1,19 +1,23 @@
-﻿using System.Web.Http;
+﻿using System.Web;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Question;
 using NasleGhalam.WebApi.Extentions;
-using System.Web;
+using System;
+using System.IO;
+using NasleGhalam.WebApi.Util;
+using System.Collections.Generic;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
-	/// <author>
-	///     name: حسین شریعتمداری
-	///     date: 26/05/1397
-	/// </author>
-	public class QuestionController : ApiController
+    /// <author>
+    ///     name: حسین شری
+    ///     date: 22/8/97
+    /// </author>
+    public class QuestionController : ApiController
     {
         private readonly QuestionService _questionService;
         public QuestionController(QuestionService questionService)
@@ -23,9 +27,9 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAll([FromUri] IEnumerable<int> ids)
         {
-            return Ok(_questionService.GetAll());
+            return Ok(_questionService.GetAllByTopicIds(ids));
         }
 
 
@@ -44,105 +48,40 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(QuestionCreateViewModel questionViewModel)
+        [CheckWordFileValidation("word",1024)]
+        public IHttpActionResult Create([FromUri]QuestionCreateViewModel questionViewModel)
         {
-            var files = HttpContext.Current.Request.Files;
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
             
-            var wordFile = files.Get("wordFile");
-            
-            if (wordFile != null )
+            if (wordFile != null && wordFile.ContentLength > 0)
             {
-                HttpPostedFileBase wordFilebase = new HttpPostedFileWrapper(wordFile);
-                var resualtWord = CheckFile.UploadWordFile(wordFilebase, 1024 * 5);
-
-                
-
-                if (resualtWord == "OK" )
-                {
-                    var msgRes = _questionService.Create(questionViewModel, wordFile, Request.GetUserId() );
-                    return Ok(msgRes);
-                }
-                else
-                {
-                    return Ok(new MessageResultClient
-                    {
-                        Message = resualtWord 
-                    });
-                }
+                questionViewModel.FileName = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
             }
-            else
+         
+
+            var msgRes = _questionService.Create(questionViewModel);
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
-                return Ok(new MessageResultClient
-                {
-                    Message = "خطای فایل!"
-                });
+                wordFile.SaveAs(SitePath.GetAxillaryBookAbsPath(questionViewModel.FileName));
             }
 
-
-            
+            return Ok(msgRes);
         }
-
-        [HttpPost]
-        [CheckUserAccess(ActionBits.QuestionCreateAccess)]
-        [CheckModelValidation]
-        public IHttpActionResult CreateMulti(QuestionTempViewModel questionViewModel)
-        {
-            var files = HttpContext.Current.Request.Files;
-            var wordFile = files.Get("wordFile");
-            var excelFile = files.Get("excelFile");
-
-
-
-            if (wordFile != null)
-            {
-                HttpPostedFileBase wordFilebase = new HttpPostedFileWrapper(wordFile);
-                var resualtWord = CheckFile.UploadWordFile(wordFilebase, 1024 * 5);
-
-                HttpPostedFileBase excelFilebase = new HttpPostedFileWrapper(wordFile);
-                var resualtExcel = CheckFile.UploadWordFile(excelFilebase, 1024 * 5);
-
-                if (resualtWord == "OK" && resualtExcel == "OK")
-                {
-                    var msgRes = _questionService.CreateMulti(questionViewModel, wordFile, excelFile);
-                    return Ok(msgRes);
-                }
-                else
-                {
-                    return Ok(new MessageResultClient
-                    {
-                        Message = resualtWord + resualtExcel
-                    });
-                }
-            }
-            else
-            {
-                return Ok(new MessageResultClient
-                {
-                    Message = "خطای فایل!"
-                });
-            }
-
-
-
-        }
-
 
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(QuestionCreateViewModel questionViewModel)
+        public IHttpActionResult Update(QuestionUpdateViewModel questionViewModel)
         {
-            var msgRes = _questionService.Update(questionViewModel);
-            return Ok(msgRes);
+            return Ok(_questionService.Update(questionViewModel));
         }
 
 
         [HttpPost, CheckUserAccess(ActionBits.QuestionDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _questionService.Delete(id);
-            return Ok(msgRes);
+            return Ok(_questionService.Delete(id));
         }
     }
 }

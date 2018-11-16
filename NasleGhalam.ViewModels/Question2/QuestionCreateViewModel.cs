@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using NasleGhalam.ViewModels._MediaFormatter;
 using NasleGhalam.ViewModels._Attributes;
 
-namespace NasleGhalam.ViewModels.Question
+namespace NasleGhalam.ViewModels.Question2
 {
     public class QuestionCreateViewModel :IMultiPartMediaTypeFormatter
     {
         
-     
+        public int Id { get; set; }
 
 
         [Display(Name = "متن")]
@@ -80,13 +80,6 @@ namespace NasleGhalam.ViewModels.Question
         public int UserId { get; set; }
 
 
-        [Display(Name = "فعال")]
-        public bool IsActive { get; set; }
-
-
-        
-        public string FilePath { get; set; }
-      
 
         private List<int> topicsId = new List<int>();
 

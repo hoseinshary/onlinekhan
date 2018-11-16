@@ -54,7 +54,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                     .CreateResponse(HttpStatusCode.OK,
                         new MessageResultClient
                         {
-                            Message = $" عکس ارسالی باید کمتر از {_WordFileSize} کیلو بایت باشد.", // todo: عکس :D
+                            Message = $" فایل ورد ارسالی باید کمتر از {_WordFileSize} کیلو بایت باشد.", // todo: عکس :D
                             MessageType = MessageType.Error
                         });
             }

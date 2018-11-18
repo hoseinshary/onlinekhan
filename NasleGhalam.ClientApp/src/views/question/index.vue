@@ -187,19 +187,7 @@
         this.fillLessonDdlStore(val);
       },
       "questionObj.TopicIds"(newVal, oldVal) {
-        // let node;
-        // if (newVal && oldVal) {
-        //   node = this.$refs.topicTree.getNodeByKey(newVal);
-        //   node.visible = true;
-        //   node = this.$refs.topicTree.getNodeByKey(oldVal);
-        //   node.visible = false;
-        // } else if (newVal) {
-        //   node = this.$refs.topicTree.getNodeByKey(newVal);
-        //   node.visible = true;
-        // } else if (oldVal) {
-        //   node = this.$refs.topicTree.getNodeByKey(oldVal);
-        //   node.visible = false;
-        // }
+        this.fillGridStore();
       }
     },
     created() {

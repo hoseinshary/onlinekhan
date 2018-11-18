@@ -113,7 +113,9 @@ const store = {
       // fill grid if modelChanged
       if (state.gridModelChanged) {
         // get data
-        axios.get(`${baseUrl}/GetAll`).then(response => {
+        axios.get(`${baseUrl}/GetAll?` + util.toParam({
+          Ids: state.questionObj.TopicIds
+        })).then(response => {
           state.questionGridData = response.data;
           state.gridModelChanged = false;
         });

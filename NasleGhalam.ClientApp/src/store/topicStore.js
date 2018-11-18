@@ -6,8 +6,8 @@ import { TOPIC_URL as baseUrl } from 'utilities/site-config';
  * find index of object in topicTreeData by id
  * @param {Number} id
  */
-function getIndexById(children, id) {
-  return children.findIndex(o => o.Id == id);
+function getIndexById(arr, id) {
+  return arr.findIndex(o => o.Id == id);
 }
 
 const store = {
@@ -54,14 +54,28 @@ const store = {
         'Id',
         createdObj.ParentTopicId
       );
-      node.children = node.children || [];
-      node.children.push({
-        Id: createdObj.Id,
-        label: createdObj.Title,
-        ParentTopicId: createdObj.ParentTopicId,
-        header: 'custome',
-        visible: false
-      });
+      debugger;
+      if (!node) {
+        node = {
+          Id: createdObj.Id,
+          label: createdObj.Title,
+          ParentTopicId: createdObj.ParentTopicId,
+          header: 'custome',
+          visible: false,
+          children: []
+        };
+        state.topicTreeData.push(node);
+      } else {
+        node.children.push({
+          Id: createdObj.Id,
+          label: createdObj.Title,
+          ParentTopicId: createdObj.ParentTopicId,
+          header: 'custome',
+          visible: false,
+          children: []
+        });
+      }
+
       state.topicIndexObj.selectedTopicId = null;
     },
 
@@ -82,14 +96,24 @@ const store = {
      * delete from topicTreeData
      */
     delete(state) {
-      let node = util.searchTreeArray(
+      let index = 0;
+      let parentNode = util.searchTreeArray(
         state.topicTreeData,
         'Id',
         state.topicObj.ParentTopicId
       );
-      let index = getIndexById(node.children, state.selectedId);
-      if (index < 0) return;
-      node.children.splice(index, 1);
+      debugger;
+      // if has parentNode
+      if (parentNode) {
+        index = getIndexById(parentNode.children, state.selectedId);
+        if (index < 0) return;
+        parentNode.children.splice(index, 1);
+      } else {
+        // if has not parentNode
+        index = getIndexById(state.topicTreeData, state.selectedId);
+        if (index < 0) return;
+        state.topicTreeData.splice(index, 1);
+      }
     },
 
     /**
@@ -110,6 +134,14 @@ const store = {
     }
   },
   actions: {
+    /**
+     * clear topic tree
+     */
+    clearTreeStore({ state }) {
+      let len = state.topicTreeData.length;
+      state.topicTreeData.splice(0, len);
+    },
+
     /**
      * get data by id
      */

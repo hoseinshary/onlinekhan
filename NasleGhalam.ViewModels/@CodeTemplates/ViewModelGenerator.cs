@@ -1,79 +1,35 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Question
+namespace NasleGhalam.ViewModels.EducationBook
 {
-	public class QuestionViewModel
+	public class EducationBookViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public string Context { get; set; }
+		public string Name { get; set; }
 
 
 		[Display(Name = "")]
-		public int QuestionNumber { get; set; }
+		public short PublishYear { get; set; }
 
 
 		[Display(Name = "")]
-		public int LookupId_QuestionType { get; set; }
-
-
-		[Display(Name = "")]
-		public int QuestionPoint { get; set; }
-
-
-		[Display(Name = "")]
-		public int LookupId_QuestionHardnessType { get; set; }
-
-
-		[Display(Name = "")]
-		public int LookupId_RepeatnessType { get; set; }
-
-
-		[Display(Name = "")]
-		public bool UseEvaluation { get; set; }
-
-
-		[Display(Name = "")]
-		public bool IsStandard { get; set; }
-
-
-		[Display(Name = "")]
-		public int LookupId_AuthorType { get; set; }
-
-
-		[Display(Name = "")]
-		public string AuthorName { get; set; }
-
-
-		[Display(Name = "")]
-		public short ResponseSecond { get; set; }
-
-
-		[Display(Name = "")]
-		public int LookupId_AreaType { get; set; }
-
-
-		[Display(Name = "")]
-		public string Description { get; set; }
-
-
-		[Display(Name = "")]
-		public string FileName { get; set; }
-
-
-		[Display(Name = "")]
-		public DateTime InsertDateTime { get; set; }
-
-
-		[Display(Name = "")]
-		public int UserId { get; set; }
+		public bool IsExamSource { get; set; }
 
 
 		[Display(Name = "")]
 		public bool IsActive { get; set; }
+
+
+		[Display(Name = "")]
+		public bool IsChanged { get; set; }
+
+
+		[Display(Name = "")]
+		public int LessonId { get; set; }
 
 
 	}

@@ -121,7 +121,8 @@ export default {
       'getByIdStore',
       'fillTreeStore',
       'resetCreateStore',
-      'resetEditStore'
+      'resetEditStore',
+      'clearTreeStore'
     ]),
     ...mapActions('educationTreeStore', {
       getAllGrade: 'getAllGrade',
@@ -157,7 +158,7 @@ export default {
       // filter lesson tree by gradeId
       var self = this;
       this.topicIndexObj.LessonId = 0;
-      this.topicTreeData.splice(0, this.topicTreeData.length);
+      this.clearTreeStore();
       this.topicIndexObj.EducationTreeIds = [];
       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
         self.educationTreeData = [treeData];
@@ -188,21 +189,23 @@ export default {
   validations: viewModel,
   watch: {
     'topicIndexObj.EducationTreeIds'(val) {
+      this.clearTreeStore();
+      this.topicIndexObj.LessonId = 0;
       this.fillLessonDdlStore(val);
     },
     'topicIndexObj.selectedTopicId'(newVal, oldVal) {
       let node;
       if (newVal && oldVal) {
         node = this.$refs.topicTree.getNodeByKey(newVal);
-        node.visible = true;
+        if (node) node.visible = true;
         node = this.$refs.topicTree.getNodeByKey(oldVal);
-        node.visible = false;
+        if (node) node.visible = false;
       } else if (newVal) {
         node = this.$refs.topicTree.getNodeByKey(newVal);
-        node.visible = true;
+        if (node) node.visible = true;
       } else if (oldVal) {
         node = this.$refs.topicTree.getNodeByKey(oldVal);
-        node.visible = false;
+        if (node) node.visible = false;
       }
       this.topicObj.ParentTopicId = newVal;
     }

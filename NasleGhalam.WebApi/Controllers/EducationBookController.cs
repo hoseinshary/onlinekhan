@@ -23,7 +23,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
         public IHttpActionResult GetAllByGradeLevelId(int id)
         {
-            return Ok(_educationBookService.GetAllByGradeLevelId(id));
+            return Ok(_educationBookService.GetAllByLessonId(id));
         }
 
 
@@ -42,7 +42,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationBookCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(EducationBookViewModel educationBookViewModel)
+        public IHttpActionResult Create(EducationBookCreateViewModel educationBookViewModel)
         {
             var msgRes = _educationBookService.Create(educationBookViewModel);
             return Ok(msgRes);
@@ -52,7 +52,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationBookUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(EducationBookViewModel educationBookViewModel)
+        public IHttpActionResult Update(EducationBookCreateViewModel educationBookViewModel)
         {
             var msgRes = _educationBookService.Update(educationBookViewModel);
             return Ok(msgRes);

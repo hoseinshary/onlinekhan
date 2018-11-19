@@ -27,6 +27,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public ICollection<Topic> Topics { get; set; }
 
+        public ICollection<QuestionGroup> QuestionGroups { get; set; }
+
         public ICollection<EducationBook> EducationBooks { get; set; }
     }
 }

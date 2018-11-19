@@ -1,60 +1,71 @@
 <template>
-  <section class="col-md-11">
+  <section class="col-12 q-px-sm">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
-        <section class="row gutter-md">
-          <my-select :model="$v.educationBookIndexObj.GradeId"
-                     :options="gradeDdl"
-                     class="col-md-3 col-sm-4"
-                     @change="fillGradeLevelByGradeIdDdl($event)" />
+        <section class="row gutter-sm">
 
-          <my-select :model="$v.educationBookIndexObj.GradeLevelId"
-                     :options="gradeLevelByGradeDdl"
-                     class="col-md-3 col-sm-4"
-                     @change="fillGridStore($event)" />
+          <div class="col-sm-5">
+            <section class="q-ma-sm q-pa-sm shadow-1">
+              <my-select :model="$v.topicIndexObj.EducationTreeId_Grade"
+                         :options="educationTree_GradeDdl"
+                         @change="gradeDdlChange" />
 
-          <div class="col-md-3 col-sm-4">
+              <q-tree :nodes="educationTreeData"
+                      color="primary"
+                      tick-strategy="leaf"
+                      accordion
+                      node-key="Id"
+                      :ticked.sync="topicIndexObj.EducationTreeIds"
+                      ref="educationTree" />
+
+              <my-select :model="$v.topicIndexObj.LessonId"
+                         :options="lessonDdl"
+                         class="q-pt-lg"
+                         @change="lessonDdlChange" />
+            </section>
+          </div>
+
+          <div class="col-sm-7">
             <my-btn-create v-if="pageAccess.canCreate"
                            :label="`ایجاد (${modelName}) جدید`"
                            @click="showModalCreate" />
+            <br>
+            <my-table :grid-data="educationBookGridData"
+                      :columns="educationBookGridColumn"
+                      hasIndex>
+
+              <template slot="IsActive"
+                        slot-scope="data">
+                <q-checkbox v-model="data.row.IsActive"
+                            readonly />
+              </template>
+
+              <template slot="IsExamSource"
+                        slot-scope="data">
+                <q-checkbox v-model="data.row.IsExamSource"
+                            readonly />
+              </template>
+
+              <template slot="IsChanged"
+                        slot-scope="data">
+                <q-checkbox v-model="data.row.IsChanged"
+                            readonly />
+              </template>
+
+              <template slot="Id"
+                        slot-scope="data">
+                <my-btn-edit v-if="pageAccess.canEdit"
+                             round
+                             @click="showModalEdit(data.row.Id)" />
+                <my-btn-delete v-if="pageAccess.canDelete"
+                               round
+                               @click="showModalDelete(data.row.Id)" />
+              </template>
+            </my-table>
           </div>
         </section>
-
-        <br>
-        <my-table :grid-data="educationBookGridData"
-                  :columns="educationBookGridColumn"
-                  hasIndex>
-
-          <template slot="IsActive"
-                    slot-scope="data">
-            <q-checkbox v-model="data.row.IsActive"
-                        readonly />
-          </template>
-
-          <template slot="IsExamSource"
-                    slot-scope="data">
-            <q-checkbox v-model="data.row.IsExamSource"
-                        readonly />
-          </template>
-
-          <template slot="IsChanged"
-                    slot-scope="data">
-            <q-checkbox v-model="data.row.IsChanged"
-                        readonly />
-          </template>
-
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
-          </template>
-        </my-table>
       </div>
     </my-panel>
 
@@ -88,10 +99,6 @@ export default {
         GradeLevelId: undefined
       },
       educationBookGridColumn: [
-        {
-          title: 'درس',
-          data: 'LessonName'
-        },
         {
           title: 'نام کتاب',
           data: 'Name'
@@ -135,12 +142,13 @@ export default {
       'resetCreateStore',
       'resetEditStore'
     ]),
-    ...mapActions({
-      fillGradeDdl: 'gradeStore/fillDdlStore',
-      fillGradeLevelByGradeIdDdl: 'gradeLevelStore/fillGradeLevelByGradeId',
-      fillLessonByEducationGroupDdlStore:
-        'lessonStore/fillLessonByEducationGroupDdlStore',
-      fillTopicTreeStore: 'topicStore/GetAllTreeStore'
+    ...mapActions('educationTreeStore', {
+      getAllGrade: 'getAllGrade',
+      fillEducationTreeStore: 'fillTreeStore',
+      fillEducationTreeByGradeIdStore: 'fillTreeByGradeIdStore'
+    }),
+    ...mapActions('lessonStore', {
+      fillLessonDdlStore: 'fillDdlStore'
     }),
     showModalCreate() {
       this.$v.educationBookIndexObj.$touch();
@@ -194,13 +202,16 @@ export default {
       educationBookObj: 'educationBookObj',
       educationBookGridData: 'educationBookGridData'
     }),
-    ...mapState({
-      gradeDdl: s => s.gradeStore.gradeDdl,
-      gradeLevelByGradeDdl: s => s.gradeLevelStore.gradeLevelByGradeDdl
+    ...mapState('educationTreeStore', {
+      educationTree_GradeDdl: 'gradeDdl'
+    }),
+    ...mapState('lessonStore', {
+      lessonDdl: 'allObjDdl'
     })
   },
   created() {
-    this.fillGradeDdl();
+    this.getAllGrade();
+    this.fillEducationTreeStore();
   }
 };
 </script>

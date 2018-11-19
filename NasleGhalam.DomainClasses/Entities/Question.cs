@@ -75,5 +75,6 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<QuestionAnswer> Answers { get; set; }
 
         public ICollection<Topic> Topics { get; set; }
+        public ICollection<QuestionGroup> QuestionGroups { get; set; }
     }
 }

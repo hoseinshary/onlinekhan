@@ -1,7 +1,7 @@
 import { displayName, requiredDdl } from 'plugins/vuelidate';
 
 export default {
-  topicIndexObj: {
+  educationBookIndexObj: {
     EducationTreeId_Grade: {
       displayName: displayName('مقطع تحصیلی'),
       requiredDdl: requiredDdl(0)

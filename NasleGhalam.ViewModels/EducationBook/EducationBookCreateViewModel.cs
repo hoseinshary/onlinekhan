@@ -27,9 +27,9 @@ namespace NasleGhalam.ViewModels.EducationBook
         [Display(Name = "تغییر نسبت به سال قبل")]
         public bool IsChanged { get; set; }
 
-        [Display(Name = "پایه")]
+        [Display(Name = "درس")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
-        public int GradeLevelId { get; set; }
+        public int LessonId { get; set; }
 
         public IEnumerable<int> TopicIds { get; set; }
     }

@@ -20,7 +20,7 @@ namespace NasleGhalam.ViewModels.EducationBook
 
         public int LessonId { get; set; }
 
-        public LessonViewModel Lesson { get; set; }
+        //public LessonViewModel Lesson { get; set; }
 
         public ICollection<TopicViewModel> Topics { get; set; }
     }

@@ -21,7 +21,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.EducationBookReadAccess)]
-        public IHttpActionResult GetAllByGradeLevelId(int id)
+        public IHttpActionResult GetAllByLessonId(int id)
         {
             return Ok(_educationBookService.GetAllByLessonId(id));
         }

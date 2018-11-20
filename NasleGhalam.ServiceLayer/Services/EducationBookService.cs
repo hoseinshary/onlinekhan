@@ -48,7 +48,6 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<EducationBookViewModel> GetAllByLessonId(int lessonId)
         {
             return _educationBooks
-                .Include(current => current.Lesson)
                 .Where(current => current.LessonId == lessonId)
                 .AsEnumerable()
                 .Select(Mapper.Map<EducationBookViewModel>)
@@ -120,17 +119,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-            var educationBookViewModel = GetById(id);
-            if (educationBookViewModel == null)
+            var educationBook = _educationBooks
+                .Include(current => current.Topics)
+                .FirstOrDefault(current => current.Id == id);
+
+            if (educationBook == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
-            foreach (var topicViewModel in educationBookViewModel.Topics)
+            var topics = educationBook.Topics.ToList();
+            foreach (var topic in topics)
             {
-                var topic = Mapper.Map<Topic>(topicViewModel);
-                _uow.MarkAsUnChanged(topic);
                 educationBook.Topics.Remove(topic);
             }
             _uow.MarkAsDeleted(educationBook);

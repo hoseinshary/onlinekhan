@@ -157,16 +157,18 @@ const store = {
      */
     fillTreeStore({ state }, lessonId) {
       // get tree
-      axios.get(`${baseUrl}/GetAllByLessonId/${lessonId}`).then(response => {
-        let res = response.data.map(x => ({
-          Id: x.Id,
-          label: x.Title,
-          ParentTopicId: x.ParentTopicId,
-          header: 'custome',
-          visible: false
-        }));
-        state.topicTreeData = util.listToTree(res, 'Id', 'ParentTopicId');
-      });
+      return axios
+        .get(`${baseUrl}/GetAllByLessonId/${lessonId}`)
+        .then(response => {
+          let res = response.data.map(x => ({
+            Id: x.Id,
+            label: x.Title,
+            ParentTopicId: x.ParentTopicId,
+            header: 'custome',
+            visible: false
+          }));
+          state.topicTreeData = util.listToTree(res, 'Id', 'ParentTopicId');
+        });
     },
 
     /**

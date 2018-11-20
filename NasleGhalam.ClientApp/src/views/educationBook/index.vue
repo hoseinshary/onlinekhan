@@ -8,7 +8,7 @@
 
           <div class="col-sm-5">
             <section class="q-ma-sm q-pa-sm shadow-1">
-              <my-select :model="$v.topicIndexObj.EducationTreeId_Grade"
+              <my-select :model="$v.educationBookIndexObj.EducationTreeId_Grade"
                          :options="educationTree_GradeDdl"
                          @change="gradeDdlChange" />
 
@@ -16,11 +16,11 @@
                       color="primary"
                       tick-strategy="leaf"
                       accordion
+                      :ticked.sync="educationBookIndexObj.EducationTreeIds"
                       node-key="Id"
-                      :ticked.sync="topicIndexObj.EducationTreeIds"
                       ref="educationTree" />
 
-              <my-select :model="$v.topicIndexObj.LessonId"
+              <my-select :model="$v.educationBookIndexObj.LessonId"
                          :options="lessonDdl"
                          class="q-pt-lg"
                          @change="lessonDdlChange" />
@@ -28,7 +28,7 @@
           </div>
 
           <div class="col-sm-7">
-            <my-btn-create v-if="pageAccess.canCreate"
+            <my-btn-create v-if="pageAccess.canCreate && educationBookIndexObj.LessonId > 0"
                            :label="`ایجاد (${modelName}) جدید`"
                            @click="showModalCreate" />
             <br>
@@ -94,10 +94,7 @@ export default {
     var pageAccess = this.$util.initAccess('/educationBook');
     return {
       pageAccess,
-      educationBookIndexObj: {
-        GradeId: undefined,
-        GradeLevelId: undefined
-      },
+      educationTreeData: [],
       educationBookGridColumn: [
         {
           title: 'نام کتاب',
@@ -151,32 +148,16 @@ export default {
       fillLessonDdlStore: 'fillDdlStore'
     }),
     showModalCreate() {
-      this.$v.educationBookIndexObj.$touch();
-      if (this.$v.educationBookIndexObj.$error) {
-        return;
-      }
       // reset data on modal show
       this.resetCreateStore();
-      //set GradeLevelId
-      this.educationBookObj.GradeLevelId = this.educationBookIndexObj.GradeLevelId;
       // show modal
       this.toggleModalCreateStore(true);
     },
     showModalEdit(id) {
-      this.$v.educationBookIndexObj.$touch();
-      if (this.$v.educationBookIndexObj.$error) {
-        return;
-      }
       // reset data on modal show
       this.resetEditStore();
-      var vm = this;
-      // get data by id
-      this.getByIdStore(id).then(data => {
-        this.fillLessonByEducationGroupDdlStore(data.EducationGroupId);
-        this.fillTopicTreeStore(data.EducationGroup_LessonId).then(() => {
-          // after tree loaded
-          vm.$refs.modalEdit.$refs.topicTree.expandAll();
-        });
+      // show modal
+      this.getByIdStore(id).then(() => {
         // show modal
         this.toggleModalEditStore(true);
       });
@@ -187,6 +168,22 @@ export default {
         // show modal
         this.toggleModalDeleteStore(true);
       });
+    },
+    gradeDdlChange(val) {
+      // filter lesson tree by gradeId
+      var self = this;
+      this.educationBookIndexObj.LessonId = 0;
+      this.educationBookIndexObj.EducationTreeIds = [];
+      this.fillEducationTreeByGradeIdStore(val).then(treeData => {
+        self.educationTreeData = [treeData];
+        setTimeout(() => {
+          self.$refs.educationTree.expandAll();
+        }, 300);
+      });
+    },
+    lessonDdlChange(val) {
+      this.fillGridStore(val);
+      this.educationBookObj.LessonId = val;
     }
   },
   /**
@@ -200,6 +197,7 @@ export default {
     ...mapState('educationBookStore', {
       modelName: 'modelName',
       educationBookObj: 'educationBookObj',
+      educationBookIndexObj: 'educationBookIndexObj',
       educationBookGridData: 'educationBookGridData'
     }),
     ...mapState('educationTreeStore', {
@@ -208,6 +206,12 @@ export default {
     ...mapState('lessonStore', {
       lessonDdl: 'allObjDdl'
     })
+  },
+  watch: {
+    'educationBookIndexObj.EducationTreeIds'(val) {
+      this.educationBookIndexObj.LessonId = 0;
+      this.fillLessonDdlStore(val);
+    }
   },
   created() {
     this.getAllGrade();

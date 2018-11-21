@@ -8,7 +8,9 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
     {
         public EducationBookProfile()
         {
-            CreateMap<EducationBookViewModel, EducationBook>();
+            CreateMap<EducationBookViewModel, EducationBook>().ReverseMap();
+            CreateMap<EducationBookCreateViewModel, EducationBook>();
+            CreateMap<EducationBookUpdateViewModel, EducationBook>();
         }
     }
 }

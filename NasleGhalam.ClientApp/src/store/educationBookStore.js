@@ -25,10 +25,13 @@ const store = {
       IsActive: false,
       IsChanged: false,
       LessonName: '',
-      GradeLevelId: undefined,
-      EducationGroup_LessonId: 0,
-      EducationGroupId: 0,
+      LessonId: 0,
       TopicIds: []
+    },
+    educationBookIndexObj: {
+      LessonId: 0,
+      EducationTreeId_Grade: 0,
+      EducationTreeIds: []
     },
     educationBookGridData: [],
     educationBookDdl: [],
@@ -77,8 +80,6 @@ const store = {
     reset(state, $v) {
       state.educationBookObj.Name = '';
       state.educationBookObj.PublishYear = undefined;
-      state.educationBookObj.EducationGroup_LessonId = undefined;
-      state.educationBookObj.EducationGroupId = undefined;
       state.educationBookObj.IsExamSource = false;
       state.educationBookObj.IsActive = false;
       state.educationBookObj.IsChanged = false;
@@ -98,6 +99,8 @@ const store = {
       return axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.educationBookObj);
+        debugger;
+        state.educationBookObj.TopicIds = response.data.Topics.map(x => x.Id);
         return response.data;
       });
     },
@@ -109,7 +112,7 @@ const store = {
       if (gradeLevelId) {
         // get data
         axios
-          .get(`${baseUrl}/GetAllByGradeLevelId/${gradeLevelId}`)
+          .get(`${baseUrl}/GetAllByLessonId/${gradeLevelId}`)
           .then(response => {
             state.educationBookGridData = response.data;
           });
@@ -202,9 +205,8 @@ const store = {
     /**
      * reset create vue
      */
-    resetCreateStore({ state, commit, rootState }) {
+    resetCreateStore({ state, commit }) {
       commit('reset', state.createVue.$v);
-      util.clearArray(rootState.topicStore.treeLst);
     },
     //------------------------------------------------
 
@@ -258,9 +260,8 @@ const store = {
     /**
      * reset edit vue
      */
-    resetEditStore({ state, commit, rootState }) {
+    resetEditStore({ state, commit }) {
       commit('reset', state.editVue.$v);
-      util.clearArray(rootState.topicStore.treeLst);
     },
     //------------------------------------------------
 

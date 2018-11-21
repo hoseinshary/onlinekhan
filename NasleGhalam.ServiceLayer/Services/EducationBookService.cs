@@ -32,41 +32,26 @@ namespace NasleGhalam.ServiceLayer.Services
         public EducationBookViewModel GetById(int id)
         {
             return _educationBooks
+                .Include(current => current.Topics)
                 .Where(current => current.Id == id)
-                .Select(current => new EducationBookViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    IsActive = current.IsActive,
-                    IsChanged = current.IsChanged,
-                    IsExamSource = current.IsExamSource,
-                    PublishYear = current.PublishYear,
-                    EducationGroupId = current.EducationGroup_Lesson.EducationGroupId,
-                    EducationGroup_LessonId = current.EducationGroup_LessonId,
-                    GradeLevelId = current.GradeLevelId,
-                    TopicIds = current.Topics.Select(topic => topic.Id)
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<EducationBookViewModel>)
+                .FirstOrDefault();
         }
 
 
         /// <summary>
-        ///  گرفتن همه کتاب های درسی یک پایه ی تحصیلی
+        ///  گرفتن همه کتاب های درسی یک درس
         /// </summary>
         /// <returns></returns>
-        public IList<EducationBookViewModel> GetAllByGradeLevelId(int gradeLevelId)
+        public IList<EducationBookViewModel> GetAllByLessonId(int lessonId)
         {
             return _educationBooks
-                .Where(current => current.GradeLevelId == gradeLevelId)
-                .Select(current => new EducationBookViewModel()
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    IsActive = current.IsActive,
-                    IsChanged = current.IsChanged,
-                    IsExamSource = current.IsExamSource,
-                    PublishYear = current.PublishYear,
-                    LessonName = current.EducationGroup_Lesson.Lesson.Name
-                }).ToList();
+                .Where(current => current.LessonId == lessonId)
+                .AsEnumerable()
+                .Select(Mapper.Map<EducationBookViewModel>)
+                .ToList();
         }
 
 
@@ -75,23 +60,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationBookViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(EducationBookViewModel educationBookViewModel)
+        public MessageResultClient Create(EducationBookCreateViewModel educationBookViewModel)
         {
             var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
-            var topics = _uow.Set<Topic>();
 
             foreach (var topicId in educationBookViewModel.TopicIds)
             {
-                var topic = new Topic()
-                {
-                    Id = topicId
-                };
-                topics.Attach(topic);
+                var topic = new Topic() { Id = topicId };
+                _uow.MarkAsUnChanged(topic);
                 educationBook.Topics.Add(topic);
             }
             _educationBooks.Add(educationBook);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationBook.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
@@ -102,23 +83,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationBookViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(EducationBookViewModel educationBookViewModel)
+        public MessageResultClient Update(EducationBookCreateViewModel educationBookViewModel)
         {
             var transaction = _uow.BeginTransaction();
-            _uow.ExecuteSqlCommand("delete from Topics_EducationBooks where EducationBookId=@id", 
+            _uow.ExecuteSqlCommand("delete from Topics_EducationBooks where EducationBookId=@id",
                 new SqlParameter("@id", educationBookViewModel.Id));
 
             var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
             _uow.MarkAsChanged(educationBook);
-            var topics = _uow.Set<Topic>();
 
             foreach (var topicId in educationBookViewModel.TopicIds)
             {
-                var topic = new Topic()
-                {
-                    Id = topicId
-                };
-                topics.Attach(topic);
+                var topic = new Topic() { Id = topicId };
+                _uow.MarkAsUnChanged(topic);
                 educationBook.Topics.Add(topic);
             }
 
@@ -142,23 +119,23 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-            var educationBookViewModel = GetById(id);
-            if (educationBookViewModel == null)
+            var educationBook = _educationBooks
+                .Include(current => current.Topics)
+                .FirstOrDefault(current => current.Id == id);
+
+            if (educationBook == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
-            var topics = _uow.Set<Topic>();
-            foreach (var topicId in educationBookViewModel.TopicIds)
-            {
-                var topic = new Topic() { Id = topicId };
-                topics.Attach(topic);
-                _uow.MarkAsDeleted(topic);
-            }
 
-            var educationBook = Mapper.Map<EducationBook>(educationBookViewModel);
+            var topics = educationBook.Topics.ToList();
+            foreach (var topic in topics)
+            {
+                educationBook.Topics.Remove(topic);
+            }
             _uow.MarkAsDeleted(educationBook);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 

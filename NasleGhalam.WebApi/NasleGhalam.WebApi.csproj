@@ -107,6 +107,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AxillaryBookController.cs" />
     <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\EducationBookController.cs" />
     <Compile Include="Controllers\EducationSubGroupController.cs" />
     <Compile Include="Controllers\EducationTreeController.cs" />
     <Compile Include="Controllers\EducationYearController.cs" />

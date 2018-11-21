@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
+    <Compile Include="EducationBook\EducationBookUpdateViewModel.cs" />
+    <Compile Include="EducationBook\EducationBookViewModel.cs" />
     <Compile Include="EducationSubGroup\EducationSubGroupCreateViewModel.cs" />
     <Compile Include="EducationSubGroup\EducationSubGroupUpdateViewModel.cs" />
     <Compile Include="EducationSubGroup\EducationSubGroupViewModel.cs" />
@@ -109,7 +111,7 @@
     <Compile Include="_Attributes\MinLengthExcludeEmptyAndNullAttribute.cs" />
     <Compile Include="_Attributes\NationalNoAttribute.cs" />
     <Compile Include="_Attributes\RequiredDdlAttribute.cs" />
-    <Compile Include="EducationBook\EducationBook.cs" />
+    <Compile Include="EducationBook\EducationBookCreateViewModel.cs" />
     <Compile Include="EducationGroup\EducationGroupViewModel.cs" />
     <Compile Include="GradeLevel\GradeLevelViewModel.cs" />
     <Compile Include="Grade\GradeViewModel.cs" />

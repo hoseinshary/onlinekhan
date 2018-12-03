@@ -68,6 +68,8 @@ namespace NasleGhalam.WebApi.Controllers
             var allP = document.Paragraphs;
             XWPFDocument doc2 = new XWPFDocument();
             
+            
+
             //clean paragraphs
             foreach (var pragraph in allP)
             {

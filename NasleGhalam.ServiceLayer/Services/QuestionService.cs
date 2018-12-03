@@ -80,7 +80,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Tags.Add(tag);
             }
 
-
+            _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = question.Id;
             return Mapper.Map<MessageResultClient>(msgRes);

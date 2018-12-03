@@ -61,6 +61,7 @@
     <Compile Include="EducationTree\EducationTreeUpdateViewModel.cs" />
     <Compile Include="Lesson\LessonUpdateViewModel.cs" />
     <Compile Include="Publisher\PublisherViewModel.cs" />
+    <Compile Include="QuestionOption\QuestionOptionViewModel.cs" />
     <Compile Include="Question\QuestionViewModel.cs" />
     <Compile Include="Question\QuestionUpdateViewModel.cs" />
     <Compile Include="Question\QuestionCreateViewModel.cs" />

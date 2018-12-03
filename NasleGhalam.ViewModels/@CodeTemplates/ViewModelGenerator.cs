@@ -1,35 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.EducationBook
+namespace NasleGhalam.ViewModels.QuestionOption
 {
-	public class EducationBookViewModel
+	public class QuestionOptionViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public string Name { get; set; }
+		public string Context { get; set; }
 
 
 		[Display(Name = "")]
-		public short PublishYear { get; set; }
+		public bool IsAnswer { get; set; }
 
 
 		[Display(Name = "")]
-		public bool IsExamSource { get; set; }
-
-
-		[Display(Name = "")]
-		public bool IsActive { get; set; }
-
-
-		[Display(Name = "")]
-		public bool IsChanged { get; set; }
-
-
-		[Display(Name = "")]
-		public int LessonId { get; set; }
+		public int QuestionId { get; set; }
 
 
 	}

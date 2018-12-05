@@ -91,16 +91,11 @@ namespace NasleGhalam.ViewModels.Question
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         public int  AnswerNumber { get; set; }
-      
 
-        private List<int> topicsId = new List<int>();
 
-        private List<int> tagsId = new List<int>();
+        public List<int> TopicsId { get; set; } = new List<int>();
+        public List<int> TagsId { get; set; } = new List<int>();
 
-        private List<QuestionOptionViewModel> options = new List<QuestionOptionViewModel>();
-
-        public List<int> TopicsId { get => topicsId; set => topicsId = value; }
-        public List<int> TagsId { get => tagsId; set => tagsId = value; }
-        public List<QuestionOptionViewModel> Options { get => options; set => options = value; }
+        public List<QuestionOptionViewModel> Options { get; set; } = new List<QuestionOptionViewModel>();
     }
 }

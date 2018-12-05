@@ -80,6 +80,20 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Tags.Add(tag);
             }
 
+            foreach (var option in questionViewModel.Options)
+            {
+                var newOption = new QuestionOption()
+                {
+                    Context = option.Context,
+                    IsAnswer = option.IsAnswer,
+                };
+                
+                question.QuestionOptions.Add(newOption);
+            }
+
+
+
+
             _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = question.Id;

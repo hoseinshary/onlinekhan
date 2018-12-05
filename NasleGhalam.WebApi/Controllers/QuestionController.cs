@@ -81,6 +81,7 @@ namespace NasleGhalam.WebApi.Controllers
 
             //get options
             int optionNumbers = 0;
+            var optionArray  = new List<QuestionOptionViewModel>();
             for(int i = allP.Count-1; optionNumbers < 4 ; i--)
             {
                 if (!allP[i].IsEmpty && allP[i].Text != "" && allP[i].Text != " ")
@@ -96,11 +97,19 @@ namespace NasleGhalam.WebApi.Controllers
                     else
                         newOption.IsAnswer = false;
 
-                    questionViewModel.Options.Add(newOption);
+                    optionArray.Add(newOption);
 
                 }
             }
 
+            for (int i = optionArray.Count-1 ; i >= 0; i--)
+            {
+                questionViewModel.Options.Add(optionArray[i]);
+            }
+
+
+            questionViewModel.InsertDateTime = DateTime.Now;
+            questionViewModel.UserId = Request.GetUserId();
 
             /////////////////////////////////
             var msgRes = _questionService.Create(questionViewModel);

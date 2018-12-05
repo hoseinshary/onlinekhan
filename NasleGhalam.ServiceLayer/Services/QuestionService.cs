@@ -32,8 +32,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public QuestionViewModel GetById(int id)
         {
             return _questions
+                .Include(current => current.QuestionOptions)
                 .Where(current => current.Id == id)
-
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)

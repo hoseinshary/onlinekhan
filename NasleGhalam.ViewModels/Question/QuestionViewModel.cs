@@ -6,6 +6,7 @@ using NasleGhalam.ViewModels._Attributes;
 using NasleGhalam.ViewModels.QuestionOption;
 using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.ViewModels.Tag;
+using System.Linq;
 
 namespace NasleGhalam.ViewModels.Question
 {
@@ -83,10 +84,14 @@ namespace NasleGhalam.ViewModels.Question
 
         public IEnumerable<TopicViewModel> Topics { get; set; }
         public IEnumerable<TagViewModel> Tags { get; set; }
-        public IEnumerable<QuestionOptionViewModel> QuestionOptions { get; set; }
+        public List<QuestionOptionViewModel> QuestionOptions { get; set; }
 
+        public QuestionViewModel()
+        {
+            //QuestionOptions = new 
 
+        }
 
-
+        //public bool isValid => QuestionOptions.Count(x => x.IsAnswer == true) == 1;  
     }
 }

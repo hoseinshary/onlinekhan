@@ -32,8 +32,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public QuestionViewModel GetById(int id)
         {
             return _questions
+                .Include(current => current.QuestionOptions)
                 .Where(current => current.Id == id)
-
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)
@@ -80,7 +80,21 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Tags.Add(tag);
             }
 
+            foreach (var option in questionViewModel.Options)
+            {
+                var newOption = new QuestionOption()
+                {
+                    Context = option.Context,
+                    IsAnswer = option.IsAnswer,
+                };
+                
+                question.QuestionOptions.Add(newOption);
+            }
 
+
+
+
+            _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = question.Id;
             return Mapper.Map<MessageResultClient>(msgRes);

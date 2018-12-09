@@ -2,12 +2,12 @@ import { displayName, requiredDdl } from 'plugins/vuelidate';
 
 export default {
   educationBookIndexObj: {
-    GradeId: {
+    EducationTreeId_Grade: {
       displayName: displayName('مقطع تحصیلی'),
       requiredDdl: requiredDdl(0)
     },
-    GradeLevelId: {
-      displayName: displayName('پایه تحصیلی'),
+    LessonId: {
+      displayName: displayName('درس'),
       requiredDdl: requiredDdl(0)
     }
   }

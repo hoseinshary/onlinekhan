@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using NasleGhalam.ViewModels._MediaFormatter;
 using NasleGhalam.ViewModels._Attributes;
+using NasleGhalam.ViewModels.QuestionOption;
+using NasleGhalam.ViewModels.Topic;
+using NasleGhalam.ViewModels.Tag;
 
 namespace NasleGhalam.ViewModels.Question
 {
@@ -72,15 +75,18 @@ namespace NasleGhalam.ViewModels.Question
 
         public int UserId { get; set; }
 
-      
+
+
+
         public bool IsActive { get; set; }
 
 
-        private List<int> topicsId = new List<int>();
+        public IEnumerable<TopicViewModel> Topics { get; set; }
+        public IEnumerable<TagViewModel> Tags { get; set; }
+        public IEnumerable<QuestionOptionViewModel> QuestionOptions { get; set; }
 
-        private List<int> tagsId = new List<int>();
 
-        public List<int> TopicsId { get => topicsId; set => topicsId = value; }
-        public List<int> TagsId { get => tagsId; set => tagsId = value; }
+
+
     }
 }

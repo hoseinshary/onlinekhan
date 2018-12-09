@@ -115,19 +115,18 @@ const store = {
     /**
      * get tree by state
      */
-    changeEducationTree({
-      state
-    }, gradeId) {
-      state.educationTreeData = gradeId ==
-        null ? state.educationTreeDataMaster :
-        state.educationTreeDataMaster[0].children.filter(x => x.Id == gradeId);
+    changeEducationTree({ state }, gradeId) {
+      state.educationTreeData =
+        gradeId == null
+          ? state.educationTreeDataMaster
+          : state.educationTreeDataMaster[0].children.filter(
+              x => x.Id == gradeId
+            );
     },
     /**
      * get tree by state
      */
-    getAllEducationTreeByState({
-      state
-    }, treeState) {
+    getAllEducationTreeByState({ state }, treeState) {
       axios
         .get(`${baseUrl}/getAllEducationTreeByState/?state=${treeState}`)
         .then(response => {
@@ -143,9 +142,7 @@ const store = {
     /**
      * get data by id
      */
-    getByIdStore({
-      state
-    }, id) {
+    getByIdStore({ state }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.educationTreeObj);
@@ -155,9 +152,7 @@ const store = {
     /**
      * get all grades
      */
-    getAllGrade({
-      state
-    }) {
+    getAllGrade({ state }) {
       axios
         .get(`${baseUrl}/GetAllEducationTreeByState/?state=1`)
         .then(response => {
@@ -170,9 +165,7 @@ const store = {
     /**
      * get all grades
      */
-    fillEducationGroupDdl({
-      state
-    }) {
+    fillEducationGroupDdl({ state }) {
       axios
         .get(`${baseUrl}/GetAllEducationTreeByState/?state=3`)
         .then(response => {
@@ -185,9 +178,7 @@ const store = {
     /**
      * fill grid data
      */
-    fillTreeStore({
-      state
-    }) {
+    fillTreeStore({ state }) {
       // fill grid if modelChanged
       if (state.gridModelChanged) {
         // get data
@@ -209,69 +200,77 @@ const store = {
         });
       }
 
+      // ToDo: mostafa: چرا ساب گروپ اینجاست؟
       axios.get(`${subGroupUrl}/GetAll`).then(response => {
         state.educationSubGroupList = response.data;
       });
     },
-    getEducationGroupsUnderSelectedList({
-      state
-    }, params) {
+    getEducationGroupsUnderSelectedList({ state }, params) {
       state.educationGroupList = [];
 
       params.lstSelected.forEach(element => {
-        var item = state.educationTreeDataMasterList
-          .filter(x => x.Id == element &&
+        var item = state.educationTreeDataMasterList.filter(
+          x =>
+            x.Id == element &&
             //یا زیر گروه یا مقطع
-            (x.Lookup_EducationTreeState.State == 3 || x.Lookup_EducationTreeState.State == 4));
+            (x.Lookup_EducationTreeState.State == 3 ||
+              x.Lookup_EducationTreeState.State == 4)
+        );
         if (item.length != 0) {
-          if (item[0].Lookup_EducationTreeState.State == 3) { //زیر گروه
+          if (item[0].Lookup_EducationTreeState.State == 3) {
+            //زیر گروه
             if (!state.educationGroupList.map(x => x.Id).includes(item[0].Id))
-              state.educationGroupList.push(item[0])
-          } else { //مقطع
-            var parent = state.educationTreeDataMasterList
-              .filter(x => x.Id == item[0].ParentEducationTreeId)
-            if (parent.length > 0 && parent[0].Lookup_EducationTreeState.State == 3)
-              //اگر پدر زیر گروه بود
-              if (!state.educationGroupList.map(x => x.Id).includes(parent[0].Id))
-                state.educationGroupList.push(parent[0])
+              state.educationGroupList.push(item[0]);
+          } else {
+            //مقطع
+            var parent = state.educationTreeDataMasterList.filter(
+              x => x.Id == item[0].ParentEducationTreeId
+            );
+            if (
+              parent.length > 0 &&
+              parent[0].Lookup_EducationTreeState.State == 3
+            )
+              if (
+                !state.educationGroupList.map(x => x.Id).includes(parent[0].Id)
+              )
+                //اگر پدر زیر گروه بود
+                state.educationGroupList.push(parent[0]);
           }
         }
       });
       state.educationGroupList = state.educationGroupList.map(x => ({
         EducationGroupId: x.Id,
-        IsChecked: params.isEdit ? (params.eduGroupsId.includes(x.Id)) : false,
+        IsChecked: params.isEdit ? params.eduGroupsId.includes(x.Id) : false,
         Name: x.Name,
         SubGroups: []
-      }))
+      }));
       if (params.isEdit) {
         state.educationSubGroupList.forEach(element => {
-          var item = params.Ratios.filter(x => x.EducationSubGroup.Id == element.Id);
+          var item = params.Ratios.filter(
+            x => x.EducationSubGroup.Id == element.Id
+          );
           element.Rate = item.length > 0 ? item[0].Rate : 0;
         });
       }
 
-
       state.educationGroupList.forEach(element => {
-        element.SubGroups = state.educationSubGroupList.filter(x => x.EducationTreeId == element.EducationGroupId)
+        element.SubGroups = state.educationSubGroupList.filter(
+          x => x.EducationTreeId == element.EducationGroupId
+        );
       });
-
     },
 
     /**
      * fill tree by grade id
      */
-    fillTreeByGradeIdStore({
-      state
-    }, gradeId) {
+    fillTreeByGradeIdStore({ state }, gradeId) {
       return util.searchTreeArray(state.educationTreeData, 'Id', gradeId);
     },
 
     /**
      * fill dropDwonList
      */
-    fillDdlStore({
-      state
-    }) {
+    fillDdlStore({ state }) {
       // fill grid if modelChanged
       if (state.ddlModelChanged) {
         // get data
@@ -285,9 +284,7 @@ const store = {
     /**
      * vlidate form
      */
-    validateFormStore({
-      dispatch
-    }, vm) {
+    validateFormStore({ dispatch }, vm) {
       // check instance validation
       vm.$v.educationTreeObj.$touch();
       if (vm.$v.educationTreeObj.$error) {
@@ -303,9 +300,7 @@ const store = {
     /**
      * model changed
      */
-    modelChangedStore({
-      state
-    }) {
+    modelChangedStore({ state }) {
       state.ddlModelChanged = true;
       state.gridModelChanged = true;
     },
@@ -314,30 +309,21 @@ const store = {
     /**
      * toggle modal create
      */
-    toggleModalCreateStore({
-      state
-    }, isOpen) {
+    toggleModalCreateStore({ state }, isOpen) {
       state.isOpenModalCreate = isOpen;
     },
 
     /**
      * init create vue on load
      */
-    createVueStore({
-      state
-    }, vm) {
+    createVueStore({ state }, vm) {
       state.createVue = vm;
     },
 
     /**
      * submit create data
      */
-    submitCreateStore({
-      state,
-      commit,
-      dispatch
-    }, closeModal) {
-
+    submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
       state.selectedId = state.educationTreeObj.ParentEducationTreeId;
       dispatch('validateFormStore', vm).then(isValid => {
@@ -349,7 +335,6 @@ const store = {
             let data = response.data;
 
             if (data.MessageType == 1) {
-
               commit('insertToTree', data.Id);
               dispatch('modelChangedStore');
               dispatch('resetCreateStore');
@@ -357,11 +342,13 @@ const store = {
             }
 
             dispatch(
-              'notify', {
+              'notify',
+              {
                 body: data.Message,
                 type: data.MessageType,
                 vm: vm
-              }, {
+              },
+              {
                 root: true
               }
             );
@@ -372,10 +359,7 @@ const store = {
     /**
      * reset create vue
      */
-    resetCreateStore({
-      state,
-      commit
-    }) {
+    resetCreateStore({ state, commit }) {
       commit('reset', state.createVue.$v);
     },
     //------------------------------------------------
@@ -384,29 +368,21 @@ const store = {
     /**
      * toggle modal edit
      */
-    toggleModalEditStore({
-      state
-    }, isOpen) {
+    toggleModalEditStore({ state }, isOpen) {
       state.isOpenModalEdit = isOpen;
     },
 
     /**
      * init edit vue on load
      */
-    editVueStore({
-      state
-    }, vm) {
+    editVueStore({ state }, vm) {
       state.editVue = vm;
     },
 
     /**
      * submit edit data
      */
-    submitEditStore({
-      state,
-      commit,
-      dispatch
-    }) {
+    submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
@@ -423,11 +399,13 @@ const store = {
             }
 
             dispatch(
-              'notify', {
+              'notify',
+              {
                 body: data.Message,
                 type: data.MessageType,
                 vm: vm
-              }, {
+              },
+              {
                 root: true
               }
             );
@@ -438,10 +416,7 @@ const store = {
     /**
      * reset edit vue
      */
-    resetEditStore({
-      state,
-      commit
-    }) {
+    resetEditStore({ state, commit }) {
       commit('reset', state.editVue.$v);
     },
     //------------------------------------------------
@@ -450,20 +425,14 @@ const store = {
     /**
      * toggle modal delete
      */
-    toggleModalDeleteStore({
-      state
-    }, isOpen) {
+    toggleModalDeleteStore({ state }, isOpen) {
       state.isOpenModalDelete = isOpen;
     },
 
     /**
      * submit to delete data
      */
-    submitDeleteStore({
-      state,
-      commit,
-      dispatch
-    }, vm) {
+    submitDeleteStore({ state, commit, dispatch }, vm) {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
@@ -474,11 +443,13 @@ const store = {
         }
 
         dispatch(
-          'notify', {
+          'notify',
+          {
             body: data.Message,
             type: data.MessageType,
             vm: vm
-          }, {
+          },
+          {
             root: true
           }
         );

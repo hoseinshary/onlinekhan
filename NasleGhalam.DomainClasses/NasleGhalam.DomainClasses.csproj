@@ -60,6 +60,7 @@
     <Compile Include="Entities\QuestionEqual.cs" />
     <Compile Include="Entities\QuestionOption.cs" />
     <Compile Include="Entities\QuestionJudge.cs" />
+    <Compile Include="Entities\QuestionGroup.cs" />
     <Compile Include="Entities\Topic.cs" />
     <Compile Include="Entities\Publisher.cs" />
     <Compile Include="Entities\Lesson.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="EntityConfigs\QuestionOptionConfig.cs" />
     <Compile Include="EntityConfigs\QuestionJudgConfig.cs" />
     <Compile Include="EntityConfigs\QuestionAnswerConfig.cs" />
+    <Compile Include="EntityConfigs\QuestionGroupConfig.cs" />
     <Compile Include="EntityConfigs\TopicConfig.cs" />
     <Compile Include="EntityConfigs\PublisherConfig.cs" />
     <Compile Include="EntityConfigs\LessonConfig.cs" />

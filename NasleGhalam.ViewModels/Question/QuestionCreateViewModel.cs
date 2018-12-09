@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using NasleGhalam.ViewModels._MediaFormatter;
 using NasleGhalam.ViewModels._Attributes;
+using NasleGhalam.ViewModels.QuestionOption;
 
 namespace NasleGhalam.ViewModels.Question
 {
@@ -86,13 +87,15 @@ namespace NasleGhalam.ViewModels.Question
 
         
         public string FilePath { get; set; }
-      
 
-        private List<int> topicsId = new List<int>();
 
-        private List<int> tagsId = new List<int>();
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        public int  AnswerNumber { get; set; }
 
-        public List<int> TopicsId { get => topicsId; set => topicsId = value; }
-        public List<int> TagsId { get => tagsId; set => tagsId = value; }
+
+        public List<int> TopicsId { get; set; } = new List<int>();
+        public List<int> TagsId { get; set; } = new List<int>();
+
+        public List<QuestionOptionViewModel> Options { get; set; } = new List<QuestionOptionViewModel>();
     }
 }

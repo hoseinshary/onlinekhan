@@ -9,6 +9,9 @@ using System;
 using System.IO;
 using NasleGhalam.WebApi.Util;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using NPOI.XWPF.UserModel;
 using NasleGhalam.ViewModels.QuestionOption;
 
@@ -48,14 +51,25 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
-        public IHttpActionResult GetWordFile(Guid id)
+        public IHttpActionResult GetWordFile(string id)
         {
-            var question = _questionService.GetById(id);
-            if (question == null)
+            var stream = new MemoryStream();
+            var filestraem = File.OpenRead(SitePath.GetQuestionAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                return NotFound();
-            }
-            return Ok(question);
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+
+            return Ok(result);
         }
 
 
@@ -142,14 +156,26 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(QuestionUpdateViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
-
+            bool updateFile = false;
+            var fileNamePrevous = "";
             if (wordFile != null && wordFile.ContentLength > 0)
             {
+                fileNamePrevous = questionViewModel.FileName;
                 questionViewModel.FileName = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+                updateFile = true;
             }
 
+            var msgRes = _questionService.Update(questionViewModel);
 
-            return Ok(_questionService.Update(questionViewModel));
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && updateFile)
+            {
+                if (File.Exists(SitePath.GetQuestionAbsPath(fileNamePrevous)))
+                {
+                    File.Delete(SitePath.GetQuestionAbsPath(fileNamePrevous));
+                }
+                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName));
+            }
+            return Ok(msgRes);
         }
 
 

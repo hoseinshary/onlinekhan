@@ -51,7 +51,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
-        public IHttpActionResult GetWordFile(string id)
+        public HttpResponseMessage GetWordFile(string id)
         {
             var stream = new MemoryStream();
             var filestraem = File.OpenRead(SitePath.GetQuestionAbsPath(id));
@@ -69,7 +69,7 @@ namespace NasleGhalam.WebApi.Controllers
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue("application/octet-stream");
 
-            return Ok(result);
+            return result;
         }
 
 

@@ -76,11 +76,6 @@ namespace NasleGhalam.ViewModels.Question
         public bool IsActive { get; set; }
 
 
-        private List<int> topicsId = new List<int>();
-
-        private List<int> tagsId = new List<int>();
-
-        public List<int> TopicsId { get => topicsId; set => topicsId = value; }
-        public List<int> TagsId { get => tagsId; set => tagsId = value; }
+    
     }
 }

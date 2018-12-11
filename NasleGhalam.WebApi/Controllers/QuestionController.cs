@@ -29,7 +29,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
-        public IHttpActionResult GetAll([FromUri] IEnumerable<int> ids)
+        public IHttpActionResult GetAllByTopicIds([FromUri] IEnumerable<int> ids)
         {
             return Ok(_questionService.GetAllByTopicIds(ids));
         }
@@ -45,6 +45,19 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(question);
         }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public IHttpActionResult GetWordFile(Guid id)
+        {
+            var question = _questionService.GetById(id);
+            if (question == null)
+            {
+                return NotFound();
+            }
+            return Ok(question);
+        }
+
 
 
         [HttpPost]
@@ -125,8 +138,17 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
         [CheckModelValidation]
+        [CheckWordFileValidation("word", 1024)]
         public IHttpActionResult Update(QuestionUpdateViewModel questionViewModel)
         {
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
+
+            if (wordFile != null && wordFile.ContentLength > 0)
+            {
+                questionViewModel.FileName = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+            }
+
+
             return Ok(_questionService.Update(questionViewModel));
         }
 

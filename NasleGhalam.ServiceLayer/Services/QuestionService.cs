@@ -47,6 +47,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<QuestionViewModel> GetAllByTopicIds(IEnumerable<int> ids)
         {
+           
             return _questions
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                 .AsNoTracking()

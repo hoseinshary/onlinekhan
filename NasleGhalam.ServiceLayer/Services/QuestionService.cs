@@ -32,8 +32,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public QuestionViewModel GetById(int id)
         {
             return _questions
+                .Include(current => current.QuestionOptions)
                 .Where(current => current.Id == id)
-
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)
@@ -88,7 +88,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Context = option.Context,
                     IsAnswer = option.IsAnswer,
                 };
-                
+
                 question.QuestionOptions.Add(newOption);
             }
 
@@ -98,7 +98,13 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = question.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
+            var resutlVal = Mapper.Map<MessageResultClient>(msgRes);
+            resutlVal.Obj = new
+            {
+                question.Context,
+                question.FileName
+            };
+            return resutlVal;
         }
 
 
@@ -109,11 +115,82 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Update(QuestionUpdateViewModel questionViewModel)
         {
-            var question = Mapper.Map<Question>(questionViewModel);
-            _uow.MarkAsChanged(question);
 
+            var question = _questions
+                .Include(current => current.QuestionOptions)
+                .Include(current => current.Topics)
+                .Include(current => current.Tags  )
+                .First(current => current.Id == questionViewModel.Id);
+
+            question.AuthorName = questionViewModel.AuthorName;
+            question.Description = questionViewModel.Description;
+            question.InsertDateTime = DateTime.Now;
+            question.IsActive = questionViewModel.IsActive;
+            question.IsStandard = questionViewModel.IsStandard;
+            question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
+            question.LookupId_AuthorType = questionViewModel.LookupId_AuthorType;
+            question.LookupId_QuestionHardnessType = questionViewModel.LookupId_QuestionHardnessType;
+            question.LookupId_QuestionType = questionViewModel.LookupId_QuestionType;
+            question.LookupId_RepeatnessType = questionViewModel.LookupId_RepeatnessType;
+            question.QuestionNumber = questionViewModel.QuestionNumber;
+            question.QuestionPoint = questionViewModel.QuestionPoint;
+            question.ResponseSecond = questionViewModel.ResponseSecond;
+            question.UseEvaluation = questionViewModel.UseEvaluation;
+            
+
+
+
+
+
+
+            //delete topics
+            var deleteTopicList = question.Topics
+                .Where(oldTopic => questionViewModel.TopicsId.All(newTopicId => newTopicId != oldTopic.Id))
+                .ToList();
+            foreach (var topic in deleteTopicList)
+            {
+                question.Topics.Remove(topic);
+            }
+
+            //add topics
+            var addTopicList = questionViewModel.TopicsId
+                .Where(oldTopicId => question.Topics.All(newTopic => newTopic.Id != oldTopicId))
+                .ToList();
+            foreach (var topicId in addTopicList)
+            {
+                var topic = new Topic { Id = topicId };
+                _uow.MarkAsUnChanged(topic);
+                question.Topics.Add(topic);
+            }
+
+
+
+            //delete tag
+            var deleteTagList = question.Tags
+                .Where(oldTag => questionViewModel.TagsId.All(newTagId => newTagId != oldTag.Id))
+                .ToList();
+            foreach (var tag in deleteTagList)
+            {
+                question.Tags.Remove(tag);
+            }
+
+            //add tag
+            var addTagList = questionViewModel.TagsId
+                .Where(oldTagId => question.Tags.All(newTag => newTag.Id != oldTagId))
+                .ToList();
+            foreach (var tagId in addTagList)
+            {
+                var tag = new Tag { Id = tagId };
+                _uow.MarkAsUnChanged(tag);
+                question.Tags.Add(tag);
+            }
+
+            
+
+            
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
+            
         }
 
 
@@ -150,6 +227,13 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
 
+            //remove options
+            var options = question.QuestionOptions.ToList();
+            foreach (var item in options)
+            {
+                _uow.MarkAsDeleted(item);
+            }
+
 
             _uow.MarkAsDeleted(question);
 
@@ -158,6 +242,6 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-       
+
     }
 }

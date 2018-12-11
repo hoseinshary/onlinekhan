@@ -74,7 +74,7 @@ namespace NasleGhalam.WebApi.Controllers
             }
             /////////////////////////////
 
-
+            
             
             XWPFDocument document = null;
             document = new XWPFDocument(wordFile.InputStream);
@@ -128,7 +128,7 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _questionService.Create(questionViewModel);
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
-                wordFile.SaveAs(SitePath.GetAxillaryBookAbsPath(questionViewModel.FileName));
+                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName));
             }
 
             return Ok(msgRes);

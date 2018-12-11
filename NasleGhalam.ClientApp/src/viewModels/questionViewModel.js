@@ -94,8 +94,20 @@ export default {
     EducationGroupId: {
       displayName: displayName('گروه تحصیلی')
     },
+    EducationTreeId_Grade: {
+      displayName: displayName('مقطع')
+    },
     EducationGroup_LessonId: {
       displayName: displayName('درس')
+    },
+    EducationTreeIds: {
+      displayName: displayName('درخت آموزش')
+    },
+    LessonId: {
+      displayName: displayName('درس')
+    },
+    TopicIds: {
+      displayName: displayName('گره والد')
     }
   }
 };

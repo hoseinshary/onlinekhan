@@ -65,7 +65,6 @@
     <Compile Include="Question\QuestionViewModel.cs" />
     <Compile Include="Question\QuestionUpdateViewModel.cs" />
     <Compile Include="Question\QuestionCreateViewModel.cs" />
-    <Compile Include="Question\QuestionTempViewModel.cs" />
     <Compile Include="Ratio\RatioUpdateViewModel.cs" />
     <Compile Include="Ratio\RatioCreateViewModel.cs" />
     <Compile Include="Role\RoleUpdateViewModel.cs" />

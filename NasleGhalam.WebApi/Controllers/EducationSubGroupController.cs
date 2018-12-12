@@ -20,7 +20,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess,ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_educationSubGroupService.GetAll());

@@ -20,7 +20,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess, ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_educationTreeService.GetAll());
@@ -33,7 +33,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess, ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAllEducationTreeByState(EducationTreeState state)
         {
             return Ok(_educationTreeService.GetAllEducationTreeByState(state));

@@ -21,7 +21,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess, ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAllByEducationTreeIds([FromUri] IEnumerable<int> ids)
         {
             return Ok(_lessonService.GetAllByEducationTreeIds(ids));

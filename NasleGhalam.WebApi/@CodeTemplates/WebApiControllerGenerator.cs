@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Question;
+using NasleGhalam.ViewModels.QuestionGroup;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,56 +12,56 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class QuestionController : ApiController
+	public class QuestionGroupController : ApiController
 	{
-        private readonly QuestionService _questionService;
-		public QuestionController(QuestionService questionService)
+        private readonly QuestionGroupService _questionGroupService;
+		public QuestionGroupController(QuestionGroupService questionGroupService)
         {
-            _questionService = questionService;
+            _questionGroupService = questionGroupService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_questionService.GetAll());
+            return Ok(_questionGroupService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var question = _questionService.GetById(id);
-            if (question == null)
+            var questionGroup = _questionGroupService.GetById(id);
+            if (questionGroup == null)
             {
                 return NotFound();
             }
-            return Ok(question);
+            return Ok(questionGroup);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.QuestionCreateAccess)]
+        [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(QuestionCreateViewModel questionViewModel)
+        public IHttpActionResult Create(QuestionGroupCreateViewModel questionGroupViewModel)
         {
-            return Ok(_questionService.Create(questionViewModel));
+            return Ok(_questionGroupService.Create(questionGroupViewModel));
         }
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
+        [CheckUserAccess(ActionBits.QuestionGroupUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(QuestionUpdateViewModel questionViewModel)
+        public IHttpActionResult Update(QuestionGroupUpdateViewModel questionGroupViewModel)
         {
-            return Ok(_questionService.Update(questionViewModel));
+            return Ok(_questionGroupService.Update(questionGroupViewModel));
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.QuestionDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.QuestionGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_questionService.Delete(id));
+            return Ok(_questionGroupService.Delete(id));
         }
 	}
 }

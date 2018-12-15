@@ -101,6 +101,7 @@
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\ProvinceService.cs" />
     <Compile Include="Services\PublisherService.cs" />
+    <Compile Include="Services\QuestionGroupService.cs" />
     <Compile Include="Services\QuestionService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\StudentService.cs" />

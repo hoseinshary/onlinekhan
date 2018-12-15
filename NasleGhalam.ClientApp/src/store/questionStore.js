@@ -119,9 +119,9 @@ const store = {
       // fill grid if modelChanged
       // if (state.gridModelChanged) {
       // get data
-      // axios.get(`${baseUrl}/GetAllByTopicIds?` + util.toParam({
-      axios.get(`${baseUrl}/GetAllByTopicIds?Ids=3351&Ids=3352`)
-        .then(response => {
+      axios.get(`${baseUrl}/GetAllByTopicIds?` + util.toParam({
+        Ids: state.questionObj.IndexTopicIds
+      })).then(response => {
           state.questionGridData = response.data;
           state.gridModelChanged = false;
         });
@@ -210,15 +210,15 @@ const store = {
       commit,
       dispatch
     }, closeModal) {
-      // if (state.questionObj.TopicIds.length == 0) {
-      //   state.createVue.$snotify.html('<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>', {
-      //     type: 'error',
-      //     timeout: 4000,
-      //     showProgressBar: true,
-      //     position: 'leftTop'
-      //   });
-      //   return
-      // }
+      if (state.questionObj.TopicIds.length == 0) {
+        state.createVue.$snotify.html('<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>', {
+          type: 'error',
+          timeout: 4000,
+          showProgressBar: true,
+          position: 'leftTop'
+        });
+        return
+      }
 
       state.questionObj.UserId = 0;
       state.questionObj.Context = '1';
@@ -228,7 +228,7 @@ const store = {
 
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
-        // if (!isValid) return;
+        if (!isValid) return;
 
         var formData = new FormData();
         var fileUpload = state.questionObj.File;

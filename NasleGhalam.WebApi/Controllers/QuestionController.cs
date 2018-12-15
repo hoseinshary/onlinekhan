@@ -101,11 +101,11 @@ namespace NasleGhalam.WebApi.Controllers
             //clean paragraphs
             foreach (var pragraph in allP)
             {
-                pragraph.
-                //if(!pragraph.IsEmpty && pragraph.Text != "" && pragraph.Text != " ")
-                {
-                    questionViewModel.Context += pragraph.Text;
-                }
+                //pragraph.
+                ////if(!pragraph.IsEmpty && pragraph.Text != "" && pragraph.Text != " ")
+                //{
+                //    questionViewModel.Context += pragraph.Text;
+                //}
             }
 
             //get options

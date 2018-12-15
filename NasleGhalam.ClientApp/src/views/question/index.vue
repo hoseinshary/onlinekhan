@@ -204,7 +204,7 @@
       }
     },
     created() {
-       this.fillGridStore();
+      // this.fillGridStore();
       this.getAllGrade();
       this.fillEducationTreeStore();
     }

@@ -114,5 +114,9 @@
         UniversityBranchCreateAccess = 79,
         UniversityBranchUpdateAccess = 80,
         UniversityBranchDeleteAccess = 81,
+        QuestionGroupUpdateAccess = 82,
+        QuestionGroupDeleteAccess = 83,
+        QuestionGroupCreateAccess = 84,
+        QuestionGroupReadAccess = 85,
     }
 }

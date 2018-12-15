@@ -11,20 +11,20 @@ using NasleGhalam.ViewModels.QuestionGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class QuestionGroupService
-	{
-		private const string Title = "سوال گروهی";
+    public class QuestionGroupService
+    {
+        private const string Title = "سوال گروهی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<QuestionGroup> _questionGroups;
-       
-	    public QuestionGroupService(IUnitOfWork uow)
+
+        public QuestionGroupService(IUnitOfWork uow)
         {
             _uow = uow;
             _questionGroups = uow.Set<QuestionGroup>();
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  سوال گروهی با آی دی
         /// </summary>
         /// <param name="id"></param>
@@ -40,7 +40,7 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه سوال گروهی ها
         /// </summary>
         /// <returns></returns>
@@ -54,7 +54,7 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ثبت سوال گروهی
         /// </summary>
         /// <param name="questionGroupViewModel"></param>
@@ -64,13 +64,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
             _questionGroups.Add(questionGroup);
 
-			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = questionGroup.Id;
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = questionGroup.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
-		/// <summary>
+        /// <summary>
         /// ویرایش سوال گروهی
         /// </summary>
         /// <param name="questionGroupViewModel"></param>
@@ -79,20 +79,20 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
             _uow.MarkAsChanged(questionGroup);
-			
-			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-			return Mapper.Map<MessageResultClient>(msgRes);
+
+            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
-		/// <summary>
+        /// <summary>
         /// حذف سوال گروهی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-			var  questionGroupViewModel = GetById(id);
+            var questionGroupViewModel = GetById(id);
             if (questionGroupViewModel == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
@@ -100,23 +100,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
             _uow.MarkAsDeleted(questionGroup);
-            
-			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-			return Mapper.Map<MessageResultClient>(msgRes);
+
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
-        /// <summary>
-        /// گرفتن همه سوال گروهی ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _questionGroups.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
-        }
-	}
+   
+    }
 }

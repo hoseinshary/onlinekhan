@@ -93,13 +93,15 @@ namespace NasleGhalam.WebApi.Controllers
             XWPFDocument document = null;
             document = new XWPFDocument(wordFile.InputStream);
             var allP = document.Paragraphs;
-            XWPFDocument doc2 = new XWPFDocument();
+            
+            
             
             
 
             //clean paragraphs
             foreach (var pragraph in allP)
             {
+                pragraph.
                 //if(!pragraph.IsEmpty && pragraph.Text != "" && pragraph.Text != " ")
                 {
                     questionViewModel.Context += pragraph.Text;

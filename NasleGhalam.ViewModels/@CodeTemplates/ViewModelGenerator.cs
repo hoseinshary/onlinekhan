@@ -1,23 +1,35 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.QuestionOption
+namespace NasleGhalam.ViewModels.QuestionGroup
 {
-	public class QuestionOptionViewModel
+	public class QuestionGroupViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public string Context { get; set; }
+		public string Title { get; set; }
 
 
 		[Display(Name = "")]
-		public bool IsAnswer { get; set; }
+		public DateTime InsertTime { get; set; }
 
 
 		[Display(Name = "")]
-		public int QuestionId { get; set; }
+		public string WordFile { get; set; }
+
+
+		[Display(Name = "")]
+		public string ExcelFile { get; set; }
+
+
+		[Display(Name = "")]
+		public int LessonId { get; set; }
+
+
+		[Display(Name = "")]
+		public int UserId { get; set; }
 
 
 	}

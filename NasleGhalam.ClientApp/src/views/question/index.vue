@@ -1,3 +1,4 @@
+
 <template>
   <section class="col-md-8">
     <!-- panel -->
@@ -12,6 +13,14 @@
                 :options="educationTree_GradeDdl"
                 @change="gradeDdlChange"
               />
+              <!-- <q-select
+                multiple
+                chips
+                filter
+                v-model="tmpObj"
+                :options="educationTree_GradeDdl"
+                float-label="Some label"
+              /> -->
               <q-tree
                 :nodes="educationTreeData"
                 color="primary"
@@ -45,7 +54,7 @@
                 accordion
                 node-key="Id"
                 ref="topicTree"
-                :ticked.sync="questionObj.TopicIds"
+                :ticked.sync="questionObj.IndexTopicIds"
               />
             </section>
           </div>
@@ -59,8 +68,8 @@
         <br>
         <my-table :grid-data="questionGridData" :columns="questionGridColumn" hasIndex>
           <template slot="Id" slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <my-btn-delete v-if="pageAccess.canDelete" round @click="showModalDelete(data.row.Id)"/>
+            <my-btn-edit v-if="pageAccess.canEdit" round @click="showModalEdit(data.row.FileName)"/>
+            <my-btn-delete v-if="pageAccess.canDelete" round @click="showModalDelete(data.row.FileName)"/>
           </template>
         </my-table>
       </div>
@@ -90,10 +99,11 @@
       return {
         pageAccess,
         educationTreeData: [],
+        tmpObj:[],
         questionGridColumn: [
           {
-            title: "شماره سوال",
-            data: "QuestionNumber"
+            title: "متن سوال",
+            data: "Context"
           },
 
           {
@@ -163,6 +173,7 @@
       },
       lessonDdlChange(val) {
         this.fillTreeStore(val);
+        this.questionObj.IndexTopicIds = [];
       }
     },
     computed: {
@@ -185,13 +196,15 @@
     watch: {
       "questionObj.EducationTreeIds"(val) {
         this.fillLessonDdlStore(val);
+        this.questionObj.IndexTopicIds = [];
       },
-      "questionObj.TopicIds"(newVal, oldVal) {
+      "questionObj.IndexTopicIds"(newVal, oldVal) {
+        if(this.questionObj.IndexTopicIds.length > 0)
         this.fillGridStore();
       }
     },
     created() {
-      // this.fillGridStore();
+       this.fillGridStore();
       this.getAllGrade();
       this.fillEducationTreeStore();
     }

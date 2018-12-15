@@ -1,7 +1,8 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
 import {
-  QUESTION_URL as baseUrl
+  QUESTION_URL as baseUrl,
+  TAG_URL as tagUrl
 } from 'utilities/site-config';
 
 /**
@@ -42,11 +43,15 @@ const store = {
       EducationGroup_LessonId: 0,
       EducationTreeId_Grade: 0,
       LessonId: 0,
+      IndexTopicIds: [],
       TopicIds: [],
-      EducationTreeIds: []
+      EducationTreeIds: [],
+      AnswerNumber: 0,
+      TagsId: []
     },
     questionGridData: [],
     questionDdl: [],
+    tagDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
@@ -57,9 +62,10 @@ const store = {
     /**
      * insert new questionObj to questionGridData
      */
-    insert(state, id) {
+    insert(state, data) {
       let createdObj = util.cloneObject(state.questionObj);
-      createdObj.Id = id;
+      createdObj.FileName = data.FileName;
+      createdObj.Context = data.Context;
       state.questionGridData.push(createdObj);
     },
 
@@ -111,15 +117,15 @@ const store = {
       state
     }) {
       // fill grid if modelChanged
-      if (state.gridModelChanged) {
-        // get data
-        axios.get(`${baseUrl}/GetAll?` + util.toParam({
-          Ids: state.questionObj.TopicIds
-        })).then(response => {
+      // if (state.gridModelChanged) {
+      // get data
+      // axios.get(`${baseUrl}/GetAllByTopicIds?` + util.toParam({
+      axios.get(`${baseUrl}/GetAllByTopicIds?Ids=3351&Ids=3352`)
+        .then(response => {
           state.questionGridData = response.data;
           state.gridModelChanged = false;
         });
-      }
+      // }
     },
 
     /**
@@ -136,6 +142,16 @@ const store = {
           state.ddlModelChanged = false;
         });
       }
+    },
+    fillTagsDdlStore({
+      state
+    }) {
+        axios.get(`${tagUrl}/GetAll`).then(response => {
+          state.tagDdl = response.data.map(x => ({
+            value: x.Id,
+            label: x.Name
+          }));
+        });
     },
 
     /**
@@ -194,21 +210,42 @@ const store = {
       commit,
       dispatch
     }, closeModal) {
-      debugger;
+      // if (state.questionObj.TopicIds.length == 0) {
+      //   state.createVue.$snotify.html('<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>', {
+      //     type: 'error',
+      //     timeout: 4000,
+      //     showProgressBar: true,
+      //     position: 'leftTop'
+      //   });
+      //   return
+      // }
+
       state.questionObj.UserId = 0;
       state.questionObj.Context = '1';
       state.questionObj.InsertDateTime = '1';
       state.questionObj.FileName = '1';
+      state.questionObj.InsertDateTime = new Date().toLocaleString();;
 
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
-        if (!isValid) return;
+        // if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.questionObj).then(response => {
+        var formData = new FormData();
+        var fileUpload = state.questionObj.File;
+        if (fileUpload && fileUpload.size > 0) {
+          formData.append("word", fileUpload);
+        }
+        var tmp1 = util.toParam(state.questionObj);
+        axios({
+          method: 'post',
+          url: `${baseUrl}/Create?${tmp1}`,
+          data: formData,
+          config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        }).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
-            commit('insert', data.Id);
+            commit('insert', data);
             dispatch('modelChangedStore');
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);

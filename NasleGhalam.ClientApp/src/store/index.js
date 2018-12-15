@@ -31,6 +31,7 @@ const store = new Vuex.Store({
      * create notification and show
      */
     notify({}, notify) {
+      debugger
       // if vue instance not pass
       if (!notify.vm) return;
       var html = `<div class="snotifyToast__body">${notify.body}</div> `;

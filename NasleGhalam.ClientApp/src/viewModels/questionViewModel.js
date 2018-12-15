@@ -33,6 +33,11 @@ export default {
       numeric,
       required
     },
+    AnswerNumber: {
+      displayName: displayName('شماره گزینه صحیح'),
+      numeric,
+      required
+    },
     LookupId_RepeatnessType: {
       displayName: displayName('درجه تکرار'),
       numeric,

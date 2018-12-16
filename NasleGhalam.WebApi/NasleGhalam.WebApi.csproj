@@ -137,6 +137,7 @@
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="FilterAttribute\CheckWordFileUpdateValidation.cs" />
     <Compile Include="ModelBinderAndFormatter\IntegerModelBinder.cs" />
     <Compile Include="Util\SitePath.cs" />
     <None Include="%40CodeTemplates\WebApiControllerGenerator.cs">

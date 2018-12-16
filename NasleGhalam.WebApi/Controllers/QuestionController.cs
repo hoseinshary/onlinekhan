@@ -104,7 +104,7 @@ namespace NasleGhalam.WebApi.Controllers
                 //pragraph.
                 ////if(!pragraph.IsEmpty && pragraph.Text != "" && pragraph.Text != " ")
                 //{
-                //    questionViewModel.Context += pragraph.Text;
+                    questionViewModel.Context += pragraph.Text;
                 //}
             }
 

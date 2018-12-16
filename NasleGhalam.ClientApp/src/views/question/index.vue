@@ -68,8 +68,8 @@
         <br>
         <my-table :grid-data="questionGridData" :columns="questionGridColumn" hasIndex>
           <template slot="Id" slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit" round @click="showModalEdit(data.row.FileName)"/>
-            <my-btn-delete v-if="pageAccess.canDelete" round @click="showModalDelete(data.row.FileName)"/>
+            <my-btn-edit v-if="pageAccess.canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <my-btn-delete v-if="pageAccess.canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
         </my-table>
       </div>
@@ -207,6 +207,7 @@
       // this.fillGridStore();
       this.getAllGrade();
       this.fillEducationTreeStore();
+      // this.questionObj.IndexTopicIds=[3351,3352]
     }
   };
 </script>

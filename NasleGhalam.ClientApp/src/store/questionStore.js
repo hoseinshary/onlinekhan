@@ -64,8 +64,8 @@ const store = {
      */
     insert(state, data) {
       let createdObj = util.cloneObject(state.questionObj);
-      createdObj.FileName = data.FileName;
-      createdObj.Context = data.Context;
+      createdObj.FileName = data.Obj.FileName;
+      createdObj.Context = data.Obj.Context;
       state.questionGridData.push(createdObj);
     },
 
@@ -222,7 +222,6 @@ const store = {
 
       state.questionObj.UserId = 0;
       state.questionObj.Context = '1';
-      state.questionObj.InsertDateTime = '1';
       state.questionObj.FileName = '1';
       state.questionObj.InsertDateTime = new Date().toLocaleString();;
 
@@ -306,7 +305,25 @@ const store = {
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.questionObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.questionObj).then(response => {
+
+        
+        var formData = new FormData();
+        var fileUpload = state.questionObj.File;
+        if (fileUpload && fileUpload.size > 0) {
+          formData.append("word", fileUpload);
+        }
+        var tmp1 = util.toParam(state.questionObj);
+        axios({
+          method: 'post',
+          url: `${baseUrl}/Update?${tmp1}`,
+          data: formData,
+          config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        })
+
+
+
+        // axios.post(`${baseUrl}/Update`, state.questionObj)
+        .then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
@@ -381,7 +398,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.questionObj.Name;
+      return state.questionObj.Context;
     }
   }
 };

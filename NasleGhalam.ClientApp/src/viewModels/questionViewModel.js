@@ -9,9 +9,8 @@ import {
 export default {
   questionObj: {
     Context: {
-      displayName: displayName('متن'),
-      maxLength: maxLength(50),
-      required
+      displayName: displayName('متن')
+      // maxLength: maxLength(50)
     },
     QuestionNumber: {
       displayName: displayName('شماره سوال'),
@@ -85,13 +84,11 @@ export default {
     },
     InsertDateTime: {
       displayName: displayName('تاریخ ورود داده'),
-      maxLength: maxLength(50),
-      required
+      maxLength: maxLength(50)
     },
     UserId: {
       displayName: displayName('کاربر'),
-      numeric,
-      required
+      numeric
     },
     File: {
       displayName: displayName('فایل سوال')

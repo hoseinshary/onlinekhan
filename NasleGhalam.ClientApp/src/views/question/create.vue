@@ -31,6 +31,7 @@
           multiple
           v-model="questionObj.TagsId"
           :options="tagDdl"
+          float-label="تگ ها"
         />
 
       </section>
@@ -191,8 +192,12 @@ export default {
    */
   data() {
     return {
-      answersDdl:[{value:1,label:"1"},{value:2,label:"2"}
-      ,{value:3,label:"3"},{value:4,label:"4"}]
+      answersDdl: [
+        { value: 1, label: "1" },
+        { value: 2, label: "2" },
+        { value: 3, label: "3" },
+        { value: 4, label: "4" }
+      ]
     };
   },
   methods: {
@@ -203,8 +208,7 @@ export default {
       "resetCreateStore",
       "fillTagsDdlStore"
     ]),
-    ...mapActions("educationGroupStore", { fillEduGrpDdl: "fillDdlStore" }),
-    ...mapActions("lessonStore", { fillLessonDdl: "fillDdlStore" }),
+    // ...mapActions("lessonStore", { fillLessonDdl: "fillDdlStore" }),
     ...mapActions("lookupStore", [
       "fillTopicAreaTypeDdlStore",
       "getLookupQuestionType",
@@ -215,7 +219,7 @@ export default {
     ...mapActions("topicStore", ["GetAllTreeStore"]),
     getAllDdls() {
       // this.fillEduGrpDdl();
-      this.fillLessonDdl();
+      // this.fillLessonDdl();
       this.fillTagsDdlStore();
       this.getLookupQuestionType();
       this.getLookupQuestionHardnessType();
@@ -240,8 +244,8 @@ export default {
       isOpenModalCreate: "isOpenModalCreate",
       tagDdl: "tagDdl"
     }),
-    ...mapState("educationGroupStore", ["educationGroupDdl"]),
-    ...mapState("lessonStore", { lessonDdl: "allObjDdl" }),
+    // ...mapState("educationGroupStore", ["educationGroupDdl"]),
+    // ...mapState("lessonStore", { lessonDdl: "allObjDdl" }),
     ...mapState("lookupStore", [
       "lookupTopicAreaTypeDdl",
       "lookupQuestionType",
@@ -251,14 +255,14 @@ export default {
     ]),
     ...mapState("topicStore", {
       topicTreeData: "topicTreeData"
-    }),
-    lessonFilteredDdl: function() {
-      return this.questionObj.EducationGroupId == 0
-        ? []
-        : this.lessonDdl.filter(
-            x => x.educationGroupId == this.questionObj.EducationGroupId
-          );
-    }
+    })
+    // lessonFilteredDdl: function() {
+    //   return this.questionObj.EducationGroupId == 0
+    //     ? []
+    //     : this.lessonDdl.filter(
+    //         x => x.educationGroupId == this.questionObj.EducationGroupId
+    //       );
+    // }
   },
   /**
    * validations

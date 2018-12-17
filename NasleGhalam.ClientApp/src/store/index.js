@@ -22,6 +22,7 @@ import universityBranchStore from './universityBranchStore';
 import questionStore from './questionStore';
 import studentStore from './studentStore';
 import educationTreeStore from './educationTreeStore';
+import questionGroupStore from './questionGroupStore';
 
 Vue.use(Vuex);
 
@@ -90,7 +91,8 @@ const store = new Vuex.Store({
     questionStore,
     axillaryBookStore,
     studentStore,
-    educationTreeStore
+    educationTreeStore,
+    questionGroupStore
   }
 });
 

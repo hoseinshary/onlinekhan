@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.ViewModels.QuestionGroup
 {
@@ -16,6 +17,7 @@ namespace NasleGhalam.ViewModels.QuestionGroup
         [Display(Name = "")]
         public DateTime InsertTime { get; set; }
 
+        public string PInsertTime => InsertTime.ToPersianDateTime();
 
         [Display(Name = "")]
         public string WordFile { get; set; }

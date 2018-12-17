@@ -90,6 +90,10 @@ export default [
       {
         path: '/educationTree',
         component: () => import('views/educationTree')
+      },
+      {
+        path: '/questionGroup',
+        component: () => import('views/questionGroup')
       }
     ]
   },

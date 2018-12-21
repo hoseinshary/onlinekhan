@@ -91,7 +91,10 @@ namespace NasleGhalam.WebApi.Controllers
             
             
             XWPFDocument document = null;
-            document = new XWPFDocument(wordFile.InputStream);
+            MemoryStream tempStream  = new MemoryStream();
+            wordFile.InputStream.CopyTo(tempStream);
+            wordFile.InputStream.Position = tempStream.Position = 0;
+            document = new XWPFDocument(tempStream);
             var allP = document.Paragraphs;
             
             

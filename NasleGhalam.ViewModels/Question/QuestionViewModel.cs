@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
 using System.Collections.Generic;
+using NasleGhalam.ViewModels.QuestionOption;
+using NasleGhalam.ViewModels.Tag;
+using NasleGhalam.ViewModels.Topic;
 using NasleGhalam.ViewModels._MediaFormatter;
 using NasleGhalam.ViewModels._Attributes;
 
@@ -75,7 +78,9 @@ namespace NasleGhalam.ViewModels.Question
       
         public bool IsActive { get; set; }
 
+        public List<QuestionOptionViewModel> QuestionOptions { get; set; } = new List<QuestionOptionViewModel>();
+        public List<TopicViewModel> Topics { get; set; } = new List<TopicViewModel>();
+        public List<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
 
-    
     }
 }

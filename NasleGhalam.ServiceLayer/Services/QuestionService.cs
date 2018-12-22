@@ -31,8 +31,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public QuestionViewModel GetById(int id)
         {
+            var q = _questions
+                .Include(current => current.QuestionOptions)
+                .Include(current => current.Topics)
+                .Include(current => current.Tags)
+                .Where(current => current.Id == id)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .FirstOrDefault();
             return _questions
                 .Include(current => current.QuestionOptions)
+                .Include(current => current.Topics)
+                .Include(current => current.Tags)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -47,7 +58,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<QuestionViewModel> GetAllByTopicIds(IEnumerable<int> ids)
         {
-           
+            var q= _questions
+                .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
             return _questions
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                 .AsNoTracking()
@@ -204,6 +220,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var question = _questions
                 .Include(current => current.Topics)
                 .Include(current => current.Tags)
+                .Include(current => current.QuestionOptions)
                 .First(current => current.Id == id);
 
             if (question == null)
@@ -223,7 +240,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var tags = question.Tags.ToList();
             foreach (var item in tags)
             {
-                _uow.MarkAsDeleted(item);
+                question.Tags.Remove(item);
             }
 
 

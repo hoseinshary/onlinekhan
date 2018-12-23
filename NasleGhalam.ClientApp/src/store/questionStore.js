@@ -43,8 +43,8 @@ const store = {
       EducationGroup_LessonId: 0,
       EducationTreeId_Grade: 0,
       LessonId: 0,
-      IndexTopicIds: [],
-      TopicIds: [],
+      IndexTopicsId: [],
+      TopicsId: [],
       EducationTreeIds: [],
       AnswerNumber: 0,
       TagsId: []
@@ -109,6 +109,7 @@ const store = {
         state.selectedId = id;
         util.mapObject(response.data, state.questionObj);
         state.questionObj.TagsId = response.data.Tags.map(x => x.Id);
+        state.questionObj.TopicsId = response.data.Topics.map(x => x.Id);
       });
     },
 
@@ -122,7 +123,7 @@ const store = {
       // if (state.gridModelChanged) {
       // get data
       axios.get(`${baseUrl}/GetAllByTopicIds?` + util.toParam({
-        Ids: state.questionObj.IndexTopicIds
+        Ids: state.questionObj.IndexTopicsId
       })).then(response => {
           state.questionGridData = response.data;
           state.gridModelChanged = false;
@@ -212,7 +213,7 @@ const store = {
       commit,
       dispatch
     }, closeModal) {
-      if (state.questionObj.TopicIds.length == 0) {
+      if (state.questionObj.TopicsId.length == 0) {
         state.createVue.$snotify.html('<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>', {
           type: 'error',
           timeout: 4000,

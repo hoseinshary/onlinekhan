@@ -19,7 +19,7 @@
           accordion
           node-key="Id"
           ref="topicTree"
-          :ticked.sync="questionObj.TopicIds"
+          :ticked.sync="questionObj.TopicsId"
         />
 
       </section>

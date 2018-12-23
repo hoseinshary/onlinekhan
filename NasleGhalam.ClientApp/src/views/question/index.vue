@@ -54,7 +54,7 @@
                 accordion
                 node-key="Id"
                 ref="topicTree"
-                :ticked.sync="questionObj.IndexTopicIds"
+                :ticked.sync="questionObj.IndexTopicsId"
               />
             </section>
           </div>
@@ -173,7 +173,7 @@
       },
       lessonDdlChange(val) {
         this.fillTreeStore(val);
-        this.questionObj.IndexTopicIds = [];
+        this.questionObj.IndexTopicsId = [];
       }
     },
     computed: {
@@ -196,10 +196,10 @@
     watch: {
       "questionObj.EducationTreeIds"(val) {
         this.fillLessonDdlStore(val);
-        this.questionObj.IndexTopicIds = [];
+        this.questionObj.IndexTopicsId = [];
       },
-      "questionObj.IndexTopicIds"(newVal, oldVal) {
-        if(this.questionObj.IndexTopicIds.length > 0)
+      "questionObj.IndexTopicsId"(newVal, oldVal) {
+        if(this.questionObj.IndexTopicsId.length > 0)
         this.fillGridStore();
       }
     },
@@ -207,7 +207,7 @@
       // this.fillGridStore();
       this.getAllGrade();
       this.fillEducationTreeStore();
-      this.questionObj.IndexTopicIds=[3351,3352]
+      this.questionObj.IndexTopicsId=[3351,3352]
     }
   };
 </script>

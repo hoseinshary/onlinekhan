@@ -64,6 +64,7 @@ const store = {
      */
     insert(state, data) {
       let createdObj = util.cloneObject(state.questionObj);
+      createdObj.Id = data.Id;
       createdObj.FileName = data.Obj.FileName;
       createdObj.Context = data.Obj.Context;
       state.questionGridData.push(createdObj);
@@ -107,6 +108,7 @@ const store = {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.questionObj);
+        state.questionObj.TagsId = response.data.Tags.map(x => x.Id);
       });
     },
 

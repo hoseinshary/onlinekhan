@@ -109,12 +109,12 @@
         <template slot-scope="data">
           <q-radio
             v-model="data.obj.$model"
-            val="false"
+            :val="false"
             label="خیر"
           />
           <q-radio
             v-model="data.obj.$model"
-            val="true"
+            :val="true"
             label="بلی"
           />
         </template>
@@ -127,12 +127,12 @@
         <template slot-scope="data">
           <q-radio
             v-model="data.obj.$model"
-            val="false"
+            :val="false"
             label="خیر"
           />
           <q-radio
             v-model="data.obj.$model"
-            val="true"
+            :val="true"
             label="بلی"
           />
         </template>

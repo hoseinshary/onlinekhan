@@ -83,6 +83,7 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "فعال")]
         public bool IsActive { get; set; }
 
+        public int AnswerNumber { get; set; }
 
         public List<int> TopicsId { get; set; } = new List<int>();
         public List<int> TagsId { get; set; } = new List<int>();

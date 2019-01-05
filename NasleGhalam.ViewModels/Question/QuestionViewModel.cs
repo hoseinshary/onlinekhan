@@ -78,6 +78,8 @@ namespace NasleGhalam.ViewModels.Question
       
         public bool IsActive { get; set; }
 
+        public int AnswerNumber { get; set; }
+
         public List<QuestionOptionViewModel> QuestionOptions { get; set; } = new List<QuestionOptionViewModel>();
         public List<TopicViewModel> Topics { get; set; } = new List<TopicViewModel>();
         public List<TagViewModel> Tags { get; set; } = new List<TagViewModel>();

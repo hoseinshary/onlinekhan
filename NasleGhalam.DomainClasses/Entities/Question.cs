@@ -60,6 +60,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public bool IsActive { get; set; }
 
+        public int AnswerNumber { get; set; }
+
         public ICollection<QuestionJudge> QuestionJudges { get; set; }
                
         public ICollection<QuestionOption> QuestionOptions { get; set; }

@@ -6,6 +6,7 @@ namespace NasleGhalam.WebApi.Util
     {
         public static string AxillaryBookRelPath => "~/Content/AxillaryBook/";
         public static string QuestionRelPath => "~/Content/Question/";
+        public static string QuestionGroupRelPath => "~/Content/QuestionGroup/";
         //-------------------------------------------------------------------------------------
 
 
@@ -14,6 +15,10 @@ namespace NasleGhalam.WebApi.Util
 
 
         public static string GetQuestionAbsPath(string name) => ToAbsoulutPath($"{QuestionRelPath}{name}");
+
+
+        public static string GetQuestionGroupAbsPath(string name) => ToAbsoulutPath($"{QuestionGroupRelPath}{name}");
+
         public static string ToAbsoulutPath(string relativePath)
         {
             return HttpContext.Current.Server.MapPath(relativePath);

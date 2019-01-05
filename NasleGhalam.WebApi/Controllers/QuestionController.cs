@@ -111,33 +111,33 @@ namespace NasleGhalam.WebApi.Controllers
                 //}
             }
 
-            //get options
-            int optionNumbers = 0;
-            var optionArray  = new List<QuestionOptionViewModel>();
-            for(int i = allP.Count-1; optionNumbers < 4 ; i--)
-            {
-                if (!allP[i].IsEmpty && allP[i].Text != "" && allP[i].Text != " ")
-                {
-                    optionNumbers++;
-                    QuestionOptionViewModel newOption = new QuestionOptionViewModel();
-                    newOption.Context = allP[i].Text;
-                    if ((questionViewModel.AnswerNumber == 4 && optionNumbers == 1) ||
-                        (questionViewModel.AnswerNumber == 3 && optionNumbers == 2) ||
-                        (questionViewModel.AnswerNumber == 2 && optionNumbers == 3) ||
-                        (questionViewModel.AnswerNumber == 1 && optionNumbers == 4))
-                        newOption.IsAnswer = true;
-                    else
-                        newOption.IsAnswer = false;
+            ////get options
+            //int optionNumbers = 0;
+            //var optionArray  = new List<QuestionOptionViewModel>();
+            //for(int i = allP.Count-1; optionNumbers < 4 ; i--)
+            //{
+            //    if (!allP[i].IsEmpty && allP[i].Text != "" && allP[i].Text != " ")
+            //    {
+            //        optionNumbers++;
+            //        QuestionOptionViewModel newOption = new QuestionOptionViewModel();
+            //        newOption.Context = allP[i].Text;
+            //        if ((questionViewModel.AnswerNumber == 4 && optionNumbers == 1) ||
+            //            (questionViewModel.AnswerNumber == 3 && optionNumbers == 2) ||
+            //            (questionViewModel.AnswerNumber == 2 && optionNumbers == 3) ||
+            //            (questionViewModel.AnswerNumber == 1 && optionNumbers == 4))
+            //            newOption.IsAnswer = true;
+            //        else
+            //            newOption.IsAnswer = false;
 
-                    optionArray.Add(newOption);
+            //        optionArray.Add(newOption);
 
-                }
-            }
+            //    }
+            //}
 
-            for (int i = optionArray.Count-1 ; i >= 0; i--)
-            {
-                questionViewModel.Options.Add(optionArray[i]);
-            }
+            //for (int i = optionArray.Count-1 ; i >= 0; i--)
+            //{
+            //    questionViewModel.Options.Add(optionArray[i]);
+            //}
 
 
             questionViewModel.InsertDateTime = DateTime.Now;
@@ -157,8 +157,8 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
         [CheckModelValidation]
-        [CheckWordFileUpdateValidation("word", 1024)]
-        public IHttpActionResult Update(QuestionUpdateViewModel questionViewModel)
+        //[CheckWordFileUpdateValidation("word", 1024)]
+        public IHttpActionResult Update([FromUri]QuestionUpdateViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             bool updateFile = false;
@@ -187,7 +187,13 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.QuestionDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_questionService.Delete(id));
+            var question = _questionService.GetById(id);
+            var msgResualt = _questionService.Delete(id);
+            if (msgResualt.MessageType == MessageType.Success)
+            {
+                File.Delete(SitePath.GetQuestionAbsPath(question.FileName));
+            }
+            return Ok(msgResualt);
         }
     }
 }

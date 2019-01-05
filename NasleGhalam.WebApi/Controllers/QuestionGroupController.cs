@@ -10,6 +10,9 @@ using System.Web;
 using NasleGhalam.WebApi.Util;
 using NPOI.XSSF.UserModel;
 using NPOI.XWPF.UserModel;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -43,6 +46,57 @@ namespace NasleGhalam.WebApi.Controllers
                 return NotFound();
             }
             return Ok(questionGroup);
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetExcelFile(string id)
+        {
+            id += ".xlsx";
+
+            var stream = new MemoryStream();
+            var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+
+            return result;
+        }
+
+
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetWordFile(string id)
+        {
+            id += ".docx";
+
+            var stream = new MemoryStream();
+            var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+
+            return result;
         }
 
 

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Web;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.QuestionGroup;
+using NasleGhalam.ServiceLayer.Util;
+using NPOI.XSSF.UserModel;
+using NPOI.XWPF.UserModel;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -62,13 +67,74 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel)
+        public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word , HttpPostedFile excel)
         {
+            XWPFDocument document = null;
+            document = new XWPFDocument(word.InputStream);
+            var allP = document.Paragraphs;
+            XSSFWorkbook sheet = new XSSFWorkbook();
+            var s = sheet.GetSheetAt(0);
+            
+           
+
+            var count = allP.Count;
+
+            int questionCount = 0;
+            int i = 0;
+            while (i < count)
+            {
+                if (isQuestionParagraph(allP[i].Text))
+                {
+                    Question newQuestion = new Question();
+
+                    
+
+                    var tempQuestion = new List<XWPFParagraph>();
+                    tempQuestion.Add(allP[i]);
+                    i++;
+                    while (!isQuestionParagraph(allP[i].Text))
+                    {
+                        tempQuestion.Add(allP[i]);
+
+                        i++;
+                    }
+
+                    questionCount++;
+
+                    XWPFDocument doc = new XWPFDocument();
+                    int position = 0;
+                    foreach (var item in tempQuestion)
+                    {
+                        doc.SetParagraph(item, position);
+                        position++;
+                    }
+                    FileStream out1 = new FileStream(SitePath.GetQuestionAbsPath(Guid.NewGuid() + ".docx"), FileMode.Create);
+                    doc.Write(out1);
+                    out1.Close();
+
+                }
+                i++;
+            }
+
+
+
+
+
+
+            /////////////////////////////////
+
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
             _questionGroups.Add(questionGroup);
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = questionGroup.Id;
+
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.WordFile) && !string.IsNullOrEmpty(questionGroupViewModel.ExcelFile))
+            {
+                word.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.WordFile));
+                excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.ExcelFile));
+            }
+
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
@@ -108,7 +174,34 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
+        public bool isQuestionParagraph(string s)
+        {
+            var arraytemp = s.ToCharArray();
 
-   
+            int i = 0;
+            while (i < arraytemp.Length)
+            {
+                if (arraytemp[i] == ' ' || arraytemp[i] == '\n' || arraytemp[i] == '\r')
+                {
+                    i++;
+                }
+                else if (char.IsDigit(arraytemp[i]))
+                {
+                    i++;
+                    while (char.IsDigit(arraytemp[i]))
+                    {
+                        i++;
+                    }
+                    if (arraytemp[i] == '-')
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                i++;
+            }
+            return false;
+        }
+
     }
 }

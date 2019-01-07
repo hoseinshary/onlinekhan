@@ -54,6 +54,7 @@ namespace NasleGhalam.WebApi.Controllers
         public HttpResponseMessage GetWordFile(string id)
         {
             var stream = new MemoryStream();
+            id += ".docx";
             var filestraem = File.OpenRead(SitePath.GetQuestionAbsPath(id));
             filestraem.CopyTo(stream);
 
@@ -84,7 +85,8 @@ namespace NasleGhalam.WebApi.Controllers
 
             if (wordFile != null && wordFile.ContentLength > 0)
             {
-                questionViewModel.FileName = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+                //{Path.GetExtension(wordFile.FileName)}
+                questionViewModel.FileName = $"{Guid.NewGuid()}";
             }
             /////////////////////////////
 
@@ -147,7 +149,7 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _questionService.Create(questionViewModel);
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
-                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName));
+                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName + Path.GetExtension(wordFile.FileName)));
             }
 
             return Ok(msgRes);
@@ -166,7 +168,7 @@ namespace NasleGhalam.WebApi.Controllers
             if (wordFile != null && wordFile.ContentLength > 0)
             {
                 fileNamePrevous = questionViewModel.FileName;
-                questionViewModel.FileName = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+                questionViewModel.FileName = $"{Guid.NewGuid()}";
                 updateFile = true;
             }
 
@@ -174,11 +176,11 @@ namespace NasleGhalam.WebApi.Controllers
 
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && updateFile)
             {
-                if (File.Exists(SitePath.GetQuestionAbsPath(fileNamePrevous)))
+                if (File.Exists(SitePath.GetQuestionAbsPath(fileNamePrevous) + Path.GetExtension(wordFile.FileName)))
                 {
-                    File.Delete(SitePath.GetQuestionAbsPath(fileNamePrevous));
+                    File.Delete(SitePath.GetQuestionAbsPath(fileNamePrevous) + Path.GetExtension(wordFile.FileName));
                 }
-                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName));
+                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + Path.GetExtension(wordFile.FileName));
             }
             return Ok(msgRes);
         }
@@ -191,7 +193,7 @@ namespace NasleGhalam.WebApi.Controllers
             var msgResualt = _questionService.Delete(id);
             if (msgResualt.MessageType == MessageType.Success)
             {
-                File.Delete(SitePath.GetQuestionAbsPath(question.FileName));
+                File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".docx");
             }
             return Ok(msgResualt);
         }

@@ -52,7 +52,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public HttpResponseMessage GetExcelFile(string id)
         {
-            id += ".xlsx";
+            //id += ".xlsx";
 
             var stream = new MemoryStream();
             var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
@@ -78,7 +78,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public HttpResponseMessage GetWordFile(string id)
         {
-            id += ".docx";
+            //id += ".docx";
 
             var stream = new MemoryStream();
             var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
@@ -120,38 +120,13 @@ namespace NasleGhalam.WebApi.Controllers
                 questionGroupViewModel.ExcelFile = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
             }
 
-            /////////////////////////////
-
-            XWPFDocument document = null;
-            document = new XWPFDocument(wordFile.InputStream);
-            var allP = document.Paragraphs;
-            //XSSFWorkbook doc2 = new XSSFWorkbook();
-
-
-
-            //clean paragraphs
-            foreach (var pragraph in allP)
-            {
-                if(!pragraph.IsEmpty && pragraph.Text != "" && pragraph.Text != " ")
-                {
-               
-                }
-            }
-
-
-
-
-            /////////////////////////////
+        
 
             questionGroupViewModel.InsertTime = DateTime.Now;
             questionGroupViewModel.UserId = Request.GetUserId();
 
-            var msgRes = _questionGroupService.Create(questionGroupViewModel);
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.WordFile) && !string.IsNullOrEmpty(questionGroupViewModel.ExcelFile))
-            {
-                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionGroupViewModel.WordFile));
-                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionGroupViewModel.ExcelFile));
-            }
+            var msgRes = _questionGroupService.Create(questionGroupViewModel ,wordFile,excelFile );
+      
             
 
             return Ok(msgRes);
@@ -172,5 +147,10 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_questionGroupService.Delete(id));
         }
+
+
+       
+
+
     }
 }

@@ -39,10 +39,10 @@ const store = {
       InsertDateTime: '',
       UserId: 0,
       File: '',
-      EducationGroupId: 0,
-      EducationGroup_LessonId: 0,
-      EducationTreeId_Grade: 0,
-      LessonId: 0,
+      // EducationGroupId: 0,
+      // EducationGroup_LessonId: 0,
+      // EducationTreeId_Grade: 0,
+      // LessonId: 0,
       IndexTopicsId: [],
       TopicsId: [],
       EducationTreeIds: [],
@@ -165,6 +165,7 @@ const store = {
     }, vm) {
       debugger;
       // check instance validation
+      debugger
       vm.$v.questionObj.$touch();
       if (vm.$v.questionObj.$error) {
         dispatch('notifyInvalidForm', vm, {
@@ -213,8 +214,12 @@ const store = {
       commit,
       dispatch
     }, closeModal) {
-      if (state.questionObj.TopicsId.length == 0) {
-        state.createVue.$snotify.html('<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>', {
+      if (state.questionObj.TopicsId.length == 0 || state.questionObj.File == '') {
+        var msg = '';
+        msg += (state.questionObj.TopicsId.length == 0 ?'<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div><br/>':'')
+        msg += (state.questionObj.File == '' ?'<div class="snotifyToast__body">فایلی انتخاب نکرده اید.</div>':'')
+
+        state.createVue.$snotify.html(msg, {
           type: 'error',
           timeout: 4000,
           showProgressBar: true,
@@ -224,7 +229,7 @@ const store = {
       }
 
       state.questionObj.UserId = 0;
-      state.questionObj.Context = '1';
+      delete state.questionObj.Context;
       state.questionObj.FileName = '1';
       state.questionObj.InsertDateTime = new Date().toLocaleString();;
 
@@ -304,6 +309,15 @@ const store = {
       commit,
       dispatch
     }) {
+      if (state.questionObj.TopicsId.length == 0) {
+        state.createVue.$snotify.html('<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>', {
+          type: 'error',
+          timeout: 4000,
+          showProgressBar: true,
+          position: 'leftTop'
+        });
+        return
+      }
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
@@ -315,8 +329,9 @@ const store = {
         if (fileUpload && fileUpload.size > 0) {
           formData.append("word", fileUpload);
         }
-        var tmp1 = util.toParam(state.questionObj);
-        axios({
+      delete state.questionObj.Context;
+      var tmp1 = util.toParam(state.questionObj);
+      axios({
           method: 'post',
           url: `${baseUrl}/Update?${tmp1}`,
           data: formData,

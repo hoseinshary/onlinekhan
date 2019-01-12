@@ -207,7 +207,7 @@
       // this.fillGridStore();
       this.getAllGrade();
       this.fillEducationTreeStore();
-      this.questionObj.IndexTopicsId=[3351,3352]
+      // this.questionObj.IndexTopicsId=[3351,3352]
     }
   };
 </script>

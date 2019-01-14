@@ -13,11 +13,15 @@ namespace NasleGhalam.DataAccess.Context
 {
     public class DBContext : DbContext, IUnitOfWork
     {
+        static DBContext()
+        {
+            Database.SetInitializer<DBContext>(null);
+        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             // disable cascade delete
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
-            // default navarcha(50)
+            // default nvarchar(50)
             modelBuilder.Properties<string>().Configure(p => p.HasMaxLength(50));
 
             modelBuilder.Configurations.AddFromAssembly(typeof(ActionConfig).Assembly);

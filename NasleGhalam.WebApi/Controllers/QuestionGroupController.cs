@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
@@ -31,9 +32,9 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionGroupReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllByLessonId(int id)
         {
-            return Ok(_questionGroupService.GetAll());
+            return Ok(_questionGroupService.GetAll().Where(current => current.LessonId == id));
         }
 
 
@@ -98,6 +99,39 @@ namespace NasleGhalam.WebApi.Controllers
 
             return result;
         }
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
+        [CheckModelValidation]
+        [CheckWordFileValidation("word", 1024)]
+        [CheckWordFileValidation("excel", 1024)]
+        public IHttpActionResult PreCreate(QuestionGroupCreateViewModel questionGroupViewModel)
+        {
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
+            var excelFile = HttpContext.Current.Request.Files.Get("excel");
+
+            if (wordFile != null && wordFile.ContentLength > 0)
+            {
+                questionGroupViewModel.WordFile = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+            }
+
+            if (excelFile != null && excelFile.ContentLength > 0)
+            {
+                questionGroupViewModel.ExcelFile = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
+            }
+
+
+
+            questionGroupViewModel.InsertTime = DateTime.Now;
+            questionGroupViewModel.UserId = Request.GetUserId();
+
+            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile, excelFile);
+
+
+
+            return Ok(msgRes);
+        }
+
 
 
         [HttpPost]

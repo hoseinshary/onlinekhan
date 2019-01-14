@@ -61,6 +61,22 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
+        /// گرفتن همه سوال های سوال گروهی
+        /// </summary>
+        /// <returns></returns>
+        public IList<QuestionViewModel> GetAllByQuestionGroupId(int id)
+        {
+
+            return _questions
+                .Where(current => current.QuestionGroups.Any(x => x.Id == id))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
+
+
+        /// <summary>
         /// ثبت سوال
         /// </summary>
         /// <param name="questionViewModel"></param>

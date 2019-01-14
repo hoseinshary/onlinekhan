@@ -37,6 +37,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionService.GetAllByTopicIds(ids));
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess , ActionBits.QuestionGroupReadAccess)]
+        public IHttpActionResult GetAllByQuestionGroupId(int id)
+        {
+            return Ok(_questionService.GetAllByQuestionGroupId(id));
+        }
+
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetById(int id)

@@ -11,6 +11,7 @@ using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.QuestionGroup;
 using NasleGhalam.ServiceLayer.Util;
+using NasleGhalam.ViewModels.Question;
 using NPOI.XSSF.UserModel;
 using NPOI.XWPF.UserModel;
 
@@ -43,6 +44,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<QuestionGroupViewModel>)
                 .FirstOrDefault();
         }
+
+       
 
 
         /// <summary>
@@ -138,6 +141,11 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
+        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile wordFile, HttpPostedFile excelFile)
+        {
+            throw new NotImplementedException();
+        }
+
 
         /// <summary>
         /// ویرایش سوال گروهی
@@ -159,6 +167,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// todo: delete all questions in one commit
         public MessageResultClient Delete(int id)
         {
             var questionGroupViewModel = GetById(id);

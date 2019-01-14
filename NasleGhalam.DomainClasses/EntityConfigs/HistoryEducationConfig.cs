@@ -7,34 +7,27 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public HistoryEducationConfig()
         {
-            this.HasKey(x => x.Id);
+            HasKey(x => x.Id);
 
-            this.HasRequired(x => x.Student)
+            HasRequired(x => x.Student)
                 .WithMany(x => x.HistoryEducations)
                 .HasForeignKey(x => x.StudentId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.Exam)
+            HasRequired(x => x.Exam)
                 .WithMany(x => x.HistoryEducations)
                 .HasForeignKey(x => x.ExamId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.EducationGroup)
+            
+
+            
+            HasRequired(x => x.EducationTree)
                 .WithMany(x => x.HistoryEducations)
-                .HasForeignKey(x => x.EducationGroupId)
+                .HasForeignKey(x => x.EducationTreeId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.EducationSubGroup)
-                .WithMany(x => x.HistoryEducations)
-                .HasForeignKey(x => x.EducationSubGroupId)
-                .WillCascadeOnDelete(false);
-
-            this.HasRequired(x => x.GradeLevel)
-                .WithMany(x => x.HistoryEducations)
-                .HasForeignKey(x => x.GradeLevelId)
-                .WillCascadeOnDelete(false);
-
-            this.HasMany(x => x.Cities)
+            HasMany(x => x.Cities)
              .WithMany(x => x.HistoryEducations)
              .Map(config =>
              {
@@ -43,7 +36,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                  config.ToTable("HistoryEducations_Cities");
              });
 
-            this.HasMany(x => x.UniversityBranches)
+            HasMany(x => x.UniversityBranches)
              .WithMany(x => x.HistoryEducations)
              .Map(config =>
              {

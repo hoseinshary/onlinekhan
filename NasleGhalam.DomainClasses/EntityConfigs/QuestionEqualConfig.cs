@@ -7,14 +7,14 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public QuestionEqualConfig()
         {
-            this.HasKey(x => x.Id);
+            HasKey(x => x.Id);
 
-            this.HasRequired(x => x.Question1)
+            HasRequired(x => x.Question1)
                 .WithMany(x => x.QuestionEquals1)
                 .HasForeignKey(x => x.QuestionId1)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.Question2)
+            HasRequired(x => x.Question2)
                 .WithMany(x => x.QuestionEquals2)
                 .HasForeignKey(x => x.QuestionId2)
                 .WillCascadeOnDelete(false);

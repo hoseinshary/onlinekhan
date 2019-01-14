@@ -10,6 +10,8 @@ function getIndexById(id) {
   return store.state.roleGridData.findIndex(o => o.Id == id);
 }
 
+var allUserTypeName = ['سازمانی', 'دانش آموز', 'معلم'];
+
 const store = {
   namespaced: true,
   state: {
@@ -21,12 +23,13 @@ const store = {
     roleObj: {
       Id: 0,
       Name: '',
-      Level: 0
+      Level: 0,
+      UserType: undefined,
+      UserTypeName: ''
     },
     roleGridData: [],
     roleDdl: [],
     selectedId: 0,
-    ddlModelChanged: true,
     gridModelChanged: true,
     createVue: null,
     editVue: null,
@@ -46,6 +49,7 @@ const store = {
     insert(state, id) {
       let createdObj = util.cloneObject(state.roleObj);
       createdObj.Id = id;
+      createdObj.UserTypeName = allUserTypeName[createdObj.UserType];
       state.roleGridData.push(createdObj);
     },
 
@@ -55,6 +59,7 @@ const store = {
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
+      state.roleObj.UserTypeName = allUserTypeName[state.roleObj.UserType];
       util.mapObject(state.roleObj, state.roleGridData[index]);
     },
 
@@ -104,13 +109,16 @@ const store = {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      if (state.ddlModelChanged) {
-        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-          state.roleDdl = response.data;
-          state.ddlModelChanged = false;
-        });
-      }
+    fillDdlByStudentStore({ state }) {
+      axios.get(`${baseUrl}/GetAllByStudentDdl`).then(response => {
+        state.roleDdl = response.data;
+      });
+    },
+
+    fillDdlByOrganStore({ state }) {
+      axios.get(`${baseUrl}/GetAllByOrganDdl`).then(response => {
+        state.roleDdl = response.data;
+      });
     },
 
     /**
@@ -131,7 +139,6 @@ const store = {
      * model changed
      */
     modelChangedStore({ state }) {
-      state.ddlModelChanged = true;
       state.gridModelChanged = true;
     },
 

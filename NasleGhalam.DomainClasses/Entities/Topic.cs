@@ -37,9 +37,9 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public ICollection<Topic> ChildrenTopic { get; set; }
 
-        public int EducationGroup_LessonId { get; set; }
+        public int LessonId { get; set; }
 
-        public EducationGroup_Lesson EducationGroup_Lesson { get; set; }
+        public Lesson Lesson { get; set; }
 
         public ICollection<EducationBook> EducationBooks { get; set; }
 

@@ -1,19 +1,35 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Student
+namespace NasleGhalam.ViewModels.QuestionGroup
 {
-	public class StudentViewModel
+	public class QuestionGroupViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public string FatherName { get; set; }
+		public string Title { get; set; }
 
 
 		[Display(Name = "")]
-		public string Address { get; set; }
+		public DateTime InsertTime { get; set; }
+
+
+		[Display(Name = "")]
+		public string WordFile { get; set; }
+
+
+		[Display(Name = "")]
+		public string ExcelFile { get; set; }
+
+
+		[Display(Name = "")]
+		public int LessonId { get; set; }
+
+
+		[Display(Name = "")]
+		public int UserId { get; set; }
 
 
 	}

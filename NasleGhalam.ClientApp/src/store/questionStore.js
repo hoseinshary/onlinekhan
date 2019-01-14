@@ -1,6 +1,9 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { QUESTION_URL as baseUrl } from 'utilities/site-config';
+import {
+  QUESTION_URL as baseUrl,
+  TAG_URL as tagUrl
+} from 'utilities/site-config';
 
 /**
  * find index of object in questionGridData by id
@@ -36,11 +39,19 @@ const store = {
       InsertDateTime: '',
       UserId: 0,
       File: '',
-      EducationGroupId: 0,
-      EducationGroup_LessonId: 0
+      // EducationGroupId: 0,
+      // EducationGroup_LessonId: 0,
+      // EducationTreeId_Grade: 0,
+      // LessonId: 0,
+      IndexTopicsId: [],
+      TopicsId: [],
+      EducationTreeIds: [],
+      AnswerNumber: 0,
+      TagsId: []
     },
     questionGridData: [],
     questionDdl: [],
+    tagDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
@@ -51,9 +62,11 @@ const store = {
     /**
      * insert new questionObj to questionGridData
      */
-    insert(state, id) {
+    insert(state, data) {
       let createdObj = util.cloneObject(state.questionObj);
-      createdObj.Id = id;
+      createdObj.Id = data.Id;
+      createdObj.FileName = data.Obj.FileName;
+      createdObj.Context = data.Obj.Context;
       state.questionGridData.push(createdObj);
     },
 
@@ -89,31 +102,41 @@ const store = {
     /**
      * get data by id
      */
-    getByIdStore({ state }, id) {
+    getByIdStore({
+      state
+    }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.questionObj);
+        state.questionObj.TagsId = response.data.Tags.map(x => x.Id);
+        state.questionObj.TopicsId = response.data.Topics.map(x => x.Id);
       });
     },
 
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
+    fillGridStore({
+      state
+    }) {
       // fill grid if modelChanged
-      if (state.gridModelChanged) {
-        // get data
-        axios.get(`${baseUrl}/GetAll`).then(response => {
+      // if (state.gridModelChanged) {
+      // get data
+      axios.get(`${baseUrl}/GetAllByTopicIds?` + util.toParam({
+        Ids: state.questionObj.IndexTopicsId
+      })).then(response => {
           state.questionGridData = response.data;
           state.gridModelChanged = false;
         });
-      }
+      // }
     },
 
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
+    fillDdlStore({
+      state
+    }) {
       // fill grid if modelChanged
       if (state.ddlModelChanged) {
         // get data
@@ -123,16 +146,31 @@ const store = {
         });
       }
     },
+    fillTagsDdlStore({
+      state
+    }) {
+        axios.get(`${tagUrl}/GetAll`).then(response => {
+          state.tagDdl = response.data.map(x => ({
+            value: x.Id,
+            label: x.Name
+          }));
+        });
+    },
 
     /**
      * vlidate form
      */
-    validateFormStore({ dispatch }, vm) {
+    validateFormStore({
+      dispatch
+    }, vm) {
       debugger;
       // check instance validation
+      debugger
       vm.$v.questionObj.$touch();
       if (vm.$v.questionObj.$error) {
-        dispatch('notifyInvalidForm', vm, { root: true });
+        dispatch('notifyInvalidForm', vm, {
+          root: true
+        });
         return false;
       }
 
@@ -142,7 +180,9 @@ const store = {
     /**
      * model changed
      */
-    modelChangedStore({ state }) {
+    modelChangedStore({
+      state
+    }) {
       state.ddlModelChanged = true;
       state.gridModelChanged = true;
     },
@@ -151,49 +191,81 @@ const store = {
     /**
      * toggle modal create
      */
-    toggleModalCreateStore({ state }, isOpen) {
+    toggleModalCreateStore({
+      state
+    }, isOpen) {
       state.isOpenModalCreate = isOpen;
     },
 
     /**
      * init create vue on load
      */
-    createVueStore({ state }, vm) {
+    createVueStore({
+      state
+    }, vm) {
       state.createVue = vm;
     },
 
     /**
      * submit create data
      */
-    submitCreateStore({ state, commit, dispatch }, closeModal) {
-      debugger;
+    submitCreateStore({
+      state,
+      commit,
+      dispatch
+    }, closeModal) {
+      if (state.questionObj.TopicsId.length == 0 || state.questionObj.File == '') {
+        var msg = '';
+        msg += (state.questionObj.TopicsId.length == 0 ?'<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div><br/>':'')
+        msg += (state.questionObj.File == '' ?'<div class="snotifyToast__body">فایلی انتخاب نکرده اید.</div>':'')
+
+        state.createVue.$snotify.html(msg, {
+          type: 'error',
+          timeout: 4000,
+          showProgressBar: true,
+          position: 'leftTop'
+        });
+        return
+      }
+
       state.questionObj.UserId = 0;
-      state.questionObj.Context = '1';
-      state.questionObj.InsertDateTime = '1';
+      delete state.questionObj.Context;
       state.questionObj.FileName = '1';
+      state.questionObj.InsertDateTime = new Date().toLocaleString();;
 
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
-        axios.post(`${baseUrl}/Create`, state.questionObj).then(response => {
+        var formData = new FormData();
+        var fileUpload = state.questionObj.File;
+        if (fileUpload && fileUpload.size > 0) {
+          formData.append("word", fileUpload);
+        }
+        var tmp1 = util.toParam(state.questionObj);
+        axios({
+          method: 'post',
+          url: `${baseUrl}/Create?${tmp1}`,
+          data: formData,
+          config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        }).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
-            commit('insert', data.Id);
+            commit('insert', data);
             dispatch('modelChangedStore');
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
 
           dispatch(
-            'notify',
-            {
+            'notify', {
               body: data.Message,
               type: data.MessageType,
               vm: vm
-            },
-            { root: true }
+            }, {
+              root: true
+            }
           );
         });
       });
@@ -202,7 +274,10 @@ const store = {
     /**
      * reset create vue
      */
-    resetCreateStore({ state, commit }) {
+    resetCreateStore({
+      state,
+      commit
+    }) {
       commit('reset', state.createVue.$v);
     },
     //------------------------------------------------
@@ -211,26 +286,62 @@ const store = {
     /**
      * toggle modal edit
      */
-    toggleModalEditStore({ state }, isOpen) {
+    toggleModalEditStore({
+      state
+    }, isOpen) {
       state.isOpenModalEdit = isOpen;
     },
 
     /**
      * init edit vue on load
      */
-    editVueStore({ state }, vm) {
+    editVueStore({
+      state
+    }, vm) {
       state.editVue = vm;
     },
 
     /**
      * submit edit data
      */
-    submitEditStore({ state, commit, dispatch }) {
+    submitEditStore({
+      state,
+      commit,
+      dispatch
+    }) {
+      if (state.questionObj.TopicsId.length == 0) {
+        state.createVue.$snotify.html('<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>', {
+          type: 'error',
+          timeout: 4000,
+          showProgressBar: true,
+          position: 'leftTop'
+        });
+        return
+      }
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.questionObj.Id = state.selectedId;
-        axios.post(`${baseUrl}/Update`, state.questionObj).then(response => {
+
+        
+        var formData = new FormData();
+        var fileUpload = state.questionObj.File;
+        if (fileUpload && fileUpload.size > 0) {
+          formData.append("word", fileUpload);
+        }
+      delete state.questionObj.Context;
+      var tmp1 = util.toParam(state.questionObj);
+      axios({
+          method: 'post',
+          url: `${baseUrl}/Update?${tmp1}`,
+          data: formData,
+          config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        })
+
+
+
+        // axios.post(`${baseUrl}/Update`, state.questionObj)
+        .then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
             commit('update');
@@ -240,13 +351,13 @@ const store = {
           }
 
           dispatch(
-            'notify',
-            {
+            'notify', {
               body: data.Message,
               type: data.MessageType,
               vm: vm
-            },
-            { root: true }
+            }, {
+              root: true
+            }
           );
         });
       });
@@ -255,7 +366,10 @@ const store = {
     /**
      * reset edit vue
      */
-    resetEditStore({ state, commit }) {
+    resetEditStore({
+      state,
+      commit
+    }) {
       commit('reset', state.editVue.$v);
     },
     //------------------------------------------------
@@ -264,14 +378,20 @@ const store = {
     /**
      * toggle modal delete
      */
-    toggleModalDeleteStore({ state }, isOpen) {
+    toggleModalDeleteStore({
+      state
+    }, isOpen) {
       state.isOpenModalDelete = isOpen;
     },
 
     /**
      * submit to delete data
      */
-    submitDeleteStore({ state, commit, dispatch }, vm) {
+    submitDeleteStore({
+      state,
+      commit,
+      dispatch
+    }, vm) {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
@@ -282,13 +402,13 @@ const store = {
         }
 
         dispatch(
-          'notify',
-          {
+          'notify', {
             body: data.Message,
             type: data.MessageType,
             vm: vm
-          },
-          { root: true }
+          }, {
+            root: true
+          }
         );
       });
     }
@@ -296,7 +416,7 @@ const store = {
   },
   getters: {
     recordName(state) {
-      return state.questionObj.Name;
+      return state.questionObj.Context;
     }
   }
 };

@@ -1,19 +1,28 @@
-﻿using System.Web.Http;
+﻿using System.Web;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Question;
 using NasleGhalam.WebApi.Extentions;
-using System.Web;
+using System;
+using System.IO;
+using NasleGhalam.WebApi.Util;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using NPOI.XWPF.UserModel;
+using NasleGhalam.ViewModels.QuestionOption;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
-	/// <author>
-	///     name: حسین شریعتمداری
-	///     date: 26/05/1397
-	/// </author>
-	public class QuestionController : ApiController
+    /// <author>
+    ///     name: حسین شری
+    ///     date: 22/8/97
+    /// </author>
+    public class QuestionController : ApiController
     {
         private readonly QuestionService _questionService;
         public QuestionController(QuestionService questionService)
@@ -23,9 +32,9 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllByTopicIds([FromUri] IEnumerable<int> ids)
         {
-            return Ok(_questionService.GetAll());
+            return Ok(_questionService.GetAllByTopicIds(ids));
         }
 
 
@@ -41,99 +50,138 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost]
-        [CheckUserAccess(ActionBits.QuestionCreateAccess)]
-        [CheckModelValidation]
-        public IHttpActionResult Create(QuestionCreateViewModel questionViewModel)
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetWordFile(string id)
         {
-            var files = HttpContext.Current.Request.Files;
-            
-            var wordFile = files.Get("wordFile");
-            
-            if (wordFile != null )
+            var stream = new MemoryStream();
+            id += ".docx";
+            var filestraem = File.OpenRead(SitePath.GetQuestionAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                HttpPostedFileBase wordFilebase = new HttpPostedFileWrapper(wordFile);
-                var resualtWord = CheckFile.UploadWordFile(wordFilebase, 1024 * 5);
-
-                
-
-                if (resualtWord == "OK" )
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
                 {
-                    var msgRes = _questionService.Create(questionViewModel, wordFile, Request.GetUserId() );
-                    return Ok(msgRes);
-                }
-                else
-                {
-                    return Ok(new MessageResultClient
-                    {
-                        Message = resualtWord 
-                    });
-                }
-            }
-            else
-            {
-                return Ok(new MessageResultClient
-                {
-                    Message = "خطای فایل!"
-                });
-            }
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
 
-
-            
+            return result;
         }
+
+
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult CreateMulti(QuestionTempViewModel questionViewModel)
+        [CheckWordFileValidation("word", 1024)]
+        public IHttpActionResult Create([FromUri]QuestionCreateViewModel questionViewModel)
         {
-            var files = HttpContext.Current.Request.Files;
-            var wordFile = files.Get("wordFile");
-            var excelFile = files.Get("excelFile");
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
 
-
-
-            if (wordFile != null)
+            if (wordFile != null && wordFile.ContentLength > 0)
             {
-                HttpPostedFileBase wordFilebase = new HttpPostedFileWrapper(wordFile);
-                var resualtWord = CheckFile.UploadWordFile(wordFilebase, 1024 * 5);
-
-                HttpPostedFileBase excelFilebase = new HttpPostedFileWrapper(wordFile);
-                var resualtExcel = CheckFile.UploadWordFile(excelFilebase, 1024 * 5);
-
-                if (resualtWord == "OK" && resualtExcel == "OK")
-                {
-                    var msgRes = _questionService.CreateMulti(questionViewModel, wordFile, excelFile);
-                    return Ok(msgRes);
-                }
-                else
-                {
-                    return Ok(new MessageResultClient
-                    {
-                        Message = resualtWord + resualtExcel
-                    });
-                }
+                //{Path.GetExtension(wordFile.FileName)}
+                questionViewModel.FileName = $"{Guid.NewGuid()}";
             }
-            else
+            /////////////////////////////
+
+            
+            
+            XWPFDocument document = null;
+            MemoryStream tempStream  = new MemoryStream();
+            wordFile.InputStream.CopyTo(tempStream);
+            wordFile.InputStream.Position = tempStream.Position = 0;
+            document = new XWPFDocument(tempStream);
+            var allP = document.Paragraphs;
+            
+            
+            
+            
+
+            //clean paragraphs
+            foreach (var pragraph in allP)
             {
-                return Ok(new MessageResultClient
-                {
-                    Message = "خطای فایل!"
-                });
+                //pragraph.
+                ////if(!pragraph.IsEmpty && pragraph.Text != "" && pragraph.Text != " ")
+                //{
+                    questionViewModel.Context += pragraph.Text;
+                //}
             }
 
+            ////get options
+            //int optionNumbers = 0;
+            //var optionArray  = new List<QuestionOptionViewModel>();
+            //for(int i = allP.Count-1; optionNumbers < 4 ; i--)
+            //{
+            //    if (!allP[i].IsEmpty && allP[i].Text != "" && allP[i].Text != " ")
+            //    {
+            //        optionNumbers++;
+            //        QuestionOptionViewModel newOption = new QuestionOptionViewModel();
+            //        newOption.Context = allP[i].Text;
+            //        if ((questionViewModel.AnswerNumber == 4 && optionNumbers == 1) ||
+            //            (questionViewModel.AnswerNumber == 3 && optionNumbers == 2) ||
+            //            (questionViewModel.AnswerNumber == 2 && optionNumbers == 3) ||
+            //            (questionViewModel.AnswerNumber == 1 && optionNumbers == 4))
+            //            newOption.IsAnswer = true;
+            //        else
+            //            newOption.IsAnswer = false;
+
+            //        optionArray.Add(newOption);
+
+            //    }
+            //}
+
+            //for (int i = optionArray.Count-1 ; i >= 0; i--)
+            //{
+            //    questionViewModel.Options.Add(optionArray[i]);
+            //}
 
 
+            questionViewModel.InsertDateTime = DateTime.Now;
+            questionViewModel.UserId = Request.GetUserId();
+
+            /////////////////////////////////
+            var msgRes = _questionService.Create(questionViewModel);
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName))
+            {
+                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName + Path.GetExtension(wordFile.FileName)));
+            }
+
+            return Ok(msgRes);
         }
-
 
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(QuestionCreateViewModel questionViewModel)
+        //[CheckWordFileUpdateValidation("word", 1024)]
+        public IHttpActionResult Update([FromUri]QuestionUpdateViewModel questionViewModel)
         {
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
+            bool updateFile = false;
+            var fileNamePrevous = "";
+            if (wordFile != null && wordFile.ContentLength > 0)
+            {
+                fileNamePrevous = questionViewModel.FileName;
+                questionViewModel.FileName = $"{Guid.NewGuid()}";
+                updateFile = true;
+            }
+
             var msgRes = _questionService.Update(questionViewModel);
+
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && updateFile)
+            {
+                if (File.Exists(SitePath.GetQuestionAbsPath(fileNamePrevous) + Path.GetExtension(wordFile.FileName)))
+                {
+                    File.Delete(SitePath.GetQuestionAbsPath(fileNamePrevous) + Path.GetExtension(wordFile.FileName));
+                }
+                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + Path.GetExtension(wordFile.FileName));
+            }
             return Ok(msgRes);
         }
 
@@ -141,8 +189,13 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.QuestionDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var msgRes = _questionService.Delete(id);
-            return Ok(msgRes);
+            var question = _questionService.GetById(id);
+            var msgResualt = _questionService.Delete(id);
+            if (msgResualt.MessageType == MessageType.Success)
+            {
+                File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".docx");
+            }
+            return Ok(msgResualt);
         }
     }
 }

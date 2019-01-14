@@ -7,10 +7,10 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public BoxConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(50).IsRequired();
+            HasKey(x => x.Id);
+            Property(x => x.Name).HasMaxLength(50).IsRequired();
 
-            this.HasRequired(x => x.Teacher)
+            HasRequired(x => x.Teacher)
                 .WithMany(x => x.Boxes)
                 .HasForeignKey(x => x.TeacherId)
                 .WillCascadeOnDelete(false);

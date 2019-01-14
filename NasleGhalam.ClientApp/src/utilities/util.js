@@ -71,7 +71,16 @@ const clearArray = function(arr) {
  */
 const toParam = function(obj) {
   return Object.keys(obj)
-    .map(key => key + '=' + obj[key])
+    .map(key => {
+      var value = obj[key];
+      if (isObject(value)) {
+        return toParam(value);
+      }
+      if (isArray(value)) {
+        return value.map(x => key + '=' + x).join('&');
+      }
+      return key + '=' + value;
+    })
     .join('&');
 };
 
@@ -136,6 +145,28 @@ const isBoolean = function(value) {
   return typeof value === 'boolean';
 };
 
+//   isNull(value) {
+//     return value === null;
+//   },
+//   isUndefined(value) {
+//     return typeof value === 'undefined';
+//   },
+//   isFunction(value) {
+//     return typeof value === 'function';
+//   },
+//   isRegExp(value) {
+//     return value && typeof value === 'object' && value.constructor === RegExp;
+//   },
+//   isError(value) {
+//     return value instanceof Error && typeof value.message !== 'undefined';
+//   },
+//   isDate(value) {
+//     return value instanceof Date;
+//   },
+//   isSymbol(value) {
+//     return typeof value === 'symbol';
+//   }
+
 /**
  * handle logout
  */
@@ -176,6 +207,7 @@ const initAccess = function(modelName) {
   });
   return pageAccess;
 };
+
 /**
  * تبدیل obj به formData
  */
@@ -184,42 +216,73 @@ const objToFormdata = function(obj) {
   Object.keys(obj).forEach(key => formdata.append(key, obj[key]));
   return formdata;
 };
+
 const fileAdd = function(model, prop, number, isRequired, chObj, vueObj) {
-  debugger;
   if (chObj.$refs['file' + number + ''].files.length > 0)
     vueObj[model][prop] = chObj.$refs['file' + number + ''].files[0];
   if (isRequired) vueObj.$v[model][prop].$touch();
 };
+
 const fileRemove = function(model, prop, isRequired, vueObj) {
-  debugger;
   vueObj[model][prop] = '';
   if (isRequired) vueObj.$v[model][prop].$touch();
 };
-//   isNull(value) {
-//     return value === null;
-//   },
-//   isUndefined(value) {
-//     return typeof value === 'undefined';
-//   },
-//   isFunction(value) {
-//     return typeof value === 'function';
-//   },
-//   isBoolean(value) {
-//     return typeof value === 'boolean';
-//   },
-//   isRegExp(value) {
-//     return value && typeof value === 'object' && value.constructor === RegExp;
-//   },
-//   isError(value) {
-//     return value instanceof Error && typeof value.message !== 'undefined';
-//   },
-//   isDate(value) {
-//     return value instanceof Date;
-//   },
-//   isSymbol(value) {
-//     return typeof value === 'symbol';
-//   }
 
+/**
+ * convert flatern list to tree
+ * @param {array} list
+ * @param {string} key
+ * @param {string} parentKey
+ */
+const listToTree = function(list, key, parentKey) {
+  var map = {},
+    node,
+    roots = [],
+    i;
+  for (i = 0; i < list.length; i += 1) {
+    map[list[i][key]] = i; // initialize the map
+    list[i].children = []; // initialize the children
+  }
+  for (i = 0; i < list.length; i += 1) {
+    node = list[i];
+    if (node[parentKey] !== null) {
+      // if you have dangling branches check that map[node.parentId] exists
+      list[map[node[parentKey]]].children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+  return roots;
+};
+
+/**
+ * search through tree
+ * @param {array} array
+ * @param {string} key
+ * @param {string} value
+ */
+const searchTreeArray = function(array, key, value) {
+  var i;
+  var parentNode = null;
+  for (i = 0; parentNode == null && i < array.length; i++) {
+    parentNode = searchTree(array[i], key, value);
+  }
+  return parentNode;
+};
+
+const searchTree = function(element, key, value) {
+  if (element[key] == value) {
+    return element;
+  } else if (element.children != null) {
+    var i;
+    var result = null;
+    for (i = 0; result == null && i < element.children.length; i++) {
+      result = searchTree(element.children[i], key, value);
+    }
+    return result;
+  }
+  return null;
+};
 /**
  * export data
  */
@@ -239,5 +302,8 @@ export default {
   initAccess,
   objToFormdata,
   fileAdd,
-  fileRemove
+  fileRemove,
+  listToTree,
+  // searchTree,
+  searchTreeArray
 };

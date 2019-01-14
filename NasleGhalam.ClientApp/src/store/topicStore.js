@@ -3,11 +3,11 @@ import axios from 'utilities/axios';
 import { TOPIC_URL as baseUrl } from 'utilities/site-config';
 
 /**
- * find index of object in topicGridData by id
+ * find index of object in topicTreeData by id
  * @param {Number} id
  */
-function getIndexById(id) {
-  return store.state.topicGridData.findIndex(o => o.Id == id);
+function getIndexById(arr, id) {
+  return arr.findIndex(o => o.Id == id);
 }
 
 const store = {
@@ -15,92 +15,133 @@ const store = {
   state: {
     modelName: 'مبحث',
     isOpenModalCreate: false,
-    isOpenModalDetails: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
     topicObj: {
       Id: 0,
       Title: '',
       ExamStock: 0,
-      ExamStockSystem: 0,
       Importance: 0,
       IsExamSource: false,
       LookupId_HardnessType: 0,
       LookupId_AreaType: 0,
       IsActive: false,
       ParentTopicId: 0,
-      EducationGroup_LessonId: 0,
-      EducationGroupId: 0,
-      LookupId_Nezam: 0,
-      GradeId: 0,
-      GradeLevelId: 0
+      LessonId: 0
     },
-    EducationGroupId: 0,
-    EducationGroup_LessonId: 0,
-    LookupId_Nezam: 0,
-    GradeId: 0,
-    GradeLevelId: 0,
-    moduleDdl: [],
-    treeLst: [],
-    controllerDdl: [],
-    topicGridData: [],
+    topicIndexObj: {
+      LessonId: 0,
+      EducationTreeId_Grade: 0,
+      EducationTreeIds: [],
+      selectedTopicId: null
+    },
+    topicTreeData: [],
     topicDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
-    gridModelChanged: true,
     createVue: null,
     editVue: null
   },
   mutations: {
     /**
-     * insert new topicObj to topicGridData
+     * insert new topicObj to topicTreeData
      */
     insert(state, id) {
       let createdObj = util.cloneObject(state.topicObj);
       createdObj.Id = id;
-      state.topicGridData.push(createdObj);
+      let node = util.searchTreeArray(
+        state.topicTreeData,
+        'Id',
+        createdObj.ParentTopicId
+      );
+      debugger;
+      if (!node) {
+        node = {
+          Id: createdObj.Id,
+          label: createdObj.Title,
+          ParentTopicId: createdObj.ParentTopicId,
+          header: 'custome',
+          visible: false,
+          children: []
+        };
+        state.topicTreeData.push(node);
+      } else {
+        node.children.push({
+          Id: createdObj.Id,
+          label: createdObj.Title,
+          ParentTopicId: createdObj.ParentTopicId,
+          header: 'custome',
+          visible: false,
+          children: []
+        });
+      }
+
+      state.topicIndexObj.selectedTopicId = null;
     },
 
     /**
-     * update topicObj of topicGridData
+     * update topicObj of topicTreeData
      */
     update(state) {
-      let index = getIndexById(state.selectedId);
-      if (index < 0) return;
-      util.mapObject(state.topicObj, state.topicGridData[index]);
+      let node = util.searchTreeArray(
+        state.topicTreeData,
+        'Id',
+        state.selectedId
+      );
+      if (!node) return;
+      node.label = state.topicObj.Title;
     },
 
     /**
-     * delete from topicGridData
+     * delete from topicTreeData
      */
     delete(state) {
-      let index = getIndexById(state.selectedId);
-      if (index < 0) return;
-      state.topicGridData.splice(index, 1);
+      let index = 0;
+      let parentNode = util.searchTreeArray(
+        state.topicTreeData,
+        'Id',
+        state.topicObj.ParentTopicId
+      );
+      debugger;
+      // if has parentNode
+      if (parentNode) {
+        index = getIndexById(parentNode.children, state.selectedId);
+        if (index < 0) return;
+        parentNode.children.splice(index, 1);
+      } else {
+        // if has not parentNode
+        index = getIndexById(state.topicTreeData, state.selectedId);
+        if (index < 0) return;
+        state.topicTreeData.splice(index, 1);
+      }
     },
 
     /**
      * rest value of topicObj
      */
     reset(state, $v) {
-      state.EducationGroupId = state.topicObj.EducationGroupId;
-      state.EducationGroup_LessonId = state.topicObj.EducationGroup_LessonId;
-      state.LookupId_Nezam = state.topicObj.LookupId_Nezam;
-      state.GradeId = state.topicObj.GradeId;
-      state.GradeLevelId = state.topicObj.GradeLevelId;
-      util.clearObject(state.topicObj);
+      // util.clearObject(state.topicObj);
+      state.topicObj.Title = '';
+      state.topicObj.ExamStock = 0;
+      state.topicObj.Importance = 0;
+      state.topicObj.IsExamSource = undefined;
+      state.topicObj.LookupId_HardnessType = 0;
+      state.topicObj.LookupId_AreaType = 0;
+      state.topicObj.IsActive = true;
       if ($v) {
         $v.$reset();
-        $v.topicObj.EducationGroupId.$model = state.EducationGroupId;
-        $v.topicObj.EducationGroup_LessonId.$model =
-          state.EducationGroup_LessonId;
-        $v.topicObj.LookupId_Nezam.$model = state.LookupId_Nezam;
-        $v.topicObj.GradeId.$model = state.GradeId;
-        $v.topicObj.GradeLevelId.$model = state.GradeLevelId;
       }
     }
   },
   actions: {
+    /**
+     * clear topic tree
+     */
+    clearTreeStore({ state }) {
+      let len = state.topicTreeData.length;
+      state.topicTreeData.splice(0, len);
+    },
+
     /**
      * get data by id
      */
@@ -112,33 +153,24 @@ const store = {
     },
 
     /**
-     * get data by id
+     * fill tree data
      */
-    GetAllTreeStore({ state }, id) {
-      return axios.get(`${baseUrl}/GetAllTree/${id}`).then(response => {
-        state.treeLst = response.data;
-      });
-    },
-    change({ state }, id) {},
-
-    /**
-     * fill grid data
-     */
-    fillGridStore({ state }) {
-      // fill grid if modelChanged
-      if (state.gridModelChanged) {
-        // get data
-        axios.get(`${baseUrl}/GetAll`).then(response => {
-          state.topicGridData = response.data;
-          state.gridModelChanged = false;
+    fillTreeStore({ state }, lessonId) {
+      // get tree
+      return axios
+        .get(`${baseUrl}/GetAllByLessonId/${lessonId}`)
+        .then(response => {
+          let res = response.data.map(x => ({
+            Id: x.Id,
+            label: x.Title,
+            ParentTopicId: x.ParentTopicId,
+            header: 'custome',
+            visible: false
+          }));
+          state.topicTreeData = util.listToTree(res, 'Id', 'ParentTopicId');
         });
-      }
     },
-    setLessonIdQndParentIdStore({ state }, obj) {
-      debugger;
-      state.topicObj.EducationGroup_LessonId = obj.lessonid;
-      state.topicObj.ParentTopicId = obj.parentId;
-    },
+
     /**
      * fill dropDwonList
      */
@@ -172,7 +204,6 @@ const store = {
      */
     modelChangedStore({ state }) {
       state.ddlModelChanged = true;
-      state.gridModelChanged = true;
     },
 
     //### create section ###
@@ -197,13 +228,11 @@ const store = {
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
-        debugger;
 
         axios.post(`${baseUrl}/Create`, state.topicObj).then(response => {
           let data = response.data;
-          debugger;
+
           if (data.MessageType == 1) {
-            dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
             commit('insert', data.Id);
             dispatch('modelChangedStore');
             dispatch('resetCreateStore');
@@ -235,9 +264,6 @@ const store = {
     /**
      * toggle modal edit
      */
-    toggleModalDetailsStore({ state }, isOpen) {
-      state.isOpenModalDetails = isOpen;
-    },
     toggleModalEditStore({ state }, isOpen) {
       state.isOpenModalEdit = isOpen;
     },
@@ -260,7 +286,6 @@ const store = {
         axios.post(`${baseUrl}/Update`, state.topicObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
-            dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
             commit('update');
             dispatch('modelChangedStore');
             dispatch('resetEditStore');
@@ -304,7 +329,6 @@ const store = {
         let data = response.data;
         if (data.MessageType == 1) {
           commit('delete');
-          dispatch('GetAllTreeStore', state.topicObj.EducationGroup_LessonId);
           commit('reset');
           dispatch('modelChangedStore');
           dispatch('toggleModalDeleteStore', false);

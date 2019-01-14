@@ -17,11 +17,17 @@ export default {
       Name: '',
       IsMain: undefined,
       EducationGroups: [],
+      EducationTreeIds: [],
       LookupId_Nezam: 0,
       GradeId: 0,
-      GradeLevelId: 0
+      GradeLevelId: 0,
+      TreeId_Grade: 0,
+      EducationTrees:[],
+      Ratios:[]
     },
     allObj: [],
+    // selectedNodeIds: [],
+    educationGroupList: [],
     allObjDdl: [],
     selectedIndex: -1,
     selectedId: 0,
@@ -62,6 +68,7 @@ export default {
      * rest value of instanceObj
      */
     reset(state, $v) {
+      var xx = state.instanceObj.GradeId;
       util.clearObject(state.instanceObj);
       state.EducationGroups.filter(x => x.IsChecked).forEach(element => {
         element.IsChecked = false;
@@ -72,6 +79,7 @@ export default {
       if ($v) {
         $v.$reset();
       }
+      state.instanceObj.GradeId = xx;
     },
 
     /**
@@ -87,18 +95,25 @@ export default {
     /**
      * get data by id
      */
-    getByIdStore({ state }, id) {
+    getByIdStore({
+      state
+    }, id) {
       axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.instanceObj);
+        if (state.isOpenModalEdit) {
+          state.instanceObj.EducationTreeIds = response.data.EducationTrees.map(x => x.Id);
+        }
       });
     },
 
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      axios.get(`${baseUrl}/GetAll`).then(response => {
+    fillGridStore({
+      state
+    }, lstIds) {
+      axios.get(`${baseUrl}/GetAllByEducationTreeIds/?`+ util.toParam({Ids:lstIds})).then(response => {
         state.allObj = response.data;
       });
     },
@@ -106,7 +121,9 @@ export default {
     /**
      * fill dropDwonList lesson by educationGroupId
      */
-    fillLessonByEducationGroupDdlStore({ state }, educationGroupId) {
+    fillLessonByEducationGroupDdlStore({
+      state
+    }, educationGroupId) {
       axios
         .get(`${baseUrl}/GetAllByEducationGroupIdDdl/${educationGroupId}`)
         .then(response => {
@@ -117,15 +134,29 @@ export default {
     /**
      * fill dropDwonList
      */
-    fillDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-        state.allObjDdl = response.data;
-      });
+    fillDdlStore({
+      state
+    }, ids) {
+      axios
+        .get(
+          `${baseUrl}/GetAllByEducationTreeIds?${util.toParam({
+            ids: ids
+          })}`
+        )
+        .then(response => {
+          state.allObjDdl = response.data.map(x => ({
+            value: x.Id,
+            label: x.Name
+          }));
+        });
     },
     /**
      * vlidate form
      */
-    validateFormStore({ state, dispatch }, vm) {
+    validateFormStore({
+      state,
+      dispatch
+    }, vm) {
       var flag = true;
       var message = '';
       state.EducationGroups.filter(x => x.IsChecked).forEach(groups => {
@@ -136,26 +167,27 @@ export default {
           }
         });
       });
-      debugger;
+
       if (!flag) {
         var cnt = message.split(' و ').length;
         dispatch(
-          'notify',
-          {
-            body:
-              message.substring(0, message.length - 2) +
+          'notify', {
+            body: message.substring(0, message.length - 2) +
               '، باید بین 0 تا 10 ' +
               (cnt > 2 ? 'باشند.' : 'باشد.'),
             type: 0,
             vm: vm
-          },
-          { root: true }
+          }, {
+            root: true
+          }
         );
       }
-      debugger;
+
       vm.$v.instanceObj.$touch();
       if (vm.$v.instanceObj.$error) {
-        dispatch('notifyInvalidForm', vm, { root: true });
+        dispatch('notifyInvalidForm', vm, {
+          root: true
+        });
         flag = false;
       }
 
@@ -165,40 +197,69 @@ export default {
     /**
      * fill dropDwon EduGroupAndEduSubGroup
      */
-    getAllEduGroupAndEduSubGroupStore({ state }) {
+    getAllEduGroupAndEduSubGroupStore({
+      state
+    }) {
       axios
         .get(`${EDUCATION_GROUP_URL}/GetAllEducationWithSubGroups`) // todo: چرا از استور گروه آموزشی استفاده نشده؟
         .then(response => {
           state.EducationGroups = response.data;
         });
     },
+    setEducationGroupListLesson({
+      state
+    }, lstEducationGroups) {
+
+      state.EducationGroupListLesson = lstEducationGroups;
+    },
 
     //### create section ###
     /**
      * toggle modal create
      */
-    toggleModalCreateStore({ state }, isOpen) {
+    toggleModalCreateStore({
+      state
+    }, isOpen) {
       state.isOpenModalCreate = isOpen;
     },
 
     /**
      * init create vue on load
      */
-    createVueStore({ state }, vm) {
+    createVueStore({
+      state
+    }, vm) {
       state.createVue = vm;
     },
 
     /**
      * submit create data
      */
-    submitCreateStore({ state, commit, dispatch }, closeModal) {
+    submitCreateStore({
+      state,
+      commit,
+      dispatch
+    }, closeModal) {
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
-        debugger;
+
         if (!isValid) return;
         state.instanceObj.EducationGroups = state.EducationGroups.filter(
           x => x.IsChecked
         );
+        state.instanceObj.Ratios = [];
+        state.EducationGroupListLesson.forEach(element => {
+          element.SubGroups.filter(x => x.Rate != undefined).forEach(item => {
+            debugger
+            state.instanceObj.Ratios.push({
+              EducationSubGroupId: item.Id,
+              Rate: item.Rate
+            })
+          });
+        });
+        delete state.instanceObj.TreeId_Grade;
+        delete state.instanceObj.GradeId;
+        delete state.instanceObj.EducationGroups;
         axios.post(`${baseUrl}/Create`, state.instanceObj).then(response => {
           let data = response.data;
 
@@ -209,9 +270,13 @@ export default {
           }
 
           dispatch(
-            'notify',
-            { body: data.Message, type: data.MessageType, vm: vm },
-            { root: true }
+            'notify', {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            }, {
+              root: true
+            }
           );
         });
       });
@@ -220,7 +285,10 @@ export default {
     /**
      * reset create vue
      */
-    resetCreateStore({ state, commit }) {
+    resetCreateStore({
+      state,
+      commit
+    }) {
       commit('reset', state.createVue.$v);
     },
     //------------------------------------------------
@@ -229,25 +297,51 @@ export default {
     /**
      * toggle modal edit
      */
-    toggleModalEditStore({ state }, isOpen) {
+    toggleModalEditStore({
+      state
+    }, isOpen) {
       state.isOpenModalEdit = isOpen;
     },
 
     /**
      * init edit vue on load
      */
-    editVueStore({ state }, vm) {
+    editVueStore({
+      state
+    }, vm) {
       state.editVue = vm;
     },
 
     /**
      * submit edit data
      */
-    submitEditStore({ state, commit, dispatch }) {
+    submitEditStore({
+      state,
+      commit,
+      dispatch
+    }) {
       var vm = state.editVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.instanceObj.Id = state.selectedId;
+        state.instanceObj.EducationGroups = state.EducationGroups.filter(
+          x => x.IsChecked
+        );
+        state.instanceObj.Ratios = [];
+        state.EducationGroupListLesson.filter(x => x.IsChecked).forEach(element => {
+          element.SubGroups.filter(x => x.Rate != undefined).forEach(item => {
+            debugger
+            state.instanceObj.Ratios.push({
+              EducationSubGroupId: item.Id,
+              Rate: item.Rate,
+              LessonId: state.instanceObj.Id
+            })
+          });
+        });
+        delete state.instanceObj.TreeId_Grade;
+        delete state.instanceObj.GradeId;
+        delete state.instanceObj.EducationGroups;
+
         axios.post(`${baseUrl}/Update`, state.instanceObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
@@ -258,13 +352,13 @@ export default {
           }
 
           dispatch(
-            'notify',
-            {
+            'notify', {
               body: data.Message,
               type: data.MessageType,
               vm: vm
-            },
-            { root: true }
+            }, {
+              root: true
+            }
           );
         });
       });
@@ -273,7 +367,10 @@ export default {
     /**
      * reset edit vue
      */
-    resetEditStore({ state, commit }) {
+    resetEditStore({
+      state,
+      commit
+    }) {
       commit('reset', state.editVue.$v);
     },
     //------------------------------------------------
@@ -282,14 +379,20 @@ export default {
     /**
      * toggle modal delete
      */
-    toggleModalDeleteStore({ state }, isOpen) {
+    toggleModalDeleteStore({
+      state
+    }, isOpen) {
       state.isOpenModalDelete = isOpen;
     },
 
     /**
      * submit to delete data
      */
-    submitDeleteStore({ state, commit, dispatch }, vm) {
+    submitDeleteStore({
+      state,
+      commit,
+      dispatch
+    }, vm) {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
@@ -300,13 +403,13 @@ export default {
         }
 
         dispatch(
-          'notify',
-          {
+          'notify', {
             body: data.Message,
             type: data.MessageType,
             vm: vm
-          },
-          { root: true }
+          }, {
+            root: true
+          }
         );
       });
     }

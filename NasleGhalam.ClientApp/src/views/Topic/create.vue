@@ -11,9 +11,6 @@
     <my-input :model="$v.topicObj.ExamStock"
               class="col-md-6" />
 
-    <!-- <my-input :model="$v.topicObj.ExamStockSystem"
-              class="col-md-6" /> -->
-
     <my-input :model="$v.topicObj.Importance"
               class="col-md-6" />
 
@@ -50,12 +47,11 @@
                  label="بلی" />
       </template>
     </my-field>
-
   </my-modal-create>
 </template>
 
 <script>
-import viewModel from 'viewModels/topicViewModel';
+import viewModel from 'viewModels/topic/topicViewModel';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -68,14 +64,14 @@ export default {
       'createVueStore',
       'submitCreateStore',
       'resetCreateStore'
-    ]),    
+    ]),
     ...mapActions('lookupStore', [
       'fillTopicHardnessTypeDdlStore',
       'fillTopicAreaTypeDdlStore'
     ]),
-    modalOpen:function(){
-       this.fillTopicHardnessTypeDdlStore();
-       this.fillTopicAreaTypeDdlStore(); 
+    modalOpen: function() {
+      this.fillTopicHardnessTypeDdlStore();
+      this.fillTopicAreaTypeDdlStore();
     }
   },
   /**

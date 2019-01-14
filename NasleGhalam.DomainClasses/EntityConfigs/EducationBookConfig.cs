@@ -7,18 +7,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public EducationBookConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(200).IsRequired();
-            this.HasIndex(x => x.Name).IsUnique().HasName("UK_EducationBook_Name");
+            HasKey(x => x.Id);
+            Property(x => x.Name).HasMaxLength(200).IsRequired();
+            HasIndex(x => x.Name).IsUnique().HasName("UK_EducationBook_Name");
 
-            this.HasRequired(x => x.GradeLevel)
-                .WithMany(x => x.EducationBooks)
-                .HasForeignKey(x => x.GradeLevelId)
-                .WillCascadeOnDelete(false);
+            
 
-            this.HasRequired(x => x.EducationGroup_Lesson)
+            HasRequired(x => x.Lesson)
                 .WithMany(x => x.EducationBooks)
-                .HasForeignKey(x => x.EducationGroup_LessonId)
+                .HasForeignKey(x => x.LessonId)
                 .WillCascadeOnDelete(false);
         }
     }

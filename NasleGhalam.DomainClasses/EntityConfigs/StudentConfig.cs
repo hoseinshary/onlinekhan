@@ -7,15 +7,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public StudentConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.FatherName).HasMaxLength(50).IsRequired();
-            this.Property(x => x.Address).HasMaxLength(300).IsRequired();
-            //this.HasIndex(x => x.UserId).IsUnique();
-
-            //this.HasRequired(x => x.User)
-            //    .WithMany(x => x.Students)
-            //    .HasForeignKey(x => x.UserId)
-            //    .WillCascadeOnDelete(false);
+            HasKey(x => x.Id);
+            Property(x => x.FatherName).HasMaxLength(50).IsRequired();
+            Property(x => x.Address).HasMaxLength(300).IsRequired();
         }
     }
 }

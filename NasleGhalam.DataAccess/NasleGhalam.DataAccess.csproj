@@ -49,69 +49,13 @@
   <ItemGroup>
     <Compile Include="Context\DBContext.cs" />
     <Compile Include="Context\IUnitOfWork.cs" />
-    <Compile Include="Migrations\201808201417081_initDb.cs" />
-    <Compile Include="Migrations\201808201417081_initDb.Designer.cs">
-      <DependentUpon>201808201417081_initDb.cs</DependentUpon>
+    <Compile Include="Migrations\201810271900171_UpdateRole.cs" />
+    <Compile Include="Migrations\201810271900171_UpdateRole.Designer.cs">
+      <DependentUpon>201810271900171_UpdateRole.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201808211145217_nullableParentTopic.cs" />
-    <Compile Include="Migrations\201808211145217_nullableParentTopic.Designer.cs">
-      <DependentUpon>201808211145217_nullableParentTopic.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809021349424_questionAxillaryBook.cs" />
-    <Compile Include="Migrations\201809021349424_questionAxillaryBook.Designer.cs">
-      <DependentUpon>201809021349424_questionAxillaryBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809041238395_tagsQuestion.cs" />
-    <Compile Include="Migrations\201809041238395_tagsQuestion.Designer.cs">
-      <DependentUpon>201809041238395_tagsQuestion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809050540491_axillaryBook.cs" />
-    <Compile Include="Migrations\201809050540491_axillaryBook.Designer.cs">
-      <DependentUpon>201809050540491_axillaryBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809050847114_questionisrequire.cs" />
-    <Compile Include="Migrations\201809050847114_questionisrequire.Designer.cs">
-      <DependentUpon>201809050847114_questionisrequire.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809061137367_questionchanged.cs" />
-    <Compile Include="Migrations\201809061137367_questionchanged.Designer.cs">
-      <DependentUpon>201809061137367_questionchanged.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809111828090_DeleteStudedntRelationWithUser.cs" />
-    <Compile Include="Migrations\201809111828090_DeleteStudedntRelationWithUser.Designer.cs">
-      <DependentUpon>201809111828090_DeleteStudedntRelationWithUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809111829150_OneToOneStudentAndUser.cs" />
-    <Compile Include="Migrations\201809111829150_OneToOneStudentAndUser.Designer.cs">
-      <DependentUpon>201809111829150_OneToOneStudentAndUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809210628224_RemoveHasImageFromAxillaryBook.cs" />
-    <Compile Include="Migrations\201809210628224_RemoveHasImageFromAxillaryBook.Designer.cs">
-      <DependentUpon>201809210628224_RemoveHasImageFromAxillaryBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809210708404_RenameImgPathFromAxillaryBook.cs" />
-    <Compile Include="Migrations\201809210708404_RenameImgPathFromAxillaryBook.Designer.cs">
-      <DependentUpon>201809210708404_RenameImgPathFromAxillaryBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201809241421031_changedAxillaryAndQuestion.cs" />
-    <Compile Include="Migrations\201809241421031_changedAxillaryAndQuestion.Designer.cs">
-      <DependentUpon>201809241421031_changedAxillaryAndQuestion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201810071547545_lesson_historyEducaiton_changes.cs" />
-    <Compile Include="Migrations\201810071547545_lesson_historyEducaiton_changes.Designer.cs">
-      <DependentUpon>201810071547545_lesson_historyEducaiton_changes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201810071549300_lesson_historyEducaiton_changes2.cs" />
-    <Compile Include="Migrations\201810071549300_lesson_historyEducaiton_changes2.Designer.cs">
-      <DependentUpon>201810071549300_lesson_historyEducaiton_changes2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201810081640071_lesson_fix.cs" />
-    <Compile Include="Migrations\201810081640071_lesson_fix.Designer.cs">
-      <DependentUpon>201810081640071_lesson_fix.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201810091426248_changeuniversitybranch.cs" />
-    <Compile Include="Migrations\201810091426248_changeuniversitybranch.Designer.cs">
-      <DependentUpon>201810091426248_changeuniversitybranch.cs</DependentUpon>
+    <Compile Include="Migrations\201811180834009_addQuestionGroup.cs" />
+    <Compile Include="Migrations\201811180834009_addQuestionGroup.Designer.cs">
+      <DependentUpon>201811180834009_addQuestionGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,53 +75,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201808201417081_initDb.resx">
-      <DependentUpon>201808201417081_initDb.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201810271900171_UpdateRole.resx">
+      <DependentUpon>201810271900171_UpdateRole.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808211145217_nullableParentTopic.resx">
-      <DependentUpon>201808211145217_nullableParentTopic.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809021349424_questionAxillaryBook.resx">
-      <DependentUpon>201809021349424_questionAxillaryBook.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809041238395_tagsQuestion.resx">
-      <DependentUpon>201809041238395_tagsQuestion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809050540491_axillaryBook.resx">
-      <DependentUpon>201809050540491_axillaryBook.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809050847114_questionisrequire.resx">
-      <DependentUpon>201809050847114_questionisrequire.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809061137367_questionchanged.resx">
-      <DependentUpon>201809061137367_questionchanged.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809111828090_DeleteStudedntRelationWithUser.resx">
-      <DependentUpon>201809111828090_DeleteStudedntRelationWithUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809111829150_OneToOneStudentAndUser.resx">
-      <DependentUpon>201809111829150_OneToOneStudentAndUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809210628224_RemoveHasImageFromAxillaryBook.resx">
-      <DependentUpon>201809210628224_RemoveHasImageFromAxillaryBook.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809210708404_RenameImgPathFromAxillaryBook.resx">
-      <DependentUpon>201809210708404_RenameImgPathFromAxillaryBook.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809241421031_changedAxillaryAndQuestion.resx">
-      <DependentUpon>201809241421031_changedAxillaryAndQuestion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201810071547545_lesson_historyEducaiton_changes.resx">
-      <DependentUpon>201810071547545_lesson_historyEducaiton_changes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201810071549300_lesson_historyEducaiton_changes2.resx">
-      <DependentUpon>201810071549300_lesson_historyEducaiton_changes2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201810081640071_lesson_fix.resx">
-      <DependentUpon>201810081640071_lesson_fix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201810091426248_changeuniversitybranch.resx">
-      <DependentUpon>201810091426248_changeuniversitybranch.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201811180834009_addQuestionGroup.resx">
+      <DependentUpon>201811180834009_addQuestionGroup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,9 +7,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public LookupConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(50).IsRequired();
-            this.Property(x => x.Value).HasMaxLength(50).IsRequired();
+            HasKey(x => x.Id);
+            Property(x => x.Name).HasMaxLength(50).IsRequired();
+            Property(x => x.Value).HasMaxLength(50).IsRequired();
         }
     }
 }

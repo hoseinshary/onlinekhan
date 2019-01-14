@@ -60,6 +60,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public bool IsActive { get; set; }
 
+        public int AnswerNumber { get; set; }
+
         public ICollection<QuestionJudge> QuestionJudges { get; set; }
                
         public ICollection<QuestionOption> QuestionOptions { get; set; }
@@ -75,5 +77,6 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<QuestionAnswer> Answers { get; set; }
 
         public ICollection<Topic> Topics { get; set; }
+        public ICollection<QuestionGroup> QuestionGroups { get; set; }
     }
 }

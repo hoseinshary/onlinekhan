@@ -29,7 +29,22 @@
         Equal = 0,
         Same = 1
     }
-   
+
+    public enum UserType
+    {
+        Organ = 0,
+        Student = 1,
+        Teacher = 2
+    }
+
+    public enum EducationTreeState
+    {
+        Grade = 1,
+        SubTree = 2,
+        EducationGroup = 3,
+        GradeLevel = 4,
+    }
+
     //public enum AnswerType : byte
     //{
     //}

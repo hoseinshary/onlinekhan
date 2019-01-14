@@ -37,13 +37,10 @@ namespace NasleGhalam.ServiceLayer.Services
             return _roles
                 .Where(current => current.Id == id)
                 .Where(current => current.Level > userRoleLevel)
-                .Select(current => new RoleViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    Level = current.Level,
-                    SumOfActionBit = current.SumOfActionBit
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<RoleViewModel>)
+                .FirstOrDefault();
         }
 
 
@@ -56,12 +53,10 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _roles
                 .Where(current => current.Level > userRoleLevel)
-                .Select(current => new RoleViewModel()
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    Level = current.Level
-                }).ToList();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<RoleViewModel>)
+                .ToList();
         }
 
 
@@ -71,7 +66,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="roleViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(RoleViewModel roleViewModel, byte userRoleLevel)
+        public MessageResultClient Create(RoleCreateViewModel roleViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ثبت کننده باشد
             if (roleViewModel.Level <= userRoleLevel)
@@ -87,7 +82,7 @@ namespace NasleGhalam.ServiceLayer.Services
             role.SumOfActionBit = "0";
             _roles.Add(role);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = role.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
@@ -99,7 +94,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="roleViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(RoleViewModel roleViewModel, byte userRoleLevel)
+        public MessageResultClient Update(RoleUpdateViewModel roleViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             if (roleViewModel.Level <= userRoleLevel)
@@ -122,7 +117,7 @@ namespace NasleGhalam.ServiceLayer.Services
             newRole.SumOfActionBit = oldRole.SumOfActionBit;
 
             _uow.MarkAsChanged(newRole);
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
@@ -143,7 +138,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsDeleted(role);
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
@@ -152,11 +147,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه نقش ها برای لیست کشویی
         /// </summary>
         /// <param name="userRoleLevel"></param>
+        /// <param name="userType"></param>
         /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl(byte userRoleLevel)
+        public IList<SelectViewModel> GetAllDdl(byte userRoleLevel, UserType userType)
         {
             return _roles
                 .Where(current => current.Level > userRoleLevel)
+                .Where(current => current.UserType == userType)
                 .Select(current => new SelectViewModel
                 {
                     value = current.Id,
@@ -199,12 +196,11 @@ namespace NasleGhalam.ServiceLayer.Services
             else if (Utility.HasAccess(userAccess, action.ActionBit))
             {
                 roleViewModel.SumOfActionBit = Utility.RemoveAccess(roleViewModel.SumOfActionBit, action.ActionBit);
-
             }
 
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsChanged(role);
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
         }
     }

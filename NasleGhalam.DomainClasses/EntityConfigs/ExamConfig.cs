@@ -7,15 +7,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public ExamConfig()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.Name).HasMaxLength(50).IsRequired();
+            HasKey(x => x.Id);
+            Property(x => x.Name).HasMaxLength(50).IsRequired();
 
-            this.HasRequired(x => x.EducationGroup)
+            HasRequired(x => x.EducationTree)
                 .WithMany(x => x.Exams)
-                .HasForeignKey(x => x.EducationGroupId)
+                .HasForeignKey(x => x.EducationTreeId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.EducationYear)
+            HasRequired(x => x.EducationYear)
                 .WithMany(x => x.Exams)
                 .HasForeignKey(x => x.EducationYearId)
                 .WillCascadeOnDelete(false);

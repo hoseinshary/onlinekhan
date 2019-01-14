@@ -21,17 +21,9 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Exam Exam { get; set; }
 
-        public int EducationSubGroupId { get; set; }
+        public int EducationTreeId { get; set; }
 
-        public EducationSubGroup EducationSubGroup { get; set; }
-
-        public int EducationGroupId { get; set; }
-
-        public EducationGroup EducationGroup { get; set; }
-
-        public int GradeLevelId { get; set; }
-
-        public GradeLevel GradeLevel { get; set; }
+        public EducationTree  EducationTree { get; set; }
 
         public ICollection<UniversityBranch> UniversityBranches { get; set; }
 

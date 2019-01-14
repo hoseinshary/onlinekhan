@@ -10,8 +10,8 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Reflection" #>
 <#
-	string modelName = "Student";
-	string instanceName = "student";
+	string modelName = "QuestionGroup";
+	string instanceName = "questionGroup";
 #>
 using System.Web.Http;
 using NasleGhalam.Common;
@@ -58,7 +58,7 @@ namespace NasleGhalam.WebApi.Controllers
 		[HttpPost]
         [CheckUserAccess(ActionBits.<#= modelName #>CreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
+        public IHttpActionResult Create(<#= modelName #>CreateViewModel <#= instanceName #>ViewModel)
         {
             return Ok(_<#= instanceName #>Service.Create(<#= instanceName #>ViewModel));
         }
@@ -67,7 +67,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.<#= modelName #>UpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
+        public IHttpActionResult Update(<#= modelName #>UpdateViewModel <#= instanceName #>ViewModel)
         {
             return Ok(_<#= instanceName #>Service.Update(<#= instanceName #>ViewModel));
         }

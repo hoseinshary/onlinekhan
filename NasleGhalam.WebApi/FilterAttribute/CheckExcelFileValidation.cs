@@ -54,7 +54,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                     .CreateResponse(HttpStatusCode.OK,
                         new MessageResultClient
                         {
-                            Message = $" عکس ارسالی باید کمتر از {_ExcelFileSize} کیلو بایت باشد.",
+                            Message = $" فایل اکسل ارسالی باید کمتر از {_ExcelFileSize} کیلو بایت باشد.",
                             MessageType = MessageType.Error
                         });
                 return;

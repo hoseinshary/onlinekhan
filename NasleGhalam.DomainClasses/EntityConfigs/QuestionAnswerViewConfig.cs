@@ -7,14 +7,14 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
     {
         public QuestionAnswerViewConfig()
         {
-            this.HasKey(x => x.Id);
+            HasKey(x => x.Id);
 
-            this.HasRequired(x => x.Answer)
+            HasRequired(x => x.Answer)
                 .WithMany(x => x.QuestionAnswerViews)
                 .HasForeignKey(x => x.AnswerId)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.Student)
+            HasRequired(x => x.Student)
                 .WithMany(x => x.QuestionAnswerViews)
                 .HasForeignKey(x => x.StudentId)
                 .WillCascadeOnDelete(false);

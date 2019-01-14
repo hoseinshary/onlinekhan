@@ -50,7 +50,7 @@ export default {
       educationSubGroupGridColumn: [
         {
           title: 'گروه آموزشی',
-          data: 'EducationGroupName'
+          data: 'EducationTreeName'
         },
         {
           title: 'نام',

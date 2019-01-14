@@ -1,0 +1,156 @@
+﻿using System;
+using System.IO;
+using System.Web.Http;
+using NasleGhalam.Common;
+using NasleGhalam.ServiceLayer.Services;
+using NasleGhalam.WebApi.FilterAttribute;
+using NasleGhalam.ViewModels.QuestionGroup;
+using NasleGhalam.WebApi.Extentions;
+using System.Web;
+using NasleGhalam.WebApi.Util;
+using NPOI.XSSF.UserModel;
+using NPOI.XWPF.UserModel;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
+
+namespace NasleGhalam.WebApi.Controllers
+{
+    /// <inheritdoc />
+	/// <author>
+	///     name: hosein shary
+	///     date: 24-9-97
+	/// </author>
+	public class QuestionGroupController : ApiController
+    {
+        private readonly QuestionGroupService _questionGroupService;
+        public QuestionGroupController(QuestionGroupService questionGroupService)
+        {
+            _questionGroupService = questionGroupService;
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionGroupReadAccess)]
+        public IHttpActionResult GetAll()
+        {
+            return Ok(_questionGroupService.GetAll());
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionGroupReadAccess)]
+        public IHttpActionResult GetById(int id)
+        {
+            var questionGroup = _questionGroupService.GetById(id);
+            if (questionGroup == null)
+            {
+                return NotFound();
+            }
+            return Ok(questionGroup);
+        }
+
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetExcelFile(string id)
+        {
+            //id += ".xlsx";
+
+            var stream = new MemoryStream();
+            var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+
+            return result;
+        }
+
+
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetWordFile(string id)
+        {
+            //id += ".docx";
+
+            var stream = new MemoryStream();
+            var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+
+            return result;
+        }
+
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
+        [CheckModelValidation]
+        [CheckWordFileValidation("word", 1024)]
+        [CheckWordFileValidation("excel", 1024)]
+        public IHttpActionResult Create(QuestionGroupCreateViewModel questionGroupViewModel)
+        {
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
+            var excelFile = HttpContext.Current.Request.Files.Get("excel");
+
+            if (wordFile != null && wordFile.ContentLength > 0)
+            {
+                questionGroupViewModel.WordFile = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+            }
+
+            if (excelFile != null && excelFile.ContentLength > 0)
+            {
+                questionGroupViewModel.ExcelFile = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
+            }
+
+        
+
+            questionGroupViewModel.InsertTime = DateTime.Now;
+            questionGroupViewModel.UserId = Request.GetUserId();
+
+            var msgRes = _questionGroupService.Create(questionGroupViewModel ,wordFile,excelFile );
+      
+            
+
+            return Ok(msgRes);
+        }
+
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.QuestionGroupUpdateAccess)]
+        [CheckModelValidation]
+        public IHttpActionResult Update(QuestionGroupUpdateViewModel questionGroupViewModel)
+        {
+            return Ok(_questionGroupService.Update(questionGroupViewModel));
+        }
+
+
+        [HttpPost, CheckUserAccess(ActionBits.QuestionGroupDeleteAccess)]
+        public IHttpActionResult Delete(int id)
+        {
+            return Ok(_questionGroupService.Delete(id));
+        }
+
+
+       
+
+
+    }
+}

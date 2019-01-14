@@ -1,7 +1,5 @@
-﻿using System;
-using System.Web.Http.Controllers;
+﻿using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
-using System.Web.Http.ValueProviders;
 using NasleGhalam.Common;
 
 namespace NasleGhalam.WebApi.ModelBinderAndFormatter
@@ -10,15 +8,11 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
     {
         public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
         {
-            ValueProviderResult valueResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
-            if (String.IsNullOrWhiteSpace(valueResult?.AttemptedValue))
-            {
+            var valueResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
+            if (string.IsNullOrWhiteSpace(valueResult?.AttemptedValue))
                 return false;
-            }
 
             bindingContext.Model = valueResult.AttemptedValue.ToMiladiDateTime();
-            //string temp = "asd";
-            //temp.ToMiladiDateTime();
             return true;
         }
     }

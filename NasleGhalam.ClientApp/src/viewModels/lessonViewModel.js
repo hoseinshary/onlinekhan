@@ -1,4 +1,8 @@
-import { required, displayName, maxLength } from 'plugins/vuelidate';
+import {
+  required,
+  displayName,
+  maxLength
+} from 'plugins/vuelidate';
 
 export default {
   instanceObj: {
@@ -16,12 +20,15 @@ export default {
       required
     },
     GradeId: {
-      displayName: displayName('مقطع'),
-      required
+      displayName: displayName('مقطع')
+      // required
     },
     GradeLevelId: {
-      displayName: displayName('پایه'),
-      required
+      displayName: displayName('پایه')
+      // required
+    },
+    TreeId_Grade: {
+      displayName: displayName('مقطع')
     }
   }
 };

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using NasleGhalam.DataAccess.Context;
-using NasleGhalam.ServiceLayer.Services;
+//using NasleGhalam.ServiceLayer.Services;
 using StructureMap;
 using StructureMap.Web;
 
@@ -28,7 +28,7 @@ namespace NasleGhalam.ServiceLayer.Configs
 
                 cfg.Scan(scan =>
                 {
-                    scan.AssemblyContainingType<ActionService>();
+                //    scan.AssemblyContainingType<ActionService>();
                     scan.WithDefaultConventions();
                 });
             });

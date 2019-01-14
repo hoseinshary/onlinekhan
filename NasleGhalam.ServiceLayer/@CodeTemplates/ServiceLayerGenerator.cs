@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.Student;
+using NasleGhalam.ViewModels.QuestionGroup;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class StudentService
+	public class QuestionGroupService
 	{
-		private const string Title = "دانش آموز";
+		private const string Title = "سوال گروهی";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Student> _students;
+        private readonly IDbSet<QuestionGroup> _questionGroups;
        
-	    public StudentService(IUnitOfWork uow)
+	    public QuestionGroupService(IUnitOfWork uow)
         {
             _uow = uow;
-            _students = uow.Set<Student>();
+            _questionGroups = uow.Set<QuestionGroup>();
         }
 
 
 		/// <summary>
-        /// گرفتن  دانش آموز با آی دی
+        /// گرفتن  سوال گروهی با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public StudentViewModel GetById(int id)
+        public QuestionGroupViewModel GetById(int id)
         {
-            return _students
+            return _questionGroups
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<StudentViewModel>)
+                .Select(Mapper.Map<QuestionGroupViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه دانش آموز ها
+        /// گرفتن همه سوال گروهی ها
         /// </summary>
         /// <returns></returns>
-        public IList<StudentViewModel> GetAll()
+        public IList<QuestionGroupViewModel> GetAll()
         {
-            return _students
+            return _questionGroups
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<StudentViewModel>)
+                .Select(Mapper.Map<QuestionGroupViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت دانش آموز
+        /// ثبت سوال گروهی
         /// </summary>
-        /// <param name="studentViewModel"></param>
+        /// <param name="questionGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(StudentViewModel studentViewModel)
+        public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel)
         {
-            var student = Mapper.Map<Student>(studentViewModel);
-            _students.Add(student);
+            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
+            _questionGroups.Add(questionGroup);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = student.Id;
+			msgRes.Id = questionGroup.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش دانش آموز
+        /// ویرایش سوال گروهی
         /// </summary>
-        /// <param name="studentViewModel"></param>
+        /// <param name="questionGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(StudentViewModel studentViewModel)
+        public MessageResultClient Update(QuestionGroupUpdateViewModel questionGroupViewModel)
         {
-            var student = Mapper.Map<Student>(studentViewModel);
-            _uow.MarkAsChanged(student);
+            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
+            _uow.MarkAsChanged(questionGroup);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف دانش آموز
+        /// حذف سوال گروهی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-			var  studentViewModel = GetById(id);
-            if (studentViewModel == null)
+			var  questionGroupViewModel = GetById(id);
+            if (questionGroupViewModel == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var student = Mapper.Map<Student>(studentViewModel);
-            _uow.MarkAsDeleted(student);
+            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
+            _uow.MarkAsDeleted(questionGroup);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه دانش آموز ها برای لیست کشویی
+        /// گرفتن همه سوال گروهی ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _students.Select(current => new SelectViewModel
+            return _questionGroups.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

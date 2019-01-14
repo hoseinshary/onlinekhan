@@ -13,8 +13,8 @@ namespace NasleGhalam.WebApi.Controllers
 	/// </author>
 	public class EducationGroupController : ApiController
     {
-        private readonly EducationGroupService _educationGroupService;
-        public EducationGroupController(EducationGroupService educationGroupService)
+        private readonly EducationTreeService _educationGroupService;
+        public EducationGroupController(EducationTreeService educationGroupService)
         {
             _educationGroupService = educationGroupService;
         }
@@ -74,8 +74,7 @@ namespace NasleGhalam.WebApi.Controllers
 
         [HttpGet, CheckUserAccess(ActionBits.EducationSubGroupCreateAccess,
              ActionBits.EducationSubGroupUpdateAccess,
-             ActionBits.UniversityBranchReadAccess,
-             ActionBits.TopicReadAccess)]
+             ActionBits.UniversityBranchReadAccess)]
         public IHttpActionResult GetAllDdl()
         {
             return Ok(_educationGroupService.GetAllDdl());

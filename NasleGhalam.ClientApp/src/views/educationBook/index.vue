@@ -1,60 +1,71 @@
 <template>
-  <section class="col-md-11">
+  <section class="col-12 q-px-sm">
     <!-- panel -->
     <my-panel>
       <span slot="title">{{modelName}}</span>
       <div slot="body">
-        <section class="row gutter-md">
-          <my-select :model="$v.educationBookIndexObj.GradeId"
-                     :options="gradeDdl"
-                     class="col-md-3 col-sm-4"
-                     @change="fillGradeLevelByGradeIdDdl($event)" />
+        <section class="row gutter-sm">
 
-          <my-select :model="$v.educationBookIndexObj.GradeLevelId"
-                     :options="gradeLevelByGradeDdl"
-                     class="col-md-3 col-sm-4"
-                     @change="fillGridStore($event)" />
+          <div class="col-sm-5">
+            <section class="q-ma-sm q-pa-sm shadow-1">
+              <my-select :model="$v.educationBookIndexObj.EducationTreeId_Grade"
+                         :options="educationTree_GradeDdl"
+                         @change="gradeDdlChange" />
 
-          <div class="col-md-3 col-sm-4">
-            <my-btn-create v-if="pageAccess.canCreate"
+              <q-tree :nodes="educationTreeData"
+                      color="primary"
+                      tick-strategy="leaf"
+                      accordion
+                      :ticked.sync="educationBookIndexObj.EducationTreeIds"
+                      node-key="Id"
+                      ref="educationTree" />
+
+              <my-select :model="$v.educationBookIndexObj.LessonId"
+                         :options="lessonDdl"
+                         class="q-pt-lg"
+                         @change="lessonDdlChange" />
+            </section>
+          </div>
+
+          <div class="col-sm-7">
+            <my-btn-create v-if="pageAccess.canCreate && educationBookIndexObj.LessonId > 0"
                            :label="`ایجاد (${modelName}) جدید`"
                            @click="showModalCreate" />
+            <br>
+            <my-table :grid-data="educationBookGridData"
+                      :columns="educationBookGridColumn"
+                      hasIndex>
+
+              <template slot="IsActive"
+                        slot-scope="data">
+                <q-checkbox v-model="data.row.IsActive"
+                            readonly />
+              </template>
+
+              <template slot="IsExamSource"
+                        slot-scope="data">
+                <q-checkbox v-model="data.row.IsExamSource"
+                            readonly />
+              </template>
+
+              <template slot="IsChanged"
+                        slot-scope="data">
+                <q-checkbox v-model="data.row.IsChanged"
+                            readonly />
+              </template>
+
+              <template slot="Id"
+                        slot-scope="data">
+                <my-btn-edit v-if="pageAccess.canEdit"
+                             round
+                             @click="showModalEdit(data.row.Id)" />
+                <my-btn-delete v-if="pageAccess.canDelete"
+                               round
+                               @click="showModalDelete(data.row.Id)" />
+              </template>
+            </my-table>
           </div>
         </section>
-
-        <br>
-        <my-table :grid-data="educationBookGridData"
-                  :columns="educationBookGridColumn"
-                  hasIndex>
-
-          <template slot="IsActive"
-                    slot-scope="data">
-            <q-checkbox v-model="data.row.IsActive"
-                        readonly />
-          </template>
-
-          <template slot="IsExamSource"
-                    slot-scope="data">
-            <q-checkbox v-model="data.row.IsExamSource"
-                        readonly />
-          </template>
-
-          <template slot="IsChanged"
-                    slot-scope="data">
-            <q-checkbox v-model="data.row.IsChanged"
-                        readonly />
-          </template>
-
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
-          </template>
-        </my-table>
       </div>
     </my-panel>
 
@@ -83,15 +94,8 @@ export default {
     var pageAccess = this.$util.initAccess('/educationBook');
     return {
       pageAccess,
-      educationBookIndexObj: {
-        GradeId: undefined,
-        GradeLevelId: undefined
-      },
+      educationTreeData: [],
       educationBookGridColumn: [
-        {
-          title: 'درس',
-          data: 'LessonName'
-        },
         {
           title: 'نام کتاب',
           data: 'Name'
@@ -135,40 +139,25 @@ export default {
       'resetCreateStore',
       'resetEditStore'
     ]),
-    ...mapActions({
-      fillGradeDdl: 'gradeStore/fillDdlStore',
-      fillGradeLevelByGradeIdDdl: 'gradeLevelStore/fillGradeLevelByGradeId',
-      fillLessonByEducationGroupDdlStore:
-        'lessonStore/fillLessonByEducationGroupDdlStore',
-      fillTopicTreeStore: 'topicStore/GetAllTreeStore'
+    ...mapActions('educationTreeStore', {
+      getAllGrade: 'getAllGrade',
+      fillEducationTreeStore: 'fillTreeStore',
+      fillEducationTreeByGradeIdStore: 'fillTreeByGradeIdStore'
+    }),
+    ...mapActions('lessonStore', {
+      fillLessonDdlStore: 'fillDdlStore'
     }),
     showModalCreate() {
-      this.$v.educationBookIndexObj.$touch();
-      if (this.$v.educationBookIndexObj.$error) {
-        return;
-      }
       // reset data on modal show
       this.resetCreateStore();
-      //set GradeLevelId
-      this.educationBookObj.GradeLevelId = this.educationBookIndexObj.GradeLevelId;
       // show modal
       this.toggleModalCreateStore(true);
     },
     showModalEdit(id) {
-      this.$v.educationBookIndexObj.$touch();
-      if (this.$v.educationBookIndexObj.$error) {
-        return;
-      }
       // reset data on modal show
       this.resetEditStore();
-      var vm = this;
-      // get data by id
-      this.getByIdStore(id).then(data => {
-        this.fillLessonByEducationGroupDdlStore(data.EducationGroupId);
-        this.fillTopicTreeStore(data.EducationGroup_LessonId).then(() => {
-          // after tree loaded
-          vm.$refs.modalEdit.$refs.topicTree.expandAll();
-        });
+      // show modal
+      this.getByIdStore(id).then(() => {
         // show modal
         this.toggleModalEditStore(true);
       });
@@ -179,6 +168,22 @@ export default {
         // show modal
         this.toggleModalDeleteStore(true);
       });
+    },
+    gradeDdlChange(val) {
+      // filter lesson tree by gradeId
+      var self = this;
+      this.educationBookIndexObj.LessonId = 0;
+      this.educationBookIndexObj.EducationTreeIds = [];
+      this.fillEducationTreeByGradeIdStore(val).then(treeData => {
+        self.educationTreeData = [treeData];
+        setTimeout(() => {
+          self.$refs.educationTree.expandAll();
+        }, 300);
+      });
+    },
+    lessonDdlChange(val) {
+      this.fillGridStore(val);
+      this.educationBookObj.LessonId = val;
     }
   },
   /**
@@ -192,15 +197,25 @@ export default {
     ...mapState('educationBookStore', {
       modelName: 'modelName',
       educationBookObj: 'educationBookObj',
+      educationBookIndexObj: 'educationBookIndexObj',
       educationBookGridData: 'educationBookGridData'
     }),
-    ...mapState({
-      gradeDdl: s => s.gradeStore.gradeDdl,
-      gradeLevelByGradeDdl: s => s.gradeLevelStore.gradeLevelByGradeDdl
+    ...mapState('educationTreeStore', {
+      educationTree_GradeDdl: 'gradeDdl'
+    }),
+    ...mapState('lessonStore', {
+      lessonDdl: 'allObjDdl'
     })
   },
+  watch: {
+    'educationBookIndexObj.EducationTreeIds'(val) {
+      this.educationBookIndexObj.LessonId = 0;
+      this.fillLessonDdlStore(val);
+    }
+  },
   created() {
-    this.fillGradeDdl();
+    this.getAllGrade();
+    this.fillEducationTreeStore();
   }
 };
 </script>

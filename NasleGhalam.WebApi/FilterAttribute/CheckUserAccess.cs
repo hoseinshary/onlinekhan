@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,8 +23,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
             bool isAuthenticated = false;
 
             string token = null;
-            IEnumerable<string> values;
-            if (actionContext.Request.Headers.TryGetValues("Token", out values))
+            if (actionContext.Request.Headers.TryGetValues("Token", out var values))
             {
                 token = values.FirstOrDefault();
             }
@@ -65,6 +63,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                             actionContext.Request.Properties.Add("_roleLevel", lst[0]);
                             actionContext.Request.Properties.Add("_isAdmin", lst[1]);
                             actionContext.Request.Properties.Add("_user_id", lst[2]);
+                            actionContext.Request.Properties.Add("_userType", lst[3]);
 
                             actionContext.Request.Properties.Add("_access", jsonPayload.Access);
                         }

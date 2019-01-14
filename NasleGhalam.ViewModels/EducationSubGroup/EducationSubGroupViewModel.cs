@@ -1,26 +1,23 @@
-﻿using NasleGhalam.ViewModels._Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using NasleGhalam.ViewModels.EducationTree;
 
 namespace NasleGhalam.ViewModels.EducationSubGroup
 {
     public class EducationSubGroupViewModel
     {
-
+      
         public int Id { get; set; }
 
 
         [Display(Name = "نام")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string Name { get; set; }
 
 
-        [Display(Name = "گروه آموزشی")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
-        public int EducationGroupId { get; set; }
+        [Display(Name = "درخت آموزش")]
+        public int EducationTreeId { get; set; }
 
-        [Display(Name = "گروه آموزشی")]
-        public string EducationGroupName { get; set; }
+        public EducationTreeViewModel EducationTree { get; set; }
+
 
     }
 }

@@ -18,13 +18,19 @@ namespace NasleGhalam.WebApi.Controllers
             _lookupService = lookupService;
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.AnswerCreateAccess, ActionBits.AnswerReadAccess, ActionBits.AnswerUpdateAccess)]
-        public IHttpActionResult GetAllAnswerTypeDdl()
+        [HttpGet, CheckUserAccess(ActionBits.AnswerCreateAccess ,ActionBits.AnswerReadAccess , ActionBits.AnswerUpdateAccess)] 
+        public IHttpActionResult GetAllAnswerTypeDdl() 
         {
             return Ok(_lookupService.GetAllDdlByName("AnswerType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.EducationTreeCreateAccess, ActionBits.EducationTreeReadAccess, ActionBits.EducationTreeUpdateAccess)]
+        public IHttpActionResult GetAllEducationTreeStateDdl()
+        {
+            return Ok(_lookupService.GetAllDdlByName("EducationTreeState"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess , ActionBits.AxillaryBookReadAccess , ActionBits.AxillaryBookUpdateAccess)]
         public IHttpActionResult GetAllPaperTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("PaperType"));
@@ -36,9 +42,7 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllDdlByName("PrintType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.LessonCreateAccess,
-             ActionBits.LessonUpdateAccess,
-             ActionBits.TopicReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.LessonCreateAccess, ActionBits.LessonUpdateAccess, ActionBits.LessonReadAccess)]
         public IHttpActionResult GetAllNezamDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("Nezam"));
@@ -51,14 +55,14 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllDdlByName("BookType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess,ActionBits.QuestionReadAccess , ActionBits.QuestionUpdateAccess)]
         public IHttpActionResult GetAllQuestionTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("QuestionType"));
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.TopicCreateAccess, ActionBits.TopicReadAccess, ActionBits.TopicUpdateAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.TopicCreateAccess,ActionBits.TopicReadAccess,ActionBits.TopicUpdateAccess)]
         public IHttpActionResult GetAllTopicHardnessTypeDdl()
         {
             return Ok(_lookupService.GetAllDdlByName("TopicHardnessType"));

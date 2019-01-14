@@ -10,6 +10,6 @@ namespace NasleGhalam.ViewModels.EducationGroup
         public string Name { get; set; }
         public bool IsChecked { get; set; }
 
-        public List<EducationSubGroupLessonViewModel> SubGroups { get; set; }
+     //   public List<EducationSubGroupLessonViewModel> SubGroups { get; set; }
     }
 }

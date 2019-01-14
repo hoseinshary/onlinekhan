@@ -9,9 +9,9 @@
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#
-	string modelName = "Student";
-	string instanceName = "student";
-	string faName = "دانش آموز";
+	string modelName = "QuestionGroup";
+	string instanceName = "questionGroup";
+	string faName = "سوال گروهی";
 #>
 using System;
 using System.Collections.Generic;
@@ -74,7 +74,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="<#= instanceName #>ViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
+        public MessageResultClient Create(<#= modelName #>CreateViewModel <#= instanceName #>ViewModel)
         {
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _<#= instanceName #>s.Add(<#= instanceName #>);
@@ -90,7 +90,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="<#= instanceName #>ViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(<#= modelName #>ViewModel <#= instanceName #>ViewModel)
+        public MessageResultClient Update(<#= modelName #>UpdateViewModel <#= instanceName #>ViewModel)
         {
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _uow.MarkAsChanged(<#= instanceName #>);

@@ -21,6 +21,8 @@ import axillaryBookStore from './axillaryBookStore';
 import universityBranchStore from './universityBranchStore';
 import questionStore from './questionStore';
 import studentStore from './studentStore';
+import educationTreeStore from './educationTreeStore';
+import questionGroupStore from './questionGroupStore';
 
 Vue.use(Vuex);
 
@@ -30,6 +32,7 @@ const store = new Vuex.Store({
      * create notification and show
      */
     notify({}, notify) {
+      debugger
       // if vue instance not pass
       if (!notify.vm) return;
       var html = `<div class="snotifyToast__body">${notify.body}</div> `;
@@ -87,7 +90,9 @@ const store = new Vuex.Store({
     universityBranchStore,
     questionStore,
     axillaryBookStore,
-    studentStore
+    studentStore,
+    educationTreeStore,
+    questionGroupStore
   }
 });
 

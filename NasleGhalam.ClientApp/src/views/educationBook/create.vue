@@ -2,24 +2,13 @@
   <my-modal-create :title="modelName"
                    :show="isOpenModalCreate"
                    size="lg"
-                   @confirm="submit"
+                   @confirm="submitCreateStore"
                    @reset="resetCreateStore"
                    @open="modalOpen"
                    @close="toggleModalCreateStore(false)">
 
     <section class="col-md-8">
       <div class="row gutter-sm q-ma-sm q-px-sm shadow-1">
-        <my-select :model="$v.educationBookObj.EducationGroupId"
-                   :options="educationGroupDdl"
-                   class="col-md-6"
-                   @change="educationGroupChange" />
-
-        <my-select :model="$v.educationBookObj.EducationGroup_LessonId"
-                   :options="educationGroup_LessonDdl"
-                   class="col-md-6"
-                   @change="fillTopicTree"
-                   ref="EducationGroup_LessonId" />
-
         <my-input :model="$v.educationBookObj.Name"
                   class="col-md-6" />
 
@@ -53,9 +42,9 @@
         <q-field class="col-12">
           <q-input v-model="topicFilter.value"
                    float-label="جستجوی مبحث"
-                   clearable/>
+                   clearable />
         </q-field>
-        <q-tree :nodes="topicTree"
+        <q-tree :nodes="topicTreeData"
                 color="primary"
                 :ticked.sync="educationBookObj.TopicIds"
                 tick-strategy="leaf"
@@ -85,26 +74,13 @@ export default {
       'resetCreateStore'
     ]),
     ...mapActions({
-      fillEducationGroupDdlStore: 'educationGroupStore/fillDdlStore',
-      fillLessonByEducationGroupDdlStore:
-        'lessonStore/fillLessonByEducationGroupDdlStore',
-      fillTopicTreeStore: 'topicStore/GetAllTreeStore'
+      fillTopicTreeStore: 'topicStore/fillTreeStore'
     }),
     modalOpen() {
-      this.fillEducationGroupDdlStore();
-    },
-    educationGroupChange(value) {
-      this.fillLessonByEducationGroupDdlStore(value);
-    },
-    fillTopicTree(value) {
-      this.fillTopicTreeStore(value).then(() => {
+      this.fillTopicTreeStore(this.educationBookObj.LessonId).then(() => {
         // after tree loaded
         this.$refs.topicTree.expandAll();
       });
-    },
-    submit(closeModal) {
-      this.educationBookObj.LessonName = this.$refs.EducationGroup_LessonId.getSelectedLabel();
-      this.submitCreateStore(closeModal);
     }
   },
   /**
@@ -118,9 +94,7 @@ export default {
       topicFilter: 'topicFilter'
     }),
     ...mapState({
-      educationGroupDdl: s => s.educationGroupStore.educationGroupDdl,
-      educationGroup_LessonDdl: s => s.lessonStore.educationGroup_LessonDdl,
-      topicTree: s => s.topicStore.treeLst
+      topicTreeData: s => s.topicStore.topicTreeData
     })
   },
   /**

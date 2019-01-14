@@ -1,7 +1,5 @@
-﻿using System;
-using System.Web.Http.Controllers;
+﻿using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
-using System.Web.Http.ValueProviders;
 
 namespace NasleGhalam.WebApi.ModelBinderAndFormatter
 {
@@ -9,16 +7,16 @@ namespace NasleGhalam.WebApi.ModelBinderAndFormatter
     {
         public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
         {
-            ValueProviderResult valueResult = bindingContext.ValueProvider.GetValue(
+            var valueResult = bindingContext.ValueProvider.GetValue(
                 bindingContext.ModelName);
-            if (valueResult == null || valueResult.AttemptedValue == null)
+            if (valueResult?.AttemptedValue == null)
             {
                 return false;
             }
 
-            Int32.TryParse(valueResult
+            int.TryParse(valueResult
                 .AttemptedValue.Trim()
-                .Replace(",", ""), out int val);
+                .Replace(",", ""), out var val);
 
             bindingContext.Model = val;
             return true;

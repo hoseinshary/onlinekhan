@@ -4,6 +4,7 @@ using System.Web.Http.Cors;
 using System.Web.Http.Dispatcher;
 using NasleGhalam.ServiceLayer.Configs;
 using NasleGhalam.WebApi.ModelBinderAndFormatter;
+using Newtonsoft.Json;
 
 namespace NasleGhalam.WebApi
 {
@@ -29,6 +30,7 @@ namespace NasleGhalam.WebApi
             config.Formatters.XmlFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data"));
             //config.Formatters.Add(new MultiPartMediaTypeFormatter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new CustomJsonFormatter());
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             //------------------------------
 
 

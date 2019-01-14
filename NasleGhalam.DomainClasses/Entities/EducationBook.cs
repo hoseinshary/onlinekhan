@@ -21,13 +21,9 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public bool IsChanged { get; set; }
 
-        public int GradeLevelId { get; set; }
+        public int LessonId { get; set; }
 
-        public GradeLevel GradeLevel { get; set; }
-
-        public int EducationGroup_LessonId { get; set; }
-
-        public EducationGroup_Lesson EducationGroup_Lesson { get; set; }
+        public Lesson Lesson { get; set; }
 
         public ICollection<Topic> Topics { get; set; }
 

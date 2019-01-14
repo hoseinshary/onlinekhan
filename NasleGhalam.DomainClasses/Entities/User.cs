@@ -48,6 +48,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<Teacher> Teachers { get; set; }
 
         public ICollection<Question> Questions { get; set; }
+        public ICollection<QuestionGroup> QuestionGroups { get; set; }
 
         public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
     }

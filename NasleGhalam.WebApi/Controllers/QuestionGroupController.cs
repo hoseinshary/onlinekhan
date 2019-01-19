@@ -110,29 +110,14 @@ namespace NasleGhalam.WebApi.Controllers
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             var excelFile = HttpContext.Current.Request.Files.Get("excel");
 
-            if (wordFile != null && wordFile.ContentLength > 0)
-            {
-                questionGroupViewModel.WordFile = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
-            }
+            questionGroupViewModel.WordFile = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+            questionGroupViewModel.ExcelFile = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
 
-            if (excelFile != null && excelFile.ContentLength > 0)
-            {
-                questionGroupViewModel.ExcelFile = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
-            }
-
-
-
-            questionGroupViewModel.InsertTime = DateTime.Now;
             questionGroupViewModel.UserId = Request.GetUserId();
-
             var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile, excelFile);
-
-
 
             return Ok(msgRes);
         }
-
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
@@ -154,18 +139,10 @@ namespace NasleGhalam.WebApi.Controllers
                 questionGroupViewModel.ExcelFile = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
             }
 
-        
-
-            questionGroupViewModel.InsertTime = DateTime.Now;
             questionGroupViewModel.UserId = Request.GetUserId();
-
-            var msgRes = _questionGroupService.Create(questionGroupViewModel ,wordFile,excelFile );
-      
-            
-
+            var msgRes = _questionGroupService.Create(questionGroupViewModel, wordFile, excelFile);
             return Ok(msgRes);
         }
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionGroupUpdateAccess)]
@@ -175,16 +152,10 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionGroupService.Update(questionGroupViewModel));
         }
 
-
         [HttpPost, CheckUserAccess(ActionBits.QuestionGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             return Ok(_questionGroupService.Delete(id));
         }
-
-
-       
-
-
     }
 }

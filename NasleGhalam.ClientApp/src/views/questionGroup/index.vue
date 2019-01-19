@@ -12,6 +12,7 @@
                          @change="gradeDdlChange" />
 
               <q-tree :nodes="educationTreeData"
+                      style="max-height: 200px; overflow-y:scroll;"
                       color="primary"
                       tick-strategy="leaf"
                       accordion
@@ -56,35 +57,35 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import viewModel from 'viewModels/questionGroup/questionGroupIndexViewModel';
+import { mapState, mapActions } from "vuex";
+import viewModel from "viewModels/questionGroup/questionGroupIndexViewModel";
 
 export default {
   components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
+    "modal-create": () => import("./create"),
+    "modal-edit": () => import("./edit"),
+    "modal-delete": () => import("./delete")
   },
   /**
    * data
    */
   data() {
-    var pageAccess = this.$util.initAccess('/questionGroup');
+    var pageAccess = this.$util.initAccess("/questionGroup");
     return {
       pageAccess,
       educationTreeData: [],
       questionGroupGridColumn: [
         {
-          title: 'عنوان',
-          data: 'Title'
+          title: "عنوان",
+          data: "Title"
         },
         {
-          title: 'زمان ثبت',
-          data: 'PInsertTime'
+          title: "زمان ثبت",
+          data: "PInsertTime"
         },
         {
-          title: 'عملیات',
-          data: 'Id',
+          title: "عملیات",
+          data: "Id",
           searchable: false,
           sortable: false,
           visible: pageAccess.canEdit || pageAccess.canDelete
@@ -96,22 +97,22 @@ export default {
    * methods
    */
   methods: {
-    ...mapActions('questionGroupStore', [
-      'toggleModalCreateStore',
-      'toggleModalEditStore',
-      'toggleModalDeleteStore',
-      'getByIdStore',
-      'fillGridStore',
-      'resetCreateStore',
-      'resetEditStore'
+    ...mapActions("questionGroupStore", [
+      "toggleModalCreateStore",
+      "toggleModalEditStore",
+      "toggleModalDeleteStore",
+      "getByIdStore",
+      "fillGridByLessonIdStore",
+      "resetCreateStore",
+      "resetEditStore"
     ]),
-    ...mapActions('educationTreeStore', {
-      getAllGrade: 'getAllGrade',
-      fillEducationTreeStore: 'fillTreeStore',
-      fillEducationTreeByGradeIdStore: 'fillTreeByGradeIdStore'
+    ...mapActions("educationTreeStore", {
+      getAllGrade: "getAllGrade",
+      fillEducationTreeStore: "fillTreeStore",
+      fillEducationTreeByGradeIdStore: "fillTreeByGradeIdStore"
     }),
-    ...mapActions('lessonStore', {
-      fillLessonDdlStore: 'fillDdlStore'
+    ...mapActions("lessonStore", {
+      fillLessonDdlStore: "fillDdlStore"
     }),
     showModalCreate() {
       // reset data on modal show
@@ -148,30 +149,30 @@ export default {
       });
     },
     lessonDdlChange(val) {
-      this.fillGridStore(val);
       this.questionGroupObj.LessonId = val;
+      this.fillGridByLessonIdStore(val);
     }
   },
   computed: {
-    ...mapState('questionGroupStore', {
-      modelName: 'modelName',
-      questionGroupObj: 'questionGroupObj',
-      questionGroupIndexObj: 'questionGroupIndexObj',
-      questionGroupGridData: 'questionGroupGridData'
+    ...mapState("questionGroupStore", {
+      modelName: "modelName",
+      questionGroupObj: "questionGroupObj",
+      questionGroupIndexObj: "questionGroupIndexObj",
+      questionGroupGridData: "questionGroupGridData"
     }),
-    ...mapState('educationTreeStore', {
-      educationTree_GradeDdl: 'gradeDdl'
+    ...mapState("educationTreeStore", {
+      educationTree_GradeDdl: "gradeDdl"
     }),
-    ...mapState('lessonStore', {
-      lessonDdl: 'allObjDdl'
+    ...mapState("lessonStore", {
+      lessonDdl: "allObjDdl"
     })
   },
   watch: {
-    'questionGroupIndexObj.EducationTreeIds'(val) {
+    "questionGroupIndexObj.EducationTreeIds"(val) {
       this.questionGroupIndexObj.LessonId = 0;
       this.fillLessonDdlStore(val);
     },
-    'questionGroupIndexObj.selectedquestionGroupId'(newVal, oldVal) {
+    "questionGroupIndexObj.selectedquestionGroupId"(newVal, oldVal) {
       let node;
       if (newVal && oldVal) {
         node = this.$refs.questionGroupTree.getNodeByKey(newVal);

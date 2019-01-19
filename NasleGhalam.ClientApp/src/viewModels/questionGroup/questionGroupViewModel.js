@@ -12,11 +12,11 @@ export default {
       displayName: displayName('عنوان'),
       maxLength: maxLength(50),
       required
-    },
-    LessonId: {
-      displayName: displayName('LessonId'),
-      maxLength: maxLength(50),
-      required
     }
+    // LessonId: {
+    //   displayName: displayName('LessonId'),
+    //   maxLength: maxLength(50),
+    //   required
+    // }
   }
 };

@@ -90,9 +90,9 @@ const store = {
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
+    fillGridByLessonIdStore({ state }, lessonId) {
       // fill grid if modelChanged
-      axios.get(`${baseUrl}/GetAll`).then(response => {
+      axios.get(`${baseUrl}/GetAllByLessonId/${lessonId}`).then(response => {
         state.questionGroupGridData = response.data;
       });
     },
@@ -145,6 +145,53 @@ const store = {
      */
     createVueStore({ state }, vm) {
       state.createVue = vm;
+    },
+
+    /**
+     * submit create data
+     */
+    submitPreCreateStore({ state, commit, dispatch }) {
+      var vm = state.createVue;
+      dispatch('validateFormStore', vm).then(isValid => {
+        if (!isValid) return;
+
+        var formData = new FormData();
+        var wordFileUpload = state.createVue.$refs.wordFileUpload;
+        if (wordFileUpload && wordFileUpload.files) {
+          formData.append(wordFileUpload.name, wordFileUpload.files[0]);
+        }
+
+        var excelFileUpload = state.createVue.$refs.excelFileUpload;
+        if (excelFileUpload && excelFileUpload.files) {
+          formData.append(excelFileUpload.name, excelFileUpload.files[0]);
+        }
+
+        axios({
+          method: 'post',
+          url: `${baseUrl}/PreCreate?${util.toParam(state.questionGroupObj)}`,
+          data: formData,
+          config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        }).then(response => {
+          let data = response.data;
+
+          if (data.MessageType == 1) {
+            commit('insert', data.Id);
+            dispatch('modelChangedStore');
+            dispatch('resetCreateStore');
+            dispatch('toggleModalCreateStore', !closeModal);
+          }
+
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            { root: true }
+          );
+        });
+      });
     },
 
     /**

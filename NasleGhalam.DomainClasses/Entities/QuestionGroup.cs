@@ -21,10 +21,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public DateTime InsertTime { get; set; }
 
-        public string WordFile { get; set; }
-
-        public string ExcelFile { get; set; }
-
+        public string File { get; set; }
+        
         public int LessonId { get; set; }
 
         public Lesson Lesson { get; set; }

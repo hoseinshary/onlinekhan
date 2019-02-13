@@ -129,15 +129,12 @@ namespace NasleGhalam.WebApi.Controllers
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             var excelFile = HttpContext.Current.Request.Files.Get("excel");
 
-            if (wordFile != null && wordFile.ContentLength > 0)
+            if (wordFile != null && wordFile.ContentLength > 0 &&
+                excelFile != null && excelFile.ContentLength > 0)
             {
-                questionGroupViewModel.WordFile = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+                questionGroupViewModel.File = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
             }
 
-            if (excelFile != null && excelFile.ContentLength > 0)
-            {
-                questionGroupViewModel.ExcelFile = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
-            }
 
             questionGroupViewModel.UserId = Request.GetUserId();
             var msgRes = _questionGroupService.Create(questionGroupViewModel, wordFile, excelFile);

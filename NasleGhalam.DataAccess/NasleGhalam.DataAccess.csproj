@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201811180834009_addQuestionGroup.Designer.cs">
       <DependentUpon>201811180834009_addQuestionGroup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902131303491_changedQuestionGroup.cs" />
+    <Compile Include="Migrations\201902131303491_changedQuestionGroup.Designer.cs">
+      <DependentUpon>201902131303491_changedQuestionGroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -80,6 +84,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811180834009_addQuestionGroup.resx">
       <DependentUpon>201811180834009_addQuestionGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902131303491_changedQuestionGroup.resx">
+      <DependentUpon>201902131303491_changedQuestionGroup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

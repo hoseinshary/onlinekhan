@@ -53,7 +53,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public HttpResponseMessage GetExcelFile(string id)
         {
-            //id += ".xlsx";
+            id += ".xlsx";
 
             var stream = new MemoryStream();
             var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
@@ -79,7 +79,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public HttpResponseMessage GetWordFile(string id)
         {
-            //id += ".docx";
+            id += ".docx";
 
             var stream = new MemoryStream();
             var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
@@ -104,17 +104,17 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
         [CheckModelValidation]
         [CheckWordFileValidation("word", 1024)]
-        [CheckWordFileValidation("excel", 1024)]
-        public IHttpActionResult PreCreate(QuestionGroupCreateViewModel questionGroupViewModel)
+        
+        public IHttpActionResult PreCreate([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
-            var excelFile = HttpContext.Current.Request.Files.Get("excel");
+            
 
-            questionGroupViewModel.WordFile = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
-            questionGroupViewModel.ExcelFile = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
+            questionGroupViewModel.File = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
+        
 
             questionGroupViewModel.UserId = Request.GetUserId();
-            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile, excelFile);
+            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile);
 
             return Ok(msgRes);
         }
@@ -124,7 +124,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         [CheckWordFileValidation("word", 1024)]
         [CheckWordFileValidation("excel", 1024)]
-        public IHttpActionResult Create(QuestionGroupCreateViewModel questionGroupViewModel)
+        public IHttpActionResult Create([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             var excelFile = HttpContext.Current.Request.Files.Get("excel");

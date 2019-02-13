@@ -7,6 +7,7 @@ namespace NasleGhalam.ServiceLayer.Util
         public static string AxillaryBookRelPath => "~/Content/AxillaryBook/";
         public static string QuestionRelPath => "~/Content/Question/";
         public static string QuestionGroupRelPath => "~/Content/QuestionGroup/";
+        public static string QuestionGroupTempRelPath => "~/Content/QuestionGroupTemp/";
         //-------------------------------------------------------------------------------------
 
 
@@ -18,6 +19,7 @@ namespace NasleGhalam.ServiceLayer.Util
 
 
         public static string GetQuestionGroupAbsPath(string name) => ToAbsoulutPath($"{QuestionGroupRelPath}{name}");
+        public static string GetQuestionGroupTempAbsPath(string name) => ToAbsoulutPath($"{QuestionGroupTempRelPath}{name}");
 
         public static string ToAbsoulutPath(string relativePath)
         {

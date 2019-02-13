@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
 using AutoMapper;
+using Microsoft.Office.Interop.Word;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
@@ -12,8 +14,9 @@ using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.QuestionGroup;
 using NasleGhalam.ServiceLayer.Util;
 using NasleGhalam.ViewModels.Question;
-using NPOI.XSSF.UserModel;
-using NPOI.XWPF.UserModel;
+using System.Drawing.Imaging;
+using Microsoft.Office.Interop.Excel;
+using System.Data;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -45,7 +48,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-       
+
 
 
         /// <summary>
@@ -70,80 +73,275 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word , HttpPostedFile excel)
+        public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
         {
-            XWPFDocument document = null;
-            document = new XWPFDocument(word.InputStream);
-            var allP = document.Paragraphs;
-            XSSFWorkbook sheet = new XSSFWorkbook();
-            var s = sheet.GetSheetAt(0);
-            
-           
+            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
+            _questionGroups.Add(questionGroup);
 
-            var count = allP.Count;
+            //save Doc and excel file in temp memory
+            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx");
+            excel.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".xlsx");
 
-            int questionCount = 0;
-            int i = 0;
-            while (i < count)
+
+            // Open a doc file.
+            Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx";
+            var excelFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".xlsx";
+            Document doc = app.Documents.Open(wordFilename);
+
+            object missing = Type.Missing;
+
+            //split question group
+            int x = doc.Paragraphs.Count;
+            int i = 1;
+            int numberOFQ = 0;
+            while (i <= x)
             {
-                if (isQuestionParagraph(allP[i].Text))
-                {
-                    Question newQuestion = new Question();
-
-                    
-
-                    var tempQuestion = new List<XWPFParagraph>();
-                    tempQuestion.Add(allP[i]);
+                if (doc.Paragraphs[i].Range.Text == "\f" || doc.Paragraphs[i].Range.Text == "\f\r")
                     i++;
-                    while (!isQuestionParagraph(allP[i].Text))
+                else
+                {
+                    if (isQuestionParagraph(doc.Paragraphs[i].Range.Text))
                     {
-                        tempQuestion.Add(allP[i]);
+                        numberOFQ++;
+                        Document newdoc2 = app.Documents.Add(
+                            ref missing, ref missing, ref missing, ref missing);
 
+                        doc.Paragraphs[i].Range.Copy();
+
+                        app.Selection.Paste();
                         i++;
+                        while (i <= x && !isQuestionParagraph(doc.Paragraphs[i].Range.Text))
+                        {
+                            if (doc.Paragraphs[i].Range.Text != "\f" && doc.Paragraphs[i].Range.Text != "\f\r")
+                            {
+                                doc.Paragraphs[i].Range.Copy();
+
+                                app.Selection.Paste();
+                            }
+                            i++;
+                        }
+
+
+                        //read from excel file
+                        Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+                        Workbook xlWorkbook = xlApp.Workbooks.Open(excelFilename, 0, true, 5, "", "", true, XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+                        _Worksheet xlWorksheet = (_Worksheet)xlWorkbook.Sheets[1];
+                        Microsoft.Office.Interop.Excel.Range xlRange = xlWorksheet.UsedRange;
+
+                        int rowCount = xlRange.Rows.Count;
+                        int colCount = xlRange.Columns.Count;
+                        System.Data.DataTable dt = new System.Data.DataTable();
+                        for (int k = 1; k <= rowCount; k++)
+                        {
+                            DataRow dr = dt.NewRow();
+                            for (int j = 1; j <= colCount; j++)
+                            {
+                                if (k == 1)
+                                {
+                                    dt.Columns.Add(Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range).Value2));
+                                }
+                                else
+                                {
+                                    dr[j - 1] = Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range).Value2);
+                                }
+
+                            }
+                            if (k != 1)
+                                dt.Rows.Add(dr);
+                        }
+
+                        xlWorkbook.Close();
+                        xlApp.Quit();
+
+                        //create single question
+                        Question newQuestion = new Question();
+                        var newGuid = Guid.NewGuid();
+                        newQuestion.FileName = newGuid.ToString();
+
+                        newQuestion.LookupId_QuestionType = dt.Rows[numberOFQ - 1]["نوع سوال"].ToString() == "تستی" ? 6 : 7;
+                        newQuestion.QuestionPoint = Convert.ToInt32(dt.Rows[numberOFQ - 1]["بارم سوال"]);
+                        newQuestion.AnswerNumber = Convert.ToInt32(dt.Rows[numberOFQ - 1]["گزینه صحیح"]);
+                        newQuestion.LookupId_QuestionHardnessType = 1040;
+                        newQuestion.LookupId_AreaType = 1036;
+                        newQuestion.LookupId_AuthorType = 1039;
+                        newQuestion.LookupId_RepeatnessType = 21;
+                        newQuestion.InsertDateTime = DateTime.Now;
+                        newQuestion.IsStandard = dt.Rows[numberOFQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
+                        newQuestion.AuthorName = dt.Rows[numberOFQ - 1]["نام طراح"].ToString();
+                        newQuestion.UserId = questionGroupViewModel.UserId;
+                        newQuestion.Description = dt.Rows[numberOFQ - 1]["توضیحات"].ToString();
+                        newQuestion.Context = "";
+                        newQuestion.IsActive = false;
+                        newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOFQ - 1]["زمان پاسخگویی"]);
+                        newQuestion.UseEvaluation = false;
+                        newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOFQ - 1]["شماره سوال در منبع اصلی"]);
+
+                        questionGroup.Questions.Add(newQuestion);
+
+                        var filename2 = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".docx";
+                        newdoc2.SaveAs(filename2, ref missing, ref missing,
+                            ref missing, ref missing, ref missing, ref missing,
+                            ref missing, ref missing, ref missing, ref missing,
+                            ref missing, ref missing, ref missing, ref missing,
+                            ref missing);
+
+                        //تبدیل به عکس
+                        var pane = newdoc2.Windows[1].Panes[1];
+                        var page = pane.Pages[1];
+                        var bits = page.EnhMetaFileBits;
+                        var target = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()) + ".png";
+                       
+                        
+
+                        //crop and resize
+                        try
+                        {
+                            using (var ms = new MemoryStream((byte[])(bits)))
+                            {
+                                var image = System.Drawing.Image.FromStream(ms);
+                       
+                                var pngTarget = Path.ChangeExtension(target, "png");
+                                var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
+                                // resizedImage.Save(pngTarget, ImageFormat.Png);
+                                var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
+                                var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
+                                croppedImage.Save(pngTarget, ImageFormat.Png);
+                            }
+                        }
+                        catch (System.Exception ex)
+                        { }
+
+                        newdoc2.Close();
                     }
-
-                    questionCount++;
-
-                    XWPFDocument doc = new XWPFDocument();
-                    int position = 0;
-                    foreach (var item in tempQuestion)
-                    {
-                        doc.SetParagraph(item, position);
-                        position++;
-                    }
-                    FileStream out1 = new FileStream(SitePath.GetQuestionAbsPath(Guid.NewGuid() + ".docx"), FileMode.Create);
-                    doc.Write(out1);
-                    out1.Close();
-
                 }
-                i++;
             }
 
 
-
-
-
-
+            doc.Close();
+            app.Quit();
             /////////////////////////////////
 
-            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
-            _questionGroups.Add(questionGroup);
+
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = questionGroup.Id;
 
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.WordFile) && !string.IsNullOrEmpty(questionGroupViewModel.ExcelFile))
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.File) && !string.IsNullOrEmpty(questionGroupViewModel.File))
             {
-                word.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.WordFile));
-                excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.ExcelFile));
+                File.Delete(SitePath.GetQuestionGroupTempAbsPath(wordFilename) + ".docx");
+                File.Delete(SitePath.GetQuestionGroupTempAbsPath(excelFilename) + ".xlsx");
+                word.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File));
+                excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File));
             }
 
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
-        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile wordFile, HttpPostedFile excelFile)
+        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word)
         {
-            throw new NotImplementedException();
+            List<string> returnGuidS = new List<string>();
+
+            //save Doc and excel file in temp memory
+            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx");
+        
+
+
+            // Open a doc file.
+            Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx";
+            
+            Document doc = app.Documents.Open(wordFilename);
+
+            object missing = Type.Missing;
+
+            //split question group
+            int x = doc.Paragraphs.Count;
+            int i = 1;
+            int numberOFQ = 0;
+            while (i <= x)
+            {
+                if (doc.Paragraphs[i].Range.Text == "\f" || doc.Paragraphs[i].Range.Text == "\f\r")
+                    i++;
+                else
+                {
+                    if (isQuestionParagraph(doc.Paragraphs[i].Range.Text))
+                    {
+                        numberOFQ++;
+                        Document newdoc2 = app.Documents.Add(
+                            ref missing, ref missing, ref missing, ref missing);
+
+                        doc.Paragraphs[i].Range.Copy();
+
+                        app.Selection.Paste();
+                        i++;
+                        while (i <= x && !isQuestionParagraph(doc.Paragraphs[i].Range.Text))
+                        {
+                            if (doc.Paragraphs[i].Range.Text != "\f" && doc.Paragraphs[i].Range.Text != "\f\r")
+                            {
+                                doc.Paragraphs[i].Range.Copy();
+
+                                app.Selection.Paste();
+                            }
+                            i++;
+                        }
+
+
+
+                        var newGuid = Guid.NewGuid();
+            
+                        returnGuidS.Add(newGuid.ToString());
+                 
+
+                        //تبدیل به عکس
+                        var pane = newdoc2.Windows[1].Panes[1];
+                        var page = pane.Pages[1];
+                        var bits = page.EnhMetaFileBits;
+                        var target = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
+                        
+
+                        //crop and resize
+                        try
+                        {
+                            using (var ms = new MemoryStream((byte[])(bits)))
+                            {
+                                var image = System.Drawing.Image.FromStream(ms);
+                                var pngTarget = target;//Path.ChangeExtension(target , "png");
+                                image.Save(pngTarget + "1.png", ImageFormat.Png);
+                                image = new  Bitmap(pngTarget + "1.png");
+                             
+                                var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
+                                //resizedImage.Save(pngTarget, ImageFormat.Png);
+                                var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
+                                var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
+                                croppedImage.Save(pngTarget + ".png", ImageFormat.Png);
+                                File.Delete(pngTarget + "1.png");
+                            }
+                        }
+                        catch (System.Exception ex)
+                        { }
+
+                        newdoc2.Close(WdSaveOptions.wdDoNotSaveChanges,WdOriginalFormat.wdOriginalDocumentFormat,false);
+                    }
+                }
+            }
+
+
+            doc.Close();
+            app.Quit();
+            /////////////////////////////////
+
+
+
+
+
+
+
+            MessageResultClient msgRes = new MessageResultClient();
+            msgRes.MessageType = MessageType.Success;
+            msgRes.Obj = returnGuidS;
+            
+            return msgRes;
         }
 
 
@@ -197,13 +395,21 @@ namespace NasleGhalam.ServiceLayer.Services
                 else if (char.IsDigit(arraytemp[i]))
                 {
                     i++;
-                    while (char.IsDigit(arraytemp[i]))
+                    while (char.IsDigit(arraytemp[i]) && i < arraytemp.Length)
                     {
                         i++;
                     }
                     if (arraytemp[i] == '-')
                     {
-                        return true;
+                        int j = 0;
+                        while (j < 30 && i < arraytemp.Length)
+                        {
+                            i++;
+
+                            j++;
+                        }
+                        if (j == 30)
+                            return true;
                     }
                     return false;
                 }
@@ -211,6 +417,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
             return false;
         }
+
 
     }
 }

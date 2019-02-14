@@ -160,8 +160,8 @@ namespace NasleGhalam.ServiceLayer.Services
                         newQuestion.FileName = newGuid.ToString();
 
                         newQuestion.LookupId_QuestionType = dt.Rows[numberOFQ - 1]["نوع سوال"].ToString() == "تستی" ? 6 : 7;
-                        newQuestion.QuestionPoint = Convert.ToInt32(dt.Rows[numberOFQ - 1]["بارم سوال"]);
-                        newQuestion.AnswerNumber = Convert.ToInt32(dt.Rows[numberOFQ - 1]["گزینه صحیح"]);
+                        newQuestion.QuestionPoint = Convert.ToInt32(dt.Rows[numberOFQ - 1]["بارم سوال"] != DBNull.Value ? dt.Rows[numberOFQ - 1]["بارم سوال"] : 0);
+                        newQuestion.AnswerNumber = Convert.ToInt32(dt.Rows[numberOFQ - 1]["گزینه صحیح"] != DBNull.Value ? dt.Rows[numberOFQ - 1]["گزینه صحیح"] : 0);
                         newQuestion.LookupId_QuestionHardnessType = 1040;
                         newQuestion.LookupId_AreaType = 1036;
                         newQuestion.LookupId_AuthorType = 1039;
@@ -173,9 +173,9 @@ namespace NasleGhalam.ServiceLayer.Services
                         newQuestion.Description = dt.Rows[numberOFQ - 1]["توضیحات"].ToString();
                         newQuestion.Context = "";
                         newQuestion.IsActive = false;
-                        newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOFQ - 1]["زمان پاسخگویی"]);
+                        newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOFQ - 1]["زمان پاسخگویی"]!= DBNull.Value ? dt.Rows[numberOFQ - 1]["زمان پاسخگویی"] : 0);
                         newQuestion.UseEvaluation = false;
-                        newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOFQ - 1]["شماره سوال در منبع اصلی"]);
+                        newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOFQ - 1]["شماره سوال در منبع اصلی"]!= DBNull.Value ? dt.Rows[numberOFQ - 1]["شماره سوال در منبع اصلی"] : 0);
 
                         questionGroup.Questions.Add(newQuestion);
 
@@ -190,7 +190,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         var pane = newdoc2.Windows[1].Panes[1];
                         var page = pane.Pages[1];
                         var bits = page.EnhMetaFileBits;
-                        var target = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()) + ".png";
+                        var target = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".png";
                        
                         
 
@@ -229,10 +229,10 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.File) && !string.IsNullOrEmpty(questionGroupViewModel.File))
             {
-                File.Delete(SitePath.GetQuestionGroupTempAbsPath(wordFilename) + ".docx");
-                File.Delete(SitePath.GetQuestionGroupTempAbsPath(excelFilename) + ".xlsx");
-                word.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File));
-                excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File));
+               // File.Delete(SitePath.GetQuestionGroupTempAbsPath(wordFilename));
+                //File.Delete(SitePath.GetQuestionGroupTempAbsPath(excelFilename) );
+                word.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".docx");
+                excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".xlsx");
             }
 
             return Mapper.Map<MessageResultClient>(msgRes);

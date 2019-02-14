@@ -123,7 +123,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
         [CheckModelValidation]
         [CheckWordFileValidation("word", 1024)]
-        [CheckWordFileValidation("excel", 1024)]
+        [CheckExcelFileValidation("excel", 1024)]
         public IHttpActionResult Create([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
@@ -132,7 +132,7 @@ namespace NasleGhalam.WebApi.Controllers
             if (wordFile != null && wordFile.ContentLength > 0 &&
                 excelFile != null && excelFile.ContentLength > 0)
             {
-                questionGroupViewModel.File = $"{Guid.NewGuid()}{Path.GetExtension(excelFile.FileName)}";
+                questionGroupViewModel.File = $"{Guid.NewGuid()}";
             }
 
 

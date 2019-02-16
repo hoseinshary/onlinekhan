@@ -61,10 +61,10 @@ export default {
   data() {
     return {
       modalSize: {
-        'bs-modal-dialog-centered': this.center,
-        'bs-modal-lg': this.size == 'lg',
-        'bs-modal-sm': this.size == 'sm',
-        'bs-modal-xl': this.size == 'xl'
+        "bs-modal-dialog-centered": this.center,
+        "bs-modal-lg": this.size == "lg",
+        "bs-modal-sm": this.size == "sm",
+        "bs-modal-xl": this.size == "xl"
       }
     };
   },
@@ -75,11 +75,11 @@ export default {
   methods: {
     close(type) {
       if (
-        (type == 'click' && this.closeOnClick) ||
-        (type == 'esc' && this.closeOnEsc)
+        (type == "click" && this.closeOnClick) ||
+        (type == "esc" && this.closeOnEsc)
       ) {
         // this.$emit('toggle', false);
-        this.$emit('close');
+        this.$emit("close");
       }
     }
   },
@@ -90,11 +90,11 @@ export default {
   watch: {
     show(newVal) {
       if (newVal) {
-        document.body.classList.add('bs-modal-open');
-        this.$emit('open');
+        document.body.classList.add("bs-modal-open");
+        this.$emit("open");
         // document.body.style.paddingRight = '17px';
       } else {
-        document.body.classList.remove('bs-modal-open');
+        document.body.classList.remove("bs-modal-open");
         // document.body.style.paddingRight = '0';
       }
     }
@@ -143,7 +143,8 @@ export default {
 
 .bs-modal {
   position: fixed;
-  top: 50px;
+  top: 0;
+  /* top: 50px; */
   right: 0;
   bottom: 0;
   left: 0;

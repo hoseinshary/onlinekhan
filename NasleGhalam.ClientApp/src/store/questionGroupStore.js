@@ -148,7 +148,7 @@ const store = {
     },
 
     /**
-     * submit create data
+     * submit pre create data
      */
     submitPreCreateStore({ state, commit, dispatch }) {
       var vm = state.createVue;
@@ -175,8 +175,47 @@ const store = {
           let data = response.data;
 
           if (data.MessageType == 1) {
-            commit('insert', data.Id);
-            dispatch('modelChangedStore');
+            debugger;
+            state.createVue.selectedTab = 'previewTab';
+            state.createVue.modalSize = 'lg';
+            state.createVue.previewImages = data.Obj;
+            state.createVue.isPreCreate = false;
+          }
+        });
+      });
+    },
+
+    /**
+     * submit create data
+     */
+    submitCreateStore({ state, commit, dispatch }, closeModal) {
+      var vm = state.createVue;
+      dispatch('validateFormStore', vm).then(isValid => {
+        if (!isValid) return;
+
+        var formData = new FormData();
+        var wordFileUpload = state.createVue.$refs.wordFileUpload;
+        if (wordFileUpload && wordFileUpload.files) {
+          formData.append(wordFileUpload.name, wordFileUpload.files[0]);
+        }
+
+        var excelFileUpload = state.createVue.$refs.excelFileUpload;
+        if (excelFileUpload && excelFileUpload.files) {
+          formData.append(excelFileUpload.name, excelFileUpload.files[0]);
+        }
+
+        axios({
+          method: 'post',
+          url: `${baseUrl}/Create?${util.toParam(state.questionGroupObj)}`,
+          data: formData,
+          config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        }).then(response => {
+          let data = response.data;
+
+          if (data.MessageType == 1) {
+            // commit('insert', data.Id);
+            // dispatch('modelChangedStore');
+            debugger;
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', !closeModal);
           }
@@ -191,39 +230,6 @@ const store = {
             { root: true }
           );
         });
-      });
-    },
-
-    /**
-     * submit create data
-     */
-    submitCreateStore({ state, commit, dispatch }, closeModal) {
-      var vm = state.createVue;
-      dispatch('validateFormStore', vm).then(isValid => {
-        if (!isValid) return;
-
-        axios
-          .post(`${baseUrl}/Create`, state.questionGroupObj)
-          .then(response => {
-            let data = response.data;
-
-            if (data.MessageType == 1) {
-              commit('insert', data.Id);
-              dispatch('modelChangedStore');
-              dispatch('resetCreateStore');
-              dispatch('toggleModalCreateStore', !closeModal);
-            }
-
-            dispatch(
-              'notify',
-              {
-                body: data.Message,
-                type: data.MessageType,
-                vm: vm
-              },
-              { root: true }
-            );
-          });
       });
     },
 

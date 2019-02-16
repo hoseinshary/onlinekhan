@@ -67,6 +67,8 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
+Content/
+
 node_modules
 build
 *.log

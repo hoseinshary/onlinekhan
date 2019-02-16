@@ -163,9 +163,7 @@ const store = {
     validateFormStore({
       dispatch
     }, vm) {
-      debugger;
       // check instance validation
-      debugger
       vm.$v.questionObj.$touch();
       if (vm.$v.questionObj.$error) {
         dispatch('notifyInvalidForm', vm, {

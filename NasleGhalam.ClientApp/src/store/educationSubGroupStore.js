@@ -46,7 +46,6 @@ const store = {
     update(state) {
       let index = getIndexById(state.selectedId);
       if (index < 0) return;
-      debugger;
       util.mapObject(
         state.educationSubGroupObj,
         state.educationSubGroupGridData[index]

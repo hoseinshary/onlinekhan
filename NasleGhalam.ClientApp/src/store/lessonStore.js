@@ -250,7 +250,6 @@ export default {
         state.instanceObj.Ratios = [];
         state.EducationGroupListLesson.forEach(element => {
           element.SubGroups.filter(x => x.Rate != undefined).forEach(item => {
-            debugger
             state.instanceObj.Ratios.push({
               EducationSubGroupId: item.Id,
               Rate: item.Rate
@@ -330,7 +329,6 @@ export default {
         state.instanceObj.Ratios = [];
         state.EducationGroupListLesson.filter(x => x.IsChecked).forEach(element => {
           element.SubGroups.filter(x => x.Rate != undefined).forEach(item => {
-            debugger
             state.instanceObj.Ratios.push({
               EducationSubGroupId: item.Id,
               Rate: item.Rate,

@@ -331,7 +331,6 @@ export default {
       this.rowClickCount;
 
       let renderType = '';
-      //debugger; // this or not
       // set renderType
       if (sortKey || filterKey) {
         renderType = 'sortOrSearch';
@@ -366,7 +365,6 @@ export default {
           });
         });
       }
-      debugger;
 
       if (sortKey) {
         // gridData = gridData.slice().sort(function(a, b) {
@@ -381,7 +379,6 @@ export default {
       }
 
       /* eslint-disable */
-      //debugger;
       this.filterRows = gridData.length;
 
       // set perPage to total

@@ -54,7 +54,6 @@ const store = {
         'Id',
         createdObj.ParentTopicId
       );
-      debugger;
       if (!node) {
         node = {
           Id: createdObj.Id,
@@ -102,7 +101,6 @@ const store = {
         'Id',
         state.topicObj.ParentTopicId
       );
-      debugger;
       // if has parentNode
       if (parentNode) {
         index = getIndexById(parentNode.children, state.selectedId);

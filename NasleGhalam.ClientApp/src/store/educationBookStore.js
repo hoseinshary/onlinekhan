@@ -99,7 +99,6 @@ const store = {
       return axios.get(`${baseUrl}/GetById/${id}`).then(response => {
         state.selectedId = id;
         util.mapObject(response.data, state.educationBookObj);
-        debugger;
         state.educationBookObj.TopicIds = response.data.Topics.map(x => x.Id);
         return response.data;
       });

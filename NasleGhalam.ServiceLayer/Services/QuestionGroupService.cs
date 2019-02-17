@@ -243,13 +243,13 @@ namespace NasleGhalam.ServiceLayer.Services
             List<string> returnGuidS = new List<string>();
 
             //save Doc and excel file in temp memory
-            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx");
+            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) );
         
 
 
             // Open a doc file.
             Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
-            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx";
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) ;
             
             Document doc = app.Documents.Open(wordFilename);
 

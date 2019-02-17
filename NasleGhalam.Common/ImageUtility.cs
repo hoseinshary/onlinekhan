@@ -91,29 +91,29 @@ namespace NasleGhalam.Common
 
 
 
-            // find x1
+            //// find x1
 
-            for (var i = 0; i < data.Width; i++)
+            //for (var i = 0; i < data.Width; i++)
 
-            {
+            //{
 
-                for (var j = 0; j < data.Height; j++)
+            //    for (var j = 0; j < data.Height; j++)
 
-                {
+            //    {
 
-                    if (!HasOpacity(data.GetPixel(i, j))) continue;
+            //        if (!HasOpacity(data.GetPixel(i, j))) continue;
 
-                    x1 = i;
+            //        x1 = i;
 
-                    break;
+            //        break;
 
-                }
+            //    }
 
-                if (x1 > 0)
+            //    if (x1 > 0)
 
-                    break;
+            //        break;
 
-            }
+            //}
 
 
 
@@ -195,7 +195,8 @@ namespace NasleGhalam.Common
 
 
 
-            x1 -= padding;
+
+            x1 = data.Width - x2 - padding;
 
             y1 -= padding;
 
@@ -203,6 +204,7 @@ namespace NasleGhalam.Common
 
             y2 += padding;
 
+           
 
 
             var width = x2 - x1;

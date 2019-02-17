@@ -200,13 +200,15 @@ namespace NasleGhalam.ServiceLayer.Services
                             using (var ms = new MemoryStream((byte[])(bits)))
                             {
                                 var image = System.Drawing.Image.FromStream(ms);
-                       
-                                var pngTarget = Path.ChangeExtension(target, "png");
+                                var pngTarget = target;//Path.ChangeExtension(target , "png");
+                                image.Save(pngTarget + "1.png", ImageFormat.Png);
+                                image = new Bitmap(pngTarget + "1.png");
+
                                 var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
                                 // resizedImage.Save(pngTarget, ImageFormat.Png);
                                 var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
                                 var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                                croppedImage.Save(pngTarget, ImageFormat.Png);
+                                croppedImage.Save(pngTarget + ".png", ImageFormat.Png);
                             }
                         }
                         catch (System.Exception ex)
@@ -226,6 +228,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = questionGroup.Id;
+            
 
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.File) && !string.IsNullOrEmpty(questionGroupViewModel.File))
             {
@@ -235,10 +238,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".xlsx");
             }
 
-            return Mapper.Map<MessageResultClient>(msgRes);
+            var returnval = Mapper.Map<MessageResultClient>(msgRes);
+            returnval.Obj = Mapper.Map<QuestionGroupViewModel>(questionGroup);
+            return returnval;
         }
 
-        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word)
+        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word ,  string host)
         {
             List<string> returnGuidS = new List<string>();
 
@@ -289,8 +294,10 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
                         var newGuid = Guid.NewGuid();
-            
-                        returnGuidS.Add(newGuid.ToString());
+
+                        var newEntry = host + @"/content/questiongrouptemp/" + newGuid + ".png";
+
+                        returnGuidS.Add(newEntry);
                  
 
                         //تبدیل به عکس
@@ -308,8 +315,8 @@ namespace NasleGhalam.ServiceLayer.Services
                                 var image = System.Drawing.Image.FromStream(ms);
                                 var pngTarget = target;//Path.ChangeExtension(target , "png");
                                 image.Save(pngTarget + "1.png", ImageFormat.Png);
-                                image = new  Bitmap(pngTarget + "1.png");
-                             
+                                image = new Bitmap(pngTarget + "1.png");
+                                
                                 var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
                                 //resizedImage.Save(pngTarget, ImageFormat.Png);
                                 var rectangle = ImageUtility.GetCropArea(resizedImage, 10);

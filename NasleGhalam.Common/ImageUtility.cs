@@ -143,7 +143,7 @@ namespace NasleGhalam.Common
 
 
 
-            // find x1
+            // find x2
 
             for (var i = data.Width - 1; i > x1; i--)
 

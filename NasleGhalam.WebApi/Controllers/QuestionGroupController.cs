@@ -9,8 +9,6 @@ using NasleGhalam.ViewModels.QuestionGroup;
 using NasleGhalam.WebApi.Extentions;
 using System.Web;
 using NasleGhalam.WebApi.Util;
-using NPOI.XSSF.UserModel;
-using NPOI.XWPF.UserModel;
 using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
@@ -114,7 +112,7 @@ namespace NasleGhalam.WebApi.Controllers
         
 
             questionGroupViewModel.UserId = Request.GetUserId();
-            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile);
+            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile,Request.Headers.Host);
 
             return Ok(msgRes);
         }
@@ -125,7 +123,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckWordFileValidation("word", 1024)]
         [CheckExcelFileValidation("excel", 1024)]
         public IHttpActionResult Create([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
-        {
+        {                     
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             var excelFile = HttpContext.Current.Request.Files.Get("excel");
 

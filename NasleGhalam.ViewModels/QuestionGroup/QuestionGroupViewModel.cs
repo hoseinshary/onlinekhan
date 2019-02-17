@@ -14,9 +14,8 @@ namespace NasleGhalam.ViewModels.QuestionGroup
 
         public string PInsertTime => InsertTime.ToPersianDateTime();
 
-        public string WordFile { get; set; }
+        public string File { get; set; }
 
-        public string ExcelFile { get; set; }
 
         public int LessonId { get; set; }
 

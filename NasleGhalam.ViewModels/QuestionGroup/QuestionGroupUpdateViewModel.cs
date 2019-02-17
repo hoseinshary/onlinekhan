@@ -18,11 +18,9 @@ namespace NasleGhalam.ViewModels.QuestionGroup
 
 
         [Display(Name = "")]
-        public string WordFile { get; set; }
+        public string File { get; set; }
 
 
-        [Display(Name = "")]
-        public string ExcelFile { get; set; }
 
 
         [Display(Name = "")]

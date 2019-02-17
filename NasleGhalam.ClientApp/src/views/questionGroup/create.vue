@@ -61,7 +61,7 @@
                 v-bind:key="src"
                 class="col-12">
           <q-card-media>
-            <img :src="'http://localhost:63839/Content/QuestionGroupTemp/' + src + '.png'">
+            <img :src="'http://' + src">
           </q-card-media>
         </q-card>
       </q-tab-pane>

@@ -20,7 +20,8 @@ const store = {
     questionGroupObj: {
       Id: 0,
       Title: '',
-      LessonId: ''
+      LessonId: 0,
+      PInsertTime: ''
     },
     questionGroupIndexObj: {
       LessonId: 0,
@@ -31,7 +32,6 @@ const store = {
     questionGroupGridData: [],
     questionGroupDdl: [],
     selectedId: 0,
-    ddlModelChanged: true,
     createVue: null,
     editVue: null
   },
@@ -39,10 +39,8 @@ const store = {
     /**
      * insert new questionGroupObj to questionGroupGridData
      */
-    insert(state, id) {
-      let createdObj = util.cloneObject(state.questionGroupObj);
-      createdObj.Id = id;
-      state.questionGroupGridData.push(createdObj);
+    insert(state, data) {
+      state.questionGroupGridData.push(data.Obj);
     },
 
     /**
@@ -70,7 +68,8 @@ const store = {
      * rest value of questionGroupObj
      */
     reset(state, $v) {
-      util.clearObject(state.questionGroupObj);
+      state.questionGroupObj.Title = '';
+
       if ($v) {
         $v.$reset();
       }
@@ -91,24 +90,9 @@ const store = {
      * fill grid data
      */
     fillGridByLessonIdStore({ state }, lessonId) {
-      // fill grid if modelChanged
       axios.get(`${baseUrl}/GetAllByLessonId/${lessonId}`).then(response => {
         state.questionGroupGridData = response.data;
       });
-    },
-
-    /**
-     * fill dropDwonList
-     */
-    fillDdlStore({ state }) {
-      // fill grid if modelChanged
-      if (state.ddlModelChanged) {
-        // get data
-        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-          state.questionGroupDdl = response.data;
-          state.ddlModelChanged = false;
-        });
-      }
     },
 
     /**
@@ -123,13 +107,6 @@ const store = {
       }
 
       return true;
-    },
-
-    /**
-     * model changed
-     */
-    modelChangedStore({ state }) {
-      state.ddlModelChanged = true;
     },
 
     //### create section ###
@@ -175,9 +152,7 @@ const store = {
           let data = response.data;
 
           if (data.MessageType == 1) {
-            debugger;
             state.createVue.selectedTab = 'previewTab';
-            state.createVue.modalSize = 'lg';
             state.createVue.previewImages = data.Obj;
             state.createVue.isPreCreate = false;
           }
@@ -188,7 +163,7 @@ const store = {
     /**
      * submit create data
      */
-    submitCreateStore({ state, commit, dispatch }, closeModal) {
+    submitCreateStore({ state, commit, dispatch }) {
       var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
@@ -213,11 +188,10 @@ const store = {
           let data = response.data;
 
           if (data.MessageType == 1) {
-            // commit('insert', data.Id);
-            // dispatch('modelChangedStore');
             debugger;
+            commit('insert', data);
             dispatch('resetCreateStore');
-            dispatch('toggleModalCreateStore', !closeModal);
+            dispatch('toggleModalCreateStore', false);
           }
 
           dispatch(
@@ -238,6 +212,20 @@ const store = {
      */
     resetCreateStore({ state, commit }) {
       commit('reset', state.createVue.$v);
+
+      state.createVue.selectedTab = 'preCreateTab';
+      state.createVue.previewImages = [];
+      state.createVue.isPreCreate = true;
+
+      var word = state.createVue.$refs.wordFileUpload;
+      if (word) {
+        word.reset();
+      }
+
+      var excel = state.createVue.$refs.excelFileUpload;
+      if (excel) {
+        excel.reset();
+      }
     },
     //------------------------------------------------
 
@@ -270,7 +258,6 @@ const store = {
             let data = response.data;
             if (data.MessageType == 1) {
               commit('update');
-              dispatch('modelChangedStore');
               dispatch('resetEditStore');
               dispatch('toggleModalEditStore', false);
             }
@@ -313,7 +300,6 @@ const store = {
         if (data.MessageType == 1) {
           commit('delete');
           commit('reset');
-          dispatch('modelChangedStore');
           dispatch('toggleModalDeleteStore', false);
         }
 

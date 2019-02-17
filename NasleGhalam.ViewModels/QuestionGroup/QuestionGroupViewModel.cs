@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using NasleGhalam.Common;
 
 namespace NasleGhalam.ViewModels.QuestionGroup
@@ -15,7 +14,6 @@ namespace NasleGhalam.ViewModels.QuestionGroup
         public string PInsertTime => InsertTime.ToPersianDateTime();
 
         public string File { get; set; }
-
 
         public int LessonId { get; set; }
 

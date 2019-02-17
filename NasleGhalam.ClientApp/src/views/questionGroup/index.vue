@@ -27,7 +27,7 @@
             </section>
           </div>
           <div class="col-sm-7">
-            <my-btn-create v-if="pageAccess.canCreate"
+            <my-btn-create v-if="pageAccess.canCreate && questionGroupIndexObj.LessonId>0"
                            :label="`ایجاد (${modelName}) جدید`"
                            @click="showModalCreate" />
             <br>
@@ -82,14 +82,15 @@ export default {
         {
           title: "زمان ثبت",
           data: "PInsertTime"
-        },
-        {
-          title: "عملیات",
-          data: "Id",
-          searchable: false,
-          sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
         }
+        // ,
+        // {
+        //   title: "عملیات",
+        //   data: "Id",
+        //   searchable: false,
+        //   sortable: false,
+        //   visible: pageAccess.canEdit || pageAccess.canDelete
+        // }
       ]
     };
   },

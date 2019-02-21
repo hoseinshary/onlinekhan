@@ -13,7 +13,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using NPOI.XWPF.UserModel;
-using NasleGhalam.ViewModels.QuestionOption;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -37,7 +36,8 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionService.GetAllByTopicIds(ids));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess , ActionBits.QuestionGroupReadAccess)]
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAllByQuestionGroupId(int id)
         {
             return Ok(_questionService.GetAllByQuestionGroupId(id));
@@ -69,7 +69,7 @@ namespace NasleGhalam.WebApi.Controllers
                 Content = new ByteArrayContent(stream.ToArray())
             };
             result.Content.Headers.ContentDisposition =
-                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                new ContentDispositionHeaderValue("attachment")
                 {
                     FileName = id
                 };
@@ -93,7 +93,7 @@ namespace NasleGhalam.WebApi.Controllers
                 Content = new ByteArrayContent(stream.ToArray())
             };
             result.Content.Headers.ContentDisposition =
-                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                new ContentDispositionHeaderValue("attachment")
                 {
                     FileName = id
                 };
@@ -120,18 +120,16 @@ namespace NasleGhalam.WebApi.Controllers
             }
             /////////////////////////////
 
-            
-            
-            XWPFDocument document = null;
-            MemoryStream tempStream  = new MemoryStream();
+
+            MemoryStream tempStream = new MemoryStream();
             wordFile.InputStream.CopyTo(tempStream);
             wordFile.InputStream.Position = tempStream.Position = 0;
-            document = new XWPFDocument(tempStream);
+            var document = new XWPFDocument(tempStream);
             var allP = document.Paragraphs;
-            
-            
-            
-            
+
+
+
+
 
             //clean paragraphs
             foreach (var pragraph in allP)
@@ -139,7 +137,7 @@ namespace NasleGhalam.WebApi.Controllers
                 //pragraph.
                 ////if(!pragraph.IsEmpty && pragraph.Text != "" && pragraph.Text != " ")
                 //{
-                    questionViewModel.Context += pragraph.Text;
+                questionViewModel.Context += pragraph.Text;
                 //}
             }
 

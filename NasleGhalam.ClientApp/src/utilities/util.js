@@ -188,10 +188,8 @@ const initAccess = function(modelName) {
     ایجاد: 'canCreate',
     ویرایش: 'canEdit',
     حذف: 'canDelete',
-    دسترسی: 'canAccess',
-    شهر: 'canCity'
+    دسترسی: 'canAccess'
   };
-
   var accessControl = LocalStorage.get
     .item('subMenuList')
     .find(x => x.EnName.toLowerCase() == modelName.toLowerCase());

@@ -80,6 +80,30 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetPictureFile(string id)
+        {
+            var stream = new MemoryStream();
+            id += ".png";
+            var filestraem = File.OpenRead(SitePath.GetQuestionAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+
+            return result;
+        }
+
+
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionCreateAccess)]

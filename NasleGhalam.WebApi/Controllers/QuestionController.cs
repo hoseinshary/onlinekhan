@@ -80,7 +80,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        [HttpGet]
         public HttpResponseMessage GetPictureFile(string id)
         {
             var stream = new MemoryStream();

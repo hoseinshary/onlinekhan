@@ -1,6 +1,7 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
 import {
+  API_URL as apiUrl,
   QUESTION_URL as baseUrl,
   TAG_URL as tagUrl
 } from 'utilities/site-config';
@@ -418,6 +419,9 @@ const store = {
   getters: {
     recordName(state) {
       return state.questionObj.Context;
+    },
+    questionFilePath() {
+      return `${apiUrl}${baseUrl}/GetPictureFile`;
     }
   }
 };

@@ -186,7 +186,6 @@ const store = {
           let data = response.data;
 
           if (data.MessageType == 1) {
-            debugger;
             commit('insert', data);
             dispatch('resetCreateStore');
             dispatch('toggleModalCreateStore', false);

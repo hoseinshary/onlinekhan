@@ -36,12 +36,15 @@
                       hasIndex>
               <template slot="Id"
                         slot-scope="data">
-                <my-btn-edit v-if="pageAccess.canEdit"
-                             round
-                             @click="showModalEdit(data.row.Id)" />
-                <my-btn-delete v-if="pageAccess.canDelete"
+                <q-btn outline
+                       color="primary"
+                       class="shadow-1 bg-white q-mr-sm"
+                       @click="showModalQuestion(data.row.Id)">
+                  سوال ها
+                </q-btn>
+                <!-- <my-btn-delete v-if="pageAccess.canDelete"
                                round
-                               @click="showModalDelete(data.row.Id)" />
+                               @click="showModalDelete(data.row.Id)" /> -->
               </template>
             </my-table>
           </div>
@@ -51,8 +54,8 @@
 
     <!-- modals -->
     <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <!-- <modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete> -->
+    <modal-question></modal-question>
+    <!-- <modal-delete v-if="pageAccess.canDelete"></modal-delete> -->
   </section>
 </template>
 
@@ -63,7 +66,7 @@ import viewModel from "viewModels/questionGroup/questionGroupIndexViewModel";
 export default {
   components: {
     "modal-create": () => import("./create"),
-    "modal-edit": () => import("./edit"),
+    "modal-question": () => import("../question/questions"),
     "modal-delete": () => import("./delete")
   },
   /**
@@ -82,15 +85,14 @@ export default {
         {
           title: "زمان ثبت",
           data: "PInsertTime"
+        },
+        {
+          title: "عملیات",
+          data: "Id",
+          searchable: false,
+          sortable: false
+          // visible: pageAccess.canViewQuestion //|| pageAccess.canDelete
         }
-        // ,
-        // {
-        //   title: "عملیات",
-        //   data: "Id",
-        //   searchable: false,
-        //   sortable: false,
-        //   visible: pageAccess.canEdit || pageAccess.canDelete
-        // }
       ]
     };
   },
@@ -100,12 +102,15 @@ export default {
   methods: {
     ...mapActions("questionGroupStore", [
       "toggleModalCreateStore",
-      "toggleModalEditStore",
       "toggleModalDeleteStore",
       "getByIdStore",
       "fillGridByLessonIdStore",
-      "resetCreateStore",
-      "resetEditStore"
+      "resetCreateStore"
+    ]),
+    ...mapActions("questionStore", [
+      "getByQuestionGroupIdStore",
+      "toggleModalQuestionStore",
+      "resetQuestionStore"
     ]),
     ...mapActions("educationTreeStore", {
       getAllGrade: "getAllGrade",
@@ -121,13 +126,14 @@ export default {
       // show modal
       this.toggleModalCreateStore(true);
     },
-    showModalEdit(id) {
+    showModalQuestion(id) {
       // reset data on modal show
-      this.resetEditStore();
+      this.resetQuestionStore();
       // get data by id
-      this.getByIdStore(id).then(() => {
+
+      this.getByQuestionGroupIdStore(id).then(() => {
         // show modal
-        this.toggleModalEditStore(true);
+        this.toggleModalQuestionStore(true);
       });
     },
     showModalDelete(id) {

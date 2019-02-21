@@ -15,7 +15,6 @@ const store = {
   state: {
     modelName: 'سوال گروهی',
     isOpenModalCreate: false,
-    isOpenModalEdit: false,
     isOpenModalDelete: false,
     questionGroupObj: {
       Id: 0,
@@ -32,8 +31,7 @@ const store = {
     questionGroupGridData: [],
     questionGroupDdl: [],
     selectedId: 0,
-    createVue: null,
-    editVue: null
+    createVue: null
   },
   mutations: {
     /**
@@ -226,60 +224,6 @@ const store = {
       if (excel) {
         excel.reset();
       }
-    },
-    //------------------------------------------------
-
-    //### edit section ###
-    /**
-     * toggle modal edit
-     */
-    toggleModalEditStore({ state }, isOpen) {
-      state.isOpenModalEdit = isOpen;
-    },
-
-    /**
-     * init edit vue on load
-     */
-    editVueStore({ state }, vm) {
-      state.editVue = vm;
-    },
-
-    /**
-     * submit edit data
-     */
-    submitEditStore({ state, commit, dispatch }) {
-      var vm = state.editVue;
-      dispatch('validateFormStore', vm).then(isValid => {
-        if (!isValid) return;
-        state.questionGroupObj.Id = state.selectedId;
-        axios
-          .post(`${baseUrl}/Update`, state.questionGroupObj)
-          .then(response => {
-            let data = response.data;
-            if (data.MessageType == 1) {
-              commit('update');
-              dispatch('resetEditStore');
-              dispatch('toggleModalEditStore', false);
-            }
-
-            dispatch(
-              'notify',
-              {
-                body: data.Message,
-                type: data.MessageType,
-                vm: vm
-              },
-              { root: true }
-            );
-          });
-      });
-    },
-
-    /**
-     * reset edit vue
-     */
-    resetEditStore({ state, commit }) {
-      commit('reset', state.editVue.$v);
     },
     //------------------------------------------------
 

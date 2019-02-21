@@ -73,7 +73,6 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public HttpResponseMessage GetWordFile(string id)
         {
@@ -98,11 +97,11 @@ namespace NasleGhalam.WebApi.Controllers
             return result;
         }
 
+
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
         [CheckModelValidation]
         [CheckWordFileValidation("word", 1024)]
-        
         public IHttpActionResult PreCreate([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");

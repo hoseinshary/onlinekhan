@@ -111,7 +111,7 @@ namespace NasleGhalam.WebApi.Controllers
         
 
             questionGroupViewModel.UserId = Request.GetUserId();
-            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile,Request.Headers.Host);
+            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile );
 
             return Ok(msgRes);
         }

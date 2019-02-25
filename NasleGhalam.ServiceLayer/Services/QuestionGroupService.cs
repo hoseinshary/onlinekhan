@@ -244,7 +244,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return returnval;
         }
 
-        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word ,  string host)
+        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word )
         {
             List<string> returnGuidS = new List<string>();
 
@@ -296,7 +296,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                         var newGuid = Guid.NewGuid();
 
-                        var newEntry = host + @"/content/questiongrouptemp/" + newGuid + ".png";
+                        var newEntry =  @"/content/questiongrouptemp/" + newGuid + ".png";
 
                         returnGuidS.Add(newEntry);
                  

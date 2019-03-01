@@ -1,35 +1,47 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.QuestionGroup
+namespace NasleGhalam.ViewModels.QuestionJudge
 {
-	public class QuestionGroupViewModel
+	public class QuestionJudgeViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public string Title { get; set; }
+		public int LookupId_QuestionHardnessType { get; set; }
 
 
 		[Display(Name = "")]
-		public DateTime InsertTime { get; set; }
+		public int LookupId_RepeatnessType { get; set; }
 
 
 		[Display(Name = "")]
-		public string WordFile { get; set; }
+		public byte Repeatness { get; set; }
 
 
 		[Display(Name = "")]
-		public string ExcelFile { get; set; }
+		public bool IsStandard { get; set; }
 
 
 		[Display(Name = "")]
-		public int LessonId { get; set; }
+		public bool IsDelete { get; set; }
 
 
 		[Display(Name = "")]
-		public int UserId { get; set; }
+		public bool IsUpdate { get; set; }
+
+
+		[Display(Name = "")]
+		public bool IsLearning { get; set; }
+
+
+		[Display(Name = "")]
+		public short ResponseSecond { get; set; }
+
+
+		[Display(Name = "")]
+		public int QuestionId { get; set; }
 
 
 	}

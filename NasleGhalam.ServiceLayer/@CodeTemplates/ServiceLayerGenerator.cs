@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.QuestionGroup;
+using NasleGhalam.ViewModels.QuestionJudge;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class QuestionGroupService
+	public class QuestionJudgeService
 	{
-		private const string Title = "سوال گروهی";
+		private const string Title = "کارشناسی سوال";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<QuestionGroup> _questionGroups;
+        private readonly IDbSet<QuestionJudge> _questionJudges;
        
-	    public QuestionGroupService(IUnitOfWork uow)
+	    public QuestionJudgeService(IUnitOfWork uow)
         {
             _uow = uow;
-            _questionGroups = uow.Set<QuestionGroup>();
+            _questionJudges = uow.Set<QuestionJudge>();
         }
 
 
 		/// <summary>
-        /// گرفتن  سوال گروهی با آی دی
+        /// گرفتن  کارشناسی سوال با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public QuestionGroupViewModel GetById(int id)
+        public QuestionJudgeViewModel GetById(int id)
         {
-            return _questionGroups
+            return _questionJudges
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<QuestionGroupViewModel>)
+                .Select(Mapper.Map<QuestionJudgeViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه سوال گروهی ها
+        /// گرفتن همه کارشناسی سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionGroupViewModel> GetAll()
+        public IList<QuestionJudgeViewModel> GetAll()
         {
-            return _questionGroups
+            return _questionJudges
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<QuestionGroupViewModel>)
+                .Select(Mapper.Map<QuestionJudgeViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت سوال گروهی
+        /// ثبت کارشناسی سوال
         /// </summary>
-        /// <param name="questionGroupViewModel"></param>
+        /// <param name="questionJudgeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel)
+        public MessageResultClient Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
         {
-            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
-            _questionGroups.Add(questionGroup);
+            var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
+            _questionJudges.Add(questionJudge);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = questionGroup.Id;
+			msgRes.Id = questionJudge.Id;
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش سوال گروهی
+        /// ویرایش کارشناسی سوال
         /// </summary>
-        /// <param name="questionGroupViewModel"></param>
+        /// <param name="questionJudgeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(QuestionGroupUpdateViewModel questionGroupViewModel)
+        public MessageResultClient Update(QuestionJudgeUpdateViewModel questionJudgeViewModel)
         {
-            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
-            _uow.MarkAsChanged(questionGroup);
+            var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
+            _uow.MarkAsChanged(questionJudge);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف سوال گروهی
+        /// حذف کارشناسی سوال
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public MessageResultClient Delete(int id)
         {
-			var  questionGroupViewModel = GetById(id);
-            if (questionGroupViewModel == null)
+			var  questionJudgeViewModel = GetById(id);
+            if (questionJudgeViewModel == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
-            _uow.MarkAsDeleted(questionGroup);
+            var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
+            _uow.MarkAsDeleted(questionJudge);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<MessageResultClient>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه سوال گروهی ها برای لیست کشویی
+        /// گرفتن همه کارشناسی سوال ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _questionGroups.Select(current => new SelectViewModel
+            return _questionJudges.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

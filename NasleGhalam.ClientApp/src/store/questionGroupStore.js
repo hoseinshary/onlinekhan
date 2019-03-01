@@ -1,6 +1,9 @@
 import util from 'utilities/util';
 import axios from 'utilities/axios';
-import { QUESTIONGROUP_URL as baseUrl } from 'utilities/site-config';
+import {
+  API_URL as apiUrl,
+  QUESTIONGROUP_URL as baseUrl
+} from 'utilities/site-config';
 
 /**
  * find index of object in questionGroupGridData by id
@@ -151,8 +154,11 @@ const store = {
 
           if (data.MessageType == 1) {
             state.createVue.selectedTab = 'previewTab';
-            state.createVue.previewImages = data.Obj;
             state.createVue.isPreCreate = false;
+            state.createVue.previewImages = data.Obj;
+            state.createVue.previewImages.forEach(element => {
+              element = `${apiUrl}${element}`;
+            });
           }
         });
       });

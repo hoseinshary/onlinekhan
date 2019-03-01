@@ -24,6 +24,7 @@ const store = {
     questionObj: {
       Id: 0,
       Context: '',
+      FileName: '',
       QuestionNumber: 0,
       AnswerNumber: 0,
       QuestionPoint: 0,
@@ -90,6 +91,7 @@ const store = {
      */
     reset(state, $v) {
       state.questionObj.Context = '';
+      state.questionObj.FileName = '';
       state.questionObj.QuestionNumber = 0;
       state.questionObj.AnswerNumber = 0;
       state.questionObj.QuestionPoint = 0;
@@ -310,58 +312,65 @@ const store = {
      * submit edit data
      */
     submitEditStore({ state, commit, dispatch }) {
+      var vm = state.editVue;
+      var wordFile = state.editVue.$refs.wordFile;
+      var msg = '';
+
+      if (wordFile.files.length == 0) {
+        msg = 'فایل ورد انتخاب نشده است.';
+      }
       if (state.questionObj.TopicsId.length == 0) {
-        state.createVue.$snotify.html(
-          '<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>',
+        msg = 'مبحثی انتخاب نکرده اید.';
+      }
+      if (msg) {
+        dispatch(
+          'notify',
           {
-            type: 'error',
-            timeout: 4000,
-            showProgressBar: true,
-            position: 'leftTop'
+            body: msg,
+            type: 0,
+            vm: vm
+          },
+          {
+            root: true
           }
         );
         return;
       }
-      var vm = state.editVue;
+
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.questionObj.Id = state.selectedId;
 
         var formData = new FormData();
-        var fileUpload = state.questionObj.File;
-        if (fileUpload && fileUpload.size > 0) {
-          formData.append('word', fileUpload);
-        }
-        delete state.questionObj.Context;
-        var tmp1 = util.toParam(state.questionObj);
+        formData.append(wordFile.name, wordFile.files[0]);
+
+        var params = util.toParam(state.questionObj);
         axios({
           method: 'post',
-          url: `${baseUrl}/Update?${tmp1}`,
+          url: `${baseUrl}/Update?${params}`,
           data: formData,
           config: { headers: { 'Content-Type': 'multipart/form-data' } }
-        })
-          // axios.post(`${baseUrl}/Update`, state.questionObj)
-          .then(response => {
-            let data = response.data;
-            if (data.MessageType == 1) {
-              commit('update');
-              dispatch('modelChangedStore');
-              dispatch('resetEditStore');
-              dispatch('toggleModalEditStore', false);
-            }
+        }).then(response => {
+          let data = response.data;
+          if (data.MessageType == 1) {
+            commit('update');
+            dispatch('modelChangedStore');
+            dispatch('resetEditStore');
+            dispatch('toggleModalEditStore', false);
+          }
 
-            dispatch(
-              'notify',
-              {
-                body: data.Message,
-                type: data.MessageType,
-                vm: vm
-              },
-              {
-                root: true
-              }
-            );
-          });
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            {
+              root: true
+            }
+          );
+        });
       });
     },
 
@@ -370,6 +379,9 @@ const store = {
      */
     resetEditStore({ state, commit }) {
       commit('reset', state.editVue.$v);
+
+      var wordFile = state.createVue.$refs.wordFile;
+      wordFile.reset();
     },
     //------------------------------------------------
 

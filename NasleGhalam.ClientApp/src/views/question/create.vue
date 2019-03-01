@@ -21,8 +21,8 @@
                 ref="topicTree"
                 :filter="topicFilter"
                 :ticked.sync="questionObj.TopicsId" />
-
       </section>
+
       <section class="q-ma-sm q-pa-sm shadow-1">
         <q-select filter
                   chips
@@ -31,6 +31,7 @@
                   :options="tagDdl"
                   float-label="تگ ها" />
       </section>
+
       <q-slide-transition>
         <section v-if="questionObj.LookupId_QuestionType==6"
                  class="q-ma-sm q-pa-sm shadow-1">گزینه صحیح
@@ -42,15 +43,8 @@
         </section>
       </q-slide-transition>
     </div>
-    <div class="col-sm-8 row gutter-md">
-      <!-- <my-uploader :model="$v.questionObj"
-                   classes="col-sm-4"
-                   myRef="file1"
-                   @add="fileAdd($event,'questionObj','File',1,true)"
-                   @remove="fileRemove('questionObj','File',true)"
-                   extensions='.doc,.docx'
-                   label='' /> -->
 
+    <div class="col-sm-8 row gutter-md">
       <q-field class="col-sm-4">
         <q-uploader url="url"
                     float-label="فایل سوال"
@@ -172,12 +166,6 @@ export default {
       this.getLookupQuestionRepeatnessType();
       this.getLookupQuestionAuthorType();
       this.fillTopicAreaTypeDdlStore();
-    },
-    fileAdd(chObj, model, prop, number, isRequired) {
-      util.fileAdd(model, prop, number, isRequired, chObj, this);
-    },
-    fileRemove(model, prop, isRequired) {
-      util.fileRemove(model, prop, isRequired, this);
     }
   },
   /**

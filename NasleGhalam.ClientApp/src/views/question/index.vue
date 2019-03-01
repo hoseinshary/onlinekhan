@@ -73,7 +73,7 @@
     </my-panel>
     <!-- modals -->
     <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <!-- <modal-edit v-if="pageAccess.canEdit"></modal-edit> -->
+    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
   </section>
 </template>
@@ -85,7 +85,7 @@ import viewModel from "viewModels/question/questionIndexViewModel";
 export default {
   components: {
     "modal-create": () => import("./create"),
-    // "modal-edit": () => import("./edit"),
+    "modal-edit": () => import("./edit"),
     "modal-delete": () => import("./delete")
   },
   /**

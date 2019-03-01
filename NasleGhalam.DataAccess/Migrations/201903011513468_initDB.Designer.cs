@@ -7,18 +7,18 @@ namespace NasleGhalam.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class addQuestionGroup : IMigrationMetadata
+    public sealed partial class initDB : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addQuestionGroup));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initDB));
         
         string IMigrationMetadata.Id
         {
-            get { return "201811180834009_addQuestionGroup"; }
+            get { return "201903011513468_initDB"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return Resources.GetString("Source"); }
+            get { return null; }
         }
         
         string IMigrationMetadata.Target

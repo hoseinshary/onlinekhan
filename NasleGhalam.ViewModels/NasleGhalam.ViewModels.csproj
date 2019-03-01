@@ -64,6 +64,9 @@
     <Compile Include="QuestionGroup\QuestionGroupUpdateViewModel.cs" />
     <Compile Include="QuestionGroup\QuestionGroupCreateViewModel.cs" />
     <Compile Include="QuestionGroup\QuestionGroupViewModel.cs" />
+    <Compile Include="QuestionJudge\QuestionJudgeUpdateViewModel.cs" />
+    <Compile Include="QuestionJudge\QuestionJudgeCreateViewModel.cs" />
+    <Compile Include="QuestionJudge\QuestionJudgeViewModel.cs" />
     <Compile Include="QuestionOption\QuestionOptionViewModel.cs" />
     <Compile Include="Question\QuestionViewModel.cs" />
     <Compile Include="Question\QuestionUpdateViewModel.cs" />

@@ -112,24 +112,11 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create([FromUri]QuestionCreateViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
-
-            if (wordFile != null && wordFile.ContentLength > 0)
-            {
-                //{Path.GetExtension(wordFile.FileName)}
-                questionViewModel.FileName = $"{Guid.NewGuid()}";
-            }
-            /////////////////////////////
-
-
             MemoryStream tempStream = new MemoryStream();
             wordFile.InputStream.CopyTo(tempStream);
             wordFile.InputStream.Position = tempStream.Position = 0;
             var document = new XWPFDocument(tempStream);
             var allP = document.Paragraphs;
-
-
-
-
 
             //clean paragraphs
             foreach (var pragraph in allP)
@@ -169,8 +156,6 @@ namespace NasleGhalam.WebApi.Controllers
             //    questionViewModel.Options.Add(optionArray[i]);
             //}
 
-
-            questionViewModel.InsertDateTime = DateTime.Now;
             questionViewModel.UserId = Request.GetUserId();
 
             /////////////////////////////////

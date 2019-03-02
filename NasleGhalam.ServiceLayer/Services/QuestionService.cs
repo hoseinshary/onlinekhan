@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Web;
 using AutoMapper;
+using Microsoft.Office.Interop.Word;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
+using NasleGhalam.ServiceLayer.Util;
 using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Question;
 
@@ -81,10 +87,46 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionCreateViewModel questionViewModel)
+        public MessageResultClient Create(QuestionCreateViewModel questionViewModel, HttpPostedFile word)
         {
             var question = Mapper.Map<Question>(questionViewModel);
             _questions.Add(question);
+
+            //save Doc and excel file in temp memory
+            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx");
+
+            // Open a doc file.
+            Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx"; 
+            Document doc = app.Documents.Open(wordFilename);
+
+            //تبدیل به عکس
+            var pane = doc.Windows[1].Panes[1];
+            var page = pane.Pages[1];
+            var bits = page.EnhMetaFileBits;
+            var target = SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png";
+
+            //crop and resize
+            try
+            {
+                using (var ms = new MemoryStream((byte[])(bits)))
+                {
+                    var image = System.Drawing.Image.FromStream(ms);
+                    var pngTarget = target;//Path.ChangeExtension(target , "png");
+                    image.Save(pngTarget + "1.png", ImageFormat.Png);
+                    image = new Bitmap(pngTarget + "1.png");
+
+                    var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
+                    // resizedImage.Save(pngTarget, ImageFormat.Png);
+                    var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
+                    var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
+                    croppedImage.Save(pngTarget, ImageFormat.Png);
+                    File.Delete(pngTarget + "1.png");
+                }
+            }
+            catch (System.Exception ex)
+            { }
+
 
             foreach (var topicId in questionViewModel.TopicsId)
             {

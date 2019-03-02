@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using NPOI.XWPF.UserModel;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -114,72 +113,14 @@ namespace NasleGhalam.WebApi.Controllers
             var wordFile = HttpContext.Current.Request.Files.Get("word");
 
             if (wordFile != null && wordFile.ContentLength > 0)
-            {
-                //{Path.GetExtension(wordFile.FileName)}
+            { 
                 questionViewModel.FileName = $"{Guid.NewGuid()}";
             }
-            /////////////////////////////
-
-
-            MemoryStream tempStream = new MemoryStream();
-            wordFile.InputStream.CopyTo(tempStream);
-            wordFile.InputStream.Position = tempStream.Position = 0;
-            var document = new XWPFDocument(tempStream);
-            var allP = document.Paragraphs;
-
-
-
-
-
-            //clean paragraphs
-            foreach (var pragraph in allP)
-            {
-                //pragraph.
-                ////if(!pragraph.IsEmpty && pragraph.Text != "" && pragraph.Text != " ")
-                //{
-                questionViewModel.Context += pragraph.Text;
-                //}
-            }
-
-            ////get options
-            //int optionNumbers = 0;
-            //var optionArray  = new List<QuestionOptionViewModel>();
-            //for(int i = allP.Count-1; optionNumbers < 4 ; i--)
-            //{
-            //    if (!allP[i].IsEmpty && allP[i].Text != "" && allP[i].Text != " ")
-            //    {
-            //        optionNumbers++;
-            //        QuestionOptionViewModel newOption = new QuestionOptionViewModel();
-            //        newOption.Context = allP[i].Text;
-            //        if ((questionViewModel.AnswerNumber == 4 && optionNumbers == 1) ||
-            //            (questionViewModel.AnswerNumber == 3 && optionNumbers == 2) ||
-            //            (questionViewModel.AnswerNumber == 2 && optionNumbers == 3) ||
-            //            (questionViewModel.AnswerNumber == 1 && optionNumbers == 4))
-            //            newOption.IsAnswer = true;
-            //        else
-            //            newOption.IsAnswer = false;
-
-            //        optionArray.Add(newOption);
-
-            //    }
-            //}
-
-            //for (int i = optionArray.Count-1 ; i >= 0; i--)
-            //{
-            //    questionViewModel.Options.Add(optionArray[i]);
-            //}
-
-
+           
             questionViewModel.InsertDateTime = DateTime.Now;
             questionViewModel.UserId = Request.GetUserId();
-
-            /////////////////////////////////
-            var msgRes = _questionService.Create(questionViewModel);
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName))
-            {
-                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName + Path.GetExtension(wordFile.FileName)));
-            }
-
+            
+            var msgRes = _questionService.Create(questionViewModel,wordFile);
             return Ok(msgRes);
         }
 

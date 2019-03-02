@@ -1,293 +1,135 @@
 <template>
-  <my-modal-edit
-    :title="modelName"
-    :show="isOpenModalEdit"
-    size='lg'
-    @confirm="submitEditStore"
-    @reset="resetEditStore"
-    @close="toggleModalEditStore(false)"
-    @open="getAllDdls()"
-  >
+  <my-modal-edit :title="modelName"
+                 :show="isOpenModalEdit"
+                 size='lg'
+                 @confirm="submitEditStore"
+                 @reset="resetEditStore"
+                 @close="toggleModalEditStore(false)"
+                 @open="getAllDdls()">
+
+    <q-card inline
+            class="col-12"
+            v-if="questionObj.FileName">
+      <q-card-media>
+        <img :src="`${questionFilePath}/${questionObj.FileName}`">
+      </q-card-media>
+    </q-card>
+
     <div class="col-sm-4">
+      <section class="q-ma-sm q-pa-sm shadow-1">
+        <q-input v-model="topicFilter"
+                 float-label="جستجوی مبحث"
+                 clearable />
+        <q-tree :nodes="topicTreeData"
+                tick-strategy="leaf"
+                color="primary"
+                accordion
+                node-key="Id"
+                ref="topicTree"
+                :filter="topicFilter"
+                :ticked.sync="questionObj.TopicsId" />
+      </section>
 
       <section class="q-ma-sm q-pa-sm shadow-1">
-        <q-tree
-          :nodes="topicTreeData"
-          tick-strategy="leaf"
-          class="q-pt-lg"
-          color="primary"
-          accordion
-          node-key="Id"
-          ref="topicTree"
-          :ticked.sync="questionObj.TopicsId"
-        />
-
+        <q-select filter
+                  chips
+                  multiple
+                  v-model="questionObj.TagsId"
+                  :options="tagDdl"
+                  float-label="تگ ها" />
       </section>
-      <section class="q-ma-sm q-pa-sm shadow-1">
-        <q-select
-          filter
-          chips
-          multiple
-          v-model="questionObj.TagsId"
-          :options="tagDdl"
-          float-label="تگ ها"
-        />
 
-      </section>
       <q-slide-transition>
-        <section
-          v-if="questionObj.LookupId_QuestionType==6"
-          class="q-ma-sm q-pa-sm shadow-1"
-        >گزینه صحیح
-          <my-select
-            :model="$v.questionObj.AnswerNumber"
-            :options="answersDdl"
-            class="col-md-4"
-            filter
-          />
-
+        <section v-if="questionObj.LookupId_QuestionType==6"
+                 class="q-ma-sm q-pa-sm shadow-1">گزینه صحیح
+          <my-select :model="$v.questionObj.AnswerNumber"
+                     :options="answersDdl"
+                     class="col-md-4"
+                     filter />
         </section>
       </q-slide-transition>
     </div>
+
     <div class="col-sm-8 row gutter-md">
+      <q-field class="col-sm-4">
+        <q-uploader url="url"
+                    float-label="فایل سوال"
+                    name="word"
+                    hide-upload-button
+                    ref="wordFile"
+                    extensions=".doc,.docx" />
+      </q-field>
 
-      <!-- <my-select :model="$v.questionObj.EducationGroupId"
-               :options="educationGroupDdl"
-               class="col-md-4"
-               filter /> -->
+      <my-input :model="$v.questionObj.QuestionNumber"
+                class="col-md-4" />
 
-      <!-- <my-select :model="$v.questionObj.EducationGroup_LessonId"
-               :options="lessonFilteredDdl"
-               class="col-md-4"
-               filter
-               @change="GetAllTreeStore($event);" /> -->
-      <my-uploader
-        :model="$v.questionObj"
-        classes="col-sm-4"
-        myRef="file1"
-        @add="fileAdd($event,'questionObj','File',1,false)"
-        @remove="fileRemove('questionObj','File',false)"
-        extensions='.doc,.docx'
-        label='فایل سوال'
-      />
+      <my-select :model="$v.questionObj.LookupId_QuestionType"
+                 :options="lookupQuestionType"
+                 class="col-md-4"
+                 filter />
 
-      <my-input
-        :model="$v.questionObj.QuestionNumber"
-        class="col-md-4"
-      />
+      <my-input :model="$v.questionObj.QuestionPoint"
+                class="col-md-4" />
 
-      <my-select
-        :model="$v.questionObj.LookupId_QuestionType"
-        :options="lookupQuestionType"
-        class="col-md-4"
-        filter
-      />
+      <my-select :model="$v.questionObj.LookupId_QuestionHardnessType"
+                 :options="lookupQuestionHardnessType"
+                 class="col-md-4"
+                 filter />
 
-      <my-input
-        :model="$v.questionObj.QuestionPoint"
-        class="col-md-4"
-      />
+      <my-select :model="$v.questionObj.LookupId_RepeatnessType"
+                 :options="lookupQuestionRepeatnessType"
+                 class="col-md-4"
+                 filter />
 
-      <my-select
-        :model="$v.questionObj.LookupId_QuestionHardnessType"
-        :options="lookupQuestionHardnessType"
-        class="col-md-4"
-        filter
-      />
-
-      <my-select
-        :model="$v.questionObj.LookupId_RepeatnessType"
-        :options="lookupQuestionRepeatnessType"
-        class="col-md-4"
-        filter
-      />
-
-      <my-field
-        class="col-md-4"
-        :model="$v.questionObj.UseEvaluation"
-      >
+      <my-field class="col-md-4"
+                :model="$v.questionObj.UseEvaluation">
         <template slot-scope="data">
-          <q-radio
-            v-model="data.obj.$model"
-            :val="false"
-            label="خیر"
-          />
-          <q-radio
-            v-model="data.obj.$model"
-            :val="true"
-            label="بلی"
-          />
+          <q-radio v-model="data.obj.$model"
+                   :val="false"
+                   label="خیر" />
+          <q-radio v-model="data.obj.$model"
+                   :val="true"
+                   label="بلی" />
         </template>
       </my-field>
 
-      <my-field
-        class="col-md-4"
-        :model="$v.questionObj.IsStandard"
-      >
+      <my-field class="col-md-4"
+                :model="$v.questionObj.IsStandard">
         <template slot-scope="data">
-          <q-radio
-            v-model="data.obj.$model"
-            :val="false"
-            label="خیر"
-          />
-          <q-radio
-            v-model="data.obj.$model"
-            :val="true"
-            label="بلی"
-          />
+          <q-radio v-model="data.obj.$model"
+                   :val="false"
+                   label="خیر" />
+          <q-radio v-model="data.obj.$model"
+                   :val="true"
+                   label="بلی" />
         </template>
       </my-field>
 
-      <my-select
-        :model="$v.questionObj.LookupId_AuthorType"
-        :options="lookupQuestionAuthorType"
-        class="col-md-4"
-        filter
-      />
+      <my-select :model="$v.questionObj.LookupId_AuthorType"
+                 :options="lookupQuestionAuthorType"
+                 class="col-md-4"
+                 filter />
 
-      <my-input
-        :model="$v.questionObj.AuthorName"
-        class="col-md-4"
-      />
+      <my-input :model="$v.questionObj.AuthorName"
+                class="col-md-4" />
 
-      <my-select
-        :model="$v.questionObj.LookupId_AreaType"
-        :options="lookupTopicAreaTypeDdl"
-        class="col-md-4"
-        filter
-      />
+      <my-select :model="$v.questionObj.LookupId_AreaType"
+                 :options="lookupTopicAreaTypeDdl"
+                 class="col-md-4"
+                 filter />
 
-      <my-input
-        :model="$v.questionObj.ResponseSecond"
-        class="col-md-4"
-      />
+      <my-input :model="$v.questionObj.ResponseSecond"
+                class="col-md-4" />
 
-      <my-input
-        :model="$v.questionObj.Description"
-        class="col-md-4"
-      />
-
-      <!-- <my-input :model="$v.questionObj.FileName"
-              class="col-md-4" />
-
-    <my-input :model="$v.questionObj.InsertDateTime"
-              class="col-md-4" />
-
-    <my-input :model="$v.questionObj.UserId"
-              class="col-md-4" /> -->
+      <my-input :model="$v.questionObj.Description"
+                class="col-md-4" />
     </div>
-    <!--<my-input
-      :model="$v.questionObj.Context"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.QuestionNumber"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.LookupId_QuestionType"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.QuestionPoint"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.LookupId_QuestionHardnessType"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.LookupId_RepeatnessType"
-      class="col-md-6"
-    />
-
-    <my-field
-      class="col-md-6"
-      :model="$v.questionObj.UseEvaluation"
-    >
-      <template slot-scope="data">
-        <q-radio
-          v-model="data.obj.$model"
-          val="false"
-          label="false"
-        />
-        <q-radio
-          v-model="data.obj.$model"
-          val="true"
-          label="true"
-        />
-      </template>
-    </my-field>
-
-    <my-field
-      class="col-md-6"
-      :model="$v.questionObj.IsStandard"
-    >
-      <template slot-scope="data">
-        <q-radio
-          v-model="data.obj.$model"
-          val="false"
-          label="false"
-        />
-        <q-radio
-          v-model="data.obj.$model"
-          val="true"
-          label="true"
-        />
-      </template>
-    </my-field>
-
-    <my-input
-      :model="$v.questionObj.LookupId_AuthorType"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.AuthorName"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.LookupId_AreaType"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.ResponseSecond"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.Description"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.FileName"
-      class="col-md-6"
-    />
-
-    <my-input
-      :model="$v.questionObj.InsertDateTime"
-      class="col-md-6"
-    />
-
-     <my-input
-      :model="$v.questionObj.UserId"
-      class="col-md-6"
-    /> -->
-
   </my-modal-edit>
 </template>
 
 <script>
-import viewModel from "viewModels/questionViewModel";
-import { mapState, mapActions } from "vuex";
+import viewModel from "viewModels/question/questionViewModel";
+import { mapState, mapActions, mapGetters } from "vuex";
 import util from "utilities/util";
 
 export default {
@@ -296,6 +138,7 @@ export default {
    */
   data() {
     return {
+      topicFilter: "",
       answersDdl: [
         { value: 1, label: "1" },
         { value: 2, label: "2" },
@@ -309,10 +152,12 @@ export default {
       "toggleModalEditStore",
       "editVueStore",
       "submitEditStore",
-      "resetEditStore",
-      "fillTagsDdlStore"
+      "resetEditStore"
     ]),
-        ...mapActions("lookupStore", [
+    ...mapActions("tagStore", {
+      fillTagDdlStore: "fillDdlStore"
+    }),
+    ...mapActions("lookupStore", [
       "fillTopicAreaTypeDdlStore",
       "getLookupQuestionType",
       "getLookupQuestionHardnessType",
@@ -320,21 +165,13 @@ export default {
       "getLookupQuestionAuthorType"
     ]),
     ...mapActions("topicStore", ["GetAllTreeStore"]),
-        getAllDdls() {
-      // this.fillEduGrpDdl();
-      // this.fillLessonDdl();
-      this.fillTagsDdlStore();
+    getAllDdls() {
+      this.fillTagDdlStore();
       this.getLookupQuestionType();
       this.getLookupQuestionHardnessType();
       this.getLookupQuestionRepeatnessType();
       this.getLookupQuestionAuthorType();
       this.fillTopicAreaTypeDdlStore();
-    },
-        fileAdd(chObj, model, prop, number, isRequired) {
-      util.fileAdd(model, prop, number, isRequired, chObj, this);
-    },
-    fileRemove(model, prop, isRequired) {
-      util.fileRemove(model, prop, isRequired, this);
     }
   },
   /**
@@ -344,10 +181,12 @@ export default {
     ...mapState("questionStore", {
       modelName: "modelName",
       questionObj: "questionObj",
-      isOpenModalEdit: "isOpenModalEdit",
+      isOpenModalEdit: "isOpenModalEdit"
+    }),
+    ...mapState("tagStore", {
       tagDdl: "tagDdl"
     }),
-        ...mapState("lookupStore", [
+    ...mapState("lookupStore", [
       "lookupTopicAreaTypeDdl",
       "lookupQuestionType",
       "lookupQuestionHardnessType",
@@ -356,7 +195,8 @@ export default {
     ]),
     ...mapState("topicStore", {
       topicTreeData: "topicTreeData"
-    })
+    }),
+    ...mapGetters("questionStore", ["questionFilePath"])
   },
   /**
    * validations

@@ -61,7 +61,7 @@
                 v-bind:key="src"
                 class="col-12">
           <q-card-media>
-            <img :src="'http://' + src">
+            <img :src="src">
           </q-card-media>
         </q-card>
       </q-tab-pane>

@@ -20,14 +20,18 @@ const store = {
   },
   actions: {
     fillTopicHardnessTypeDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllTopicHardnessTypeDdl/`).then(response => {
-        state.lookupTopicHardnessTypeDdl = response.data;
-      });
+      if (!state.lookupTopicHardnessTypeDdl.length) {
+        axios.get(`${baseUrl}/GetAllTopicHardnessTypeDdl/`).then(response => {
+          state.lookupTopicHardnessTypeDdl = response.data;
+        });
+      }
     },
     fillTopicAreaTypeDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllAreaTypeDdl/`).then(response => {
-        state.lookupTopicAreaTypeDdl = response.data;
-      });
+      if (!state.lookupTopicAreaTypeDdl.length) {
+        axios.get(`${baseUrl}/GetAllAreaTypeDdl/`).then(response => {
+          state.lookupTopicAreaTypeDdl = response.data;
+        });
+      }
     },
     fillPrintTypeDdlStore({ state }) {
       if (!state.lookupPrintTypeDdl.length) {
@@ -51,34 +55,48 @@ const store = {
       }
     },
     getLookupQuestionType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllQuestionTypeDdl/`).then(response => {
-        state.lookupQuestionType = response.data;
-      });
+      if (!state.lookupQuestionType.length) {
+        axios.get(`${baseUrl}/GetAllQuestionTypeDdl/`).then(response => {
+          state.lookupQuestionType = response.data;
+        });
+      }
     },
     getLookupQuestionHardnessType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllQuestionHardnessTypeDdl/`).then(response => {
-        state.lookupQuestionHardnessType = response.data;
-      });
+      if (!state.lookupQuestionHardnessType.length) {
+        axios
+          .get(`${baseUrl}/GetAllQuestionHardnessTypeDdl/`)
+          .then(response => {
+            state.lookupQuestionHardnessType = response.data;
+          });
+      }
     },
     getLookupQuestionRepeatnessType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllRepeatnessTypeDdl/`).then(response => {
-        state.lookupQuestionRepeatnessType = response.data;
-      });
+      if (!state.lookupQuestionRepeatnessType.length) {
+        axios.get(`${baseUrl}/GetAllRepeatnessTypeDdl/`).then(response => {
+          state.lookupQuestionRepeatnessType = response.data;
+        });
+      }
     },
     getLookupQuestionAuthorType({ state }, id) {
-      axios.get(`${baseUrl}/GetAllAuthorTypeDdl/`).then(response => {
-        state.lookupQuestionAuthorType = response.data;
-      });
+      if (!state.lookupQuestionAuthorType.length) {
+        axios.get(`${baseUrl}/GetAllAuthorTypeDdl/`).then(response => {
+          state.lookupQuestionAuthorType = response.data;
+        });
+      }
     },
     fillTopicNezamStore({ state }) {
-      axios.get(`${baseUrl}/GetAllNezamDdl/`).then(response => {
-        state.lookupTopicNezamDdl = response.data;
-      });
+      if (!state.lookupTopicNezamDdl.length) {
+        axios.get(`${baseUrl}/GetAllNezamDdl/`).then(response => {
+          state.lookupTopicNezamDdl = response.data;
+        });
+      }
     },
     fillEducationTreeStateDdlStore({ state }) {
-      axios.get(`${baseUrl}/GetAllEducationTreeStateDdl/`).then(response => {
-        state.lookupEducationTreeStateDdl = response.data;
-      });
+      if (!state.lookupEducationTreeStateDdl.length) {
+        axios.get(`${baseUrl}/GetAllEducationTreeStateDdl/`).then(response => {
+          state.lookupEducationTreeStateDdl = response.data;
+        });
+      }
     }
   }
 };

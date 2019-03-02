@@ -2,8 +2,7 @@ import util from 'utilities/util';
 import axios from 'utilities/axios';
 import {
   API_URL as apiUrl,
-  QUESTION_URL as baseUrl,
-  TAG_URL as tagUrl
+  QUESTION_URL as baseUrl
 } from 'utilities/site-config';
 
 /**
@@ -25,36 +24,33 @@ const store = {
     questionObj: {
       Id: 0,
       Context: '',
+      FileName: '',
       QuestionNumber: 0,
-      LookupId_QuestionType: 0,
+      AnswerNumber: 0,
       QuestionPoint: 0,
-      LookupId_QuestionHardnessType: 0,
-      LookupId_RepeatnessType: 0,
       UseEvaluation: false,
       IsStandard: false,
-      LookupId_AuthorType: 0,
       AuthorName: '',
-      LookupId_AreaType: 0,
       ResponseSecond: 0,
       Description: '',
-      FileName: '',
-      InsertDateTime: '',
-      UserId: 0,
-      File: '',
-      // EducationGroupId: 0,
-      // EducationGroup_LessonId: 0,
-      // EducationTreeId_Grade: 0,
-      // LessonId: 0,
-      IndexTopicsId: [],
+      LookupId_QuestionType: 0,
+      LookupId_QuestionHardnessType: 0,
+      LookupId_RepeatnessType: 0,
+      LookupId_AuthorType: 0,
+      LookupId_AreaType: 0,
       TopicsId: [],
       EducationTreeIds: [],
-      AnswerNumber: 0,
       TagsId: []
+    },
+    questionIndexObj: {
+      EducationTreeId_Grade: 0,
+      LessonId: 0,
+      TickedEducationTreeIds: [],
+      TickedTopicsIds: []
     },
     questionGridData: [],
     questionDdl: [],
     questionByQuestionGroupIdData: [],
-    tagDdl: [],
     selectedId: 0,
     ddlModelChanged: true,
     gridModelChanged: true,
@@ -68,8 +64,7 @@ const store = {
     insert(state, data) {
       let createdObj = util.cloneObject(state.questionObj);
       createdObj.Id = data.Id;
-      createdObj.FileName = data.Obj.FileName;
-      createdObj.Context = data.Obj.Context;
+      createdObj.Context = data.Context;
       state.questionGridData.push(createdObj);
     },
 
@@ -95,7 +90,21 @@ const store = {
      * rest value of questionObj
      */
     reset(state, $v) {
-      util.clearObject(state.questionObj);
+      state.questionObj.Context = '';
+      state.questionObj.FileName = '';
+      state.questionObj.QuestionNumber = 0;
+      state.questionObj.AnswerNumber = 0;
+      state.questionObj.QuestionPoint = 0;
+      state.questionObj.UseEvaluation = false;
+      state.questionObj.IsStandard = false;
+      state.questionObj.AuthorName = '';
+      state.questionObj.ResponseSecond = 0;
+      state.questionObj.Description = '';
+      state.questionObj.LookupId_QuestionType = 7;
+      state.questionObj.LookupId_QuestionHardnessType = 12;
+      state.questionObj.LookupId_RepeatnessType = 22;
+      state.questionObj.LookupId_AuthorType = 1039;
+      state.questionObj.LookupId_AreaType = 1036;
       if ($v) {
         $v.$reset();
       }
@@ -117,22 +126,17 @@ const store = {
     /**
      * fill grid data
      */
-    fillGridStore({ state }) {
-      // fill grid if modelChanged
-      // if (state.gridModelChanged) {
-      // get data
+    fillGridStore({ state }, topicsIds) {
       axios
         .get(
           `${baseUrl}/GetAllByTopicIds?` +
             util.toParam({
-              Ids: state.questionObj.IndexTopicsId
+              Ids: topicsIds
             })
         )
         .then(response => {
           state.questionGridData = response.data;
-          state.gridModelChanged = false;
         });
-      // }
     },
 
     /**
@@ -147,15 +151,6 @@ const store = {
           state.ddlModelChanged = false;
         });
       }
-    },
-
-    fillTagsDdlStore({ state }) {
-      axios.get(`${tagUrl}/GetAll`).then(response => {
-        state.tagDdl = response.data.map(x => ({
-          value: x.Id,
-          label: x.Name
-        }));
-      });
     },
 
     /**
@@ -209,6 +204,9 @@ const store = {
      */
     toggleModalCreateStore({ state }, isOpen) {
       state.isOpenModalCreate = isOpen;
+      state.questionObj.TopicsId = util.cloneObject(
+        state.questionIndexObj.TickedTopicsIds
+      );
     },
 
     /**
@@ -222,47 +220,41 @@ const store = {
      * submit create data
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
-      if (
-        state.questionObj.TopicsId.length == 0 ||
-        state.questionObj.File == ''
-      ) {
-        var msg = '';
-        msg +=
-          state.questionObj.TopicsId.length == 0
-            ? '<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div><br/>'
-            : '';
-        msg +=
-          state.questionObj.File == ''
-            ? '<div class="snotifyToast__body">فایلی انتخاب نکرده اید.</div>'
-            : '';
+      var vm = state.createVue;
+      var wordFile = state.createVue.$refs.wordFile;
+      var msg = '';
 
-        state.createVue.$snotify.html(msg, {
-          type: 'error',
-          timeout: 4000,
-          showProgressBar: true,
-          position: 'leftTop'
-        });
+      if (wordFile.files.length == 0) {
+        msg = 'فایل ورد انتخاب نشده است.';
+      }
+      if (state.questionObj.TopicsId.length == 0) {
+        msg = 'مبحثی انتخاب نکرده اید.';
+      }
+      if (msg) {
+        dispatch(
+          'notify',
+          {
+            body: msg,
+            type: 0,
+            vm: vm
+          },
+          {
+            root: true
+          }
+        );
         return;
       }
 
-      state.questionObj.UserId = 0;
-      delete state.questionObj.Context;
-      state.questionObj.FileName = '1';
-      state.questionObj.InsertDateTime = new Date().toLocaleString();
-
-      var vm = state.createVue;
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
 
         var formData = new FormData();
-        var fileUpload = state.questionObj.File;
-        if (fileUpload && fileUpload.size > 0) {
-          formData.append('word', fileUpload);
-        }
-        var tmp1 = util.toParam(state.questionObj);
+        formData.append(wordFile.name, wordFile.files[0]);
+
+        var params = util.toParam(state.questionObj);
         axios({
           method: 'post',
-          url: `${baseUrl}/Create?${tmp1}`,
+          url: `${baseUrl}/Create?${params}`,
           data: formData,
           config: { headers: { 'Content-Type': 'multipart/form-data' } }
         }).then(response => {
@@ -295,6 +287,9 @@ const store = {
      */
     resetCreateStore({ state, commit }) {
       commit('reset', state.createVue.$v);
+
+      var wordFile = state.createVue.$refs.wordFile;
+      wordFile.reset();
     },
     //------------------------------------------------
 
@@ -317,58 +312,65 @@ const store = {
      * submit edit data
      */
     submitEditStore({ state, commit, dispatch }) {
+      var vm = state.editVue;
+      var wordFile = state.editVue.$refs.wordFile;
+      var msg = '';
+
+      if (wordFile.files.length == 0) {
+        msg = 'فایل ورد انتخاب نشده است.';
+      }
       if (state.questionObj.TopicsId.length == 0) {
-        state.createVue.$snotify.html(
-          '<div class="snotifyToast__body">مبحثی انتخاب نکرده اید.</div>',
+        msg = 'مبحثی انتخاب نکرده اید.';
+      }
+      if (msg) {
+        dispatch(
+          'notify',
           {
-            type: 'error',
-            timeout: 4000,
-            showProgressBar: true,
-            position: 'leftTop'
+            body: msg,
+            type: 0,
+            vm: vm
+          },
+          {
+            root: true
           }
         );
         return;
       }
-      var vm = state.editVue;
+
       dispatch('validateFormStore', vm).then(isValid => {
         if (!isValid) return;
         state.questionObj.Id = state.selectedId;
 
         var formData = new FormData();
-        var fileUpload = state.questionObj.File;
-        if (fileUpload && fileUpload.size > 0) {
-          formData.append('word', fileUpload);
-        }
-        delete state.questionObj.Context;
-        var tmp1 = util.toParam(state.questionObj);
+        formData.append(wordFile.name, wordFile.files[0]);
+
+        var params = util.toParam(state.questionObj);
         axios({
           method: 'post',
-          url: `${baseUrl}/Update?${tmp1}`,
+          url: `${baseUrl}/Update?${params}`,
           data: formData,
           config: { headers: { 'Content-Type': 'multipart/form-data' } }
-        })
-          // axios.post(`${baseUrl}/Update`, state.questionObj)
-          .then(response => {
-            let data = response.data;
-            if (data.MessageType == 1) {
-              commit('update');
-              dispatch('modelChangedStore');
-              dispatch('resetEditStore');
-              dispatch('toggleModalEditStore', false);
-            }
+        }).then(response => {
+          let data = response.data;
+          if (data.MessageType == 1) {
+            commit('update');
+            dispatch('modelChangedStore');
+            dispatch('resetEditStore');
+            dispatch('toggleModalEditStore', false);
+          }
 
-            dispatch(
-              'notify',
-              {
-                body: data.Message,
-                type: data.MessageType,
-                vm: vm
-              },
-              {
-                root: true
-              }
-            );
-          });
+          dispatch(
+            'notify',
+            {
+              body: data.Message,
+              type: data.MessageType,
+              vm: vm
+            },
+            {
+              root: true
+            }
+          );
+        });
       });
     },
 
@@ -377,6 +379,9 @@ const store = {
      */
     resetEditStore({ state, commit }) {
       commit('reset', state.editVue.$v);
+
+      var wordFile = state.createVue.$refs.wordFile;
+      wordFile.reset();
     },
     //------------------------------------------------
 

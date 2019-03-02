@@ -119,5 +119,10 @@
         QuestionGroupDeleteAccess = 83,
         QuestionGroupCreateAccess = 84,
         QuestionGroupReadAccess = 85,
+
+        QuestionJudgeDeleteAccess = 86,
+        QuestionJudgeUpdateAccess = 87,
+        QuestionJudgeCreateAccess = 88,
+        QuestionJudgeReadAccess = 89,
     }
 }

@@ -70,6 +70,10 @@ const clearArray = function(arr) {
  * @param {Object} obj
  */
 const toParam = function(obj) {
+  return encodeURI(toParamWithoutEncode(obj));
+};
+
+const toParamWithoutEncode = function(obj) {
   return Object.keys(obj)
     .map(key => {
       var value = obj[key];

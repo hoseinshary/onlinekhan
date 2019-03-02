@@ -100,8 +100,11 @@ const store = {
       // fill grid if modelChanged
       if (state.ddlModelChanged) {
         // get data
-        axios.get(`${baseUrl}/GetAllDdl`).then(response => {
-          state.tagDdl = response.data;
+        axios.get(`${baseUrl}/GetAll`).then(response => {
+          state.tagDdl = response.data.map(x => ({
+            value: x.Id,
+            label: x.Name
+          }));
           state.ddlModelChanged = false;
         });
       }

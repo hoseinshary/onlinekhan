@@ -297,7 +297,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         var newGuid = Guid.NewGuid();
 
                         var newEntry =  @"/content/questiongrouptemp/" + newGuid + ".png";
-                        
+
                         returnGuidS.Add(newEntry);
                  
 

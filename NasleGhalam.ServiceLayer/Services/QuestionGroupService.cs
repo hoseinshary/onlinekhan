@@ -76,8 +76,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
-            _questionGroups.Add(questionGroup);
-
+            
             //save Doc and excel file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx");
             excel.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".xlsx");
@@ -226,6 +225,7 @@ namespace NasleGhalam.ServiceLayer.Services
             /////////////////////////////////
 
 
+            _questionGroups.Add(questionGroup);
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = questionGroup.Id;

@@ -68,7 +68,8 @@ namespace NasleGhalam.WebApi.Controllers
                 };
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue("application/octet-stream");
-
+            filestraem.Dispose();
+            stream.Dispose();
             return result;
         }
 
@@ -93,7 +94,8 @@ namespace NasleGhalam.WebApi.Controllers
                 };
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue("application/octet-stream");
-
+            filestraem.Dispose();
+            stream.Dispose();
             return result;
         }
 

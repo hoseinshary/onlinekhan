@@ -60,7 +60,7 @@ namespace NasleGhalam.ViewModels.Question
         public string Description { get; set; }
 
         [Display(Name = "نام فایل")]
-        public string FileName => Guid.NewGuid().ToString();
+        public string FileName { get; set; }
 
         [Display(Name = "تاریخ ورود داده")]
         public DateTime InsertDateTime { get; set; }

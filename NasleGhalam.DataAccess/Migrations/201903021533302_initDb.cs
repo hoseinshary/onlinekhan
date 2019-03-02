@@ -3,7 +3,7 @@ namespace NasleGhalam.DataAccess.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initDB : DbMigration
+    public partial class initDb : DbMigration
     {
         public override void Up()
         {
@@ -283,12 +283,10 @@ namespace NasleGhalam.DataAccess.Migrations
                         IsExercise = c.Boolean(nullable: false),
                         IsLearning = c.Boolean(nullable: false),
                         AnswerNumber = c.Int(nullable: false),
-                        Lookup_AreaType_Id = c.Int(),
-                        Lookup_AuthorType_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Lookups", t => t.Lookup_AreaType_Id)
-                .ForeignKey("dbo.Lookups", t => t.Lookup_AuthorType_Id)
+                .ForeignKey("dbo.Lookups", t => t.LookupId_AreaType)
+                .ForeignKey("dbo.Lookups", t => t.LookupId_AuthorType)
                 .ForeignKey("dbo.Lookups", t => t.LookupId_QuestionHardnessType)
                 .ForeignKey("dbo.Lookups", t => t.LookupId_QuestionType)
                 .ForeignKey("dbo.Lookups", t => t.LookupId_RepeatnessType)
@@ -296,9 +294,9 @@ namespace NasleGhalam.DataAccess.Migrations
                 .Index(t => t.LookupId_QuestionType)
                 .Index(t => t.LookupId_QuestionHardnessType)
                 .Index(t => t.LookupId_RepeatnessType)
-                .Index(t => t.UserId)
-                .Index(t => t.Lookup_AreaType_Id)
-                .Index(t => t.Lookup_AuthorType_Id);
+                .Index(t => t.LookupId_AuthorType)
+                .Index(t => t.LookupId_AreaType)
+                .Index(t => t.UserId);
             
             CreateTable(
                 "dbo.Boxes",
@@ -700,8 +698,8 @@ namespace NasleGhalam.DataAccess.Migrations
             DropForeignKey("dbo.Questions", "LookupId_RepeatnessType", "dbo.Lookups");
             DropForeignKey("dbo.Questions", "LookupId_QuestionType", "dbo.Lookups");
             DropForeignKey("dbo.Questions", "LookupId_QuestionHardnessType", "dbo.Lookups");
-            DropForeignKey("dbo.Questions", "Lookup_AuthorType_Id", "dbo.Lookups");
-            DropForeignKey("dbo.Questions", "Lookup_AreaType_Id", "dbo.Lookups");
+            DropForeignKey("dbo.Questions", "LookupId_AuthorType", "dbo.Lookups");
+            DropForeignKey("dbo.Questions", "LookupId_AreaType", "dbo.Lookups");
             DropForeignKey("dbo.Questions_Boxes", "BoxId", "dbo.Boxes");
             DropForeignKey("dbo.Questions_Boxes", "QuestionId", "dbo.Questions");
             DropForeignKey("dbo.Boxes", "TeacherId", "dbo.Teachers");
@@ -756,9 +754,9 @@ namespace NasleGhalam.DataAccess.Migrations
             DropIndex("dbo.QuestionEquals", new[] { "QuestionId1" });
             DropIndex("dbo.Teachers", new[] { "UserId" });
             DropIndex("dbo.Boxes", new[] { "TeacherId" });
-            DropIndex("dbo.Questions", new[] { "Lookup_AuthorType_Id" });
-            DropIndex("dbo.Questions", new[] { "Lookup_AreaType_Id" });
             DropIndex("dbo.Questions", new[] { "UserId" });
+            DropIndex("dbo.Questions", new[] { "LookupId_AreaType" });
+            DropIndex("dbo.Questions", new[] { "LookupId_AuthorType" });
             DropIndex("dbo.Questions", new[] { "LookupId_RepeatnessType" });
             DropIndex("dbo.Questions", new[] { "LookupId_QuestionHardnessType" });
             DropIndex("dbo.Questions", new[] { "LookupId_QuestionType" });

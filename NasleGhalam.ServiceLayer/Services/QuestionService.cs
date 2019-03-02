@@ -90,7 +90,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public MessageResultClient Create(QuestionCreateViewModel questionViewModel, HttpPostedFile word)
         {
             var question = Mapper.Map<Question>(questionViewModel);
-            _questions.Add(question);
+            
 
             //save Doc and excel file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx");
@@ -100,33 +100,22 @@ namespace NasleGhalam.ServiceLayer.Services
             var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx"; 
             Document doc = app.Documents.Open(wordFilename);
 
+            foreach (Paragraph VARIABLE in doc.Paragraphs)
+            {
+                question.Context += VARIABLE.Range.Text;
+            }
+
+
             //تبدیل به عکس
             var pane = doc.Windows[1].Panes[1];
             var page = pane.Pages[1];
             var bits = page.EnhMetaFileBits;
             var target = SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png";
 
-            //crop and resize
-            try
-            {
-                using (var ms = new MemoryStream((byte[])(bits)))
-                {
-                    var image = System.Drawing.Image.FromStream(ms);
-                    var pngTarget = target;//Path.ChangeExtension(target , "png");
-                    image.Save(pngTarget + "1.png", ImageFormat.Png);
-                    image = new Bitmap(pngTarget + "1.png");
+            
 
-                    var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                    // resizedImage.Save(pngTarget, ImageFormat.Png);
-                    var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                    var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                    croppedImage.Save(pngTarget, ImageFormat.Png);
-                    File.Delete(pngTarget + "1.png");
-                }
-            }
-            catch (System.Exception ex)
-            { }
-
+            doc.Close();
+            app.Quit();
 
             foreach (var topicId in questionViewModel.TopicsId)
             {
@@ -155,9 +144,38 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-
+            _questions.Add(question);
             _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
+            {
+                word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
+
+                //crop and resize
+                try
+                {
+                    using (var ms = new MemoryStream((byte[])(bits)))
+                    {
+                        var image = System.Drawing.Image.FromStream(ms);
+                        var pngTarget = target;//Path.ChangeExtension(target , "png");
+                        image.Save(pngTarget + "1.png", ImageFormat.Png);
+                        image = new Bitmap(pngTarget + "1.png");
+
+                        var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
+                        // resizedImage.Save(pngTarget, ImageFormat.Png);
+                        var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
+                        var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
+                        croppedImage.Save(pngTarget, ImageFormat.Png);
+                        croppedImage.Dispose();
+                        File.Delete(pngTarget + "1.png");
+                    }
+                }
+                catch (System.Exception ex)
+                { }
+
+                File.Delete(wordFilename);
+
+            }
             msgRes.Id = question.Id;
             var resutlVal = Mapper.Map<MessageResultClient>(msgRes);
             resutlVal.Obj = new
@@ -300,6 +318,12 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(question);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".docx");
+                File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".png");
+            }
+
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 

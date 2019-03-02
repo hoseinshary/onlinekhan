@@ -7,18 +7,18 @@ namespace NasleGhalam.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class fixState : IMigrationMetadata
+    public sealed partial class initDb : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(fixState));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initDb));
         
         string IMigrationMetadata.Id
         {
-            get { return "201810271805157_fixState"; }
+            get { return "201903021533302_initDb"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return Resources.GetString("Source"); }
+            get { return null; }
         }
         
         string IMigrationMetadata.Target

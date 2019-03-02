@@ -35,6 +35,17 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.LookupId_RepeatnessType)
                 .WillCascadeOnDelete(false);
 
+            HasRequired(x => x.Lookup_AreaType)
+                .WithMany(x => x.Question_AreaTypes)
+                .HasForeignKey(x => x.LookupId_AreaType)
+                .WillCascadeOnDelete(false);
+
+            HasRequired(x => x.Lookup_AuthorType)
+                .WithMany(x => x.Question_AuthorTypes)
+                .HasForeignKey(x => x.LookupId_AuthorType)
+                .WillCascadeOnDelete(false);
+
+
             HasMany(x => x.Tags)
                 .WithMany(x => x.Questions)
                 .Map(config =>

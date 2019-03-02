@@ -74,7 +74,8 @@ namespace NasleGhalam.WebApi.Controllers
                 };
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue("application/octet-stream");
-
+            filestraem.Dispose();
+            stream.Dispose();
             return result;
         }
 
@@ -86,7 +87,7 @@ namespace NasleGhalam.WebApi.Controllers
             id += ".png";
             var filestraem = File.OpenRead(SitePath.GetQuestionAbsPath(id));
             filestraem.CopyTo(stream);
-
+            
             var result = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new ByteArrayContent(stream.ToArray())
@@ -98,7 +99,8 @@ namespace NasleGhalam.WebApi.Controllers
                 };
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue("application/octet-stream");
-
+            filestraem.Dispose();
+            stream.Dispose();
             return result;
         }
 
@@ -113,10 +115,10 @@ namespace NasleGhalam.WebApi.Controllers
             var wordFile = HttpContext.Current.Request.Files.Get("word");
 
             if (wordFile != null && wordFile.ContentLength > 0)
-            { 
+            {
                 questionViewModel.FileName = $"{Guid.NewGuid()}";
             }
-           
+
             questionViewModel.InsertDateTime = DateTime.Now;
             questionViewModel.UserId = Request.GetUserId();
             
@@ -160,10 +162,7 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var question = _questionService.GetById(id);
             var msgResualt = _questionService.Delete(id);
-            if (msgResualt.MessageType == MessageType.Success)
-            {
-                File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".docx");
-            }
+         
             return Ok(msgResualt);
         }
     }

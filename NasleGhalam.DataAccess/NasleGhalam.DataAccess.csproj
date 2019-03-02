@@ -53,6 +53,10 @@
     <Compile Include="Migrations\201903021533302_initDb.Designer.cs">
       <DependentUpon>201903021533302_initDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903021600161_questionjudgeFix.cs" />
+    <Compile Include="Migrations\201903021600161_questionjudgeFix.Designer.cs">
+      <DependentUpon>201903021600161_questionjudgeFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -73,6 +77,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201903021533302_initDb.resx">
       <DependentUpon>201903021533302_initDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903021600161_questionjudgeFix.resx">
+      <DependentUpon>201903021600161_questionjudgeFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

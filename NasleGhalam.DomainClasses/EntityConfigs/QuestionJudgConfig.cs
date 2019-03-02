@@ -13,6 +13,12 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .WithMany(x => x.QuestionJudges)
                 .HasForeignKey(x => x.QuestionId)
                 .WillCascadeOnDelete(false);
+
+
+            HasRequired(x => x.User)
+                .WithMany(x => x.QuestionJudges)
+                .HasForeignKey(x => x.UserId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

@@ -49,6 +49,17 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
+        public object GetAllByTopicIdsNoJudge(IEnumerable<int> ids, int userid)
+        {
+            return _questions
+                .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                .Where( current => current.QuestionJudges.Any(x => x.UserId  != userid) || !current.QuestionJudges.Any())
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
+
 
         /// <summary>
         /// گرفتن همه سوال های مباحث
@@ -59,6 +70,16 @@ namespace NasleGhalam.ServiceLayer.Services
            
             return _questions
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
+
+        public object GetAllByLessonId(int id)
+        {
+            return _questions
+                .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)

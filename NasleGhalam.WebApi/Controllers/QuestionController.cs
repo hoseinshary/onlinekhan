@@ -36,10 +36,25 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public IHttpActionResult GetAllByTopicIdsNoJudge([FromUri] IEnumerable<int> ids)
+        {
+            return Ok(_questionService.GetAllByTopicIdsNoJudge(ids,Request.GetUserId()));
+        }
+
+
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAllByQuestionGroupId(int id)
         {
             return Ok(_questionService.GetAllByQuestionGroupId(id));
+        }
+
+        
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
+        public IHttpActionResult GetAllByLessonId(int id)
+        {
+            return Ok(_questionService.GetAllByLessonId(id));
         }
 
 

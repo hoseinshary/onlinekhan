@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.QuestionJudge;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -44,9 +42,10 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کارشناسی سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionJudgeViewModel> GetAll()
+        public IList<QuestionJudgeViewModel> GetAllByQuestionId(int questionId)
         {
             return _questionJudges
+                .Where(current => current.QuestionId == questionId)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionJudgeViewModel>)

@@ -3,7 +3,6 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.QuestionJudge;
-using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -22,9 +21,9 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionJudgeReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllByQuestionId(int id)
         {
-            return Ok(_questionJudgeService.GetAll());
+            return Ok(_questionJudgeService.GetAllByQuestionId(id));
         }
 
 

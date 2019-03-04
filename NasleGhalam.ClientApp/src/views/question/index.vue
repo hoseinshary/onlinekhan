@@ -71,6 +71,17 @@
                   hasIndex>
           <template slot="Id"
                     slot-scope="data">
+            <q-btn outline
+                   round
+                   icon="list"
+                   color="brown"
+                   size="sm"
+                   class="shadow-1 bg-white q-mr-sm"
+                   @click="showModalQuestionJudge(data.row.Id)">
+              <q-tooltip>
+                ارزیابی
+              </q-tooltip>
+            </q-btn>
             <my-btn-edit v-if="pageAccess.canEdit"
                          round
                          @click="showModalEdit(data.row.Id)" />
@@ -85,6 +96,7 @@
     <modal-create v-if="pageAccess.canCreate"></modal-create>
     <modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>
+    <modal-question-judge></modal-question-judge>
   </section>
 </template>
 
@@ -96,7 +108,8 @@ export default {
   components: {
     "modal-create": () => import("./create"),
     "modal-edit": () => import("./edit"),
-    "modal-delete": () => import("./delete")
+    "modal-delete": () => import("./delete"),
+    "modal-question-judge": () => import("../questionJudge/index")
   },
   /**
    * data
@@ -150,6 +163,10 @@ export default {
     ...mapActions("lessonStore", {
       fillLessonDdlStore: "fillDdlStore"
     }),
+    ...mapActions("questionJudgeStore", {
+      toggleModalQuestionJudgeStore: "toggleModalStore",
+      fillGridQuestionJudgeByQuestionId: "fillGridStore"
+    }),
     showModalCreate() {
       // reset data on modal show
       this.resetCreateStore();
@@ -170,6 +187,13 @@ export default {
       this.getByIdStore(id).then(() => {
         // show modal
         this.toggleModalDeleteStore(true);
+      });
+    },
+    showModalQuestionJudge(id) {
+      // get data by id
+      this.fillGridQuestionJudgeByQuestionId(id).then(() => {
+        // show modal
+        this.toggleModalQuestionJudgeStore(true);
       });
     },
     gradeDdlChange(val) {

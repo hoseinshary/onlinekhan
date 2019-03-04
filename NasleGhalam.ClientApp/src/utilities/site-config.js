@@ -20,8 +20,9 @@ const QUESTION_URL = '/api/question';
 const AXILLARY_BOOK_URL = '/api/axillaryBook';
 const UNIVERSITY_BRANCH_URL = '/api/universityBranch';
 const STUDENT_URL = '/api/student';
-const EDUCATIONTREE_URL =  '/api/educationTree';
-const QUESTIONGROUP_URL =  '/api/questionGroup';
+const EDUCATIONTREE_URL = '/api/educationTree';
+const QUESTIONGROUP_URL = '/api/questionGroup';
+const QUESTION_JUDGE_URL = '/api/questionJudge';
 
 export {
   API_URL,
@@ -46,5 +47,6 @@ export {
   UNIVERSITY_BRANCH_URL,
   STUDENT_URL,
   EDUCATIONTREE_URL,
-  QUESTIONGROUP_URL
+  QUESTIONGROUP_URL,
+  QUESTION_JUDGE_URL
 };

@@ -126,17 +126,24 @@ const store = {
     /**
      * fill grid data
      */
-    fillGridStore({ state }, topicsIds) {
-      axios
-        .get(
-          `${baseUrl}/GetAllByTopicIds?` +
-            util.toParam({
-              Ids: topicsIds
-            })
-        )
-        .then(response => {
-          state.questionGridData = response.data;
+    fillGridStore({ state }, data) {
+      var url = '';
+      if (data.showWithoutTopic) {
+        url = `${baseUrl}/GetAllByLessonId/${data.lessonId}`;
+      } else {
+        var params = util.toParam({
+          Ids: data.topicsIds
         });
+        if (data.showNoJudgement) {
+          url = `${baseUrl}/GetAllByTopicIdsNoJudge?${params}`;
+        } else {
+          url = `${baseUrl}/GetAllByTopicIds?${params}`;
+        }
+      }
+
+      axios.get(url).then(response => {
+        state.questionGridData = response.data;
+      });
     },
 
     /**

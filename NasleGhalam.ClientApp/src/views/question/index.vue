@@ -5,7 +5,16 @@
       <span slot="title">{{modelName}}</span>
       <div slot="body">
         <section class="row">
-          <div class="col-sm-5">
+          <div class="col-12">
+            <section class="q-ma-sm q-pa-sm shadow-1">
+              <q-checkbox v-model="showNoJudgement"
+                          label="نمایش سوال های بدون ارزیابی" />
+              <br>
+              <q-checkbox v-model="showWithoutTopic"
+                          label="نمایش سوال های بدون مبحث" />
+            </section>
+          </div>
+          <div class="col-sm-5 ">
             <section class="q-ma-sm q-pa-sm shadow-1">
               <my-select :model="$v.questionIndexObj.EducationTreeId_Grade"
                          :options="educationTree_GradeDdl"
@@ -31,7 +40,8 @@
                          @change="lessonDdlChange" />
             </section>
           </div>
-          <div class="col-sm-7">
+          <div class="col-sm-7 "
+               v-if="!showWithoutTopic">
             <section class="q-ma-sm q-pa-sm shadow-1">
               <q-field class="col-12">
                 <q-input v-model="topicFilter"
@@ -98,6 +108,8 @@ export default {
       educationTreeData: [],
       topicFilter: "",
       educationTreeFilter: "",
+      showNoJudgement: false,
+      showWithoutTopic: false,
       questionGridColumn: [
         {
           title: "متن سوال",
@@ -177,7 +189,14 @@ export default {
     },
     lessonDdlChange(val) {
       this.questionIndexObj.TickedTopicsIds = [];
-      this.fillTopicTreeStore(val);
+      if (this.showWithoutTopic) {
+        this.fillGridStore({
+          showWithoutTopic: this.showWithoutTopic,
+          lessonId: val
+        });
+      } else {
+        this.fillTopicTreeStore(val);
+      }
     }
   },
   computed: {
@@ -206,7 +225,10 @@ export default {
     },
     "questionIndexObj.TickedTopicsIds"(newVal, oldVal) {
       if (this.questionIndexObj.TickedTopicsIds.length > 0) {
-        this.fillGridStore(this.questionIndexObj.TickedTopicsIds);
+        this.fillGridStore({
+          topicsIds: this.questionIndexObj.TickedTopicsIds,
+          showNoJudgement: this.showNoJudgement
+        });
       } else {
         this.$util.clearArray(this.questionGridData);
       }

@@ -18,7 +18,7 @@
             v-bind:key="question.Id"
             class="col-12">
       <q-card-media>
-        <img :src="`${questionFilePath}/${question.FileName}`">
+        <img :src="`${questionPicturePath}/${question.FileName}`">
       </q-card-media>
     </q-card>
 
@@ -46,7 +46,7 @@ export default {
       questionByQuestionGroupIdData: "questionByQuestionGroupIdData",
       isOpenModalQuestions: "isOpenModalQuestions"
     }),
-    ...mapGetters("questionStore", ["questionFilePath"])
+    ...mapGetters("questionStore", ["questionPicturePath"])
   }
 };
 </script>

@@ -11,7 +11,7 @@
             class="col-12"
             v-if="questionObj.FileName">
       <q-card-media>
-        <img :src="`${questionFilePath}/${questionObj.FileName}`">
+        <img :src="`${questionPicturePath}/${questionObj.FileName}`">
       </q-card-media>
     </q-card>
 
@@ -48,6 +48,9 @@
                      filter />
         </section>
       </q-slide-transition>
+
+      <a :href="`${questionWordPath}/${questionObj.FileName}`"
+         target="_blank">دانلود فایل ورد</a>
     </div>
 
     <div class="col-sm-8 row gutter-md">
@@ -196,7 +199,7 @@ export default {
     ...mapState("topicStore", {
       topicTreeData: "topicTreeData"
     }),
-    ...mapGetters("questionStore", ["questionFilePath"])
+    ...mapGetters("questionStore", ["questionPicturePath", "questionWordPath"])
   },
   /**
    * validations

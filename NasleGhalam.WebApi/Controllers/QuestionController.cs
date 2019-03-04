@@ -39,7 +39,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetAllByTopicIdsNoJudge([FromUri] IEnumerable<int> ids)
         {
-            return Ok(_questionService.GetAllByTopicIdsNoJudge(ids,Request.GetUserId()));
+            return Ok(_questionService.GetAllByTopicIdsNoJudge(ids, Request.GetUserId()));
         }
 
 
@@ -49,7 +49,7 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionService.GetAllByQuestionGroupId(id));
         }
 
-        
+
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAllByLessonId(int id)
@@ -70,7 +70,8 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        [HttpGet]
+        //[CheckUserAccess(ActionBits.QuestionReadAccess)]
         public HttpResponseMessage GetWordFile(string id)
         {
             var stream = new MemoryStream();
@@ -96,13 +97,14 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpGet]
+        //[CheckUserAccess(ActionBits.QuestionReadAccess)]
         public HttpResponseMessage GetPictureFile(string id)
         {
             var stream = new MemoryStream();
             id += ".png";
             var filestraem = File.OpenRead(SitePath.GetQuestionAbsPath(id));
             filestraem.CopyTo(stream);
-            
+
             var result = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new ByteArrayContent(stream.ToArray())
@@ -128,16 +130,9 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create([FromUri]QuestionCreateViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
-
-            if (wordFile != null && wordFile.ContentLength > 0)
-            {
-                questionViewModel.FileName = $"{Guid.NewGuid()}";
-            }
-
-            questionViewModel.InsertDateTime = DateTime.Now;
             questionViewModel.UserId = Request.GetUserId();
-            
-            var msgRes = _questionService.Create(questionViewModel,wordFile);
+        
+            var msgRes = _questionService.Create(questionViewModel, wordFile);
             return Ok(msgRes);
         }
 
@@ -177,7 +172,7 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var question = _questionService.GetById(id);
             var msgResualt = _questionService.Delete(id);
-         
+
             return Ok(msgResualt);
         }
     }

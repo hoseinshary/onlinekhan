@@ -12,6 +12,7 @@ namespace NasleGhalam.ViewModels.Question
         public QuestionCreateViewModel()
         {
             InsertDateTime = DateTime.Now;
+            FileName = Guid.NewGuid().ToString();
         }
 
         [Display(Name = "متن")]

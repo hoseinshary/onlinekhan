@@ -64,7 +64,7 @@ const store = {
     insert(state, data) {
       let createdObj = util.cloneObject(state.questionObj);
       createdObj.Id = data.Id;
-      createdObj.Context = data.Context;
+      createdObj.Context = data.Obj.Context;
       state.questionGridData.push(createdObj);
     },
 
@@ -100,7 +100,7 @@ const store = {
       state.questionObj.AuthorName = '';
       state.questionObj.ResponseSecond = 0;
       state.questionObj.Description = '';
-      state.questionObj.LookupId_QuestionType = 7;
+      state.questionObj.LookupId_QuestionType = 6;
       state.questionObj.LookupId_QuestionHardnessType = 12;
       state.questionObj.LookupId_RepeatnessType = 22;
       state.questionObj.LookupId_AuthorType = 1039;
@@ -229,6 +229,13 @@ const store = {
       }
       if (state.questionObj.TopicsId.length == 0) {
         msg = 'مبحثی انتخاب نکرده اید.';
+      }
+      if (
+        state.questionObj.LookupId_QuestionType == 6 &&
+        (state.questionObj.AnswerNumber < 1 ||
+          state.questionObj.AnswerNumber > 4)
+      ) {
+        msg = 'گزینه صحیح انتخاب نشده است.';
       }
       if (msg) {
         dispatch(
@@ -425,8 +432,11 @@ const store = {
     recordName(state) {
       return state.questionObj.Context;
     },
-    questionFilePath() {
+    questionPicturePath() {
       return `${apiUrl}${baseUrl}/GetPictureFile`;
+    },
+    questionWordPath() {
+      return `${apiUrl}${baseUrl}/GetWordFile`;
     }
   }
 };

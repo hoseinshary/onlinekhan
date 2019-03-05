@@ -21,7 +21,7 @@ namespace NasleGhalam.ServiceLayer.Util
         public static string GetQuestionGroupAbsPath(string name) => ToAbsoulutPath($"{QuestionGroupRelPath}{name}");
         public static string GetQuestionGroupTempAbsPath(string name) => ToAbsoulutPath($"{QuestionGroupTempRelPath}{name}");
 
-        public static string ToAbsoulutPath(string relativePath)
+        public static string ToAbsoulutPath(this string relativePath)
         {
             return HttpContext.Current.Server.MapPath(relativePath);
         }

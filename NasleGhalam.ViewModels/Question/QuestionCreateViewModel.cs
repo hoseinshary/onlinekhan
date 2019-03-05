@@ -74,7 +74,10 @@ namespace NasleGhalam.ViewModels.Question
 
         public string FilePath { get; set; }
 
+
+        [Display(Name = "گزینه صحیح")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [Range(1,4, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
         public int AnswerNumber { get; set; }
 
         public List<int> TopicsId { get; set; } = new List<int>();

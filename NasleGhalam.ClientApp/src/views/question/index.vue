@@ -193,7 +193,7 @@ export default {
       // get data by id
       this.fillGridQuestionJudgeByQuestionId(id).then(() => {
         // show modal
-        this.toggleModalQuestionJudgeStore(true);
+        this.toggleModalQuestionJudgeStore({ isOpen: true, questionId: id });
       });
     },
     gradeDdlChange(val) {

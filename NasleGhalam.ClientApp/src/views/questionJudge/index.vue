@@ -9,7 +9,7 @@
         </q-toolbar-title>
         <q-btn dense
                icon="close"
-               @click="toggleModalQuestionStore(false)" />
+               @click="toggleModalQuestionStore({isOpen:false})" />
       </q-toolbar>
     </template>
 
@@ -33,7 +33,7 @@
     </div>
 
     <template slot="footer">
-      <my-btn-back @click="toggleModalQuestionStore(false)"></my-btn-back>
+      <my-btn-back @click="toggleModalQuestionStore({isOpen:false})"></my-btn-back>
     </template>
     <!--<modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete> -->
@@ -97,14 +97,14 @@ export default {
    */
   methods: {
     ...mapActions("questionJudgeStore", [
-      "toggleModalCreateStore",
-      "toggleModalEditStore",
-      "toggleModalDeleteStore",
       "getByIdStore",
       "fillGridStore",
       "resetCreateStore",
       "resetEditStore"
-    ])
+    ]),
+    ...mapActions("questionJudgeStore", {
+      toggleModalQuestionStore: "toggleModalStore"
+    })
   },
   computed: {
     ...mapState("questionJudgeStore", {

@@ -23,7 +23,8 @@ const store = {
       IsLearning: false,
       ResponseSecond: 0,
       LookupId_RepeatnessType: 0,
-      LookupId_QuestionHardnessType: 0
+      LookupId_QuestionHardnessType: 0,
+      QuestionId: 0
     },
     questionJudgeGridData: [],
     selectedId: 0,
@@ -110,8 +111,9 @@ const store = {
     /**
      * toggle modal
      */
-    toggleModalStore({ state }, isOpen) {
-      state.isOpenModal = isOpen;
+    toggleModalStore({ state }, data) {
+      state.isOpenModal = data.isOpen;
+      state.questionJudgeObj.QuestionId = data.questionId;
     },
 
     //### create section ###

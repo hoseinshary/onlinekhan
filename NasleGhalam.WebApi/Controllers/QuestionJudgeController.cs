@@ -45,7 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
         {
-            return Ok(_questionJudgeService.Create(questionJudgeViewModel),Request.GetUserId());
+            return Ok(_questionJudgeService.Create(questionJudgeViewModel,Request.GetUserId()));
 
         }
 

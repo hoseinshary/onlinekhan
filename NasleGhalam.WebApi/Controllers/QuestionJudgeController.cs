@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.QuestionJudge;
+using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -44,7 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
         {
-            return Ok(_questionJudgeService.Create(questionJudgeViewModel));
+            return Ok(_questionJudgeService.Create(questionJudgeViewModel),Request.GetUserId());
 
         }
 

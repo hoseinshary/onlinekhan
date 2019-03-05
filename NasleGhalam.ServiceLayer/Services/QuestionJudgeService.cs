@@ -58,9 +58,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionJudgeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
+        public MessageResultClient Create(QuestionJudgeCreateViewModel questionJudgeViewModel, int userid)
         {
+
             var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
+            questionJudge.UserId = userid;
             _questionJudges.Add(questionJudge);
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);

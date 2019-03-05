@@ -90,6 +90,40 @@ namespace NasleGhalam.ServiceLayer.Services
 
             object missing = Type.Missing;
 
+            //read from excel file
+            Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+            Workbook xlWorkbook = xlApp.Workbooks.Open(excelFilename, 0, true, 5, "", "", true, XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            _Worksheet xlWorksheet = (_Worksheet)xlWorkbook.Sheets[1];
+            Microsoft.Office.Interop.Excel.Range xlRange = xlWorksheet.UsedRange;
+
+            int rowCount = xlRange.Rows.Count;
+            int colCount = xlRange.Columns.Count;
+            System.Data.DataTable dt = new System.Data.DataTable();
+            for (int k = 1; k <= rowCount; k++)
+            {
+                DataRow dr = dt.NewRow();
+                for (int j = 1; j <= colCount; j++)
+                {
+                    if (k == 1)
+                    {
+                        dt.Columns.Add(Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range).Value2));
+                    }
+                    else
+                    {
+                        dr[j - 1] = Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range).Value2);
+                    }
+
+                }
+                if (k != 1)
+                    dt.Rows.Add(dr);
+            }
+
+            xlWorkbook.Close();
+            xlApp.Quit();
+
+
+
+
             //split question group
             int x = doc.Paragraphs.Count;
             int i = 1;
@@ -102,6 +136,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     if (isQuestionParagraph(doc.Paragraphs[i].Range.Text))
                     {
+                        String context = "";
+                        
                         numberOFQ++;
                         Document newdoc2 = app.Documents.Add(
                             ref missing, ref missing, ref missing, ref missing);
@@ -109,6 +145,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         doc.Paragraphs[i].Range.Copy();
 
                         app.Selection.Paste();
+                        context += doc.Paragraphs[i].Range.Text;
                         i++;
                         while (i <= x && !isQuestionParagraph(doc.Paragraphs[i].Range.Text))
                         {
@@ -117,47 +154,20 @@ namespace NasleGhalam.ServiceLayer.Services
                                 doc.Paragraphs[i].Range.Copy();
 
                                 app.Selection.Paste();
+                                context += doc.Paragraphs[i].Range.Text;
+
                             }
                             i++;
                         }
 
 
-                        //read from excel file
-                        Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
-                        Workbook xlWorkbook = xlApp.Workbooks.Open(excelFilename, 0, true, 5, "", "", true, XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-                        _Worksheet xlWorksheet = (_Worksheet)xlWorkbook.Sheets[1];
-                        Microsoft.Office.Interop.Excel.Range xlRange = xlWorksheet.UsedRange;
-
-                        int rowCount = xlRange.Rows.Count;
-                        int colCount = xlRange.Columns.Count;
-                        System.Data.DataTable dt = new System.Data.DataTable();
-                        for (int k = 1; k <= rowCount; k++)
-                        {
-                            DataRow dr = dt.NewRow();
-                            for (int j = 1; j <= colCount; j++)
-                            {
-                                if (k == 1)
-                                {
-                                    dt.Columns.Add(Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range).Value2));
-                                }
-                                else
-                                {
-                                    dr[j - 1] = Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range).Value2);
-                                }
-
-                            }
-                            if (k != 1)
-                                dt.Rows.Add(dr);
-                        }
-
-                        xlWorkbook.Close();
-                        xlApp.Quit();
+                       
 
                         //create single question
                         Question newQuestion = new Question();
                         var newGuid = Guid.NewGuid();
                         newQuestion.FileName = newGuid.ToString();
-
+                        newQuestion.Context = context;
                         newQuestion.LookupId_QuestionType = dt.Rows[numberOFQ - 1]["نوع سوال"].ToString() == "تستی" ? 6 : 7;
                         newQuestion.QuestionPoint = Convert.ToInt32(dt.Rows[numberOFQ - 1]["بارم سوال"] != DBNull.Value ? dt.Rows[numberOFQ - 1]["بارم سوال"] : 0);
                         newQuestion.AnswerNumber = Convert.ToInt32(dt.Rows[numberOFQ - 1]["گزینه صحیح"] != DBNull.Value ? dt.Rows[numberOFQ - 1]["گزینه صحیح"] : 0);

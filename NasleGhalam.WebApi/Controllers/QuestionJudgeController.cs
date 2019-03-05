@@ -20,14 +20,14 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, /*CheckUserAccess(ActionBits.QuestionJudgeReadAccess)*/]
+        [HttpGet, CheckUserAccess(ActionBits.QuestionJudgeReadAccess)]
         public IHttpActionResult GetAllByQuestionId(int id)
         {
             return Ok(_questionJudgeService.GetAllByQuestionId(id));
         }
 
 
-        [HttpGet, /*CheckUserAccess(ActionBits.QuestionJudgeReadAccess)*/]
+        [HttpGet, CheckUserAccess(ActionBits.QuestionJudgeReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var questionJudge = _questionJudgeService.GetById(id);
@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        //[CheckUserAccess(ActionBits.QuestionJudgeCreateAccess)]
+        [CheckUserAccess(ActionBits.QuestionJudgeCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
         {
@@ -49,7 +49,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        //[CheckUserAccess(ActionBits.QuestionJudgeUpdateAccess)]
+        [CheckUserAccess(ActionBits.QuestionJudgeUpdateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Update(QuestionJudgeUpdateViewModel questionJudgeViewModel)
         {
@@ -57,7 +57,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, /*CheckUserAccess(ActionBits.QuestionJudgeDeleteAccess)*/]
+        [HttpPost, CheckUserAccess(ActionBits.QuestionJudgeDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             return Ok(_questionJudgeService.Delete(id));

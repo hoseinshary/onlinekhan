@@ -74,6 +74,7 @@
     <Compile Include="MapperProfile\EducationTreeProfile.cs" />
     <Compile Include="MapperProfile\PublicProfile.cs" />
     <Compile Include="MapperProfile\QuestionGroupProfile.cs" />
+    <Compile Include="MapperProfile\QuestionJudgeProfile.cs" />
     <Compile Include="MapperProfile\UnivercityBranchProfile.cs" />
     <Compile Include="MapperProfile\QuestionProfile.cs" />
     <Compile Include="MapperProfile\TagProfile.cs" />

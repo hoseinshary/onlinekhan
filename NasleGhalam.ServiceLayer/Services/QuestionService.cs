@@ -110,6 +110,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Create(QuestionCreateViewModel questionViewModel, HttpPostedFile word)
         {
+            questionViewModel.FileName = Guid.NewGuid().ToString();
             var question = Mapper.Map<Question>(questionViewModel);
             
 

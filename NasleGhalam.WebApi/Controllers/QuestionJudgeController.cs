@@ -45,6 +45,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
         {
             return Ok(_questionJudgeService.Create(questionJudgeViewModel));
+
         }
 
 

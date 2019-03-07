@@ -420,13 +420,13 @@ namespace NasleGhalam.ServiceLayer.Services
                     if (arraytemp[i] == '-')
                     {
                         int j = 0;
-                        while (j < 30 && i < arraytemp.Length)
+                        while (j < 20 && i < arraytemp.Length)
                         {
                             i++;
 
                             j++;
                         }
-                        if (j == 30)
+                        if (j == 20)
                             return true;
                     }
                     return false;

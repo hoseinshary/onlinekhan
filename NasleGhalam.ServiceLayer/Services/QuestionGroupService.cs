@@ -235,6 +235,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
             _questionGroups.Add(questionGroup);
+            _uow.ValidateOnSaveEnabled(false);
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = questionGroup.Id;

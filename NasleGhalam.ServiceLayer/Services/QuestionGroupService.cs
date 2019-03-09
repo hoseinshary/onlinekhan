@@ -180,7 +180,6 @@ namespace NasleGhalam.ServiceLayer.Services
                         newQuestion.AuthorName = dt.Rows[numberOFQ - 1]["نام طراح"].ToString();
                         newQuestion.UserId = questionGroupViewModel.UserId;
                         newQuestion.Description = dt.Rows[numberOFQ - 1]["توضیحات"].ToString();
-                        newQuestion.Context = "";
                         newQuestion.IsActive = false;
                         newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOFQ - 1]["زمان پاسخگویی"]!= DBNull.Value ? dt.Rows[numberOFQ - 1]["زمان پاسخگویی"] : 0);
                         newQuestion.UseEvaluation = false;

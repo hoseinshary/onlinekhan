@@ -1,9 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
-      <q-toolbar :glossy="$q.theme === 'mat'"
-                 text-color="white"
-                 color="amber-10">
+      <q-toolbar class="toolbar-header"
+                 color="">
         <q-btn flat
                dense
                round
@@ -13,60 +12,38 @@
         </q-btn>
 
         <q-toolbar-title>
-          نسل قلم
+          آنلاین خوان
           <div slot="subtitle">سامانه جامع کنکور
           </div>
         </q-toolbar-title>
-        <div class="gt-xs inline">
-          <img src="/assets/img/User.jpg"
-               class="img-circle"
-               style="width: 20px;height: 20px;border-radius: 50%;">
-          {{FullName}}،
-          خوش آمدید
-          <a @click="logout"
-             style="text-decoration: none;color: white;padding-right: 20px;cursor: pointer;">
-            <q-icon name="assignment return" /> خروج </a>
-        </div>
-        <div class="lt-sm inline">
-          <q-btn flat
-                 dense
-                 round
-                 color="primary"
-                 @click="showLogoutMenu = true"
-                 style="color:white !important">
-            <q-icon name="list" />
-          </q-btn>
-          <div>
 
-            <q-popover v-model="showLogoutMenu"
-                       style="border-radius: 5px;">
-              <div style="padding:5px; background: rgb(32, 116, 119);border-radius: 5px;overflow: overlay;">
-                <img src="/assets/img/User.jpg"
-                     class="img-circle"
-                     style="width: 20px;height: 20px;border-radius: 50%;">{{FullName}}،
-                خوش آمدید
-                <a @click="logout"
-                   style="text-decoration: none;color: white;margin-right: 5px; cursor: pointer;">
-                  <q-icon id="exitLtlMenu"
-                          name="assignment return" /> خروج </a>
-              </div>
-            </q-popover>
-          </div>
-        </div>
-
+        <q-btn flat
+               dense
+               class="q-mr-sm">
+          <q-icon name="account_circle" />
+          {{FullName}}
+        </q-btn>
+        <q-btn @click="logout"
+               flat
+               dense>
+          <q-icon name="exit_to_app" />
+          خروج
+        </q-btn>
       </q-toolbar>
     </q-layout-header>
 
     <q-layout-drawer v-model="leftDrawerOpen"
                      :overlay="true"
                      side="left"
-                     :mini="miniState"
+                     :mini="false"
+                     behavior="mobile"
+                     class="layout-drawer"
                      @click.capture="drawerClick">
 
       <q-list no-border
               link
               inset-delimiter>
-
+        <q-list-header>آنلاین خوان</q-list-header>
         <q-collapsible group="sideMenu"
                        v-for="menu in menuList"
                        :key="menu.ModuleId"
@@ -78,7 +55,8 @@
               <!-- <q-item-side icon='map' /> -->
               <!--"item.Icon" />-->
               <q-item-main :label="item.FaName"
-                           sublabel="" />
+                           sublabel=""
+                           color="white" />
             </q-item>
           </router-link>
         </q-collapsible>
@@ -101,8 +79,8 @@
 </template>
 
 <script>
-import { openURL } from 'quasar';
-import util from 'utilities/util';
+import { openURL } from "quasar";
+import util from "utilities/util";
 
 export default {
   data() {
@@ -111,7 +89,7 @@ export default {
       miniState: false,
       menuList: null,
       subMenuList: null,
-      FullName: '',
+      FullName: "",
       showLogoutMenu: false
     };
   },
@@ -134,15 +112,58 @@ export default {
     }
   },
   created: function() {
-    this.FullName = this.$q.localStorage.get.item('FullName');
-    this.menuList = this.$q.localStorage.get.item('menuList');
-    this.subMenuList = this.$q.localStorage.get.item('subMenuList');
+    this.FullName = this.$q.localStorage.get.item("FullName");
+    this.menuList = this.$q.localStorage.get.item("menuList");
+    this.subMenuList = this.$q.localStorage.get.item("subMenuList");
   }
 };
 </script>
 
 <style>
-.q-item.q-item-division.relative-position:hover {
+.toolbar-header {
+  background-color: #34495e;
+}
+
+.layout-drawer aside {
+  width: 220px;
+  background-color: #3d566e;
+  color: white;
+}
+
+.layout-drawer aside .q-list-header {
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  border-bottom: 1px solid gray;
+}
+
+.layout-drawer aside .q-item {
+  border-bottom: 1px solid gray;
+}
+
+.layout-drawer aside .q-item:hover {
+  border-bottom: 2px solid white;
+  background-color: #263544;
+  padding-left: 25px;
+  font-weight: bold;
+  -webkit-transition: all 500ms; /* Safari */
+  transition: all 500ms;
+}
+
+.layout-drawer aside .q-collapsible-sub-item {
+  padding: 0;
+}
+
+.layout-drawer aside .q-collapsible-sub-item a {
+  color: white;
+  text-decoration: none;
+}
+
+.layout-drawer aside .q-collapsible-sub-item .q-item-label {
+  color: white;
+  padding-left: 15px;
+}
+/* .q-item.q-item-division.relative-position:hover {
   background: #719ee6;
 }
 aside a {
@@ -154,13 +175,7 @@ aside a {
 }
 .q-layout-drawer.q-layout-drawer.q-layout-transition.q-layout-drawer-left.scroll.fixed {
   background: #f87352;
-  /* background: #1f4037;  fallback for old browsers */
-  /* background: -webkit-linear-gradient(to right, #99f2c8, #1f4037);  Chrome 10-25, Safari 5.1-6 */
-  /* background: linear-gradient(
-    to top,
-    #136b6fad,
-    #00585c
-  ); W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+ 
 
   width: 220px;
   color: white;
@@ -168,5 +183,5 @@ aside a {
 .q-layout-drawer .q-item-side,
 .q-layout-drawer .q-item-label {
   color: white;
-}
+} */
 </style>

@@ -2,7 +2,7 @@
 
   <q-card :square="true"
           class="my-panel">
-    <q-card-title class="text-center text-bold bg-white header">
+    <q-card-title class="text-center text-bold bg-white header shadow-10">
       <slot name="title"></slot>
     </q-card-title>
     <q-card-separator />

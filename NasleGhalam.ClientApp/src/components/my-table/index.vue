@@ -26,11 +26,11 @@
  </template>-->
 
 <script>
-import util from 'utilities/util';
-import filterKey from './filter-key.vue';
-import perPage from './per-page.vue';
-import pagination from './pagination.vue';
-import tableSummary from './table-summary.vue';
+import util from "utilities/util";
+import filterKey from "./filter-key.vue";
+import perPage from "./per-page.vue";
+import pagination from "./pagination.vue";
+import tableSummary from "./table-summary.vue";
 
 export default {
   components: {
@@ -44,19 +44,27 @@ export default {
     // var $slots = tbl.$slots;
     var $scopedSlots = tbl.$scopedSlots;
 
-    var icon_asc = h('q-icon', {
+    var icon_asc = h("q-icon", {
       props: {
-        name: 'arrow_drop_up',
-        color: 'red',
-        size: '18px'
+        name: "arrow_drop_up",
+        color: "white",
+        size: "18px"
       }
     });
 
-    var icon_desc = h('q-icon', {
+    var icon_desc = h("q-icon", {
       props: {
-        name: 'arrow_drop_down',
-        color: 'red',
-        size: '18px'
+        name: "arrow_drop_down",
+        color: "white",
+        size: "18px"
+      }
+    });
+
+    var icon_unsort = h("q-icon", {
+      props: {
+        name: "swap_vert",
+        color: "white",
+        size: "18px"
       }
     });
 
@@ -66,10 +74,7 @@ export default {
       if (!col.visible) return;
 
       var data = {
-        key: col.data + '_' + index,
-        // class: {
-        //   active: col.sortable && tbl.sortKey == col.data
-        // },
+        key: col.data + "_" + index,
         on: {
           click: function click(evt) {
             evt.stopPropagation();
@@ -87,22 +92,24 @@ export default {
         }
       };
 
-      let slot = $scopedSlots['HEAD_' + col.data];
+      let slot = $scopedSlots["HEAD_" + col.data];
       let child = [];
       if (slot) {
         child.push(slot({ title: col.title, col: col }));
       } else {
-        child.push(h('span', col.title));
+        child.push(h("span", col.title));
       }
 
       if (col.sortable && tbl.sortKey == col.data) {
         child.unshift(tbl.sortOrders[col.data] == 1 ? icon_asc : icon_desc);
+      } else if (col.sortable) {
+        child.unshift(icon_unsort);
       }
-      return h('th', data, child);
+      return h("th", data, child);
     });
 
     // create thead
-    var thead = h('thead', [h('tr', column)]);
+    var thead = h("thead", [h("tr", column)]);
     //--------------------------------------------
 
     //create row data
@@ -110,7 +117,7 @@ export default {
     tbl.filteredData.forEach(function(row, rowIndex) {
       // set index of current row
       if (tbl.hasIndex) {
-        row['_index'] = rowIndex + tbl.rowFrom;
+        row["_index"] = rowIndex + tbl.rowFrom;
       }
 
       let tds = [];
@@ -119,7 +126,7 @@ export default {
           // return if col is hidden
           if (!col.visible) return;
           let colData = {
-            key: 'row_' + rowIndex + '_cell_' + colIndex
+            key: "row_" + rowIndex + "_cell_" + colIndex
           };
 
           let slot = $scopedSlots[col.data];
@@ -134,17 +141,17 @@ export default {
           } else {
             colData.domProps = {
               innerHTML: col.render
-                ? col.render(row[col.data], 'display', row, rowIndex)
+                ? col.render(row[col.data], "display", row, rowIndex)
                 : row[col.data]
             };
           }
 
-          return h('td', colData, slot);
+          return h("td", colData, slot);
         })
       );
       //---------------------
       let rowData = {
-        key: 'row_' + rowIndex,
+        key: "row_" + rowIndex,
         class: {
           selected: row._rowSelected
         },
@@ -155,33 +162,33 @@ export default {
         }
       };
 
-      rows.push(h('tr', rowData, tds));
+      rows.push(h("tr", rowData, tds));
     });
 
-    var tbody = h('tbody', rows);
+    var tbody = h("tbody", rows);
 
     var table = h(
-      'table',
+      "table",
       {
         class: {
-          'my-table': true
+          "my-table": true
         }
       },
       [thead, tbody]
     );
 
     var tableContainerRender = h(
-      'div',
+      "div",
       {
         attrs: {
-          class: 'col-12'
+          class: "col-12"
         }
       },
       [table]
     );
 
     //  filter key
-    let searchKeyContainerRender = h('filter-key', {
+    let searchKeyContainerRender = h("filter-key", {
       props: {
         filterKey: tbl.filterKey
       },
@@ -194,7 +201,7 @@ export default {
     //  filter key------------------------------------------------------------------
 
     // per page
-    let perPageContainerRender = h('per-page', {
+    let perPageContainerRender = h("per-page", {
       props: {
         options: tbl.pageOptions,
         perPage: tbl.perPage
@@ -208,7 +215,7 @@ export default {
     //  per page------------------------------------------------------------------
 
     // pagination
-    let paginationContainerRender = h('pagination', {
+    let paginationContainerRender = h("pagination", {
       props: {
         totalRows: tbl.filterRows,
         perPage: tbl.perPage,
@@ -226,7 +233,7 @@ export default {
     // pagination------------------------------------------------------------------
 
     // summary
-    let summaryContainerRender = h('table-summary', {
+    let summaryContainerRender = h("table-summary", {
       props: {
         totalRows: tbl.gridData.length,
         filterRows: tbl.filterRows,
@@ -237,10 +244,10 @@ export default {
     // summary------------------------------------------------------------------
 
     return h(
-      'div',
+      "div",
       {
         attrs: {
-          class: 'row col-xs-12'
+          class: "row col-xs-12"
         }
       },
       [
@@ -265,7 +272,7 @@ export default {
     cssClass: {
       type: String,
       required: false,
-      default: ''
+      default: ""
     },
     hasIndex: {
       type: Boolean,
@@ -284,35 +291,35 @@ export default {
     let gridDataRows = this.gridData.length;
     let pageOptions = [
       {
-        label: '10',
+        label: "10",
         value: 10
       },
       {
-        label: '25',
+        label: "25",
         value: 25
       },
       {
-        label: '50',
+        label: "50",
         value: 50
       },
       {
-        label: '100',
+        label: "100",
         value: 100
       },
       {
-        label: 'همه',
-        value: 'همه'
+        label: "همه",
+        value: "همه"
       }
     ]; //[10, 25, 50, 100, 'همه'];
 
     return {
-      filterKey: '',
+      filterKey: "",
       currentPage: 1,
       perPage: pageOptions[0].value,
       pageOptions: pageOptions,
       // totalRows: gridDataRows,
       filterRows: gridDataRows,
-      sortKey: '',
+      sortKey: "",
       sortOrders: sortOrders,
       rowClickCount: 0
     };
@@ -330,12 +337,12 @@ export default {
       var gridData = this.gridData;
       this.rowClickCount;
 
-      let renderType = '';
+      let renderType = "";
       // set renderType
       if (sortKey || filterKey) {
-        renderType = 'sortOrSearch';
+        renderType = "sortOrSearch";
       } else {
-        renderType = 'display';
+        renderType = "display";
       }
 
       if (filterKey) {
@@ -382,7 +389,7 @@ export default {
       this.filterRows = gridData.length;
 
       // set perPage to total
-      if (this.perPage == 'همه') {
+      if (this.perPage == "همه") {
         this.perPage = this.gridData.length;
       }
 
@@ -453,19 +460,19 @@ export default {
             key: i
           };
         } else {
-          throw 'columns must be array of string or object';
+          throw "columns must be array of string or object";
         }
       }
 
       if (
         this.hasIndex &&
         !this.columns.some(val => {
-          return val.data == '_index';
+          return val.data == "_index";
         })
       ) {
         this.columns.unshift({
-          title: 'ردیف',
-          data: '_index',
+          title: "ردیف",
+          data: "_index",
           searchable: false,
           sortable: false,
           visible: true,
@@ -509,19 +516,30 @@ export default {
   width: 100% !important;
 }
 
-.my-table tr td {
-  vertical-align: middle;
-  text-align: center;
-  border: 1px solid rgb(230, 230, 230);
-  height: 30px;
+.my-table tr {
+  white-space: nowrap;
 }
 
-.my-table th {
-  background-color: #e6e6e6;
+.my-table tr th {
+  background-color: #006b7b;
+  color: white;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  height: 35px;
+  padding: 1px;
+}
+
+.my-table tr td {
   color: #524f4f;
   vertical-align: middle;
   text-align: center;
-  font-size: 13px;
+  border: 1px solid rgb(230, 230, 230);
+  height: 25px;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 1px;
 }
 
 .my-table tr:nth-child(2n + 2) {

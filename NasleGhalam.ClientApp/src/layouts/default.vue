@@ -12,7 +12,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          آنلاین خوان
+          {{siteName}}
           <div slot="subtitle">سامانه جامع کنکور
           </div>
         </q-toolbar-title>
@@ -21,7 +21,7 @@
                dense
                class="q-mr-sm">
           <q-icon name="account_circle" />
-          {{FullName}}
+          {{fullName}}
         </q-btn>
         <q-btn @click="logout"
                flat
@@ -43,7 +43,7 @@
       <q-list no-border
               link
               inset-delimiter>
-        <q-list-header>آنلاین خوان</q-list-header>
+        <q-list-header>{{siteName}}</q-list-header>
         <q-collapsible group="sideMenu"
                        v-for="menu in menuList"
                        :key="menu.ModuleId"
@@ -79,31 +79,23 @@
 </template>
 
 <script>
-import { openURL } from "quasar";
 import util from "utilities/util";
 
 export default {
   data() {
     return {
-      leftDrawerOpen: true, //this.$q.platform.is.desktop,
+      siteName: "آنلاین خوان",
+      leftDrawerOpen: true,
       miniState: false,
       menuList: null,
       subMenuList: null,
-      FullName: "",
-      showLogoutMenu: false
+      fullName: ""
     };
   },
   methods: {
-    openURL,
     drawerClick(e) {
-      // if in "mini" state and user
-      // click on drawer, we switch it to "normal" mode
       if (this.miniState) {
         this.miniState = false;
-
-        // notice we have registered an event with capture flag;
-        // we need to stop further propagation as this click is
-        // intended for switching drawer to "normal" mode only
         e.stopPropagation();
       }
     },
@@ -112,7 +104,7 @@ export default {
     }
   },
   created: function() {
-    this.FullName = this.$q.localStorage.get.item("FullName");
+    this.fullName = this.$q.localStorage.get.item("FullName");
     this.menuList = this.$q.localStorage.get.item("menuList");
     this.subMenuList = this.$q.localStorage.get.item("subMenuList");
   }
@@ -163,25 +155,4 @@ export default {
   color: white;
   padding-left: 15px;
 }
-/* .q-item.q-item-division.relative-position:hover {
-  background: #719ee6;
-}
-aside a {
-  text-decoration: none;
-}
-.q-collapsible-sub-item.relative-position {
-  padding: 5px;
-  overflow-x: hidden;
-}
-.q-layout-drawer.q-layout-drawer.q-layout-transition.q-layout-drawer-left.scroll.fixed {
-  background: #f87352;
- 
-
-  width: 220px;
-  color: white;
-}
-.q-layout-drawer .q-item-side,
-.q-layout-drawer .q-item-label {
-  color: white;
-} */
 </style>

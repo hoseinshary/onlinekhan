@@ -1,8 +1,8 @@
 {
-  "name": "nasleghalam",
+  "name": "onlinekhan.ir",
   "version": "1.0.0",
   "description": "A Quasar Framework app",
-  "productName": "nasleghalam",
+  "productName": "آنلاین خوان",
   "cordovaId": "org.cordova.quasar.app",
   "author": "alireza <alireza123>",
   "private": true,

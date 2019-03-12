@@ -45,7 +45,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'text'
+      default: "text"
     },
     helper: String,
     readonly: Boolean,
@@ -109,15 +109,15 @@ export default {
      */
     errorLabel() {
       if (!this.model.$dirty) {
-        return '';
+        return "";
       }
 
       if (this.isOnlyPersianChar) {
-        return 'فقط از حروف فارسی استفاده شود';
+        return "فقط از حروف فارسی استفاده شود";
       } else if (this.isNotPersianChar) {
-        return 'کیبورد را انگلیسی نمایید';
+        return "کیبورد را انگلیسی نمایید";
       } else if (this.isNumeric) {
-        return 'فقط عدد وارد شود';
+        return "فقط عدد وارد شود";
       } else if (this.model.required !== undefined && !this.model.required) {
         return `(${this.displayName}) خالی میباشد`;
       } else if (this.model.minLength !== undefined && !this.model.minLength) {
@@ -129,10 +129,10 @@ export default {
           this.maxLen
         }) می باشد`;
       }
-      return '';
+      return "";
     },
     keydown(e) {
-      this.$emit('keydown', e);
+      this.$emit("keydown", e);
 
       if (this.isOnlyPersianChar || this.isNotPersianChar || this.isNumeric) {
         if (
@@ -165,7 +165,7 @@ export default {
       if (this.model && this.model.$params && this.model.$params.displayName) {
         return this.model.$params.displayName.value;
       }
-      return '';
+      return "";
     },
     /**
      * get min value of model

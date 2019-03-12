@@ -63,6 +63,8 @@ namespace NasleGhalam.DomainClasses.Entities
         public bool IsExercise { get; set; }
 
         public bool IsLearning { get; set; }
+        public bool IsDelete { get; set; }
+        public bool IsUpdate { get; set; }
 
         public int AnswerNumber { get; set; }
 

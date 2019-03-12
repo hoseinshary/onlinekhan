@@ -31,7 +31,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .WillCascadeOnDelete(false);
 
             HasRequired(x => x.Lookup_RepeatnessType)
-                .WithMany(x => x.Question_ReapetnessTypes)
+                .WithMany(x => x.Question_RepeatnessTypes)
                 .HasForeignKey(x => x.LookupId_RepeatnessType)
                 .WillCascadeOnDelete(false);
 

@@ -16,8 +16,6 @@ namespace NasleGhalam.ViewModels.QuestionJudge
         public int LookupId_RepeatnessType { get; set; }
 
 
-        [Display(Name = "")]
-        public byte Repeatness { get; set; }
 
 
         [Display(Name = "")]

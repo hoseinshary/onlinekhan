@@ -19,6 +19,17 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .WithMany(x => x.QuestionJudges)
                 .HasForeignKey(x => x.UserId)
                 .WillCascadeOnDelete(false);
+
+
+            HasRequired(x => x.Lookup_QuestionHardnessType)
+                .WithMany(x => x.QuestionJudge_QuestionHardnessTypes)
+                .HasForeignKey(x => x.LookupId_QuestionHardnessType)
+                .WillCascadeOnDelete(false);
+
+            HasRequired(x => x.Lookup_RepeatnessType)
+                .WithMany(x => x.QuestionJudge_RepeatnessTypes)
+                .HasForeignKey(x => x.LookupId_RepeatnessType)
+                .WillCascadeOnDelete(false);
         }
     }
 }

@@ -13,7 +13,6 @@
         public int LookupId_RepeatnessType { get; set; }
         public Lookup Lookup_RepeatnessType { get; set; }
 
-        public byte Repeatness { get; set; }
 
         public bool IsStandard { get; set; }
 

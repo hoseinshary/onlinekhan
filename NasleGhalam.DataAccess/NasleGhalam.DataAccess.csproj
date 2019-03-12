@@ -57,6 +57,18 @@
     <Compile Include="Migrations\201903021600161_questionjudgeFix.Designer.cs">
       <DependentUpon>201903021600161_questionjudgeFix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903120759434_fixQuestionJudge.cs" />
+    <Compile Include="Migrations\201903120759434_fixQuestionJudge.Designer.cs">
+      <DependentUpon>201903120759434_fixQuestionJudge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903120824406_fixQuestion.cs" />
+    <Compile Include="Migrations\201903120824406_fixQuestion.Designer.cs">
+      <DependentUpon>201903120824406_fixQuestion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903120929533_fixQuestionjudgeRel.cs" />
+    <Compile Include="Migrations\201903120929533_fixQuestionjudgeRel.Designer.cs">
+      <DependentUpon>201903120929533_fixQuestionjudgeRel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -80,6 +92,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903021600161_questionjudgeFix.resx">
       <DependentUpon>201903021600161_questionjudgeFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903120759434_fixQuestionJudge.resx">
+      <DependentUpon>201903120759434_fixQuestionJudge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903120824406_fixQuestion.resx">
+      <DependentUpon>201903120824406_fixQuestion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903120929533_fixQuestionjudgeRel.resx">
+      <DependentUpon>201903120929533_fixQuestionjudgeRel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

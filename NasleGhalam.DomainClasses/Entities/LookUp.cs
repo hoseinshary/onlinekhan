@@ -15,9 +15,12 @@ namespace NasleGhalam.DomainClasses.Entities
 
             Question_QuestionHardnessTypes = new HashSet<Question>();
             Question_QuestionTypes = new HashSet<Question>();
-            Question_ReapetnessTypes = new HashSet<Question>();
+            Question_RepeatnessTypes = new HashSet<Question>();
             Question_AreaTypes = new HashSet<Question>();
             Question_AuthorTypes = new HashSet<Question>();
+
+            QuestionJudge_QuestionHardnessTypes = new HashSet<QuestionJudge>();
+            QuestionJudge_QuestionHardnessTypes = new HashSet<QuestionJudge>();
 
             Topic_AreaTypes = new HashSet<Topic>();
             Topic_Hardnesses = new HashSet<Topic>();
@@ -44,10 +47,12 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<Question> Question_QuestionTypes { get; set; }
 
         public ICollection<Question> Question_QuestionHardnessTypes { get; set; }
-
-        public ICollection<Question> Question_ReapetnessTypes { get; set; }
+        public ICollection<Question> Question_RepeatnessTypes { get; set; }
         public ICollection<Question> Question_AreaTypes { get; set; }
         public ICollection<Question> Question_AuthorTypes { get; set; }
+
+        public ICollection<QuestionJudge> QuestionJudge_QuestionHardnessTypes { get; set; }
+        public ICollection<QuestionJudge> QuestionJudge_RepeatnessTypes { get; set; }
 
         public ICollection<Topic> Topic_Hardnesses { get; set; }
 

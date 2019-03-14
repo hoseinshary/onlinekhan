@@ -12,7 +12,6 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ServiceLayer.Util;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -36,8 +35,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <returns></returns>
         public QuestionViewModel GetById(int id)
-        {
-           
+        {         
             return _questions
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
@@ -60,14 +58,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
         /// <summary>
         /// گرفتن همه سوال های مباحث
         /// </summary>
         /// <returns></returns>
         public IList<QuestionViewModel> GetAllByTopicIds(IEnumerable<int> ids)
-        {
-           
+        {       
             return _questions
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                 .AsNoTracking()
@@ -93,7 +89,6 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<QuestionViewModel> GetAllByQuestionGroupId(int id)
         {
-
             return _questions
                 .Where(current => current.QuestionGroups.Any(x => x.Id == id))
                 .AsNoTracking()
@@ -107,34 +102,30 @@ namespace NasleGhalam.ServiceLayer.Services
         /// ثبت سوال
         /// </summary>
         /// <param name="questionViewModel"></param>
+        /// <param name="word"></param>
         /// <returns></returns>
         public MessageResultClient Create(QuestionCreateViewModel questionViewModel, HttpPostedFile word)
         {
-            
             var question = Mapper.Map<Question>(questionViewModel);
             
-
             //save Doc and excel file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx");
 
             // Open a doc file.
-            Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
+            var app = new Application();
             var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx"; 
-            Document doc = app.Documents.Open(wordFilename);
+            var doc = app.Documents.Open(wordFilename);
 
-            foreach (Paragraph VARIABLE in doc.Paragraphs)
+            foreach (Paragraph paragraph in doc.Paragraphs)
             {
-                question.Context += VARIABLE.Range.Text;
+                question.Context += paragraph.Range.Text;
             }
-
 
             //تبدیل به عکس
             var pane = doc.Windows[1].Panes[1];
             var page = pane.Pages[1];
             var bits = page.EnhMetaFileBits;
             var target = SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png";
-
-            
 
             doc.Close();
             app.Quit();
@@ -164,22 +155,19 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.QuestionOptions.Add(newOption);
             }
 
-
-
             _questions.Add(question);
             _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-
                 //crop and resize
                 try
                 {
-                    using (var ms = new MemoryStream((byte[])(bits)))
+                    using (var ms = new MemoryStream((byte[]) (bits)))
                     {
-                        var image = System.Drawing.Image.FromStream(ms);
-                        var pngTarget = target;//Path.ChangeExtension(target , "png");
+                        var image = Image.FromStream(ms);
+                        var pngTarget = target; //Path.ChangeExtension(target , "png");
                         image.Save(pngTarget + "1.png", ImageFormat.Png);
                         image = new Bitmap(pngTarget + "1.png");
 
@@ -192,20 +180,22 @@ namespace NasleGhalam.ServiceLayer.Services
                         File.Delete(pngTarget + "1.png");
                     }
                 }
-                catch (System.Exception ex)
-                { }
+                catch (Exception ex)
+                {
+                    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                }
 
                 File.Delete(wordFilename);
 
             }
             msgRes.Id = question.Id;
-            var resutlVal = Mapper.Map<MessageResultClient>(msgRes);
-            resutlVal.Obj = new
+            var resultVal = Mapper.Map<MessageResultClient>(msgRes);
+            resultVal.Obj = new
             {
                 question.Context,
                 question.FileName
             };
-            return resutlVal;
+            return resultVal;
         }
 
 
@@ -216,7 +206,6 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Update(QuestionUpdateViewModel questionViewModel)
         {
-
             var question = _questions
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
@@ -238,12 +227,6 @@ namespace NasleGhalam.ServiceLayer.Services
             question.ResponseSecond = questionViewModel.ResponseSecond;
             question.UseEvaluation = questionViewModel.UseEvaluation;
             
-
-
-
-
-
-
             //delete topics
             var deleteTopicList = question.Topics
                 .Where(oldTopic => questionViewModel.TopicsId.All(newTopicId => newTopicId != oldTopic.Id))
@@ -264,8 +247,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Topics.Add(topic);
             }
 
-
-
             //delete tag
             var deleteTagList = question.Tags
                 .Where(oldTag => questionViewModel.TagsId.All(newTagId => newTagId != oldTag.Id))
@@ -285,13 +266,9 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.MarkAsUnChanged(tag);
                 question.Tags.Add(tag);
             }
-
-            
-
             
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
-            
         }
 
 
@@ -328,14 +305,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Tags.Remove(item);
             }
 
-
             //remove options
             var options = question.QuestionOptions.ToList();
             foreach (var item in options)
             {
                 _uow.MarkAsDeleted(item);
             }
-
 
             _uow.MarkAsDeleted(question);
 
@@ -348,8 +323,5 @@ namespace NasleGhalam.ServiceLayer.Services
 
             return Mapper.Map<MessageResultClient>(msgRes);
         }
-
-
-
     }
 }

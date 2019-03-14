@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 
 namespace NasleGhalam.ServiceLayer.Util
 {
@@ -11,19 +12,25 @@ namespace NasleGhalam.ServiceLayer.Util
         //-------------------------------------------------------------------------------------
 
 
-        public static string GetAxillaryBookAbsPath(string name) => ToAbsoulutPath($"{AxillaryBookRelPath}{name}");
+        public static string GetAxillaryBookAbsPath(string name) => ToAbsolutePath($"{AxillaryBookRelPath}{name}");
         //-------------------------------------------------------------------------------------
 
 
-        public static string GetQuestionAbsPath(string name) => ToAbsoulutPath($"{QuestionRelPath}{name}");
+        public static string GetQuestionAbsPath(string name) => ToAbsolutePath($"{QuestionRelPath}{name}");
 
 
-        public static string GetQuestionGroupAbsPath(string name) => ToAbsoulutPath($"{QuestionGroupRelPath}{name}");
-        public static string GetQuestionGroupTempAbsPath(string name) => ToAbsoulutPath($"{QuestionGroupTempRelPath}{name}");
+        public static string GetQuestionGroupAbsPath(string name) => ToAbsolutePath($"{QuestionGroupRelPath}{name}");
+        public static string GetQuestionGroupTempAbsPath(string name) => ToAbsolutePath($"{QuestionGroupTempRelPath}{name}");
 
-        public static string ToAbsoulutPath(this string relativePath)
+        public static string ToAbsolutePath(this string relativePath)
         {
             return HttpContext.Current.Server.MapPath(relativePath);
+        }
+
+        public static string ToFullRelativePath(this string relativePath)
+        {
+            var baseUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+            return $"{baseUrl}{relativePath}";
         }
     }
 }

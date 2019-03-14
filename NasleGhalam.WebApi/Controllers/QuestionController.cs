@@ -144,11 +144,11 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update([FromUri]QuestionUpdateViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
-            bool updateFile = false;
-            var fileNamePrevous = "";
+            var updateFile = false;
+            var fileNamePrevious = "";
             if (wordFile != null && wordFile.ContentLength > 0)
             {
-                fileNamePrevous = questionViewModel.FileName;
+                fileNamePrevious = questionViewModel.FileName;
                 questionViewModel.FileName = $"{Guid.NewGuid()}";
                 updateFile = true;
             }
@@ -157,9 +157,9 @@ namespace NasleGhalam.WebApi.Controllers
 
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && updateFile)
             {
-                if (File.Exists(SitePath.GetQuestionAbsPath(fileNamePrevous) + Path.GetExtension(wordFile.FileName)))
+                if (File.Exists(SitePath.GetQuestionAbsPath(fileNamePrevious) + Path.GetExtension(wordFile.FileName)))
                 {
-                    File.Delete(SitePath.GetQuestionAbsPath(fileNamePrevous) + Path.GetExtension(wordFile.FileName));
+                    File.Delete(SitePath.GetQuestionAbsPath(fileNamePrevious) + Path.GetExtension(wordFile.FileName));
                 }
                 wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + Path.GetExtension(wordFile.FileName));
             }
@@ -170,10 +170,8 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.QuestionDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var question = _questionService.GetById(id);
-            var msgResualt = _questionService.Delete(id);
-
-            return Ok(msgResualt);
+            var msgResult = _questionService.Delete(id);
+            return Ok(msgResult);
         }
     }
 }

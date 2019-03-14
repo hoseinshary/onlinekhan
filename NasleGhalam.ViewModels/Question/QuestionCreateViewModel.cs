@@ -9,10 +9,9 @@ namespace NasleGhalam.ViewModels.Question
 {
     public class QuestionCreateViewModel : IMultiPartMediaTypeFormatter
     {
-        private string _fileName;
-
         public QuestionCreateViewModel()
         {
+            FileName = Guid.NewGuid().ToString();
             InsertDateTime = DateTime.Now;
         }
 
@@ -62,14 +61,10 @@ namespace NasleGhalam.ViewModels.Question
         public string Description { get; set; }
 
         [Display(Name = "نام فایل")]
-        public string FileName
-        {
-            get => _fileName;
-            set => _fileName = string.IsNullOrEmpty(value) ? Guid.NewGuid().ToString(): value;
-        }
+        public string FileName { get; }
 
         [Display(Name = "تاریخ ورود داده")]
-        public DateTime InsertDateTime { get; set; }
+        public DateTime InsertDateTime { get; }
 
         [Display(Name = "کاربر")]
         public int UserId { get; set; }

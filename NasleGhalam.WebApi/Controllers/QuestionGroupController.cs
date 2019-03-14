@@ -62,7 +62,7 @@ namespace NasleGhalam.WebApi.Controllers
                 Content = new ByteArrayContent(stream.ToArray())
             };
             result.Content.Headers.ContentDisposition =
-                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                new ContentDispositionHeaderValue("attachment")
                 {
                     FileName = id
                 };
@@ -80,21 +80,21 @@ namespace NasleGhalam.WebApi.Controllers
             id += ".docx";
 
             var stream = new MemoryStream();
-            var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
-            filestraem.CopyTo(stream);
+            var fileStream = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
+            fileStream.CopyTo(stream);
 
             var result = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new ByteArrayContent(stream.ToArray())
             };
             result.Content.Headers.ContentDisposition =
-                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                new ContentDispositionHeaderValue("attachment")
                 {
                     FileName = id
                 };
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue("application/octet-stream");
-            filestraem.Dispose();
+            fileStream.Dispose();
             stream.Dispose();
             return result;
         }
@@ -107,11 +107,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult PreCreate([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
-            
-
             questionGroupViewModel.File = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
-        
-
             questionGroupViewModel.UserId = Request.GetUserId();
             var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile );
 
@@ -133,7 +129,6 @@ namespace NasleGhalam.WebApi.Controllers
             {
                 questionGroupViewModel.File = $"{Guid.NewGuid()}";
             }
-
 
             questionGroupViewModel.UserId = Request.GetUserId();
             var msgRes = _questionGroupService.Create(questionGroupViewModel, wordFile, excelFile);

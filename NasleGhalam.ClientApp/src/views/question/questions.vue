@@ -18,7 +18,7 @@
             v-bind:key="question.Id"
             class="col-12">
       <q-card-media>
-        <img :src="`${questionPicturePath}/${question.FileName}`">
+        <img :src="question.QuestionPicturePath">
       </q-card-media>
     </q-card>
 
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   /**
@@ -45,8 +45,7 @@ export default {
     ...mapState("questionStore", {
       questionByQuestionGroupIdData: "questionByQuestionGroupIdData",
       isOpenModalQuestions: "isOpenModalQuestions"
-    }),
-    ...mapGetters("questionStore", ["questionPicturePath"])
+    })
   }
 };
 </script>

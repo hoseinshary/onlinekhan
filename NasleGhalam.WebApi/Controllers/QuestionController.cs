@@ -49,7 +49,6 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAllByLessonId(int id)
         {
@@ -119,7 +118,6 @@ namespace NasleGhalam.WebApi.Controllers
             stream.Dispose();
             return result;
         }
-
 
 
         [HttpPost]

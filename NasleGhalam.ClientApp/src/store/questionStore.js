@@ -38,6 +38,8 @@ const store = {
       LookupId_RepeatnessType: 0,
       LookupId_AuthorType: 0,
       LookupId_AreaType: 0,
+      QuestionWordPath: '',
+      QuestionPicturePath: '',
       TopicsId: [],
       EducationTreeIds: [],
       TagsId: []
@@ -438,12 +440,6 @@ const store = {
   getters: {
     recordName(state) {
       return state.questionObj.Context;
-    },
-    questionPicturePath() {
-      return `${apiUrl}${baseUrl}/GetPictureFile`;
-    },
-    questionWordPath() {
-      return `${apiUrl}${baseUrl}/GetWordFile`;
     }
   }
 };

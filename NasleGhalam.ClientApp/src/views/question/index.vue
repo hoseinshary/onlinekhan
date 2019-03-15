@@ -204,6 +204,7 @@ export default {
       this.$util.clearArray(this.questionIndexObj.TickedEducationTreeIds);
       this.$util.clearArray(this.questionIndexObj.TickedTopicsIds);
       this.questionIndexObj.LessonId = 0;
+      
       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
         self.educationTreeData = [treeData];
         setTimeout(() => {

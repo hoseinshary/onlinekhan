@@ -18,5 +18,9 @@ namespace NasleGhalam.ViewModels.QuestionGroup
         public int LessonId { get; set; }
 
         public int UserId { get; set; }
+
+        public string QuestionGroupWordPath => $"/Api/QuestionGroup/GetWordFile/{File}".ToFullRelativePath();
+
+        public string QuestionGroupExcelPath => $"/Api/QuestionGroup/GetExcelFile/{File}".ToFullRelativePath();
     }
 }

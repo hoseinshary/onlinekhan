@@ -11,7 +11,6 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.QuestionGroup;
-using NasleGhalam.ServiceLayer.Util;
 using System.Drawing.Imaging;
 using Microsoft.Office.Interop.Excel;
 

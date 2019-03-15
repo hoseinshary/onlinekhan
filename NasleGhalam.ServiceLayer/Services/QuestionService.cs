@@ -11,7 +11,6 @@ using Microsoft.Office.Interop.Word;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ServiceLayer.Util;
 using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.ServiceLayer.Services

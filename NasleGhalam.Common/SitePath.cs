@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace NasleGhalam.ServiceLayer.Util
+namespace NasleGhalam.Common
 {
     public static class SitePath
     {

@@ -6,8 +6,6 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.AxillaryBook;
-using NasleGhalam.WebApi.Util;
-
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -65,8 +63,6 @@ namespace NasleGhalam.WebApi.Controllers
             }
 
             return Ok(msgRes);
-
-
         }
 
 

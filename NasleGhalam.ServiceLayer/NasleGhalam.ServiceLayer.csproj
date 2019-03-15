@@ -115,7 +115,6 @@
     <Compile Include="Services\TagService.cs" />
     <Compile Include="Services\TopicService.cs" />
     <Compile Include="Services\UserService.cs" />
-    <Compile Include="Util\SitePath.cs" />
     <Content Include="%40CodeTemplates\ServiceLayerGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

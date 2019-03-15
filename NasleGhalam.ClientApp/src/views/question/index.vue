@@ -8,10 +8,12 @@
           <div class="col-12">
             <section class="q-ma-sm q-pa-sm shadow-1">
               <q-checkbox v-model="showNoJudgement"
-                          label="نمایش سوال های بدون ارزیابی" />
+                          label="نمایش سوال های بدون ارزیابی"
+                          @input="fillGrid()" />
               <br>
               <q-checkbox v-model="showWithoutTopic"
-                          label="نمایش سوال های بدون مبحث" />
+                          label="نمایش سوال های بدون مبحث"
+                          @input="fillGrid()" />
             </section>
           </div>
           <div class="col-sm-5 ">
@@ -204,7 +206,7 @@ export default {
       this.$util.clearArray(this.questionIndexObj.TickedEducationTreeIds);
       this.$util.clearArray(this.questionIndexObj.TickedTopicsIds);
       this.questionIndexObj.LessonId = 0;
-      
+
       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
         self.educationTreeData = [treeData];
         setTimeout(() => {
@@ -213,15 +215,20 @@ export default {
       });
     },
     lessonDdlChange(val) {
+      this.questionIndexObj.LessonId = val;
       this.questionIndexObj.TickedTopicsIds = [];
+      this.fillTopicTreeStore(val);
       if (this.showWithoutTopic) {
-        this.fillGridStore({
-          showWithoutTopic: this.showWithoutTopic,
-          lessonId: val
-        });
-      } else {
-        this.fillTopicTreeStore(val);
+        this.fillGrid();
       }
+    },
+    fillGrid() {
+      this.fillGridStore({
+        lessonId: this.questionIndexObj.LessonId,
+        topicsIds: this.questionIndexObj.TickedTopicsIds,
+        showNoJudgement: this.showNoJudgement,
+        showWithoutTopic: this.showWithoutTopic
+      });
     }
   },
   computed: {
@@ -250,10 +257,7 @@ export default {
     },
     "questionIndexObj.TickedTopicsIds"(newVal, oldVal) {
       if (this.questionIndexObj.TickedTopicsIds.length > 0) {
-        this.fillGridStore({
-          topicsIds: this.questionIndexObj.TickedTopicsIds,
-          showNoJudgement: this.showNoJudgement
-        });
+        this.fillGrid();
       } else {
         this.$util.clearArray(this.questionGridData);
       }

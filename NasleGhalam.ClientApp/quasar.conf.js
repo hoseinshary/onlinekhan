@@ -60,7 +60,8 @@ module.exports = function (ctx) {
           viewModels: path.resolve(__dirname, './src/viewModels/'),
           plugins: path.resolve(__dirname, './src/plugins/'),
           store: path.resolve(__dirname, './src/store/'),
-          router: path.resolve(__dirname, './src/router/')
+          router: path.resolve(__dirname, './src/router/'),
+          models: path.resolve(__dirname, './src/models/')
         };
         cfg.resolve.extensions.push('.ts');
       }

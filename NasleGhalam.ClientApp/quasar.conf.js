@@ -2,7 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = function(ctx) {
+module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: ['i18n', 'vuelidate', 'main'],
@@ -41,6 +41,15 @@ module.exports = function(ctx) {
           loader: 'file-loader'
         });
 
+        rules.push({
+          test: /\.ts$/,
+          exclude: /node_modules|vue\/src/,
+          loader: 'ts-loader',
+          options: {
+            appendTsSuffixTo: [/\.vue$/]
+          }
+        });
+
         cfg.resolve.alias = {
           ...cfg.resolve.alias,
           assets: path.resolve(__dirname, './src/assets/'),
@@ -53,6 +62,7 @@ module.exports = function(ctx) {
           store: path.resolve(__dirname, './src/store/'),
           router: path.resolve(__dirname, './src/router/')
         };
+        cfg.resolve.extensions.push('.ts');
       }
     },
     devServer: {

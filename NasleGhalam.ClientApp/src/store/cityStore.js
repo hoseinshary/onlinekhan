@@ -178,8 +178,7 @@ const store = {
             dispatch('toggleModalCreateStore', !closeModal);
           }
 
-          dispatch(
-            'notify',
+          dispatch('notify',
             {
               body: data.Message,
               type: data.MessageType,

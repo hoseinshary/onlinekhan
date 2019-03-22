@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import { vxm } from "../../store";
 import BaseButton from "./BaseButton.vue";
 @Component({
   components: {
@@ -31,6 +32,10 @@ export default class HelloDecorator extends Vue {
   }
   get exclamationMarks(): string {
     return Array(this.enthusiasm + 1).join("!");
+  }
+
+  get modelName() {
+    return vxm.city.modelName;
   }
 }
 </script>

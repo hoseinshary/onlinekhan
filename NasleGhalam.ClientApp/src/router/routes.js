@@ -7,9 +7,13 @@ export default [
     path: '/',
     component: () => import('layouts/default'),
     children: [
+      // {
+      //   path: '',
+      //   component: () => import('views/test/HelloDecorator')
+      // },
       {
         path: '',
-        component: () => import('views/grade')
+        component: () => import('views/city')
       },
       {
         path: '/grade',

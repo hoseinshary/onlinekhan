@@ -1,79 +1,70 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
-      <q-toolbar class="toolbar-header"
-                 color="">
-        <q-btn flat
-               dense
-               round
-               @click="leftDrawerOpen = !leftDrawerOpen"
-               aria-label="Menu">
-          <q-icon name="menu" />
+      <q-toolbar class="toolbar-header" color>
+        <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
+          <q-icon name="menu"/>
         </q-btn>
 
         <q-toolbar-title>
           {{siteName}}
-          <div slot="subtitle">سامانه جامع کنکور
-          </div>
+          <div slot="subtitle">سامانه جامع کنکور</div>
         </q-toolbar-title>
 
-        <q-btn flat
-               dense
-               class="q-mr-sm">
-          <q-icon name="account_circle" />
+        <q-btn flat dense class="q-mr-sm">
+          <q-icon name="account_circle"/>
           {{fullName}}
         </q-btn>
-        <q-btn @click="logout"
-               flat
-               dense>
-          <q-icon name="exit_to_app" />
-          خروج
+        <q-btn @click="logout" flat dense>
+          <q-icon name="exit_to_app"/>خروج
         </q-btn>
       </q-toolbar>
     </q-layout-header>
 
-    <q-layout-drawer v-model="leftDrawerOpen"
-                     :overlay="true"
-                     side="left"
-                     :mini="false"
-                     behavior="mobile"
-                     class="layout-drawer"
-                     @click.capture="drawerClick">
-
-      <q-list no-border
-              link
-              inset-delimiter>
+    <q-layout-drawer
+      v-model="leftDrawerOpen"
+      :overlay="true"
+      side="left"
+      :mini="false"
+      behavior="mobile"
+      class="layout-drawer"
+      @click.capture="drawerClick"
+    >
+      <q-list no-border link inset-delimiter>
         <q-list-header>{{siteName}}</q-list-header>
-        <q-collapsible group="sideMenu"
-                       v-for="menu in menuList"
-                       :key="menu.ModuleId"
-                       :label="menu.ModuleName">
-          <router-link v-for="item in subMenuList.filter(x=>x.ModuleId == menu.ModuleId)"
-                       :key="item.EnName"
-                       :to="item.EnName">
+        <q-collapsible
+          group="sideMenu"
+          v-for="menu in menuList"
+          :key="menu.ModuleId"
+          :label="menu.ModuleName"
+        >
+          <router-link
+            v-for="item in subMenuList.filter(x=>x.ModuleId == menu.ModuleId)"
+            :key="item.EnName"
+            :to="item.EnName"
+          >
             <q-item>
               <!-- <q-item-side icon='map' /> -->
               <!--"item.Icon" />-->
-              <q-item-main :label="item.FaName"
-                           sublabel=""
-                           color="white" />
+              <q-item-main :label="item.FaName" sublabel color="white"/>
             </q-item>
           </router-link>
         </q-collapsible>
       </q-list>
     </q-layout-drawer>
 
-    <q-page-container class="">
+    <q-page-container class>
       <br>
       <div class="row justify-center q-mt-lg">
-        <transition name="transitions"
-                    enter-active-class="animated bounceInDown"
-                    leave-active-class="animated bounceOutUp"
-                    mode="out-in">
-          <router-view />
+        <transition
+          name="transitions"
+          enter-active-class="animated bounceInDown"
+          leave-active-class="animated bounceOutUp"
+          mode="out-in"
+        >
+          <router-view/>
         </transition>
       </div>
-
     </q-page-container>
   </q-layout>
 </template>

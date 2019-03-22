@@ -2,7 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = function (ctx) {
+module.exports = function(ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: ['i18n', 'vuelidate', 'main'],
@@ -54,7 +54,6 @@ module.exports = function (ctx) {
           ...cfg.resolve.alias,
           assets: path.resolve(__dirname, './src/assets/'),
           components: path.resolve(__dirname, './src/components/'),
-          serviceLayers: path.resolve(__dirname, './src/serviceLayers/'),
           utilities: path.resolve(__dirname, './src/utilities/'),
           views: path.resolve(__dirname, './src/views/'),
           viewModels: path.resolve(__dirname, './src/viewModels/'),

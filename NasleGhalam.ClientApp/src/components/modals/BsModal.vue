@@ -1,8 +1,15 @@
 <template>
   <div>
     <transition name="bs-modal">
-      <div v-show="show" class="bs-modal" tabindex="0" role="dialog" @click="close('click')">
-        <div class="bs-modal-dialog" :class="modalSize" role="document" @click.stop>
+      <div v-show="show"
+           class="bs-modal"
+           tabindex="0"
+           role="dialog"
+           @click="close('click')">
+        <div class="bs-modal-dialog"
+             :class="modalSize"
+             role="document"
+             @click.stop>
           <div class="bs-modal-content">
             <section class="bs-modal-header">
               <slot name="header"></slot>
@@ -21,7 +28,8 @@
         </div>
       </div>
     </transition>
-    <section v-if="show" class="bs-modal-backdrop"></section>
+    <section v-if="show"
+             class="bs-modal-backdrop"></section>
   </div>
 </template>
 

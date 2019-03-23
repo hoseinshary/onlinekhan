@@ -1,33 +1,22 @@
 <template>
   <section class="col-md-8">
     <!-- panel -->
-    <my-panel>
+    <base-panel>
       <span slot="title">{{cityStore.modelName}}</span>
       <div slot="body">
-        <my-btn-create :label="`ایجاد (${cityStore.modelName}) جدید`" @click="showModalCreate"/>
+        <base-btn-create :label="`ایجاد (${cityStore.modelName}) جدید`" @click="showModalCreate"/>
         <br>
-        <ul>
-          <li v-for="city in cityStore.cityDdl" :key="city.Id">{{city}}</li>
-        </ul>
-        <button @click="add()">click</button>
-        <!-- <my-table :grid-data="cityGridData"
-                  :columns="cityGridColumn"
-                  hasIndex>
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
+        <!-- <base-table :grid-data="cityGridData" :columns="cityGridColumn" hasIndex>
+          <template slot="Id" slot-scope="data">
+            <base-btn-edit round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete round @click="showModalDelete(data.row.Id)"/>
           </template>
-        </my-table>-->
+        </base-table>-->
       </div>
-    </my-panel>
+    </base-panel>
     <!-- modals -->
-    <!-- <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
+    <modal-create></modal-create>
+    <!-- <modal-edit v-if="pageAccess.canEdit"></modal-edit>
     <modal-delete v-if="pageAccess.canDelete"></modal-delete>-->
   </section>
 </template>
@@ -35,9 +24,12 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { vxm } from "src/store";
-import { debug } from "util";
 
-@Component
+@Component({
+  components: {
+    ModalCreate: () => import("./create.vue")
+  }
+})
 export default class CityVue extends Vue {
   //### datas ###
   cityStore = vxm.city;
@@ -59,11 +51,7 @@ export default class CityVue extends Vue {
   ];
   //--------------------------------------------------
 
-  //### internal functions ###
-  add() {
-    this.cityStore.submitCreate(this);
-  }
-
+  //### methods ###
   showModalCreate() {}
   //--------------------------------------------------
 

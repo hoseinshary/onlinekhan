@@ -1,22 +1,22 @@
-import Vue from 'Vue';
-import { AxiosResponse } from 'axios';
+import Vue from "Vue";
+import { AxiosResponse } from "axios";
 
-import ICity from 'src/models/ICity';
-import IMessageResult from 'src/models/IMessageResult';
+import ICity from "src/models/ICity";
+import IMessageResult from "src/models/IMessageResult";
 
-import util from 'src/utilities/util';
-import { ModalType, MessageType } from 'src/utilities/enumeration';
-import axios from 'src/utilities/axios';
-import { CITY_URL as baseUrl } from 'src/utilities/site-config';
+import util from "src/utilities/util";
+import { ModalType, MessageType } from "src/utilities/enumeration";
+import axios from "src/utilities/axios";
+import { CITY_URL as baseUrl } from "src/utilities/site-config";
 import {
   VuexModule,
   mutation,
   action,
   Module,
   getRawActionContext
-} from 'vuex-class-component';
+} from "vuex-class-component";
 
-@Module({ namespacedPath: 'city/' })
+@Module({ namespacedPath: "city/" })
 export class CityStore extends VuexModule {
   city: ICity;
   cityList: Array<ICity>;
@@ -37,9 +37,9 @@ export class CityStore extends VuexModule {
     this.cityList = [];
     this.city = {
       Id: 0,
-      Name: '',
+      Name: "",
       ProvinceId: 0,
-      ProvinceName: ''
+      ProvinceName: ""
     };
   }
 
@@ -54,8 +54,8 @@ export class CityStore extends VuexModule {
   //#endregion
 
   //#region ### getters ###
-  readonly modelName = 'شهر';
-  readonly recordName = (this.city && this.city.Name) || '';
+  readonly modelName = "شهر";
+  readonly recordName = (this.city && this.city.Name) || "";
 
   get cityDdl() {
     return this.cityList.map(x => ({
@@ -91,11 +91,15 @@ export class CityStore extends VuexModule {
   }
 
   @mutation
-  private RESET() {
+  private RESET(vm: any) {
     this.city.Id = 0;
-    this.city.Name = '';
+    this.city.Name = "";
     this.city.ProvinceId = 0;
-    this.city.ProvinceName = '';
+    this.city.ProvinceName = "";
+
+    if (vm.$v) {
+      vm.$v.$reset();
+    }
   }
 
   @mutation
@@ -152,22 +156,22 @@ export class CityStore extends VuexModule {
     }
   }
 
-  @action({ mode: 'raw' })
+  @action({ mode: "raw" })
   async validateForm(vm: any) {
     vm.$v.cityObj.$touch();
     if (vm.$v.cityObj.$error) {
       const context = getRawActionContext(this);
-      await context.dispatch('notifyInvalidForm', vm, { root: true });
+      await context.dispatch("notifyInvalidForm", vm, { root: true });
       return false;
     }
     return true;
   }
 
-  @action({ mode: 'raw' })
+  @action({ mode: "raw" })
   async notify(payload: { vm: Vue; data: IMessageResult }) {
     const context = getRawActionContext(this);
     await context.dispatch(
-      'notify',
+      "notify",
       {
         body: payload.data.Message,
         type: payload.data.MessageType,
@@ -190,8 +194,14 @@ export class CityStore extends VuexModule {
         if (data.MessageType == MessageType.Success) {
           this.CREATE(this.city);
           this.TOGGLE_MODAL({ type: ModalType.Create, b: true });
+          this.resetCreate();
         }
       });
+  }
+
+  @action()
+  async resetCreate() {
+    await this.RESET(this.createVue);
   }
   //#endregion
 }

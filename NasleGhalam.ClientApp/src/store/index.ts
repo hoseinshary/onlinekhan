@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 
-import { CityStore, city } from './cityStore';
+import { CityStore, cityStore } from "./cityStore";
 
 Vue.use(Vuex);
 
@@ -21,19 +21,19 @@ const store = new Vuex.Store({
       //fine notification type
       var type =
         notify.type == 0
-          ? 'error'
+          ? "error"
           : notify.type == 1
-          ? 'success'
+          ? "success"
           : notify.type == 2
-          ? 'warning'
-          : 'error';
+          ? "warning"
+          : "error";
 
       //show notification
       notify.vm.$snotify.html(html, {
         type: type,
         timeout: 4000,
         showProgressBar: true,
-        position: 'leftTop'
+        position: "leftTop"
       });
     },
 
@@ -41,19 +41,19 @@ const store = new Vuex.Store({
      * show invalid form notification
      */
     notifyInvalidForm({ dispatch }, vm) {
-      dispatch('notify', {
+      dispatch("notify", {
         vm,
-        body: 'تمام مقادیر را بصورت صحیح وارد نمایید.'
+        body: "تمام مقادیر را بصورت صحیح وارد نمایید."
       });
     }
   },
   modules: {
-    city
+    cityStore
   }
 });
 
 export default store;
 
 export const vxm = {
-  city: CityStore.CreateProxy(store, CityStore) as CityStore
+  cityStore: CityStore.CreateProxy(store, CityStore) as CityStore
 };

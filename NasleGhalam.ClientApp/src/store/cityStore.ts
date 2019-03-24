@@ -16,7 +16,7 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 
-@Module({ namespacedPath: "city/" })
+@Module({ namespacedPath: "cityStore/" })
 export class CityStore extends VuexModule {
   city: ICity;
   cityList: Array<ICity>;
@@ -162,20 +162,22 @@ export class CityStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  async validateForm(vm: any) {
-    vm.$v.cityObj.$touch();
-    if (vm.$v.cityObj.$error) {
-      const context = getRawActionContext(this);
-      await context.dispatch("notifyInvalidForm", vm, { root: true });
-      return false;
-    }
-    return true;
+  validateForm(vm: any) {
+    return new Promise(resolve => {
+      vm.$v.city.$touch();
+      if (vm.$v.city.$error) {
+        const context = getRawActionContext(this);
+        context.dispatch("notifyInvalidForm", vm, { root: true });
+        resolve(false);
+      }
+      resolve(true);
+    });
   }
 
   @action({ mode: "raw" })
-  async notify(payload: { vm: Vue; data: IMessageResult }) {
+  notify(payload: { vm: Vue; data: IMessageResult }) {
     const context = getRawActionContext(this);
-    await context.dispatch(
+    return context.dispatch(
       "notify",
       {
         body: payload.data.Message,
@@ -187,8 +189,9 @@ export class CityStore extends VuexModule {
   }
 
   @action()
-  submitCreate(vm: Vue) {
-    if (!this.validateForm(vm)) return;
+  async submitCreate(closeModal: boolean) {
+    let vm = this.createVue;
+    if (!(await this.validateForm(vm))) return;
 
     return axios
       .post(`${baseUrl}/Create`, this.city)
@@ -198,7 +201,7 @@ export class CityStore extends VuexModule {
         this.notify({ vm, data });
         if (data.MessageType == MessageType.Success) {
           this.CREATE(this.city);
-          this.TOGGLE_MODAL_CREATE(false);
+          this.TOGGLE_MODAL_CREATE(closeModal);
           this.resetCreate();
         }
       });
@@ -206,9 +209,9 @@ export class CityStore extends VuexModule {
 
   @action()
   async resetCreate() {
-    await this.RESET(this.createVue);
+    this.RESET(this.createVue);
   }
   //#endregion
 }
 
-export const city = CityStore.ExtractVuexModule(CityStore);
+export const cityStore = CityStore.ExtractVuexModule(CityStore);

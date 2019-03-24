@@ -27,20 +27,21 @@ import {
 } from "src/validations/CityValidation";
 
 @Component({
-  mixins: [validationMixin],
+  // mixins: [validationMixin],
   validations: cityValidations
 })
 export default class CityCreateVue extends Vue {
   $v: any;
 
   //### data ###
-  cityStore = vxm.city;
-  city = vxm.city.city;
+  cityStore = vxm.cityStore;
   //--------------------------------------------------
 
   //### methods ###
   modalOpen() {}
-  submit() {}
+  submit(closeModal: boolean) {
+    this.cityStore.submitCreate(closeModal);
+  }
   //--------------------------------------------------
 
   //### hooks ###

@@ -32,7 +32,7 @@ import { vxm } from "src/store";
 })
 export default class CityVue extends Vue {
   //### data ###
-  cityStore = vxm.city;
+  cityStore = vxm.cityStore;
   cityGridColumn: [
     {
       title: "استان";

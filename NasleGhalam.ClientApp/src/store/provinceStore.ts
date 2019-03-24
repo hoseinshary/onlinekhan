@@ -1,9 +1,9 @@
 import Vue from "Vue";
-import ICity, { DefaultCity } from "src/models/ICity";
+import IProvince, { DefaultProvince } from "src/models/IProvince";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
-import { CITY_URL as baseUrl } from "src/utilities/site-config";
+import { PROVINCE_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
@@ -13,10 +13,10 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 
-@Module({ namespacedPath: "cityStore/" })
-export class CityStore extends VuexModule {
-  city: ICity;
-  cityList: Array<ICity>;
+@Module({ namespacedPath: "provinceStore/" })
+export class ProvinceStore extends VuexModule {
+  province: IProvince;
+  provinceList: Array<IProvince>;
   openModal: { create: boolean; edit: boolean; delete: boolean } = {
     create: false,
     edit: false,
@@ -33,26 +33,26 @@ export class CityStore extends VuexModule {
   constructor() {
     super();
 
-    this.cityList = [];
-    this.city = DefaultCity;
+    this.provinceList = [];
+    this.province = DefaultProvince;
   }
 
   //#region ### internal functions ###
   private getIndexById(id: number) {
-    return this.cityList.findIndex(x => x.Id == id);
+    return this.provinceList.findIndex(x => x.Id == id);
   }
 
   private findById(id: number) {
-    return this.cityList.find(x => x.Id == id);
+    return this.provinceList.find(x => x.Id == id);
   }
   //#endregion
 
   //#region ### getters ###
-  readonly modelName = "شهر";
-  readonly recordName = (this.city && this.city.Name) || "";
+  readonly modelName = "استان";
+  readonly recordName = (this.province && this.province.Name) || "";
 
-  get cityDdl() {
-    return this.cityList.map(x => ({
+  get provinceDdl() {
+    return this.provinceList.map(x => ({
       value: x.Id,
       name: x.Name
     }));
@@ -61,17 +61,17 @@ export class CityStore extends VuexModule {
 
   //#region ### mutations ###
   @mutation
-  private CREATE(city: ICity) {
-    this.cityList.push(city);
+  private CREATE(province: IProvince) {
+    this.provinceList.push(province);
   }
 
   @mutation
-  private UPDATE(city: ICity) {
-    let index = this.getIndexById(city.Id);
+  private UPDATE(province: IProvince) {
+    let index = this.getIndexById(province.Id);
     if (index < 0) return;
 
-    this.cityList[index].Id = city.Id;
-    this.cityList[index].Name = city.Name;
+    this.provinceList[index].Id = province.Id;
+    this.provinceList[index].Name = province.Name;
   }
 
   @mutation
@@ -79,20 +79,20 @@ export class CityStore extends VuexModule {
     let index = this.getIndexById(id);
     if (index < 0) return;
 
-    this.cityList.splice(index, 1);
+    this.provinceList.splice(index, 1);
   }
 
   @mutation
   private RESET(vm: any) {
-    this.city = DefaultCity;
+    this.province = DefaultProvince;
     if (vm.$v) {
       vm.$v.$reset();
     }
   }
 
   @mutation
-  private SET_CITY_LIST(list: Array<ICity>) {
-    this.cityList = list;
+  private SET_PROVINCE_LIST(list: Array<IProvince>) {
+    this.provinceList = list;
   }
 
   @mutation
@@ -131,9 +131,9 @@ export class CityStore extends VuexModule {
   getById() {
     return axios
       .get(`${baseUrl}/GetById`)
-      .then((response: AxiosResponse<ICity>) => {
-        this.city.Id = response.data.Id;
-        this.city.Name = response.data.Name;
+      .then((response: AxiosResponse<IProvince>) => {
+        this.province.Id = response.data.Id;
+        this.province.Name = response.data.Name;
       });
   }
 
@@ -142,20 +142,20 @@ export class CityStore extends VuexModule {
     if (this.modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
-        .then((response: AxiosResponse<Array<ICity>>) => {
-          this.SET_CITY_LIST(response.data);
+        .then((response: AxiosResponse<Array<IProvince>>) => {
+          this.SET_PROVINCE_LIST(response.data);
           this.TOGGLE_MODEL_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this.cityList);
+      return Promise.resolve(this.provinceList);
     }
   }
 
   @action({ mode: "raw" })
   validateForm(vm: any) {
     return new Promise(resolve => {
-      vm.$v.city.$touch();
-      if (vm.$v.city.$error) {
+      vm.$v.province.$touch();
+      if (vm.$v.province.$error) {
         const context = getRawActionContext(this);
         context.dispatch("notifyInvalidForm", vm, { root: true });
         resolve(false);
@@ -184,13 +184,13 @@ export class CityStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     return axios
-      .post(`${baseUrl}/Create`, this.city)
+      .post(`${baseUrl}/Create`, this.province)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
 
         this.notify({ vm, data });
         if (data.MessageType == MessageType.Success) {
-          this.CREATE(this.city);
+          this.CREATE(this.province);
           this.TOGGLE_MODAL_CREATE(closeModal);
           this.resetCreate();
         }
@@ -204,4 +204,4 @@ export class CityStore extends VuexModule {
   //#endregion
 }
 
-export const cityStore = CityStore.ExtractVuexModule(CityStore);
+export const provinceStore = ProvinceStore.ExtractVuexModule(ProvinceStore);

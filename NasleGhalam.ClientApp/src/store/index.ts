@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import { CityStore, cityStore } from "./cityStore";
+import { ProvinceStore, provinceStore } from "./provinceStore";
 
 Vue.use(Vuex);
 
@@ -48,12 +49,17 @@ const store = new Vuex.Store({
     }
   },
   modules: {
-    cityStore
+    cityStore,
+    provinceStore
   }
 });
 
 export default store;
 
 export const vxm = {
-  cityStore: CityStore.CreateProxy(store, CityStore) as CityStore
+  cityStore: CityStore.CreateProxy(store, CityStore) as CityStore,
+  provinceStore: ProvinceStore.CreateProxy(
+    store,
+    ProvinceStore
+  ) as ProvinceStore
 };

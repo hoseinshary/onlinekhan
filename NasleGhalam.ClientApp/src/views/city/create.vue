@@ -21,13 +21,9 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
-import {
-  cityValidations,
-  validationMixin
-} from "src/validations/CityValidation";
+import { cityValidations } from "src/validations/CityValidation";
 
 @Component({
-  // mixins: [validationMixin],
   validations: cityValidations
 })
 export default class CityCreateVue extends Vue {
@@ -35,6 +31,7 @@ export default class CityCreateVue extends Vue {
 
   //### data ###
   cityStore = vxm.cityStore;
+  city = vxm.cityStore.city;
   //--------------------------------------------------
 
   //### methods ###

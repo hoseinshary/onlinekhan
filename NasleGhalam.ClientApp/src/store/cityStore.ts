@@ -33,8 +33,8 @@ export class CityStore extends VuexModule {
   constructor() {
     super();
 
+    this.city = util.cloneObject(DefaultCity);
     this.cityList = [];
-    this.city = DefaultCity;
   }
 
   //#region ### internal functions ###
@@ -84,7 +84,7 @@ export class CityStore extends VuexModule {
 
   @mutation
   private RESET(vm: any) {
-    this.city = DefaultCity;
+    util.mapObject(DefaultCity, this.city);
     if (vm.$v) {
       vm.$v.$reset();
     }

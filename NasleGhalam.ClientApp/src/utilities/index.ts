@@ -1,6 +1,6 @@
-import { LocalStorage } from 'quasar';
-import router from 'src/router';
-import axios from 'src/utilities/axios';
+import { LocalStorage } from "quasar";
+import router from "src/router";
+import axios from "src/utilities/axios";
 
 /**
  * map all value of source object to dest object
@@ -25,6 +25,7 @@ const mapObject = function(cloneFrom, cloneTo) {
  */
 const cloneObject = function(obj) {
   return JSON.parse(JSON.stringify(obj));
+  //Object.assign({}, obj)
 };
 
 /**
@@ -81,11 +82,11 @@ const toParamWithoutEncode = function(obj) {
         return toParam(value);
       }
       if (isArray(value)) {
-        return value.map(x => key + '=' + x).join('&');
+        return value.map(x => key + "=" + x).join("&");
       }
-      return key + '=' + value;
+      return key + "=" + value;
     })
-    .join('&');
+    .join("&");
 };
 
 /**
@@ -95,11 +96,11 @@ const toParamWithoutEncode = function(obj) {
  */
 const getNested = function(theObject, path) {
   try {
-    var separator = '.';
+    var separator = ".";
 
     return path
-      .replace('[', separator)
-      .replace(']', '')
+      .replace("[", separator)
+      .replace("]", "")
       .split(separator)
       .reduce(function(obj, property) {
         return obj[property];
@@ -114,7 +115,7 @@ const getNested = function(theObject, path) {
  * @param {*} value
  */
 const isString = function(value) {
-  return typeof value === 'string' || value instanceof String;
+  return typeof value === "string" || value instanceof String;
 };
 
 /**
@@ -122,7 +123,7 @@ const isString = function(value) {
  * @param {*} value
  */
 const isNumber = function(value) {
-  return typeof value === 'number' && isFinite(value);
+  return typeof value === "number" && isFinite(value);
 };
 
 /**
@@ -130,7 +131,7 @@ const isNumber = function(value) {
  * @param {*} value
  */
 const isArray = function(value) {
-  return value && typeof value === 'object' && value.constructor === Array;
+  return value && typeof value === "object" && value.constructor === Array;
 };
 
 /**
@@ -138,7 +139,7 @@ const isArray = function(value) {
  * @param {*} value
  */
 const isObject = function(value) {
-  return value && typeof value === 'object' && value.constructor === Object;
+  return value && typeof value === "object" && value.constructor === Object;
 };
 
 /**
@@ -146,7 +147,7 @@ const isObject = function(value) {
  * @param {*} value
  */
 const isBoolean = function(value) {
-  return typeof value === 'boolean';
+  return typeof value === "boolean";
 };
 
 //   isNull(value) {
@@ -175,13 +176,13 @@ const isBoolean = function(value) {
  * handle logout
  */
 const logout = function() {
-  LocalStorage.remove('authList');
-  LocalStorage.remove('menuList');
-  LocalStorage.remove('subMenuList');
-  LocalStorage.remove('Token');
-  LocalStorage.remove('FullName');
-  axios.defaults.headers.common['Token'] = '';
-  router.push('/user/login');
+  LocalStorage.remove("authList");
+  LocalStorage.remove("menuList");
+  LocalStorage.remove("subMenuList");
+  LocalStorage.remove("Token");
+  LocalStorage.remove("FullName");
+  axios.defaults.headers.common["Token"] = "";
+  router.push("/user/login");
 };
 
 /**
@@ -189,13 +190,13 @@ const logout = function() {
  */
 const initAccess = function(modelName) {
   var actionsLst = {
-    ایجاد: 'canCreate',
-    ویرایش: 'canEdit',
-    حذف: 'canDelete',
-    دسترسی: 'canAccess'
+    ایجاد: "canCreate",
+    ویرایش: "canEdit",
+    حذف: "canDelete",
+    دسترسی: "canAccess"
   };
   var accessControl = LocalStorage.get
-    .item('subMenuList')
+    .item("subMenuList")
     .find(x => x.EnName.toLowerCase() == modelName.toLowerCase());
 
   if (accessControl) {
@@ -220,13 +221,13 @@ const objToFormdata = function(obj) {
 };
 
 const fileAdd = function(model, prop, number, isRequired, chObj, vueObj) {
-  if (chObj.$refs['file' + number + ''].files.length > 0)
-    vueObj[model][prop] = chObj.$refs['file' + number + ''].files[0];
+  if (chObj.$refs["file" + number + ""].files.length > 0)
+    vueObj[model][prop] = chObj.$refs["file" + number + ""].files[0];
   if (isRequired) vueObj.$v[model][prop].$touch();
 };
 
 const fileRemove = function(model, prop, isRequired, vueObj) {
-  vueObj[model][prop] = '';
+  vueObj[model][prop] = "";
   if (isRequired) vueObj.$v[model][prop].$touch();
 };
 

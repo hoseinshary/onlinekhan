@@ -60,7 +60,7 @@ export default class CityVue extends Vue {
 
   //### hooks ###
   created() {
-    // this.cityStore.getAll();
+    this.cityStore.getAll();
   }
   //--------------------------------------------------
 }

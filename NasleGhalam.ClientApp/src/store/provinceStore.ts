@@ -33,8 +33,8 @@ export class ProvinceStore extends VuexModule {
   constructor() {
     super();
 
+    this.province = util.cloneObject(DefaultProvince);
     this.provinceList = [];
-    this.province = DefaultProvince;
   }
 
   //#region ### internal functions ###
@@ -84,7 +84,7 @@ export class ProvinceStore extends VuexModule {
 
   @mutation
   private RESET(vm: any) {
-    this.province = DefaultProvince;
+    util.mapObject(DefaultProvince, this.province);
     if (vm.$v) {
       vm.$v.$reset();
     }

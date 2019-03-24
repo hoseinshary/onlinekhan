@@ -1,4 +1,5 @@
 import IProvince, { DefaultProvince } from "./IProvince";
+import utilities from "src/utilities";
 
 export default interface ICity {
   Id: number;
@@ -9,5 +10,5 @@ export default interface ICity {
 export const DefaultCity: ICity = {
   Id: 0,
   Name: "",
-  Province: DefaultProvince
+  Province: utilities.cloneObject(DefaultProvince)
 };

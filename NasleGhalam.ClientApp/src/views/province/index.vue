@@ -1,116 +1,157 @@
 <template>
   <section class="col-md-8">
     <!-- panel -->
-    <my-panel>
-      <span slot="title">{{modelName}}</span>
+    <base-panel>
+      <span slot="title">{{provinceStore.modelName}}</span>
       <div slot="body">
-        <my-btn-create v-if="pageAccess.canCreate"
-                       :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate" />
+        <base-btn-create
+          :label="`ایجاد (${provinceStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
         <br>
-        <my-table :grid-data="provinceGridData"
-                  :columns="provinceGridColumn"
-                  hasIndex>
-          <template slot="Id"
+        <base-table :grid-data="provinceStore.provinceList" :columns="provinceGridColumn" hasIndex>
+          <!-- <template slot="Id"
                     slot-scope="data">
-            <my-btn-edit round
+            <base-btn-edit round
                          v-if="pageAccess.canEdit"
                          @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete round
+            <base-btn-delete round
                            v-if="pageAccess.canDelete"
                            @click="showModalDelete(data.row.Id)" />
-          </template>
-        </my-table>
+          </template>-->
+        </base-table>
       </div>
-    </my-panel>
+    </base-panel>
 
     <!-- modals -->
     <modal-create></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
+    <!-- <modal-edit></modal-edit>
+    <modal-delete></modal-delete>-->
   </section>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
 
-export default {
+@Component({
   components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
-  },
-  /**
-   * data
-   */
-  data() {
-    var pageAccess = this.$util.initAccess('/province');
-    return {
-      pageAccess,
-      provinceGridColumn: [
-        {
-          title: 'نام',
-          data: 'Name'
-        },
-        {
-          title: 'کد',
-          data: 'Code'
-        },
-        {
-          title: 'عملیات',
-          data: 'Id',
-          searchable: false,
-          sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
-        }
-      ]
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('provinceStore', [
-      'toggleModalCreateStore',
-      'toggleModalEditStore',
-      'toggleModalDeleteStore',
-      'getByIdStore',
-      'fillGridStore',
-      'resetCreateStore',
-      'resetEditStore'
-    ]),
-    showModalCreate() {
-      // reset data on modal show
-      this.resetCreateStore();
-      // show modal
-      this.toggleModalCreateStore(true);
-    },
-    showModalEdit(id) {
-      // reset data on modal show
-      this.resetEditStore();
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalEditStore(true);
-      });
-    },
-    showModalDelete(id) {
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalDeleteStore(true);
-      });
-    }
-  },
-  computed: {
-    ...mapState('provinceStore', {
-      modelName: 'modelName',
-      provinceGridData: 'provinceGridData'
-    })
-  },
-  created() {
-    this.fillGridStore();
+    ModalCreate: () => import("./create.vue")
   }
-};
+})
+export default class ProvinceVue extends Vue {
+  //### data ###
+  provinceStore = vxm.provinceStore;
+  provinceGridColumn = [
+    {
+      title: "نام",
+      data: "Name"
+    },
+    {
+      title: "کد",
+      data: "Code"
+    },
+    {
+      title: "عملیات",
+      data: "Id",
+      searchable: false,
+      sortable: false,
+      visible: false
+    }
+  ];
+  //--------------------------------------------------
+
+  //### methods ###
+  showModalCreate() {
+    this.provinceStore.resetCreate();
+    this.provinceStore.TOGGLE_MODAL_CREATE(true);
+  }
+  //--------------------------------------------------
+
+  //### hooks ###
+  created() {
+    this.provinceStore.getAll();
+  }
+  //--------------------------------------------------
+}
+
+// export default {
+//   components: {
+//     "modal-create": () => import("./create"),
+//     "modal-edit": () => import("./edit"),
+//     "modal-delete": () => import("./delete")
+//   },
+//   /**
+//    * data
+//    */
+//   data() {
+//     var pageAccess = this.$util.initAccess("/province");
+//     return {
+//       pageAccess,
+//       provinceGridColumn: [
+//         {
+//           title: "نام",
+//           data: "Name"
+//         },
+//         {
+//           title: "کد",
+//           data: "Code"
+//         },
+//         {
+//           title: "عملیات",
+//           data: "Id",
+//           searchable: false,
+//           sortable: false,
+//           visible: pageAccess.canEdit || pageAccess.canDelete
+//         }
+//       ]
+//     };
+//   },
+//   /**
+//    * methods
+//    */
+//   methods: {
+//     ...mapActions("provinceStore", [
+//       "toggleModalCreateStore",
+//       "toggleModalEditStore",
+//       "toggleModalDeleteStore",
+//       "getByIdStore",
+//       "fillGridStore",
+//       "resetCreateStore",
+//       "resetEditStore"
+//     ]),
+//     showModalCreate() {
+//       // reset data on modal show
+//       this.resetCreateStore();
+//       // show modal
+//       this.toggleModalCreateStore(true);
+//     },
+//     showModalEdit(id) {
+//       // reset data on modal show
+//       this.resetEditStore();
+//       // get data by id
+//       this.getByIdStore(id).then(() => {
+//         // show modal
+//         this.toggleModalEditStore(true);
+//       });
+//     },
+//     showModalDelete(id) {
+//       // get data by id
+//       this.getByIdStore(id).then(() => {
+//         // show modal
+//         this.toggleModalDeleteStore(true);
+//       });
+//     }
+//   },
+//   computed: {
+//     ...mapState("provinceStore", {
+//       modelName: "modelName",
+//       provinceGridData: "provinceGridData"
+//     })
+//   },
+//   created() {
+//     this.fillGridStore();
+//   }
+// };
 </script>
 

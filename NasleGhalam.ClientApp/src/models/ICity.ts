@@ -1,6 +1,6 @@
 export default interface ICity {
   Id: number;
   Name: string;
-  ProvinceId: number | undefined;
-  ProvinceName: string | undefined;
+  ProvinceId?: number;
+  ProvinceName?: string;
 }

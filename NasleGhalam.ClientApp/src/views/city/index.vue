@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 
 @Component({
@@ -31,7 +31,7 @@ import { vxm } from "src/store";
   }
 })
 export default class CityVue extends Vue {
-  //### datas ###
+  //### data ###
   cityStore = vxm.city;
   cityGridColumn: [
     {
@@ -52,10 +52,13 @@ export default class CityVue extends Vue {
   //--------------------------------------------------
 
   //### methods ###
-  showModalCreate() {}
+  showModalCreate() {
+    this.cityStore.resetCreate();
+    this.cityStore.TOGGLE_MODAL_CREATE(true);
+  }
   //--------------------------------------------------
 
-  //### hook functions ###
+  //### hooks ###
   created() {
     // this.cityStore.getAll();
   }

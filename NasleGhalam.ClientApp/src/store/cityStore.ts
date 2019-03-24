@@ -20,9 +20,11 @@ import {
 export class CityStore extends VuexModule {
   city: ICity;
   cityList: Array<ICity>;
-  private openModalCreate: boolean = false;
-  private openModalEdit: boolean = false;
-  private openModalDelete: boolean = false;
+  openModal: { create: boolean; edit: boolean; delete: boolean } = {
+    create: false,
+    edit: false,
+    delete: false
+  };
   private selectedId: number = 0;
   private modelChanged: boolean = true;
   private createVue: Vue;
@@ -37,9 +39,7 @@ export class CityStore extends VuexModule {
     this.cityList = [];
     this.city = {
       Id: 0,
-      Name: "",
-      ProvinceId: 0,
-      ProvinceName: ""
+      Name: ""
     };
   }
 
@@ -113,23 +113,28 @@ export class CityStore extends VuexModule {
   }
 
   @mutation
-  TOGGLE_MODAL(payload: { type: ModalType; b: boolean }) {
-    if (payload.type == ModalType.Create) {
-      this.openModalCreate = payload.b;
-    } else if (payload.type == ModalType.Update) {
-      this.openModalEdit = payload.b;
-    } else if (payload.type == ModalType.Delete) {
-      this.openModalDelete = payload.b;
-    }
+  TOGGLE_MODAL_CREATE(open: boolean) {
+    this.openModal.create = open;
   }
 
   @mutation
-  SET_VUE(payload: { type: ModalType; vue: Vue }) {
-    if (payload.type == ModalType.Create) {
-      this.createVue = payload.vue;
-    } else if (payload.type == ModalType.Update) {
-      this.editVue = payload.vue;
-    }
+  TOGGLE_MODAL_EDIT(open: boolean) {
+    this.openModal.edit = open;
+  }
+
+  @mutation
+  TOGGLE_MODAL_DELETE(open: boolean) {
+    this.openModal.delete = open;
+  }
+
+  @mutation
+  SET_CREATE_VUE(vm: Vue) {
+    this.createVue = vm;
+  }
+
+  @mutation
+  SET_EDIT_VUE(vm: Vue) {
+    this.editVue = vm;
   }
   //#endregion
 
@@ -193,7 +198,7 @@ export class CityStore extends VuexModule {
         this.notify({ vm, data });
         if (data.MessageType == MessageType.Success) {
           this.CREATE(this.city);
-          this.TOGGLE_MODAL({ type: ModalType.Create, b: true });
+          this.TOGGLE_MODAL_CREATE(false);
           this.resetCreate();
         }
       });

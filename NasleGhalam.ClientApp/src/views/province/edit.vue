@@ -1,55 +1,37 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 @confirm="submitEditStore"
-                 @reset="resetEditStore"
-                 @close="toggleModalEditStore(false)">
-
-    <my-input :model="$v.provinceObj.Name" class="col-md-6" />
-          
-          <my-input :model="$v.provinceObj.Code" class="col-md-6" />
-          
-          
-
-  </my-modal-edit>
+  <base-modal-edit
+    :title="provinceStore.modelName"
+    :show="provinceStore.openModal.edit"
+    @confirm="provinceStore.submitEdit"
+    @reset="provinceStore.resetEdit"
+    @close="provinceStore.OPEN_MODAL_EDIT(false)"
+  >
+    <base-input :model="$v.province.Name" class="col-md-6"/>
+    <base-input :model="$v.province.Code" class="col-md-6"/>
+  </base-modal-edit>
 </template>
 
-<script>
-import viewModel from 'viewModels/provinceViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { provinceValidations } from "src/validations/ProvinceValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('provinceStore', [
-      'toggleModalEditStore',
-      'editVueStore',
-      'submitEditStore',
-      'resetEditStore'
-    ])
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('provinceStore', {
-      modelName: 'modelName',
-      provinceObj: 'provinceObj',
-      isOpenModalEdit: 'isOpenModalEdit'
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: provinceValidations
+})
+export default class ProvinceEditVue extends Vue {
+  $v: any;
+
+  //### data ###
+  provinceStore = vxm.provinceStore;
+  province = vxm.provinceStore.province;
+  //--------------------------------------------------
+
+  //### hooks ###
   created() {
-    this.editVueStore(this);
+    this.provinceStore.SET_EDIT_VUE(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
 

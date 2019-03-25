@@ -54,13 +54,13 @@ export default class CityVue extends Vue {
   //### methods ###
   showModalCreate() {
     this.cityStore.resetCreate();
-    this.cityStore.TOGGLE_MODAL_CREATE(true);
+    this.cityStore.OPEN_MODAL_CREATE(true);
   }
   //--------------------------------------------------
 
   //### hooks ###
   created() {
-    this.cityStore.getAll();
+    this.cityStore.fillList();
   }
   //--------------------------------------------------
 }

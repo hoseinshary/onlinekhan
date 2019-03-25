@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Province;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -15,15 +14,12 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "استان";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Province> _provinces;
-       
 
-        public ProvinceService(IUnitOfWork uow )
+        public ProvinceService(IUnitOfWork uow)
         {
             _uow = uow;
             _provinces = uow.Set<Province>();
-
         }
-
 
         /// <summary>
         /// گرفتن  استان با آی دی
@@ -34,14 +30,11 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _provinces
                 .Where(current => current.Id == id)
-                .Select(current => new ProvinceViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    Code = current.Code,
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<ProvinceViewModel>)
+                .FirstOrDefault();
         }
-
 
         /// <summary>
         /// گرفتن همه استان ها
@@ -49,15 +42,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<ProvinceViewModel> GetAll()
         {
-            return _provinces.Select(current => new ProvinceViewModel()
-            {
-                Id = current.Id,
-                Name = current.Name,
-                Code = current.Code
-
-            }).ToList();
+            return _provinces
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<ProvinceViewModel>)
+                .ToList();
         }
-
 
         /// <summary>
         /// ثبت استان
@@ -69,11 +59,12 @@ namespace NasleGhalam.ServiceLayer.Services
             var province = Mapper.Map<Province>(provinceViewModel);
             _provinces.Add(province);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = province.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<MessageResultClient>(serverResult);
+            clientResult.Obj = province;
 
+            return clientResult;
+        }
 
         /// <summary>
         /// ویرایش استان
@@ -85,11 +76,12 @@ namespace NasleGhalam.ServiceLayer.Services
             var province = Mapper.Map<Province>(provinceViewModel);
             _uow.MarkAsChanged(province);
 
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<MessageResultClient>(serverResult);
+            clientResult.Obj = province;
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return clientResult;
         }
-
 
         /// <summary>
         /// حذف استان
@@ -107,22 +99,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var province = Mapper.Map<Province>(provinceViewModel);
             _uow.MarkAsDeleted(province);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه استان ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _provinces.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

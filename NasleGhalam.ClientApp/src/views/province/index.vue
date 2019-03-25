@@ -10,22 +10,17 @@
         />
         <br>
         <base-table :grid-data="provinceStore.gridData" :columns="provinceGridColumn" hasIndex>
-          <!-- <template slot="Id"
-                    slot-scope="data">
-            <base-btn-edit round
-                         v-if="pageAccess.canEdit"
-                         @click="showModalEdit(data.row.Id)" />
-            <base-btn-delete round
-                           v-if="pageAccess.canDelete"
-                           @click="showModalDelete(data.row.Id)" />
-          </template>-->
+          <template slot="Id" slot-scope="data">
+            <base-btn-edit round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete round @click="showModalDelete(data.row.Id)"/>
+          </template>
         </base-table>
       </div>
     </base-panel>
     <!-- modals -->
     <modal-create></modal-create>
-    <!-- <modal-edit></modal-edit>
-    <modal-delete></modal-delete>-->
+    <modal-edit></modal-edit>
+    <modal-delete></modal-delete>
   </section>
 </template>
 
@@ -35,7 +30,9 @@ import { vxm } from "src/store";
 
 @Component({
   components: {
-    ModalCreate: () => import("./create.vue")
+    ModalCreate: () => import("./create.vue"),
+    ModalEdit: () => import("./edit.vue"),
+    ModalDelete: () => import("./delete.vue")
   }
 })
 export default class ProvinceVue extends Vue {
@@ -54,29 +51,34 @@ export default class ProvinceVue extends Vue {
       title: "عملیات",
       data: "Id",
       searchable: false,
-      sortable: false,
-      visible: false
+      sortable: false
     }
   ];
-  //--------------------------------------------------
-
-  //### computed ###
-  // get gridData() {
-  //   debugger;
-  //   return this.provinceStore.gridData;
-  // }
   //--------------------------------------------------
 
   //### methods ###
   showModalCreate() {
     this.provinceStore.resetCreate();
-    this.provinceStore.TOGGLE_MODAL_CREATE(true);
+    this.provinceStore.OPEN_MODAL_CREATE(true);
+  }
+
+  showModalEdit(id) {
+    this.provinceStore.resetEdit();
+    this.provinceStore.getById(id).then(() => {
+      this.provinceStore.OPEN_MODAL_EDIT(true);
+    });
+  }
+
+  showModalDelete(id) {
+    this.provinceStore.getById(id).then(() => {
+      this.provinceStore.OPEN_MODAL_DELETE(true);
+    });
   }
   //--------------------------------------------------
 
   //### hooks ###
   created() {
-    this.provinceStore.getAll();
+    this.provinceStore.fillList();
   }
   //--------------------------------------------------
 }

@@ -5,7 +5,7 @@
     @confirm="submit"
     @reset="cityStore.resetCreate"
     @open="modalOpen"
-    @close="cityStore.TOGGLE_MODAL_CREATE(false)"
+    @close="cityStore.OPEN_MODAL_CREATE(false)"
   >
     <!-- <base-select
       :model="$v.cityObj.ProvinceId"
@@ -35,7 +35,6 @@ export default class CityCreateVue extends Vue {
   //--------------------------------------------------
 
   //### methods ###
-  modalOpen() {}
   submit(closeModal: boolean) {
     this.cityStore.submitCreate(closeModal);
   }

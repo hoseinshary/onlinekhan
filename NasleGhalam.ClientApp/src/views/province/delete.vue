@@ -1,35 +1,21 @@
 <template>
-  <my-modal-delete :title="modelName"
-                   :recordName="recordName"
-                   :show="isOpenModalDelete"
-                   @confirm="submitDelete"
-                   @close="toggleModalDeleteStore(false)">
-  </my-modal-delete>
+  <base-modal-delete
+    :title="provinceStore.modelName"
+    :recordName="provinceStore.recordName"
+    :show="provinceStore.openModal.delete"
+    @confirm="provinceStore.submitDelete"
+    @close="provinceStore.OPEN_MODAL_DELETE(false)"
+  ></base-modal-delete>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex';
-
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('provinceStore', ['toggleModalDeleteStore', 'submitDeleteStore']),
-    submitDelete() {
-      this.submitDeleteStore(this);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('provinceStore', {
-      modelName: 'modelName',
-      isOpenModalDelete: 'isOpenModalDelete'
-    }),
-    ...mapGetters('provinceStore', ['recordName'])
-  }
-};
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+@Component
+export default class CityCreateVue extends Vue {
+  //### data ###
+  provinceStore = vxm.provinceStore;
+  //--------------------------------------------------
+}
 </script>
 

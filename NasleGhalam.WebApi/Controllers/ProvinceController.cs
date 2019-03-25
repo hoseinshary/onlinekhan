@@ -19,13 +19,11 @@ namespace NasleGhalam.WebApi.Controllers
             _provinceService = provinceService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.ProvinceReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_provinceService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.ProvinceReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -38,7 +36,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(province);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.ProvinceCreateAccess)]
         [CheckModelValidation]
@@ -47,7 +44,6 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _provinceService.Create(provinceViewModel);
             return Ok(msgRes);
         }
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.ProvinceUpdateAccess)]
@@ -58,19 +54,11 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(msgRes);
         }
 
-
         [HttpPost, CheckUserAccess(ActionBits.ProvinceDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _provinceService.Delete(id);
             return Ok(msgRes);
-        }
-
-        [HttpGet, CheckUserAccess(ActionBits.UserCreateAccess,
-            ActionBits.UserUpdateAccess)]
-        public IHttpActionResult GetAllDdl()
-        {
-            return Ok(_provinceService.GetAllDdl());
         }
     }
 }

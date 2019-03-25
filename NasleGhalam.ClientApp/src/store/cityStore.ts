@@ -15,9 +15,9 @@ import {
 
 @Module({ namespacedPath: "cityStore/" })
 export class CityStore extends VuexModule {
-  city: ICity;
-  cityList: Array<ICity>;
   openModal: { create: boolean; edit: boolean; delete: boolean };
+  city: ICity;
+  private cityList: Array<ICity>;
   private selectedId: number = 0;
   private modelChanged: boolean = true;
   private createVue: Vue;
@@ -41,10 +41,6 @@ export class CityStore extends VuexModule {
   //#region ### internal functions ###
   private getIndexById(id: number) {
     return this.cityList.findIndex(x => x.Id == id);
-  }
-
-  private findById(id: number) {
-    return this.cityList.find(x => x.Id == id);
   }
   //#endregion
 
@@ -97,22 +93,22 @@ export class CityStore extends VuexModule {
   }
 
   @mutation
-  private TOGGLE_MODEL_CHANGED(b: boolean) {
-    this.modelChanged = b;
+  private MODEL_CHANGED(changed: boolean) {
+    this.modelChanged = changed;
   }
 
   @mutation
-  TOGGLE_MODAL_CREATE(open: boolean) {
+  OPEN_MODAL_CREATE(open: boolean) {
     this.openModal.create = open;
   }
 
   @mutation
-  TOGGLE_MODAL_EDIT(open: boolean) {
+  OPEN_MODAL_EDIT(open: boolean) {
     this.openModal.edit = open;
   }
 
   @mutation
-  TOGGLE_MODAL_DELETE(open: boolean) {
+  OPEN_MODAL_DELETE(open: boolean) {
     this.openModal.delete = open;
   }
 
@@ -139,13 +135,13 @@ export class CityStore extends VuexModule {
   }
 
   @action()
-  getAll() {
+  fillList() {
     if (this.modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
         .then((response: AxiosResponse<Array<ICity>>) => {
           this.SET_CITY_LIST(response.data);
-          this.TOGGLE_MODEL_CHANGED(false);
+          this.MODEL_CHANGED(false);
         });
     } else {
       return Promise.resolve(this.cityList);
@@ -192,7 +188,7 @@ export class CityStore extends VuexModule {
         this.notify({ vm, data });
         if (data.MessageType == MessageType.Success) {
           this.CREATE(this.city);
-          this.TOGGLE_MODAL_CREATE(closeModal);
+          this.OPEN_MODAL_CREATE(!closeModal);
           this.resetCreate();
         }
       });

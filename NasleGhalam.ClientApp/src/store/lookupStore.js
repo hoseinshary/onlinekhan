@@ -1,4 +1,4 @@
-import axios from 'utilities/axios';
+import axios from 'plugins/axios';
 import { LOOKUP_URL as baseUrl } from 'utilities/site-config';
 
 const store = {

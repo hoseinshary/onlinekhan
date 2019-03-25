@@ -1,5 +1,5 @@
 import util from "src/utilities";
-import axios from 'utilities/axios';
+import axios from 'plugins/axios';
 import {
   EDUCATIONTREE_URL as baseUrl,
   EDUCATION_SUB_GROUP_URL as subGroupUrl

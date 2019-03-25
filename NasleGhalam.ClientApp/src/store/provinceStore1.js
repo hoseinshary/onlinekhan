@@ -1,6 +1,6 @@
 import util from "src/utilities";
-import axios from 'utilities/axios';
-import { PROVINCE_URL as baseUrl } from 'utilities/site-config';
+import axios from "plugins/axios";
+import { PROVINCE_URL as baseUrl } from "utilities/site-config";
 
 /**
  * find index of object in provinceGridData by id
@@ -13,14 +13,14 @@ function getIndexById(id) {
 const store = {
   namespaced: true,
   state: {
-    modelName: 'استان',
+    modelName: "استان",
     isOpenModalCreate: false,
     isOpenModalEdit: false,
     isOpenModalDelete: false,
     provinceObj: {
       Id: 0,
-      Name: '',
-      Code: ''
+      Name: "",
+      Code: ""
     },
     provinceGridData: [],
     provinceDdl: [],
@@ -114,7 +114,7 @@ const store = {
       // check instance validation
       vm.$v.provinceObj.$touch();
       if (vm.$v.provinceObj.$error) {
-        dispatch('notifyInvalidForm', vm, { root: true });
+        dispatch("notifyInvalidForm", vm, { root: true });
         return false;
       }
 
@@ -149,21 +149,21 @@ const store = {
      */
     submitCreateStore({ state, commit, dispatch }, closeModal) {
       var vm = state.createVue;
-      dispatch('validateFormStore', vm).then(isValid => {
+      dispatch("validateFormStore", vm).then(isValid => {
         if (!isValid) return;
 
         axios.post(`${baseUrl}/Create`, state.provinceObj).then(response => {
           let data = response.data;
 
           if (data.MessageType == 1) {
-            commit('insert', data.Id);
-            dispatch('modelChangedStore');
-            dispatch('resetCreateStore');
-            dispatch('toggleModalCreateStore', !closeModal);
+            commit("insert", data.Id);
+            dispatch("modelChangedStore");
+            dispatch("resetCreateStore");
+            dispatch("toggleModalCreateStore", !closeModal);
           }
 
           dispatch(
-            'notify',
+            "notify",
             {
               body: data.Message,
               type: data.MessageType,
@@ -179,7 +179,7 @@ const store = {
      * reset create vue
      */
     resetCreateStore({ state, commit }) {
-      commit('reset', state.createVue.$v);
+      commit("reset", state.createVue.$v);
     },
     //------------------------------------------------
 
@@ -203,20 +203,20 @@ const store = {
      */
     submitEditStore({ state, commit, dispatch }) {
       var vm = state.editVue;
-      dispatch('validateFormStore', vm).then(isValid => {
+      dispatch("validateFormStore", vm).then(isValid => {
         if (!isValid) return;
         state.provinceObj.Id = state.selectedId;
         axios.post(`${baseUrl}/Update`, state.provinceObj).then(response => {
           let data = response.data;
           if (data.MessageType == 1) {
-            commit('update');
-            dispatch('modelChangedStore');
-            dispatch('resetEditStore');
-            dispatch('toggleModalEditStore', false);
+            commit("update");
+            dispatch("modelChangedStore");
+            dispatch("resetEditStore");
+            dispatch("toggleModalEditStore", false);
           }
 
           dispatch(
-            'notify',
+            "notify",
             {
               body: data.Message,
               type: data.MessageType,
@@ -232,7 +232,7 @@ const store = {
      * reset edit vue
      */
     resetEditStore({ state, commit }) {
-      commit('reset', state.editVue.$v);
+      commit("reset", state.editVue.$v);
     },
     //------------------------------------------------
 
@@ -251,14 +251,14 @@ const store = {
       axios.post(`${baseUrl}/Delete/${state.selectedId}`).then(response => {
         let data = response.data;
         if (data.MessageType == 1) {
-          commit('delete');
-          commit('reset');
-          dispatch('modelChangedStore');
-          dispatch('toggleModalDeleteStore', false);
+          commit("delete");
+          commit("reset");
+          dispatch("modelChangedStore");
+          dispatch("toggleModalDeleteStore", false);
         }
 
         dispatch(
-          'notify',
+          "notify",
           {
             body: data.Message,
             type: data.MessageType,

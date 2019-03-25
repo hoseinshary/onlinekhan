@@ -17,11 +17,7 @@ import {
 export class CityStore extends VuexModule {
   city: ICity;
   cityList: Array<ICity>;
-  openModal: { create: boolean; edit: boolean; delete: boolean } = {
-    create: false,
-    edit: false,
-    delete: false
-  };
+  openModal: { create: boolean; edit: boolean; delete: boolean };
   private selectedId: number = 0;
   private modelChanged: boolean = true;
   private createVue: Vue;
@@ -35,6 +31,11 @@ export class CityStore extends VuexModule {
 
     this.city = util.cloneObject(DefaultCity);
     this.cityList = [];
+    this.openModal = {
+      create: false,
+      edit: false,
+      delete: false
+    };
   }
 
   //#region ### internal functions ###

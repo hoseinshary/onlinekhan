@@ -1,5 +1,5 @@
 import util from "src/utilities";
-import axios from 'utilities/axios';
+import axios from 'plugins/axios';
 import {
   API_URL as apiUrl,
   QUESTIONGROUP_URL as baseUrl

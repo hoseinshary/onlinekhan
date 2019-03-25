@@ -1,5 +1,5 @@
 import util from "src/utilities";
-import axios from 'utilities/axios';
+import axios from 'plugins/axios';
 import { USER_URL as baseUrl } from 'utilities/site-config';
 import { LocalStorage } from 'quasar';
 import router from 'router';

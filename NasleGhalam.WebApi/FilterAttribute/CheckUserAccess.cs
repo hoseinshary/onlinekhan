@@ -19,7 +19,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            //return;
+            return;
             bool isAuthenticated = false;
 
             string token = null;

@@ -1,5 +1,5 @@
 import util from "src/utilities";
-import axios from 'utilities/axios';
+import axios from 'plugins/axios';
 import {
   LESSON_URL as baseUrl,
   EDUCATION_GROUP_URL

@@ -17,11 +17,7 @@ import {
 export class ProvinceStore extends VuexModule {
   province: IProvince;
   provinceList: Array<IProvince>;
-  openModal: { create: boolean; edit: boolean; delete: boolean } = {
-    create: false,
-    edit: false,
-    delete: false
-  };
+  openModal: { create: boolean; edit: boolean; delete: boolean };
   private selectedId: number = 0;
   private modelChanged: boolean = true;
   private createVue: Vue;
@@ -35,6 +31,11 @@ export class ProvinceStore extends VuexModule {
 
     this.province = util.cloneObject(DefaultProvince);
     this.provinceList = [];
+    this.openModal = {
+      create: false,
+      edit: false,
+      delete: false
+    };
   }
 
   //#region ### internal functions ###
@@ -92,6 +93,11 @@ export class ProvinceStore extends VuexModule {
 
   @mutation
   private SET_PROVINCE_LIST(list: Array<IProvince>) {
+    // debugger;
+    // util.clearArray(this.provinceList);
+    // list.forEach(o => {
+    //   this.provinceList.push(o);
+    // });
     this.provinceList = list;
   }
 

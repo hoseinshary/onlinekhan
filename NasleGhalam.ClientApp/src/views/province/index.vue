@@ -9,7 +9,7 @@
           @click="showModalCreate"
         />
         <br>
-        <base-table :grid-data="provinceStore.provinceList" :columns="provinceGridColumn" hasIndex>
+        <base-table :grid-data="list" :columns="provinceGridColumn" hasIndex>
           <!-- <template slot="Id"
                     slot-scope="data">
             <base-btn-edit round
@@ -42,6 +42,7 @@ import { vxm } from "src/store";
 export default class ProvinceVue extends Vue {
   //### data ###
   provinceStore = vxm.provinceStore;
+  list = vxm.provinceStore.provinceList;
   provinceGridColumn = [
     {
       title: "نام",
@@ -70,7 +71,7 @@ export default class ProvinceVue extends Vue {
 
   //### hooks ###
   created() {
-    this.provinceStore.getAll();
+    vxm.provinceStore.getAll();
   }
   //--------------------------------------------------
 }

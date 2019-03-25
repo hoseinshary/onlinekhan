@@ -1,5 +1,5 @@
 import util from "src/utilities";
-import axios from 'utilities/axios';
+import axios from 'plugins/axios';
 import { EDUCATION_SUB_GROUP_URL as baseUrl } from 'utilities/site-config';
 
 /**

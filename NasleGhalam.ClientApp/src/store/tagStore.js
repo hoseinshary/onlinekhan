@@ -1,5 +1,5 @@
 import util from "src/utilities";
-import axios from 'utilities/axios';
+import axios from 'plugins/axios';
 import { TAG_URL as baseUrl } from 'utilities/site-config';
 
 /**

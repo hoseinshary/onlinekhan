@@ -133,7 +133,7 @@
 <script>
 import viewModel from "viewModels/question/questionViewModel";
 import { mapState, mapActions, mapGetters } from "vuex";
-import util from "utilities/util";
+import util from "src/utilities";
 
 export default {
   /**

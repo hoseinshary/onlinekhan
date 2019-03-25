@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { LocalStorage } from 'quasar';
 import routes from './routes';
-import util from 'utilities/util';
+import util from "src/utilities";
 
 Vue.use(VueRouter);
 

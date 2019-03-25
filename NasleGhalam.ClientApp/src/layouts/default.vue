@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import util from "utilities/util";
+import util from "src/utilities";
 
 export default {
   data() {

@@ -26,7 +26,7 @@
  </template>-->
 
 <script>
-import util from "utilities/util";
+import util from "src/utilities";
 import filterKey from "./filter-key.vue";
 import perPage from "./per-page.vue";
 import pagination from "./pagination.vue";

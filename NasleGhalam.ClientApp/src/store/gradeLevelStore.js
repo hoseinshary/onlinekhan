@@ -1,4 +1,4 @@
-import util from 'utilities/util';
+import util from "src/utilities";
 import axios from 'utilities/axios';
 import { GRADE_LEVEL_URL as baseUrl } from 'utilities/site-config';
 

@@ -1,12 +1,12 @@
 ﻿using NasleGhalam.ViewModels._Attributes;
 using System.ComponentModel.DataAnnotations;
+using NasleGhalam.ViewModels.Province;
 
 namespace NasleGhalam.ViewModels.City
 {
     public class CityViewModel
     {
         public int Id { get; set; }
-
 
         [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
@@ -17,8 +17,7 @@ namespace NasleGhalam.ViewModels.City
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int ProvinceId { get; set; }
 
-
-        public string ProvinceName { get; set; }
+        public ProvinceViewModel Province { get; set; }
 
     }
 }

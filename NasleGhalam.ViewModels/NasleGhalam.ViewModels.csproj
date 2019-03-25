@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
+    <Compile Include="City\CityUpdateViewModel.cs" />
+    <Compile Include="City\CityCreateViewModel.cs" />
     <Compile Include="EducationBook\EducationBookUpdateViewModel.cs" />
     <Compile Include="EducationBook\EducationBookViewModel.cs" />
     <Compile Include="EducationSubGroup\EducationSubGroupCreateViewModel.cs" />

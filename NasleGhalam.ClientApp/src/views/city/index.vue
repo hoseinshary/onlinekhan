@@ -6,18 +6,19 @@
       <div slot="body">
         <base-btn-create :label="`ایجاد (${cityStore.modelName}) جدید`" @click="showModalCreate"/>
         <br>
-        <!-- <base-table :grid-data="cityGridData" :columns="cityGridColumn" hasIndex>
+        <base-table :grid-data="cityStore.gridData" :columns="cityGridColumn" hasIndex>
+          <template slot="Province.Name" slot-scope="data">{{data.row.Province.Name}}</template>
           <template slot="Id" slot-scope="data">
             <base-btn-edit round @click="showModalEdit(data.row.Id)"/>
             <base-btn-delete round @click="showModalDelete(data.row.Id)"/>
           </template>
-        </base-table>-->
+        </base-table>
       </div>
     </base-panel>
     <!-- modals -->
     <modal-create></modal-create>
-    <!-- <modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete>-->
+    <modal-edit></modal-edit>
+    <modal-delete></modal-delete>
   </section>
 </template>
 
@@ -27,26 +28,28 @@ import { vxm } from "src/store";
 
 @Component({
   components: {
-    ModalCreate: () => import("./create.vue")
+    ModalCreate: () => import("./create.vue"),
+    ModalEdit: () => import("./edit.vue"),
+    ModalDelete: () => import("./delete.vue")
   }
 })
 export default class CityVue extends Vue {
   //### data ###
   cityStore = vxm.cityStore;
-  cityGridColumn: [
+  cityGridColumn = [
     {
-      title: "استان";
-      data: "ProvinceName";
+      title: "استان",
+      data: "Province.Name"
     },
     {
-      title: "نام شهر";
-      data: "Name";
+      title: "نام شهر",
+      data: "Name"
     },
     {
-      title: "عملیات";
-      data: "Id";
-      searchable: false;
-      sortable: false;
+      title: "عملیات",
+      data: "Id",
+      searchable: false,
+      sortable: false
     }
   ];
   //--------------------------------------------------
@@ -56,6 +59,19 @@ export default class CityVue extends Vue {
     this.cityStore.resetCreate();
     this.cityStore.OPEN_MODAL_CREATE(true);
   }
+
+  showModalEdit(id) {
+    this.cityStore.resetEdit();
+    this.cityStore.getById(id).then(() => {
+      this.cityStore.OPEN_MODAL_EDIT(true);
+    });
+  }
+
+  showModalDelete(id) {
+    this.cityStore.getById(id).then(() => {
+      this.cityStore.OPEN_MODAL_DELETE(true);
+    });
+  }
   //--------------------------------------------------
 
   //### hooks ###
@@ -64,83 +80,4 @@ export default class CityVue extends Vue {
   }
   //--------------------------------------------------
 }
-// export default {
-//   // components: {
-//   //   'modal-create': () => import('./create'),
-//   //   'modal-edit': () => import('./edit'),
-//   //   'modal-delete': () => import('./delete')
-//   // },
-//   /**
-//    * data
-//    */
-//   data() {
-//     var pageAccess = this.$util.initAccess('/city');
-//     return {
-//       pageAccess,
-//       cityGridColumn: [
-//         {
-//           title: 'استان',
-//           data: 'ProvinceName'
-//         },
-//         {
-//           title: 'نام شهر',
-//           data: 'Name'
-//         },
-//         {
-//           title: 'عملیات',
-//           data: 'Id',
-//           searchable: false,
-//           sortable: false,
-//           visible: pageAccess.canEdit || pageAccess.canDelete
-//         }
-//       ]
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions('cityStore', [
-//       'toggleModalCreateStore',
-//       'toggleModalEditStore',
-//       'toggleModalDeleteStore',
-//       'getByIdStore',
-//       'fillGridStore',
-//       'resetCreateStore',
-//       'resetEditStore'
-//     ]),
-//     showModalCreate() {
-//       // reset data on modal show
-//       this.resetCreateStore();
-//       // show modal
-//       this.toggleModalCreateStore(true);
-//     },
-//     showModalEdit(id) {
-//       // reset data on modal show
-//       this.resetEditStore();
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalEditStore(true);
-//       });
-//     },
-//     showModalDelete(id) {
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalDeleteStore(true);
-//       });
-//     }
-//   },
-//   computed: {
-//     ...mapState('cityStore', {
-//       modelName: 'modelName',
-//       cityGridData: 'cityGridData'
-//     })
-//   },
-//   created() {
-//     this.fillGridStore();
-//   }
-// };
 </script>
-

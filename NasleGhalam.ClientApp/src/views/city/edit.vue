@@ -1,72 +1,43 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 @confirm="submit"
-                 @reset="resetEditStore"
-                 @open="modalOpen"
-                 @close="toggleModalEditStore(false)">
-
-    <my-select :model="$v.cityObj.ProvinceId"
-               :options="provinceDdl"
-               class="col-md-6"
-               clearable
-               ref="provinceId" />
-
-    <my-input :model="$v.cityObj.Name"
-              class="col-md-6" />
-
-  </my-modal-edit>
+  <base-modal-edit
+    :title="cityStore.modelName"
+    :show="cityStore.openModal.edit"
+    @confirm="cityStore.submitEdit"
+    @reset="cityStore.resetEdit"
+    @open="provinceStore.fillList"
+    @close="cityStore.OPEN_MODAL_EDIT(false)"
+  >
+    <base-select
+      :model="$v.city.ProvinceId"
+      :options="provinceStore.Ddl"
+      class="col-md-6"
+      ref="provinceId"
+    />
+    <base-input :model="$v.city.Name" class="col-md-6"/>
+  </base-modal-edit>
 </template>
 
-<script>
-import viewModel from 'viewModels/cityViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { cityValidations } from "src/validations/CityValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('cityStore', [
-      'toggleModalEditStore',
-      'editVueStore',
-      'submitEditStore',
-      'resetEditStore'
-    ]),
-    ...mapActions('provinceStore', {
-      fillProvinceDdlStore: 'fillDdlStore'
-    }),
-    submit() {
-      this.cityObj.ProvinceName = this.$refs.provinceId.getSelectedLabel();
-      this.submitEditStore();
-    },
-    modalOpen() {
-      this.fillProvinceDdlStore();
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('cityStore', {
-      modelName: 'modelName',
-      cityObj: 'cityObj',
-      isOpenModalEdit: 'isOpenModalEdit'
-    }),
-    ...mapState('provinceStore', {
-      provinceDdl: 'provinceDdl'
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: cityValidations
+})
+export default class CityEditVue extends Vue {
+  $v: any;
+
+  //### data ###
+  cityStore = vxm.cityStore;
+  provinceStore = vxm.provinceStore;
+  city = vxm.cityStore.city;
+  //--------------------------------------------------
+
+  //### hooks ###
   created() {
-    this.editVueStore(this);
+    this.cityStore.SET_EDIT_VUE(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
-

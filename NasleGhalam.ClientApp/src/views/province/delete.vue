@@ -12,7 +12,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component
-export default class CityCreateVue extends Vue {
+export default class ProvinceDeleteVue extends Vue {
   //### data ###
   provinceStore = vxm.provinceStore;
   //--------------------------------------------------

@@ -38,21 +38,24 @@ export class CityStore extends VuexModule {
     };
   }
 
-  //#region ### internal functions ###
-  private getIndexById(id: number) {
-    return this.cityList.findIndex(x => x.Id == id);
-  }
-  //#endregion
-
   //#region ### getters ###
-  readonly modelName = "شهر";
-  readonly recordName = (this.city && this.city.Name) || "";
+  get modelName() {
+    return "شهر";
+  }
 
-  get cityDdl() {
+  get recordName() {
+    return this.city.Name || "";
+  }
+
+  get Ddl() {
     return this.cityList.map(x => ({
       value: x.Id,
-      name: x.Name
+      label: x.Name
     }));
+  }
+
+  get gridData() {
+    return this.cityList;
   }
   //#endregion
 
@@ -64,18 +67,15 @@ export class CityStore extends VuexModule {
 
   @mutation
   private UPDATE(city: ICity) {
-    let index = this.getIndexById(city.Id);
+    let index = this.cityList.findIndex(x => x.Id == this.selectedId);
     if (index < 0) return;
-
-    this.cityList[index].Id = city.Id;
-    this.cityList[index].Name = city.Name;
+    util.mapObject(city, this.cityList[index]);
   }
 
   @mutation
-  private DELETE(id: number) {
-    let index = this.getIndexById(id);
+  private DELETE() {
+    let index = this.cityList.findIndex(x => x.Id == this.selectedId);
     if (index < 0) return;
-
     this.cityList.splice(index, 1);
   }
 
@@ -88,8 +88,13 @@ export class CityStore extends VuexModule {
   }
 
   @mutation
-  private SET_CITY_LIST(list: Array<ICity>) {
+  private SET_LIST(list: Array<ICity>) {
     this.cityList = list;
+  }
+
+  @mutation
+  private SET_SELECTED_ID(id: number) {
+    this.selectedId = id;
   }
 
   @mutation
@@ -125,12 +130,12 @@ export class CityStore extends VuexModule {
 
   //#region ### actions ###
   @action()
-  getById() {
+  getById(id: number) {
     return axios
-      .get(`${baseUrl}/GetById`)
+      .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<ICity>) => {
-        this.city.Id = response.data.Id;
-        this.city.Name = response.data.Name;
+        util.mapObject(response.data, this.city);
+        this.SET_SELECTED_ID(this.city.Id);
       });
   }
 
@@ -140,7 +145,7 @@ export class CityStore extends VuexModule {
       return axios
         .get(`${baseUrl}/GetAll`)
         .then((response: AxiosResponse<Array<ICity>>) => {
-          this.SET_CITY_LIST(response.data);
+          this.SET_LIST(response.data);
           this.MODEL_CHANGED(false);
         });
     } else {
@@ -184,11 +189,12 @@ export class CityStore extends VuexModule {
       .post(`${baseUrl}/Create`, this.city)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
-
         this.notify({ vm, data });
+
         if (data.MessageType == MessageType.Success) {
-          this.CREATE(this.city);
+          this.CREATE(data.Obj);
           this.OPEN_MODAL_CREATE(!closeModal);
+          this.MODEL_CHANGED(true);
           this.resetCreate();
         }
       });
@@ -197,6 +203,50 @@ export class CityStore extends VuexModule {
   @action()
   async resetCreate() {
     this.RESET(this.createVue);
+  }
+
+  @action()
+  async submitEdit() {
+    let vm = this.createVue;
+    if (!(await this.validateForm(vm))) return;
+
+    this.city.Id = this.selectedId;
+    return axios
+      .post(`${baseUrl}/Update/${this.selectedId}`, this.city)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+          this.UPDATE(data.Obj);
+          this.OPEN_MODAL_EDIT(false);
+          this.MODEL_CHANGED(true);
+          this.resetEdit();
+        }
+      });
+  }
+
+  @action()
+  async resetEdit() {
+    this.RESET(this.editVue);
+  }
+
+  @action()
+  async submitDelete() {
+    let vm = this.createVue;
+    if (!(await this.validateForm(vm))) return;
+
+    return axios
+      .post(`${baseUrl}/Delete/${this.selectedId}`)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+        if (data.MessageType == MessageType.Success) {
+          this.DELETE();
+          this.OPEN_MODAL_DELETE(false);
+          this.MODEL_CHANGED(true);
+        }
+      });
   }
   //#endregion
 }

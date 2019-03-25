@@ -92,9 +92,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var provinceViewModel = GetById(id);
             if (provinceViewModel == null)
-            {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
-            }
 
             var province = Mapper.Map<Province>(provinceViewModel);
             _uow.MarkAsDeleted(province);

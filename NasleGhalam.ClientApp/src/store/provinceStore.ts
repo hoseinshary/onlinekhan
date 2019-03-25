@@ -17,8 +17,8 @@ import {
 export class ProvinceStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   province: IProvince;
-  private selectedId: number;
   private provinceList: Array<IProvince>;
+  private selectedId: number;
   private modelChanged: boolean = true;
   private createVue: Vue;
   private editVue: Vue;
@@ -44,13 +44,13 @@ export class ProvinceStore extends VuexModule {
   }
 
   get recordName() {
-    return (this.province && this.province.Name) || "";
+    return this.province.Name || "";
   }
 
   get Ddl() {
     return this.provinceList.map(x => ({
       value: x.Id,
-      name: x.Name
+      label: x.Name
     }));
   }
 
@@ -135,7 +135,7 @@ export class ProvinceStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IProvince>) => {
         util.mapObject(response.data, this.province);
-        this.SET_SELECTED_ID(response.data.Id);
+        this.SET_SELECTED_ID(this.province.Id);
       });
   }
 
@@ -209,6 +209,7 @@ export class ProvinceStore extends VuexModule {
   async submitEdit() {
     let vm = this.createVue;
     if (!(await this.validateForm(vm))) return;
+
     this.province.Id = this.selectedId;
     return axios
       .post(`${baseUrl}/Update/${this.selectedId}`, this.province)
@@ -236,7 +237,7 @@ export class ProvinceStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     return axios
-      .post(`${baseUrl}/Delete/${this.selectedId}`, this.province)
+      .post(`${baseUrl}/Delete/${this.selectedId}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

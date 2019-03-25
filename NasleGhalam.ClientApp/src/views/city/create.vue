@@ -2,18 +2,17 @@
   <base-modal-create
     :title="cityStore.modelName"
     :show="cityStore.openModal.create"
-    @confirm="submit"
+    @confirm="cityStore.submitCreate"
     @reset="cityStore.resetCreate"
-    @open="modalOpen"
+    @open="provinceStore.fillList"
     @close="cityStore.OPEN_MODAL_CREATE(false)"
   >
-    <!-- <base-select
-      :model="$v.cityObj.ProvinceId"
-      :options="provinceDdl"
+    <base-select
+      :model="$v.city.ProvinceId"
+      :options="provinceStore.Ddl"
       class="col-md-6"
-      clearable
       ref="provinceId"
-    />-->
+    />
     <base-input :model="$v.city.Name" class="col-md-6"/>
   </base-modal-create>
 </template>
@@ -31,13 +30,8 @@ export default class CityCreateVue extends Vue {
 
   //### data ###
   cityStore = vxm.cityStore;
+  provinceStore = vxm.provinceStore;
   city = vxm.cityStore.city;
-  //--------------------------------------------------
-
-  //### methods ###
-  submit(closeModal: boolean) {
-    this.cityStore.submitCreate(closeModal);
-  }
   //--------------------------------------------------
 
   //### hooks ###
@@ -46,52 +40,5 @@ export default class CityCreateVue extends Vue {
   }
   //--------------------------------------------------
 }
-
-// export default {
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("cityStore", [
-//       "toggleModalCreateStore",
-//       "createVueStore",
-//       "submitCreateStore",
-//       "resetCreateStore"
-//     ]),
-//     ...mapActions("provinceStore", {
-//       fillProvinceDdlStore: "fillDdlStore"
-//     }),
-//     submit() {
-//       this.cityObj.ProvinceName = this.$refs.provinceId.getSelectedLabel();
-//       this.submitCreateStore();
-//     },
-//     modalOpen() {
-//       this.fillProvinceDdlStore();
-//     }
-//   },
-//   /**
-//    * computed
-//    */
-//   computed: {
-//     ...mapState("cityStore", {
-//       modelName: "modelName",
-//       cityObj: "cityObj",
-//       isOpenModalCreate: "isOpenModalCreate"
-//     }),
-//     ...mapState("provinceStore", {
-//       provinceDdl: "provinceDdl"
-//     })
-//   },
-//   /**
-//    * validations
-//    */
-//   validations: viewModel,
-//   /**
-//    * created
-//    */
-//   created() {
-//     this.createVueStore(this);
-//   }
-// };
 </script>
 

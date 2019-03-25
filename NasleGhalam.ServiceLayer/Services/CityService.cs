@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.City;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -22,7 +21,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _cities = uow.Set<City>();
         }
 
-
         /// <summary>
         /// گرفتن  شهر با آی دی
         /// </summary>
@@ -31,16 +29,13 @@ namespace NasleGhalam.ServiceLayer.Services
         public CityViewModel GetById(int id)
         {
             return _cities
+                .Include(current => current.Province)
                 .Where(current => current.Id == id)
-                .Select(current => new CityViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    ProvinceId = current.ProvinceId,
-                    // ProvinceName = current.Province.Name
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<CityViewModel>)
+                .FirstOrDefault();
         }
-
 
         /// <summary>
         /// گرفتن همه شهر ها
@@ -48,47 +43,47 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<CityViewModel> GetAll()
         {
-            return _cities.Select(current => new CityViewModel()
-            {
-                Id = current.Id,
-                Name = current.Name,
-                ProvinceId = current.ProvinceId,
-                ProvinceName = current.Province.Name
-            }).ToList();
+            return _cities
+                .Include(current => current.Province)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<CityViewModel>)
+                .ToList();
         }
-
 
         /// <summary>
         /// ثبت شهر
         /// </summary>
         /// <param name="cityViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(CityViewModel cityViewModel)
+        public MessageResultClient Create(CityCreateViewModel cityViewModel)
         {
             var city = Mapper.Map<City>(cityViewModel);
             _cities.Add(city);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = city.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<MessageResultClient>(serverResult);
+            clientResult.Obj = GetById(city.Id);
 
+            return clientResult;
+        }
 
         /// <summary>
         /// ویرایش شهر
         /// </summary>
         /// <param name="cityViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(CityViewModel cityViewModel)
+        public MessageResultClient Update(CityUpdateViewModel cityViewModel)
         {
             var city = Mapper.Map<City>(cityViewModel);
             _uow.MarkAsChanged(city);
 
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<MessageResultClient>(serverResult);
+            clientResult.Obj = GetById(city.Id);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return clientResult;
         }
-
 
         /// <summary>
         /// حذف شهر
@@ -99,31 +94,13 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var cityViewModel = GetById(id);
             if (cityViewModel == null)
-            {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
-            }
 
             var city = Mapper.Map<City>(cityViewModel);
             _uow.MarkAsDeleted(city);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه شهر ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllByProvinceIdDdl(int provinceId)
-        {
-            return _cities
-                .Where(current => current.ProvinceId == provinceId)
-                .Select(current => new SelectViewModel
-                {
-                    value = current.Id,
-                    label = current.Name
-                }).ToList();
         }
     }
 }

@@ -39,7 +39,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.CityCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(CityViewModel cityViewModel)
+        public IHttpActionResult Create(CityCreateViewModel cityViewModel)
         {
             var msgRes = _cityService.Create(cityViewModel);
             return Ok(msgRes);
@@ -48,7 +48,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.CityUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(CityViewModel cityViewModel)
+        public IHttpActionResult Update(CityUpdateViewModel cityViewModel)
         {
             var msgRes = _cityService.Update(cityViewModel);
             return Ok(msgRes);
@@ -59,13 +59,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var msgRes = _cityService.Delete(id);
             return Ok(msgRes);
-        }
-
-        [HttpGet, CheckUserAccess(ActionBits.UserCreateAccess,
-             ActionBits.UserUpdateAccess)]
-        public IHttpActionResult GetAllByProvinceIdDdl(int id)
-        {
-            return Ok(_cityService.GetAllByProvinceIdDdl(id));
         }
     }
 }

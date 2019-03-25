@@ -9,6 +9,8 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         public CityProfile()
         {
             CreateMap<CityViewModel, City>();
+            CreateMap<CityCreateViewModel, City>();
+            CreateMap<CityUpdateViewModel, City>();
         }
     }
 }

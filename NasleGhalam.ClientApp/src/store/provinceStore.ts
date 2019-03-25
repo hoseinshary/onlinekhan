@@ -16,7 +16,7 @@ import {
 @Module({ namespacedPath: "provinceStore/" })
 export class ProvinceStore extends VuexModule {
   province: IProvince;
-  provinceList: Array<IProvince>;
+  private provinceList: Array<IProvince>;
   openModal: { create: boolean; edit: boolean; delete: boolean };
   private selectedId: number = 0;
   private modelChanged: boolean = true;
@@ -52,11 +52,15 @@ export class ProvinceStore extends VuexModule {
   readonly modelName = "استان";
   readonly recordName = (this.province && this.province.Name) || "";
 
-  get provinceDdl() {
+  get Ddl() {
     return this.provinceList.map(x => ({
       value: x.Id,
       name: x.Name
     }));
+  }
+
+  get gridData() {
+    return this.provinceList;
   }
   //#endregion
 
@@ -70,16 +74,13 @@ export class ProvinceStore extends VuexModule {
   private UPDATE(province: IProvince) {
     let index = this.getIndexById(province.Id);
     if (index < 0) return;
-
-    this.provinceList[index].Id = province.Id;
-    this.provinceList[index].Name = province.Name;
+    util.mapObject(province, this.provinceList[index]);
   }
 
   @mutation
   private DELETE(id: number) {
     let index = this.getIndexById(id);
     if (index < 0) return;
-
     this.provinceList.splice(index, 1);
   }
 
@@ -93,11 +94,6 @@ export class ProvinceStore extends VuexModule {
 
   @mutation
   private SET_PROVINCE_LIST(list: Array<IProvince>) {
-    // debugger;
-    // util.clearArray(this.provinceList);
-    // list.forEach(o => {
-    //   this.provinceList.push(o);
-    // });
     this.provinceList = list;
   }
 

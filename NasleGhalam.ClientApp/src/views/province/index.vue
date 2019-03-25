@@ -9,7 +9,7 @@
           @click="showModalCreate"
         />
         <br>
-        <base-table :grid-data="list" :columns="provinceGridColumn" hasIndex>
+        <base-table :grid-data="provinceStore.gridData" :columns="provinceGridColumn" hasIndex>
           <!-- <template slot="Id"
                     slot-scope="data">
             <base-btn-edit round
@@ -22,7 +22,6 @@
         </base-table>
       </div>
     </base-panel>
-
     <!-- modals -->
     <modal-create></modal-create>
     <!-- <modal-edit></modal-edit>
@@ -42,7 +41,6 @@ import { vxm } from "src/store";
 export default class ProvinceVue extends Vue {
   //### data ###
   provinceStore = vxm.provinceStore;
-  list = vxm.provinceStore.provinceList;
   provinceGridColumn = [
     {
       title: "نام",
@@ -62,6 +60,13 @@ export default class ProvinceVue extends Vue {
   ];
   //--------------------------------------------------
 
+  //### computed ###
+  // get gridData() {
+  //   debugger;
+  //   return this.provinceStore.gridData;
+  // }
+  //--------------------------------------------------
+
   //### methods ###
   showModalCreate() {
     this.provinceStore.resetCreate();
@@ -71,7 +76,7 @@ export default class ProvinceVue extends Vue {
 
   //### hooks ###
   created() {
-    vxm.provinceStore.getAll();
+    this.provinceStore.getAll();
   }
   //--------------------------------------------------
 }

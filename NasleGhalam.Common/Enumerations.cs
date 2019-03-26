@@ -1,4 +1,6 @@
-﻿namespace NasleGhalam.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NasleGhalam.Common
 {
     public enum JwtHashAlgorithm
     {
@@ -32,8 +34,13 @@
 
     public enum UserType
     {
+        [Display(Name = "سازمانی")]
         Organ = 0,
+
+        [Display(Name = "دانش آموز")]
         Student = 1,
+
+        [Display(Name = "معلم")]
         Teacher = 2
     }
 

@@ -25,7 +25,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _actionService = actionService;
         }
 
-
         /// <summary>
         /// گرفتن  نقش با آی دی
         /// </summary>
@@ -43,7 +42,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن همه نقش ها
         /// </summary>
@@ -59,7 +57,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
         /// <summary>
         /// ثبت نقش
         /// </summary>
@@ -71,12 +68,12 @@ namespace NasleGhalam.ServiceLayer.Services
             // سطح نقش باید بزرگتر از سطح نقش کاربر ثبت کننده باشد
             if (roleViewModel.Level <= userRoleLevel)
             {
-                ServerMessageResult msgRes1 = new ServerMessageResult()
+                var msgRes1 = new ClientMessageResult()
                 {
-                    FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
+                    Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
-                return Mapper.Map<ClientMessageResult>(msgRes1);
+                return msgRes1;
             }
             var role = Mapper.Map<Role>(roleViewModel);
             role.SumOfActionBit = "0";
@@ -86,7 +83,6 @@ namespace NasleGhalam.ServiceLayer.Services
             msgRes.Id = role.Id;
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
 
         /// <summary>
         /// ویرایش نقش
@@ -99,12 +95,12 @@ namespace NasleGhalam.ServiceLayer.Services
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             if (roleViewModel.Level <= userRoleLevel)
             {
-                ServerMessageResult msgRes1 = new ServerMessageResult()
+                var msgRes1 = new ClientMessageResult()
                 {
-                    FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
+                    Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
-                return Mapper.Map<ClientMessageResult>(msgRes1);
+                return msgRes1;
             }
 
             var oldRole = GetById(roleViewModel.Id, userRoleLevel);
@@ -118,7 +114,6 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
 
         /// <summary>
         /// حذف نقش
@@ -138,7 +133,6 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
-
         /// <summary>
         /// گرفتن همه نقش ها برای لیست کشویی
         /// </summary>
@@ -157,7 +151,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 }).ToList();
         }
 
-
         /// <summary>
         /// ویرایش دسترسی
         /// </summary>
@@ -171,14 +164,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var action = _actionService.Value.GetActionById(roleAccess.ActionId);
 
             if (roleViewModel == null || action == null)
-            {
-                ServerMessageResult msgRes1 = new ServerMessageResult()
-                {
-                    FaMessage = "نقش یافت نگردید.",
-                    MessageType = MessageType.Error
-                };
-                return Mapper.Map<ClientMessageResult>(msgRes1);
-            }
+                return ClientMessageResult.NotFound();
 
 
             // اگر در کلاینت چک خورده باشد ولی در دیتابیس چک نخورده باشد

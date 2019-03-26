@@ -24,13 +24,11 @@ namespace NasleGhalam.WebApi.Controllers
             _actionService = actionService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.RoleReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_roleService.GetAll(Request.GetRoleLevel()));
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.RoleReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -43,7 +41,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(role);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.RoleCreateAccess)]
         [CheckModelValidation]
@@ -52,7 +49,6 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _roleService.Create(roleViewModel, Request.GetRoleLevel());
             return Ok(msgRes);
         }
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.RoleUpdateAccess)]
@@ -63,14 +59,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(msgRes);
         }
 
-
         [HttpPost, CheckUserAccess(ActionBits.RoleDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _roleService.Delete(id, Request.GetRoleLevel());
             return Ok(msgRes);
         }
-
 
         #region ### Ddl ###
         [HttpGet, CheckUserAccess(ActionBits.StudentCreateAccess, ActionBits.StudentUpdateAccess)]
@@ -94,20 +88,17 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_actionService.Value.GetAllModuleDdl(Request.GetAccess()));
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
         public IHttpActionResult GetAllControllerByModuleIdDdl(int id)
         {
             return Ok(_actionService.Value.GetAllControllerByModuleIdDdl(id, Request.GetAccess()));
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
         public IHttpActionResult GetActionByControllerIdAndModuleId(int controllerId, int roleId, int moduleId)
         {
             return Ok(_actionService.Value.GetActionByControllerIdAndModuleId(controllerId, roleId, moduleId, Request.GetRoleLevel()));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.RoleChangeAccess)]
         public IHttpActionResult ChangeAccess(RoleAccessViewModel roleAccess)
@@ -116,6 +107,5 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(msgRes);
         }
         #endregion
-
     }
 }

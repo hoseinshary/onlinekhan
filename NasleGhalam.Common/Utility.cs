@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace NasleGhalam.Common
@@ -243,6 +246,7 @@ namespace NasleGhalam.Common
         #endregion
 
 
+        #region ### Extension ###
         public static bool CheckImageExtension(string extension)
         {
             extension = extension.ToLower();
@@ -261,5 +265,33 @@ namespace NasleGhalam.Common
             extension = extension.ToLower();
             return (extension == ".xls" || extension == ".xlsx");
         }
+        #endregion
+
+        #region ### Enum ###
+        public static string GetDisplayName<TEnum>(this TEnum e)
+        {
+            string displayName;
+            try
+            {
+                var memInfo = e.GetType().GetMember(e.GetType().ToString());
+                var displayNameAttributes = memInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);
+                displayName = displayNameAttributes.Length > 0 ? ((DisplayAttribute)displayNameAttributes[0]).Name : e.ToString();
+            }
+            catch
+            {
+                displayName = "";
+            }
+
+            return displayName;
+        }
+
+        public static Dictionary<int, string> EnumToDictionary<T>()
+        {
+            if (!typeof(T).IsEnum)
+                throw new ArgumentException("Type must be an enum");
+
+            return Enum.GetValues(typeof(T)).Cast<T>().ToDictionary(t => (int)(object)t, t => t.GetDisplayName());
+        }
+        #endregion
     }
 }

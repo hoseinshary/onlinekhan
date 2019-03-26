@@ -4,8 +4,6 @@ namespace NasleGhalam.ViewModels.Role
 {
     public class RoleViewModel
     {
-        private static readonly string[] AllUserTypeName = { "سازمانی", "دانش آموز", "معلم" };
-
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -16,6 +14,6 @@ namespace NasleGhalam.ViewModels.Role
 
         public UserType UserType { get; set; }
 
-        public string UserTypeName => AllUserTypeName[(int)UserType];
+        public string UserTypeName => UserType.GetDisplayName();
     }
 }

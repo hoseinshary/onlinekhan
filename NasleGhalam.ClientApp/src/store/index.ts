@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import { CityStore, cityStore } from "./cityStore";
 import { ProvinceStore, provinceStore } from "./provinceStore";
+import { RoleStore, roleStore } from "./roleStore";
 
 Vue.use(Vuex);
 
@@ -50,7 +51,8 @@ const store = new Vuex.Store({
   },
   modules: {
     cityStore,
-    provinceStore
+    provinceStore,
+    roleStore
   }
 });
 
@@ -61,5 +63,6 @@ export const vxm = {
   provinceStore: ProvinceStore.CreateProxy(
     store,
     ProvinceStore
-  ) as ProvinceStore
+  ) as ProvinceStore,
+  roleStore: RoleStore.CreateProxy(store, RoleStore) as RoleStore
 };

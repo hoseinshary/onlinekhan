@@ -18,4 +18,3 @@ export default class ProvinceDeleteVue extends Vue {
   //--------------------------------------------------
 }
 </script>
-

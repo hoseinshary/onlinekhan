@@ -1,15 +1,7 @@
-enum CrudType {
-  Create,
-  Update,
-  Delete,
-  Read
-}
-
-enum ModalType {
-  Create,
-  Update,
-  Delete,
-  Read
+enum UserType {
+  Organ = 0,
+  Student = 1,
+  Teacher = 2
 }
 
 enum MessageType {
@@ -20,4 +12,4 @@ enum MessageType {
   Unauthorized = 4
 }
 
-export { CrudType, ModalType, MessageType };
+export { UserType, MessageType };

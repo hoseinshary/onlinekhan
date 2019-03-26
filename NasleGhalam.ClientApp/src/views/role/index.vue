@@ -16,7 +16,7 @@
             color="brown"
             size="sm"
             class="shadow-1 bg-white q-mr-sm"
-            @click="showModalAccess(data.row.Id, data.row.Name)"
+            @click="showModalAccess(data.row.Id)"
           >
             <q-tooltip>انتساب نقش</q-tooltip>
           </q-btn>
@@ -32,7 +32,7 @@
     <modal-create></modal-create>
     <modal-edit></modal-edit>
     <modal-delete></modal-delete>
-    <!--<modal-access v-if="pageAccess.canAccess"></modal-access>-->
+    <modal-access></modal-access>
   </section>
 </template>
 
@@ -43,8 +43,8 @@ import { vxm } from "src/store";
   components: {
     ModalCreate: () => import("./create.vue"),
     ModalEdit: () => import("./edit.vue"),
-    ModalDelete: () => import("./delete.vue")
-    // ModalAccess: () => import("./access.vue")
+    ModalDelete: () => import("./delete.vue"),
+    ModalAccess: () => import("./access.vue")
   }
 })
 export default class RoleVue extends Vue {
@@ -96,6 +96,13 @@ export default class RoleVue extends Vue {
   showModalDelete(id) {
     this.roleStore.getById(id).then(() => {
       this.roleStore.OPEN_MODAL_DELETE(true);
+    });
+  }
+
+  showModalAccess(id, name) {
+    this.roleStore.getById(id).then(() => {
+      vxm.accessStore.OPEN_MODAL_ACCESS(true);
+      vxm.accessStore.SET_ROLE_ID(id);
     });
   }
   //--------------------------------------------------

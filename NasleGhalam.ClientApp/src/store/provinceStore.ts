@@ -47,7 +47,7 @@ export class ProvinceStore extends VuexModule {
     return this.province.Name || "";
   }
 
-  get Ddl() {
+  get ddl() {
     return this.provinceList.map(x => ({
       value: x.Id,
       label: x.Name

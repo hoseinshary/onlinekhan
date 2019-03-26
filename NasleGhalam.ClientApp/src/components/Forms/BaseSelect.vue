@@ -1,34 +1,34 @@
 <template>
-  <q-field count
-           :helper="helper"
-           :error-label="errorLabel()">
+  <q-field count :helper="helper" :error-label="errorLabel()">
     <!-- v-model="model.$model" -->
-    <q-select ref="input"
-              :value="model.$model"
-              @change="val => { model.$model = val; $emit('change', val); }"
-              :options="options"
-              :float-label="displayName"
-              :multiple="multiple"
-              :radio="radio"
-              :toggle="toggle"
-              :chips="chips"
-              :filter="filter"
-              :readonly="readonly"
-              :clearable="clearable"
-              :autofocus-filter="true"
-              filter-placeholder="جستجو"
-              :error="model.$error"
-              :max-height="maxHeight"
-              :prefix="prefix"
-              :suffix="suffix"
-              :align="align"
-              :disable="disable"
-              :before="before"
-              :after="after"
-              @input="$emit('input', $event)"
-              @clear="$emit('clear', $event)"
-              @focus="$emit('focus')"
-              @blur="$emit('blur')" />
+    <q-select
+      ref="input"
+      :value="model.$model"
+      @change="val => { model.$model = val; $emit('change', val); }"
+      :options="options"
+      :float-label="displayName"
+      :multiple="multiple"
+      :radio="radio"
+      :toggle="toggle"
+      :chips="chips"
+      :filter="filter"
+      :readonly="readonly"
+      :clearable="clearable"
+      :autofocus-filter="true"
+      filter-placeholder="جستجو"
+      :error="model.$error"
+      :max-height="maxHeight"
+      :prefix="prefix"
+      :suffix="suffix"
+      :align="align"
+      :disable="disable"
+      :before="before"
+      :after="after"
+      @input="$emit('input', $event)"
+      @clear="$emit('clear', $event)"
+      @focus="$emit('focus')"
+      @blur="$emit('blur')"
+    />
   </q-field>
 </template>
 
@@ -92,7 +92,7 @@ export default {
      */
     getSelectedLabel() {
       var item = this.getSelected;
-      return item ? item.label : '';
+      return item ? item.label : "";
     },
     /**
      * get selected value
@@ -105,7 +105,7 @@ export default {
      */
     errorLabel() {
       if (!this.model.$dirty) {
-        return '';
+        return "";
       }
 
       if (this.model.required !== undefined && !this.model.required) {
@@ -116,7 +116,7 @@ export default {
       ) {
         return `(${this.displayName}) انتخاب نشده است`;
       }
-      return '';
+      return "";
     }
   },
   /**
@@ -127,7 +127,7 @@ export default {
       if (this.model && this.model.$params && this.model.$params.displayName) {
         return this.model.$params.displayName.value;
       }
-      return '';
+      return "";
     },
     getSelected() {
       return this.options.find(o => o.value == this.model.$model);

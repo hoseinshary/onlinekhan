@@ -128,6 +128,7 @@
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionGroupController.cs" />
     <Compile Include="Controllers\QuestionJudgeController.cs" />
+    <Compile Include="Controllers\AccessController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TagController.cs" />

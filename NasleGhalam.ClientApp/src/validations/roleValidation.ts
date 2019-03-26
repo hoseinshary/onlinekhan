@@ -5,7 +5,7 @@ import {
   numeric
 } from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
-import IRole from "src/models/role/IRole";
+import IRole from "src/models/IRole";
 
 type TRole = { role: IRole; validationGroup: string[] };
 const roleValidations: ValidationRuleset<TRole> = {

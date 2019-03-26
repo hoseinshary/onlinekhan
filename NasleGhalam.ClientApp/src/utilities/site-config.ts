@@ -6,6 +6,7 @@ const CITY_URL = "/api/city";
 const LESSON_URL = "/api/lesson";
 const PROVINCE_URL = "/api/province";
 const ROLE_URL = "/api/role";
+const ACCESS_URL = "/api/access";
 const USER_URL = "/api/user";
 const EDUCATION_GROUP_URL = "/api/educationGroup";
 const EDUCATION_SUB_GROUP_URL = "/api/educationSubGroup";
@@ -32,6 +33,7 @@ export {
   LESSON_URL,
   PROVINCE_URL,
   ROLE_URL,
+  ACCESS_URL,
   USER_URL,
   EDUCATION_GROUP_URL,
   EDUCATION_SUB_GROUP_URL,

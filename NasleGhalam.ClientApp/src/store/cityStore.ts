@@ -47,7 +47,7 @@ export class CityStore extends VuexModule {
     return this.city.Name || "";
   }
 
-  get Ddl() {
+  get ddl() {
     return this.cityList.map(x => ({
       value: x.Id,
       label: x.Name

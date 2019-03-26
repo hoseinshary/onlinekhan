@@ -1,6 +1,6 @@
 import { displayName } from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
-import IAccess from "src/models/role/IAccess";
+import IAccess from "src/models/IAccess";
 
 type TAccess = { access: IAccess; validationGroup: string[] };
 const accessValidations: ValidationRuleset<TAccess> = {

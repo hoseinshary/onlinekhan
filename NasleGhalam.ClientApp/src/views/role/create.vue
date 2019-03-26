@@ -21,7 +21,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
-import { roleValidations } from "src/validations/role/roleValidation";
+import { roleValidations } from "src/validations/roleValidation";
 
 @Component({
   validations: roleValidations

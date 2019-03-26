@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Action;
 using Action = NasleGhalam.DomainClasses.Entities.Action;
 
@@ -38,16 +37,13 @@ namespace NasleGhalam.ServiceLayer.Services
                 }).FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن اکشن های یک کنترلر
         /// </summary>
-        /// <param name="controllerId"></param>
         /// <param name="roleId"></param>
-        /// <param name="moduleId"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public IList<ActionViewModel> GetActionByControllerIdAndModuleId(int controllerId, int roleId, int moduleId, byte userRoleLevel)
+        public IList<ActionViewModel> GetAllActions(int roleId, byte userRoleLevel)
         {
             var role = _roleService.Value.GetById(roleId, userRoleLevel);
             if (role == null)
@@ -55,8 +51,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
             return _actions
                 .Include(current => current.Controller)
-                .Where(current => moduleId == 0 || current.Controller.ModuleId == moduleId)
-                .Where(current => controllerId == 0 || current.ControllerId == controllerId)
                 .OrderBy(current => current.Controller.Priority)
                 .ThenBy(current => current.Priority)
                 .AsEnumerable()
@@ -65,39 +59,11 @@ namespace NasleGhalam.ServiceLayer.Services
                     Id = current.Id,
                     ActionFaName = current.FaName,
                     ControllerFaName = current.Controller.FaName,
-                    IsChecked = Utility.HasAccess(role.SumOfActionBit, current.ActionBit)
+                    IsChecked = Utility.HasAccess(role.SumOfActionBit, current.ActionBit),
+                    ModuleId = current.Controller.ModuleId,
+                    ControllerId = current.ControllerId
                 }).ToList();
         }
-
-
-        /// <summary>
-        /// گرفتن منو برای لیست کشویی با اعمال دسترسی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllControllerByModuleIdDdl(int moduleId, string userAccess)
-        {
-            var controller = _actions
-                .Include(current => current.Controller)
-                .Where(current => current.IsIndex)
-                .Where(current => moduleId == 0 || current.Controller.ModuleId == moduleId)
-                .OrderBy(current => current.Controller.Priority)
-                .AsEnumerable()
-                .Where(current => Utility.HasAccess(userAccess, current.ActionBit))
-                .Select(current => new SelectViewModel
-                {
-                    value = current.ControllerId,
-                    label = current.Controller.FaName
-                }).ToList();
-
-            controller.Insert(0, new SelectViewModel()
-            {
-                label = "همه",
-                value = 0
-            });
-
-            return controller;
-        }
-
 
         /// <summary>
         /// گرفتن  منو با اعمال دسترسی
@@ -107,7 +73,6 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return GetAllModuleQuery(userAccess).ToList();
         }
-
 
         /// <summary>
         /// گرفتن زیر منو
@@ -125,6 +90,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(current => new SubMenuViewModel()
                 {
                     ModuleId = current.Controller.ModuleId,
+                    ControllerId = current.ControllerId,
                     FaName = current.Controller.FaName,
                     EnName = current.Controller.EnName,
                     Icon = current.Controller.Icone,
@@ -175,30 +141,6 @@ namespace NasleGhalam.ServiceLayer.Services
             //    })
             //    .ToList();
         }
-
-
-        /// <summary>
-        /// گرفتن  منو برای لیست کشویی با اعمال دسترسی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllModuleDdl(string userAccess)
-        {
-            var module = GetAllModuleQuery(userAccess)
-                .Select(current => new SelectViewModel
-                {
-                    value = current.ModuleId,
-                    label = current.ModuleName
-                }).ToList();
-
-            module.Insert(0, new SelectViewModel()
-            {
-                label = "همه",
-                value = 0
-            });
-
-            return module;
-        }
-
 
         /// <summary>
         /// گرفتن کوئری ماژول برای لیست کشویی با اعمال دسترسی

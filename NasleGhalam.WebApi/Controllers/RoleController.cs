@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.ViewModels.Role;
@@ -16,12 +15,9 @@ namespace NasleGhalam.WebApi.Controllers
     public class RoleController : ApiController
     {
         private readonly RoleService _roleService;
-        private readonly Lazy<ActionService> _actionService;
-        public RoleController(RoleService roleService,
-            Lazy<ActionService> actionService)
+        public RoleController(RoleService roleService)
         {
             _roleService = roleService;
-            _actionService = actionService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.RoleReadAccess)]
@@ -65,32 +61,5 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _roleService.Delete(id, Request.GetRoleLevel());
             return Ok(msgRes);
         }
-
-        #region ### Access ###
-        [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
-        public IHttpActionResult GetAllModuleDdl()
-        {
-            return Ok(_actionService.Value.GetAllModuleDdl(Request.GetAccess()));
-        }
-
-        [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
-        public IHttpActionResult GetAllControllerByModuleIdDdl(int id)
-        {
-            return Ok(_actionService.Value.GetAllControllerByModuleIdDdl(id, Request.GetAccess()));
-        }
-
-        [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
-        public IHttpActionResult GetActionByControllerIdAndModuleId(int controllerId, int roleId, int moduleId)
-        {
-            return Ok(_actionService.Value.GetActionByControllerIdAndModuleId(controllerId, roleId, moduleId, Request.GetRoleLevel()));
-        }
-
-        [HttpPost, CheckUserAccess(ActionBits.RoleChangeAccess)]
-        public IHttpActionResult ChangeAccess(RoleAccessViewModel roleAccess)
-        {
-            var msgRes = _roleService.ChangeAccess(roleAccess, Request.GetAccess(), Request.GetRoleLevel());
-            return Ok(msgRes);
-        }
-        #endregion
     }
 }

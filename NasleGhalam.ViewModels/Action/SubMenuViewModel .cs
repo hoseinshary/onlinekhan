@@ -4,6 +4,8 @@
     {
         public int ModuleId { get; set; }
 
+        public int ControllerId { get; set; }
+
         public string FaName { get; set; }
 
         public string EnName { get; set; }

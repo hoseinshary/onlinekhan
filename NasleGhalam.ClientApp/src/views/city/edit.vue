@@ -9,7 +9,7 @@
   >
     <base-select
       :model="$v.city.ProvinceId"
-      :options="provinceStore.Ddl"
+      :options="provinceStore.ddl"
       class="col-md-6"
       ref="provinceId"
     />

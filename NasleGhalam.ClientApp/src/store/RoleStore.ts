@@ -1,5 +1,6 @@
 import Vue from "Vue";
-import IRole, { DefaultRole } from "src/models/role/IRole";
+import IRole, { DefaultRole } from "src/models/IRole";
+import IAccess, { DefaultAccess } from "src/models/IAccess";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -15,9 +16,14 @@ import {
 
 @Module({ namespacedPath: "roleStore/" })
 export class RoleStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean };
+  openModal: {
+    create: boolean;
+    edit: boolean;
+    delete: boolean;
+  };
   role: IRole;
   private roleList: Array<IRole>;
+  access: IAccess;
   private selectedId: number = 0;
   private modelChanged: boolean = true;
   private createVue: Vue;
@@ -36,6 +42,7 @@ export class RoleStore extends VuexModule {
       edit: false,
       delete: false
     };
+    this.access = util.cloneObject(DefaultAccess);
   }
 
   //#region ### getters ###
@@ -47,7 +54,7 @@ export class RoleStore extends VuexModule {
     return this.role.Name || "";
   }
 
-  get Ddl() {
+  get ddl() {
     return this.roleList.map(x => ({
       value: x.Id,
       label: x.Name

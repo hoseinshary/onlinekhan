@@ -11,5 +11,9 @@
         public bool IsChecked { get; set; }
 
         public short ActionBit { get; set; }
+
+        public int ControllerId { get; set; }
+
+        public int ModuleId { get; set; }
     }
 }

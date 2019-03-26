@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.ViewModels.User;
-using NasleGhalam.WebApi.Extentions;
+using NasleGhalam.WebApi.Extensions;
 using NasleGhalam.WebApi.FilterAttribute;
 
 namespace NasleGhalam.WebApi.Controllers

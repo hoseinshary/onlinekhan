@@ -3,7 +3,7 @@ using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.ViewModels.Role;
-using NasleGhalam.WebApi.Extentions;
+using NasleGhalam.WebApi.Extensions;
 using NasleGhalam.WebApi.FilterAttribute;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -65,21 +65,6 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _roleService.Delete(id, Request.GetRoleLevel());
             return Ok(msgRes);
         }
-
-        #region ### Ddl ###
-        [HttpGet, CheckUserAccess(ActionBits.StudentCreateAccess, ActionBits.StudentUpdateAccess)]
-        public IHttpActionResult GetAllByStudentDdl()
-        {
-            return Ok(_roleService.GetAllDdl(Request.GetRoleLevel(), UserType.Student));
-        }
-
-        [HttpGet, CheckUserAccess(ActionBits.UserCreateAccess, ActionBits.UserUpdateAccess)]
-        public IHttpActionResult GetAllByOrganDdl()
-        {
-            return Ok(_roleService.GetAllDdl(Request.GetRoleLevel(), UserType.Organ));
-        }
-        #endregion
-
 
         #region ### Access ###
         [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]

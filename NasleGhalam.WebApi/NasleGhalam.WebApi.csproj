@@ -142,7 +142,7 @@
     </None>
     <Compile Include="App_Start\StructureMapHttpControllerActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Extentions\RequestExtention.cs" />
+    <Compile Include="Extensions\RequestExtension.cs" />
     <Compile Include="FilterAttribute\CheckImageValidation.cs" />
     <Compile Include="FilterAttribute\CheckImageValidationNotRequired.cs" />
     <Compile Include="FilterAttribute\CheckModelValidation.cs" />

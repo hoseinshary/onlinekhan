@@ -7,10 +7,9 @@
         <base-btn-create :label="`ایجاد (${roleStore.modelName}) جدید`" @click="showModalCreate"/>
         <br>
         <base-table :grid-data="roleStore.gridData" :columns="roleGridColumn" hasIndex>
-          <!-- <q-btn
+          <q-btn
             slot="role"
             slot-scope="data"
-            v-if="pageAccess.canAccess"
             outline
             round
             icon="list"
@@ -22,22 +21,18 @@
             <q-tooltip>انتساب نقش</q-tooltip>
           </q-btn>
           <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="pageAccess.canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete
-              v-if="pageAccess.canDelete"
-              round
-              @click="showModalDelete(data.row.Id)"
-            />
-          </template>-->
+            <base-btn-edit round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete round @click="showModalDelete(data.row.Id)"/>
+          </template>
         </base-table>
       </div>
     </base-panel>
 
     <!-- modals -->
-    <!-- <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete>
-    <modal-access v-if="pageAccess.canAccess"></modal-access>-->
+    <modal-create></modal-create>
+    <modal-edit></modal-edit>
+    <modal-delete></modal-delete>
+    <!--<modal-access v-if="pageAccess.canAccess"></modal-access>-->
   </section>
 </template>
 
@@ -46,9 +41,9 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component({
   components: {
-    // ModalCreate: () => import("./create.vue"),
-    // ModalEdit: () => import("./edit.vue"),
-    // ModalDelete: () => import("./delete.vue"),
+    ModalCreate: () => import("./create.vue"),
+    ModalEdit: () => import("./edit.vue"),
+    ModalDelete: () => import("./delete.vue")
     // ModalAccess: () => import("./access.vue")
   }
 })
@@ -65,7 +60,7 @@ export default class RoleVue extends Vue {
       data: "Level"
     },
     {
-      title: "سطح نقش",
+      title: "نوع کاربری",
       data: "UserTypeName"
     },
     {

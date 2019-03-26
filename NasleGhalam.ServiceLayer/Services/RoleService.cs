@@ -6,7 +6,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Role;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -68,20 +67,21 @@ namespace NasleGhalam.ServiceLayer.Services
             // سطح نقش باید بزرگتر از سطح نقش کاربر ثبت کننده باشد
             if (roleViewModel.Level <= userRoleLevel)
             {
-                var msgRes1 = new ClientMessageResult()
+                return new ClientMessageResult()
                 {
                     Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
-                return msgRes1;
             }
             var role = Mapper.Map<Role>(roleViewModel);
             role.SumOfActionBit = "0";
             _roles.Add(role);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = role.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            clientResult.Obj = GetById(role.Id, userRoleLevel);
+
+            return clientResult;
         }
 
         /// <summary>
@@ -95,24 +95,22 @@ namespace NasleGhalam.ServiceLayer.Services
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             if (roleViewModel.Level <= userRoleLevel)
             {
-                var msgRes1 = new ClientMessageResult()
+                return new ClientMessageResult()
                 {
                     Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
-                return msgRes1;
             }
+            
+            var role = Mapper.Map<Role>(roleViewModel);
+            _uow.ExcludeFieldsFromUpdate(role, x=>x.SumOfActionBit);
+            _uow.ValidateOnSaveEnabled(false);
 
-            var oldRole = GetById(roleViewModel.Id, userRoleLevel);
-            if (oldRole == null)
-                return ClientMessageResult.NotFound();
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            clientResult.Obj = GetById(role.Id, userRoleLevel);
 
-            var newRole = Mapper.Map<Role>(roleViewModel);
-            newRole.SumOfActionBit = oldRole.SumOfActionBit;
-
-            _uow.MarkAsChanged(newRole);
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            return clientResult;
         }
 
         /// <summary>
@@ -131,24 +129,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(role);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-        /// <summary>
-        /// گرفتن همه نقش ها برای لیست کشویی
-        /// </summary>
-        /// <param name="userRoleLevel"></param>
-        /// <param name="userType"></param>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl(byte userRoleLevel, UserType userType)
-        {
-            return _roles
-                .Where(current => current.Level > userRoleLevel)
-                .Where(current => current.UserType == userType)
-                .Select(current => new SelectViewModel
-                {
-                    value = current.Id,
-                    label = current.Name
-                }).ToList();
         }
 
         /// <summary>

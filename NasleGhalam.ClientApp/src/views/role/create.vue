@@ -1,70 +1,43 @@
 <template>
-  <my-modal-create :title="modelName"
-                   :show="isOpenModalCreate"
-                   @confirm="submitCreateStore"
-                   @reset="resetCreateStore"
-                   @close="toggleModalCreateStore(false)">
-
-    <my-input :model="$v.roleObj.Name"
-              class="col-md-6" />
-
-    <my-input :model="$v.roleObj.Level"
-              class="col-md-6" />
-
-    <my-field class="col-12"
-              :model="$v.roleObj.UserType">
+  <base-modal-create
+    :title="roleStore.modelName"
+    :show="roleStore.openModal.create"
+    @confirm="roleStore.submitCreate"
+    @reset="roleStore.resetCreate"
+    @close="roleStore.OPEN_MODAL_CREATE(false)"
+  >
+    <base-input :model="$v.role.Name" class="col-md-6"/>
+    <base-input :model="$v.role.Level" class="col-md-6"/>
+    <base-field class="col-12" :model="$v.role.UserType">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="0"
-                 label="سازمانی" />
-        <q-radio v-model="data.obj.$model"
-                 :val="1"
-                 label="دانش آموز" />
-        <q-radio v-model="data.obj.$model"
-                 :val="2"
-                 label="معلم" />
+        <q-radio v-model="data.obj.$model" :val="0" label="سازمانی"/>
+        <q-radio v-model="data.obj.$model" :val="1" label="دانش آموز"/>
+        <q-radio v-model="data.obj.$model" :val="2" label="معلم"/>
       </template>
-    </my-field>
-
-  </my-modal-create>
+    </base-field>
+  </base-modal-create>
 </template>
 
-<script>
-import viewModel from 'viewModels/role/roleViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { roleValidations } from "src/validations/role/roleValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('roleStore', [
-      'toggleModalCreateStore',
-      'createVueStore',
-      'submitCreateStore',
-      'resetCreateStore'
-    ])
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('roleStore', {
-      modelName: 'modelName',
-      roleObj: 'roleObj',
-      isOpenModalCreate: 'isOpenModalCreate'
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: roleValidations
+})
+export default class RoleCreateVue extends Vue {
+  $v: any;
+
+  //### data ###
+  roleStore = vxm.roleStore;
+  role = vxm.roleStore.role;
+  //--------------------------------------------------
+
+  //### hooks ###
   created() {
-    this.createVueStore(this);
+    this.roleStore.SET_CREATE_VUE(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
-

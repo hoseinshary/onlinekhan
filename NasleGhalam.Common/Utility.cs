@@ -270,10 +270,14 @@ namespace NasleGhalam.Common
         #region ### Enum ###
         public static string GetDisplayName<TEnum>(this TEnum e)
         {
-            string displayName;
+            var displayName = "";
             try
             {
-                var memInfo = e.GetType().GetMember(e.GetType().ToString());
+                var enumType = e.GetType().GetEnumName(e);
+                if (enumType == null)
+                    return displayName;
+
+                var memInfo = e.GetType().GetMember(enumType);
                 var displayNameAttributes = memInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);
                 displayName = displayNameAttributes.Length > 0 ? ((DisplayAttribute)displayNameAttributes[0]).Name : e.ToString();
             }

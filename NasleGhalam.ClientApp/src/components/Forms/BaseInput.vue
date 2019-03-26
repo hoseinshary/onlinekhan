@@ -1,35 +1,35 @@
 <template>
-  <q-field count
-           :helper="helper"
-           :error-label="errorLabel()">
-    <q-input ref="input"
-             :type="type"
-             v-model="model.$model"
-             :float-label="displayName"
-             :error="model.$error"
-             :max-height="maxHeight"
-             :prefix="prefix"
-             :suffix="suffix"
-             :readonly="readonly"
-             :clearable="clearable"
-             :align="align"
-             :disable="disable"
-             :before="before"
-             :after="after"
-             :maxlength="inputMaxLen"
-             :rows="rows"
-             :min="min"
-             :max="max"
-             :step="step"
-             :autocomplete="autocomplete"
-             @input="$emit('input', model)"
-             @change="$emit('change', model)"
-             @clear="$emit('clear', model)"
-             @focus="$emit('focus')"
-             @blur="$emit('blur')"
-             @keydown="keydown"
-             @keyup="$emit('keyup',$event)"
-             @click="$emit('click',$event)" />
+  <q-field count :helper="helper" :error-label="errorLabel()">
+    <q-input
+      ref="input"
+      :type="type"
+      v-model="model.$model"
+      :float-label="displayName"
+      :error="model.$error"
+      :max-height="maxHeight"
+      :prefix="prefix"
+      :suffix="suffix"
+      :readonly="readonly"
+      :clearable="clearable"
+      :align="align"
+      :disable="disable"
+      :before="before"
+      :after="after"
+      :maxlength="inputMaxLen"
+      :rows="rows"
+      :min="min"
+      :max="max"
+      :step="step"
+      :autocomplete="autocomplete"
+      @input="$emit('input', model)"
+      @change="$emit('change', model)"
+      @clear="$emit('clear', model)"
+      @focus="$emit('focus')"
+      @blur="$emit('blur')"
+      @keydown="keydown"
+      @keyup="$emit('keyup',$event)"
+      @click="$emit('click',$event)"
+    />
   </q-field>
 </template>
 
@@ -111,7 +111,6 @@ export default {
       if (!this.model.$dirty) {
         return "";
       }
-
       if (this.isOnlyPersianChar) {
         return "فقط از حروف فارسی استفاده شود";
       } else if (this.isNotPersianChar) {

@@ -1,35 +1,22 @@
 <template>
-  <my-modal-delete :title="modelName"
-                   :recordName="recordName"
-                   :show="isOpenModalDelete"
-                   @confirm="submitDelete"
-                   @close="toggleModalDeleteStore(false)">
-  </my-modal-delete>
+  <base-modal-delete
+    :title="roleStore.modelName"
+    :recordName="roleStore.recordName"
+    :show="roleStore.openModal.delete"
+    @confirm="roleStore.submitDelete"
+    @close="roleStore.OPEN_MODAL_DELETE(false)"
+  ></base-modal-delete>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex';
-
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('roleStore', ['toggleModalDeleteStore', 'submitDeleteStore']),
-    submitDelete() {
-      this.submitDeleteStore(this);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('roleStore', {
-      modelName: 'modelName',
-      isOpenModalDelete: 'isOpenModalDelete'
-    }),
-    ...mapGetters('roleStore', ['recordName'])
-  }
-};
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+@Component
+export default class RoleDeleteVue extends Vue {
+  //### data ###
+  roleStore = vxm.roleStore;
+  //--------------------------------------------------
+}
 </script>
+
 

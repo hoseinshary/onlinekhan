@@ -66,17 +66,17 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="roleViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(RoleCreateViewModel roleViewModel, byte userRoleLevel)
+        public ClientMessageResult Create(RoleCreateViewModel roleViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ثبت کننده باشد
             if (roleViewModel.Level <= userRoleLevel)
             {
-                MessageResultServer msgRes1 = new MessageResultServer()
+                ServerMessageResult msgRes1 = new ServerMessageResult()
                 {
                     FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
-                return Mapper.Map<MessageResultClient>(msgRes1);
+                return Mapper.Map<ClientMessageResult>(msgRes1);
             }
             var role = Mapper.Map<Role>(roleViewModel);
             role.SumOfActionBit = "0";
@@ -84,7 +84,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = role.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -94,31 +94,29 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="roleViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(RoleUpdateViewModel roleViewModel, byte userRoleLevel)
+        public ClientMessageResult Update(RoleUpdateViewModel roleViewModel, byte userRoleLevel)
         {
             // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
             if (roleViewModel.Level <= userRoleLevel)
             {
-                MessageResultServer msgRes1 = new MessageResultServer()
+                ServerMessageResult msgRes1 = new ServerMessageResult()
                 {
                     FaMessage = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
                     MessageType = MessageType.Error
                 };
-                return Mapper.Map<MessageResultClient>(msgRes1);
+                return Mapper.Map<ClientMessageResult>(msgRes1);
             }
 
             var oldRole = GetById(roleViewModel.Id, userRoleLevel);
             if (oldRole == null)
-            {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
-            }
+                return ClientMessageResult.NotFound();
 
             var newRole = Mapper.Map<Role>(roleViewModel);
             newRole.SumOfActionBit = oldRole.SumOfActionBit;
 
             _uow.MarkAsChanged(newRole);
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -128,18 +126,16 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id, byte userRoleLevel)
+        public ClientMessageResult Delete(int id, byte userRoleLevel)
         {
             var roleViewModel = GetById(id, userRoleLevel);
             if (roleViewModel == null)
-            {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
-            }
+                return ClientMessageResult.NotFound();
 
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsDeleted(role);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -169,19 +165,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="userAccess"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public MessageResultClient ChangeAccess(RoleAccessViewModel roleAccess, string userAccess, byte userRoleLevel)
+        public ClientMessageResult ChangeAccess(RoleAccessViewModel roleAccess, string userAccess, byte userRoleLevel)
         {
             var roleViewModel = GetById(roleAccess.RoleId, userRoleLevel);
             var action = _actionService.Value.GetActionById(roleAccess.ActionId);
 
             if (roleViewModel == null || action == null)
             {
-                MessageResultServer msgRes1 = new MessageResultServer()
+                ServerMessageResult msgRes1 = new ServerMessageResult()
                 {
                     FaMessage = "نقش یافت نگردید.",
                     MessageType = MessageType.Error
                 };
-                return Mapper.Map<MessageResultClient>(msgRes1);
+                return Mapper.Map<ClientMessageResult>(msgRes1);
             }
 
 
@@ -201,7 +197,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsChanged(role);
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
     }
 }

@@ -59,14 +59,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionJudgeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
+        public ClientMessageResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
         {
             var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
             _questionJudges.Add(questionJudge);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
 			msgRes.Id = questionJudge.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -75,13 +75,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionJudgeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(QuestionJudgeUpdateViewModel questionJudgeViewModel)
+        public ClientMessageResult Update(QuestionJudgeUpdateViewModel questionJudgeViewModel)
         {
             var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
             _uow.MarkAsChanged(questionJudge);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-			return Mapper.Map<MessageResultClient>(msgRes);
+			return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -90,19 +90,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
 			var  questionJudgeViewModel = GetById(id);
             if (questionJudgeViewModel == null)
             {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
             }
 
             var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
             _uow.MarkAsDeleted(questionJudge);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-			return Mapper.Map<MessageResultClient>(msgRes);
+			return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 

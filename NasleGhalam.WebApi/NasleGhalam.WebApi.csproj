@@ -125,6 +125,8 @@
     <Compile Include="Controllers\LookupController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\PublisherController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\QuestionGroupController.cs" />
     <Compile Include="Controllers\QuestionJudgeController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
@@ -142,7 +144,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Extentions\RequestExtention.cs" />
     <Compile Include="FilterAttribute\CheckImageValidation.cs" />
-    <Compile Include="FilterAttribute\CheckImageValidatioNotRequired.cs" />
+    <Compile Include="FilterAttribute\CheckImageValidationNotRequired.cs" />
     <Compile Include="FilterAttribute\CheckModelValidation.cs" />
     <Compile Include="FilterAttribute\CheckUserAccess.cs" />
     <Compile Include="FilterAttribute\CheckWordFileValidation.cs" />

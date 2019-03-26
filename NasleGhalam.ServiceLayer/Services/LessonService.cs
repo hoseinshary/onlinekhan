@@ -61,7 +61,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(LessonCreateViewModel lessonViewModel)
+        public ClientMessageResult Create(LessonCreateViewModel lessonViewModel)
         {
             var lesson = Mapper.Map<Lesson>(lessonViewModel);
             _lessons.Add(lesson);
@@ -75,7 +75,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = lesson.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -84,7 +84,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="lessonUpdateViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(LessonUpdateViewModel lessonUpdateViewModel)
+        public ClientMessageResult Update(LessonUpdateViewModel lessonUpdateViewModel)
         {
             var lesson = _lessons
                 .Include(current => current.EducationTrees)
@@ -147,7 +147,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -156,7 +156,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var lesson = _lessons
                 .Include(current => current.EducationTrees)
@@ -165,7 +165,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (lesson == null)
             {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
             }
 
             //remove education tree 
@@ -185,7 +185,7 @@ namespace NasleGhalam.ServiceLayer.Services
             
             _uow.MarkAsDeleted(lesson);
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 

@@ -47,7 +47,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.AxillaryBookCreateAccess)]
         [CheckModelValidation]
-        [CheckImageValidatioNotRequired("img", 1024)]
+        [CheckImageValidationNotRequired("img", 1024)]
         public IHttpActionResult Create([FromUri]AxillaryBookViewModel axillaryBookViewModel)
         {
             var postedFile = HttpContext.Current.Request.Files.Get("img");
@@ -69,7 +69,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.AxillaryBookUpdateAccess)]
         [CheckModelValidation]
-        [CheckImageValidatioNotRequired("img", 1024)]
+        [CheckImageValidationNotRequired("img", 1024)]
         public IHttpActionResult Update([FromUri] AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = _axillaryBookService.GetById(axillaryBookViewModel.Id);

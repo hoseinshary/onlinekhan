@@ -66,7 +66,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="word"></param>
         /// <param name="excel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
+        public ClientMessageResult Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
             
@@ -231,12 +231,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".xlsx");
             }
 
-            var returnVal = Mapper.Map<MessageResultClient>(msgRes);
+            var returnVal = Mapper.Map<ClientMessageResult>(msgRes);
             returnVal.Obj = Mapper.Map<QuestionGroupViewModel>(questionGroup);
             return returnVal;
         }
 
-        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word )
+        public ClientMessageResult PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word )
         {
             var returnGuidList = new List<string>();
 
@@ -319,7 +319,7 @@ namespace NasleGhalam.ServiceLayer.Services
             app.Quit();
             /////////////////////////////////
 
-            var msgRes = new MessageResultClient {MessageType = MessageType.Success, Obj = returnGuidList};
+            var msgRes = new ClientMessageResult {MessageType = MessageType.Success, Obj = returnGuidList};
             return msgRes;
         }
 
@@ -329,13 +329,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionGroupViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(QuestionGroupUpdateViewModel questionGroupViewModel)
+        public ClientMessageResult Update(QuestionGroupUpdateViewModel questionGroupViewModel)
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
             _uow.MarkAsChanged(questionGroup);
 
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -345,19 +345,17 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <returns></returns>
         /// todo: delete all questions in one commit
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var questionGroupViewModel = GetById(id);
             if (questionGroupViewModel == null)
-            {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
-            }
+                return ClientMessageResult.NotFound();
 
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
             _uow.MarkAsDeleted(questionGroup);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
         public bool IsQuestionParagraph(string s)

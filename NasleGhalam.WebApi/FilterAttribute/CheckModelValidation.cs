@@ -13,7 +13,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
         {
             if (actionContext.ModelState.IsValid) return;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (var modelState in actionContext.ModelState)
             {
                 foreach (var error in modelState.Value.Errors)
@@ -24,7 +24,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
 
             actionContext.Response = actionContext.ControllerContext.Request
                 .CreateResponse(HttpStatusCode.OK,
-                    new MessageResultClient
+                    new ClientMessageResult
                     {
                         Message = sb.ToString(),
                         MessageType = MessageType.Error

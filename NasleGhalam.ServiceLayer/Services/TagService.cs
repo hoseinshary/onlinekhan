@@ -61,14 +61,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="tagViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(TagViewModel tagViewModel)
+        public ClientMessageResult Create(TagViewModel tagViewModel)
         {
             var tag = Mapper.Map<Tag>(tagViewModel);
             _tags.Add(tag);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = tag.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -77,13 +77,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="tagViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(TagViewModel tagViewModel)
+        public ClientMessageResult Update(TagViewModel tagViewModel)
         {
             var tag = Mapper.Map<Tag>(tagViewModel);
             _uow.MarkAsChanged(tag);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -92,19 +92,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var tagViewModel = GetById(id);
             if (tagViewModel == null)
             {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
             }
 
             var tag = Mapper.Map<Tag>(tagViewModel);
             _uow.MarkAsDeleted(tag);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 

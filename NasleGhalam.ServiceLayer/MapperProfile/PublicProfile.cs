@@ -7,7 +7,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
     {
         public PublicProfile()
         {
-            CreateMap<MessageResultServer, MessageResultClient>()
+            CreateMap<ServerMessageResult, ClientMessageResult>()
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.FaMessage))
                 .ForMember(dest => dest.Obj, opt => opt.Ignore());
         }

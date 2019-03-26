@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -18,7 +17,7 @@ namespace NasleGhalam.Common
             int month = pc.GetMonth(mDate);
             int year = pc.GetYear(mDate);
 
-            return String.Format("{0:0000}/{1:00}/{2:00}", year, month, day);
+            return string.Format("{0:0000}/{1:00}/{2:00}", year, month, day);
         }
 
         public static string ToPersianDateTime(this DateTime mDateTime)
@@ -30,7 +29,7 @@ namespace NasleGhalam.Common
             int month = pc.GetMonth(mDate);
             int year = pc.GetYear(mDate);
 
-            return String.Format("{0:0000}/{1:00}/{2:00} {3:00}:{4:00}:{5:00}", year, month, day, mDate.Hour, mDate.Minute, mDate.Second);
+            return string.Format("{0:0000}/{1:00}/{2:00} {3:00}:{4:00}:{5:00}", year, month, day, mDate.Hour, mDate.Minute, mDate.Second);
         }
 
         public static DateTime? ToMiladiDateTime(this string pDateTime)
@@ -38,7 +37,7 @@ namespace NasleGhalam.Common
             PersianCalendar pc = new PersianCalendar();
             DateTime thisDate = DateTime.Now;
 
-            string[] arr_dateTime = pDateTime.Split(new Char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] arr_dateTime = pDateTime.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (arr_dateTime.Length == 2) // date and time
             {
@@ -98,7 +97,7 @@ namespace NasleGhalam.Common
 
 
         #region ### Access ###
-        public static String SumBinary(String a, String b)
+        public static string SumBinary(string a, string b)
         {
             int a_len = a.Length;
             int b_len = b.Length;
@@ -130,7 +129,7 @@ namespace NasleGhalam.Common
         /// <param name="sumOfAction"></param>
         /// <param name="actionBit"></param>
         /// <returns></returns>
-        public static String AddAccess(String sumOfAction, int actionBit)
+        public static string AddAccess(string sumOfAction, int actionBit)
         {
             StringBuilder strSumAction = new StringBuilder(sumOfAction);
             while (strSumAction.Length <= actionBit)
@@ -150,7 +149,7 @@ namespace NasleGhalam.Common
         /// <param name="sumOfAction"></param>
         /// <param name="actionBit"></param>
         /// <returns></returns>
-        public static String RemoveAccess(String sumOfAction, int actionBit)
+        public static string RemoveAccess(string sumOfAction, int actionBit)
         {
             StringBuilder strSumAction = new StringBuilder(sumOfAction);
             while (strSumAction.Length <= actionBit)
@@ -168,7 +167,7 @@ namespace NasleGhalam.Common
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static String AndBinary(String a, String b)
+        public static string AndBinary(string a, string b)
         {
             int a_len = a.Length;
             int b_len = b.Length;
@@ -186,7 +185,7 @@ namespace NasleGhalam.Common
             return and.ToString();
         }
 
-        private static int GetBit(String s, int index)
+        private static int GetBit(string s, int index)
         {
             if (index < 0 || index >= s.Length)
                 return 0;
@@ -204,15 +203,15 @@ namespace NasleGhalam.Common
         /// <param name="sumOfAction"></param>
         /// <param name="actionBit"></param>
         /// <returns></returns>
-        public static bool HasAccess(String sumOfAction, short actionBit)
+        public static bool HasAccess(string sumOfAction, short actionBit)
         {
-            String strActionBit = ConvertIntToBit(actionBit, sumOfAction.Length);
-            String result = AndBinary(sumOfAction, strActionBit);
+            string strActionBit = ConvertIntToBit(actionBit, sumOfAction.Length);
+            string result = AndBinary(sumOfAction, strActionBit);
 
             return result == strActionBit;
         }
 
-        public static bool HasAccess(String sumOfAction, short[] actionBits)
+        public static bool HasAccess(string sumOfAction, short[] actionBits)
         {
             foreach (short actionBit in actionBits)
             {
@@ -226,7 +225,7 @@ namespace NasleGhalam.Common
             return false;
         }
 
-        private static String ConvertIntToBit(int actionBit, int len)
+        private static string ConvertIntToBit(int actionBit, int len)
         {
             StringBuilder strBulderAction = new StringBuilder("1");
             for (int i = 0; i < actionBit; i++)
@@ -244,60 +243,23 @@ namespace NasleGhalam.Common
         #endregion
 
 
-        #region ### Return Message ###
-        public static MessageResultServer NotFoundMessage()
+        public static bool CheckImageExtension(string extension)
         {
-            return new MessageResultServer
-            {
-                FaMessage = "رکورد مورد نظر یافت نگردید.",
-                MessageType = MessageType.NotFound
-            };
+            extension = extension.ToLower();
+            return (extension == ".jpg" || extension == ".gif" || extension == ".jpeg"
+                    || extension == ".png" || extension == ".bmp" || extension == ".icn");
         }
 
-
-        //public static MessageResultApi UnauthorizedMessage()
-        //{
-        //    return new MessageResultApi
-        //    {
-        //        Message = "عدم دسترسی.",
-        //        MessageType = MessageType.Unauthorized
-        //    };
-        //} 
-        #endregion
-
-        public static bool CheckImageExtention(String extention)
+        public static bool CheckWordFileExtension(string extension)
         {
-            extention = extention.ToLower();
-            return (extention == ".jpg" || extention == ".gif" || extention == ".jpeg"
-                    || extention == ".png" || extention == ".bmp" || extention == ".icn");
+            extension = extension.ToLower();
+            return (extension == ".doc" || extension == ".docx");
         }
 
-        public static bool CheckWordFileExtention(String extention)
+        public static bool CheckExcelFileExtension(string extension)
         {
-            extention = extention.ToLower();
-            return (extention == ".doc" || extention == ".docx");
+            extension = extension.ToLower();
+            return (extension == ".xls" || extension == ".xlsx");
         }
-
-        public static bool CheckExcelFileExtention(String extention)
-        {
-            extention = extention.ToLower();
-            return (extention == ".xls" || extention == ".xlsx");
-        }
-
-        #region ### utility ###
-        public static bool isExistInArray<T>(IEnumerable<T> list , T key ) // todo: hossein, remove
-        {
-            foreach(T temp in list)
-            {
-                if(temp.Equals(key))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
-        #endregion
     }
 }

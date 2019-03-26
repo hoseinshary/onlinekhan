@@ -61,7 +61,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationYearViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(EducationYearViewModel educationYearViewModel)
+        public ClientMessageResult Create(EducationYearViewModel educationYearViewModel)
         {
             var transacion = _uow.BeginTransaction();
             if (educationYearViewModel.IsActiveYear)
@@ -72,14 +72,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _educationYears.Add(educationYear);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationYear.Id;
             if (msgRes.MessageType == MessageType.Success)
                 transacion.Commit();
             else
                 transacion.Rollback();
 
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
 
         }
 
@@ -88,7 +88,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationYearViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(EducationYearViewModel educationYearViewModel)
+        public ClientMessageResult Update(EducationYearViewModel educationYearViewModel)
         {
             var transacion = _uow.BeginTransaction();
             if(educationYearViewModel.IsActiveYear)
@@ -104,7 +104,7 @@ namespace NasleGhalam.ServiceLayer.Services
             else
                 transacion.Rollback();
 
-            return Mapper.Map<MessageResultClient>(result);
+            return Mapper.Map<ClientMessageResult>(result);
         }
 
 
@@ -113,19 +113,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var educationYearViewModel = GetById(id);
             if (educationYearViewModel == null)
             {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
             }
 
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _uow.MarkAsDeleted(educationYear);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 

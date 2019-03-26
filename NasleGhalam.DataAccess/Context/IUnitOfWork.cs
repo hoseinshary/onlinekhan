@@ -14,7 +14,7 @@ namespace NasleGhalam.DataAccess.Context
         void ValidateOnSaveEnabled(bool validateOnSaveEnabled);
         int SaveChanges();
         int SaveChanges(bool validateOnSaveEnabled);
-        MessageResultServer CommitChanges(CrudType type = CrudType.None, string fieldName = "");
+        ServerMessageResult CommitChanges(CrudType type = CrudType.None, string fieldName = "");
         Task<int> SaveChangesAsync();
         void MarkAsChanged<TEntity>(TEntity entity) where TEntity : class;
         void MarkAsDeleted<TEntity>(TEntity entity) where TEntity : class;

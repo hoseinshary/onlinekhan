@@ -103,7 +103,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="questionViewModel"></param>
         /// <param name="word"></param>
         /// <returns></returns>
-        public MessageResultClient Create(QuestionCreateViewModel questionViewModel, HttpPostedFile word)
+        public ClientMessageResult Create(QuestionCreateViewModel questionViewModel, HttpPostedFile word)
         {
             var question = Mapper.Map<Question>(questionViewModel);
             
@@ -188,7 +188,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             }
             msgRes.Id = question.Id;
-            var resultVal = Mapper.Map<MessageResultClient>(msgRes);
+            var resultVal = Mapper.Map<ClientMessageResult>(msgRes);
             resultVal.Obj = new
             {
                 question.Context,
@@ -203,7 +203,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(QuestionUpdateViewModel questionViewModel)
+        public ClientMessageResult Update(QuestionUpdateViewModel questionViewModel)
         {
             var question = _questions
                 .Include(current => current.QuestionOptions)
@@ -267,7 +267,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
             
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -276,7 +276,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var question = _questions
                 .Include(current => current.Topics)
@@ -286,7 +286,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (question == null)
             {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
             }
 
             //remove topics
@@ -320,7 +320,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".png");
             }
 
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
     }
 }

@@ -56,13 +56,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="cityViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(CityCreateViewModel cityViewModel)
+        public ClientMessageResult Create(CityCreateViewModel cityViewModel)
         {
             var city = Mapper.Map<City>(cityViewModel);
             _cities.Add(city);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
-            var clientResult = Mapper.Map<MessageResultClient>(serverResult);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             clientResult.Obj = GetById(city.Id);
 
             return clientResult;
@@ -73,13 +73,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="cityViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(CityUpdateViewModel cityViewModel)
+        public ClientMessageResult Update(CityUpdateViewModel cityViewModel)
         {
             var city = Mapper.Map<City>(cityViewModel);
             _uow.MarkAsChanged(city);
 
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
-            var clientResult = Mapper.Map<MessageResultClient>(serverResult);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             clientResult.Obj = GetById(city.Id);
 
             return clientResult;
@@ -90,17 +90,17 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var cityViewModel = GetById(id);
             if (cityViewModel == null)
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
 
             var city = Mapper.Map<City>(cityViewModel);
             _uow.MarkAsDeleted(city);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
     }
 }

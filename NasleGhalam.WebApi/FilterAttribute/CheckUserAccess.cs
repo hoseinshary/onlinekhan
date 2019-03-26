@@ -20,7 +20,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             return;
-            bool isAuthenticated = false;
+            var isAuthenticated = false;
 
             string token = null;
             if (actionContext.Request.Headers.TryGetValues("Token", out var values))
@@ -34,7 +34,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                 {
                     // decode token and convert to JwtPayload
                     var jsonPayload = JsonWebToken.Decode(token);
-                    long tick = DateTime.Now.ToUniversalTime().Ticks;
+                    var tick = DateTime.Now.ToUniversalTime().Ticks;
 
                     //if token does not expire
                     if (jsonPayload.Exp > tick)

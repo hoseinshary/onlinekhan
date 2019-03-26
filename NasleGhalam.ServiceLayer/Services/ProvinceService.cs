@@ -54,13 +54,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="provinceViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(ProvinceViewModel provinceViewModel)
+        public ClientMessageResult Create(ProvinceViewModel provinceViewModel)
         {
             var province = Mapper.Map<Province>(provinceViewModel);
             _provinces.Add(province);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
-            var clientResult = Mapper.Map<MessageResultClient>(serverResult);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             clientResult.Obj = province;
 
             return clientResult;
@@ -71,13 +71,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="provinceViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(ProvinceViewModel provinceViewModel)
+        public ClientMessageResult Update(ProvinceViewModel provinceViewModel)
         {
             var province = Mapper.Map<Province>(provinceViewModel);
             _uow.MarkAsChanged(province);
 
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
-            var clientResult = Mapper.Map<MessageResultClient>(serverResult);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             clientResult.Obj = province;
 
             return clientResult;
@@ -88,17 +88,17 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var provinceViewModel = GetById(id);
             if (provinceViewModel == null)
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
 
             var province = Mapper.Map<Province>(provinceViewModel);
             _uow.MarkAsDeleted(province);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
     }
 }

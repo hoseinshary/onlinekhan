@@ -89,14 +89,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationTreeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(EducationTreeCreateViewModel educationTreeViewModel)
+        public ClientMessageResult Create(EducationTreeCreateViewModel educationTreeViewModel)
         {
             var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
             _educationTrees.Add(educationTree);
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = educationTree.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -105,13 +105,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationTreeViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(EducationTreeUpdateViewModel educationTreeViewModel)
+        public ClientMessageResult Update(EducationTreeUpdateViewModel educationTreeViewModel)
         {
             var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
             _uow.MarkAsChanged(educationTree);
 
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -120,19 +120,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var educationTreeViewModel = GetById(id);
             if (educationTreeViewModel == null)
             {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
             }
 
             var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
             _uow.MarkAsDeleted(educationTree);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
         /// <summary>

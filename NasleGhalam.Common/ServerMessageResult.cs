@@ -1,6 +1,6 @@
 ﻿namespace NasleGhalam.Common
 {
-    public class MessageResultServer
+    public class ServerMessageResult
     {
         public string FaMessage { get; set; }
 

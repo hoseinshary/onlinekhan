@@ -59,14 +59,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="publisherViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Create(PublisherViewModel publisherViewModel)
+        public ClientMessageResult Create(PublisherViewModel publisherViewModel)
         {
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _publishers.Add(publisher);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = publisher.Id;
-            return Mapper.Map<MessageResultClient>(msgRes);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -75,14 +75,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="publisherViewModel"></param>
         /// <returns></returns>
-        public MessageResultClient Update(PublisherViewModel publisherViewModel)
+        public ClientMessageResult Update(PublisherViewModel publisherViewModel)
         {
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _uow.MarkAsChanged(publisher);
 
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
@@ -91,19 +91,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
             var publisherViewModel = GetById(id);
             if (publisherViewModel == null)
             {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+                return ClientMessageResult.NotFound();
             }
 
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _uow.MarkAsDeleted(publisher);
 
-            MessageResultServer msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 

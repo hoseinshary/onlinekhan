@@ -95,9 +95,9 @@ namespace NasleGhalam.DataAccess.Context
             return SaveChanges();
         }
 
-        public MessageResultServer CommitChanges(CrudType type = CrudType.None, string fieldName = "")
+        public ServerMessageResult CommitChanges(CrudType type = CrudType.None, string fieldName = "")
         {
-            MessageResultServer result = new MessageResultServer();
+            ServerMessageResult result = new ServerMessageResult();
 
             try
             {

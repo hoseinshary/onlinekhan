@@ -8,7 +8,7 @@ import ISubMenu from "src/models/ISubMenu";
  * @param {Object} cloneFrom
  * @param {Object} cloneTo
  */
-const mapObject = function(cloneFrom, cloneTo) {
+const mapObject = function(cloneFrom: object, cloneTo: object) {
   Object.keys(cloneTo).forEach(key => {
     if (cloneFrom[key] !== undefined) {
       if (isObject(cloneFrom[key])) {
@@ -24,7 +24,7 @@ const mapObject = function(cloneFrom, cloneTo) {
  * return new object
  * @param {Object} obj
  */
-const cloneObject = function(obj) {
+const cloneObject = function(obj: object) {
   return JSON.parse(JSON.stringify(obj));
   //Object.assign({}, obj)
 };
@@ -33,7 +33,7 @@ const cloneObject = function(obj) {
  * clear value of object
  * @param {Object} obj
  */
-const clearObject = function(obj) {
+const clearObject = function(obj: object) {
   Object.keys(obj).forEach(key => {
     if (isObject(obj[key])) {
       clearObject(obj[key]);
@@ -63,7 +63,7 @@ const clearObject = function(obj) {
  * clear array
  * @param {Array} arr
  */
-const clearArray = function(arr) {
+const clearArray = function<T>(arr: Array<T>) {
   arr.splice(0, arr.length);
 };
 
@@ -71,11 +71,11 @@ const clearArray = function(arr) {
  * turn an object into query string parameters
  * @param {Object} obj
  */
-const toParam = function(obj) {
+const toParam = function(obj: object): string {
   return encodeURI(toParamWithoutEncode(obj));
 };
 
-const toParamWithoutEncode = function(obj) {
+const toParamWithoutEncode = function(obj: object) {
   return Object.keys(obj)
     .map(key => {
       var value = obj[key];
@@ -95,10 +95,9 @@ const toParamWithoutEncode = function(obj) {
  * @param {*} theObject
  * @param {String} path
  */
-const getNested = function(theObject, path) {
+const getNested = function(theObject: object, path: string) {
   try {
     var separator = ".";
-
     return path
       .replace("[", separator)
       .replace("]", "")
@@ -115,7 +114,7 @@ const getNested = function(theObject, path) {
  * check type value be string
  * @param {*} value
  */
-const isString = function(value) {
+const isString = function(value: any) {
   return typeof value === "string" || value instanceof String;
 };
 
@@ -123,7 +122,7 @@ const isString = function(value) {
  * check type value be array
  * @param {*} value
  */
-const isNumber = function(value) {
+const isNumber = function(value: any) {
   return typeof value === "number" && isFinite(value);
 };
 
@@ -131,7 +130,7 @@ const isNumber = function(value) {
  * check type value be array
  * @param {*} value
  */
-const isArray = function(value) {
+const isArray = function(value: any) {
   return value && typeof value === "object" && value.constructor === Array;
 };
 
@@ -139,7 +138,7 @@ const isArray = function(value) {
  * check type value be object
  * @param {*} value
  */
-const isObject = function(value) {
+const isObject = function(value: any) {
   return value && typeof value === "object" && value.constructor === Object;
 };
 
@@ -147,7 +146,7 @@ const isObject = function(value) {
  * check type value be boolean
  * @param {*} value
  */
-const isBoolean = function(value) {
+const isBoolean = function(value: any) {
   return typeof value === "boolean";
 };
 
@@ -187,31 +186,8 @@ const logout = function() {
 };
 
 /**
- * مقدار دهی اولیه دسترسی
+ * گرفتن دسترسی
  */
-const initAccess = function(modelName) {
-  var actionsLst = {
-    ایجاد: "canCreate",
-    ویرایش: "canEdit",
-    حذف: "canDelete",
-    دسترسی: "canAccess"
-  };
-  var accessControl = LocalStorage.get
-    .item("subMenuList")
-    .find(x => x.EnName.toLowerCase() == modelName.toLowerCase());
-
-  if (accessControl) {
-    accessControl = accessControl.UserAccess;
-  }
-  var pageAccess = {};
-  Object.keys(actionsLst).forEach(key => {
-    pageAccess[actionsLst[key]] = accessControl
-      ? accessControl.includes(key)
-      : false;
-  });
-  return pageAccess;
-};
-
 const getAccess = function(modelName: string) {
   var subMenuList = LocalStorage.get.item("subMenuList") as Array<ISubMenu>;
   var item = subMenuList.find(x => x.FaName == modelName);
@@ -224,36 +200,16 @@ const getAccess = function(modelName: string) {
 };
 
 /**
- * تبدیل obj به formData
- */
-const objToFormdata = function(obj) {
-  var formdata = new FormData();
-  Object.keys(obj).forEach(key => formdata.append(key, obj[key]));
-  return formdata;
-};
-
-const fileAdd = function(model, prop, number, isRequired, chObj, vueObj) {
-  if (chObj.$refs["file" + number + ""].files.length > 0)
-    vueObj[model][prop] = chObj.$refs["file" + number + ""].files[0];
-  if (isRequired) vueObj.$v[model][prop].$touch();
-};
-
-const fileRemove = function(model, prop, isRequired, vueObj) {
-  vueObj[model][prop] = "";
-  if (isRequired) vueObj.$v[model][prop].$touch();
-};
-
-/**
  * convert flatern list to tree
  * @param {array} list
  * @param {string} key
  * @param {string} parentKey
  */
-const listToTree = function(list, key, parentKey) {
+const listToTree = function(list: any, key: string, parentKey: string) {
   var map = {},
-    node,
+    node: any,
     roots: any = [],
-    i;
+    i: number;
   for (i = 0; i < list.length; i += 1) {
     map[list[i][key]] = i; // initialize the map
     list[i].children = []; // initialize the children
@@ -276,8 +232,12 @@ const listToTree = function(list, key, parentKey) {
  * @param {string} key
  * @param {string} value
  */
-const searchTreeArray = function(array, key, value) {
-  var i;
+const searchTreeArray = function<T>(
+  array: Array<T>,
+  key: string,
+  value: string
+) {
+  var i: number;
   var parentNode = null;
   for (i = 0; parentNode == null && i < array.length; i++) {
     parentNode = searchTree(array[i], key, value);
@@ -285,7 +245,7 @@ const searchTreeArray = function(array, key, value) {
   return parentNode;
 };
 
-const searchTree = function(element, key, value) {
+const searchTree = function(element: any, key: string, value: string) {
   if (element[key] == value) {
     return element;
   } else if (element.children != null) {
@@ -314,12 +274,7 @@ export default {
   isObject,
   isBoolean,
   logout,
-  initAccess,
   getAccess,
-  objToFormdata,
-  fileAdd,
-  fileRemove,
   listToTree,
-  // searchTree,
   searchTreeArray
 };

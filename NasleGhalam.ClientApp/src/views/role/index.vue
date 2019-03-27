@@ -39,6 +39,8 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
+import util from "src/utilities";
+
 @Component({
   components: {
     ModalCreate: () => import("./create.vue"),
@@ -50,6 +52,7 @@ import { vxm } from "src/store";
 export default class RoleVue extends Vue {
   //### data ###
   roleStore = vxm.roleStore;
+  pageAccess = util.getAccess(this.roleStore.modelName);
   roleGridColumn = [
     {
       title: "نام",
@@ -67,17 +70,35 @@ export default class RoleVue extends Vue {
       title: "انتساب نقش",
       data: "role",
       searchable: false,
-      sortable: false
-      // visible: pageAccess.canAccess
+      sortable: false,
+      visible: this.canAccess
     },
     {
       title: "عملیات",
       data: "Id",
       searchable: false,
-      sortable: false
-      // visible: pageAccess.canEdit || pageAccess.canDelete
+      sortable: false,
+      visible: this.canEdit || this.canDelete
     }
   ];
+  //--------------------------------------------------
+
+  //### getters ###
+  get canCreate() {
+    return this.pageAccess.indexOf("ایجاد") > -1;
+  }
+
+  get canEdit() {
+    return this.pageAccess.indexOf("ویرایش") > -1;
+  }
+
+  get canDelete() {
+    return this.pageAccess.indexOf("حذف") > -1;
+  }
+
+  get canAccess() {
+    return this.pageAccess.indexOf("دسترسی") > -1;
+  }
   //--------------------------------------------------
 
   //### methods ###
@@ -113,103 +134,4 @@ export default class RoleVue extends Vue {
   }
   //--------------------------------------------------
 }
-// export default {
-//   components: {
-//     "modal-create": () => import("./create"),
-//     "modal-edit": () => import("./edit"),
-//     "modal-delete": () => import("./delete"),
-//     "modal-access": () => import("./access")
-//   },
-//   /**
-//    * data
-//    */
-//   data() {
-//     var pageAccess = this.$util.initAccess("/role");
-//     return {
-//       pageAccess,
-//       gridColumns: [
-//         {
-//           title: "نام",
-//           data: "Name"
-//         },
-//         {
-//           title: "سطح نقش",
-//           data: "Level"
-//         },
-//         {
-//           title: "سطح نقش",
-//           data: "UserTypeName"
-//         },
-//         {
-//           title: "انتساب نقش",
-//           data: "role",
-//           searchable: false,
-//           sortable: false,
-//           visible: pageAccess.canAccess
-//         },
-//         {
-//           title: "عملیات",
-//           data: "Id",
-//           searchable: false,
-//           sortable: false,
-//           visible: pageAccess.canEdit || pageAccess.canDelete
-//         }
-//       ]
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("roleStore", [
-//       "toggleModalCreateStore",
-//       "toggleModalEditStore",
-//       "toggleModalDeleteStore",
-//       "getByIdStore",
-//       "fillGridStore",
-//       "resetCreateStore",
-//       "resetEditStore",
-//       "toggleModalAccessStore",
-//       "setRoleIdStore",
-//       "setRoleNameStore"
-//     ]),
-//     showModalCreate() {
-//       // reset data on modal show
-//       this.resetCreateStore();
-//       // show modal
-//       this.toggleModalCreateStore(true);
-//     },
-//     showModalEdit(id) {
-//       // reset data on modal show
-//       this.resetEditStore();
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalEditStore(true);
-//       });
-//     },
-//     showModalDelete(id) {
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalDeleteStore(true);
-//       });
-//     },
-//     showModalAccess(id, name) {
-//       this.setRoleIdStore(id);
-//       this.setRoleNameStore(name);
-//       this.toggleModalAccessStore(true);
-//     }
-//   },
-//   computed: {
-//     ...mapState("roleStore", {
-//       modelName: "modelName",
-//       roleGridData: "roleGridData"
-//     })
-//   },
-//   created() {
-//     this.fillGridStore();
-//   }
-// };
 </script>
-

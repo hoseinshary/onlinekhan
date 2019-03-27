@@ -5,28 +5,30 @@
       <span slot="title">{{provinceStore.modelName}}</span>
       <div slot="body">
         <base-btn-create
+          v-if="canCreate"
           :label="`ایجاد (${provinceStore.modelName}) جدید`"
           @click="showModalCreate"
         />
         <br>
         <base-table :grid-data="provinceStore.gridData" :columns="provinceGridColumn" hasIndex>
           <template slot="Id" slot-scope="data">
-            <base-btn-edit round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete round @click="showModalDelete(data.row.Id)"/>
+            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
         </base-table>
       </div>
     </base-panel>
     <!-- modals -->
-    <modal-create></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
+    <modal-create v-if="canCreate"></modal-create>
+    <modal-edit v-if="canEdit"></modal-edit>
+    <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
+import util from "src/utilities";
 
 @Component({
   components: {
@@ -38,6 +40,7 @@ import { vxm } from "src/store";
 export default class ProvinceVue extends Vue {
   //### data ###
   provinceStore = vxm.provinceStore;
+  pageAccess = util.getAccess(this.provinceStore.modelName);
   provinceGridColumn = [
     {
       title: "نام",
@@ -51,9 +54,24 @@ export default class ProvinceVue extends Vue {
       title: "عملیات",
       data: "Id",
       searchable: false,
-      sortable: false
+      sortable: false,
+      visible: this.canEdit || this.canDelete
     }
   ];
+  //--------------------------------------------------
+
+  //### getters ###
+  get canCreate() {
+    return this.pageAccess.indexOf("ایجاد") > -1;
+  }
+
+  get canEdit() {
+    return this.pageAccess.indexOf("ویرایش") > -1;
+  }
+
+  get canDelete() {
+    return this.pageAccess.indexOf("حذف") > -1;
+  }
   //--------------------------------------------------
 
   //### methods ###

@@ -4,21 +4,25 @@
     <base-panel>
       <span slot="title">{{cityStore.modelName}}</span>
       <div slot="body">
-        <base-btn-create :label="`ایجاد (${cityStore.modelName}) جدید`" @click="showModalCreate"/>
+        <base-btn-create
+          v-if="canCreate"
+          :label="`ایجاد (${cityStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
         <br>
         <base-table :grid-data="cityStore.gridData" :columns="cityGridColumn" hasIndex>
           <template slot="Province.Name" slot-scope="data">{{data.row.Province.Name}}</template>
           <template slot="Id" slot-scope="data">
-            <base-btn-edit round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete round @click="showModalDelete(data.row.Id)"/>
+            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
         </base-table>
       </div>
     </base-panel>
     <!-- modals -->
-    <modal-create></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
+    <modal-create v-if="canCreate"></modal-create>
+    <modal-edit v-if="canEdit"></modal-edit>
+    <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
 
@@ -37,7 +41,7 @@ import util from "src/utilities";
 export default class CityVue extends Vue {
   //### data ###
   cityStore = vxm.cityStore;
-  pageAccess = util.getAccess(vxm.cityStore.modelName);
+  pageAccess = util.getAccess(this.cityStore.modelName);
   cityGridColumn = [
     {
       title: "استان",
@@ -51,7 +55,8 @@ export default class CityVue extends Vue {
       title: "عملیات",
       data: "Id",
       searchable: false,
-      sortable: false
+      sortable: false,
+      visible: this.canEdit || this.canDelete
     }
   ];
   //--------------------------------------------------

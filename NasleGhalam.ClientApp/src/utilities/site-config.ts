@@ -1,12 +1,13 @@
 // const API_URL = "http://onlinekhan.ir";
 const API_URL = "http://localhost:63839";
-const GRADE_URL = "/api/grade";
-const GRADE_LEVEL_URL = "/api/gradeLevel";
 const CITY_URL = "/api/city";
-const LESSON_URL = "/api/lesson";
 const PROVINCE_URL = "/api/province";
 const ROLE_URL = "/api/role";
 const ACCESS_URL = "/api/access";
+
+const GRADE_URL = "/api/grade";
+const GRADE_LEVEL_URL = "/api/gradeLevel";
+const LESSON_URL = "/api/lesson";
 const USER_URL = "/api/user";
 const EDUCATION_GROUP_URL = "/api/educationGroup";
 const EDUCATION_SUB_GROUP_URL = "/api/educationSubGroup";
@@ -27,13 +28,13 @@ const QUESTION_JUDGE_URL = "/api/questionJudge";
 
 export {
   API_URL,
-  GRADE_URL,
-  GRADE_LEVEL_URL,
   CITY_URL,
-  LESSON_URL,
   PROVINCE_URL,
   ROLE_URL,
   ACCESS_URL,
+  GRADE_URL,
+  GRADE_LEVEL_URL,
+  LESSON_URL,
   USER_URL,
   EDUCATION_GROUP_URL,
   EDUCATION_SUB_GROUP_URL,

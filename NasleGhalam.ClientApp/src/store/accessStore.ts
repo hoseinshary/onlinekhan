@@ -48,14 +48,15 @@ export class AccessStore extends VuexModule {
 
   //#region ### getters ###
   get menuDdl() {
-    return this.menuList.map(x => ({
+    var menuList = this.menuList.map(x => ({
       value: x.ModuleId,
       label: x.ModuleName
     }));
+    return [{ value: 0, label: "همه" }].concat(menuList);
   }
 
   get subMenuDdl() {
-    return this.subMenuList
+    var subMenuList = this.subMenuList
       .filter(
         x => this.access.ModuleId == 0 || x.ModuleId == this.access.ModuleId
       )
@@ -63,6 +64,7 @@ export class AccessStore extends VuexModule {
         value: x.ControllerId,
         label: x.FaName
       }));
+    return [{ value: 0, label: "همه" }].concat(subMenuList);
   }
 
   get actionGridData() {
@@ -91,13 +93,11 @@ export class AccessStore extends VuexModule {
 
   @mutation
   private SET_MENU_LIST(list: Array<IMenu>) {
-    list.unshift({ ModuleId: 0, ModuleName: "همه" });
     this.menuList = list;
   }
 
   @mutation
   private SET_SUB_MENU_LIST(list: Array<ISubMenu>) {
-    list.unshift({ ModuleId: 0, FaName: "همه", ControllerId: 0, EnName: "" });
     this.subMenuList = list;
   }
 

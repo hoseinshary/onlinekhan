@@ -20,13 +20,11 @@ namespace NasleGhalam.WebApi.Controllers
             _userService = userService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_userService.GetAll(Request.GetRoleLevel()));
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -39,7 +37,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(user);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.UserCreateAccess)]
         [CheckModelValidation]
@@ -48,7 +45,6 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _userService.Create(userViewModel, Request.GetRoleLevel());
             return Ok(msgRes);
         }
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.UserUpdateAccess)]
@@ -59,14 +55,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(msgRes);
         }
 
-
         [HttpPost, CheckUserAccess(ActionBits.UserDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _userService.Delete(id, Request.GetRoleLevel());
             return Ok(msgRes);
         }
-
 
         [HttpPost]
         public IHttpActionResult Login(LoginViewModel login)

@@ -12,7 +12,6 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
             CreateMap<UserUpdateViewModel, User>();
             CreateMap<UserViewModel, User>()
                 .ReverseMap()
-                .ForMember(dst => dst.GenderName, opt => opt.MapFrom(src => src.Gender ? "پسر" : "دختر"))
                 .ForMember(dst => dst.ProvinceId, opt => opt.MapFrom(src => src.City.ProvinceId));
         }
     }

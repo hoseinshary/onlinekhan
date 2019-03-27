@@ -1,161 +1,139 @@
 <template>
   <section class="col-xs-12 q-px-md">
     <!-- panel -->
-    <my-panel>
-      <span slot="title">{{modelName}}</span>
+    <base-panel>
+      <span slot="title">{{userStore.modelName}}</span>
       <div slot="body">
-        <my-btn-create v-if="pageAccess.canCreate"
-                       :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate" />
+        <base-btn-create
+          v-if="canCreate"
+          :label="`ایجاد (${userStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
         <br>
-        <my-table :grid-data="userGridData"
-                  :columns="userGridColumn"
-                  hasIndex>
-          <template slot="IsActive"
-                    slot-scope="data">
-            <q-checkbox v-model="data.row.IsActive"
-                        readonly />
+        <base-table :grid-data="userStore.gridData" :columns="userGridColumn" hasIndex>
+          <template slot="IsActive" slot-scope="data">
+            <q-checkbox v-model="data.row.IsActive" readonly/>
           </template>
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
+          <template slot="Id" slot-scope="data">
+            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
-        </my-table>
+        </base-table>
       </div>
-    </my-panel>
+    </base-panel>
 
     <!-- modals -->
-    <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete>
+    <modal-create v-if="canCreate"></modal-create>
+    <!--<modal-edit v-if="pageAccess.canEdit"></modal-edit>
+    <modal-delete v-if="pageAccess.canDelete"></modal-delete>-->
   </section>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import util from "src/utilities";
 
-export default {
+@Component({
   components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
-  },
-  /**
-   * data
-   */
-  data() {
-    var pageAccess = this.$util.initAccess('/user');
-    return {
-      pageAccess,
-      userGridColumn: [
-        {
-          title: 'نام',
-          data: 'Name'
-        },
-        {
-          title: 'نام خانوادگی',
-          data: 'Family'
-        },
-        {
-          title: 'جنسیت',
-          data: 'GenderName'
-          // render(data, type, row) {
-          //   return data ? 'پسر' : 'دختر';
-          // }
-        },
-        {
-          title: 'کد ملی',
-          data: 'NationalNo'
-        },
-        {
-          title: 'نام کاربری',
-          data: 'Username'
-        },
-        {
-          title: 'فعال',
-          data: 'IsActive'
-        },
-        {
-          title: 'تلفن ثابت',
-          data: 'Phone'
-        },
-        {
-          title: 'موبایل',
-          data: 'Mobile'
-        },
-        {
-          title: 'نقش',
-          data: 'RoleName'
-        },
-        {
-          title: 'شهر',
-          data: 'CityName'
-        },
-        {
-          title: 'عملیات',
-          data: 'Id',
-          searchable: false,
-          sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
-        }
-      ]
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('userStore', [
-      'toggleModalCreateStore',
-      'toggleModalEditStore',
-      'toggleModalDeleteStore',
-      'getByIdStore',
-      'fillGridStore',
-      'resetCreateStore',
-      'resetEditStore'
-    ]),
-    ...mapActions({
-      fillCityByProvincIdDdl: 'cityStore/fillCityByProvinceIdDdlStore'
-    }),
-    showModalCreate() {
-      // reset data on modal show
-      this.resetCreateStore();
-      // show modal
-      this.toggleModalCreateStore(true);
-    },
-    showModalEdit(id) {
-      // reset data on modal show
-      this.resetEditStore();
-      // get data by id
-      this.getByIdStore(id).then(data => {
-        // fill cityDdl by provinceId
-        this.fillCityByProvincIdDdl(data.ProvinceId);
-        // show modal
-        this.toggleModalEditStore(true);
-      });
-    },
-    showModalDelete(id) {
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalDeleteStore(true);
-      });
-    }
-  },
-  computed: {
-    ...mapState('userStore', {
-      modelName: 'modelName',
-      userGridData: 'userGridData'
-    })
-  },
-  created() {
-    this.fillGridStore();
+    ModalCreate: () => import("./create.vue")
+    // ModalEdit: () => import("./edit.vue"),
+    // ModalDelete: () => import("./delete.vue")
   }
-};
-</script>
+})
+export default class UserVue extends Vue {
+  //### data ###
+  userStore = vxm.userStore;
+  pageAccess = util.getAccess(this.userStore.modelName);
+  userGridColumn = [
+    {
+      title: "نام",
+      data: "Name"
+    },
+    {
+      title: "نام خانوادگی",
+      data: "Family"
+    },
+    {
+      title: "جنسیت",
+      data: "GenderName"
+    },
+    {
+      title: "کد ملی",
+      data: "NationalNo"
+    },
+    {
+      title: "نام کاربری",
+      data: "Username"
+    },
+    {
+      title: "فعال",
+      data: "IsActive"
+    },
+    {
+      title: "تلفن ثابت",
+      data: "Phone"
+    },
+    {
+      title: "موبایل",
+      data: "Mobile"
+    },
+    {
+      title: "نقش",
+      data: "RoleName"
+    },
+    {
+      title: "شهر",
+      data: "CityName"
+    },
+    {
+      title: "عملیات",
+      data: "Id",
+      searchable: false,
+      sortable: false,
+      visible: this.canEdit || this.canDelete
+    }
+  ];
+  //--------------------------------------------------
 
+  //### getters ###
+  get canCreate() {
+    return this.pageAccess.indexOf("ایجاد") > -1;
+  }
+
+  get canEdit() {
+    return this.pageAccess.indexOf("ویرایش") > -1;
+  }
+
+  get canDelete() {
+    return this.pageAccess.indexOf("حذف") > -1;
+  }
+  //--------------------------------------------------
+
+  //### methods ###
+  showModalCreate() {
+    this.userStore.resetCreate();
+    this.userStore.OPEN_MODAL_CREATE(true);
+  }
+
+  showModalEdit(id) {
+    this.userStore.resetEdit();
+    this.userStore.getById(id).then(() => {
+      this.userStore.OPEN_MODAL_EDIT(true);
+    });
+  }
+
+  showModalDelete(id) {
+    this.userStore.getById(id).then(() => {
+      this.userStore.OPEN_MODAL_DELETE(true);
+    });
+  }
+  //--------------------------------------------------
+
+  //### hooks ###
+  created() {
+    this.userStore.fillList();
+  }
+  //--------------------------------------------------
+}
+</script>

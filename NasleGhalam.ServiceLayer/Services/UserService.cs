@@ -7,7 +7,6 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ServiceLayer.Jwt;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.User;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -93,9 +92,11 @@ namespace NasleGhalam.ServiceLayer.Services
             user.LastLogin = DateTime.Now;
             _users.Add(user);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = user.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            clientResult.Obj = GetById(user.Id, userRoleLevel);
+
+            return clientResult;
         }
 
 
@@ -138,8 +139,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.ExcludeFieldsFromUpdate(user, x => x.LastLogin);
             }
 
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            clientResult.Obj = GetById(user.Id,userRoleLevel);
+
+            return clientResult;
         }
 
 
@@ -161,23 +165,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(user);
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه کاربر ها برای لیست کشویی
-        /// </summary>
-        /// <param name="userRoleLevel"></param>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl(byte userRoleLevel)
-        {
-            return _users
-                .Where(current => current.Role.Level > userRoleLevel)
-                .Select(current => new SelectViewModel
-                {
-                    value = current.Id,
-                    label = current.Name
-                }).ToList();
         }
 
 
@@ -215,10 +202,10 @@ namespace NasleGhalam.ServiceLayer.Services
                     }
                     else
                     {
-                        string defaultPage = "";
+                        var defaultPage = "";
                         foreach (var item in loginResult.SubMenus)
                         {
-                            if (item.EnName == "/Dashboard/Map")
+                            if (item.EnName == "/Question")
                             {
                                 defaultPage = item.EnName;
                                 break;
@@ -244,7 +231,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
             else
             {
-                loginResult.Message = "نام کاربری یا رمز عبور اشتباه میباشد.";
+                loginResult.Message = "نام کاربری یا رمز عبور اشتباه می باشد.";
             }
 
             return loginResult;

@@ -1,9 +1,9 @@
 import Vue from "Vue";
-import ICity, { DefaultCity } from "src/models/ICity";
+import IUser, { DefaultUser } from "src/models/IUser";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
-import { CITY_URL as baseUrl } from "src/utilities/site-config";
+import { USER_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
@@ -12,12 +12,15 @@ import {
   Module,
   getRawActionContext
 } from "vuex-class-component";
+import { LocalStorage } from "quasar";
+import router from "src/router";
 
-@Module({ namespacedPath: "cityStore/" })
-export class CityStore extends VuexModule {
+@Module({ namespacedPath: "userStore/" })
+export class UserStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
-  city: ICity;
-  private cityList: Array<ICity>;
+  user: IUser;
+  loginUser: { Username: string; Password: string };
+  private userList: Array<IUser>;
   private selectedId: number = 0;
   private modelChanged: boolean = true;
   private createVue: Vue;
@@ -29,8 +32,9 @@ export class CityStore extends VuexModule {
   constructor() {
     super();
 
-    this.city = util.cloneObject(DefaultCity);
-    this.cityList = [];
+    this.user = util.cloneObject(DefaultUser);
+    this.loginUser = { Password: "", Username: "" };
+    this.userList = [];
     this.openModal = {
       create: false,
       edit: false,
@@ -40,66 +44,56 @@ export class CityStore extends VuexModule {
 
   //#region ### getters ###
   get modelName() {
-    return "شهر";
+    return "کاربر";
   }
 
   get recordName() {
-    return this.city.Name || "";
+    return this.user.Name || "";
   }
 
   get ddl() {
-    return this.cityList.map(x => ({
+    return this.userList.map(x => ({
       value: x.Id,
       label: x.Name
     }));
   }
 
-  get cityByProvinceIdDdl() {
-    return provinceId =>
-      this.cityList
-        .filter(x => x.ProvinceId == provinceId)
-        .map(x => ({
-          value: x.Id,
-          label: x.Name
-        }));
-  }
-
   get gridData() {
-    return this.cityList;
+    return this.userList;
   }
   //#endregion
 
   //#region ### mutations ###
   @mutation
-  private CREATE(city: ICity) {
-    this.cityList.push(city);
+  private CREATE(user: IUser) {
+    this.userList.push(user);
   }
 
   @mutation
-  private UPDATE(city: ICity) {
-    let index = this.cityList.findIndex(x => x.Id == this.selectedId);
+  private UPDATE(user: IUser) {
+    let index = this.userList.findIndex(x => x.Id == this.selectedId);
     if (index < 0) return;
-    util.mapObject(city, this.cityList[index]);
+    util.mapObject(user, this.userList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this.cityList.findIndex(x => x.Id == this.selectedId);
+    let index = this.userList.findIndex(x => x.Id == this.selectedId);
     if (index < 0) return;
-    this.cityList.splice(index, 1);
+    this.userList.splice(index, 1);
   }
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultCity, this.city);
+    util.mapObject(DefaultUser, this.user);
     if (vm.$v) {
       vm.$v.$reset();
     }
   }
 
   @mutation
-  private SET_LIST(list: Array<ICity>) {
-    this.cityList = list;
+  private SET_LIST(list: Array<IUser>) {
+    this.userList = list;
   }
 
   @mutation
@@ -143,9 +137,9 @@ export class CityStore extends VuexModule {
   getById(id: number) {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
-      .then((response: AxiosResponse<ICity>) => {
-        util.mapObject(response.data, this.city);
-        this.SET_SELECTED_ID(this.city.Id);
+      .then((response: AxiosResponse<IUser>) => {
+        util.mapObject(response.data, this.user);
+        this.SET_SELECTED_ID(this.user.Id);
       });
   }
 
@@ -154,20 +148,20 @@ export class CityStore extends VuexModule {
     if (this.modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
-        .then((response: AxiosResponse<Array<ICity>>) => {
+        .then((response: AxiosResponse<Array<IUser>>) => {
           this.SET_LIST(response.data);
           this.MODEL_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this.cityList);
+      return Promise.resolve(this.userList);
     }
   }
 
   @action({ mode: "raw" })
   validateForm(vm: any) {
     return new Promise(resolve => {
-      vm.$v.city.$touch();
-      if (vm.$v.city.$error) {
+      vm.$v.user.$touch();
+      if (vm.$v.user.$error) {
         const context = getRawActionContext(this);
         context.dispatch("notifyInvalidForm", vm, { root: true });
         resolve(false);
@@ -196,7 +190,7 @@ export class CityStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     return axios
-      .post(`${baseUrl}/Create`, this.city)
+      .post(`${baseUrl}/Create`, this.user)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -220,9 +214,9 @@ export class CityStore extends VuexModule {
     let vm = this.createVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.city.Id = this.selectedId;
+    this.user.Id = this.selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this.selectedId}`, this.city)
+      .post(`${baseUrl}/Update/${this.selectedId}`, this.user)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -258,7 +252,31 @@ export class CityStore extends VuexModule {
         }
       });
   }
+
+  @action()
+  login(vm: Vue) {
+    return axios
+      .post(`${baseUrl}/Login`, this.loginUser)
+      .then((response: AxiosResponse<any>) => {
+        let data = response.data;
+
+        if (data.MessageType == MessageType.Success) {
+          axios.defaults.headers.common["Token"] = data.Token;
+          LocalStorage.set("Token", data.Token);
+          LocalStorage.set("FullName", data.FullName);
+          LocalStorage.set(
+            "authList",
+            data.SubMenus.map(x => x.EnName.toLowerCase())
+          );
+          LocalStorage.set("menuList", data.Menus);
+          LocalStorage.set("subMenuList", data.SubMenus);
+          router.push(data.DefaultPage);
+        } else {
+          this.notify({ vm, data });
+        }
+      });
+  }
   //#endregion
 }
 
-export const cityStore = CityStore.ExtractVuexModule(CityStore);
+export const userStore = UserStore.ExtractVuexModule(UserStore);

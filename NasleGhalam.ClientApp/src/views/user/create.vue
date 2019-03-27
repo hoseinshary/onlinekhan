@@ -1,137 +1,93 @@
 <template>
-  <my-modal-create :title="modelName"
-                   :show="isOpenModalCreate"
-                   size="lg"
-                   @confirm="submit"
-                   @reset="resetCreateStore"
-                   @open="modalOpen"
-                   @close="toggleModalCreateStore(false)">
-
-    <my-select :model="$v.userObj.RoleId"
-               :options="roleDdl"
-               class="col-sm-6 col-md-4"
-               clearable
-               ref="roleId" />
-
-    <my-select :model="$v.userObj.ProvinceId"
-               :options="provinceDdl"
-               class="col-sm-6 col-md-4"
-               clearable
-               @change="provinceChange" />
-
-    <my-select :model="$v.userObj.CityId"
-               :options="cityByProvinceDdl"
-               class="col-sm-6 col-md-4"
-               clearable
-               ref="cityId" />
-
-    <!-- <my-hr /> -->
-
-    <my-input :model="$v.userObj.Name"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.userObj.Family"
-              class="col-sm-6 col-md-4" />
-
-    <my-field class="col-sm-6 col-md-4"
-              :model="$v.userObj.Gender">
+  <base-modal-create
+    :title="userStore.modelName"
+    :show="userStore.openModal.create"
+    size="lg"
+    @confirm="userStore.submitCreate"
+    @reset="userStore.resetCreate"
+    @open="open"
+    @close="userStore.OPEN_MODAL_CREATE(false)"
+  >
+    <base-select
+      :model="$v.user.RoleId"
+      :options="roleStore.ddl"
+      class="col-sm-6 col-md-4"
+      clearable
+      ref="roleId"
+    />
+    <base-select
+      :model="$v.user.ProvinceId"
+      :options="provinceStore.ddl"
+      class="col-sm-6 col-md-4"
+      clearable
+      @change="provinceChange"
+    />
+    <base-select
+      :model="$v.user.CityId"
+      :options="cityByProvinceDdl"
+      class="col-sm-6 col-md-4"
+      clearable
+      ref="userId"
+    />
+    <!-- <base-hr /> -->
+    <base-input :model="$v.user.Name" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.user.Family" class="col-sm-6 col-md-4"/>
+    <base-field class="col-sm-6 col-md-4" :model="$v.user.Gender">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="دختر" />
-        <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="پسر" />
+        <q-radio v-model="data.obj.$model" :val="false" label="دختر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="پسر"/>
       </template>
-    </my-field>
-
-    <my-input :model="$v.userObj.NationalNo"
-              align="right"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.userObj.Username"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.userObj.Password"
-              type="password"
-              class="col-sm-6 col-md-4" />
-
-    <my-field class="col-sm-6 col-md-4"
-              :model="$v.userObj.IsActive">
+    </base-field>
+    <base-input :model="$v.user.NationalNo" align="right" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.user.Username" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.user.Password" type="password" class="col-sm-6 col-md-4"/>
+    <base-field class="col-sm-6 col-md-4" :model="$v.user.IsActive">
       <template slot-scope="data">
-        <q-toggle v-model="data.obj.$model" />
+        <q-toggle v-model="data.obj.$model"/>
       </template>
-    </my-field>
-
-    <my-input :model="$v.userObj.Phone"
-              align="right"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.userObj.Mobile"
-              align="right"
-              class="col-sm-6 col-md-4" />
-
-  </my-modal-create>
+    </base-field>
+    <base-input :model="$v.user.Phone" align="right" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.user.Mobile" align="right" class="col-sm-6 col-md-4"/>
+  </base-modal-create>
 </template>
 
-<script>
-import viewModel from 'viewModels/user/userCreateViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { userCreateValidations } from "src/validations/user/UserCreateValidation";
+import ISelect from "src/models/ISelect";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('userStore', [
-      'toggleModalCreateStore',
-      'createVueStore',
-      'submitCreateStore',
-      'resetCreateStore'
-    ]),
-    ...mapActions({
-      fillRoleDdl: 'roleStore/fillDdlByOrganStore',
-      fillProvinceDdl: 'provinceStore/fillDdlStore',
-      fillCityByProvincIdDdl: 'cityStore/fillCityByProvinceIdDdlStore'
-    }),
-    modalOpen() {
-      this.fillRoleDdl();
-      this.fillProvinceDdl();
-    },
-    provinceChange(value) {
-      this.fillCityByProvincIdDdl(value);
-    },
-    submit(closeModal) {
-      this.userObj.CityName = this.$refs.cityId.getSelectedLabel();
-      this.userObj.RoleName = this.$refs.roleId.getSelectedLabel();
-      this.submitCreateStore(closeModal);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('userStore', {
-      modelName: 'modelName',
-      userObj: 'userObj',
-      isOpenModalCreate: 'isOpenModalCreate'
-    }),
-    ...mapState({
-      roleDdl: s => s.roleStore.roleDdl,
-      provinceDdl: s => s.provinceStore.provinceDdl,
-      cityByProvinceDdl: s => s.cityStore.cityByProvinceDdl
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
-  created() {
-    this.createVueStore(this);
+@Component({
+  validations: userCreateValidations
+})
+export default class UserCreateVue extends Vue {
+  $v: any;
+
+  //### data ###
+  userStore = vxm.userStore;
+  provinceStore = vxm.provinceStore;
+  cityStore = vxm.cityStore;
+  roleStore = vxm.roleStore;
+  user = vxm.userStore.user;
+  cityByProvinceDdl: Array<ISelect> = [];
+  //--------------------------------------------------
+
+  //### hooks ###
+  open() {
+    this.provinceStore.fillList();
+    this.cityStore.fillList();
+    this.roleStore.fillList();
   }
-};
-</script>
 
+  provinceChange(provinceId) {
+    this.cityByProvinceDdl = this.cityStore.cityByProvinceIdDdl(provinceId);
+  }
+  //--------------------------------------------------
+
+  //### hooks ###
+  created() {
+    this.userStore.SET_CREATE_VUE(this);
+  }
+  //--------------------------------------------------
+}
+</script>

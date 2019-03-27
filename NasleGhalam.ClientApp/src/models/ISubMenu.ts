@@ -4,4 +4,5 @@ export default interface ISubMenu {
   FaName: string;
   EnName: string;
   Icon?: string;
+  UserAccess: Array<string>;
 }

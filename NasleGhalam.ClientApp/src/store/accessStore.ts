@@ -10,6 +10,7 @@ import { ACCESS_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
+  getter,
   mutation,
   action,
   Module,
@@ -26,7 +27,8 @@ export class AccessStore extends VuexModule {
   menuList: Array<IMenu>;
   subMenuList: Array<ISubMenu>;
   private roleId: number = 0;
-  private modelChanged: boolean = true;
+  private menuChanged: boolean = true;
+  private subMenuChanged: boolean = true;
   private accessVue: Vue;
 
   /**
@@ -100,8 +102,13 @@ export class AccessStore extends VuexModule {
   }
 
   @mutation
-  private MODEL_CHANGED(changed: boolean) {
-    this.modelChanged = changed;
+  private MENU_CHANGED(changed: boolean) {
+    this.menuChanged = changed;
+  }
+
+  @mutation
+  private SUB_MENU_CHANGED(changed: boolean) {
+    this.subMenuChanged = changed;
   }
 
   @mutation
@@ -118,12 +125,12 @@ export class AccessStore extends VuexModule {
   //#region ### actions ###
   @action()
   fillMenuList() {
-    if (this.modelChanged) {
+    if (this.menuChanged) {
       return axios
         .get(`${baseUrl}/GetMenu`)
         .then((response: AxiosResponse<Array<IMenu>>) => {
           this.SET_MENU_LIST(response.data);
-          this.MODEL_CHANGED(false);
+          this.MENU_CHANGED(false);
         });
     } else {
       return Promise.resolve(this.menuList);
@@ -132,12 +139,12 @@ export class AccessStore extends VuexModule {
 
   @action()
   fillSubMenuList() {
-    if (this.modelChanged) {
+    if (this.subMenuChanged) {
       return axios
         .get(`${baseUrl}/GetSubMenu`)
         .then((response: AxiosResponse<Array<ISubMenu>>) => {
           this.SET_SUB_MENU_LIST(response.data);
-          this.MODEL_CHANGED(false);
+          this.SUB_MENU_CHANGED(false);
         });
     } else {
       return Promise.resolve(this.subMenuList);

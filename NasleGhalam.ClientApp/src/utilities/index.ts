@@ -1,13 +1,14 @@
 import { LocalStorage } from "quasar";
 import router from "src/router";
 import axios from "src/plugins/axios";
+import ISubMenu from "src/models/ISubMenu";
 
 /**
  * map all value of source object to dest object
  * @param {Object} cloneFrom
  * @param {Object} cloneTo
  */
-const mapObject = function (cloneFrom, cloneTo) {
+const mapObject = function(cloneFrom, cloneTo) {
   Object.keys(cloneTo).forEach(key => {
     if (cloneFrom[key] !== undefined) {
       if (isObject(cloneFrom[key])) {
@@ -23,7 +24,7 @@ const mapObject = function (cloneFrom, cloneTo) {
  * return new object
  * @param {Object} obj
  */
-const cloneObject = function (obj) {
+const cloneObject = function(obj) {
   return JSON.parse(JSON.stringify(obj));
   //Object.assign({}, obj)
 };
@@ -32,7 +33,7 @@ const cloneObject = function (obj) {
  * clear value of object
  * @param {Object} obj
  */
-const clearObject = function (obj) {
+const clearObject = function(obj) {
   Object.keys(obj).forEach(key => {
     if (isObject(obj[key])) {
       clearObject(obj[key]);
@@ -62,7 +63,7 @@ const clearObject = function (obj) {
  * clear array
  * @param {Array} arr
  */
-const clearArray = function (arr) {
+const clearArray = function(arr) {
   arr.splice(0, arr.length);
 };
 
@@ -70,11 +71,11 @@ const clearArray = function (arr) {
  * turn an object into query string parameters
  * @param {Object} obj
  */
-const toParam = function (obj) {
+const toParam = function(obj) {
   return encodeURI(toParamWithoutEncode(obj));
 };
 
-const toParamWithoutEncode = function (obj) {
+const toParamWithoutEncode = function(obj) {
   return Object.keys(obj)
     .map(key => {
       var value = obj[key];
@@ -94,7 +95,7 @@ const toParamWithoutEncode = function (obj) {
  * @param {*} theObject
  * @param {String} path
  */
-const getNested = function (theObject, path) {
+const getNested = function(theObject, path) {
   try {
     var separator = ".";
 
@@ -102,7 +103,7 @@ const getNested = function (theObject, path) {
       .replace("[", separator)
       .replace("]", "")
       .split(separator)
-      .reduce(function (obj, property) {
+      .reduce(function(obj, property) {
         return obj[property];
       }, theObject);
   } catch (err) {
@@ -114,7 +115,7 @@ const getNested = function (theObject, path) {
  * check type value be string
  * @param {*} value
  */
-const isString = function (value) {
+const isString = function(value) {
   return typeof value === "string" || value instanceof String;
 };
 
@@ -122,7 +123,7 @@ const isString = function (value) {
  * check type value be array
  * @param {*} value
  */
-const isNumber = function (value) {
+const isNumber = function(value) {
   return typeof value === "number" && isFinite(value);
 };
 
@@ -130,7 +131,7 @@ const isNumber = function (value) {
  * check type value be array
  * @param {*} value
  */
-const isArray = function (value) {
+const isArray = function(value) {
   return value && typeof value === "object" && value.constructor === Array;
 };
 
@@ -138,7 +139,7 @@ const isArray = function (value) {
  * check type value be object
  * @param {*} value
  */
-const isObject = function (value) {
+const isObject = function(value) {
   return value && typeof value === "object" && value.constructor === Object;
 };
 
@@ -146,7 +147,7 @@ const isObject = function (value) {
  * check type value be boolean
  * @param {*} value
  */
-const isBoolean = function (value) {
+const isBoolean = function(value) {
   return typeof value === "boolean";
 };
 
@@ -175,7 +176,7 @@ const isBoolean = function (value) {
 /**
  * handle logout
  */
-const logout = function () {
+const logout = function() {
   LocalStorage.remove("authList");
   LocalStorage.remove("menuList");
   LocalStorage.remove("subMenuList");
@@ -188,7 +189,7 @@ const logout = function () {
 /**
  * مقدار دهی اولیه دسترسی
  */
-const initAccess = function (modelName) {
+const initAccess = function(modelName) {
   var actionsLst = {
     ایجاد: "canCreate",
     ویرایش: "canEdit",
@@ -211,22 +212,33 @@ const initAccess = function (modelName) {
   return pageAccess;
 };
 
+const getAccess = function(modelName: string) {
+  var subMenuList = LocalStorage.get.item("subMenuList") as Array<ISubMenu>;
+  var item = subMenuList.find(x => x.FaName == modelName);
+
+  if (item) {
+    return item.UserAccess;
+  } else {
+    return [];
+  }
+};
+
 /**
  * تبدیل obj به formData
  */
-const objToFormdata = function (obj) {
+const objToFormdata = function(obj) {
   var formdata = new FormData();
   Object.keys(obj).forEach(key => formdata.append(key, obj[key]));
   return formdata;
 };
 
-const fileAdd = function (model, prop, number, isRequired, chObj, vueObj) {
+const fileAdd = function(model, prop, number, isRequired, chObj, vueObj) {
   if (chObj.$refs["file" + number + ""].files.length > 0)
     vueObj[model][prop] = chObj.$refs["file" + number + ""].files[0];
   if (isRequired) vueObj.$v[model][prop].$touch();
 };
 
-const fileRemove = function (model, prop, isRequired, vueObj) {
+const fileRemove = function(model, prop, isRequired, vueObj) {
   vueObj[model][prop] = "";
   if (isRequired) vueObj.$v[model][prop].$touch();
 };
@@ -237,7 +249,7 @@ const fileRemove = function (model, prop, isRequired, vueObj) {
  * @param {string} key
  * @param {string} parentKey
  */
-const listToTree = function (list, key, parentKey) {
+const listToTree = function(list, key, parentKey) {
   var map = {},
     node,
     roots: any = [],
@@ -264,7 +276,7 @@ const listToTree = function (list, key, parentKey) {
  * @param {string} key
  * @param {string} value
  */
-const searchTreeArray = function (array, key, value) {
+const searchTreeArray = function(array, key, value) {
   var i;
   var parentNode = null;
   for (i = 0; parentNode == null && i < array.length; i++) {
@@ -273,7 +285,7 @@ const searchTreeArray = function (array, key, value) {
   return parentNode;
 };
 
-const searchTree = function (element, key, value) {
+const searchTree = function(element, key, value) {
   if (element[key] == value) {
     return element;
   } else if (element.children != null) {
@@ -303,6 +315,7 @@ export default {
   isBoolean,
   logout,
   initAccess,
+  getAccess,
   objToFormdata,
   fileAdd,
   fileRemove,

@@ -25,6 +25,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
+import util from "src/utilities";
 
 @Component({
   components: {
@@ -36,6 +37,7 @@ import { vxm } from "src/store";
 export default class CityVue extends Vue {
   //### data ###
   cityStore = vxm.cityStore;
+  pageAccess = util.getAccess(vxm.cityStore.modelName);
   cityGridColumn = [
     {
       title: "استان",
@@ -52,6 +54,20 @@ export default class CityVue extends Vue {
       sortable: false
     }
   ];
+  //--------------------------------------------------
+
+  //### getters ###
+  get canCreate() {
+    return this.pageAccess.indexOf("ایجاد") > -1;
+  }
+
+  get canEdit() {
+    return this.pageAccess.indexOf("ویرایش") > -1;
+  }
+
+  get canDelete() {
+    return this.pageAccess.indexOf("حذف") > -1;
+  }
   //--------------------------------------------------
 
   //### methods ###

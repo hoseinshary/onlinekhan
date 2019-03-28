@@ -176,7 +176,6 @@
     <Folder Include="Content\QuestionGroupTemp\" />
     <Folder Include="Content\QuestionGroup\" />
     <Folder Include="Content\Question\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NasleGhalam.Common\NasleGhalam.Common.csproj">

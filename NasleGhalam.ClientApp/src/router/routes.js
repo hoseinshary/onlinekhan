@@ -1,110 +1,90 @@
 export default [
   {
-    path: '/user/login',
-    component: () => import('views/user/login')
+    path: "/user/login",
+    component: () => import("views/user/login")
   },
   {
-    path: '/',
-    component: () => import('layouts/default'),
+    path: "/",
+    component: () => import("layouts/default"),
     children: [
       // {
       //   path: '',
       //   component: () => import('views/test/HelloDecorator')
       // },
       {
-        path: '',
-        component: () => import('views/city')
+        path: "",
+        component: () => import("views/city")
       },
       {
-        path: '/grade',
-        component: () => import('views/grade')
+        path: "/province",
+        component: () => import("views/province")
       },
       {
-        path: '/gradelevel',
-        component: () => import('views/gradeLevel')
+        path: "/city",
+        component: () => import("views/city")
       },
       {
-        path: '/province',
-        component: () => import('views/province')
+        path: "/lesson",
+        component: () => import("views/lesson")
       },
       {
-        path: '/city',
-        component: () => import('views/city')
+        path: "/role",
+        component: () => import("views/role")
       },
       {
-        path: '/lesson',
-        component: () => import('views/lesson')
+        path: "/user",
+        component: () => import("views/user")
       },
       {
-        path: '/role',
-        component: () => import('views/role')
+        path: "/educationSubGroup",
+        component: () => import("views/educationSubGroup")
       },
       {
-        path: '/user',
-        component: () => import('views/user')
+        path: "/topic",
+        component: () => import("views/topic")
       },
       {
-        path: '/educationGroup',
-        component: () => import('views/educationGroup')
+        path: "/educationBook",
+        component: () => import("views/educationBook")
       },
       {
-        path: '/educationSubGroup',
-        component: () => import('views/educationSubGroup')
+        path: "/publisher",
+        component: () => import("views/publisher")
       },
       {
-        path: '/topic',
-        component: () => import('views/topic')
+        path: "/tag",
+        component: () => import("views/tag")
       },
       {
-        path: '/educationBook',
-        component: () => import('views/educationBook')
+        path: "/educationYear",
+        component: () => import("views/educationYear")
       },
       {
-        path: '/exam',
-        component: () => import('views/exam')
+        path: "/axillaryBook",
+        component: () => import("views/axillaryBook")
       },
       {
-        path: '/publisher',
-        component: () => import('views/publisher')
+        path: "/question",
+        component: () => import("views/question")
       },
       {
-        path: '/tag',
-        component: () => import('views/tag')
+        path: "/student",
+        component: () => import("views/student")
       },
       {
-        path: '/educationYear',
-        component: () => import('views/educationYear')
+        path: "/educationTree",
+        component: () => import("views/educationTree")
       },
       {
-        path: '/axillaryBook',
-        component: () => import('views/axillaryBook')
-      },
-      {
-        path: '/universityBranch',
-        component: () => import('views/universityBranch')
-      },
-      {
-        path: '/question',
-        component: () => import('views/question')
-      },
-      {
-        path: '/student',
-        component: () => import('views/student')
-      },
-      {
-        path: '/educationTree',
-        component: () => import('views/educationTree')
-      },
-      {
-        path: '/questionGroup',
-        component: () => import('views/questionGroup')
+        path: "/questionGroup",
+        component: () => import("views/questionGroup")
       }
     ]
   },
 
   {
     // Always leave this as last one
-    path: '*',
-    component: () => import('pages/404')
+    path: "*",
+    component: () => import("pages/404")
   }
 ];

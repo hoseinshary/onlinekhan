@@ -24,8 +24,8 @@
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
-    <!--<modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete>-->
+    <modal-edit v-if="canEdit"></modal-edit>
+    <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
 
@@ -36,9 +36,9 @@ import util from "src/utilities";
 
 @Component({
   components: {
-    ModalCreate: () => import("./create.vue")
-    // ModalEdit: () => import("./edit.vue"),
-    // ModalDelete: () => import("./delete.vue")
+    ModalCreate: () => import("./create.vue"),
+    ModalEdit: () => import("./edit.vue"),
+    ModalDelete: () => import("./delete.vue")
   }
 })
 export default class UserVue extends Vue {

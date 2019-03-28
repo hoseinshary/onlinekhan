@@ -1,11 +1,11 @@
 import { required, displayName } from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
-import IUser from "src/models/IUser";
+import ILogin from "src/models/ILogin";
 
-type TUser = { user: IUser; validationGroup: string[] };
-const userLoginValidations: ValidationRuleset<TUser> = {
-  user: {
-    UserName: {
+type TLogin = { loginUser: ILogin; validationGroup: string[] };
+const userLoginValidations: ValidationRuleset<TLogin> = {
+  loginUser: {
+    Username: {
       displayName: displayName("نام کاربری"),
       required
     },

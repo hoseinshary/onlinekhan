@@ -1,5 +1,6 @@
 import Vue from "Vue";
 import IUser, { DefaultUser } from "src/models/IUser";
+import ILogin, { DefaultLogin } from "src/models/ILogin";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -19,7 +20,7 @@ import router from "src/router";
 export class UserStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   user: IUser;
-  loginUser: { Username: string; Password: string };
+  loginUser: ILogin;
   private userList: Array<IUser>;
   private selectedId: number = 0;
   private modelChanged: boolean = true;
@@ -33,7 +34,7 @@ export class UserStore extends VuexModule {
     super();
 
     this.user = util.cloneObject(DefaultUser);
-    this.loginUser = { Password: "", Username: "" };
+    this.loginUser = util.cloneObject(DefaultLogin);
     this.userList = [];
     this.openModal = {
       create: false,
@@ -261,6 +262,7 @@ export class UserStore extends VuexModule {
         let data = response.data;
 
         if (data.MessageType == MessageType.Success) {
+          debugger;
           axios.defaults.headers.common["Token"] = data.Token;
           LocalStorage.set("Token", data.Token);
           LocalStorage.set("FullName", data.FullName);

@@ -1,26 +1,20 @@
 <template>
-  <q-layout view="lHh Lpr lFf"
-            class="login-layout">
-    <q-page-container class="q-pt-lg">
-      <div class="row justify-center items-center q-mt-lg q-pa-lg">
+  <q-layout view="lHh Lpr lFf" class="login-layout row items-center">
+    <q-page-container class="col-12">
+      <div class="row justify-center">
         <q-card class="col-lg-4 col-md-6 col-sm-8">
-          <q-card-title class="text-center text-bold text-white shadow-10 card-header">
-            آنلاین خوان
-          </q-card-title>
-          <q-card-separator />
+          <q-card-title class="text-center text-bold text-white shadow-10 card-header">آنلاین خوان</q-card-title>
+          <q-card-separator/>
           <q-card-main>
-            <my-input :model="$v.loginObj.UserName"
-                      class="text-bold" />
-            <my-input :model="$v.loginObj.Password"
-                      type="password"
-                      class="text-bold"
-                      @keyup.enter="login" />
-
+            <base-input :model="$v.loginUser.Username" class="text-bold"/>
+            <base-input
+              :model="$v.loginUser.Password"
+              type="password"
+              class="text-bold"
+              @keyup.enter="login"
+            />
             <div class="text-center">
-              <q-btn color="light-blue-10"
-                     class="q-mr-sm"
-                     outline
-                     @click="login">
+              <q-btn color="light-blue-10" class="q-mr-sm" outline @click="login">
                 ورود
                 <q-icon name="keyboard_backspace"></q-icon>
               </q-btn>
@@ -32,25 +26,27 @@
   </q-layout>
 </template>
 
-<script>
-import viewModel from "viewModels/user/loginViewModel";
-import { mapState, mapActions } from "vuex";
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { userLoginValidations } from "src/validations/user/userLoginValidation";
+@Component({
+  validations: userLoginValidations
+})
+export default class UserLoginVue extends Vue {
+  $v: any;
 
-export default {
-  validations: viewModel,
+  //### data ###
+  userStore = vxm.userStore;
+  loginUser = vxm.userStore.loginUser;
+  //--------------------------------------------------
 
-  methods: {
-    ...mapActions("userStore", ["loginStore"]),
-    login() {
-      this.loginStore(this);
-    }
-  },
-  computed: {
-    ...mapState({
-      loginObj: s => s.userStore.loginObj
-    })
+  //### methods ###
+  login() {
+    this.userStore.login(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
 
 <style>

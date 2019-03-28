@@ -72,7 +72,7 @@ export default class UserCreateVue extends Vue {
   cityByProvinceDdl: Array<ISelect> = [];
   //--------------------------------------------------
 
-  //### hooks ###
+  //### methods ###
   open() {
     this.provinceStore.fillList();
     this.cityStore.fillList();

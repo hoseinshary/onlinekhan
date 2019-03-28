@@ -18,9 +18,9 @@ namespace NasleGhalam.ServiceLayer.Jwt
         {
             HashAlgorithms = new Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>>
             {
-                { JwtHashAlgorithm.Rs256, (key, value) => { using (var sha = new HMACSHA256(key)) { return sha.ComputeHash(value); } } },
-                { JwtHashAlgorithm.Hs384, (key, value) => { using (var sha = new HMACSHA384(key)) { return sha.ComputeHash(value); } } },
-                { JwtHashAlgorithm.Hs512, (key, value) => { using (var sha = new HMACSHA512(key)) { return sha.ComputeHash(value); } } }
+                { JwtHashAlgorithm.RS256, (key, value) => { using (var sha = new HMACSHA256(key)) { return sha.ComputeHash(value); } } },
+                { JwtHashAlgorithm.HS384, (key, value) => { using (var sha = new HMACSHA384(key)) { return sha.ComputeHash(value); } } },
+                { JwtHashAlgorithm.HS512, (key, value) => { using (var sha = new HMACSHA512(key)) { return sha.ComputeHash(value); } } }
             };
         }
 
@@ -81,9 +81,9 @@ namespace NasleGhalam.ServiceLayer.Jwt
         {
             switch (algorithm)
             {
-                case "RS256": return JwtHashAlgorithm.Rs256;
-                case "HS384": return JwtHashAlgorithm.Hs384;
-                case "HS512": return JwtHashAlgorithm.Hs512;
+                case "RS256": return JwtHashAlgorithm.RS256;
+                case "HS384": return JwtHashAlgorithm.HS384;
+                case "HS512": return JwtHashAlgorithm.HS512;
                 default: throw new InvalidOperationException("Algorithm not supported.");
             }
         }
@@ -130,7 +130,7 @@ namespace NasleGhalam.ServiceLayer.Jwt
                 Value = $"{roleLevel}_{isAdmin}_{userId}_{(int)userType}"
             };
 
-            return Encode(payload, JwtHashAlgorithm.Hs512);
+            return Encode(payload, JwtHashAlgorithm.HS512);
         }
     }
 }

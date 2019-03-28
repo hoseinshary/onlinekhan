@@ -79,7 +79,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
-            clientResult.Obj = GetById(role.Id, userRoleLevel);
+
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(role.Id, userRoleLevel);
 
             return clientResult;
         }
@@ -108,7 +110,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
-            clientResult.Obj = GetById(role.Id, userRoleLevel);
+
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(role.Id, userRoleLevel);
 
             return clientResult;
         }

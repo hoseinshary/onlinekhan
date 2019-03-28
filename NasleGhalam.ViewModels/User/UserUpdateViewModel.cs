@@ -9,22 +9,18 @@ namespace NasleGhalam.ViewModels.User
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        [MinLength(3, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
         [Display(Name = "نام")]
         public string Name { get; set; }
-
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         [Display(Name = "نام خانوادگی")]
         public string Family { get; set; }
 
-
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         [Display(Name = "نام کاربری")]
         public string Username { get; set; }
-
 
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
        //[MinLength(5, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
@@ -32,14 +28,11 @@ namespace NasleGhalam.ViewModels.User
         [MinLengthExcludeEmptyAndNull(5, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
         public string Password { get; set; }
 
-
         //[Display(Name = "ادمین")]
         //public bool IsAdmin { get; set; }
 
-
         [Display(Name = "فعال")]
         public bool IsActive { get; set; }
-
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [StringLength(maximumLength: 11, MinimumLength = 10, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RangeLength")]
@@ -48,10 +41,8 @@ namespace NasleGhalam.ViewModels.User
         [Display(Name = "کد ملی")]
         public string NationalNo { get; set; }
 
-
         [Display(Name = "جنسیت")]
         public bool Gender { get; set; }
-
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [StringLength(maximumLength: 8, MinimumLength = 8, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Length")]
@@ -59,18 +50,15 @@ namespace NasleGhalam.ViewModels.User
         [Display(Name = "تلفن ثابت")]
         public string Phone { get; set; }
 
-
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [StringLength(maximumLength: 10, MinimumLength = 10, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Length")]
         [RegularExpression("\\d+", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Numeric")]
         [Display(Name = "موبایل")]
         public string Mobile { get; set; }
 
-
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         [Display(Name = "نقش")]
         public int RoleId { get; set; }
-
 
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         [Display(Name = "شهر")]

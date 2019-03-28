@@ -12,22 +12,21 @@
       :model="$v.user.RoleId"
       :options="roleStore.ddl"
       class="col-sm-6 col-md-4"
-      clearable
+      filter
       ref="roleId"
     />
     <base-select
       :model="$v.user.ProvinceId"
       :options="provinceStore.ddl"
       class="col-sm-6 col-md-4"
-      clearable
-      @change="provinceChange"
+      filter
+      @change="user.CityId=0"
     />
     <base-select
       :model="$v.user.CityId"
-      :options="cityByProvinceDdl"
+      :options="cityStore.cityByProvinceIdDdl(user.ProvinceId)"
       class="col-sm-6 col-md-4"
-      clearable
-      ref="userId"
+      filter
     />
     <!-- <base-hr/> -->
     <base-input :model="$v.user.Name" class="col-sm-6 col-md-4"/>
@@ -55,7 +54,6 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { userEditValidations } from "src/validations/user/UserEditValidation";
-import ISelect from "src/models/ISelect";
 
 @Component({
   validations: userEditValidations
@@ -69,7 +67,6 @@ export default class UserEditVue extends Vue {
   cityStore = vxm.cityStore;
   roleStore = vxm.roleStore;
   user = vxm.userStore.user;
-  cityByProvinceDdl: Array<ISelect> = [];
   //--------------------------------------------------
 
   //### methods ###
@@ -77,10 +74,6 @@ export default class UserEditVue extends Vue {
     this.provinceStore.fillList();
     this.cityStore.fillList();
     this.roleStore.fillList();
-  }
-
-  provinceChange(provinceId) {
-    this.cityByProvinceDdl = this.cityStore.cityByProvinceIdDdl(provinceId);
   }
   //--------------------------------------------------
 

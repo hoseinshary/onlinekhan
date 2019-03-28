@@ -3,7 +3,7 @@
     :title="userStore.modelName"
     :recordName="userStore.recordName"
     :show="userStore.openModal.delete"
-    @confirm="userStore.submitDelete"
+    @confirm="confirm"
     @close="userStore.OPEN_MODAL_DELETE(false)"
   ></base-modal-delete>
 </template>
@@ -15,6 +15,12 @@ import { vxm } from "src/store";
 export default class UserDeleteVue extends Vue {
   //### data ###
   userStore = vxm.userStore;
+  //--------------------------------------------------
+
+  //### methods ###
+  confirm() {
+    this.userStore.submitDelete(this);
+  }
   //--------------------------------------------------
 }
 </script>

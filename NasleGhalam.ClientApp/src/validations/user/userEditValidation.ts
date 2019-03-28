@@ -43,6 +43,7 @@ const userEditValidations: ValidationRuleset<TUser> = {
     NationalNo: {
       displayName: displayName("کد ملی"),
       maxLength: maxLength(10),
+      minLength: minLength(10),
       required,
       numeric
     },

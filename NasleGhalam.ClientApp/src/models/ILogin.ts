@@ -1,9 +1,9 @@
 export default interface ILogin {
-  Username: string;
-  Password: string;
+  Username1: string;
+  Password1: string;
 }
 
 export const DefaultLogin: ILogin = {
-  Username: "",
-  Password: ""
+  Username1: "",
+  Password1: ""
 };

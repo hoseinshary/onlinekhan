@@ -217,7 +217,7 @@ export class CityStore extends VuexModule {
 
   @action()
   async submitEdit() {
-    let vm = this.createVue;
+    let vm = this.editVue;
     if (!(await this.validateForm(vm))) return;
 
     this.city.Id = this.selectedId;
@@ -242,10 +242,7 @@ export class CityStore extends VuexModule {
   }
 
   @action()
-  async submitDelete() {
-    let vm = this.createVue;
-    if (!(await this.validateForm(vm))) return;
-
+  async submitDelete(vm: Vue) {
     return axios
       .post(`${baseUrl}/Delete/${this.selectedId}`)
       .then((response: AxiosResponse<IMessageResult>) => {

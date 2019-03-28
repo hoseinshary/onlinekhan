@@ -6,9 +6,9 @@
           <q-card-title class="text-center text-bold text-white shadow-10 card-header">آنلاین خوان</q-card-title>
           <q-card-separator/>
           <q-card-main>
-            <base-input :model="$v.loginUser.Username" class="text-bold"/>
+            <base-input :model="$v.loginUser.Username1" class="text-bold"/>
             <base-input
-              :model="$v.loginUser.Password"
+              :model="$v.loginUser.Password1"
               type="password"
               class="text-bold"
               @keyup.enter="login"

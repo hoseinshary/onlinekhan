@@ -63,7 +63,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
-            clientResult.Obj = GetById(city.Id);
+
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(city.Id);
 
             return clientResult;
         }
@@ -80,7 +82,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
-            clientResult.Obj = GetById(city.Id);
+
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(city.Id);
 
             return clientResult;
         }

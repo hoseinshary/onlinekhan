@@ -4,9 +4,9 @@ namespace NasleGhalam.Common
 {
     public enum JwtHashAlgorithm
     {
-        Rs256,
-        Hs384,
-        Hs512
+        RS256,
+        HS384,
+        HS512
     }
 
     public enum MessageType

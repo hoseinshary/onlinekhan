@@ -232,10 +232,8 @@ export class ProvinceStore extends VuexModule {
   }
 
   @action()
-  async submitDelete() {
-    let vm = this.createVue;
-    if (!(await this.validateForm(vm))) return;
-
+  async submitDelete(vm: Vue) {
+    debugger;
     return axios
       .post(`${baseUrl}/Delete/${this.selectedId}`)
       .then((response: AxiosResponse<IMessageResult>) => {

@@ -3,7 +3,7 @@
     :title="provinceStore.modelName"
     :recordName="provinceStore.recordName"
     :show="provinceStore.openModal.delete"
-    @confirm="provinceStore.submitDelete"
+    @confirm="confirm"
     @close="provinceStore.OPEN_MODAL_DELETE(false)"
   ></base-modal-delete>
 </template>
@@ -15,6 +15,12 @@ import { vxm } from "src/store";
 export default class ProvinceDeleteVue extends Vue {
   //### data ###
   provinceStore = vxm.provinceStore;
+  //--------------------------------------------------
+
+  //### methods ###
+  confirm() {
+    this.provinceStore.submitDelete(this);
+  }
   //--------------------------------------------------
 }
 </script>

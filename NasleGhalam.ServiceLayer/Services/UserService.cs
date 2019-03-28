@@ -40,6 +40,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _users
                 .Include(current => current.City)
+                .Include(current => current.Role)
                 .Where(current => current.Id == id)
                 .Where(current => current.Role.Level > userRoleLevel)
                 .Where(current => current.Role.UserType == UserType.Organ)
@@ -94,7 +95,19 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
-            clientResult.Obj = GetById(user.Id, userRoleLevel);
+
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Obj = GetById(user.Id, userRoleLevel);
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_NationalNo"))
+            {
+                clientResult.Message = "کد ملی تکراری می باشد";
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_Username"))
+            {
+                clientResult.Message = "نام کاربری تکراری می باشد";
+            }
 
             return clientResult;
         }
@@ -141,7 +154,19 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
-            clientResult.Obj = GetById(user.Id,userRoleLevel);
+
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Obj = GetById(user.Id, userRoleLevel);
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_NationalNo"))
+            {
+                clientResult.Message = "کد ملی تکراری می باشد";
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_Username"))
+            {
+                clientResult.Message = "نام کاربری تکراری می باشد";
+            }
 
             return clientResult;
         }
@@ -205,7 +230,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         var defaultPage = "";
                         foreach (var item in loginResult.SubMenus)
                         {
-                            if (item.EnName == "/Question")
+                            if (item.EnName == "/User")
                             {
                                 defaultPage = item.EnName;
                                 break;

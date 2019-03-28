@@ -3,7 +3,7 @@
     :title="roleStore.modelName"
     :recordName="roleStore.recordName"
     :show="roleStore.openModal.delete"
-    @confirm="roleStore.submitDelete"
+    @confirm="confirm"
     @close="roleStore.OPEN_MODAL_DELETE(false)"
   ></base-modal-delete>
 </template>
@@ -15,6 +15,12 @@ import { vxm } from "src/store";
 export default class RoleDeleteVue extends Vue {
   //### data ###
   roleStore = vxm.roleStore;
+  //--------------------------------------------------
+
+  //### methods ###
+  confirm() {
+    this.roleStore.submitDelete(this);
+  }
   //--------------------------------------------------
 }
 </script>

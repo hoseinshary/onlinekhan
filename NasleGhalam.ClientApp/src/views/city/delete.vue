@@ -3,7 +3,7 @@
     :title="cityStore.modelName"
     :recordName="cityStore.recordName"
     :show="cityStore.openModal.delete"
-    @confirm="cityStore.submitDelete"
+    @confirm="confirm"
     @close="cityStore.OPEN_MODAL_DELETE(false)"
   ></base-modal-delete>
 </template>
@@ -15,6 +15,12 @@ import { vxm } from "src/store";
 export default class CityDeleteVue extends Vue {
   //### data ###
   cityStore = vxm.cityStore;
+  //--------------------------------------------------
+
+  //### methods ###
+  confirm() {
+    this.cityStore.submitDelete(this);
+  }
   //--------------------------------------------------
 }
 </script>

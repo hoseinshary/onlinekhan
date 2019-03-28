@@ -212,7 +212,7 @@ export class UserStore extends VuexModule {
 
   @action()
   async submitEdit() {
-    let vm = this.createVue;
+    let vm = this.editVue;
     if (!(await this.validateForm(vm))) return;
 
     this.user.Id = this.selectedId;
@@ -237,10 +237,7 @@ export class UserStore extends VuexModule {
   }
 
   @action()
-  async submitDelete() {
-    let vm = this.createVue;
-    if (!(await this.validateForm(vm))) return;
-
+  async submitDelete(vm: Vue) {
     return axios
       .post(`${baseUrl}/Delete/${this.selectedId}`)
       .then((response: AxiosResponse<IMessageResult>) => {
@@ -256,13 +253,16 @@ export class UserStore extends VuexModule {
 
   @action()
   login(vm: Vue) {
+    var data = {
+      Username: this.loginUser.Username1,
+      Password: this.loginUser.Password1
+    };
     return axios
-      .post(`${baseUrl}/Login`, this.loginUser)
+      .post(`${baseUrl}/Login`, data)
       .then((response: AxiosResponse<any>) => {
         let data = response.data;
 
         if (data.MessageType == MessageType.Success) {
-          debugger;
           axios.defaults.headers.common["Token"] = data.Token;
           LocalStorage.set("Token", data.Token);
           LocalStorage.set("FullName", data.FullName);

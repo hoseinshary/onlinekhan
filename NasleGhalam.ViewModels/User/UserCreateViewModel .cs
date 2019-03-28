@@ -9,22 +9,18 @@ namespace NasleGhalam.ViewModels.User
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        [MinLength(3, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MinLen")]
         [Display(Name = "نام")]
         public string Name { get; set; }
-
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         [Display(Name = "نام خانوادگی")]
         public string Family { get; set; }
 
-
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         [Display(Name = "نام کاربری")]
         public string Username { get; set; }
-
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
@@ -35,7 +31,6 @@ namespace NasleGhalam.ViewModels.User
         [Display(Name = "فعال")]
         public bool IsActive { get; set; }
 
-
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [StringLength(maximumLength: 11, MinimumLength = 10, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RangeLength")]
         [NationalNo(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "NationalNo")]
@@ -43,17 +38,14 @@ namespace NasleGhalam.ViewModels.User
         [Display(Name = "کد ملی")]
         public string NationalNo { get; set; }
 
-
         [Display(Name = "جنسیت")]
         public bool Gender { get; set; }
-
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [StringLength(maximumLength: 8, MinimumLength = 8, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Length")]
         [RegularExpression("\\d+", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Numeric")]
         [Display(Name = "تلفن ثابت")]
         public string Phone { get; set; }
-
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [StringLength(maximumLength: 10, MinimumLength = 10, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Length")]

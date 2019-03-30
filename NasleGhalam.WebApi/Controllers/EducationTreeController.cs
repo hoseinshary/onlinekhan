@@ -19,19 +19,11 @@ namespace NasleGhalam.WebApi.Controllers
             _educationTreeService = educationTreeService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess, ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_educationTreeService.GetAll());
         }
-
-        [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
-        public IHttpActionResult GetChildren(int id )
-        {
-            return Ok(_educationTreeService.GetChildren(id));
-        }
-
 
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess, ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAllEducationTreeByState(EducationTreeState state)
@@ -45,7 +37,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_educationTreeService.GetAllByLookupId(id));
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess)]
         public IHttpActionResult GetById(int id)
         {
@@ -57,7 +48,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(educationTree);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationTreeCreateAccess)]
         [CheckModelValidation]
@@ -66,7 +56,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_educationTreeService.Create(educationTreeViewModel));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationTreeUpdateAccess)]
         [CheckModelValidation]
@@ -74,7 +63,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_educationTreeService.Update(educationTreeViewModel));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.EducationTreeDeleteAccess)]
         public IHttpActionResult Delete(int id)

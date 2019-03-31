@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import { LocalStorage } from 'quasar';
-import routes from './routes';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import { LocalStorage } from "quasar";
+import routes from "./routes";
 import util from "src/utilities";
 
 Vue.use(VueRouter);
@@ -22,31 +22,23 @@ const Router = new VueRouter({
   routes
 });
 
-// Router.beforeEach((to, from, next) => {
-//   //https://alligator.io/vuejs/vue-router-modify-head/
-//   // const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
-//   // if (nearestWithTitle) {
-//   // document.title = nearestWithTitle.meta.title;
-//   //   setTimeout(function () { if (document.getElementById('pagetitle')) document.getElementById('pagetitle').innerHTML = nearestWithTitle.meta.title; }, 500);
-//   // }
-//   // window.$eventHub.removeAllListeners('closeModal');
+Router.beforeEach((to, from, next) => {
+  var authList = LocalStorage.get.item("authList");
+  var subMenuList = LocalStorage.get.item("subMenuList");
 
-//   var authList = LocalStorage.get.item('authList');
-//   var subMenuList = LocalStorage.get.item('subMenuList');
-//   if (to.fullPath == '/user/login') {
-//     next();
-//     // util.logout();
-//     document.title = 'ورود';
-//   } else if (!authList || !authList.includes(to.fullPath.toLowerCase())) {
-//     // next('/user/login');
-//     util.logout();
-//     document.title = 'ورود';
-//   } else {
-//     next();
-//     document.title = subMenuList.filter(
-//       x => x.EnName.toLowerCase() == to.fullPath.toLowerCase()
-//     )[0].FaName;
-//   }
-// });
+  if (to.fullPath == "/user/login") {
+    next();
+    document.title = "ورود";
+  } else if (!authList || !authList.includes(to.fullPath.toLowerCase())) {
+    next("/user/login");
+    util.logout();
+    document.title = "ورود";
+  } else {
+    next();
+    document.title = subMenuList.filter(
+      x => x.EnName.toLowerCase() == to.fullPath.toLowerCase()
+    )[0].FaName;
+  }
+});
 
 export default Router;

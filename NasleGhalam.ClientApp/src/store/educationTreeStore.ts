@@ -24,6 +24,8 @@ export class EducationTreeStore extends VuexModule {
   private modelChanged: boolean = true;
   private createVue: Vue;
   private editVue: Vue;
+  treeExpandedData: Array<object> = [];
+  _this = this;
 
   /**
    * initialize data
@@ -42,6 +44,7 @@ export class EducationTreeStore extends VuexModule {
 
   //#region ### getters ###
   get modelName() {
+    debugger;
     return "درخت آموزش";
   }
 
@@ -57,14 +60,22 @@ export class EducationTreeStore extends VuexModule {
   }
 
   get treeData() {
-    var tree = this.educationTreeList.map(x => ({
+    var list = this.educationTreeList.map(x => ({
       Id: x.Id,
       LookupId_EducationTreeState: x.LookupId_EducationTreeState,
       Lookup_EducationTreeState: x.Lookup_EducationTreeState,
       label: x.Name,
       ParentEducationTreeId: x.ParentEducationTreeId
     }));
-    return util.listToTree(tree, "Id", "ParentEducationTreeId");
+
+    var tree = util.listToTree(list, "Id", "ParentEducationTreeId");
+    debugger;
+    if (tree && tree[0]) this.treeExpandedData = [tree[0].Id];
+    return tree;
+  }
+
+  get expanded() {
+    return this.treeExpandedData;
   }
   //#endregion
 
@@ -149,7 +160,7 @@ export class EducationTreeStore extends VuexModule {
   }
 
   @action()
-  fillList() {
+  async fillList() {
     if (this.modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)

@@ -5,6 +5,7 @@ const PROVINCE_URL = "/api/province";
 const ROLE_URL = "/api/role";
 const ACCESS_URL = "/api/access";
 const USER_URL = "/api/user";
+const EDUCATION_TREE_URL = "/api/educationTree";
 
 const LESSON_URL = "/api/lesson";
 const EDUCATION_SUB_GROUP_URL = "/api/educationSubGroup";
@@ -18,7 +19,6 @@ const QUESTION_URL = "/api/question";
 const AXILLARY_BOOK_URL = "/api/axillaryBook";
 const UNIVERSITY_BRANCH_URL = "/api/universityBranch";
 const STUDENT_URL = "/api/student";
-const EDUCATION_TREE_URL = "/api/educationTree";
 const QUESTION_GROUP_URL = "/api/questionGroup";
 const QUESTION_JUDGE_URL = "/api/questionJudge";
 
@@ -28,8 +28,9 @@ export {
   PROVINCE_URL,
   ROLE_URL,
   ACCESS_URL,
-  LESSON_URL,
   USER_URL,
+  EDUCATION_TREE_URL,
+  LESSON_URL,
   EDUCATION_SUB_GROUP_URL,
   TOPIC_URL,
   LOOKUP_URL,
@@ -41,7 +42,6 @@ export {
   QUESTION_URL,
   UNIVERSITY_BRANCH_URL,
   STUDENT_URL,
-  EDUCATION_TREE_URL,
   QUESTION_GROUP_URL,
   QUESTION_JUDGE_URL
 };

@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.EducationTree;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -21,7 +20,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow = uow;
             _educationTrees = uow.Set<EducationTree>();
         }
-
 
         /// <summary>
         /// گرفتن  درخت آموزش با آی دی
@@ -39,7 +37,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن همه درخت آموزش ها به وسیله وضعیت
         /// </summary>
@@ -49,20 +46,6 @@ namespace NasleGhalam.ServiceLayer.Services
             return _educationTrees
                 .Include(current => current.Lookup_EducationTreeState)
                 .Where(current => current.LookupId_EducationTreeState == lookupId)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeViewModel>)
-                .ToList();
-        }
-
-        /// <summary>
-        /// گرفتن همه درخت آموزش ها یک گره ریشه
-        /// </summary>
-        /// <returns></returns>
-        public IList<EducationTreeViewModel> GetChildren(int id)
-        {
-            return _educationTrees.Where( current =>current.ParentEducationTreeId == id)
-                .Include(current => current.Lookup_EducationTreeState)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<EducationTreeViewModel>)
@@ -83,7 +66,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
         /// <summary>
         /// ثبت درخت آموزش
         /// </summary>
@@ -99,7 +81,6 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
-
         /// <summary>
         /// ویرایش درخت آموزش
         /// </summary>
@@ -113,7 +94,6 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
 
         /// <summary>
         /// حذف درخت آموزش
@@ -147,23 +127,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<EducationTreeViewModel>)
                 .ToList();
-        }
-
-
-
-
-
-        /// <summary>
-        /// گرفتن همه درخت آموزش ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _educationTrees.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

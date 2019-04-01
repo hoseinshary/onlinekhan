@@ -9,11 +9,11 @@ import { ValidationRuleset, validationMixin } from "vuelidate";
 import IEducationTree from "src/models/IEducationTree";
 
 type TEducationTree = {
-  EducationTree: IEducationTree;
+  educationTree: IEducationTree;
   validationGroup: string[];
 };
-const EducationTreeValidations: ValidationRuleset<TEducationTree> = {
-  EducationTree: {
+const educationTreeValidations: ValidationRuleset<TEducationTree> = {
+  educationTree: {
     Name: {
       displayName: displayName("نام"),
       maxLength: maxLength(50),
@@ -31,4 +31,4 @@ const EducationTreeValidations: ValidationRuleset<TEducationTree> = {
   }
 };
 
-export { validationMixin, EducationTreeValidations };
+export { validationMixin, educationTreeValidations };

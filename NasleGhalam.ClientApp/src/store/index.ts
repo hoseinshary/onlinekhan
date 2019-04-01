@@ -7,6 +7,7 @@ import { RoleStore, roleStore } from "./roleStore";
 import { AccessStore, accessStore } from "./accessStore";
 import { UserStore, userStore } from "./userStore";
 import { EducationTreeStore, educationTreeStore } from "./educationTreeStore";
+import { LookupStore, lookupStore } from "./lookupStore";
 
 Vue.use(Vuex);
 
@@ -58,7 +59,8 @@ const store = new Vuex.Store({
     roleStore,
     accessStore,
     userStore,
-    educationTreeStore
+    educationTreeStore,
+    lookupStore
   }
 });
 
@@ -76,5 +78,6 @@ export const vxm = {
   educationTreeStore: UserStore.CreateProxy(
     store,
     EducationTreeStore
-  ) as EducationTreeStore
+  ) as EducationTreeStore,
+  lookupStore: LookupStore.CreateProxy(store, LookupStore) as LookupStore
 };

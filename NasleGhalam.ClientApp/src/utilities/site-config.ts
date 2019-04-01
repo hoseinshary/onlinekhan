@@ -6,11 +6,11 @@ const ROLE_URL = "/api/role";
 const ACCESS_URL = "/api/access";
 const USER_URL = "/api/user";
 const EDUCATION_TREE_URL = "/api/educationTree";
+const LOOKUP_URL = "/api/lookup";
 
 const LESSON_URL = "/api/lesson";
 const EDUCATION_SUB_GROUP_URL = "/api/educationSubGroup";
 const TOPIC_URL = "/api/topic";
-const LOOKUP_URL = "/api/lookup";
 const EDUCATION_BOOK_URL = "/api/educationBook";
 const PUBLISHER_URL = "/api/publisher";
 const TAG_URL = "/api/tag";
@@ -30,10 +30,10 @@ export {
   ACCESS_URL,
   USER_URL,
   EDUCATION_TREE_URL,
+  LOOKUP_URL,
   LESSON_URL,
   EDUCATION_SUB_GROUP_URL,
   TOPIC_URL,
-  LOOKUP_URL,
   EDUCATION_BOOK_URL,
   PUBLISHER_URL,
   TAG_URL,

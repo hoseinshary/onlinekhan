@@ -1,66 +1,51 @@
 <template>
-  <my-modal-create :title="modelName"
-                   :show="isOpenModalCreate"
-                   @confirm="submitCreateStore"
-                   @reset="resetCreateStore"
-                   @open="modalOpen"
-                   @close="toggleModalCreateStore(false);">
-
-    <my-input :model="$v.educationTreeObj.Name" class="col-md-6" />
-        <my-select :model="$v.educationTreeObj.LookupId_EducationTreeState"
-               :options="lookupEducationTreeStateDdl"
-               class="col-md-6"
-               clearable />
-          <!-- <my-input :model="$v.educationTreeObj.LookupId_EducationTreeState" class="col-md-6" /> -->
-          
-  </my-modal-create>
+  <base-modal-create
+    :title="educationTreeStore.modelName"
+    :show="educationTreeStore.openModal.create"
+    @confirm="educationTreeStore.submitCreate"
+    @reset="educationTreeStore.resetCreate"
+    @open="lookupStore.fillEducationTreeState"
+    @close="educationTreeStore.OPEN_MODAL_CREATE(false)"
+  >
+    <div class="col-12">
+      <label>ریشه:</label>
+      <label class="text-bold text-red">
+        {{educationTree.ParentEducationTree
+        ? this.educationTree.ParentEducationTree.Name
+        : ""}}
+      </label>
+    </div>
+    <base-input :model="$v.educationTree.Name" class="col-md-6"/>
+    <base-select
+      :model="$v.educationTree.LookupId_EducationTreeState"
+      :options="lookupStore.educationTreeStateDdl"
+      class="col-md-6"
+      clearable
+    />
+  </base-modal-create>
 </template>
 
-<script>
-import viewModel from 'viewModels/educationTreeViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { educationTreeValidations } from "src/validations/EducationTreeValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('educationTreeStore', [
-      'toggleModalCreateStore',
-      'createVueStore',
-      'submitCreateStore',
-      'resetCreateStore'
-    ]),
-    ...mapActions('lookupStore', [
-      'fillEducationTreeStateDdlStore'
-    ]),
-    modalOpen:function(){
-       this.fillEducationTreeStateDdlStore();
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('educationTreeStore', {
-      modelName: 'modelName',
-      educationTreeObj: 'educationTreeObj',
-      isOpenModalCreate: 'isOpenModalCreate'
-    }),
-    ...mapState('lookupStore', [
-      'lookupEducationTreeStateDdl'
-    ])
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: educationTreeValidations
+})
+export default class EducationTreeCreateVue extends Vue {
+  $v: any;
+
+  //### data ###
+  educationTreeStore = vxm.educationTreeStore;
+  lookupStore = vxm.lookupStore;
+  educationTree = vxm.educationTreeStore.educationTree;
+  //--------------------------------------------------
+
+  //### hooks ###
   created() {
-    this.createVueStore(this);
+    this.educationTreeStore.SET_CREATE_VUE(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
-

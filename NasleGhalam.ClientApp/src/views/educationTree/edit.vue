@@ -1,68 +1,53 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 @confirm="submitEditStore"
-                 @reset="resetEditStore"
-                   @open="modalOpen"
-                 @close="toggleModalEditStore(false);">
-
-    <my-input :model="$v.educationTreeObj.Name" class="col-md-6" />
-          
-           <my-select :model="$v.educationTreeObj.LookupId_EducationTreeState"
-               :options="lookupEducationTreeStateDdl"
-               class="col-md-6"
-               clearable />
-          
-          
-
-  </my-modal-edit>
+  <base-modal-edit
+    :title="educationTreeStore.modelName"
+    :show="educationTreeStore.openModal.edit"
+    @confirm="educationTreeStore.submitEdit"
+    @reset="educationTreeStore.resetEdit"
+    @open="lookupStore.fillEducationTreeState"
+    @close="educationTreeStore.OPEN_MODAL_EDIT(false)"
+  >
+    <div class="col-12">
+      <label>ریشه:</label>
+      <label class="text-bold text-red">
+        {{educationTree.ParentEducationTree
+        ? this.educationTree.ParentEducationTree.Name
+        : ""}}
+      </label>
+    </div>
+    <base-input :model="$v.educationTree.Name" class="col-md-6"/>
+    <base-select
+      :model="$v.educationTree.LookupId_EducationTreeState"
+      :options="lookupStore.educationTreeStateDdl"
+      class="col-md-6"
+      clearable
+    />
+  </base-modal-edit>
 </template>
 
-<script>
-import viewModel from 'viewModels/educationTreeViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { educationTreeValidations } from "src/validations/EducationTreeValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('educationTreeStore', [
-      'toggleModalEditStore',
-      'editVueStore',
-      'submitEditStore',
-      'resetEditStore'
-    ]),
-    ...mapActions('lookupStore', [
-      'fillEducationTreeStateDdlStore'
-    ]),
-    modalOpen:function(){
-       this.fillEducationTreeStateDdlStore();
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('educationTreeStore', {
-      modelName: 'modelName',
-      educationTreeObj: 'educationTreeObj',
-      isOpenModalEdit: 'isOpenModalEdit'
-    }),
-    ...mapState('lookupStore', [
-      'lookupEducationTreeStateDdl'
-    ])
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: educationTreeValidations
+})
+export default class EducationTreeEditVue extends Vue {
+  $v: any;
+
+  //### data ###
+  educationTreeStore = vxm.educationTreeStore;
+  lookupStore = vxm.lookupStore;
+  educationTree = vxm.educationTreeStore.educationTree;
+  //--------------------------------------------------
+
+  //### hooks ###
   created() {
-    this.editVueStore(this);
+    debugger;
+    this.educationTreeStore.SET_EDIT_VUE(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
 

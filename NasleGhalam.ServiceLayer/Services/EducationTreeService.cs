@@ -76,9 +76,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
             _educationTrees.Add(educationTree);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = educationTree.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(educationTree.Id);
+
+            return clientResult;
         }
 
         /// <summary>
@@ -91,8 +95,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
             _uow.MarkAsChanged(educationTree);
 
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(educationTree.Id);
+
+            return clientResult;
         }
 
         /// <summary>

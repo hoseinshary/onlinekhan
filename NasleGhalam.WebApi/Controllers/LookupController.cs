@@ -19,137 +19,77 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AnswerCreateAccess ,ActionBits.AnswerReadAccess , ActionBits.AnswerUpdateAccess)] 
-        public IHttpActionResult GetAllAnswerTypeDdl() 
+        public IHttpActionResult GetAllAnswerType() 
         {
-            return Ok(_lookupService.GetAllDdlByName("AnswerType"));
+            return Ok(_lookupService.GetAllByName("AnswerType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeCreateAccess, ActionBits.EducationTreeReadAccess, ActionBits.EducationTreeUpdateAccess)]
-        public IHttpActionResult GetAllEducationTreeStateDdl()
+        public IHttpActionResult GetAllEducationTreeState()
         {
-            return Ok(_lookupService.GetAllDdlByName("EducationTreeState"));
+            return Ok(_lookupService.GetAllByName("EducationTreeState"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess , ActionBits.AxillaryBookReadAccess , ActionBits.AxillaryBookUpdateAccess)]
-        public IHttpActionResult GetAllPaperTypeDdl()
+        public IHttpActionResult GetAllPaperType()
         {
-            return Ok(_lookupService.GetAllDdlByName("PaperType"));
+            return Ok(_lookupService.GetAllByName("PaperType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
-        public IHttpActionResult GetAllPrintTypeDdl()
+        public IHttpActionResult GetAllPrintType()
         {
-            return Ok(_lookupService.GetAllDdlByName("PrintType"));
+            return Ok(_lookupService.GetAllByName("PrintType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.LessonCreateAccess, ActionBits.LessonUpdateAccess, ActionBits.LessonReadAccess)]
-        public IHttpActionResult GetAllNezamDdl()
+        public IHttpActionResult GetAllNezam()
         {
-            return Ok(_lookupService.GetAllDdlByName("Nezam"));
+            return Ok(_lookupService.GetAllByName("Nezam"));
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
-        public IHttpActionResult GetAllBookTypeDdl()
+        public IHttpActionResult GetAllBookType()
         {
-            return Ok(_lookupService.GetAllDdlByName("BookType"));
+            return Ok(_lookupService.GetAllByName("BookType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess,ActionBits.QuestionReadAccess , ActionBits.QuestionUpdateAccess)]
-        public IHttpActionResult GetAllQuestionTypeDdl()
+        public IHttpActionResult GetAllQuestionType()
         {
-            return Ok(_lookupService.GetAllDdlByName("QuestionType"));
+            return Ok(_lookupService.GetAllByName("QuestionType"));
         }
 
 
         [HttpGet, CheckUserAccess(ActionBits.TopicCreateAccess,ActionBits.TopicReadAccess,ActionBits.TopicUpdateAccess)]
-        public IHttpActionResult GetAllTopicHardnessTypeDdl()
+        public IHttpActionResult GetAllTopicHardnessType()
         {
-            return Ok(_lookupService.GetAllDdlByName("TopicHardnessType"));
+            return Ok(_lookupService.GetAllByName("TopicHardnessType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
-        public IHttpActionResult GetAllQuestionHardnessTypeDdl()
+        public IHttpActionResult GetAllQuestionHardnessType()
         {
-            return Ok(_lookupService.GetAllDdlByName("QuestionHardnessType"));
+            return Ok(_lookupService.GetAllByName("QuestionHardnessType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess, ActionBits.TopicCreateAccess, ActionBits.TopicReadAccess, ActionBits.TopicUpdateAccess)]
-        public IHttpActionResult GetAllAreaTypeDdl()
+        public IHttpActionResult GetAllAreaType()
         {
-            return Ok(_lookupService.GetAllDdlByName("AreaType"));
+            return Ok(_lookupService.GetAllByName("AreaType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
-        public IHttpActionResult GetAllRepeatnessTypeDdl()
+        public IHttpActionResult GetAllRepeatnessType()
         {
-            return Ok(_lookupService.GetAllDdlByName("RepeatnessType"));
+            return Ok(_lookupService.GetAllByName("RepeatnessType"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
-        public IHttpActionResult GetAllAuthorTypeDdl()
+        public IHttpActionResult GetAllAuthorType()
         {
-            return Ok(_lookupService.GetAllDdlByName("AuthorType"));
+            return Ok(_lookupService.GetAllByName("AuthorType"));
         }
-
-
-        //[HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        //public IHttpActionResult GetAll()
-        //{
-        //    return Ok(_lookupService.GetAll());
-        //}
-
-
-        //[HttpGet, CheckUserAccess(ActionBits.LookupReadAccess)]
-        //public IHttpActionResult GetById(int id)
-        //{
-        //    var lookup = _lookupService.GetById(id);
-        //    if (lookup == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(lookup);
-        //}
-
-
-        //[HttpPost]
-        //[CheckUserAccess(ActionBits.LookupCreateAccess)]
-        //[CheckModelValidation]
-        //public IHttpActionResult Create(LookupViewModel lookupViewModel)
-        //{
-        //    var msgRes = _lookupService.Create(lookupViewModel);
-        //    return Ok(new MessageResultApi
-        //    {
-        //        Message = msgRes.FaMessage,
-        //        MessageType = msgRes.MessageType,
-        //        Id = msgRes.Id
-        //    });
-        //}
-
-
-        //[HttpPost]
-        //[CheckUserAccess(ActionBits.LookupUpdateAccess)]
-        //[CheckModelValidation]
-        //public IHttpActionResult Update(LookupViewModel lookupViewModel)
-        //{
-        //    var msgRes = _lookupService.Update(lookupViewModel);
-        //    return Ok(new MessageResultApi
-        //    {
-        //        Message = msgRes.FaMessage,
-        //        MessageType = msgRes.MessageType
-        //    });
-        //}
-
-
-        //[HttpPost, CheckUserAccess(ActionBits.LookupDeleteAccess)]
-        //public IHttpActionResult Delete(int id)
-        //{
-        //    var msgRes = _lookupService.Delete(id);
-        //    return Ok(new MessageResultApi
-        //    {
-        //        Message = msgRes.FaMessage,
-        //        MessageType = msgRes.MessageType
-        //    });
-        //}
     }
 }

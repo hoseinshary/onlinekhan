@@ -60,12 +60,12 @@ export class EducationTreeStore extends VuexModule {
   get treeData() {
     var list = this._educationTreeList.map(x => ({
       Id: x.Id,
-      LookupId_EducationTreeState: x.LookupId_EducationTreeState,
-      Lookup_EducationTreeState: x.Lookup_EducationTreeState,
       label: x.Name,
-      ParentEducationTreeId: x.ParentEducationTreeId
+      ParentEducationTreeId: x.ParentEducationTreeId,
+      header: "custom"
     }));
     var tree = util.listToTree(list, "Id", "ParentEducationTreeId");
+    // set expanded list to show first level of tree
     this._expandedTreeData = tree && tree[0] ? [tree[0].Id] : [];
     return tree;
   }

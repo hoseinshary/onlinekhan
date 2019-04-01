@@ -134,7 +134,7 @@ export class RoleStore extends VuexModule {
 
   //#region ### actions ###
   @action()
-  getById(id: number) {
+  async getById(id: number) {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IRole>) => {
@@ -144,7 +144,7 @@ export class RoleStore extends VuexModule {
   }
 
   @action()
-  fillList() {
+  async fillList() {
     if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
@@ -158,7 +158,7 @@ export class RoleStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  validateForm(vm: any) {
+  async validateForm(vm: any) {
     return new Promise(resolve => {
       vm.$v.role.$touch();
       if (vm.$v.role.$error) {
@@ -171,7 +171,7 @@ export class RoleStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  notify(payload: { vm: Vue; data: IMessageResult }) {
+  async notify(payload: { vm: Vue; data: IMessageResult }) {
     const context = getRawActionContext(this);
     return context.dispatch(
       "notify",

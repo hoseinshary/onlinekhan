@@ -150,7 +150,7 @@ export class EducationTreeStore extends VuexModule {
 
   //#region ### actions ###
   @action()
-  getById(id: number) {
+  async getById(id: number) {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IEducationTree>) => {
@@ -174,7 +174,7 @@ export class EducationTreeStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  validateForm(vm: any) {
+  async validateForm(vm: any) {
     return new Promise(resolve => {
       vm.$v.educationTree.$touch();
       if (vm.$v.educationTree.$error) {
@@ -187,7 +187,7 @@ export class EducationTreeStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  notify(payload: { vm: Vue; data: IMessageResult }) {
+  async notify(payload: { vm: Vue; data: IMessageResult }) {
     const context = getRawActionContext(this);
     return context.dispatch(
       "notify",

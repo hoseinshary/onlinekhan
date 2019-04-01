@@ -130,7 +130,7 @@ export class ProvinceStore extends VuexModule {
 
   //#region ### actions ###
   @action()
-  getById(id: number) {
+  async getById(id: number) {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IProvince>) => {
@@ -140,7 +140,7 @@ export class ProvinceStore extends VuexModule {
   }
 
   @action()
-  fillList() {
+  async fillList() {
     if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
@@ -154,7 +154,7 @@ export class ProvinceStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  validateForm(vm: any) {
+  async validateForm(vm: any) {
     return new Promise(resolve => {
       vm.$v.province.$touch();
       if (vm.$v.province.$error) {
@@ -167,7 +167,7 @@ export class ProvinceStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  notify(payload: { vm: Vue; data: IMessageResult }) {
+  async notify(payload: { vm: Vue; data: IMessageResult }) {
     const context = getRawActionContext(this);
     return context.dispatch(
       "notify",

@@ -135,7 +135,7 @@ export class UserStore extends VuexModule {
 
   //#region ### actions ###
   @action()
-  getById(id: number) {
+  async getById(id: number) {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IUser>) => {
@@ -145,7 +145,7 @@ export class UserStore extends VuexModule {
   }
 
   @action()
-  fillList() {
+  async fillList() {
     if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
@@ -159,7 +159,7 @@ export class UserStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  validateForm(vm: any) {
+  async validateForm(vm: any) {
     return new Promise(resolve => {
       vm.$v.user.$touch();
       if (vm.$v.user.$error) {
@@ -172,7 +172,7 @@ export class UserStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  notify(payload: { vm: Vue; data: IMessageResult }) {
+  async notify(payload: { vm: Vue; data: IMessageResult }) {
     const context = getRawActionContext(this);
     return context.dispatch(
       "notify",
@@ -252,7 +252,7 @@ export class UserStore extends VuexModule {
   }
 
   @action()
-  login(vm: Vue) {
+  async login(vm: Vue) {
     var data = {
       Username: this.loginUser.Username1,
       Password: this.loginUser.Password1

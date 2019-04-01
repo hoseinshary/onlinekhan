@@ -124,7 +124,7 @@ export class AccessStore extends VuexModule {
 
   //#region ### actions ###
   @action()
-  fillMenuList() {
+  async fillMenuList() {
     if (this._menuChanged) {
       return axios
         .get(`${baseUrl}/GetMenu`)
@@ -138,7 +138,7 @@ export class AccessStore extends VuexModule {
   }
 
   @action()
-  fillSubMenuList() {
+  async fillSubMenuList() {
     if (this._subMenuChanged) {
       return axios
         .get(`${baseUrl}/GetSubMenu`)
@@ -152,7 +152,7 @@ export class AccessStore extends VuexModule {
   }
 
   @action()
-  fillActionList() {
+  async fillActionList() {
     return axios
       .get(`${baseUrl}/GetAllActions?roleId=${this._roleId}`)
       .then((response: AxiosResponse<Array<IAction>>) => {
@@ -161,7 +161,7 @@ export class AccessStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  validateForm(vm: any) {
+  async validateForm(vm: any) {
     return new Promise(resolve => {
       vm.$v.role.$touch();
       if (vm.$v.role.$error) {
@@ -174,7 +174,7 @@ export class AccessStore extends VuexModule {
   }
 
   @action({ mode: "raw" })
-  notify(data: IMessageResult) {
+  async notify(data: IMessageResult) {
     const context = getRawActionContext(this);
     return context.dispatch(
       "notify",
@@ -188,7 +188,7 @@ export class AccessStore extends VuexModule {
   }
 
   @action()
-  changeAccess(payload) {
+  async changeAccess(payload) {
     return axios
       .post(`${baseUrl}/ChangeAccess`, {
         RoleId: this._roleId,

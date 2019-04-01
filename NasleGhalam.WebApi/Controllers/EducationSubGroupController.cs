@@ -19,13 +19,11 @@ namespace NasleGhalam.WebApi.Controllers
             _educationSubGroupService = educationSubGroupService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess,ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_educationSubGroupService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.EducationSubGroupReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -38,7 +36,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(educationSubGroup);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationSubGroupCreateAccess)]
         [CheckModelValidation]
@@ -46,7 +43,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_educationSubGroupService.Create(educationSubGroupViewModel));
         }
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationSubGroupUpdateAccess)]
@@ -56,17 +52,10 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_educationSubGroupService.Update(educationSubGroupViewModel));
         }
 
-
         [HttpPost, CheckUserAccess(ActionBits.EducationSubGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             return Ok(_educationSubGroupService.Delete(id));
-        }
-
-        [HttpGet, CheckUserAccess(ActionBits.UniversityBranchCreateAccess, ActionBits.UniversityBranchUpdateAccess)]
-        public IHttpActionResult GetAllByEducationTreeIdDdl(int id)
-        {
-            return Ok(_educationSubGroupService.GetAllByEducationTreeIdDdl(id));
         }
     }
 }

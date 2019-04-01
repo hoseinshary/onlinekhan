@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels.Topic;
 
 namespace NasleGhalam.ViewModels.EducationBook

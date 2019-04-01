@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels.QuestionOption;

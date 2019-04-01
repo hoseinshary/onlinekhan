@@ -1,6 +1,4 @@
-﻿using NasleGhalam.ViewModels._Attributes;
-using System.ComponentModel.DataAnnotations;
-using NasleGhalam.ViewModels.Province;
+﻿using NasleGhalam.ViewModels.Province;
 
 namespace NasleGhalam.ViewModels.City
 {

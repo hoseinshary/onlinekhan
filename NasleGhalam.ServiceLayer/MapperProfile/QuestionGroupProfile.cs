@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.Question;
 using NasleGhalam.ViewModels.QuestionGroup;
-using NasleGhalam.ViewModels.QuestionOption;
 
 namespace NasleGhalam.ServiceLayer.MapperProfile
 {

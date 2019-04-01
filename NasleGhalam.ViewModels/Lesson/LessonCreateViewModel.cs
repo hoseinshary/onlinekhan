@@ -1,7 +1,6 @@
 ﻿using NasleGhalam.ViewModels._Attributes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using NasleGhalam.ViewModels.EducationTree;
 using NasleGhalam.ViewModels.Ratio;
 
 namespace NasleGhalam.ViewModels.Lesson

@@ -27,11 +27,11 @@
             </div>
           </q-slide-transition>
         </div>-->
-        1 {{expaned}}
+        {{expanded}}
         <q-slide-transition>
           <q-tree
             :nodes="educationTreeStore.treeData"
-            :expanded.sync="expaned"
+            :expanded.sync="expanded"
             class="col-md-12"
             color="blue"
             node-key="Id"
@@ -64,7 +64,7 @@ export default class EducationTreeVue extends Vue {
   //### data ###
   educationTreeStore = vxm.educationTreeStore;
   pageAccess = util.getAccess(this.educationTreeStore.modelName);
-  expaned: Array<Object> = [];
+  expanded: Array<Object> = [];
   //--------------------------------------------------
 
   //### getters ###
@@ -105,7 +105,7 @@ export default class EducationTreeVue extends Vue {
   created() {
     var _this = this;
     this.educationTreeStore.fillList().then(function(res) {
-      _this.expaned = _this.educationTreeStore.expanded;
+      _this.expanded = _this.educationTreeStore.expandedTreeData;
     });
   }
   //--------------------------------------------------

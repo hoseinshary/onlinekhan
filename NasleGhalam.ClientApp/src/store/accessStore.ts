@@ -23,13 +23,13 @@ export class AccessStore extends VuexModule {
     access: boolean;
   };
   access: IAccess;
-  actionList: Array<IAction>;
-  menuList: Array<IMenu>;
-  subMenuList: Array<ISubMenu>;
-  private roleId: number = 0;
-  private menuChanged: boolean = true;
-  private subMenuChanged: boolean = true;
-  private accessVue: Vue;
+  private _actionList: Array<IAction>;
+  private _menuList: Array<IMenu>;
+  private _subMenuList: Array<ISubMenu>;
+  private _roleId: number = 0;
+  private _menuChanged: boolean = true;
+  private _subMenuChanged: boolean = true;
+  private _accessVue: Vue;
 
   /**
    * initialize data
@@ -41,22 +41,22 @@ export class AccessStore extends VuexModule {
       access: false
     };
     this.access = util.cloneObject(DefaultAccess);
-    this.menuList = [];
-    this.subMenuList = [];
-    this.actionList = [];
+    this._menuList = [];
+    this._subMenuList = [];
+    this._actionList = [];
   }
 
   //#region ### getters ###
   get menuDdl() {
-    var menuList = this.menuList.map(x => ({
+    var _menuList = this._menuList.map(x => ({
       value: x.ModuleId,
       label: x.ModuleName
     }));
-    return [{ value: 0, label: "همه" }].concat(menuList);
+    return [{ value: 0, label: "همه" }].concat(_menuList);
   }
 
   get subMenuDdl() {
-    var subMenuList = this.subMenuList
+    var _subMenuList = this._subMenuList
       .filter(
         x => this.access.ModuleId == 0 || x.ModuleId == this.access.ModuleId
       )
@@ -64,11 +64,11 @@ export class AccessStore extends VuexModule {
         value: x.ControllerId,
         label: x.FaName
       }));
-    return [{ value: 0, label: "همه" }].concat(subMenuList);
+    return [{ value: 0, label: "همه" }].concat(_subMenuList);
   }
 
   get actionGridData() {
-    return this.actionList
+    return this._actionList
       .filter(
         x => this.access.ModuleId == 0 || x.ModuleId == this.access.ModuleId
       )
@@ -83,32 +83,32 @@ export class AccessStore extends VuexModule {
   //#region ### mutations ###
   @mutation
   SET_ROLE_ID(id: number) {
-    this.roleId = id;
+    this._roleId = id;
   }
 
   @mutation
   private SET_ACTION_LIST(list: Array<IAction>) {
-    this.actionList = list;
+    this._actionList = list;
   }
 
   @mutation
   private SET_MENU_LIST(list: Array<IMenu>) {
-    this.menuList = list;
+    this._menuList = list;
   }
 
   @mutation
   private SET_SUB_MENU_LIST(list: Array<ISubMenu>) {
-    this.subMenuList = list;
+    this._subMenuList = list;
   }
 
   @mutation
   private MENU_CHANGED(changed: boolean) {
-    this.menuChanged = changed;
+    this._menuChanged = changed;
   }
 
   @mutation
   private SUB_MENU_CHANGED(changed: boolean) {
-    this.subMenuChanged = changed;
+    this._subMenuChanged = changed;
   }
 
   @mutation
@@ -118,14 +118,14 @@ export class AccessStore extends VuexModule {
 
   @mutation
   SET_ACCESS_VUE(vm: Vue) {
-    this.accessVue = vm;
+    this._accessVue = vm;
   }
   //#endregion
 
   //#region ### actions ###
   @action()
   fillMenuList() {
-    if (this.menuChanged) {
+    if (this._menuChanged) {
       return axios
         .get(`${baseUrl}/GetMenu`)
         .then((response: AxiosResponse<Array<IMenu>>) => {
@@ -133,13 +133,13 @@ export class AccessStore extends VuexModule {
           this.MENU_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this.menuList);
+      return Promise.resolve(this._menuList);
     }
   }
 
   @action()
   fillSubMenuList() {
-    if (this.subMenuChanged) {
+    if (this._subMenuChanged) {
       return axios
         .get(`${baseUrl}/GetSubMenu`)
         .then((response: AxiosResponse<Array<ISubMenu>>) => {
@@ -147,14 +147,14 @@ export class AccessStore extends VuexModule {
           this.SUB_MENU_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this.subMenuList);
+      return Promise.resolve(this._subMenuList);
     }
   }
 
   @action()
   fillActionList() {
     return axios
-      .get(`${baseUrl}/GetAllActions?roleId=${this.roleId}`)
+      .get(`${baseUrl}/GetAllActions?roleId=${this._roleId}`)
       .then((response: AxiosResponse<Array<IAction>>) => {
         this.SET_ACTION_LIST(response.data);
       });
@@ -181,7 +181,7 @@ export class AccessStore extends VuexModule {
       {
         body: data.Message,
         type: data.MessageType,
-        vm: this.accessVue
+        vm: this._accessVue
       },
       { root: true }
     );
@@ -191,7 +191,7 @@ export class AccessStore extends VuexModule {
   changeAccess(payload) {
     return axios
       .post(`${baseUrl}/ChangeAccess`, {
-        RoleId: this.roleId,
+        RoleId: this._roleId,
         ActionId: payload.actionId,
         IsChecked: payload.checked
       })

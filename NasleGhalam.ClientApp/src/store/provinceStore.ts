@@ -17,11 +17,11 @@ import {
 export class ProvinceStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   province: IProvince;
-  private provinceList: Array<IProvince>;
-  private selectedId: number;
-  private modelChanged: boolean = true;
-  private createVue: Vue;
-  private editVue: Vue;
+  private _provinceList: Array<IProvince>;
+  private _selectedId: number;
+  private _modelChanged: boolean = true;
+  private _createVue: Vue;
+  private _editVue: Vue;
 
   /**
    * initialize data
@@ -30,7 +30,7 @@ export class ProvinceStore extends VuexModule {
     super();
 
     this.province = util.cloneObject(DefaultProvince);
-    this.provinceList = [];
+    this._provinceList = [];
     this.openModal = {
       create: false,
       edit: false,
@@ -48,35 +48,35 @@ export class ProvinceStore extends VuexModule {
   }
 
   get ddl() {
-    return this.provinceList.map(x => ({
+    return this._provinceList.map(x => ({
       value: x.Id,
       label: x.Name
     }));
   }
 
   get gridData() {
-    return this.provinceList;
+    return this._provinceList;
   }
   //#endregion
 
   //#region ### mutations ###
   @mutation
   private CREATE(province: IProvince) {
-    this.provinceList.push(province);
+    this._provinceList.push(province);
   }
 
   @mutation
   private UPDATE(province: IProvince) {
-    let index = this.provinceList.findIndex(x => x.Id == this.selectedId);
+    let index = this._provinceList.findIndex(x => x.Id == this._selectedId);
     if (index < 0) return;
-    util.mapObject(province, this.provinceList[index]);
+    util.mapObject(province, this._provinceList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this.provinceList.findIndex(x => x.Id == this.selectedId);
+    let index = this._provinceList.findIndex(x => x.Id == this._selectedId);
     if (index < 0) return;
-    this.provinceList.splice(index, 1);
+    this._provinceList.splice(index, 1);
   }
 
   @mutation
@@ -89,17 +89,17 @@ export class ProvinceStore extends VuexModule {
 
   @mutation
   private SET_LIST(list: Array<IProvince>) {
-    this.provinceList = list;
+    this._provinceList = list;
   }
 
   @mutation
   private SET_SELECTED_ID(id: number) {
-    this.selectedId = id;
+    this._selectedId = id;
   }
 
   @mutation
   private MODEL_CHANGED(changed: boolean) {
-    this.modelChanged = changed;
+    this._modelChanged = changed;
   }
 
   @mutation
@@ -119,12 +119,12 @@ export class ProvinceStore extends VuexModule {
 
   @mutation
   SET_CREATE_VUE(vm: Vue) {
-    this.createVue = vm;
+    this._createVue = vm;
   }
 
   @mutation
   SET_EDIT_VUE(vm: Vue) {
-    this.editVue = vm;
+    this._editVue = vm;
   }
   //#endregion
 
@@ -141,7 +141,7 @@ export class ProvinceStore extends VuexModule {
 
   @action()
   fillList() {
-    if (this.modelChanged) {
+    if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
         .then((response: AxiosResponse<Array<IProvince>>) => {
@@ -149,7 +149,7 @@ export class ProvinceStore extends VuexModule {
           this.MODEL_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this.provinceList);
+      return Promise.resolve(this._provinceList);
     }
   }
 
@@ -182,7 +182,7 @@ export class ProvinceStore extends VuexModule {
 
   @action()
   async submitCreate(closeModal: boolean) {
-    let vm = this.createVue;
+    let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
     return axios
@@ -202,17 +202,17 @@ export class ProvinceStore extends VuexModule {
 
   @action()
   async resetCreate() {
-    this.RESET(this.createVue);
+    this.RESET(this._createVue);
   }
 
   @action()
   async submitEdit() {
-    let vm = this.createVue;
+    let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.province.Id = this.selectedId;
+    this.province.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this.selectedId}`, this.province)
+      .post(`${baseUrl}/Update/${this._selectedId}`, this.province)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -228,14 +228,13 @@ export class ProvinceStore extends VuexModule {
 
   @action()
   async resetEdit() {
-    this.RESET(this.editVue);
+    this.RESET(this._editVue);
   }
 
   @action()
   async submitDelete(vm: Vue) {
-    debugger;
     return axios
-      .post(`${baseUrl}/Delete/${this.selectedId}`)
+      .post(`${baseUrl}/Delete/${this._selectedId}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

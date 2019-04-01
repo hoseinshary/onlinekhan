@@ -1,6 +1,5 @@
 import Vue from "Vue";
 import IRole, { DefaultRole } from "src/models/IRole";
-import IAccess, { DefaultAccess } from "src/models/IAccess";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -22,12 +21,11 @@ export class RoleStore extends VuexModule {
     delete: boolean;
   };
   role: IRole;
-  private roleList: Array<IRole>;
-  access: IAccess;
-  private selectedId: number = 0;
-  private modelChanged: boolean = true;
-  private createVue: Vue;
-  private editVue: Vue;
+  private _roleList: Array<IRole>;
+  private _selectedId: number = 0;
+  private _modelChanged: boolean = true;
+  private _createVue: Vue;
+  private _editVue: Vue;
 
   /**
    * initialize data
@@ -36,13 +34,12 @@ export class RoleStore extends VuexModule {
     super();
 
     this.role = util.cloneObject(DefaultRole);
-    this.roleList = [];
+    this._roleList = [];
     this.openModal = {
       create: false,
       edit: false,
       delete: false
     };
-    this.access = util.cloneObject(DefaultAccess);
   }
 
   //#region ### getters ###
@@ -55,35 +52,35 @@ export class RoleStore extends VuexModule {
   }
 
   get ddl() {
-    return this.roleList.map(x => ({
+    return this._roleList.map(x => ({
       value: x.Id,
       label: x.Name
     }));
   }
 
   get gridData() {
-    return this.roleList;
+    return this._roleList;
   }
   //#endregion
 
   //#region ### mutations ###
   @mutation
   private CREATE(role: IRole) {
-    this.roleList.push(role);
+    this._roleList.push(role);
   }
 
   @mutation
   private UPDATE(role: IRole) {
-    let index = this.roleList.findIndex(x => x.Id == this.selectedId);
+    let index = this._roleList.findIndex(x => x.Id == this._selectedId);
     if (index < 0) return;
-    util.mapObject(role, this.roleList[index]);
+    util.mapObject(role, this._roleList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this.roleList.findIndex(x => x.Id == this.selectedId);
+    let index = this._roleList.findIndex(x => x.Id == this._selectedId);
     if (index < 0) return;
-    this.roleList.splice(index, 1);
+    this._roleList.splice(index, 1);
   }
 
   @mutation
@@ -96,17 +93,17 @@ export class RoleStore extends VuexModule {
 
   @mutation
   private SET_LIST(list: Array<IRole>) {
-    this.roleList = list;
+    this._roleList = list;
   }
 
   @mutation
   private SET_SELECTED_ID(id: number) {
-    this.selectedId = id;
+    this._selectedId = id;
   }
 
   @mutation
   private MODEL_CHANGED(changed: boolean) {
-    this.modelChanged = changed;
+    this._modelChanged = changed;
   }
 
   @mutation
@@ -126,12 +123,12 @@ export class RoleStore extends VuexModule {
 
   @mutation
   SET_CREATE_VUE(vm: Vue) {
-    this.createVue = vm;
+    this._createVue = vm;
   }
 
   @mutation
   SET_EDIT_VUE(vm: Vue) {
-    this.editVue = vm;
+    this._editVue = vm;
   }
   //#endregion
 
@@ -148,7 +145,7 @@ export class RoleStore extends VuexModule {
 
   @action()
   fillList() {
-    if (this.modelChanged) {
+    if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
         .then((response: AxiosResponse<Array<IRole>>) => {
@@ -156,7 +153,7 @@ export class RoleStore extends VuexModule {
           this.MODEL_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this.roleList);
+      return Promise.resolve(this._roleList);
     }
   }
 
@@ -189,7 +186,7 @@ export class RoleStore extends VuexModule {
 
   @action()
   async submitCreate(closeModal: boolean) {
-    let vm = this.createVue;
+    let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
     return axios
@@ -209,17 +206,17 @@ export class RoleStore extends VuexModule {
 
   @action()
   async resetCreate() {
-    this.RESET(this.createVue);
+    this.RESET(this._createVue);
   }
 
   @action()
   async submitEdit() {
-    let vm = this.editVue;
+    let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.role.Id = this.selectedId;
+    this.role.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this.selectedId}`, this.role)
+      .post(`${baseUrl}/Update/${this._selectedId}`, this.role)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -235,13 +232,13 @@ export class RoleStore extends VuexModule {
 
   @action()
   async resetEdit() {
-    this.RESET(this.editVue);
+    this.RESET(this._editVue);
   }
 
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this.selectedId}`)
+      .post(`${baseUrl}/Delete/${this._selectedId}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

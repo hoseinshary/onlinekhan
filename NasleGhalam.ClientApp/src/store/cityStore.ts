@@ -17,11 +17,11 @@ import {
 export class CityStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   city: ICity;
-  private cityList: Array<ICity>;
-  private selectedId: number = 0;
-  private modelChanged: boolean = true;
-  private createVue: Vue;
-  private editVue: Vue;
+  private _cityList: Array<ICity>;
+  private _selectedId: number = 0;
+  private _modelChanged: boolean = true;
+  private _createVue: Vue;
+  private _editVue: Vue;
 
   /**
    * initialize data
@@ -30,7 +30,7 @@ export class CityStore extends VuexModule {
     super();
 
     this.city = util.cloneObject(DefaultCity);
-    this.cityList = [];
+    this._cityList = [];
     this.openModal = {
       create: false,
       edit: false,
@@ -48,7 +48,7 @@ export class CityStore extends VuexModule {
   }
 
   get ddl() {
-    return this.cityList.map(x => ({
+    return this._cityList.map(x => ({
       value: x.Id,
       label: x.Name
     }));
@@ -56,7 +56,7 @@ export class CityStore extends VuexModule {
 
   get cityByProvinceIdDdl() {
     return provinceId =>
-      this.cityList
+      this._cityList
         .filter(x => x.ProvinceId == provinceId)
         .map(x => ({
           value: x.Id,
@@ -65,28 +65,28 @@ export class CityStore extends VuexModule {
   }
 
   get gridData() {
-    return this.cityList;
+    return this._cityList;
   }
   //#endregion
 
   //#region ### mutations ###
   @mutation
   private CREATE(city: ICity) {
-    this.cityList.push(city);
+    this._cityList.push(city);
   }
 
   @mutation
   private UPDATE(city: ICity) {
-    let index = this.cityList.findIndex(x => x.Id == this.selectedId);
+    let index = this._cityList.findIndex(x => x.Id == this._selectedId);
     if (index < 0) return;
-    util.mapObject(city, this.cityList[index]);
+    util.mapObject(city, this._cityList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this.cityList.findIndex(x => x.Id == this.selectedId);
+    let index = this._cityList.findIndex(x => x.Id == this._selectedId);
     if (index < 0) return;
-    this.cityList.splice(index, 1);
+    this._cityList.splice(index, 1);
   }
 
   @mutation
@@ -99,17 +99,17 @@ export class CityStore extends VuexModule {
 
   @mutation
   private SET_LIST(list: Array<ICity>) {
-    this.cityList = list;
+    this._cityList = list;
   }
 
   @mutation
   private SET_SELECTED_ID(id: number) {
-    this.selectedId = id;
+    this._selectedId = id;
   }
 
   @mutation
   private MODEL_CHANGED(changed: boolean) {
-    this.modelChanged = changed;
+    this._modelChanged = changed;
   }
 
   @mutation
@@ -129,12 +129,12 @@ export class CityStore extends VuexModule {
 
   @mutation
   SET_CREATE_VUE(vm: Vue) {
-    this.createVue = vm;
+    this._createVue = vm;
   }
 
   @mutation
   SET_EDIT_VUE(vm: Vue) {
-    this.editVue = vm;
+    this._editVue = vm;
   }
   //#endregion
 
@@ -151,7 +151,7 @@ export class CityStore extends VuexModule {
 
   @action()
   fillList() {
-    if (this.modelChanged) {
+    if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
         .then((response: AxiosResponse<Array<ICity>>) => {
@@ -159,7 +159,7 @@ export class CityStore extends VuexModule {
           this.MODEL_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this.cityList);
+      return Promise.resolve(this._cityList);
     }
   }
 
@@ -192,7 +192,7 @@ export class CityStore extends VuexModule {
 
   @action()
   async submitCreate(closeModal: boolean) {
-    let vm = this.createVue;
+    let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
     return axios
@@ -212,17 +212,17 @@ export class CityStore extends VuexModule {
 
   @action()
   async resetCreate() {
-    this.RESET(this.createVue);
+    this.RESET(this._createVue);
   }
 
   @action()
   async submitEdit() {
-    let vm = this.editVue;
+    let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.city.Id = this.selectedId;
+    this.city.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this.selectedId}`, this.city)
+      .post(`${baseUrl}/Update/${this._selectedId}`, this.city)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -238,13 +238,13 @@ export class CityStore extends VuexModule {
 
   @action()
   async resetEdit() {
-    this.RESET(this.editVue);
+    this.RESET(this._editVue);
   }
 
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this.selectedId}`)
+      .post(`${baseUrl}/Delete/${this._selectedId}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

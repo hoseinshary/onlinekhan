@@ -1,11 +1,11 @@
 import Vue from "Vue";
-import IEducationTree, {
-  DefaultEducationTree
-} from "src/models/IEducationTree";
+import IEducationSubGroup, {
+  DefaultEducationSubGroup
+} from "src/models/IEducationSubGroup";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
-import { MessageType, EducationTreeState } from "src/utilities/enumeration";
-import { EDUCATION_TREE_URL as baseUrl } from "src/utilities/site-config";
+import { MessageType } from "src/utilities/enumeration";
+import { EDUCATION_SUB_GROUP_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
@@ -15,18 +15,15 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 
-@Module({ namespacedPath: "educationTreeStore/" })
-export class EducationTreeStore extends VuexModule {
+@Module({ namespacedPath: "educationSubGroupStore/" })
+export class EducationSubGroupStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
-  educationTree: IEducationTree;
-  private _educationTreeList: Array<IEducationTree>;
-  private _educationTreeByStateList: Array<IEducationTree>;
+  educationSubGroup: IEducationSubGroup;
+  private _educationSubGroupList: Array<IEducationSubGroup>;
   private _selectedId: number;
   private _modelChanged: boolean = true;
-  private _modelChangedByState: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
-  private _expandedTreeData: Array<object> = [];
 
   /**
    * initialize data
@@ -34,9 +31,8 @@ export class EducationTreeStore extends VuexModule {
   constructor() {
     super();
 
-    this.educationTree = util.cloneObject(DefaultEducationTree);
-    this._educationTreeList = [];
-    this._educationTreeByStateList = [];
+    this.educationSubGroup = util.cloneObject(DefaultEducationSubGroup);
+    this._educationSubGroupList = [];
     this.openModal = {
       create: false,
       edit: false,
@@ -46,85 +42,60 @@ export class EducationTreeStore extends VuexModule {
 
   //#region ### getters ###
   get modelName() {
-    return "درخت آموزش";
+    return "زیر گروه آموزشی";
   }
 
   get recordName() {
-    return this.educationTree.Name || "";
+    return this.educationSubGroup.Name || "";
   }
 
   get ddl() {
-    return this._educationTreeList.map(x => ({
+    return this._educationSubGroupList.map(x => ({
       value: x.Id,
       label: x.Name
     }));
   }
 
-  get byStateDdl() {
-    return this._educationTreeByStateList.map(x => ({
-      value: x.Id,
-      label: x.Name
-    }));
-  }
-
-  get treeData() {
-    var list = this._educationTreeList.map(x => ({
-      Id: x.Id,
-      label: x.Name,
-      ParentEducationTreeId: x.ParentEducationTreeId,
-      header: "custom"
-    }));
-    var tree = util.listToTree(list, "Id", "ParentEducationTreeId");
-    // set expanded list to show first level of tree
-    this._expandedTreeData = tree && tree[0] ? [tree[0].Id] : [];
-    return tree;
-  }
-
-  get expandedTreeData() {
-    return this._expandedTreeData;
+  get gridData() {
+    return this._educationSubGroupList;
   }
   //#endregion
 
   //#region ### mutations ###
   @mutation
-  private CREATE(educationTree: IEducationTree) {
-    this._educationTreeList.push(educationTree);
+  private CREATE(educationSubGroup: IEducationSubGroup) {
+    this._educationSubGroupList.push(educationSubGroup);
   }
 
   @mutation
-  private UPDATE(educationTree: IEducationTree) {
-    let index = this._educationTreeList.findIndex(
+  private UPDATE(educationSubGroup: IEducationSubGroup) {
+    let index = this._educationSubGroupList.findIndex(
       x => x.Id == this._selectedId
     );
     if (index < 0) return;
-    util.mapObject(educationTree, this._educationTreeList[index]);
+    util.mapObject(educationSubGroup, this._educationSubGroupList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this._educationTreeList.findIndex(
+    let index = this._educationSubGroupList.findIndex(
       x => x.Id == this._selectedId
     );
     if (index < 0) return;
-    this._educationTreeList.splice(index, 1);
+    this._educationSubGroupList.splice(index, 1);
   }
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultEducationTree, this.educationTree);
+    util.mapObject(DefaultEducationSubGroup, this.educationSubGroup);
     if (vm.$v) {
       vm.$v.$reset();
     }
   }
 
   @mutation
-  private SET_LIST(list: Array<IEducationTree>) {
-    this._educationTreeList = list;
-  }
-
-  @mutation
-  private SET_BY_STATE_LIST(list: Array<IEducationTree>) {
-    this._educationTreeByStateList = list;
+  private SET_LIST(list: Array<IEducationSubGroup>) {
+    this._educationSubGroupList = list;
   }
 
   @mutation
@@ -135,11 +106,6 @@ export class EducationTreeStore extends VuexModule {
   @mutation
   private MODEL_CHANGED(changed: boolean) {
     this._modelChanged = changed;
-  }
-
-  @mutation
-  private MODEL_CHANGED_BY_STATE(changed: boolean) {
-    this._modelChangedByState = changed;
   }
 
   @mutation
@@ -173,9 +139,9 @@ export class EducationTreeStore extends VuexModule {
   async getById(id: number) {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
-      .then((response: AxiosResponse<IEducationTree>) => {
-        util.mapObject(response.data, this.educationTree);
-        this.SET_SELECTED_ID(this.educationTree.Id);
+      .then((response: AxiosResponse<IEducationSubGroup>) => {
+        util.mapObject(response.data, this.educationSubGroup);
+        this.SET_SELECTED_ID(this.educationSubGroup.Id);
       });
   }
 
@@ -184,34 +150,20 @@ export class EducationTreeStore extends VuexModule {
     if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
-        .then((response: AxiosResponse<Array<IEducationTree>>) => {
+        .then((response: AxiosResponse<Array<IEducationSubGroup>>) => {
           this.SET_LIST(response.data);
           this.MODEL_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this._educationTreeList);
-    }
-  }
-
-  @action()
-  async fillByStateList(state: EducationTreeState) {
-    if (this._modelChangedByState) {
-      return axios
-        .get(`${baseUrl}/GetAllEducationTreeByState?state=${state}`)
-        .then((response: AxiosResponse<Array<IEducationTree>>) => {
-          this.SET_BY_STATE_LIST(response.data);
-          this.MODEL_CHANGED_BY_STATE(false);
-        });
-    } else {
-      return Promise.resolve(this._educationTreeByStateList);
+      return Promise.resolve(this._educationSubGroupList);
     }
   }
 
   @action({ mode: "raw" })
   async validateForm(vm: any) {
     return new Promise(resolve => {
-      vm.$v.educationTree.$touch();
-      if (vm.$v.educationTree.$error) {
+      vm.$v.educationSubGroup.$touch();
+      if (vm.$v.educationSubGroup.$error) {
         const context = getRawActionContext(this);
         context.dispatch("notifyInvalidForm", vm, { root: true });
         resolve(false);
@@ -240,7 +192,7 @@ export class EducationTreeStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     return axios
-      .post(`${baseUrl}/Create`, this.educationTree)
+      .post(`${baseUrl}/Create`, this.educationSubGroup)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -264,9 +216,9 @@ export class EducationTreeStore extends VuexModule {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.educationTree.Id = this._selectedId;
+    this.educationSubGroup.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this._selectedId}`, this.educationTree)
+      .post(`${baseUrl}/Update/${this._selectedId}`, this.educationSubGroup)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -302,6 +254,6 @@ export class EducationTreeStore extends VuexModule {
   //#endregion
 }
 
-export const educationTreeStore = EducationTreeStore.ExtractVuexModule(
-  EducationTreeStore
+export const educationSubGroupStore = EducationSubGroupStore.ExtractVuexModule(
+  EducationSubGroupStore
 );

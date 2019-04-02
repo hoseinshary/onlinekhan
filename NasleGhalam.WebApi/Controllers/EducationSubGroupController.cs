@@ -39,7 +39,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationSubGroupCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(EducationSubGroupViewModel educationSubGroupViewModel)
+        public IHttpActionResult Create(EducationSubGroupCreateViewModel educationSubGroupViewModel)
         {
             return Ok(_educationSubGroupService.Create(educationSubGroupViewModel));
         }
@@ -47,7 +47,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationSubGroupUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(EducationSubGroupViewModel educationSubGroupViewModel)
+        public IHttpActionResult Update(EducationSubGroupUpdateViewModel educationSubGroupViewModel)
         {
             return Ok(_educationSubGroupService.Update(educationSubGroupViewModel));
         }

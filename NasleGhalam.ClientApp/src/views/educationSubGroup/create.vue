@@ -1,72 +1,51 @@
 <template>
-  <my-modal-create
-    :title="modelName"
-    :show="isOpenModalCreate"
-    @confirm="submit"
-    @reset="resetCreateStore"
-    @open="modalOpen"
-    @close="toggleModalCreateStore(false)"
+  <base-modal-create
+    :title="educationSubGroupStore.modelName"
+    :show="educationSubGroupStore.openModal.create"
+    @confirm="educationSubGroupStore.submitCreate"
+    @reset="educationSubGroupStore.resetCreate"
+    @open="open"
+    @close="educationSubGroupStore.OPEN_MODAL_CREATE(false)"
   >
-    <my-select
-      :model="$v.educationSubGroupObj.EducationTreeId"
-      :options="educationGroupDdl"
+    <base-select
+      :model="$v.educationSubGroup.EducationTreeId"
+      :options="educationTreeStore.byStateDdl"
       class="col-md-6"
-      clearable
-      ref="EducationTreeId"
+      filter
     />
-    <my-input :model="$v.educationSubGroupObj.Name" class="col-md-6"/>
-  </my-modal-create>
+    <base-input :model="$v.educationSubGroup.Name" class="col-md-6"/>
+  </base-modal-create>
 </template>
 
-<script>
-  import viewModel from "viewModels/educationSubGroupViewModel";
-  import { mapState, mapActions } from "vuex";
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { educationSubGroupValidations } from "src/validations/EducationSubGroupValidation";
+import { EducationTreeState } from "../../utilities/enumeration";
 
-  export default {
-    /**
-     * methods
-     */
-    methods: {
-      ...mapActions("educationSubGroupStore", [
-        "toggleModalCreateStore",
-        "createVueStore",
-        "submitCreateStore",
-        "resetCreateStore"
-      ]),
-      ...mapActions("educationTreeStore", {
-        fillEducationGroupDdl: "fillEducationGroupDdl"
-      }),
-      submit(closeModal) {
-        this.educationSubGroupObj.EducationTreeName = this.$refs.EducationTreeId.getSelectedLabel();
-        this.submitCreateStore(closeModal);
-      },
-      modalOpen() {
-        this.fillEducationGroupDdl();
-      }
-    },
-    /**
-     * computed
-     */
-    computed: {
-      ...mapState("educationSubGroupStore", {
-        modelName: "modelName",
-        educationSubGroupObj: "educationSubGroupObj",
-        isOpenModalCreate: "isOpenModalCreate"
-      }),
-      ...mapState("educationTreeStore", {
-        educationGroupDdl: "educationGroupDdl"
-      })
-    },
-    /**
-     * validations
-     */
-    validations: viewModel,
-    /**
-     * created
-     */
-    created() {
-      this.createVueStore(this);
-    }
-  };
+@Component({
+  validations: educationSubGroupValidations
+})
+export default class EducationSubGroupCreateVue extends Vue {
+  $v: any;
+
+  //### data ###
+  educationSubGroupStore = vxm.educationSubGroupStore;
+  educationTreeStore = vxm.educationTreeStore;
+  educationSubGroup = vxm.educationSubGroupStore.educationSubGroup;
+  //--------------------------------------------------
+
+  //### methods ###
+  open() {
+    this.educationTreeStore.fillByStateList(EducationTreeState.EducationGroup);
+  }
+  //--------------------------------------------------
+
+  //### hooks ###
+  created() {
+    this.educationSubGroupStore.SET_CREATE_VUE(this);
+  }
+  //--------------------------------------------------
+}
 </script>
 

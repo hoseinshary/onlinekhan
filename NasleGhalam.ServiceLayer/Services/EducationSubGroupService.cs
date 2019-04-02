@@ -29,6 +29,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public EducationSubGroupViewModel GetById(int id)
         {
             return _educationSubGroups
+                .Include(current => current.EducationTree)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()

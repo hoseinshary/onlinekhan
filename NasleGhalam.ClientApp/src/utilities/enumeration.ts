@@ -12,4 +12,11 @@ enum MessageType {
   Unauthorized = 4
 }
 
-export { UserType, MessageType };
+enum EducationTreeState {
+  Grade = 1,
+  SubTree = 2,
+  EducationGroup = 3,
+  GradeLevel = 4
+}
+
+export { UserType, MessageType, EducationTreeState };

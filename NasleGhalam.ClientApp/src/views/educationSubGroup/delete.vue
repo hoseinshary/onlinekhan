@@ -1,35 +1,26 @@
 <template>
-  <my-modal-delete :title="modelName"
-                   :recordName="recordName"
-                   :show="isOpenModalDelete"
-                   @confirm="submitDelete"
-                   @close="toggleModalDeleteStore(false)">
-  </my-modal-delete>
+  <base-modal-delete
+    :title="educationSubGroupStore.modelName"
+    :recordName="educationSubGroupStore.recordName"
+    :show="educationSubGroupStore.openModal.delete"
+    @confirm="confirm"
+    @close="educationSubGroupStore.OPEN_MODAL_DELETE(false)"
+  ></base-modal-delete>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+@Component
+export default class EducationSubGroupDeleteVue extends Vue {
+  //### data ###
+  educationSubGroupStore = vxm.educationSubGroupStore;
+  //--------------------------------------------------
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('educationSubGroupStore', ['toggleModalDeleteStore', 'submitDeleteStore']),
-    submitDelete() {
-      this.submitDeleteStore(this);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('educationSubGroupStore', {
-      modelName: 'modelName',
-      isOpenModalDelete: 'isOpenModalDelete'
-    }),
-    ...mapGetters('educationSubGroupStore', ['recordName'])
+  //### methods ###
+  confirm() {
+    this.educationSubGroupStore.submitDelete(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
-

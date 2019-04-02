@@ -1,38 +1,26 @@
 <template>
-  <my-modal-delete :title="modelName"
-                   :recordName="recordName"
-                   :show="isOpenModalDelete"
-                   @confirm="submitDelete"
-                   @close="toggleModalDeleteStore(false)">
-  </my-modal-delete>
+  <base-modal-delete
+    :title="educationYearStore.modelName"
+    :recordName="educationYearStore.recordName"
+    :show="educationYearStore.openModal.delete"
+    @confirm="confirm"
+    @close="educationYearStore.OPEN_MODAL_DELETE(false)"
+  ></base-modal-delete>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+@Component
+export default class EducationYearDeleteVue extends Vue {
+  //### data ###
+  educationYearStore = vxm.educationYearStore;
+  //--------------------------------------------------
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('educationYearStore', [
-      'toggleModalDeleteStore',
-      'submitDeleteStore'
-    ]),
-    submitDelete() {
-      this.submitDeleteStore(this);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('educationYearStore', {
-      modelName: 'modelName',
-      isOpenModalDelete: 'isOpenModalDelete'
-    }),
-    ...mapGetters('educationYearStore', ['recordName'])
+  //### methods ###
+  confirm() {
+    this.educationYearStore.submitDelete(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
-

@@ -9,6 +9,8 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         public EducationYearProfile()
         {
             CreateMap<EducationYearViewModel, EducationYear>();
+            CreateMap<EducationYearCreateViewModel, EducationYear>();
+            CreateMap<EducationYearUpdateViewModel, EducationYear>();
         }
     }
 }

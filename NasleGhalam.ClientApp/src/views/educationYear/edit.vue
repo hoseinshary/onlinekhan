@@ -1,59 +1,40 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 @confirm="submitEditStore"
-                 @reset="resetEditStore"
-                 @close="toggleModalEditStore(false)">
-
-    <my-input :model="$v.educationYearObj.Name"
-              class="col-md-6" />
-
-    <my-field class="col-md-6"
-              :model="$v.educationYearObj.IsActiveYear">
+  <base-modal-edit
+    :title="educationYearStore.modelName"
+    :show="educationYearStore.openModal.edit"
+    @confirm="educationYearStore.submitEdit"
+    @reset="educationYearStore.resetEdit"
+    @close="educationYearStore.OPEN_MODAL_EDIT(false)"
+  >
+    <base-input :model="$v.educationYear.Name" class="col-md-6"/>
+    <base-field class="col-md-6" :model="$v.educationYear.IsActiveYear">
       <template slot-scope="data">
-        <q-toggle v-model="data.obj.$model" />
+        <q-toggle v-model="data.obj.$model"/>
       </template>
-    </my-field>
-
-  </my-modal-edit>
+    </base-field>
+  </base-modal-edit>
 </template>
 
-<script>
-import viewModel from 'viewModels/educationYearViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { educationYearValidations } from "src/validations/EducationYearValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('educationYearStore', [
-      'toggleModalEditStore',
-      'editVueStore',
-      'submitEditStore',
-      'resetEditStore'
-    ])
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('educationYearStore', {
-      modelName: 'modelName',
-      educationYearObj: 'educationYearObj',
-      isOpenModalEdit: 'isOpenModalEdit'
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: educationYearValidations
+})
+export default class EducationYearEditVue extends Vue {
+  $v: any;
+
+  //### data ###
+  educationYearStore = vxm.educationYearStore;
+  educationYear = vxm.educationYearStore.educationYear;
+  //--------------------------------------------------
+
+  //### hooks ###
   created() {
-    this.editVueStore(this);
+    this.educationYearStore.SET_EDIT_VUE(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
-

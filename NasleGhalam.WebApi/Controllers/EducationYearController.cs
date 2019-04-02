@@ -19,13 +19,11 @@ namespace NasleGhalam.WebApi.Controllers
             _educationYearService = educationYearService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_educationYearService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -38,26 +36,23 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(educationYear);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationYearCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(EducationYearViewModel educationYearViewModel)
+        public IHttpActionResult Create(EducationYearCreateViewModel educationYearViewModel)
         {
             var msgRes = _educationYearService.Create(educationYearViewModel);
             return Ok(msgRes);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.EducationYearUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(EducationYearViewModel educationYearViewModel)
+        public IHttpActionResult Update(EducationYearUpdateViewModel educationYearViewModel)
         {
             var msgRes = _educationYearService.Update(educationYearViewModel);
             return Ok(msgRes);
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.EducationYearDeleteAccess)]
         public IHttpActionResult Delete(int id)

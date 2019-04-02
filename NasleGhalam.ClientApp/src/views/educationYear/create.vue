@@ -1,59 +1,40 @@
 <template>
-  <my-modal-create :title="modelName"
-                   :show="isOpenModalCreate"
-                   @confirm="submitCreateStore"
-                   @reset="resetCreateStore"
-                   @close="toggleModalCreateStore(false)">
-
-    <my-input :model="$v.educationYearObj.Name"
-              class="col-md-6" />
-
-    <my-field class="col-md-6"
-              :model="$v.educationYearObj.IsActiveYear">
+  <base-modal-create
+    :title="educationYearStore.modelName"
+    :show="educationYearStore.openModal.create"
+    @confirm="educationYearStore.submitCreate"
+    @reset="educationYearStore.resetCreate"
+    @close="educationYearStore.OPEN_MODAL_CREATE(false)"
+  >
+    <base-input :model="$v.educationYear.Name" class="col-md-6"/>
+    <base-field class="col-md-6" :model="$v.educationYear.IsActiveYear">
       <template slot-scope="data">
-        <q-toggle v-model="data.obj.$model" />
+        <q-toggle v-model="data.obj.$model"/>
       </template>
-    </my-field>
-
-  </my-modal-create>
+    </base-field>
+  </base-modal-create>
 </template>
 
-<script>
-import viewModel from 'viewModels/educationYearViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { educationYearValidations } from "src/validations/EducationYearValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('educationYearStore', [
-      'toggleModalCreateStore',
-      'createVueStore',
-      'submitCreateStore',
-      'resetCreateStore'
-    ])
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('educationYearStore', {
-      modelName: 'modelName',
-      educationYearObj: 'educationYearObj',
-      isOpenModalCreate: 'isOpenModalCreate'
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: educationYearValidations
+})
+export default class EducationYearCreateVue extends Vue {
+  $v: any;
+
+  //### data ###
+  educationYearStore = vxm.educationYearStore;
+  educationYear = vxm.educationYearStore.educationYear;
+  //--------------------------------------------------
+
+  //### hooks ###
   created() {
-    this.createVueStore(this);
+    this.educationYearStore.SET_CREATE_VUE(this);
   }
-};
+  //--------------------------------------------------
+}
 </script>
-

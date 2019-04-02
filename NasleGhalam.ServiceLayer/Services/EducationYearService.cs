@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.EducationYear;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -22,7 +21,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _educationYears = uow.Set<EducationYear>();
         }
 
-
         /// <summary>
         /// گرفتن  سال تحصیلی با آی دی
         /// </summary>
@@ -32,14 +30,11 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _educationYears
                 .Where(current => current.Id == id)
-                .Select(current => new EducationYearViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    IsActiveYear = current.IsActiveYear
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<EducationYearViewModel>)
+                .FirstOrDefault();
         }
-
 
         /// <summary>
         /// گرفتن همه سال تحصیلی ها
@@ -47,40 +42,40 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<EducationYearViewModel> GetAll()
         {
-            return _educationYears.Select(current => new EducationYearViewModel()
-            {
-                Id = current.Id,
-                Name = current.Name,
-                IsActiveYear = current.IsActiveYear
-            }).ToList();
+            return _educationYears
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<EducationYearViewModel>)
+                .ToList();
         }
-
 
         /// <summary>
         /// ثبت سال تحصیلی
         /// </summary>
         /// <param name="educationYearViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(EducationYearViewModel educationYearViewModel)
+        public ClientMessageResult Create(EducationYearCreateViewModel educationYearViewModel)
         {
-            var transacion = _uow.BeginTransaction();
+            var transaction = _uow.BeginTransaction();
             if (educationYearViewModel.IsActiveYear)
             {
                 _uow.ExecuteSqlCommand("update EducationYears set IsActiveYear = 0");
-                //_educationYears.ToList().ForEach(current => current.IsActiveYear = false);
             }
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _educationYears.Add(educationYear);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = educationYear.Id;
-            if (msgRes.MessageType == MessageType.Success)
-                transacion.Commit();
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Obj = educationYear;
+                transaction.Commit();
+            }
             else
-                transacion.Rollback();
+                transaction.Rollback();
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
-
+            return clientResult;
         }
 
         /// <summary>
@@ -88,23 +83,28 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="educationYearViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(EducationYearViewModel educationYearViewModel)
+        public ClientMessageResult Update(EducationYearUpdateViewModel educationYearViewModel)
         {
-            var transacion = _uow.BeginTransaction();
-            if(educationYearViewModel.IsActiveYear)
+            var transaction = _uow.BeginTransaction();
+            if (educationYearViewModel.IsActiveYear)
             {
                 _uow.ExecuteSqlCommand("update EducationYears set IsActiveYear = 0");
             }
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _uow.MarkAsChanged(educationYear);
-            var result = _uow.CommitChanges(CrudType.Update, Title);
 
-            if (result.MessageType == MessageType.Success)
-                transacion.Commit();
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Obj = educationYear;
+                transaction.Commit();
+            }
             else
-                transacion.Rollback();
+                transaction.Rollback();
 
-            return Mapper.Map<ClientMessageResult>(result);
+            return clientResult;
         }
 
 
@@ -124,22 +124,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var educationYear = Mapper.Map<EducationYear>(educationYearViewModel);
             _uow.MarkAsDeleted(educationYear);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه سال تحصیلی ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _educationYears.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

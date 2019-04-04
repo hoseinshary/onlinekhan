@@ -35,7 +35,7 @@ export default class EducationSubGroupEditVue extends Vue {
   educationSubGroup = vxm.educationSubGroupStore.educationSubGroup;
   //--------------------------------------------------
 
-  //### getters ###
+  //### computed ###
   get educationTree_EducationGroupDdl() {
     return this.educationTreeStore.byState(EducationTreeState.EducationGroup);
   }

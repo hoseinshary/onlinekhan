@@ -61,7 +61,7 @@ export default class CityVue extends Vue {
   ];
   //--------------------------------------------------
 
-  //### getters ###
+  //### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }

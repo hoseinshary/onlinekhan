@@ -3,23 +3,22 @@
     <!-- panel -->
     <base-panel>
       <span slot="title">{{lessonStore.modelName}}</span>
-      <div slot="body" class="row">
-        <div class="col-md-4 row">
-          <!-- <q-select
-            v-model="$v.instanceObj.GradeId.$model"
-            class="col-md-6 offset-md-3"
+      <div slot="body" class="row gutter-sm">
+        <div class="col-md-4">
+          <q-select
+            v-model="educationTreeId"
+            :options="educationTree_GradeDdl"
+            float-label="فیلتر درخت آموزش با مقطع"
             clearable
-            :options="gradeDdl"
           />
           <q-tree
             :nodes="educationTreeData"
-            class="col-md-12"
-            color="blue"
-            :ticked.sync="selectedNodeIds"
+            :expanded.sync="expanded"
+            :ticked.sync="tickedEducationTreeIds"
             tick-strategy="leaf"
+            color="blue"
             node-key="Id"
-            ref="topicTree"
-          />-->
+          />
         </div>
         <div class="col-md-8">
           <base-btn-create
@@ -28,12 +27,7 @@
             @click="showModalCreate"
           />
           <br>
-          <base-table
-            :grid-data="lessonStore.gridData"
-            :columns="lessonGridColumn"
-            hasIndex
-            class="col-md-8"
-          >
+          <base-table :grid-data="lessonStore.gridData" :columns="lessonGridColumn" hasIndex>
             <template slot="Id" slot-scope="data">
               <base-btn-edit round v-if="canEdit" @click="showModalEdit(data.row.Id)"/>
               <base-btn-delete round v-if="canDelete" @click="showModalDelete(data.row.Id)"/>
@@ -45,14 +39,15 @@
     <!-- modals -->
     <!-- <modal-create></modal-create>
     <modal-edit></modal-edit>
-    <modal-delete></modal-delete> -->
+    <modal-delete></modal-delete>-->
   </section>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
+import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
   components: {
@@ -64,6 +59,7 @@ import util from "src/utilities";
 export default class LessonVue extends Vue {
   //### data ###
   lessonStore = vxm.lessonStore;
+  educationTreeStore = vxm.educationTreeStore;
   pageAccess = util.getAccess(this.lessonStore.modelName);
   lessonGridColumn = [
     {
@@ -78,9 +74,12 @@ export default class LessonVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
+  educationTreeId = null;
+  expanded: Array<Object> = [];
+  tickedEducationTreeIds: Array<number> = [];
   //--------------------------------------------------
 
-  //### getters ###
+  //### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -91,6 +90,34 @@ export default class LessonVue extends Vue {
 
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
+  }
+
+  get educationTree_GradeDdl() {
+    return this.educationTreeStore.byState(EducationTreeState.Grade);
+  }
+
+  get educationTreeData() {
+    if (!this.educationTreeId) {
+      return this.educationTreeStore.treeData;
+    } else {
+      return this.educationTreeStore.treeData[0].children.filter(
+        x => x.Id == this.educationTreeId
+      );
+    }
+  }
+  //--------------------------------------------------
+
+  //### watch ###
+  @Watch("educationTreeId")
+  educationTreeIdChanged(newVal, oldVal) {
+    let index = this.expanded.indexOf(oldVal);
+    if (index > -1) {
+      this.expanded.splice(index, 1);
+    }
+
+    if (this.expanded.indexOf(newVal) == -1) {
+      this.expanded.push(newVal);
+    }
   }
   //--------------------------------------------------
 
@@ -116,7 +143,10 @@ export default class LessonVue extends Vue {
 
   //### hooks ###
   created() {
-    // this.lessonStore.fillList();
+    var _this = this;
+    this.educationTreeStore.fillList().then(function(res) {
+      _this.expanded = _this.educationTreeStore.expandedTreeData;
+    });
   }
   //--------------------------------------------------
 }

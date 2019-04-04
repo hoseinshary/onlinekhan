@@ -83,7 +83,7 @@ export default class RoleVue extends Vue {
   ];
   //--------------------------------------------------
 
-  //### getters ###
+  //### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }

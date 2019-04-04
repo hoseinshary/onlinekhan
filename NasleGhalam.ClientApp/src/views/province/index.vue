@@ -60,7 +60,7 @@ export default class ProvinceVue extends Vue {
   ];
   //--------------------------------------------------
 
-  //### getters ###
+  //### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }

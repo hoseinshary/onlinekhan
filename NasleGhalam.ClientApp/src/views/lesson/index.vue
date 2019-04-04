@@ -43,9 +43,9 @@
       </div>
     </base-panel>
     <!-- modals -->
-    <modal-create></modal-create>
+    <!-- <modal-create></modal-create>
     <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
+    <modal-delete></modal-delete> -->
   </section>
 </template>
 
@@ -56,9 +56,9 @@ import util from "src/utilities";
 
 @Component({
   components: {
-    ModalCreate: () => import("./create.vue"),
-    ModalEdit: () => import("./edit.vue"),
-    ModalDelete: () => import("./delete.vue")
+    // ModalCreate: () => import("./create.vue"),
+    // ModalEdit: () => import("./edit.vue"),
+    // ModalDelete: () => import("./delete.vue")
   }
 })
 export default class LessonVue extends Vue {
@@ -116,7 +116,7 @@ export default class LessonVue extends Vue {
 
   //### hooks ###
   created() {
-    this.lessonStore.fillList();
+    // this.lessonStore.fillList();
   }
   //--------------------------------------------------
 }

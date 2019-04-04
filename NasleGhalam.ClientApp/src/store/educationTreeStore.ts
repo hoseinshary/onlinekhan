@@ -20,7 +20,6 @@ export class EducationTreeStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   educationTree: IEducationTree;
   private _educationTreeList: Array<IEducationTree>;
-  private _educationTreeByStateList: Array<IEducationTree>;
   private _selectedId: number;
   private _modelChanged: boolean = true;
   private _modelChangedByState: boolean = true;
@@ -36,7 +35,6 @@ export class EducationTreeStore extends VuexModule {
 
     this.educationTree = util.cloneObject(DefaultEducationTree);
     this._educationTreeList = [];
-    this._educationTreeByStateList = [];
     this.openModal = {
       create: false,
       edit: false,
@@ -60,13 +58,6 @@ export class EducationTreeStore extends VuexModule {
     }));
   }
 
-  get byStateDdl() {
-    return this._educationTreeByStateList.map(x => ({
-      value: x.Id,
-      label: x.Name
-    }));
-  }
-
   get treeData() {
     var list = this._educationTreeList.map(x => ({
       Id: x.Id,
@@ -82,6 +73,22 @@ export class EducationTreeStore extends VuexModule {
 
   get expandedTreeData() {
     return this._expandedTreeData;
+  }
+
+  get byState() {
+    return (state: EducationTreeState) => {
+      return this._educationTreeList
+        .filter(
+          x =>
+            x.Lookup_EducationTreeState != undefined &&
+            x.Lookup_EducationTreeState.Name == "EducationTreeState" &&
+            x.Lookup_EducationTreeState.State == state
+        )
+        .map(x => ({
+          value: x.Id,
+          label: x.Name
+        }));
+    };
   }
   //#endregion
 
@@ -120,11 +127,6 @@ export class EducationTreeStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<IEducationTree>) {
     this._educationTreeList = list;
-  }
-
-  @mutation
-  private SET_BY_STATE_LIST(list: Array<IEducationTree>) {
-    this._educationTreeByStateList = list;
   }
 
   @mutation
@@ -190,20 +192,6 @@ export class EducationTreeStore extends VuexModule {
         });
     } else {
       return Promise.resolve(this._educationTreeList);
-    }
-  }
-
-  @action()
-  async fillByStateList(state: EducationTreeState) {
-    if (this._modelChangedByState) {
-      return axios
-        .get(`${baseUrl}/GetAllEducationTreeByState?state=${state}`)
-        .then((response: AxiosResponse<Array<IEducationTree>>) => {
-          this.SET_BY_STATE_LIST(response.data);
-          this.MODEL_CHANGED_BY_STATE(false);
-        });
-    } else {
-      return Promise.resolve(this._educationTreeByStateList);
     }
   }
 

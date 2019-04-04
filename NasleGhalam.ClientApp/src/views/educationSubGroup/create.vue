@@ -9,7 +9,7 @@
   >
     <base-select
       :model="$v.educationSubGroup.EducationTreeId"
-      :options="educationTreeStore.byStateDdl"
+      :options="educationTree_EducationGroupDdl"
       class="col-md-6"
       filter
     />
@@ -35,9 +35,15 @@ export default class EducationSubGroupCreateVue extends Vue {
   educationSubGroup = vxm.educationSubGroupStore.educationSubGroup;
   //--------------------------------------------------
 
+  //### getters ###
+  get educationTree_EducationGroupDdl() {
+    return this.educationTreeStore.byState(EducationTreeState.EducationGroup);
+  }
+  //--------------------------------------------------
+
   //### methods ###
   open() {
-    this.educationTreeStore.fillByStateList(EducationTreeState.EducationGroup);
+    this.educationTreeStore.fillList();
   }
   //--------------------------------------------------
 

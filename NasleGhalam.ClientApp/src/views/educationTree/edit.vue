@@ -44,7 +44,6 @@ export default class EducationTreeEditVue extends Vue {
 
   //### hooks ###
   created() {
-    debugger;
     this.educationTreeStore.SET_EDIT_VUE(this);
   }
   //--------------------------------------------------

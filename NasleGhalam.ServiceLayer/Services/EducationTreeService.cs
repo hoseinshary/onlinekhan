@@ -123,19 +123,5 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
-        /// <summary>
-        /// گرفتن درخت آموزش هایی که گروه اموزشی هستند برای لیت کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<EducationTreeViewModel> GetAllEducationTreeByState(EducationTreeState state)
-        {
-            return _educationTrees
-                .Where(current => current.Lookup_EducationTreeState.Name == "EducationTreeState" && current.Lookup_EducationTreeState.State == (int)state)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeViewModel>)
-                .ToList();
-        }
     }
 }

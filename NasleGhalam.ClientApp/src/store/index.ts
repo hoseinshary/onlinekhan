@@ -13,6 +13,7 @@ import {
   educationSubGroupStore
 } from "./educationSubGroupStore";
 import { EducationYearStore, educationYearStore } from "./educationYearStore";
+import { LessonStore, lessonStore } from "./lessonStore";
 
 Vue.use(Vuex);
 
@@ -67,7 +68,8 @@ const store = new Vuex.Store({
     educationTreeStore,
     lookupStore,
     educationSubGroupStore,
-    educationYearStore
+    educationYearStore,
+    lessonStore
   }
 });
 
@@ -94,5 +96,6 @@ export const vxm = {
   educationYearStore: EducationYearStore.CreateProxy(
     store,
     EducationYearStore
-  ) as EducationYearStore
+  ) as EducationYearStore,
+  lessonStore: LessonStore.CreateProxy(store, LessonStore) as LessonStore
 };

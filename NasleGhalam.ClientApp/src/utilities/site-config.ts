@@ -1,47 +1,23 @@
 // const API_URL = "http://onlinekhan.ir";
-const API_URL = "http://localhost:63839";
-const CITY_URL = "/api/city";
-const PROVINCE_URL = "/api/province";
-const ROLE_URL = "/api/role";
-const ACCESS_URL = "/api/access";
-const USER_URL = "/api/user";
-const EDUCATION_TREE_URL = "/api/educationTree";
-const LOOKUP_URL = "/api/lookup";
-const EDUCATION_SUB_GROUP_URL = "/api/educationSubGroup";
-const EDUCATION_YEAR_URL = "/api/educationYear";
+export const API_URL = "http://localhost:63839";
+export const CITY_URL = "/api/city";
+export const PROVINCE_URL = "/api/province";
+export const ROLE_URL = "/api/role";
+export const ACCESS_URL = "/api/access";
+export const USER_URL = "/api/user";
+export const EDUCATION_TREE_URL = "/api/educationTree";
+export const LOOKUP_URL = "/api/lookup";
+export const EDUCATION_SUB_GROUP_URL = "/api/educationSubGroup";
+export const EDUCATION_YEAR_URL = "/api/educationYear";
+export const LESSON_URL = "/api/lesson";
 
-const LESSON_URL = "/api/lesson";
-const TOPIC_URL = "/api/topic";
-const EDUCATION_BOOK_URL = "/api/educationBook";
-const PUBLISHER_URL = "/api/publisher";
-const TAG_URL = "/api/tag";
-const QUESTION_URL = "/api/question";
-const AXILLARY_BOOK_URL = "/api/axillaryBook";
-const UNIVERSITY_BRANCH_URL = "/api/universityBranch";
-const STUDENT_URL = "/api/student";
-const QUESTION_GROUP_URL = "/api/questionGroup";
-const QUESTION_JUDGE_URL = "/api/questionJudge";
-
-export {
-  API_URL,
-  CITY_URL,
-  PROVINCE_URL,
-  ROLE_URL,
-  ACCESS_URL,
-  USER_URL,
-  EDUCATION_TREE_URL,
-  EDUCATION_SUB_GROUP_URL,
-  EDUCATION_YEAR_URL,
-  LOOKUP_URL,
-  LESSON_URL,
-  TOPIC_URL,
-  EDUCATION_BOOK_URL,
-  PUBLISHER_URL,
-  TAG_URL,
-  AXILLARY_BOOK_URL,
-  QUESTION_URL,
-  UNIVERSITY_BRANCH_URL,
-  STUDENT_URL,
-  QUESTION_GROUP_URL,
-  QUESTION_JUDGE_URL
-};
+export const TOPIC_URL = "/api/topic";
+export const EDUCATION_BOOK_URL = "/api/educationBook";
+export const PUBLISHER_URL = "/api/publisher";
+export const TAG_URL = "/api/tag";
+export const QUESTION_URL = "/api/question";
+export const AXILLARY_BOOK_URL = "/api/axillaryBook";
+export const UNIVERSITY_BRANCH_URL = "/api/universityBranch";
+export const STUDENT_URL = "/api/student";
+export const QUESTION_GROUP_URL = "/api/questionGroup";
+export const QUESTION_JUDGE_URL = "/api/questionJudge";

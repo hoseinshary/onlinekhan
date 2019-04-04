@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Lesson;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -21,7 +20,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow = uow;
             _lessons = uow.Set<Lesson>();
         }
-
 
         /// <summary>
         /// گرفتن  درس با آی دی
@@ -39,7 +37,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<LessonViewModel>)
                 .FirstOrDefault();
         }
-
 
         /// <summary>
         /// گرفتن همه درس ها با آی دی درخت آموزشی
@@ -73,11 +70,14 @@ namespace NasleGhalam.ServiceLayer.Services
                 lesson.EducationTrees.Add(tree);
             }
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = lesson.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(lesson.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// ویرایش درس
@@ -146,10 +146,14 @@ namespace NasleGhalam.ServiceLayer.Services
                 lesson.Ratios.Add(ratio);
             }
 
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(lesson.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// حذف درس
@@ -173,7 +177,7 @@ namespace NasleGhalam.ServiceLayer.Services
             foreach (var item in educationTrees)
             {
                 lesson.EducationTrees.Remove(item);
-                
+
             }
 
             //remove ratios
@@ -182,24 +186,10 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 _uow.MarkAsDeleted(item);
             }
-            
+
             _uow.MarkAsDeleted(lesson);
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه درس ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _lessons.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

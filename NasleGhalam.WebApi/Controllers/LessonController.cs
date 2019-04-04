@@ -20,13 +20,11 @@ namespace NasleGhalam.WebApi.Controllers
             _lessonService = lessonService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess, ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAllByEducationTreeIds([FromUri] IEnumerable<int> ids)
         {
             return Ok(_lessonService.GetAllByEducationTreeIds(ids));
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -38,7 +36,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(lesson);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonCreateAccess)]
         [CheckModelValidation]
@@ -47,7 +44,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lessonService.Create(lessonViewModel));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonUpdateAccess)]
         [CheckModelValidation]
@@ -55,7 +51,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_lessonService.Update(lessonViewModel));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.LessonDeleteAccess)]
         public IHttpActionResult Delete(int id)

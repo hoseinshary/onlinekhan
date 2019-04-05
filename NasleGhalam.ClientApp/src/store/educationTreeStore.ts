@@ -22,7 +22,6 @@ export class EducationTreeStore extends VuexModule {
   private _educationTreeList: Array<IEducationTree>;
   private _selectedId: number;
   private _modelChanged: boolean = true;
-  private _modelChangedByState: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
   private _expandedTreeData: Array<object> = [];
@@ -51,13 +50,6 @@ export class EducationTreeStore extends VuexModule {
     return this.educationTree.Name || "";
   }
 
-  get ddl() {
-    return this._educationTreeList.map(x => ({
-      value: x.Id,
-      label: x.Name
-    }));
-  }
-
   get treeData() {
     var list = this._educationTreeList.map(x => ({
       Id: x.Id,
@@ -75,7 +67,7 @@ export class EducationTreeStore extends VuexModule {
     return this._expandedTreeData;
   }
 
-  get byState() {
+  get byStateDdl() {
     return (state: EducationTreeState) => {
       return this._educationTreeList
         .filter(
@@ -137,11 +129,6 @@ export class EducationTreeStore extends VuexModule {
   @mutation
   private MODEL_CHANGED(changed: boolean) {
     this._modelChanged = changed;
-  }
-
-  @mutation
-  private MODEL_CHANGED_BY_STATE(changed: boolean) {
-    this._modelChangedByState = changed;
   }
 
   @mutation

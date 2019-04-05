@@ -93,7 +93,7 @@ export default class LessonVue extends Vue {
   }
 
   get educationTree_GradeDdl() {
-    return this.educationTreeStore.byState(EducationTreeState.Grade);
+    return this.educationTreeStore.byStateDdl(EducationTreeState.Grade);
   }
 
   get educationTreeData() {
@@ -110,6 +110,8 @@ export default class LessonVue extends Vue {
   //### watch ###
   @Watch("educationTreeId")
   educationTreeIdChanged(newVal, oldVal) {
+    this.tickedEducationTreeIds.splice(0, this.tickedEducationTreeIds.length);
+
     let index = this.expanded.indexOf(oldVal);
     if (index > -1) {
       this.expanded.splice(index, 1);
@@ -118,6 +120,11 @@ export default class LessonVue extends Vue {
     if (this.expanded.indexOf(newVal) == -1) {
       this.expanded.push(newVal);
     }
+  }
+
+  @Watch("tickedEducationTreeIds")
+  tickedEducationTreeIdsChanged(newVal, oldVal) {
+    this.lessonStore.fillListByEducationTreeIds(newVal);
   }
   //--------------------------------------------------
 

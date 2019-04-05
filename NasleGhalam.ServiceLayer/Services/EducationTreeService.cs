@@ -38,21 +38,6 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
-        /// گرفتن همه درخت آموزش ها به وسیله وضعیت
-        /// </summary>
-        /// <returns></returns>
-        public IList<EducationTreeViewModel> GetAllByLookupId(int lookupId)
-        {
-            return _educationTrees
-                .Include(current => current.Lookup_EducationTreeState)
-                .Where(current => current.LookupId_EducationTreeState == lookupId)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<EducationTreeViewModel>)
-                .ToList();
-        }
-
-        /// <summary>
         /// گرفتن همه درخت آموزش ها
         /// </summary>
         /// <returns></returns>

@@ -37,7 +37,7 @@ export default class EducationSubGroupCreateVue extends Vue {
 
   //### computed ###
   get educationTree_EducationGroupDdl() {
-    return this.educationTreeStore.byState(EducationTreeState.EducationGroup);
+    return this.educationTreeStore.byStateDdl(EducationTreeState.EducationGroup);
   }
   //--------------------------------------------------
 

@@ -27,14 +27,14 @@ namespace NasleGhalam.ViewModels.Exam
         public string EducationGroupName { get; set; }
 
         [Display(Name = "گروه آموزشی")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationGroupId { get; set; }
 
         [Display(Name = "سال تحصیلی")]
         public string EducationYearName { get; set; }
 
         [Display(Name = "سال تحصیلی")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int EducationYearId { get; set; }
 
 

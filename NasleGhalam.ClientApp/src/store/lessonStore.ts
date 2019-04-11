@@ -164,19 +164,36 @@ export class LessonStore extends VuexModule {
   }
 
   @action()
-  async submitCreate(closeModal: boolean) {
+  async submitCreate(payload: any) {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
-
+    debugger;
+    var ratio: Array<any> = [];
+    payload.educationGroup
+      .filter(x => x.IsChecked)
+      .map(x =>
+        x.EducationSubGroup.filter(
+          y => y.Rate != undefined && y.Rate != 0
+        ).forEach(item => {
+          ratio.push({ EducationSubGroupId: item.Id, Rate: item.Rate });
+        })
+      );
+    var lesson = {
+      Name: this.lesson.Name,
+      IsMain: this.lesson.IsMain,
+      LookupId_Nezam: this.lesson.LookupId_Nezam,
+      EducationTreeIds: payload.educationTreeIds,
+      Ratios: ratio
+    };
     return axios
-      .post(`${baseUrl}/Create`, this.lesson)
+      .post(`${baseUrl}/Create`, lesson)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
           this.CREATE(data.Obj);
-          this.OPEN_MODAL_CREATE(!closeModal);
+          this.OPEN_MODAL_CREATE(!payload.closeModal);
           this.resetCreate();
         }
       });

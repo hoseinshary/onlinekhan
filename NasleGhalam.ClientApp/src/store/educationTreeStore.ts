@@ -50,10 +50,18 @@ export class EducationTreeStore extends VuexModule {
     return this.educationTree.Name || "";
   }
 
+  get gridData() {
+    return this._educationTreeList;
+  }
+
   get treeData() {
     var list = this._educationTreeList.map(x => ({
       Id: x.Id,
-      label: x.Name,
+      label:
+        x.Name +
+        (x.Lookup_EducationTreeState == undefined
+          ? ""
+          : ` (${x.Lookup_EducationTreeState.Value})`),
       ParentEducationTreeId: x.ParentEducationTreeId,
       header: "custom"
     }));

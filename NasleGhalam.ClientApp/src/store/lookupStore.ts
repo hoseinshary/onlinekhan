@@ -6,6 +6,7 @@ import { VuexModule, mutation, action, Module } from "vuex-class-component";
 @Module({ namespacedPath: "lookupStore/" })
 export class LookupStore extends VuexModule {
   private _educationTreeState: Array<ILookup>;
+  private _topicNezam: Array<ILookup>;
 
   /**
    * initialize data
@@ -13,11 +14,19 @@ export class LookupStore extends VuexModule {
   constructor() {
     super();
     this._educationTreeState = [];
+    this._topicNezam = [];
   }
 
   //#region ### getters ###
   get educationTreeStateDdl() {
     return this._educationTreeState.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get topicNezamDdl() {
+    return this._topicNezam.map(x => ({
       value: x.Id,
       label: x.Value
     }));
@@ -28,6 +37,11 @@ export class LookupStore extends VuexModule {
   @mutation
   private SET_EDUCATION_TREE_STATE_LIST(list: Array<ILookup>) {
     this._educationTreeState = list;
+  }
+
+  @mutation
+  private SET_TOPIC_NEZAM_LIST(list: Array<ILookup>) {
+    this._topicNezam = list;
   }
   //#endregion
 
@@ -42,6 +56,19 @@ export class LookupStore extends VuexModule {
         });
     } else {
       return Promise.resolve(this._educationTreeState);
+    }
+  }
+
+  @action()
+  async fillTopicNezam() {
+    if (!this._topicNezam.length) {
+      return axios
+        .get(`${baseUrl}/GetAllNezam`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_TOPIC_NEZAM_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._topicNezam);
     }
   }
   //#endregion

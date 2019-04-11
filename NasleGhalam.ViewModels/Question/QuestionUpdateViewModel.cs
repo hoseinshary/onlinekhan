@@ -21,7 +21,7 @@ namespace NasleGhalam.ViewModels.Question
 
 
         [Display(Name = "نوع سوال ")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_QuestionType { get; set; }
 
 
@@ -30,12 +30,12 @@ namespace NasleGhalam.ViewModels.Question
 
 
         [Display(Name = "درجه سختی")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_QuestionHardnessType { get; set; }
 
 
         [Display(Name = "درجه تکرار")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_RepeatnessType { get; set; }
 
 
@@ -49,7 +49,7 @@ namespace NasleGhalam.ViewModels.Question
 
 
         [Display(Name = "نوع طراح")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_AuthorType { get; set; }
 
         [Display(Name = "نام طراح")]
@@ -57,7 +57,7 @@ namespace NasleGhalam.ViewModels.Question
 
 
         [Display(Name = "نوع طراح")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_AreaType { get; set; }
 
 

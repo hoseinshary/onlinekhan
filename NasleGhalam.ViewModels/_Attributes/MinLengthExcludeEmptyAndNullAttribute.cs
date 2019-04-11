@@ -9,7 +9,7 @@ namespace NasleGhalam.ViewModels._Attributes
     {
         public MinLengthExcludeEmptyAndNullAttribute(int minLenght)
         {
-            this.MinLeght = minLenght;
+            MinLeght = minLenght;
         }
 
         public int MinLeght { private set; get; }
@@ -30,10 +30,10 @@ namespace NasleGhalam.ViewModels._Attributes
 
         public override string FormatErrorMessage(string name)
         {
-            return string.Format((IFormatProvider)CultureInfo.CurrentCulture, this.ErrorMessageString, new object[2]
+            return string.Format((IFormatProvider)CultureInfo.CurrentCulture, ErrorMessageString, new object[2]
             {
                 (object) name,
-                (object) this.MinLeght
+                (object) MinLeght
             });
         }
 

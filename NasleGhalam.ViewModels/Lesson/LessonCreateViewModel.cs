@@ -16,7 +16,7 @@ namespace NasleGhalam.ViewModels.Lesson
         public bool IsMain { get; set; }
 
         [Display(Name = "نظام")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_Nezam { get; set; }
 
         public IEnumerable<RatioCreateViewModel> Ratios { get; set; }

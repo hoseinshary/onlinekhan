@@ -8,7 +8,7 @@ namespace NasleGhalam.ViewModels._Attributes
     {
         public RequiredDdlValidator(String invalidValue)
         {
-            this.InvalidValue = invalidValue;
+            InvalidValue = invalidValue;
         }
 
         public String InvalidValue { private set; get; }

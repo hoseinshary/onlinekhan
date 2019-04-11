@@ -1,4 +1,9 @@
-import { required, displayName, maxLength } from "src/plugins/vuelidate";
+import {
+  required,
+  displayName,
+  maxLength,
+  requiredDdl
+} from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
 import ILesson from "src/models/ILesson";
 
@@ -16,7 +21,7 @@ const lessonValidations: ValidationRuleset<TLesson> = {
     },
     LookupId_Nezam: {
       displayName: displayName("نظام"),
-      required
+      requiredDdl: requiredDdl(0)
     }
   }
 };

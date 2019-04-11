@@ -46,6 +46,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _lessons
                 .Where(current => current.EducationTrees.Any(x => ids.Contains(x.Id)))
+                .Include(current => current.Ratios.Select(ratio => ratio.EducationSubGroup))
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<LessonViewModel>)

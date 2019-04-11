@@ -22,7 +22,7 @@
         </div>
         <div class="col-md-8">
           <base-btn-create
-            v-if="pageAccess.canCreate"
+            v-if="canCreate"
             :label="`ایجاد (${lessonStore.modelName}) جدید`"
             @click="showModalCreate"
           />
@@ -37,8 +37,12 @@
       </div>
     </base-panel>
     <!-- modals -->
-    <!-- <modal-create></modal-create>
-    <modal-edit></modal-edit>
+    <modal-create
+      v-if="canCreate"
+      :expandedTreeIdsProp="expanded"
+      :leafTickedEducationTreeIdsProp="tickedEducationTreeIds"
+    ></modal-create>
+    <!--<modal-edit></modal-edit>
     <modal-delete></modal-delete>-->
   </section>
 </template>
@@ -51,7 +55,7 @@ import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
   components: {
-    // ModalCreate: () => import("./create.vue"),
+    ModalCreate: () => import("./create.vue")
     // ModalEdit: () => import("./edit.vue"),
     // ModalDelete: () => import("./delete.vue")
   }

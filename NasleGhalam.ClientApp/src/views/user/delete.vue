@@ -13,15 +13,15 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component
 export default class UserDeleteVue extends Vue {
-  //### data ###
+  //#region ### data ###
   userStore = vxm.userStore;
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   confirm() {
     this.userStore.submitDelete(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

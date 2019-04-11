@@ -46,7 +46,7 @@ import util from "src/utilities";
   }
 })
 export default class EducationYearVue extends Vue {
-  //### data ###
+  //#region ### data ###
   educationYearStore = vxm.educationYearStore;
   pageAccess = util.getAccess(this.educationYearStore.modelName);
   educationYearGridColumn = [
@@ -66,9 +66,9 @@ export default class EducationYearVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
-  //--------------------------------------------------
+  //#endregion
 
-  //### computed ###
+  //#region ### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -80,9 +80,9 @@ export default class EducationYearVue extends Vue {
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   showModalCreate() {
     this.educationYearStore.resetCreate();
     this.educationYearStore.OPEN_MODAL_CREATE(true);
@@ -100,13 +100,13 @@ export default class EducationYearVue extends Vue {
       this.educationYearStore.OPEN_MODAL_DELETE(true);
     });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.educationYearStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

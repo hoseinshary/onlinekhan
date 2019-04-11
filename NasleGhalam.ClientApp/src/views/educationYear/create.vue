@@ -26,15 +26,15 @@ import { educationYearValidations } from "src/validations/EducationYearValidatio
 export default class EducationYearCreateVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   educationYearStore = vxm.educationYearStore;
   educationYear = vxm.educationYearStore.educationYear;
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.educationYearStore.SET_CREATE_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

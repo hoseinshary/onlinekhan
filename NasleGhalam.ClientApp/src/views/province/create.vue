@@ -22,16 +22,16 @@ import { provinceValidations } from "src/validations/ProvinceValidation";
 export default class ProvinceCreateVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   provinceStore = vxm.provinceStore;
   province = vxm.provinceStore.province;
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.provinceStore.SET_CREATE_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

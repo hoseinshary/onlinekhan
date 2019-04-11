@@ -13,14 +13,14 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component
 export default class EducationSubGroupDeleteVue extends Vue {
-  //### data ###
+  //#region ### data ###
   educationSubGroupStore = vxm.educationSubGroupStore;
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   confirm() {
     this.educationSubGroupStore.submitDelete(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

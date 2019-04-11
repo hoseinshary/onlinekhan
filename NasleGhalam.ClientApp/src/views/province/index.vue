@@ -38,7 +38,7 @@ import util from "src/utilities";
   }
 })
 export default class ProvinceVue extends Vue {
-  //### data ###
+  //#region ### data ###
   provinceStore = vxm.provinceStore;
   pageAccess = util.getAccess(this.provinceStore.modelName);
   provinceGridColumn = [
@@ -58,9 +58,9 @@ export default class ProvinceVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
-  //--------------------------------------------------
+  //#endregion
 
-  //### computed ###
+  //#region ### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -72,9 +72,9 @@ export default class ProvinceVue extends Vue {
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   showModalCreate() {
     this.provinceStore.resetCreate();
     this.provinceStore.OPEN_MODAL_CREATE(true);
@@ -92,12 +92,12 @@ export default class ProvinceVue extends Vue {
       this.provinceStore.OPEN_MODAL_DELETE(true);
     });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.provinceStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

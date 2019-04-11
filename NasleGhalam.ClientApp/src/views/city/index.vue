@@ -39,7 +39,7 @@ import util from "src/utilities";
   }
 })
 export default class CityVue extends Vue {
-  //### data ###
+  //#region ### data ###
   cityStore = vxm.cityStore;
   pageAccess = util.getAccess(this.cityStore.modelName);
   cityGridColumn = [
@@ -59,9 +59,9 @@ export default class CityVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
-  //--------------------------------------------------
+  //#endregion
 
-  //### computed ###
+  //#region ### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -73,9 +73,9 @@ export default class CityVue extends Vue {
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   showModalCreate() {
     this.cityStore.resetCreate();
     this.cityStore.OPEN_MODAL_CREATE(true);
@@ -93,12 +93,12 @@ export default class CityVue extends Vue {
       this.cityStore.OPEN_MODAL_DELETE(true);
     });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.cityStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

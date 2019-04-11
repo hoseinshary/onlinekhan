@@ -13,14 +13,14 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component
 export default class EducationTreeDeleteVue extends Vue {
-  //### data ###
+  //#region ### data ###
   educationTreeStore = vxm.educationTreeStore;
-  //--------------------------------------------------
+  //#endregion
 
   //### methods ###
   confirm() {
     this.educationTreeStore.submitDelete(this);
   }
-  //--------------------------------------------------
+  //#region #endregion
 }
 </script>

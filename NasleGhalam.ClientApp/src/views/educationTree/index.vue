@@ -69,16 +69,16 @@ import util from "src/utilities";
   }
 })
 export default class EducationTreeVue extends Vue {
-  //### data ###
+  //#region ### data ###
   educationTreeStore = vxm.educationTreeStore;
   educationTree = vxm.educationTreeStore.educationTree;
   pageAccess = util.getAccess(this.educationTreeStore.modelName);
   expanded: Array<Object> = [];
   educationTreeFilter = "";
 
-  //--------------------------------------------------
+  //#endregion
 
-  //### computed ###
+  //#region ### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -90,9 +90,9 @@ export default class EducationTreeVue extends Vue {
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   showModalCreate(id, name) {
     this.educationTreeStore.resetCreate();
     this.educationTree.ParentEducationTreeId = id;
@@ -101,7 +101,6 @@ export default class EducationTreeVue extends Vue {
       Name: name,
       LookupId_EducationTreeState: 0
     };
-    // parent.Name = name;
     this.educationTreeStore.OPEN_MODAL_CREATE(true);
   }
 
@@ -122,15 +121,15 @@ export default class EducationTreeVue extends Vue {
       this.educationTreeStore.OPEN_MODAL_DELETE(true);
     });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     var _this = this;
     this.educationTreeStore.fillList().then(function(res) {
       _this.expanded = _this.educationTreeStore.expandedTreeData;
     });
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

@@ -23,16 +23,16 @@ import { cityValidations } from "src/validations/CityValidation";
 export default class CityEditVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   cityStore = vxm.cityStore;
   provinceStore = vxm.provinceStore;
   city = vxm.cityStore.city;
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.cityStore.SET_EDIT_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

@@ -29,29 +29,31 @@ import { EducationTreeState } from "../../utilities/enumeration";
 export default class EducationSubGroupEditVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   educationSubGroupStore = vxm.educationSubGroupStore;
   educationTreeStore = vxm.educationTreeStore;
   educationSubGroup = vxm.educationSubGroupStore.educationSubGroup;
-  //--------------------------------------------------
+  //#endregion
 
   //### computed ###
   get educationTree_EducationGroupDdl() {
-    return this.educationTreeStore.byStateDdl(EducationTreeState.EducationGroup);
+    return this.educationTreeStore.byStateDdl(
+      EducationTreeState.EducationGroup
+    );
   }
-  //--------------------------------------------------
+  //#region #endregion
 
-  //### methods ###
+  //#region ### methods ###
   open() {
     this.educationTreeStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.educationSubGroupStore.SET_EDIT_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

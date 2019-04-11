@@ -13,15 +13,15 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component
 export default class RoleDeleteVue extends Vue {
-  //### data ###
+  //#region ### data ###
   roleStore = vxm.roleStore;
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   confirm() {
     this.roleStore.submitDelete(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

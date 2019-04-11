@@ -29,15 +29,15 @@ import { roleValidations } from "src/validations/roleValidation";
 export default class RoleEditVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   roleStore = vxm.roleStore;
   role = vxm.roleStore.role;
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.roleStore.SET_EDIT_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

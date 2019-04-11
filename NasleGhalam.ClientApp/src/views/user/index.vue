@@ -42,7 +42,7 @@ import util from "src/utilities";
   }
 })
 export default class UserVue extends Vue {
-  //### data ###
+  //#region ### data ###
   userStore = vxm.userStore;
   pageAccess = util.getAccess(this.userStore.modelName);
   userGridColumn = [
@@ -94,9 +94,9 @@ export default class UserVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
-  //--------------------------------------------------
+  //#endregion
 
-  //### computed ###
+  //#region ### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -108,9 +108,9 @@ export default class UserVue extends Vue {
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   showModalCreate() {
     this.userStore.resetCreate();
     this.userStore.OPEN_MODAL_CREATE(true);
@@ -128,12 +128,12 @@ export default class UserVue extends Vue {
       this.userStore.OPEN_MODAL_DELETE(true);
     });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.userStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

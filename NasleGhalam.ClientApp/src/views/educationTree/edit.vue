@@ -36,17 +36,17 @@ import { educationTreeValidations } from "src/validations/EducationTreeValidatio
 export default class EducationTreeEditVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   educationTreeStore = vxm.educationTreeStore;
   lookupStore = vxm.lookupStore;
   educationTree = vxm.educationTreeStore.educationTree;
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.educationTreeStore.SET_EDIT_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

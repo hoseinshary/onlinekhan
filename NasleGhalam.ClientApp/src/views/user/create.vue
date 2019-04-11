@@ -61,26 +61,26 @@ import { userCreateValidations } from "src/validations/user/UserCreateValidation
 export default class UserCreateVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   userStore = vxm.userStore;
   provinceStore = vxm.provinceStore;
   cityStore = vxm.cityStore;
   roleStore = vxm.roleStore;
   user = vxm.userStore.user;
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   open() {
     this.provinceStore.fillList();
     this.cityStore.fillList();
     this.roleStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.userStore.SET_CREATE_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

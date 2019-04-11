@@ -13,14 +13,14 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component
 export default class EducationYearDeleteVue extends Vue {
-  //### data ###
+  //#region ### data ###
   educationYearStore = vxm.educationYearStore;
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   confirm() {
     this.educationYearStore.submitDelete(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

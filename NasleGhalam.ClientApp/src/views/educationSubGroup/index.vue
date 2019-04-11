@@ -44,7 +44,7 @@ import util from "src/utilities";
   }
 })
 export default class EducationSubGroupVue extends Vue {
-  //### data ###
+  //#region ### data ###
   educationSubGroupStore = vxm.educationSubGroupStore;
   pageAccess = util.getAccess(this.educationSubGroupStore.modelName);
   educationSubGroupGridColumn = [
@@ -64,9 +64,9 @@ export default class EducationSubGroupVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
-  //--------------------------------------------------
+  //#endregion
 
-  //### computed ###
+  //#region ### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -78,9 +78,9 @@ export default class EducationSubGroupVue extends Vue {
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   showModalCreate() {
     this.educationSubGroupStore.resetCreate();
     this.educationSubGroupStore.OPEN_MODAL_CREATE(true);
@@ -98,13 +98,13 @@ export default class EducationSubGroupVue extends Vue {
       this.educationSubGroupStore.OPEN_MODAL_DELETE(true);
     });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.educationSubGroupStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

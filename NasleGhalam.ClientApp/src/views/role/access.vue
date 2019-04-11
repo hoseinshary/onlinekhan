@@ -50,7 +50,7 @@ import { accessValidations } from "src/validations/accessValidation";
 export default class RoleAccessVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   roleStore = vxm.roleStore;
   accessStore = vxm.accessStore;
   access = vxm.accessStore.access;
@@ -70,9 +70,9 @@ export default class RoleAccessVue extends Vue {
       data: "ActionFaName"
     }
   ];
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   open() {
     this.accessStore.fillMenuList();
     this.accessStore.fillSubMenuList();
@@ -86,12 +86,12 @@ export default class RoleAccessVue extends Vue {
   actionChecked(actionId, checked) {
     this.accessStore.changeAccess({ actionId, checked });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.accessStore.SET_ACCESS_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

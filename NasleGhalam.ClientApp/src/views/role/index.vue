@@ -4,10 +4,15 @@
     <base-panel>
       <span slot="title">{{roleStore.modelName}}</span>
       <div slot="body">
-        <base-btn-create :label="`ایجاد (${roleStore.modelName}) جدید`" @click="showModalCreate"/>
+        <base-btn-create
+          v-if="canCreate"
+          :label="`ایجاد (${roleStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
         <br>
         <base-table :grid-data="roleStore.gridData" :columns="roleGridColumn" hasIndex>
           <q-btn
+            v-if="canAccess"
             slot="role"
             slot-scope="data"
             outline
@@ -21,18 +26,18 @@
             <q-tooltip>انتساب نقش</q-tooltip>
           </q-btn>
           <template slot="Id" slot-scope="data">
-            <base-btn-edit round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete round @click="showModalDelete(data.row.Id)"/>
+            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
         </base-table>
       </div>
     </base-panel>
 
     <!-- modals -->
-    <modal-create></modal-create>
-    <modal-edit></modal-edit>
-    <modal-delete></modal-delete>
-    <modal-access></modal-access>
+    <modal-create v-if="canCreate"></modal-create>
+    <modal-edit v-if="canEdit"></modal-edit>
+    <modal-delete v-if="canDelete"></modal-delete>
+    <modal-access v-if="canAccess"></modal-access>
   </section>
 </template>
 
@@ -50,7 +55,7 @@ import util from "src/utilities";
   }
 })
 export default class RoleVue extends Vue {
-  //### data ###
+  //#region ### data ###
   roleStore = vxm.roleStore;
   pageAccess = util.getAccess(this.roleStore.modelName);
   roleGridColumn = [
@@ -81,9 +86,9 @@ export default class RoleVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
-  //--------------------------------------------------
+  //#endregion
 
-  //### computed ###
+  //#region ### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -99,9 +104,9 @@ export default class RoleVue extends Vue {
   get canAccess() {
     return this.pageAccess.indexOf("دسترسی") > -1;
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   showModalCreate() {
     this.roleStore.resetCreate();
     this.roleStore.OPEN_MODAL_CREATE(true);
@@ -126,12 +131,12 @@ export default class RoleVue extends Vue {
       vxm.accessStore.SET_ROLE_ID(id);
     });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.roleStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

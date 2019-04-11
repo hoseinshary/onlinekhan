@@ -13,14 +13,14 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component
 export default class ProvinceDeleteVue extends Vue {
-  //### data ###
+  //#region ### data ###
   provinceStore = vxm.provinceStore;
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   confirm() {
     this.provinceStore.submitDelete(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>

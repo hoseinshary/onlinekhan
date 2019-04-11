@@ -61,13 +61,13 @@ import { userEditValidations } from "src/validations/user/UserEditValidation";
 export default class UserEditVue extends Vue {
   $v: any;
 
-  //### data ###
+  //#region ### data ###
   userStore = vxm.userStore;
   provinceStore = vxm.provinceStore;
   cityStore = vxm.cityStore;
   roleStore = vxm.roleStore;
   user = vxm.userStore.user;
-  //--------------------------------------------------
+  //#endregion
 
   //### methods ###
   open() {
@@ -75,13 +75,13 @@ export default class UserEditVue extends Vue {
     this.cityStore.fillList();
     this.roleStore.fillList();
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     this.userStore.SET_EDIT_VUE(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

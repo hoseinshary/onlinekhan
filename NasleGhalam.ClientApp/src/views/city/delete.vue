@@ -13,15 +13,15 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component
 export default class CityDeleteVue extends Vue {
-  //### data ###
+  //#region ### data ###
   cityStore = vxm.cityStore;
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   confirm() {
     this.cityStore.submitDelete(this);
   }
-  //--------------------------------------------------
+  //#endregion
 }
 </script>
 

@@ -8,7 +8,6 @@ using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.QuestionGroup;
 using NasleGhalam.WebApi.Extentions;
 using System.Web;
-using NasleGhalam.WebApi.Util;
 using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
@@ -48,7 +47,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        [HttpGet/*, CheckUserAccess(ActionBits.QuestionReadAccess)*/]
         public HttpResponseMessage GetExcelFile(string id)
         {
             id += ".xlsx";
@@ -62,7 +61,7 @@ namespace NasleGhalam.WebApi.Controllers
                 Content = new ByteArrayContent(stream.ToArray())
             };
             result.Content.Headers.ContentDisposition =
-                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                new ContentDispositionHeaderValue("attachment")
                 {
                     FileName = id
                 };
@@ -74,27 +73,27 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        [HttpGet/*, CheckUserAccess(ActionBits.QuestionReadAccess)*/]
         public HttpResponseMessage GetWordFile(string id)
         {
             id += ".docx";
 
             var stream = new MemoryStream();
-            var filestraem = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
-            filestraem.CopyTo(stream);
+            var fileStream = File.OpenRead(SitePath.GetQuestionGroupAbsPath(id));
+            fileStream.CopyTo(stream);
 
             var result = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new ByteArrayContent(stream.ToArray())
             };
             result.Content.Headers.ContentDisposition =
-                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                new ContentDispositionHeaderValue("attachment")
                 {
                     FileName = id
                 };
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue("application/octet-stream");
-            filestraem.Dispose();
+            fileStream.Dispose();
             stream.Dispose();
             return result;
         }
@@ -107,13 +106,9 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult PreCreate([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
-            
-
             questionGroupViewModel.File = $"{Guid.NewGuid()}{Path.GetExtension(wordFile.FileName)}";
-        
-
             questionGroupViewModel.UserId = Request.GetUserId();
-            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile );
+            var msgRes = _questionGroupService.PreCreate(questionGroupViewModel, wordFile);
 
             return Ok(msgRes);
         }
@@ -124,7 +119,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckWordFileValidation("word", 1024)]
         [CheckExcelFileValidation("excel", 1024)]
         public IHttpActionResult Create([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
-        {                     
+        {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             var excelFile = HttpContext.Current.Request.Files.Get("excel");
 
@@ -133,7 +128,6 @@ namespace NasleGhalam.WebApi.Controllers
             {
                 questionGroupViewModel.File = $"{Guid.NewGuid()}";
             }
-
 
             questionGroupViewModel.UserId = Request.GetUserId();
             var msgRes = _questionGroupService.Create(questionGroupViewModel, wordFile, excelFile);

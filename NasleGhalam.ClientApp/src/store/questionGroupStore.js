@@ -156,9 +156,6 @@ const store = {
             state.createVue.selectedTab = 'previewTab';
             state.createVue.isPreCreate = false;
             state.createVue.previewImages = data.Obj;
-            state.createVue.previewImages.forEach(element => {
-              element = `${apiUrl}${element}`;
-            });
           }
         });
       });

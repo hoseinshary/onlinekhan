@@ -37,11 +37,24 @@
               <template slot="Id"
                         slot-scope="data">
                 <q-btn outline
+                       dense
                        color="primary"
                        class="shadow-1 bg-white q-mr-sm"
                        @click="showModalQuestion(data.row.Id)">
                   سوال ها
                 </q-btn>
+
+                <a :href="data.row.QuestionGroupWordPath"
+                   target="_blank"
+                   class="q-mr-sm ">
+                  فایل ورد
+                </a>
+
+                <a :href="data.row.QuestionGroupExcelPath"
+                   target="_blank"
+                   class="q-mr-sm">
+                  فایل اکسل
+                </a>
                 <!-- <my-btn-delete v-if="pageAccess.canDelete"
                                round
                                @click="showModalDelete(data.row.Id)" /> -->
@@ -60,7 +73,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import viewModel from "viewModels/questionGroup/questionGroupIndexViewModel";
 
 export default {
@@ -147,7 +160,7 @@ export default {
       // filter lesson tree by gradeId
       var self = this;
       this.questionGroupIndexObj.LessonId = 0;
-      this.questionGroupIndexObj.EducationTreeIds = [];
+      this.$util.clearArray(this.questionGroupIndexObj.EducationTreeIds);
       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
         self.educationTreeData = [treeData];
         setTimeout(() => {
@@ -176,24 +189,9 @@ export default {
   },
   watch: {
     "questionGroupIndexObj.EducationTreeIds"(val) {
+      this.$util.clearArray(this.questionGroupGridData);
       this.questionGroupIndexObj.LessonId = 0;
       this.fillLessonDdlStore(val);
-    },
-    "questionGroupIndexObj.selectedquestionGroupId"(newVal, oldVal) {
-      let node;
-      if (newVal && oldVal) {
-        node = this.$refs.questionGroupTree.getNodeByKey(newVal);
-        if (node) node.visible = true;
-        node = this.$refs.questionGroupTree.getNodeByKey(oldVal);
-        if (node) node.visible = false;
-      } else if (newVal) {
-        node = this.$refs.questionGroupTree.getNodeByKey(newVal);
-        if (node) node.visible = true;
-      } else if (oldVal) {
-        node = this.$refs.questionGroupTree.getNodeByKey(oldVal);
-        if (node) node.visible = false;
-      }
-      this.questionGroupObj.ParentquestionGroupId = newVal;
     }
   },
   validations: viewModel,

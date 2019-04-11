@@ -15,11 +15,9 @@ namespace NasleGhalam.ViewModels.QuestionGroup
         [Display(Name = "عنوان")]
         public string Title { get; set; }
 
-        public DateTime InsertTime { get; set; }
+        public DateTime InsertTime { get; }
 
-        public string File { get; set; }
-
-     
+        public string File { get; set; }     
 
         [Display(Name = "نام درس")]
         public int LessonId { get; set; }

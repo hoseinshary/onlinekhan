@@ -33,6 +33,9 @@
     <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -112,7 +115,6 @@
     <Compile Include="Services\TagService.cs" />
     <Compile Include="Services\TopicService.cs" />
     <Compile Include="Services\UserService.cs" />
-    <Compile Include="Util\SitePath.cs" />
     <Content Include="%40CodeTemplates\ServiceLayerGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -125,6 +127,7 @@
     <Compile Include="Jwt\JsonWebToken.cs" />
     <Compile Include="Jwt\JwtPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="App_Readme\Elmah.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

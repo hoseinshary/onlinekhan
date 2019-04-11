@@ -135,7 +135,6 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="FilterAttribute\CheckWordFileUpdateValidation.cs" />
     <Compile Include="ModelBinderAndFormatter\IntegerModelBinder.cs" />
-    <Compile Include="Util\SitePath.cs" />
     <None Include="%40CodeTemplates\WebApiControllerGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

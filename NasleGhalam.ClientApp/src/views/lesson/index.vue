@@ -42,8 +42,8 @@
       :expandedTreeIdsProp="expanded"
       :leafTickedEducationTreeIdsProp="tickedEducationTreeIds"
     ></modal-create>
-    <!--<modal-edit></modal-edit>
-    <modal-delete></modal-delete>-->
+    <!--<modal-edit></modal-edit>-->
+    <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
 
@@ -55,13 +55,13 @@ import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
   components: {
-    ModalCreate: () => import("./create.vue")
+    ModalCreate: () => import("./create.vue"),
     // ModalEdit: () => import("./edit.vue"),
-    // ModalDelete: () => import("./delete.vue")
+    ModalDelete: () => import("./delete.vue")
   }
 })
 export default class LessonVue extends Vue {
-  //### data ###
+  //#region ### data ###
   lessonStore = vxm.lessonStore;
   educationTreeStore = vxm.educationTreeStore;
   pageAccess = util.getAccess(this.lessonStore.modelName);
@@ -81,9 +81,9 @@ export default class LessonVue extends Vue {
   educationTreeId = null;
   expanded: Array<Object> = [];
   tickedEducationTreeIds: Array<number> = [];
-  //--------------------------------------------------
+  //#endregion
 
-  //### computed ###
+  //#region ### computed ###
   get canCreate() {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
@@ -109,9 +109,9 @@ export default class LessonVue extends Vue {
       );
     }
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### watch ###
+  //#region ### watch ###
   @Watch("educationTreeId")
   educationTreeIdChanged(newVal, oldVal) {
     this.tickedEducationTreeIds.splice(0, this.tickedEducationTreeIds.length);
@@ -130,9 +130,9 @@ export default class LessonVue extends Vue {
   tickedEducationTreeIdsChanged(newVal, oldVal) {
     this.lessonStore.fillListByEducationTreeIds(newVal);
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### methods ###
+  //#region ### methods ###
   showModalCreate() {
     this.lessonStore.resetCreate();
     this.lessonStore.OPEN_MODAL_CREATE(true);
@@ -150,16 +150,16 @@ export default class LessonVue extends Vue {
       this.lessonStore.OPEN_MODAL_DELETE(true);
     });
   }
-  //--------------------------------------------------
+  //#endregion
 
-  //### hooks ###
+  //#region ### hooks ###
   created() {
     var _this = this;
     this.educationTreeStore.fillList().then(function(res) {
       _this.expanded = _this.educationTreeStore.expandedTreeData;
     });
   }
-  //--------------------------------------------------
+  //#endregion
 }
 // import viewModel from "viewModels/lessonViewModel";
 // import { mapState, mapActions } from "vuex";

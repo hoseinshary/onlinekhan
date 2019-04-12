@@ -1,33 +1,25 @@
 <template>
-  <bs-modal :show="isOpenModal"
-            size="xl">
+  <bs-modal :show="isOpenModal" size="xl">
     <template slot="header">
-      <q-toolbar slot="header"
-                 color="cyan-9">
-        <q-toolbar-title>
-          {{modelName}}
-        </q-toolbar-title>
-        <q-btn dense
-               icon="close"
-               @click="toggleModalQuestionStore({isOpen:false})" />
+      <q-toolbar slot="header" color="cyan-9">
+        <q-toolbar-title>{{modelName}}</q-toolbar-title>
+        <q-btn dense icon="close" @click="toggleModalQuestionStore({isOpen:false})"/>
       </q-toolbar>
     </template>
 
+    <q-card inline class="col-12" v-if="questionObj.FileName">
+      <q-card-media>
+        <img :src="questionObj.QuestionPicturePath">
+      </q-card-media>
+    </q-card>
     <div class="col-4">
       <create-question-judge></create-question-judge>
     </div>
     <div class="col-8">
-      <my-table :grid-data="questionJudgeGridData"
-                :columns="questionJudgeGridColumn"
-                hasIndex>
-        <template slot="Id"
-                  slot-scope="data">
-          <my-btn-edit v-if="pageAccess.canEdit"
-                       round
-                       @click="showModalEdit(data.row.Id)" />
-          <my-btn-delete v-if="pageAccess.canDelete"
-                         round
-                         @click="showModalDelete(data.row.Id)" />
+      <my-table :grid-data="questionJudgeGridData" :columns="questionJudgeGridColumn" hasIndex>
+        <template slot="Id" slot-scope="data">
+          <my-btn-edit v-if="pageAccess.canEdit" round @click="showModalEdit(data.row.Id)"/>
+          <my-btn-delete v-if="pageAccess.canDelete" round @click="showModalDelete(data.row.Id)"/>
         </template>
       </my-table>
     </div>
@@ -36,7 +28,7 @@
       <my-btn-back @click="toggleModalQuestionStore({isOpen:false})"></my-btn-back>
     </template>
     <!--<modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete> -->
+    <modal-delete v-if="pageAccess.canDelete"></modal-delete>-->
   </bs-modal>
 </template>
 
@@ -111,6 +103,9 @@ export default {
       modelName: "modelName",
       questionJudgeGridData: "questionJudgeGridData",
       isOpenModal: "isOpenModal"
+    }),
+    ...mapState("questionStore", {
+      questionObj: "questionObj"
     })
   },
   created() {

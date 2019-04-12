@@ -42,7 +42,7 @@
       :expandedTreeIdsProp="expanded"
       :leafTickedEducationTreeIdsProp="tickedEducationTreeIds"
     ></modal-create>
-    <!--<modal-edit></modal-edit>-->
+    <modal-edit v-if="canEdit" :expandedTreeIdsProp="expanded"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
@@ -56,7 +56,7 @@ import { EducationTreeState } from "../../utilities/enumeration";
 @Component({
   components: {
     ModalCreate: () => import("./create.vue"),
-    // ModalEdit: () => import("./edit.vue"),
+    ModalEdit: () => import("./edit.vue"),
     ModalDelete: () => import("./delete.vue")
   }
 })

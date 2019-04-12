@@ -80,6 +80,33 @@ export class LessonStore extends VuexModule {
   }
 
   @mutation
+  private SET_OBJECT(lesson: ILesson) {
+    util.mapObject(lesson, this.lesson);
+    if (lesson.EducationTrees)
+      this.lesson.EducationTreeIds = lesson.EducationTrees.map(x => x.Id);
+  }
+
+  @mutation
+  private SET_LESSON_RATIO(educationGroup: any) {
+    util.clearArray(this.lesson.Ratios);
+    educationGroup
+      .filter(x => x.IsChecked)
+      .map(x =>
+        x.EducationSubGroup.filter(
+          y => y.Rate != undefined && y.Rate != 0
+        ).forEach(item => {
+          this.lesson.Ratios.push({
+            EducationSubGroupId: item.Id,
+            Rate: item.Rate,
+            EducationTreeId: 0,
+            Id: 0,
+            LessonId: 0
+          });
+        })
+      );
+  }
+
+  @mutation
   private SET_LIST(list: Array<ILesson>) {
     this._lessonList = list;
   }
@@ -121,7 +148,7 @@ export class LessonStore extends VuexModule {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<ILesson>) => {
-        util.mapObject(response.data, this.lesson);
+        this.SET_OBJECT(response.data);
         this.SET_SELECTED_ID(this.lesson.Id);
       });
   }
@@ -167,26 +194,10 @@ export class LessonStore extends VuexModule {
   async submitCreate(payload: any) {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
-    debugger;
-    var ratio: Array<any> = [];
-    payload.educationGroup
-      .filter(x => x.IsChecked)
-      .map(x =>
-        x.EducationSubGroup.filter(
-          y => y.Rate != undefined && y.Rate != 0
-        ).forEach(item => {
-          ratio.push({ EducationSubGroupId: item.Id, Rate: item.Rate });
-        })
-      );
-    var lesson = {
-      Name: this.lesson.Name,
-      IsMain: this.lesson.IsMain,
-      LookupId_Nezam: this.lesson.LookupId_Nezam,
-      EducationTreeIds: payload.educationTreeIds,
-      Ratios: ratio
-    };
+
+    this.SET_LESSON_RATIO(payload.educationGroup);
     return axios
-      .post(`${baseUrl}/Create`, lesson)
+      .post(`${baseUrl}/Create`, this.lesson)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -205,10 +216,11 @@ export class LessonStore extends VuexModule {
   }
 
   @action()
-  async submitEdit() {
+  async submitEdit(educationGroup) {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
+    this.SET_LESSON_RATIO(educationGroup);
     this.lesson.Id = this._selectedId;
     return axios
       .post(`${baseUrl}/Update/${this._selectedId}`, this.lesson)

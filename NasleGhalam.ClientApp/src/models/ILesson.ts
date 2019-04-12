@@ -6,13 +6,16 @@ export default interface ILesson {
   Name: string;
   IsMain: boolean;
   LookupId_Nezam: number;
+  EducationTreeIds: Array<number>;
   EducationTrees?: Array<IEducationTree>;
-  Ratios?: Array<IRatio>;
+  Ratios: Array<IRatio>;
 }
 
 export const DefaultLesson: ILesson = {
   Id: 0,
   Name: "",
   IsMain: false,
-  LookupId_Nezam: 0
+  LookupId_Nezam: 0,
+  EducationTreeIds: [],
+  Ratios: []
 };

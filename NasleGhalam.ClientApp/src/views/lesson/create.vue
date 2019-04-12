@@ -13,7 +13,7 @@
         :nodes="educationTreeStore.treeData"
         color="blue"
         :expanded.sync="expandedTreeIds"
-        :ticked.sync="leafTickedEducationTreeIds"
+        :ticked.sync="lesson.EducationTreeIds"
         tick-strategy="leaf"
         accordion
         node-key="Id"
@@ -36,7 +36,7 @@
         </base-field>
 
         <q-slide-transition>
-          <fieldset class="col-12" v-if="educationTree_educationGroup.length > 0">
+          <fieldset class="col-12" v-show="educationTree_educationGroup.length > 0">
             <legend>گروههای آموزشی</legend>
             <section class="row">
               <div class="col-4" v-for="group in educationTree_educationGroup" :key="group.Id">
@@ -99,7 +99,6 @@ export default class LessonCreateVue extends Vue {
   educationSubGroupStore = vxm.educationSubGroupStore;
   lookupStore = vxm.lookupStore;
   lesson = vxm.lessonStore.lesson;
-  leafTickedEducationTreeIds: Array<number> = [];
   expandedTreeIds = [];
   educationGroup: Array<{ Id: number; Name: string; IsChecked: boolean }> = [];
   //#endregion
@@ -111,8 +110,10 @@ export default class LessonCreateVue extends Vue {
         x =>
           x.Lookup_EducationTreeState != undefined &&
           x.Lookup_EducationTreeState.Name == "EducationTreeState" &&
-          x.Lookup_EducationTreeState.State ==
-            EducationTreeState.EducationGroup &&
+          (x.Lookup_EducationTreeState.State ==
+            EducationTreeState.EducationGroup ||
+            x.Lookup_EducationTreeState.State ==
+              EducationTreeState.GradeLevel) &&
           this.tickedNodeEducationTreeIds.some(y => y == x.Id)
       )
       .map(x => ({
@@ -158,14 +159,13 @@ export default class LessonCreateVue extends Vue {
     this.lookupStore.fillTopicNezam();
     this.educationTreeStore.fillList();
     this.educationSubGroupStore.fillList();
-    this.leafTickedEducationTreeIds = this.leafTickedEducationTreeIdsProp;
+    this.lesson.EducationTreeIds = this.leafTickedEducationTreeIdsProp;
     this.expandedTreeIds = this.expandedTreeIdsProp;
   }
 
   submit(closeModal) {
     this.lessonStore.submitCreate({
       closeModal,
-      educationTreeIds: this.leafTickedEducationTreeIds,
       educationGroup: this.educationGroup
     });
   }

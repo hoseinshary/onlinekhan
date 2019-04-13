@@ -22,6 +22,9 @@ namespace NasleGhalam.ViewModels.Topic
         [Display(Name = "سهمیه در کنکور سیستمی")]
         public bool IsExamSource { get; set; }
 
+        [Display(Name = "فعال")]
+        public bool IsActive { get; set; }
+
         [Display(Name = "درجه سختی")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_HardnessType { get; set; }
@@ -29,9 +32,6 @@ namespace NasleGhalam.ViewModels.Topic
         [Display(Name = "حیطه مبحث")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_AreaType { get; set; }
-
-        [Display(Name = "فعال")]
-        public bool IsActive { get; set; }
 
         [Display(Name = "درس")]
         public int LessonId { get; set; }

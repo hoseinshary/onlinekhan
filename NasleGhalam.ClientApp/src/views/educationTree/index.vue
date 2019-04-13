@@ -9,7 +9,6 @@
           :nodes="educationTreeStore.treeData"
           :expanded.sync="expanded"
           :filter="educationTreeFilter"
-          class="col-md-12"
           color="blue"
           node-key="Id"
         >

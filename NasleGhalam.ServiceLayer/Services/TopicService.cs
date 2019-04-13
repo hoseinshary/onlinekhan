@@ -37,13 +37,26 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
-        /// گرفتن همه مبحث ها
+        /// گرفتن همه مبحث ها با آی دی درس
         /// </summary>
         /// <returns></returns>
         public IList<TopicViewModel> GetAllByLessonId(int id)
         {
             return _topics
                 .Where(current => current.LessonId == id)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<TopicViewModel>)
+                .ToList();
+        }
+
+        /// <summary>
+        /// گرفتن همه مبحث ها
+        /// </summary>
+        /// <returns></returns>
+        public IList<TopicViewModel> GetAll()
+        {
+            return _topics
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<TopicViewModel>)

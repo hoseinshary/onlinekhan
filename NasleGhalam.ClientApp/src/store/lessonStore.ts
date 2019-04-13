@@ -49,6 +49,13 @@ export class LessonStore extends VuexModule {
   get gridData() {
     return this._lessonList;
   }
+
+  get ddl() {
+    return this._lessonList.map(x => ({
+      value: x.Id,
+      label: x.Name
+    }));
+  }
   //#endregion
 
   //#region ### mutations ###

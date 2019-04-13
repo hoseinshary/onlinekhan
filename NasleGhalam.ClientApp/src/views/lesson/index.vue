@@ -13,7 +13,7 @@
           />
           <q-tree
             :nodes="educationTreeData"
-            :expanded.sync="expanded"
+            :expandedEducationTreeIds.sync="expandedEducationTreeIds"
             :ticked.sync="tickedEducationTreeIds"
             tick-strategy="leaf"
             color="blue"
@@ -39,10 +39,10 @@
     <!-- modals -->
     <modal-create
       v-if="canCreate"
-      :expandedTreeIdsProp="expanded"
+      :expandedTreeIdsProp="expandedEducationTreeIds"
       :leafTickedEducationTreeIdsProp="tickedEducationTreeIds"
     ></modal-create>
-    <modal-edit v-if="canEdit" :expandedTreeIdsProp="expanded"></modal-edit>
+    <modal-edit v-if="canEdit" :expandedTreeIdsProp="expandedEducationTreeIds"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
@@ -79,7 +79,7 @@ export default class LessonVue extends Vue {
     }
   ];
   educationTreeId = null;
-  expanded: Array<Object> = [];
+  expandedEducationTreeIds: Array<Object> = [];
   tickedEducationTreeIds: Array<number> = [];
   //#endregion
 
@@ -116,18 +116,18 @@ export default class LessonVue extends Vue {
   educationTreeIdChanged(newVal, oldVal) {
     this.tickedEducationTreeIds.splice(0, this.tickedEducationTreeIds.length);
 
-    let index = this.expanded.indexOf(oldVal);
+    let index = this.expandedEducationTreeIds.indexOf(oldVal);
     if (index > -1) {
-      this.expanded.splice(index, 1);
+      this.expandedEducationTreeIds.splice(index, 1);
     }
 
-    if (this.expanded.indexOf(newVal) == -1) {
-      this.expanded.push(newVal);
+    if (this.expandedEducationTreeIds.indexOf(newVal) == -1) {
+      this.expandedEducationTreeIds.push(newVal);
     }
   }
 
   @Watch("tickedEducationTreeIds")
-  tickedEducationTreeIdsChanged(newVal, oldVal) {
+  tickedEducationTreeIdsChanged(newVal) {
     this.lessonStore.fillListByEducationTreeIds(newVal);
   }
   //#endregion
@@ -156,7 +156,8 @@ export default class LessonVue extends Vue {
   created() {
     var _this = this;
     this.educationTreeStore.fillList().then(function(res) {
-      _this.expanded = _this.educationTreeStore.expandedTreeData;
+      _this.expandedEducationTreeIds =
+        _this.educationTreeStore.expandedTreeData;
     });
   }
   //#endregion

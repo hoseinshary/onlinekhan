@@ -50,8 +50,8 @@
         UserUpdateAccess = 32,
         UserDeleteAccess = 33,
 
-        TopicCreateAccess = 34,
-        TopicReadAccess = 35,
+        TopicReadAccess = 34,
+        TopicCreateAccess = 35,
         TopicUpdateAccess = 36,
         TopicDeleteAccess = 37,
 

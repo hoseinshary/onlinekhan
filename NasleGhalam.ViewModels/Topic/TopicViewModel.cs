@@ -13,12 +13,12 @@
         public short Importance { get; set; }
         
         public bool IsExamSource { get; set; }
+
+        public bool IsActive { get; set; }
         
         public int LookupId_HardnessType { get; set; }
         
         public int LookupId_AreaType { get; set; }
-        
-        public bool IsActive { get; set; }
         
         public int LessonId { get; set; }
 

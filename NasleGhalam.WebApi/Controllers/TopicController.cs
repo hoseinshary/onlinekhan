@@ -26,6 +26,12 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
+        public IHttpActionResult GetAll()
+        {
+            return Ok(_topicService.GetAll());
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var topic = _topicService.GetById(id);

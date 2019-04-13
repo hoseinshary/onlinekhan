@@ -19,13 +19,11 @@ namespace NasleGhalam.WebApi.Controllers
             _topicService = topicService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAllByLessonId(int id)
         {
             return Ok(_topicService.GetAllByLessonId(id));
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -38,7 +36,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(topic);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.TopicCreateAccess)]
         [CheckModelValidation]
@@ -47,7 +44,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_topicService.Create(topicViewModel));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.TopicUpdateAccess)]
         [CheckModelValidation]
@@ -55,7 +51,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_topicService.Update(topicViewModel));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.TopicDeleteAccess)]
         public IHttpActionResult Delete(int id)

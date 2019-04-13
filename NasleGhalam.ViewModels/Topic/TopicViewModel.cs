@@ -22,10 +22,6 @@
         
         public int LessonId { get; set; }
 
-        //public LessonViewModel Lesson { get; set; }
-
         public int? ParentTopicId { get; set; }
-
-        //public TopicViewModel TopicViewModel { get; set; }
     }
 }

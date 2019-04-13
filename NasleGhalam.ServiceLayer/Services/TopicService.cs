@@ -21,7 +21,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _topics = uow.Set<Topic>();
         }
 
-
         /// <summary>
         /// گرفتن  مبحث با آی دی
         /// </summary>
@@ -37,7 +36,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن همه مبحث ها
         /// </summary>
@@ -52,7 +50,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
         /// <summary>
         /// ثبت مبحث
         /// </summary>
@@ -60,37 +57,29 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Create(TopicCreateViewModel topicViewModel)
         {
+            var topic = Mapper.Map<Topic>(topicViewModel);
             var hasRoot = _topics.Any(x => x.LessonId == topicViewModel.LessonId);
-            if (!hasRoot)
-            {
-                var topic = Mapper.Map<Topic>(topicViewModel);
 
+            if (hasRoot)
+                return new ClientMessageResult
+                {
+                    Message = "برای این درس مبحث ریشه ثبت شده است!(تنها یک مبحث ریشه برای هر درس قابل ثبت است.)"
+                };
+
+            if (topicViewModel.ParentTopicId == null)
+            {
                 topic.ParentTopic = null;
                 topic.ParentTopicId = null;
-
-                _topics.Add(topic);
-
-                ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-                msgRes.Id = topic.Id;
-                return Mapper.Map<ClientMessageResult>(msgRes);
             }
-            else if (topicViewModel.ParentTopicId != null )
-            {
-                var topic = Mapper.Map<Topic>(topicViewModel);
-                _topics.Add(topic);
 
-                ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-                msgRes.Id = topic.Id;
-                return Mapper.Map<ClientMessageResult>(msgRes);
-            }
-            else
-            {
-                ServerMessageResult msgRes = new ServerMessageResult();
-                msgRes.FaMessage = "برای این درس مبحث ریشه ثبت شده است!(تنها یک مبحث ریشه برای هر درس قابل ثبت است.)";
-                return Mapper.Map<ClientMessageResult>(msgRes);
-            }
+            _topics.Add(topic);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(topic.Id);
+            return clientResult;
         }
-
 
         /// <summary>
         /// ویرایش مبحث
@@ -102,10 +91,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var topic = Mapper.Map<Topic>(topicViewModel);
             _uow.MarkAsChanged(topic);
 
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(topic.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// حذف مبحث
@@ -126,7 +119,5 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
-
     }
 }

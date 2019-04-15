@@ -107,7 +107,7 @@ export class LessonStore extends VuexModule {
             Rate: item.Rate,
             EducationTreeId: 0,
             Id: 0,
-            LessonId: 0
+            LessonId: this.lesson.Id
           });
         })
       );
@@ -223,8 +223,8 @@ export class LessonStore extends VuexModule {
   }
 
   @action()
-  async submitEdit(educationGroup) {
-    let vm = this._createVue;
+  async submitEdit(educationGroup: any) {
+    let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
     this.SET_LESSON_RATIO(educationGroup);

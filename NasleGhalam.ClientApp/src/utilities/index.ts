@@ -8,7 +8,7 @@ import ISubMenu from "src/models/ISubMenu";
  * @param {Object} cloneFrom
  * @param {Object} cloneTo
  */
-const mapObject = function (cloneFrom: object, cloneTo: object) {
+const mapObject = function(cloneFrom: object, cloneTo: object) {
   Object.keys(cloneTo).forEach(key => {
     if (cloneFrom[key] !== undefined) {
       if (isObject(cloneFrom[key])) {
@@ -24,7 +24,7 @@ const mapObject = function (cloneFrom: object, cloneTo: object) {
  * return new object
  * @param {Object} obj
  */
-const cloneObject = function (obj: object) {
+const cloneObject = function(obj: object) {
   return JSON.parse(JSON.stringify(obj));
   //Object.assign({}, obj)
 };
@@ -33,7 +33,7 @@ const cloneObject = function (obj: object) {
  * clear value of object
  * @param {Object} obj
  */
-const clearObject = function (obj: object) {
+const clearObject = function(obj: object) {
   Object.keys(obj).forEach(key => {
     if (isObject(obj[key])) {
       clearObject(obj[key]);
@@ -63,7 +63,7 @@ const clearObject = function (obj: object) {
  * clear array
  * @param {Array} arr
  */
-const clearArray = function <T>(arr: Array<T>) {
+const clearArray = function<T>(arr: Array<T>) {
   arr.splice(0, arr.length);
 };
 
@@ -71,11 +71,11 @@ const clearArray = function <T>(arr: Array<T>) {
  * turn an object into query string parameters
  * @param {Object} obj
  */
-const toParam = function (obj: object): string {
+const toParam = function(obj: object): string {
   return encodeURI(toParamWithoutEncode(obj));
 };
 
-const toParamWithoutEncode = function (obj: object) {
+const toParamWithoutEncode = function(obj: object) {
   return Object.keys(obj)
     .map(key => {
       var value = obj[key];
@@ -95,14 +95,14 @@ const toParamWithoutEncode = function (obj: object) {
  * @param {*} theObject
  * @param {String} path
  */
-const getNested = function (theObject: object, path: string) {
+const getNested = function(theObject: object, path: string) {
   try {
     var separator = ".";
     return path
       .replace("[", separator)
       .replace("]", "")
       .split(separator)
-      .reduce(function (obj, property) {
+      .reduce(function(obj, property) {
         return obj[property];
       }, theObject);
   } catch (err) {
@@ -114,7 +114,7 @@ const getNested = function (theObject: object, path: string) {
  * check type value be string
  * @param {*} value
  */
-const isString = function (value: any) {
+const isString = function(value: any) {
   return typeof value === "string" || value instanceof String;
 };
 
@@ -122,7 +122,7 @@ const isString = function (value: any) {
  * check type value be array
  * @param {*} value
  */
-const isNumber = function (value: any) {
+const isNumber = function(value: any) {
   return typeof value === "number" && isFinite(value);
 };
 
@@ -130,7 +130,7 @@ const isNumber = function (value: any) {
  * check type value be array
  * @param {*} value
  */
-const isArray = function (value: any) {
+const isArray = function(value: any) {
   return value && typeof value === "object" && value.constructor === Array;
 };
 
@@ -138,7 +138,7 @@ const isArray = function (value: any) {
  * check type value be object
  * @param {*} value
  */
-const isObject = function (value: any) {
+const isObject = function(value: any) {
   return value && typeof value === "object" && value.constructor === Object;
 };
 
@@ -146,7 +146,7 @@ const isObject = function (value: any) {
  * check type value be boolean
  * @param {*} value
  */
-const isBoolean = function (value: any) {
+const isBoolean = function(value: any) {
   return typeof value === "boolean";
 };
 
@@ -175,7 +175,7 @@ const isBoolean = function (value: any) {
 /**
  * handle logout
  */
-const logout = function () {
+const logout = function() {
   LocalStorage.remove("authList");
   LocalStorage.remove("menuList");
   LocalStorage.remove("subMenuList");
@@ -188,7 +188,7 @@ const logout = function () {
 /**
  * گرفتن دسترسی
  */
-const getAccess = function (modelName: string) {
+const getAccess = function(modelName: string) {
   var subMenuList = LocalStorage.get.item("subMenuList") as Array<ISubMenu>;
   var item = subMenuList.find(x => x.FaName == modelName);
 
@@ -205,7 +205,7 @@ const getAccess = function (modelName: string) {
  * @param {string} key
  * @param {string} parentKey
  */
-const listToTree = function (list: any, key: string, parentKey: string) {
+const listToTree = function(list: any, key: string, parentKey: string) {
   var map = {},
     node: any,
     roots: any = [],
@@ -213,12 +213,20 @@ const listToTree = function (list: any, key: string, parentKey: string) {
   for (i = 0; i < list.length; i += 1) {
     map[list[i][key]] = i; // initialize the map
     list[i].children = []; // initialize the children
+    list[i].parent = null; // initialize the parent
   }
+
+  let currentNode: any = null;
   for (i = 0; i < list.length; i += 1) {
     node = list[i];
     if (node[parentKey] !== null) {
       // if you have dangling branches check that map[node.parentId] exists
-      list[map[node[parentKey]]].children.push(node);
+      currentNode = list[map[node[parentKey]]];
+      currentNode.children.push(node);
+      node.parent = currentNode;
+      // if (node.parent !== null) {
+      //   delete node.parent.children;
+      // }
     } else {
       roots.push(node);
     }
@@ -232,26 +240,24 @@ const listToTree = function (list: any, key: string, parentKey: string) {
  * @param {string} key
  * @param {string} value
  */
-const searchTreeArray = function <T>(
+const searchTreeArray = function<T>(
   array: Array<T>,
   key: string,
   value: string
 ) {
-  var i: number;
   var parentNode = null;
-  for (i = 0; parentNode == null && i < array.length; i++) {
+  for (let i = 0; parentNode == null && i < array.length; i++) {
     parentNode = searchTree(array[i], key, value);
   }
   return parentNode;
 };
 
-const searchTree = function (element: any, key: string, value: string) {
+const searchTree = function(element: any, key: string, value: string) {
   if (element[key] == value) {
     return element;
   } else if (element.children != null) {
-    var i;
     var result = null;
-    for (i = 0; result == null && i < element.children.length; i++) {
+    for (let i = 0; result == null && i < element.children.length; i++) {
       result = searchTree(element.children[i], key, value);
     }
     return result;

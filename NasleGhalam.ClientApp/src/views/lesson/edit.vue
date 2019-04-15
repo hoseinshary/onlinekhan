@@ -3,19 +3,18 @@
     :title="lessonStore.modelName"
     size="lg"
     :show="lessonStore.openModal.edit"
-    @confirm="lessonStore.submitEdit"
+    @confirm="submit"
     @reset="lessonStore.resetEdit"
     @close="lessonStore.OPEN_MODAL_EDIT(false)"
     @open="open"
   >
     <div class="col-md-4">
       <q-tree
-        :nodes="educationTreeStore.treeData"
+        :nodes="educationTreeData"
         color="blue"
         :expanded.sync="expandedTreeIds"
         :ticked.sync="lesson.EducationTreeIds"
         tick-strategy="leaf"
-        accordion
         node-key="Id"
         ref="educationTree"
       />
@@ -36,43 +35,19 @@
         </base-field>
 
         <q-slide-transition>
-          <fieldset class="col-12" v-show="educationTree_educationGroup.length > 0">
+          <fieldset class="col-12" v-show="educationGroupByTickedEducationTreeIds.length > 0">
             <legend>گروههای آموزشی</legend>
             <div class="row">
-              <div class="col-4" v-for="group in educationTree_educationGroup" :key="group.Id">
+              <div
+                class="col-4"
+                v-for="group in educationGroupByTickedEducationTreeIds"
+                :key="group.Id"
+              >
                 <q-checkbox v-model="group.IsChecked" :label="group.Name"/>
               </div>
             </div>
           </fieldset>
         </q-slide-transition>
-
-        <!-- <div
-          class="col-12"
-          v-for="group in educationGroupList.filter(x => x.IsChecked)"
-          :key="group.Id"
-        >
-          <q-slide-transition>
-            <fieldset class="col-12">
-              <legend>زیر گروههای آموزشی</legend>
-              <div class="row">
-                <div
-                  class="inline col-sm-4"
-                  style="padding-top:5px;"
-                  v-for="subGroup in group.SubGroups"
-                  :key="subGroup.EducationSubGroupId"
-                >
-                  <div style="margin-top:20px;">{{subGroup.Name}}:</div>
-                  <q-input
-                    type="number"
-                    style="margin-right:10px; width:20%;"
-                    v-model="subGroup.Rate"
-                    float-label="ضریب"
-                  ></q-input>
-                </div>
-              </div>
-            </fieldset>
-          </q-slide-transition>
-        </div>-->
 
         <q-slide-transition v-for="group in checkedEducationGroup" :key="group.Id">
           <fieldset class="col-12" v-if="checkedEducationGroup.length > 0">
@@ -136,25 +111,8 @@ export default class LessonEditVue extends Vue {
   //#endregion
 
   //#region ### computed ###
-  get educationTree_educationGroup() {
-    this.educationGroup = this.educationTreeStore.gridData
-      .filter(
-        x =>
-          x.Lookup_EducationTreeState != undefined &&
-          x.Lookup_EducationTreeState.Name == "EducationTreeState" &&
-          (x.Lookup_EducationTreeState.State ==
-            EducationTreeState.EducationGroup ||
-            x.Lookup_EducationTreeState.State ==
-              EducationTreeState.GradeLevel) &&
-          this.tickedNodeEducationTreeIds.some(y => y == x.Id)
-      )
-      .map(x => ({
-        Id: x.Id,
-        Name: x.Name,
-        IsChecked: false,
-        EducationSubGroup: this.subGroupByEducationGroupId(x.Id)
-      }));
-    return this.educationGroup;
+  get educationTreeData() {
+    return this.educationTreeStore.treeData;
   }
 
   get checkedEducationGroup() {
@@ -172,14 +130,39 @@ export default class LessonEditVue extends Vue {
         }));
   }
 
+  get educationGroupByTickedEducationTreeIds() {
+    // reset education group
+    this.educationGroup.forEach(group => {
+      if (this.tickedNodeEducationTreeIds.indexOf(group.Id) == -1) {
+        group.IsChecked = false;
+      }
+      if (group.IsChecked == false) {
+        group.EducationSubGroup.forEach(subGroup => {
+          subGroup.Rate = 0;
+        });
+      }
+    });
+    return this.educationGroup.filter(x =>
+      this.tickedNodeEducationTreeIds.some(y => y == x.Id)
+    );
+  }
+
   get tickedNodeEducationTreeIds() {
     if (!this.$refs.educationTree) return [];
-    var isTicked = this.$refs.educationTree["isTicked"];
+    var getNodeByKey = this.$refs.educationTree["getNodeByKey"];
+    var tickedNodeList: Array<any> = [];
+    // ذخیره نود های برگ ها
+    this.lesson.EducationTreeIds.forEach(id => {
+      tickedNodeList.push(getNodeByKey(id));
+    });
 
     var list: Array<number> = [];
-    this.educationTreeStore.gridData.forEach(x => {
-      if (isTicked(x.Id)) {
-        list.push(x.Id);
+    tickedNodeList.forEach(node => {
+      while (node.parent != null) {
+        if (list.indexOf(node.Id) == -1) {
+          list.push(node.Id);
+        }
+        node = node.parent;
       }
     });
     return list;
@@ -190,31 +173,50 @@ export default class LessonEditVue extends Vue {
   open() {
     this.expandedTreeIds = this.expandedTreeIdsProp;
     this.lookupStore.fillTopicNezam();
-    this.educationTreeStore.fillList();
-    this.educationSubGroupStore.fillList().then(() => {
-      // fill ratios form server
-      this.lesson.Ratios.forEach(ratio => {
-        if (ratio.EducationSubGroup) {
-          var educationTreeId = ratio.EducationSubGroup.EducationTreeId;
-          this.educationGroup.forEach(group => {
-            if (educationTreeId == group.Id && !group.IsChecked) {
-              group.IsChecked = true;
-            }
-            group.EducationSubGroup.forEach(subGroup => {
-              if (subGroup.Id == ratio.EducationSubGroupId) {
-                subGroup.Rate = ratio.Rate;
-              }
-            });
-          });
-        }
+    this.educationTreeStore.fillList().then(() => {
+      this.educationSubGroupStore.fillList().then(() => {
+        this.fillEducationGroup();
+        this.fillEducationGroupForLesson();
       });
     });
   }
 
-  submit(closeModal) {
-    this.lessonStore.submitEdit({
-      closeModal,
-      educationGroup: this.educationGroup
+  submit() {
+    this.lessonStore.submitEdit(this.educationGroup);
+  }
+
+  fillEducationGroup() {
+    this.educationGroup = this.educationTreeStore.gridData
+      .filter(
+        x =>
+          x.Lookup_EducationTreeState != undefined &&
+          x.Lookup_EducationTreeState.Name == "EducationTreeState" &&
+          x.Lookup_EducationTreeState.State == EducationTreeState.EducationGroup
+      )
+      .map(x => ({
+        Id: x.Id,
+        Name: x.Name,
+        IsChecked: false,
+        EducationSubGroup: this.subGroupByEducationGroupId(x.Id)
+      }));
+  }
+
+  fillEducationGroupForLesson() {
+    // fill ratios form server
+    this.lesson.Ratios.forEach(ratio => {
+      if (ratio.EducationSubGroup) {
+        var educationTreeId = ratio.EducationSubGroup.EducationTreeId;
+        this.educationGroup.forEach(group => {
+          if (educationTreeId == group.Id && !group.IsChecked) {
+            group.IsChecked = true;
+          }
+          group.EducationSubGroup.forEach(subGroup => {
+            if (subGroup.Id == ratio.EducationSubGroupId) {
+              subGroup.Rate = ratio.Rate;
+            }
+          });
+        });
+      }
     });
   }
   //#endregion
@@ -225,98 +227,4 @@ export default class LessonEditVue extends Vue {
   }
   //#endregion
 }
-// import viewModel from "viewModels/lessonViewModel";
-// import { mapState, mapActions } from "vuex";
-
-// export default {
-//   data() {
-//     return {
-//       selectedNodeIds: null
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("lessonStore", [
-//       "toggleModalEditStore",
-//       "editVueStore",
-//       "submitEditStore",
-//       "resetEditStore",
-//       "getAllEduGroupAndEduSubGroupStore",
-//       "setEducationGroupListLesson"
-//     ]),
-//     ...mapActions("lookupStore", ["fillTopicNezamStore"]),
-//     ...mapActions("gradeStore", {
-//       fillGradeDdlStore: "fillDdlStore"
-//     }),
-//     ...mapActions("gradeLevelStore", {
-//       fillGradeLevel: "fillDdlStore"
-//     }),
-//     ...mapActions("educationTreeStore", [
-//       "getEducationGroupsUnderSelectedList"
-//     ]),
-//     modalOpen: function() {
-//       // this.getAllEduGroupAndEduSubGroupStore();
-//       this.fillTopicNezamStore();
-//       // this.fillGradeDdlStore();
-//       // this.fillGradeLevel();
-//     },
-//     submitEdit: function() {
-//       this.setEducationGroupListLesson(this.educationGroupList);
-//       this.submitEditStore();
-//     }
-//   },
-//   /**
-//    * computed
-//    */
-//   computed: {
-//     ...mapState("educationTreeStore", {
-//       educationGroupList: "educationGroupList",
-//       educationTreeData: "educationTreeData"
-//     }),
-//     ...mapState("lessonStore", {
-//       modelName: "modelName",
-//       lesson: "lesson",
-//       isOpenModalEdit: "isOpenModalEdit",
-//       EducationGroups: "EducationGroups",
-//       educationGroupListLesson: "educationGroupList"
-//       // selectedNodeIds: "selectedNodeIds"
-//     }),
-//     ...mapState("lookupStore", ["lookupTopicNezamDdl"]),
-//     ...mapState("gradeStore", { gradeDdl: "gradeDdl" }),
-//     ...mapState("gradeLevelStore", { gradeLevelDdl: "gradeLevelDdl" }),
-//     gradeLavelFilteredDdl: function() {
-//       return this.lesson.GradeId == 0
-//         ? []
-//         : this.gradeLevelDdl.filter(x => x.gradeId == this.lesson.GradeId);
-//     }
-//   },
-//   /**
-//    * validations
-//    */
-//   validations: viewModel,
-//   /**
-//    * created
-//    */
-//   created() {
-//     this.editVueStore(this);
-//   },
-//   watch: {
-//     "lesson.EducationTreeIds"(newVal) {
-//       var eduGroupsId = [];
-//       this.lesson.Ratios.forEach(element => {
-//         var eduGroupId = element.EducationSubGroup.EducationTreeId;
-//         if (!eduGroupsId.includes(eduGroupId)) eduGroupsId.push(eduGroupId);
-//       });
-//       if (this.isOpenModalEdit)
-//         this.getEducationGroupsUnderSelectedList({
-//           lstSelected: newVal,
-//           isEdit: true,
-//           eduGroupsId: eduGroupsId,
-//           Ratios: this.lesson.Ratios
-//         });
-//     }
-//   }
-// };
 </script>

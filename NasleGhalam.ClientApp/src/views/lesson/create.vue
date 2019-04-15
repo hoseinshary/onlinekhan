@@ -10,12 +10,11 @@
   >
     <div class="col-md-4">
       <q-tree
-        :nodes="educationTreeStore.treeData"
+        :nodes="educationTreeData"
         color="blue"
         :expanded.sync="expandedTreeIds"
         :ticked.sync="lesson.EducationTreeIds"
         tick-strategy="leaf"
-        accordion
         node-key="Id"
         ref="educationTree"
       />
@@ -36,10 +35,14 @@
         </base-field>
 
         <q-slide-transition>
-          <fieldset class="col-12" v-show="educationTree_educationGroup.length > 0">
+          <fieldset class="col-12" v-show="educationGroupByTickedEducationTreeIds.length > 0">
             <legend>گروههای آموزشی</legend>
             <section class="row">
-              <div class="col-4" v-for="group in educationTree_educationGroup" :key="group.Id">
+              <div
+                class="col-4"
+                v-for="group in educationGroupByTickedEducationTreeIds"
+                :key="group.Id"
+              >
                 <q-checkbox v-model="group.IsChecked" :label="group.Name"/>
               </div>
             </section>
@@ -89,7 +92,7 @@ export default class LessonCreateVue extends Vue {
   $v: any;
 
   //#region ### props ###
-  @Prop({ type: Array, required: true }) leafTickedEducationTreeIdsProp;
+  @Prop({ required: true }) educationTreeIdProp;
   @Prop({ type: Array, required: true }) expandedTreeIdsProp;
   //#endregion
 
@@ -99,30 +102,20 @@ export default class LessonCreateVue extends Vue {
   educationSubGroupStore = vxm.educationSubGroupStore;
   lookupStore = vxm.lookupStore;
   lesson = vxm.lessonStore.lesson;
-  expandedTreeIds = [];
-  educationGroup: Array<{ Id: number; Name: string; IsChecked: boolean }> = [];
+  expandedTreeIds: Array<number> = [];
+  educationGroup: Array<{
+    Id: number;
+    Name: string;
+    IsChecked: boolean;
+    EducationSubGroup: Array<{ Id: number; Name: string; Rate: number }>;
+  }> = [];
   //#endregion
 
   //#region ### computed ###
-  get educationTree_educationGroup() {
-    this.educationGroup = this.educationTreeStore.gridData
-      .filter(
-        x =>
-          x.Lookup_EducationTreeState != undefined &&
-          x.Lookup_EducationTreeState.Name == "EducationTreeState" &&
-          (x.Lookup_EducationTreeState.State ==
-            EducationTreeState.EducationGroup ||
-            x.Lookup_EducationTreeState.State ==
-              EducationTreeState.GradeLevel) &&
-          this.tickedNodeEducationTreeIds.some(y => y == x.Id)
-      )
-      .map(x => ({
-        Id: x.Id,
-        Name: x.Name,
-        IsChecked: false,
-        EducationSubGroup: this.subGroupByEducationGroupId(x.Id)
-      }));
-    return this.educationGroup;
+  get educationTreeData() {
+    return this.educationTreeStore.treeDataByEducationTreeId(
+      this.educationTreeIdProp
+    );
   }
 
   get checkedEducationGroup() {
@@ -140,14 +133,39 @@ export default class LessonCreateVue extends Vue {
         }));
   }
 
+  get educationGroupByTickedEducationTreeIds() {
+    // reset education group
+    this.educationGroup.forEach(group => {
+      if (this.tickedNodeEducationTreeIds.indexOf(group.Id) == -1) {
+        group.IsChecked = false;
+      }
+      if (group.IsChecked == false) {
+        group.EducationSubGroup.forEach(subGroup => {
+          subGroup.Rate = 0;
+        });
+      }
+    });
+    return this.educationGroup.filter(x =>
+      this.tickedNodeEducationTreeIds.some(y => y == x.Id)
+    );
+  }
+
   get tickedNodeEducationTreeIds() {
     if (!this.$refs.educationTree) return [];
-    var isTicked = this.$refs.educationTree["isTicked"];
+    var getNodeByKey = this.$refs.educationTree["getNodeByKey"];
+    var tickedNodeList: Array<any> = [];
+    // ذخیره نود های برگ ها
+    this.lesson.EducationTreeIds.forEach(id => {
+      tickedNodeList.push(getNodeByKey(id));
+    });
 
     var list: Array<number> = [];
-    this.educationTreeStore.gridData.forEach(x => {
-      if (isTicked(x.Id)) {
-        list.push(x.Id);
+    tickedNodeList.forEach(node => {
+      while (node.parent != null) {
+        if (list.indexOf(node.Id) == -1) {
+          list.push(node.Id);
+        }
+        node = node.parent;
       }
     });
     return list;
@@ -156,11 +174,13 @@ export default class LessonCreateVue extends Vue {
 
   //#region ### methods ###
   open() {
-    this.lookupStore.fillTopicNezam();
-    this.educationTreeStore.fillList();
-    this.educationSubGroupStore.fillList();
-    this.lesson.EducationTreeIds = this.leafTickedEducationTreeIdsProp;
     this.expandedTreeIds = this.expandedTreeIdsProp;
+    this.lookupStore.fillTopicNezam();
+    this.educationTreeStore.fillList().then(() => {
+      this.educationSubGroupStore.fillList().then(() => {
+        this.fillEducationGroup();
+      });
+    });
   }
 
   submit(closeModal) {
@@ -168,6 +188,22 @@ export default class LessonCreateVue extends Vue {
       closeModal,
       educationGroup: this.educationGroup
     });
+  }
+
+  fillEducationGroup() {
+    this.educationGroup = this.educationTreeStore.gridData
+      .filter(
+        x =>
+          x.Lookup_EducationTreeState != undefined &&
+          x.Lookup_EducationTreeState.Name == "EducationTreeState" &&
+          x.Lookup_EducationTreeState.State == EducationTreeState.EducationGroup
+      )
+      .map(x => ({
+        Id: x.Id,
+        Name: x.Name,
+        IsChecked: false,
+        EducationSubGroup: this.subGroupByEducationGroupId(x.Id)
+      }));
   }
   //#endregion
 
@@ -177,93 +213,4 @@ export default class LessonCreateVue extends Vue {
   }
   //#endregion
 }
-// import viewModel from "viewModels/lessonViewModel";
-// import { mapState, mapActions } from "vuex";
-
-// export default {
-//   data() {
-//     return {
-//       selectedNodeIds: null
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("lessonStore", [
-//       "toggleModalCreateStore",
-//       "createVueStore",
-//       "submitCreateStore",
-//       "resetCreateStore",
-//       "getAllEduGroupAndEduSubGroupStore",
-//       "setEducationGroupListLesson"
-//     ]),
-//     ...mapActions("lookupStore", ["fillTopicNezamStore"]),
-//     ...mapActions("gradeStore", {
-//       fillGradeDdlStore: "fillDdlStore"
-//     }),
-//     ...mapActions("gradeLevelStore", {
-//       fillGradeLevel: "fillDdlStore"
-//     }),
-//     ...mapActions("educationTreeStore", [
-//       "getEducationGroupsUnderSelectedList"
-//     ]),
-//     modalOpen: function() {
-//       // this.getAllEduGroupAndEduSubGroupStore();
-//       this.fillTopicNezamStore();
-//       // this.fillGradeDdlStore();
-//       // this.fillGradeLevel();
-//     },
-//     submitCreate: function() {
-//       this.setEducationGroupListLesson(this.educationGroupList);
-//       this.submitCreateStore();
-//     }
-//   },
-//   /**
-//    * computed
-//    */
-//   computed: {
-//     ...mapState("educationTreeStore", {
-//       educationGroupList: "educationGroupList",
-//       educationTreeData: "educationTreeData"
-//     }),
-//     ...mapState("lessonStore", {
-//       modelName: "modelName",
-//       instanceObj: "instanceObj",
-//       isOpenModalCreate: "isOpenModalCreate",
-//       EducationGroups: "EducationGroups",
-//       educationGroupListLesson: "educationGroupList"
-//     }),
-//     ...mapState("lookupStore", ["lookupTopicNezamDdl"]),
-//     ...mapState("gradeStore", { gradeDdl: "gradeDdl" }),
-//     ...mapState("gradeLevelStore", { gradeLevelDdl: "gradeLevelDdl" }),
-//     gradeLavelFilteredDdl: function() {
-//       return this.instanceObj.GradeId == 0
-//         ? []
-//         : this.gradeLevelDdl.filter(x => x.gradeId == this.instanceObj.GradeId);
-//     }
-//   },
-//   /**
-//    * validations
-//    */
-//   validations: viewModel,
-//   /**
-//    * created
-//    */
-//   created() {
-//     this.createVueStore(this);
-//   },
-//   watch: {
-//     "instanceObj.EducationTreeIds"(newVal) {
-//       // this.getEducationGroupsUnderSelectedList(newVal,false,null);
-//       if (this.isOpenModalCreate)
-//         this.getEducationGroupsUnderSelectedList({
-//           lstSelected: newVal,
-//           isEdit: false,
-//           eduGroupsId: [],
-//           Ratios: null
-//         });
-//     }
-//   }
-// };
 </script>

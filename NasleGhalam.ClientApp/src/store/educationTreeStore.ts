@@ -12,6 +12,7 @@ import {
   mutation,
   action,
   Module,
+  getter,
   getRawActionContext
 } from "vuex-class-component";
 
@@ -68,6 +69,33 @@ export class EducationTreeStore extends VuexModule {
     // set expanded list to show first level of tree
     this._expandedTreeData = tree && tree[0] ? [tree[0].Id] : [];
     return tree;
+  }
+
+  /**
+   * فیلتر درخت با مقطع
+   */
+  get treeDataByEducationTreeId() {
+    var list = this._educationTreeList.map(x => ({
+      Id: x.Id,
+      label:
+        x.Name +
+        (x.Lookup_EducationTreeState == undefined
+          ? ""
+          : ` (${x.Lookup_EducationTreeState.Value})`),
+      ParentEducationTreeId: x.ParentEducationTreeId,
+      header: "custom"
+    }));
+    var tree = util.listToTree(list, "Id", "ParentEducationTreeId");
+    // set expanded list to show first level of tree
+    this._expandedTreeData = tree && tree[0] ? [tree[0].Id] : [];
+
+    return (educationTreeId: number | null) => {
+      if (!educationTreeId) {
+        return tree;
+      } else {
+        return tree[0].children.filter(x => x.Id == educationTreeId);
+      }
+    };
   }
 
   get expandedTreeData() {

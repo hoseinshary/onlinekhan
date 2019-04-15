@@ -13,7 +13,7 @@
           />
           <q-tree
             :nodes="educationTreeData"
-            :expandedEducationTreeIds.sync="expandedEducationTreeIds"
+            :expanded.sync="expandedEducationTreeIds"
             :ticked.sync="tickedEducationTreeIds"
             tick-strategy="leaf"
             color="blue"
@@ -39,8 +39,8 @@
     <!-- modals -->
     <modal-create
       v-if="canCreate"
+      :educationTreeIdProp="educationTreeId"
       :expandedTreeIdsProp="expandedEducationTreeIds"
-      :leafTickedEducationTreeIdsProp="tickedEducationTreeIds"
     ></modal-create>
     <modal-edit v-if="canEdit" :expandedTreeIdsProp="expandedEducationTreeIds"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
@@ -81,6 +81,7 @@ export default class LessonVue extends Vue {
   educationTreeId = null;
   expandedEducationTreeIds: Array<Object> = [];
   tickedEducationTreeIds: Array<number> = [];
+
   //#endregion
 
   //#region ### computed ###
@@ -101,13 +102,9 @@ export default class LessonVue extends Vue {
   }
 
   get educationTreeData() {
-    if (!this.educationTreeId) {
-      return this.educationTreeStore.treeData;
-    } else {
-      return this.educationTreeStore.treeData[0].children.filter(
-        x => x.Id == this.educationTreeId
-      );
-    }
+    return this.educationTreeStore.treeDataByEducationTreeId(
+      this.educationTreeId
+    );
   }
   //#endregion
 
@@ -115,7 +112,6 @@ export default class LessonVue extends Vue {
   @Watch("educationTreeId")
   educationTreeIdChanged(newVal, oldVal) {
     this.tickedEducationTreeIds.splice(0, this.tickedEducationTreeIds.length);
-
     let index = this.expandedEducationTreeIds.indexOf(oldVal);
     if (index > -1) {
       this.expandedEducationTreeIds.splice(index, 1);
@@ -154,115 +150,11 @@ export default class LessonVue extends Vue {
 
   //#region ### hooks ###
   created() {
-    var _this = this;
-    this.educationTreeStore.fillList().then(function(res) {
-      _this.expandedEducationTreeIds =
-        _this.educationTreeStore.expandedTreeData;
+    this.educationTreeStore.fillList().then(res => {
+      this.expandedEducationTreeIds = this.educationTreeStore.expandedTreeData;
     });
   }
   //#endregion
 }
-// import viewModel from "viewModels/lessonViewModel";
-// import { mapState, mapActions } from "vuex";
-
-// export default {
-//   components: {
-//     "modal-create": () => import("./create"),
-//     "modal-edit": () => import("./edit"),
-//     "modal-delete": () => import("./delete")
-//   },
-//   /**
-//    * data
-//    */
-//   data() {
-//     var pageAccess = this.$util.initAccess("/lesson");
-//     return {
-//       pageAccess,
-//       selectedNodeIds: null,
-//       gridColumns: [
-//         {
-//           title: "نام",
-//           data: "Name"
-//         },
-//         {
-//           title: "عملیات",
-//           data: "Id",
-//           searchable: false,
-//           sortable: false,
-//           visible: pageAccess.canEdit || pageAccess.canDelete
-//         }
-//       ]
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("lessonStore", [
-//       "toggleModalCreateStore",
-//       "toggleModalEditStore",
-//       "toggleModalDeleteStore",
-//       "getByIdStore",
-//       "fillGridStore",
-//       "resetCreateStore",
-//       "resetEditStore"
-//     ]),
-//     ...mapActions("educationTreeStore", [
-//       "getAllEducationTreeByState",
-//       "fillTreeStore",
-//       "getAllGrade",
-//       "changeEducationTree"
-//     ]),
-//     showModalCreate() {
-//       // reset data on modal show
-//       this.resetCreateStore();
-//       // show modal
-//       this.toggleModalCreateStore(true);
-//     },
-//     showModalEdit(id) {
-//       // reset data on modal show
-//       this.resetEditStore();
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalEditStore(true);
-//       });
-//     },
-//     showModalDelete(id) {
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalDeleteStore(true);
-//       });
-//     }
-//   },
-//   computed: {
-//     ...mapState("lessonStore", {
-//       modelName: "modelName",
-//       instanceObj: "instanceObj",
-//       gradeDdl: "gradeDdl",
-//       allObj: "allObj"
-//     }),
-//     ...mapState("educationTreeStore", {
-//       educationTreeDdl: "educationTreeDdl",
-//       gradeDdl: "gradeDdl",
-//       educationTreeData: "educationTreeData"
-//     })
-//   },
-//   validations: viewModel,
-//   created() {
-//     this.fillTreeStore();
-//     // this.fillGridStore();
-//     this.getAllGrade();
-//   },
-//   watch: {
-//     "instanceObj.GradeId"(newVal) {
-//       this.changeEducationTree(newVal);
-//     },
-//     selectedNodeIds(newVal) {
-//       this.fillGridStore(newVal);
-//     }
-//   }
-// };
 </script>
 

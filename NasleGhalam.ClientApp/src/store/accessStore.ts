@@ -10,7 +10,6 @@ import { ACCESS_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
-  getter,
   mutation,
   action,
   Module,

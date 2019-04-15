@@ -207,7 +207,7 @@ export class ProvinceStore extends VuexModule {
 
   @action()
   async submitEdit() {
-    let vm = this._createVue;
+    let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
     this.province.Id = this._selectedId;

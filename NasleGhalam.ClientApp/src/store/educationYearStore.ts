@@ -208,7 +208,7 @@ export class EducationYearStore extends VuexModule {
 
   @action()
   async resetCreate() {
-    this.RESET(this._createVue);
+    this.RESET(this._editVue);
   }
 
   @action()

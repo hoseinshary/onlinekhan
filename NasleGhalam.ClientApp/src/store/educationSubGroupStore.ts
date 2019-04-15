@@ -213,7 +213,7 @@ export class EducationSubGroupStore extends VuexModule {
 
   @action()
   async submitEdit() {
-    let vm = this._createVue;
+    let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
     this.educationSubGroup.Id = this._selectedId;

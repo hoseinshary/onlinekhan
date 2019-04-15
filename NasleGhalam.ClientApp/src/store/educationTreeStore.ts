@@ -271,7 +271,7 @@ export class EducationTreeStore extends VuexModule {
 
   @action()
   async submitEdit() {
-    let vm = this._createVue;
+    let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
     this.educationTree.Id = this._selectedId;

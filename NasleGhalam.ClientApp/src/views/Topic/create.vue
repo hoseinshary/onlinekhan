@@ -2,15 +2,24 @@
   <base-modal-create
     :title="topicStore.modelName"
     :show="topicStore.openModal.create"
+    size="lg"
     @confirm="topicStore.submitCreate"
     @reset="topicStore.resetCreate"
     @close="topicStore.OPEN_MODAL_CREATE(false)"
     @open="open"
   >
-    <base-input :model="$v.topic.Title" class="col-md-6"/>
-    <base-input :model="$v.topic.ExamStock" class="col-md-6"/>
-    <base-input :model="$v.topic.Importance" class="col-md-6"/>
-    <base-field class="col-md-6" :model="$v.topic.IsExamSource">
+    <div class="col-12">
+      <label>ریشه:</label>
+      <label class="text-bold text-red">
+        {{topic.ParentTopic
+        ? this.topic.ParentTopic.Title
+        : ""}}
+      </label>
+    </div>
+    <base-input :model="$v.topic.Title" class="col-md-4 col-sm-6"/>
+    <base-input :model="$v.topic.ExamStock" class="col-md-4 col-sm-6"/>
+    <base-input :model="$v.topic.Importance" class="col-md-4 col-sm-6"/>
+    <base-field class="col-md-3 col-sm-6" :model="$v.topic.IsExamSource">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
         <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
@@ -18,17 +27,17 @@
     </base-field>
     <base-select
       :model="$v.topic.LookupId_HardnessType"
-      :options="lookupTopicHardnessTypeDdl"
-      class="col-md-6"
+      :options="lookupStore.topicHardnessTypeDdl"
+      class="col-md-3 col-sm-6"
       clearable
     />
     <base-select
       :model="$v.topic.LookupId_AreaType"
-      :options="lookupTopicAreaTypeDdl"
-      class="col-md-6"
+      :options="lookupStore.topicAreaTypeDdl"
+      class="col-md-3 col-sm-6"
       clearable
     />
-    <base-field class="col-md-6" :model="$v.topic.IsActive">
+    <base-field class="col-md-3 col-sm-6" :model="$v.topic.IsActive">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
         <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
@@ -50,7 +59,15 @@ export default class TopicCreateVue extends Vue {
 
   //#region ### data ###
   topicStore = vxm.topicStore;
+  lookupStore = vxm.lookupStore;
   topic = vxm.topicStore.topic;
+  //#endregion
+
+  //#region ### methods ###
+  open() {
+    this.lookupStore.fillTopicHardnessType();
+    this.lookupStore.fillTopicAreaType();
+  }
   //#endregion
 
   //#region ### hooks ###
@@ -59,53 +76,5 @@ export default class TopicCreateVue extends Vue {
   }
   //#endregion
 }
-// import viewModel from "viewModels/topic/topicViewModel";
-// import { mapState, mapActions } from "vuex";
-
-// export default {
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("topicStore", [
-//       "toggleModalCreateStore",
-//       "createVueStore",
-//       "submitCreateStore",
-//       "resetCreateStore"
-//     ]),
-//     ...mapActions("lookupStore", [
-//       "fillTopicHardnessTypeDdlStore",
-//       "fillTopicAreaTypeDdlStore"
-//     ]),
-//     modalOpen: function() {
-//       this.fillTopicHardnessTypeDdlStore();
-//       this.fillTopicAreaTypeDdlStore();
-//     }
-//   },
-//   /**
-//    * computed
-//    */
-//   computed: {
-//     ...mapState("topicStore", {
-//       modelName: "modelName",
-//       topic: "topic",
-//       isOpenModalCreate: "isOpenModalCreate"
-//     }),
-//     ...mapState("lookupStore", [
-//       "lookupTopicHardnessTypeDdl",
-//       "lookupTopicAreaTypeDdl"
-//     ])
-//   },
-//   /**
-//    * validations
-//    */
-//   validations: viewModel,
-//   /**
-//    * created
-//    */
-//   created() {
-//     this.createVueStore(this);
-//   }
-// };
 </script>
 

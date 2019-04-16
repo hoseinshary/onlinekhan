@@ -8,20 +8,27 @@
           <div class="col-sm-5">
             <section class="q-ma-sm q-pa-sm shadow-1">
               <q-select
-                v-model="educationTreeId"
+                v-model="educationTree.id"
                 :options="educationTree_GradeDdl"
                 float-label="فیلتر درخت آموزش با مقطع"
                 clearable
               />
               <q-tree
                 :nodes="educationTreeData"
-                :expanded.sync="expandedEducationTreeIds"
-                :ticked.sync="tickedEducationTreeIds"
+                :expanded.sync="educationTree.expandedIds"
+                :ticked.sync="educationTree.tickedIds"
+                class="tree-max-height"
                 tick-strategy="leaf"
                 color="blue"
                 node-key="Id"
               />
-              <q-select v-model="topic.LessonId" :options="lessonStore.ddl" class="q-pt-lg"/>
+              <q-select
+                :value="lessonId"
+                @change="lessonIdChanged"
+                :options="lessonStore.ddl"
+                float-label="انتخاب درس"
+                class="q-pt-lg"
+              />
             </section>
           </div>
           <div class="col-sm-7">
@@ -31,12 +38,12 @@
                 :label="`ایجاد (${modelName}) جدید`"
                 @click="showModalCreate"
               />
-              <!-- :selected.sync="topicIndexObj.selectedTopicId" -->
-              <q-input v-model="topicTreeFilter" float-label="جستجو در مبحث" clearable/>
+              <q-input v-model="topicStore.treeVue.filter" float-label="جستجو در مبحث" clearable/>
               <q-tree
-                :nodes="topicStore.treeDataByLessonId"
-                :expanded.sync="expandedTopicTreeIds"
-                :filter="topicTreeFilter"
+                :nodes="topicTreeData"
+                :expanded.sync="topicStore.treeVue.expanded"
+                :selected.sync="topicStore.treeVue.selected"
+                :filter="topicStore.treeVue.filter"
                 class="q-pt-lg"
                 color="primary"
                 accordion
@@ -52,7 +59,7 @@
                       class="shadow-1 bg-white q-mr-sm q-px-xs"
                       icon="save"
                       size="sm"
-                      @click.stop="showModalCreate"
+                      @click.stop="showModalCreate(prop.node.Id, prop.node.label)"
                     />
                     <q-btn
                       v-if="canEdit"
@@ -61,7 +68,7 @@
                       class="shadow-1 bg-white q-mr-sm q-px-xs"
                       icon="create"
                       size="sm"
-                      @click.stop="showModalEdit(prop.node.Id)"
+                      @click.stop="showModalEdit(prop.node.Id, prop.node.label)"
                     />
                     <q-btn
                       v-if="canDelete && !(prop.node.children && prop.node.children.length)"
@@ -77,15 +84,14 @@
               </q-tree>
             </section>
           </div>
-          <br>
         </section>
       </div>
     </base-panel>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
-    <!-- <modal-edit v-if="canEdit"></modal-edit>
-    <modal-delete v-if="canDelete"></modal-delete>-->
+    <modal-edit v-if="canEdit"></modal-edit>
+    <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
 
@@ -94,27 +100,45 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
+import ITopic, { DefaultTopic } from "../../models/ITopic";
 
 @Component({
   components: {
-    ModalCreate: () => import("./create.vue")
-    // ModalEdit: () => import("./edit.vue"),
-    // ModalDelete: () => import("./delete.vue")
+    ModalCreate: () => import("./create.vue"),
+    ModalEdit: () => import("./edit.vue"),
+    ModalDelete: () => import("./delete.vue")
   }
 })
 export default class TopicVue extends Vue {
   //#region ### data ###
   topicStore = vxm.topicStore;
+  topic = vxm.topicStore.topic;
   educationTreeStore = vxm.educationTreeStore;
   lessonStore = vxm.lessonStore;
-  topic = this.topicStore.topic;
   pageAccess = util.getAccess(this.topicStore.modelName);
-  topicTreeFilter = "";
-  educationTreeId = null;
-  expandedEducationTreeIds: Array<Object> = [];
-  tickedEducationTreeIds: Array<number> = [];
-  expandedTopicTreeIds: Array<Object> = [];
 
+  selected = null;
+  lessonId = 0;
+  educationTree: {
+    id: number;
+    expandedIds: Array<Object>;
+    tickedIds: Array<number>;
+  } = {
+    id: 0,
+    expandedIds: [],
+    tickedIds: []
+  };
+  topicTree: {
+    id: number;
+    filter: string;
+    tickedIds: Array<number>;
+    setToFirstLevel: boolean;
+  } = {
+    id: 0,
+    filter: "",
+    tickedIds: [],
+    setToFirstLevel: false
+  };
   //#endregion
 
   //#region ### computed ###
@@ -135,45 +159,71 @@ export default class TopicVue extends Vue {
   }
 
   get educationTreeData() {
-    if (!this.educationTreeId) {
+    if (!this.educationTree.id) {
       return this.educationTreeStore.treeData;
     } else {
       return this.educationTreeStore.treeData[0].children.filter(
-        x => x.Id == this.educationTreeId
+        x => x.Id == this.educationTree.id
       );
     }
+  }
+
+  get topicTreeData() {
+    var treeData = this.topicStore.treeDataByLessonId(this.lessonId);
+    if (this.topicTree.setToFirstLevel) {
+      this.topicStore.treeVue.expanded = this.topicStore.treeVue.firstLevel;
+      this.topicTree.setToFirstLevel = false;
+    }
+    return treeData;
   }
   //#endregion
 
   //#region ### watch ###
-  @Watch("educationTreeId")
+  @Watch("educationTree.id")
   educationTreeIdChanged(newVal, oldVal) {
-    this.topic.LessonId = 0;
-    this.tickedEducationTreeIds.splice(0, this.tickedEducationTreeIds.length);
+    this.lessonId = 0;
+    this.educationTree.tickedIds.splice(0, this.educationTree.tickedIds.length);
 
-    let index = this.expandedEducationTreeIds.indexOf(oldVal);
+    let index = this.educationTree.expandedIds.indexOf(oldVal);
     if (index > -1) {
-      this.expandedEducationTreeIds.splice(index, 1);
+      this.educationTree.expandedIds.splice(index, 1);
     }
 
-    if (this.expandedEducationTreeIds.indexOf(newVal) == -1) {
-      this.expandedEducationTreeIds.push(newVal);
+    if (this.educationTree.expandedIds.indexOf(newVal) == -1) {
+      this.educationTree.expandedIds.push(newVal);
     }
   }
 
-  @Watch("tickedEducationTreeIds")
-  tickedEducationTreeIdsChanged(newVal) {
+  @Watch("educationTree.tickedIds")
+  educationTreeTickedIdsChanged(newVal) {
+    this.lessonId = 0;
     this.lessonStore.fillListByEducationTreeIds(newVal);
   }
   //#endregion
 
   //#region ### methods ###
-  showModalCreate() {
+  showModalCreate(id, title) {
     this.topicStore.resetCreate();
+    if (id && id > 0) {
+      this.topic.ParentTopicId = id;
+      this.topic.LessonId = this.lessonId;
+      this.topic.ParentTopic = {
+        Id: id,
+        Title: title,
+        ExamStock: 0,
+        ExamStockSystem: 0,
+        Importance: 0,
+        IsExamSource: false,
+        IsActive: true,
+        LookupId_HardnessType: 0,
+        LookupId_AreaType: 0,
+        LessonId: 0
+      };
+    }
     this.topicStore.OPEN_MODAL_CREATE(true);
   }
 
-  showModalEdit(id) {
+  showModalEdit(id, title) {
     this.topicStore.resetEdit();
     this.topicStore.getById(id).then(() => {
       this.topicStore.OPEN_MODAL_EDIT(true);
@@ -185,142 +235,21 @@ export default class TopicVue extends Vue {
       this.topicStore.OPEN_MODAL_DELETE(true);
     });
   }
+
+  lessonIdChanged(val) {
+    this.lessonId = val;
+    this.topicTree.setToFirstLevel = true;
+  }
   //#endregion
 
   //#region ### hooks ###
   created() {
-    this.topicStore.fillList().then(res => {
-      this.expandedTopicTreeIds = this.topicStore.expandedTreeData;
-    });
+    this.topicStore.fillList();
     this.educationTreeStore.fillList().then(res => {
-      this.expandedEducationTreeIds = this.educationTreeStore.expandedTreeData;
+      this.educationTree.expandedIds = this.educationTreeStore.expandedTreeData;
     });
   }
   //#endregion
 }
-// import { mapState, mapActions } from "vuex";
-// import viewModel from "viewModels/topic/topicIndexViewModel";
-
-// export default {
-//   components: {
-//     "modal-create": () => import("./create"),
-//     "modal-edit": () => import("./edit"),
-//     "modal-delete": () => import("./delete")
-//   },
-//   /**
-//    * data
-//    */
-//   data() {
-//     var pageAccess = this.$util.initAccess("/topic");
-//     return {
-//       pageAccess,
-//       educationTreeData: []
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("topicStore", [
-//       "toggleModalCreateStore",
-//       "toggleModalEditStore",
-//       "toggleModalDeleteStore",
-//       "getByIdStore",
-//       "fillTreeStore",
-//       "resetCreateStore",
-//       "resetEditStore",
-//       "clearTreeStore"
-//     ]),
-//     ...mapActions("educationTreeStore", {
-//       getAllGrade: "getAllGrade",
-//       fillEducationTreeStore: "fillTreeStore",
-//       fillEducationTreeByGradeIdStore: "fillTreeByGradeIdStore"
-//     }),
-//     ...mapActions("lessonStore", {
-//       fillLessonDdlStore: "fillDdlStore"
-//     }),
-//     showModalCreate() {
-//       // reset data on modal show
-//       this.resetCreateStore();
-//       // show modal
-//       this.toggleModalCreateStore(true);
-//     },
-//     showModalEdit(id) {
-//       // reset data on modal show
-//       this.resetEditStore();
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalEditStore(true);
-//       });
-//     },
-//     showModalDelete(id) {
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalDeleteStore(true);
-//       });
-//     },
-//     gradeDdlChange(val) {
-//       // filter lesson tree by gradeId
-//       var self = this;
-//       this.topicIndexObj.LessonId = 0;
-//       this.clearTreeStore();
-//       this.topicIndexObj.EducationTreeIds = [];
-//       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
-//         self.educationTreeData = [treeData];
-//         setTimeout(() => {
-//           self.$refs.educationTree.expandAll();
-//         }, 300);
-//       });
-//     },
-//     lessonDdlChange(val) {
-//       this.fillTreeStore(val);
-//       this.topicObj.LessonId = val;
-//     }
-//   },
-//   computed: {
-//     ...mapState("topicStore", {
-//       modelName: "modelName",
-//       topicTreeData: "topicTreeData",
-//       topicIndexObj: "topicIndexObj",
-//       topicObj: "topicObj"
-//     }),
-//     ...mapState("educationTreeStore", {
-//       educationTree_GradeDdl: "gradeDdl"
-//     }),
-//     ...mapState("lessonStore", {
-//       lessonDdl: "allObjDdl"
-//     })
-//   },
-//   validations: viewModel,
-//   watch: {
-//     "topicIndexObj.EducationTreeIds"(val) {
-//       this.clearTreeStore();
-//       this.topicIndexObj.LessonId = 0;
-//       this.fillLessonDdlStore(val);
-//     },
-//     "topicIndexObj.selectedTopicId"(newVal, oldVal) {
-//       let node;
-//       if (newVal && oldVal) {
-//         node = this.$refs.topicTree.getNodeByKey(newVal);
-//         if (node) node.visible = true;
-//         node = this.$refs.topicTree.getNodeByKey(oldVal);
-//         if (node) node.visible = false;
-//       } else if (newVal) {
-//         node = this.$refs.topicTree.getNodeByKey(newVal);
-//         if (node) node.visible = true;
-//       } else if (oldVal) {
-//         node = this.$refs.topicTree.getNodeByKey(oldVal);
-//         if (node) node.visible = false;
-//       }
-//       this.topicObj.ParentTopicId = newVal;
-//     }
-//   },
-//   created() {
-//     this.getAllGrade();
-//     this.fillEducationTreeStore();
-//   }
-// };
 </script>
 

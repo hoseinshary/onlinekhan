@@ -59,6 +59,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
+import { DefaultEducationTree } from "../../models/IEducationTree";
 
 @Component({
   components: {
@@ -106,11 +107,6 @@ export default class EducationTreeVue extends Vue {
   showModalEdit(id, name) {
     this.educationTreeStore.resetEdit();
     this.educationTreeStore.getById(id).then(() => {
-      this.educationTree.ParentEducationTree = {
-        Id: id,
-        Name: name,
-        LookupId_EducationTreeState: 0
-      };
       this.educationTreeStore.OPEN_MODAL_EDIT(true);
     });
   }

@@ -22,7 +22,15 @@ export class TopicStore extends VuexModule {
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
-  private _expandedTreeData: Array<object> = [];
+  treeVue: {
+    filter: string;
+    selected: any;
+    expanded: Array<object>;
+    // leafTicked: Array<number>;
+    // nodeTicked: Array<number>;
+    firstLevel: any;
+    setToFirstLevel: boolean;
+  };
 
   /**
    * initialize data
@@ -32,6 +40,15 @@ export class TopicStore extends VuexModule {
 
     this.topic = util.cloneObject(DefaultTopic);
     this._topicList = [];
+    this.treeVue = {
+      filter: "",
+      selected: null,
+      expanded: [],
+      // leafTicked: [],
+      // nodeTicked: [],
+      firstLevel: null,
+      setToFirstLevel: false
+    };
     this.openModal = {
       create: false,
       edit: false,
@@ -53,24 +70,23 @@ export class TopicStore extends VuexModule {
   }
 
   get treeDataByLessonId() {
-    var list = this._topicList
-      .filter(x => x.LessonId == this.topic.LessonId)
-      .map(x => ({
-        Id: x.Id,
-        label: x.Title,
-        ParentTopicId: x.ParentTopicId,
-        header: "custom"
-      }));
-    var tree = util.listToTree(list, "Id", "ParentTopicId");
-    // set expanded list to show first level of tree
-    this._expandedTreeData = tree && tree[0] ? [tree[0].Id] : [];
-    return tree;
-  }
+    return (lessonId: number) => {
+      var list = this._topicList
+        .filter(x => x.LessonId == lessonId)
+        .map(x => ({
+          Id: x.Id,
+          label: x.Title,
+          ParentTopicId: x.ParentTopicId,
+          header: "custom"
+        }));
+      var tree = util.listToTree(list, "Id", "ParentTopicId");
+      // set expanded list to show first level of tree
+      debugger;
+      this.treeVue.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
 
-  get expandedTreeData() {
-    return this._expandedTreeData;
+      return tree;
+    };
   }
-
   //#endregion
 
   //#region ### mutations ###
@@ -206,6 +222,15 @@ export class TopicStore extends VuexModule {
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
+          let topic = data.Obj;
+          // make node selected
+          this.treeVue.selected = topic.Id;
+          // show created node in tree
+          let parentId: any = topic.ParentTopicId;
+          if (parentId && this.treeVue.expanded.indexOf(parentId)) {
+            this.treeVue.expanded.push(parentId);
+          }
+
           this.CREATE(data.Obj);
           this.OPEN_MODAL_CREATE(!closeModal);
           this.MODEL_CHANGED(true);

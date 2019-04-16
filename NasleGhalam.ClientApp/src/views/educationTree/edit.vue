@@ -7,14 +7,6 @@
     @open="lookupStore.fillEducationTreeState"
     @close="educationTreeStore.OPEN_MODAL_EDIT(false)"
   >
-    <div class="col-12">
-      <label>ریشه:</label>
-      <label class="text-bold text-red">
-        {{educationTree.ParentEducationTree
-        ? this.educationTree.ParentEducationTree.Name
-        : ""}}
-      </label>
-    </div>
     <base-input :model="$v.educationTree.Name" class="col-md-6"/>
     <base-select
       :model="$v.educationTree.LookupId_EducationTreeState"

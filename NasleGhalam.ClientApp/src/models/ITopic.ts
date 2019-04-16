@@ -3,13 +3,14 @@ export default interface ITopic {
   Title: string;
   ExamStock: number;
   ExamStockSystem: number;
-  Importance: number | string;
+  Importance: number;
   IsExamSource: boolean;
   IsActive: boolean;
   LookupId_HardnessType: number;
   LookupId_AreaType: number;
   LessonId: number;
   ParentTopicId?: number;
+  ParentTopic?: ITopic;
 }
 
 export const DefaultTopic: ITopic = {
@@ -17,7 +18,7 @@ export const DefaultTopic: ITopic = {
   Title: "",
   ExamStock: 0,
   ExamStockSystem: 0,
-  Importance: "",
+  Importance: 0,
   IsExamSource: false,
   IsActive: true,
   LookupId_HardnessType: 0,

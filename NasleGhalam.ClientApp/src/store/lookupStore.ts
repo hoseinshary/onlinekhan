@@ -7,6 +7,8 @@ import { VuexModule, mutation, action, Module } from "vuex-class-component";
 export class LookupStore extends VuexModule {
   private _educationTreeState: Array<ILookup>;
   private _topicNezam: Array<ILookup>;
+  private _topicHardnessType: Array<ILookup>;
+  private _topicAreaType: Array<ILookup>;
 
   /**
    * initialize data
@@ -15,6 +17,8 @@ export class LookupStore extends VuexModule {
     super();
     this._educationTreeState = [];
     this._topicNezam = [];
+    this._topicHardnessType = [];
+    this._topicAreaType = [];
   }
 
   //#region ### getters ###
@@ -31,6 +35,20 @@ export class LookupStore extends VuexModule {
       label: x.Value
     }));
   }
+
+  get topicHardnessTypeDdl() {
+    return this._topicHardnessType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get topicAreaTypeDdl() {
+    return this._topicAreaType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
   //#endregion
 
   //#region ### mutations ###
@@ -42,6 +60,16 @@ export class LookupStore extends VuexModule {
   @mutation
   private SET_TOPIC_NEZAM_LIST(list: Array<ILookup>) {
     this._topicNezam = list;
+  }
+
+  @mutation
+  private SET_TOPIC_HARDNESS_TYPE_LIST(list: Array<ILookup>) {
+    this._topicHardnessType = list;
+  }
+
+  @mutation
+  private SET_TOPIC_AREA_TYPE_LIST(list: Array<ILookup>) {
+    this._topicAreaType = list;
   }
   //#endregion
 
@@ -69,6 +97,32 @@ export class LookupStore extends VuexModule {
         });
     } else {
       return Promise.resolve(this._topicNezam);
+    }
+  }
+
+  @action()
+  async fillTopicHardnessType() {
+    if (!this._topicHardnessType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllTopicHardnessType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_TOPIC_HARDNESS_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._topicHardnessType);
+    }
+  }
+
+  @action()
+  async fillTopicAreaType() {
+    if (!this._topicAreaType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllAreaType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_TOPIC_AREA_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._topicAreaType);
     }
   }
   //#endregion

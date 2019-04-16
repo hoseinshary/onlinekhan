@@ -331,8 +331,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public MessageResultClient Update(QuestionGroupUpdateViewModel questionGroupViewModel)
         {
-            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
-            _uow.MarkAsChanged(questionGroup);
+            var questionGroup = _questionGroups
+                .First(current => current.Id == questionGroupViewModel.Id);
+            if (!string.IsNullOrEmpty(questionGroupViewModel.Title))
+            {
+                questionGroup.Title = questionGroupViewModel.Title;
+            }
+
+            if (questionGroupViewModel.LessonId != 0 && questionGroupViewModel.LessonId != null)
+            {
+                questionGroup.LessonId = questionGroupViewModel.LessonId;
+            }
+            
+            
 
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<MessageResultClient>(msgRes);
@@ -344,19 +355,43 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        /// todo: delete all questions in one commit
         public MessageResultClient Delete(int id)
         {
-            var questionGroupViewModel = GetById(id);
-            if (questionGroupViewModel == null)
+            var questionGroup = _questionGroups
+                .Include(current => current.Questions)
+                .First(current => current.Id == id);
+
+            if (questionGroup == null)
             {
                 return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
             }
 
-            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
+            //remove questions relation
+            var questions = questionGroup.Questions.ToList();
+            foreach (var item in questions)
+            {
+                questionGroup.Questions.Remove(item);
+                _uow.MarkAsDeleted(item);
+            }
+
+            
+
             _uow.MarkAsDeleted(questionGroup);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                //remove questions file
+                foreach (var item in questions)
+                {
+                    File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".docx");
+                    File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".png");
+                }
+
+                File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".docx");
+                File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".xlsx");
+            }
+
             return Mapper.Map<MessageResultClient>(msgRes);
         }
 

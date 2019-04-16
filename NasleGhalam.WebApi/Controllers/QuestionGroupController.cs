@@ -142,7 +142,7 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionGroupService.Update(questionGroupViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.QuestionGroupDeleteAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.QuestionGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             return Ok(_questionGroupService.Delete(id));

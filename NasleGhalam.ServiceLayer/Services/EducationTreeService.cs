@@ -58,6 +58,16 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Create(EducationTreeCreateViewModel educationTreeViewModel)
         {
+            if (educationTreeViewModel.ParentEducationTreeId == 0 ||
+                educationTreeViewModel.ParentEducationTreeId == null)
+            {
+                return new ClientMessageResult
+                {
+                    MessageType = MessageType.Error,
+                    Message = "ریشه انتخاب نشده است"
+                };
+            }
+
             var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
             _educationTrees.Add(educationTree);
 
@@ -77,6 +87,16 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Update(EducationTreeUpdateViewModel educationTreeViewModel)
         {
+            if (educationTreeViewModel.ParentEducationTreeId == 0 ||
+                educationTreeViewModel.ParentEducationTreeId == null)
+            {
+                return new ClientMessageResult
+                {
+                    MessageType = MessageType.Error,
+                    Message = "ریشه انتخاب نشده است"
+                };
+            }
+
             var educationTree = Mapper.Map<EducationTree>(educationTreeViewModel);
             _uow.MarkAsChanged(educationTree);
 

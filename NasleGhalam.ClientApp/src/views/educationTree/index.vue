@@ -4,11 +4,16 @@
     <base-panel>
       <span slot="title">{{educationTreeStore.modelName}}</span>
       <div slot="body">
-        <q-input v-model="educationTreeFilter" float-label="جستجو در درخت آموزش" clearable/>
+        <q-input
+          v-model="educationTreeStore.qTreeData.filter"
+          float-label="جستجو در درخت آموزش"
+          clearable
+        />
         <q-tree
           :nodes="educationTreeStore.treeData"
-          :expanded.sync="expanded"
-          :filter="educationTreeFilter"
+          :expanded.sync="educationTreeStore.qTreeData.expanded"
+          :selected.sync="educationTreeStore.qTreeData.selected"
+          :filter="educationTreeStore.qTreeData.filter"
           color="blue"
           node-key="Id"
         >
@@ -73,8 +78,6 @@ export default class EducationTreeVue extends Vue {
   educationTreeStore = vxm.educationTreeStore;
   educationTree = vxm.educationTreeStore.educationTree;
   pageAccess = util.getAccess(this.educationTreeStore.modelName);
-  expanded: Array<Object> = [];
-  educationTreeFilter = "";
 
   //#endregion
 
@@ -120,9 +123,8 @@ export default class EducationTreeVue extends Vue {
 
   //#region ### hooks ###
   created() {
-    var _this = this;
-    this.educationTreeStore.fillList().then(function(res) {
-      _this.expanded = _this.educationTreeStore.expandedTreeData;
+    this.educationTreeStore.fillList().then(() => {
+      this.educationTreeStore.qTreeData.expanded = this.educationTreeStore.qTreeData.firstLevel;
     });
   }
   //#endregion

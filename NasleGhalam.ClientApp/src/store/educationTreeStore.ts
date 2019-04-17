@@ -12,7 +12,6 @@ import {
   mutation,
   action,
   Module,
-  getter,
   getRawActionContext
 } from "vuex-class-component";
 
@@ -25,7 +24,16 @@ export class EducationTreeStore extends VuexModule {
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
-  private _expandedTreeData: Array<object> = [];
+  qTreeData: {
+    id: number;
+    filter: string;
+    selected: any;
+    expanded: Array<object>;
+    leafTicked: Array<number>;
+    nodeTicked: Array<number>;
+    firstLevel: any;
+    setToFirstLevel: boolean;
+  };
 
   /**
    * initialize data
@@ -38,6 +46,16 @@ export class EducationTreeStore extends VuexModule {
       create: false,
       edit: false,
       delete: false
+    };
+    this.qTreeData = {
+      id: 0,
+      filter: "",
+      selected: null,
+      expanded: [],
+      leafTicked: [],
+      nodeTicked: [],
+      firstLevel: null,
+      setToFirstLevel: false
     };
   }
 
@@ -67,7 +85,7 @@ export class EducationTreeStore extends VuexModule {
     }));
     var tree = util.listToTree(list, "Id", "ParentEducationTreeId");
     // set expanded list to show first level of tree
-    this._expandedTreeData = tree && tree[0] ? [tree[0].Id] : [];
+    this.qTreeData.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
     return tree;
   }
 
@@ -87,7 +105,7 @@ export class EducationTreeStore extends VuexModule {
     }));
     var tree = util.listToTree(list, "Id", "ParentEducationTreeId");
     // set expanded list to show first level of tree
-    this._expandedTreeData = tree && tree[0] ? [tree[0].Id] : [];
+    this.qTreeData.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
 
     return (educationTreeId: number | null) => {
       if (!educationTreeId) {
@@ -96,10 +114,6 @@ export class EducationTreeStore extends VuexModule {
         return tree[0].children.filter(x => x.Id == educationTreeId);
       }
     };
-  }
-
-  get expandedTreeData() {
-    return this._expandedTreeData;
   }
 
   get byStateDdl() {
@@ -256,6 +270,16 @@ export class EducationTreeStore extends VuexModule {
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
+          debugger;
+          let educationTree = data.Obj;
+          // make node selected
+          this.qTreeData.selected = educationTree.Id;
+          // show created node in tree
+          let parentId: any = educationTree.ParentEducationTreeId;
+          if (parentId && this.qTreeData.expanded.indexOf(parentId)) {
+            this.qTreeData.expanded.push(parentId);
+          }
+
           this.CREATE(data.Obj);
           this.OPEN_MODAL_CREATE(!closeModal);
           this.MODEL_CHANGED(true);

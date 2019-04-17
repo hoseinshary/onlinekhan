@@ -9,7 +9,7 @@ export default interface ITopic {
   LookupId_HardnessType: number;
   LookupId_AreaType: number;
   LessonId: number;
-  ParentTopicId?: number;
+  ParentTopicId?: number | null;
   ParentTopic?: ITopic;
 }
 
@@ -23,5 +23,6 @@ export const DefaultTopic: ITopic = {
   IsActive: true,
   LookupId_HardnessType: 0,
   LookupId_AreaType: 0,
-  LessonId: 0
+  LessonId: 0,
+  ParentTopicId: null
 };

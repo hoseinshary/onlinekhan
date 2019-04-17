@@ -6,15 +6,15 @@
       <div slot="body" class="row gutter-sm">
         <div class="col-md-4">
           <q-select
-            v-model="educationTreeId"
+            v-model="educationTree.id"
             :options="educationTree_GradeDdl"
             float-label="فیلتر درخت آموزش با مقطع"
             clearable
           />
           <q-tree
             :nodes="educationTreeData"
-            :expanded.sync="expandedEducationTreeIds"
-            :ticked.sync="tickedEducationTreeIds"
+            :expanded.sync="educationTree.expanded"
+            :ticked.sync="educationTree.leafTicked"
             tick-strategy="leaf"
             color="blue"
             node-key="Id"
@@ -39,10 +39,10 @@
     <!-- modals -->
     <modal-create
       v-if="canCreate"
-      :educationTreeIdProp="educationTreeId"
-      :expandedTreeIdsProp="expandedEducationTreeIds"
+      :educationTreeIdProp="educationTree.id"
+      :expandedTreeIdsProp="educationTree.expanded"
     ></modal-create>
-    <modal-edit v-if="canEdit" :expandedTreeIdsProp="expandedEducationTreeIds"></modal-edit>
+    <modal-edit v-if="canEdit" :expandedTreeIdsProp="educationTree.expanded"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
@@ -78,9 +78,7 @@ export default class LessonVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
-  educationTreeId = null;
-  expandedEducationTreeIds: Array<Object> = [];
-  tickedEducationTreeIds: Array<number> = [];
+  educationTree = this.educationTreeStore.qTreeData;
 
   //#endregion
 
@@ -103,26 +101,29 @@ export default class LessonVue extends Vue {
 
   get educationTreeData() {
     return this.educationTreeStore.treeDataByEducationTreeId(
-      this.educationTreeId
+      this.educationTree.id
     );
   }
   //#endregion
 
   //#region ### watch ###
-  @Watch("educationTreeId")
+  @Watch("educationTree.id")
   educationTreeIdChanged(newVal, oldVal) {
-    this.tickedEducationTreeIds.splice(0, this.tickedEducationTreeIds.length);
-    let index = this.expandedEducationTreeIds.indexOf(oldVal);
+    this.educationTree.leafTicked.splice(
+      0,
+      this.educationTree.leafTicked.length
+    );
+    let index = this.educationTree.expanded.indexOf(oldVal);
     if (index > -1) {
-      this.expandedEducationTreeIds.splice(index, 1);
+      this.educationTree.expanded.splice(index, 1);
     }
 
-    if (this.expandedEducationTreeIds.indexOf(newVal) == -1) {
-      this.expandedEducationTreeIds.push(newVal);
+    if (this.educationTree.expanded.indexOf(newVal) == -1) {
+      this.educationTree.expanded.push(newVal);
     }
   }
 
-  @Watch("tickedEducationTreeIds")
+  @Watch("educationTree.leafTicked")
   tickedEducationTreeIdsChanged(newVal) {
     this.lessonStore.fillListByEducationTreeIds(newVal);
   }
@@ -151,7 +152,7 @@ export default class LessonVue extends Vue {
   //#region ### hooks ###
   created() {
     this.educationTreeStore.fillList().then(res => {
-      this.expandedEducationTreeIds = this.educationTreeStore.expandedTreeData;
+      this.educationTree.expanded = this.educationTree.firstLevel;
     });
   }
   //#endregion

@@ -23,11 +23,12 @@ export class TopicStore extends VuexModule {
   private _createVue: Vue;
   private _editVue: Vue;
   qTreeData: {
+    id: number;
     filter: string;
     selected: any;
     expanded: Array<object>;
-    // leafTicked: Array<number>;
-    // nodeTicked: Array<number>;
+    leafTicked: Array<number>;
+    nodeTicked: Array<number>;
     firstLevel: any;
     setToFirstLevel: boolean;
   };
@@ -41,11 +42,12 @@ export class TopicStore extends VuexModule {
     this.topic = util.cloneObject(DefaultTopic);
     this._topicList = [];
     this.qTreeData = {
+      id: 0,
       filter: "",
       selected: null,
       expanded: [],
-      // leafTicked: [],
-      // nodeTicked: [],
+      leafTicked: [],
+      nodeTicked: [],
       firstLevel: null,
       setToFirstLevel: false
     };

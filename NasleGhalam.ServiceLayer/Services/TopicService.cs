@@ -73,17 +73,18 @@ namespace NasleGhalam.ServiceLayer.Services
             var topic = Mapper.Map<Topic>(topicViewModel);
             var hasRoot = _topics.Any(x => x.LessonId == topicViewModel.LessonId);
 
+            if (topicViewModel.ParentTopicId == 0 ||
+                topicViewModel.ParentTopicId == null)
+            {
+                topic.ParentTopic = null;
+                topic.ParentTopicId = null;
+            }
+
             if (hasRoot && topic.ParentTopicId == null)
                 return new ClientMessageResult
                 {
                     Message = "برای این درس مبحث ریشه ثبت شده است!(تنها یک مبحث ریشه برای هر درس قابل ثبت است.)"
                 };
-
-            if (topicViewModel.ParentTopicId == null)
-            {
-                topic.ParentTopic = null;
-                topic.ParentTopicId = null;
-            }
 
             _topics.Add(topic);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);

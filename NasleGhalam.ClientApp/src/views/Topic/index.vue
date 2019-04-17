@@ -15,8 +15,9 @@
               />
               <q-tree
                 :nodes="educationTreeData"
-                :expanded.sync="educationTree.expandedIds"
-                :ticked.sync="educationTree.tickedIds"
+                :expanded.sync="educationTree.expanded"
+                :ticked.sync="educationTree.leafTicked"
+                :selected.sync="educationTree.selected"
                 class="tree-max-height"
                 tick-strategy="leaf"
                 color="blue"
@@ -38,12 +39,12 @@
                 :label="`ایجاد (${topicStore.modelName}) جدید`"
                 @click="showModalCreate(0)"
               />
-              <q-input v-model="topicStore.qTreeData.filter" float-label="جستجو در مبحث" clearable/>
+              <q-input v-model="topicTree.filter" float-label="جستجو در مبحث" clearable/>
               <q-tree
                 :nodes="topicTreeData"
-                :expanded.sync="topicStore.qTreeData.expanded"
-                :selected.sync="topicStore.qTreeData.selected"
-                :filter="topicStore.qTreeData.filter"
+                :expanded.sync="topicTree.expanded"
+                :selected.sync="topicTree.selected"
+                :filter="topicTree.filter"
                 class="q-pt-lg"
                 color="primary"
                 accordion
@@ -117,28 +118,10 @@ export default class TopicVue extends Vue {
   lessonStore = vxm.lessonStore;
   pageAccess = util.getAccess(this.topicStore.modelName);
 
-  selected = null;
   lessonId = 0;
-  educationTree: {
-    id: number;
-    expandedIds: Array<Object>;
-    tickedIds: Array<number>;
-  } = {
-    id: 0,
-    expandedIds: [],
-    tickedIds: []
-  };
-  topicTree: {
-    id: number;
-    filter: string;
-    tickedIds: Array<number>;
-    setToFirstLevel: boolean;
-  } = {
-    id: 0,
-    filter: "",
-    tickedIds: [],
-    setToFirstLevel: false
-  };
+  educationTree = this.educationTreeStore.qTreeData;
+  topicTree = this.topicStore.qTreeData;
+
   //#endregion
 
   //#region ### computed ###
@@ -171,7 +154,7 @@ export default class TopicVue extends Vue {
   get topicTreeData() {
     var treeData = this.topicStore.treeDataByLessonId(this.lessonId);
     if (this.topicTree.setToFirstLevel) {
-      this.topicStore.qTreeData.expanded = this.topicStore.qTreeData.firstLevel;
+      this.topicTree.expanded = this.topicTree.firstLevel;
       this.topicTree.setToFirstLevel = false;
     }
     return treeData;
@@ -182,19 +165,22 @@ export default class TopicVue extends Vue {
   @Watch("educationTree.id")
   educationTreeIdChanged(newVal, oldVal) {
     this.lessonId = 0;
-    this.educationTree.tickedIds.splice(0, this.educationTree.tickedIds.length);
+    this.educationTree.leafTicked.splice(
+      0,
+      this.educationTree.leafTicked.length
+    );
 
-    let index = this.educationTree.expandedIds.indexOf(oldVal);
+    let index = this.educationTree.expanded.indexOf(oldVal);
     if (index > -1) {
-      this.educationTree.expandedIds.splice(index, 1);
+      this.educationTree.expanded.splice(index, 1);
     }
 
-    if (this.educationTree.expandedIds.indexOf(newVal) == -1) {
-      this.educationTree.expandedIds.push(newVal);
+    if (this.educationTree.expanded.indexOf(newVal) == -1) {
+      this.educationTree.expanded.push(newVal);
     }
   }
 
-  @Watch("educationTree.tickedIds")
+  @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
     this.lessonId = 0;
     this.lessonStore.fillListByEducationTreeIds(newVal);
@@ -235,9 +221,7 @@ export default class TopicVue extends Vue {
   //#region ### hooks ###
   created() {
     this.topicStore.fillList();
-    this.educationTreeStore.fillList().then(res => {
-      this.educationTree.expandedIds = this.educationTreeStore.expandedTreeData;
-    });
+    this.educationTreeStore.fillList();
   }
   //#endregion
 }

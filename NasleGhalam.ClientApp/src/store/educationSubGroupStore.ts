@@ -20,7 +20,6 @@ export class EducationSubGroupStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   educationSubGroup: IEducationSubGroup;
   private _educationSubGroupList: Array<IEducationSubGroup>;
-  private _selectedId: number;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -70,7 +69,7 @@ export class EducationSubGroupStore extends VuexModule {
   @mutation
   private UPDATE(educationSubGroup: IEducationSubGroup) {
     let index = this._educationSubGroupList.findIndex(
-      x => x.Id == this._selectedId
+      x => x.Id == this.educationSubGroup.Id
     );
     if (index < 0) return;
     util.mapObject(educationSubGroup, this._educationSubGroupList[index]);
@@ -79,7 +78,7 @@ export class EducationSubGroupStore extends VuexModule {
   @mutation
   private DELETE() {
     let index = this._educationSubGroupList.findIndex(
-      x => x.Id == this._selectedId
+      x => x.Id == this.educationSubGroup.Id
     );
     if (index < 0) return;
     this._educationSubGroupList.splice(index, 1);
@@ -87,7 +86,7 @@ export class EducationSubGroupStore extends VuexModule {
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultEducationSubGroup, this.educationSubGroup);
+    util.mapObject(DefaultEducationSubGroup, this.educationSubGroup, "Id");
     if (vm.$v) {
       vm.$v.$reset();
     }
@@ -96,11 +95,6 @@ export class EducationSubGroupStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<IEducationSubGroup>) {
     this._educationSubGroupList = list;
-  }
-
-  @mutation
-  private SET_SELECTED_ID(id: number) {
-    this._selectedId = id;
   }
 
   @mutation
@@ -141,7 +135,6 @@ export class EducationSubGroupStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IEducationSubGroup>) => {
         util.mapObject(response.data, this.educationSubGroup);
-        this.SET_SELECTED_ID(this.educationSubGroup.Id);
       });
   }
 
@@ -208,6 +201,7 @@ export class EducationSubGroupStore extends VuexModule {
 
   @action()
   async resetCreate() {
+    this.educationSubGroup.Id = 0;
     this.RESET(this._createVue);
   }
 
@@ -216,9 +210,8 @@ export class EducationSubGroupStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.educationSubGroup.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this._selectedId}`, this.educationSubGroup)
+      .post(`${baseUrl}/Update`, this.educationSubGroup)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -240,7 +233,7 @@ export class EducationSubGroupStore extends VuexModule {
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this._selectedId}`)
+      .post(`${baseUrl}/Delete/${this.educationSubGroup.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

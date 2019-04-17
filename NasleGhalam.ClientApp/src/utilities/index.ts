@@ -8,8 +8,17 @@ import ISubMenu from "src/models/ISubMenu";
  * @param {Object} cloneFrom
  * @param {Object} cloneTo
  */
-const mapObject = function(cloneFrom: object, cloneTo: object) {
+const mapObject = function(
+  cloneFrom: object,
+  cloneTo: object,
+  ...ignoreKeys: Array<string>
+) {
   Object.keys(cloneTo).forEach(key => {
+    debugger;
+    if (ignoreKeys.indexOf(key) > -1) {
+      return;
+    }
+
     if (cloneFrom[key] !== undefined) {
       if (isObject(cloneFrom[key])) {
         mapObject(cloneFrom[key], cloneTo[key]);

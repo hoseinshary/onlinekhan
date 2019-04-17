@@ -18,7 +18,6 @@ export class TopicStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   topic: ITopic;
   private _topicList: Array<ITopic>;
-  private _selectedId: number;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -98,21 +97,21 @@ export class TopicStore extends VuexModule {
 
   @mutation
   private UPDATE(topic: ITopic) {
-    let index = this._topicList.findIndex(x => x.Id == this._selectedId);
+    let index = this._topicList.findIndex(x => x.Id == this.topic.Id);
     if (index < 0) return;
     util.mapObject(topic, this._topicList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this._topicList.findIndex(x => x.Id == this._selectedId);
+    let index = this._topicList.findIndex(x => x.Id == this.topic.Id);
     if (index < 0) return;
     this._topicList.splice(index, 1);
   }
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultTopic, this.topic);
+    util.mapObject(DefaultTopic, this.topic, "Id");
     if (vm.$v) {
       vm.$v.$reset();
     }
@@ -121,11 +120,6 @@ export class TopicStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<ITopic>) {
     this._topicList = list;
-  }
-
-  @mutation
-  private SET_SELECTED_ID(id: number) {
-    this._selectedId = id;
   }
 
   @mutation
@@ -166,7 +160,6 @@ export class TopicStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<ITopic>) => {
         util.mapObject(response.data, this.topic);
-        this.SET_SELECTED_ID(this.topic.Id);
       });
   }
 
@@ -242,6 +235,7 @@ export class TopicStore extends VuexModule {
 
   @action()
   async resetCreate() {
+    this.topic.Id = 0;
     this.RESET(this._createVue);
   }
 
@@ -250,9 +244,8 @@ export class TopicStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.topic.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this._selectedId}`, this.topic)
+      .post(`${baseUrl}/Update`, this.topic)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -274,7 +267,7 @@ export class TopicStore extends VuexModule {
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this._selectedId}`)
+      .post(`${baseUrl}/Delete/${this.topic.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

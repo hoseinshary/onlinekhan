@@ -22,7 +22,6 @@ export class UserStore extends VuexModule {
   user: IUser;
   loginUser: ILogin;
   private _userList: Array<IUser>;
-  private _selectedId: number = 0;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -72,21 +71,21 @@ export class UserStore extends VuexModule {
 
   @mutation
   private UPDATE(user: IUser) {
-    let index = this._userList.findIndex(x => x.Id == this._selectedId);
+    let index = this._userList.findIndex(x => x.Id == this.user.Id);
     if (index < 0) return;
     util.mapObject(user, this._userList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this._userList.findIndex(x => x.Id == this._selectedId);
+    let index = this._userList.findIndex(x => x.Id == this.user.Id);
     if (index < 0) return;
     this._userList.splice(index, 1);
   }
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultUser, this.user);
+    util.mapObject(DefaultUser, this.user, "Id");
     if (vm.$v) {
       vm.$v.$reset();
     }
@@ -95,11 +94,6 @@ export class UserStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<IUser>) {
     this._userList = list;
-  }
-
-  @mutation
-  private SET_SELECTED_ID(id: number) {
-    this._selectedId = id;
   }
 
   @mutation
@@ -140,7 +134,6 @@ export class UserStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IUser>) => {
         util.mapObject(response.data, this.user);
-        this.SET_SELECTED_ID(this.user.Id);
       });
   }
 
@@ -207,6 +200,7 @@ export class UserStore extends VuexModule {
 
   @action()
   async resetCreate() {
+    this.user.Id = 0;
     this.RESET(this._createVue);
   }
 
@@ -215,9 +209,8 @@ export class UserStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.user.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this._selectedId}`, this.user)
+      .post(`${baseUrl}/Update`, this.user)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -239,7 +232,7 @@ export class UserStore extends VuexModule {
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this._selectedId}`)
+      .post(`${baseUrl}/Delete/${this.user.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

@@ -18,7 +18,6 @@ export class CityStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   city: ICity;
   private _cityList: Array<ICity>;
-  private _selectedId: number = 0;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -77,21 +76,21 @@ export class CityStore extends VuexModule {
 
   @mutation
   private UPDATE(city: ICity) {
-    let index = this._cityList.findIndex(x => x.Id == this._selectedId);
+    let index = this._cityList.findIndex(x => x.Id == this.city.Id);
     if (index < 0) return;
     util.mapObject(city, this._cityList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this._cityList.findIndex(x => x.Id == this._selectedId);
+    let index = this._cityList.findIndex(x => x.Id == this.city.Id);
     if (index < 0) return;
     this._cityList.splice(index, 1);
   }
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultCity, this.city);
+    util.mapObject(DefaultCity, this.city, "Id");
     if (vm.$v) {
       vm.$v.$reset();
     }
@@ -100,11 +99,6 @@ export class CityStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<ICity>) {
     this._cityList = list;
-  }
-
-  @mutation
-  private SET_SELECTED_ID(id: number) {
-    this._selectedId = id;
   }
 
   @mutation
@@ -145,7 +139,6 @@ export class CityStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<ICity>) => {
         util.mapObject(response.data, this.city);
-        this.SET_SELECTED_ID(this.city.Id);
       });
   }
 
@@ -212,6 +205,7 @@ export class CityStore extends VuexModule {
 
   @action()
   async resetCreate() {
+    this.city.Id = 0;
     this.RESET(this._createVue);
   }
 
@@ -220,9 +214,8 @@ export class CityStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.city.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this._selectedId}`, this.city)
+      .post(`${baseUrl}/Update`, this.city)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -244,7 +237,7 @@ export class CityStore extends VuexModule {
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this._selectedId}`)
+      .post(`${baseUrl}/Delete/${this.city.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

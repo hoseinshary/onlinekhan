@@ -20,7 +20,6 @@ export class EducationTreeStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   educationTree: IEducationTree;
   private _educationTreeList: Array<IEducationTree> = [];
-  private _selectedId: number;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -142,7 +141,7 @@ export class EducationTreeStore extends VuexModule {
   @mutation
   private UPDATE(educationTree: IEducationTree) {
     let index = this._educationTreeList.findIndex(
-      x => x.Id == this._selectedId
+      x => x.Id == this.educationTree.Id
     );
     if (index < 0) return;
     util.mapObject(educationTree, this._educationTreeList[index]);
@@ -151,7 +150,7 @@ export class EducationTreeStore extends VuexModule {
   @mutation
   private DELETE() {
     let index = this._educationTreeList.findIndex(
-      x => x.Id == this._selectedId
+      x => x.Id == this.educationTree.Id
     );
     if (index < 0) return;
     this._educationTreeList.splice(index, 1);
@@ -159,7 +158,7 @@ export class EducationTreeStore extends VuexModule {
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultEducationTree, this.educationTree);
+    util.mapObject(DefaultEducationTree, this.educationTree, "Id");
     if (vm.$v) {
       vm.$v.$reset();
     }
@@ -168,11 +167,6 @@ export class EducationTreeStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<IEducationTree>) {
     this._educationTreeList = list;
-  }
-
-  @mutation
-  private SET_SELECTED_ID(id: number) {
-    this._selectedId = id;
   }
 
   @mutation
@@ -213,7 +207,6 @@ export class EducationTreeStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IEducationTree>) => {
         util.mapObject(response.data, this.educationTree);
-        this.SET_SELECTED_ID(this.educationTree.Id);
       });
   }
 
@@ -290,6 +283,7 @@ export class EducationTreeStore extends VuexModule {
 
   @action()
   async resetCreate() {
+    this.educationTree.Id = 0;
     this.RESET(this._createVue);
   }
 
@@ -298,9 +292,8 @@ export class EducationTreeStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.educationTree.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this._selectedId}`, this.educationTree)
+      .post(`${baseUrl}/Update`, this.educationTree)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -322,7 +315,7 @@ export class EducationTreeStore extends VuexModule {
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this._selectedId}`)
+      .post(`${baseUrl}/Delete/${this.educationTree.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

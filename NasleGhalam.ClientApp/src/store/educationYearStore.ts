@@ -20,7 +20,6 @@ export class EducationYearStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   educationYear: IEducationYear;
   private _educationYearList: Array<IEducationYear>;
-  private _selectedId: number;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -70,7 +69,7 @@ export class EducationYearStore extends VuexModule {
   @mutation
   private UPDATE(educationYear: IEducationYear) {
     let index = this._educationYearList.findIndex(
-      x => x.Id == this._selectedId
+      x => x.Id == this.educationYear.Id
     );
     if (index < 0) return;
     util.mapObject(educationYear, this._educationYearList[index]);
@@ -79,7 +78,7 @@ export class EducationYearStore extends VuexModule {
   @mutation
   private DELETE() {
     let index = this._educationYearList.findIndex(
-      x => x.Id == this._selectedId
+      x => x.Id == this.educationYear.Id
     );
     if (index < 0) return;
     this._educationYearList.splice(index, 1);
@@ -87,7 +86,7 @@ export class EducationYearStore extends VuexModule {
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultEducationYear, this.educationYear);
+    util.mapObject(DefaultEducationYear, this.educationYear, "Id");
     if (vm.$v) {
       vm.$v.$reset();
     }
@@ -96,11 +95,6 @@ export class EducationYearStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<IEducationYear>) {
     this._educationYearList = list;
-  }
-
-  @mutation
-  private SET_SELECTED_ID(id: number) {
-    this._selectedId = id;
   }
 
   @mutation
@@ -141,7 +135,6 @@ export class EducationYearStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IEducationYear>) => {
         util.mapObject(response.data, this.educationYear);
-        this.SET_SELECTED_ID(this.educationYear.Id);
       });
   }
 
@@ -208,6 +201,7 @@ export class EducationYearStore extends VuexModule {
 
   @action()
   async resetCreate() {
+    this.educationYear.Id;
     this.RESET(this._editVue);
   }
 
@@ -216,9 +210,8 @@ export class EducationYearStore extends VuexModule {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
-    this.educationYear.Id = this._selectedId;
     return axios
-      .post(`${baseUrl}/Update/${this._selectedId}`, this.educationYear)
+      .post(`${baseUrl}/Update`, this.educationYear)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -240,7 +233,7 @@ export class EducationYearStore extends VuexModule {
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this._selectedId}`)
+      .post(`${baseUrl}/Delete/${this.educationYear.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

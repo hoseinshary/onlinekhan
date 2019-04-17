@@ -34,16 +34,16 @@
           <div class="col-sm-7">
             <section class="q-ma-sm q-pa-sm shadow-1">
               <base-btn-create
-                v-if="pageAccess.canCreate && lessonDdl.length && !topicTreeData.length && topicIndexObj.LessonId != 0"
-                :label="`ایجاد (${modelName}) جدید`"
-                @click="showModalCreate"
+                v-if="canCreate && lessonStore.ddl.length && !topicTreeData.length && lessonId != 0"
+                :label="`ایجاد (${topicStore.modelName}) جدید`"
+                @click="showModalCreate(0)"
               />
-              <q-input v-model="topicStore.treeVue.filter" float-label="جستجو در مبحث" clearable/>
+              <q-input v-model="topicStore.qTreeData.filter" float-label="جستجو در مبحث" clearable/>
               <q-tree
                 :nodes="topicTreeData"
-                :expanded.sync="topicStore.treeVue.expanded"
-                :selected.sync="topicStore.treeVue.selected"
-                :filter="topicStore.treeVue.filter"
+                :expanded.sync="topicStore.qTreeData.expanded"
+                :selected.sync="topicStore.qTreeData.selected"
+                :filter="topicStore.qTreeData.filter"
                 class="q-pt-lg"
                 color="primary"
                 accordion
@@ -171,7 +171,7 @@ export default class TopicVue extends Vue {
   get topicTreeData() {
     var treeData = this.topicStore.treeDataByLessonId(this.lessonId);
     if (this.topicTree.setToFirstLevel) {
-      this.topicStore.treeVue.expanded = this.topicStore.treeVue.firstLevel;
+      this.topicStore.qTreeData.expanded = this.topicStore.qTreeData.firstLevel;
       this.topicTree.setToFirstLevel = false;
     }
     return treeData;
@@ -204,22 +204,12 @@ export default class TopicVue extends Vue {
   //#region ### methods ###
   showModalCreate(id, title) {
     this.topicStore.resetCreate();
-    if (id && id > 0) {
-      this.topic.ParentTopicId = id;
-      this.topic.LessonId = this.lessonId;
-      this.topic.ParentTopic = {
-        Id: id,
-        Title: title,
-        ExamStock: 0,
-        ExamStockSystem: 0,
-        Importance: 0,
-        IsExamSource: false,
-        IsActive: true,
-        LookupId_HardnessType: 0,
-        LookupId_AreaType: 0,
-        LessonId: 0
-      };
-    }
+    this.topic.ParentTopicId = id;
+    this.topic.LessonId = this.lessonId;
+    var defaultTopic = util.cloneObject(DefaultTopic);
+    defaultTopic.Id = id;
+    defaultTopic.Title = title;
+    this.topic.ParentTopic = defaultTopic;
     this.topicStore.OPEN_MODAL_CREATE(true);
   }
 

@@ -73,7 +73,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var topic = Mapper.Map<Topic>(topicViewModel);
             var hasRoot = _topics.Any(x => x.LessonId == topicViewModel.LessonId);
 
-            if (hasRoot)
+            if (hasRoot && topic.ParentTopicId == null)
                 return new ClientMessageResult
                 {
                     Message = "برای این درس مبحث ریشه ثبت شده است!(تنها یک مبحث ریشه برای هر درس قابل ثبت است.)"

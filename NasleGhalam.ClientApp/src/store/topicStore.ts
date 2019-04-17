@@ -22,7 +22,7 @@ export class TopicStore extends VuexModule {
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
-  treeVue: {
+  qTreeData: {
     filter: string;
     selected: any;
     expanded: Array<object>;
@@ -40,7 +40,7 @@ export class TopicStore extends VuexModule {
 
     this.topic = util.cloneObject(DefaultTopic);
     this._topicList = [];
-    this.treeVue = {
+    this.qTreeData = {
       filter: "",
       selected: null,
       expanded: [],
@@ -81,8 +81,7 @@ export class TopicStore extends VuexModule {
         }));
       var tree = util.listToTree(list, "Id", "ParentTopicId");
       // set expanded list to show first level of tree
-      debugger;
-      this.treeVue.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
+      this.qTreeData.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
 
       return tree;
     };
@@ -224,11 +223,11 @@ export class TopicStore extends VuexModule {
         if (data.MessageType == MessageType.Success) {
           let topic = data.Obj;
           // make node selected
-          this.treeVue.selected = topic.Id;
+          this.qTreeData.selected = topic.Id;
           // show created node in tree
           let parentId: any = topic.ParentTopicId;
-          if (parentId && this.treeVue.expanded.indexOf(parentId)) {
-            this.treeVue.expanded.push(parentId);
+          if (parentId && this.qTreeData.expanded.indexOf(parentId)) {
+            this.qTreeData.expanded.push(parentId);
           }
 
           this.CREATE(data.Obj);

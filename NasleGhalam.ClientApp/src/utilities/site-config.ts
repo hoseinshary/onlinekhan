@@ -10,14 +10,14 @@ export const LOOKUP_URL = "/api/lookup";
 export const EDUCATION_SUB_GROUP_URL = "/api/educationSubGroup";
 export const EDUCATION_YEAR_URL = "/api/educationYear";
 export const LESSON_URL = "/api/lesson";
-
 export const TOPIC_URL = "/api/topic";
+
+export const QUESTION_URL = "/api/question";
+export const QUESTION_GROUP_URL = "/api/questionGroup";
+export const QUESTION_JUDGE_URL = "/api/questionJudge";
 export const EDUCATION_BOOK_URL = "/api/educationBook";
 export const PUBLISHER_URL = "/api/publisher";
 export const TAG_URL = "/api/tag";
-export const QUESTION_URL = "/api/question";
 export const AXILLARY_BOOK_URL = "/api/axillaryBook";
 export const UNIVERSITY_BRANCH_URL = "/api/universityBranch";
 export const STUDENT_URL = "/api/student";
-export const QUESTION_GROUP_URL = "/api/questionGroup";
-export const QUESTION_JUDGE_URL = "/api/questionJudge";

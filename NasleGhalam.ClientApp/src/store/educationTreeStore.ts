@@ -263,7 +263,6 @@ export class EducationTreeStore extends VuexModule {
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
-          debugger;
           let educationTree = data.Obj;
           // make node selected
           this.qTreeData.selected = educationTree.Id;

@@ -7,89 +7,91 @@
         <section class="row">
           <div class="col-12">
             <section class="q-ma-sm q-pa-sm shadow-1">
-              <q-checkbox v-model="showNoJudgement"
-                          label="نمایش سوال های بدون ارزیابی"
-                          @input="fillGrid()" />
+              <q-checkbox
+                v-model="showNoJudgement"
+                label="نمایش سوال های بدون ارزیابی"
+                @input="fillGrid()"
+              />
               <br>
-              <q-checkbox v-model="showWithoutTopic"
-                          label="نمایش سوال های بدون مبحث"
-                          @input="fillGrid()" />
+              <q-checkbox
+                v-model="showWithoutTopic"
+                label="نمایش سوال های بدون مبحث"
+                @input="fillGrid()"
+              />
             </section>
           </div>
-          <div class="col-sm-5 ">
+          <div class="col-sm-5">
             <section class="q-ma-sm q-pa-sm shadow-1">
-              <my-select :model="$v.questionIndexObj.EducationTreeId_Grade"
-                         :options="educationTree_GradeDdl"
-                         @change="gradeDdlChange" />
+              <my-select
+                :model="$v.questionIndexObj.EducationTreeId_Grade"
+                :options="educationTree_GradeDdl"
+                @change="gradeDdlChange"
+              />
 
               <q-field class="col-12">
-                <q-input v-model="educationTreeFilter"
-                         float-label="جستجو در درخت آموزش"
-                         clearable />
+                <q-input v-model="educationTreeFilter" float-label="جستجو در درخت آموزش" clearable/>
               </q-field>
-              <q-tree :nodes="educationTreeData"
-                      style="max-height: 200px; overflow-y:scroll;"
-                      color="primary"
-                      tick-strategy="leaf"
-                      accordion
-                      node-key="Id"
-                      :ticked.sync="questionIndexObj.TickedEducationTreeIds"
-                      :filter="educationTreeFilter"
-                      ref="educationTree" />
-              <my-select :model="$v.questionIndexObj.LessonId"
-                         :options="lessonDdl"
-                         class="q-pt-lg"
-                         @change="lessonDdlChange" />
+              <q-tree
+                :nodes="educationTreeData"
+                style="max-height: 200px; overflow-y:scroll;"
+                color="primary"
+                tick-strategy="leaf"
+                accordion
+                node-key="Id"
+                :ticked.sync="questionIndexObj.TickedEducationTreeIds"
+                :filter="educationTreeFilter"
+                ref="educationTree"
+              />
+              <my-select
+                :model="$v.questionIndexObj.LessonId"
+                :options="lessonDdl"
+                class="q-pt-lg"
+                @change="lessonDdlChange"
+              />
             </section>
           </div>
-          <div class="col-sm-7 "
-               v-if="!showWithoutTopic">
+          <div class="col-sm-7" v-if="!showWithoutTopic">
             <section class="q-ma-sm q-pa-sm shadow-1">
               <q-field class="col-12">
-                <q-input v-model="topicFilter"
-                         float-label="جستجوی مبحث"
-                         clearable />
+                <q-input v-model="topicFilter" float-label="جستجوی مبحث" clearable/>
               </q-field>
-              <q-tree :nodes="topicTreeData"
-                      style="max-height: 300px; overflow-y:scroll;"
-                      tick-strategy="leaf"
-                      class="q-pt-lg"
-                      color="primary"
-                      accordion
-                      node-key="Id"
-                      ref="topicTree"
-                      :filter="topicFilter"
-                      :ticked.sync="questionIndexObj.TickedTopicsIds" />
+              <q-tree
+                :nodes="topicTreeData"
+                style="max-height: 300px; overflow-y:scroll;"
+                tick-strategy="leaf"
+                class="q-pt-lg"
+                color="primary"
+                accordion
+                node-key="Id"
+                ref="topicTree"
+                :filter="topicFilter"
+                :ticked.sync="questionIndexObj.TickedTopicsIds"
+              />
             </section>
           </div>
           <br>
         </section>
-        <my-btn-create v-if="pageAccess.canCreate"
-                       :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate" />
+        <my-btn-create
+          v-if="pageAccess.canCreate"
+          :label="`ایجاد (${modelName}) جدید`"
+          @click="showModalCreate"
+        />
         <br>
-        <my-table :grid-data="questionGridData"
-                  :columns="questionGridColumn"
-                  hasIndex>
-          <template slot="Id"
-                    slot-scope="data">
-            <q-btn outline
-                   round
-                   icon="list"
-                   color="brown"
-                   size="sm"
-                   class="shadow-1 bg-white q-mr-sm"
-                   @click="showModalQuestionJudge(data.row.Id)">
-              <q-tooltip>
-                ارزیابی
-              </q-tooltip>
+        <my-table :grid-data="questionGridData" :columns="questionGridColumn" hasIndex>
+          <template slot="Id" slot-scope="data">
+            <q-btn
+              outline
+              round
+              icon="list"
+              color="brown"
+              size="sm"
+              class="shadow-1 bg-white q-mr-sm"
+              @click="showModalQuestionJudge(data.row.Id)"
+            >
+              <q-tooltip>ارزیابی</q-tooltip>
             </q-btn>
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
+            <my-btn-edit v-if="pageAccess.canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <my-btn-delete v-if="pageAccess.canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
         </my-table>
       </div>
@@ -192,11 +194,14 @@ export default {
       });
     },
     showModalQuestionJudge(id) {
-      // get data by id
-      this.fillGridQuestionJudgeByQuestionId(id).then(() => {
+      this.getByIdStore(id).then(() => {
         // show modal
-        this.toggleModalQuestionJudgeStore({ isOpen: true, questionId: id });
+        this.fillGridQuestionJudgeByQuestionId(id).then(() => {
+          // show modal
+          this.toggleModalQuestionJudgeStore({ isOpen: true, questionId: id });
+        });
       });
+      // get data by id
     },
     gradeDdlChange(val) {
       // filter lesson tree by gradeId

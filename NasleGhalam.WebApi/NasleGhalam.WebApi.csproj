@@ -135,6 +135,7 @@
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="FilterAttribute\CheckWordFileUpdateValidation.cs" />
+    <Compile Include="ModelBinderAndFormatter\CustomJsonFormatter.cs" />
     <Compile Include="ModelBinderAndFormatter\IntegerModelBinder.cs" />
     <None Include="%40CodeTemplates\WebApiControllerGenerator.cs">
       <AutoGen>True</AutoGen>
@@ -154,8 +155,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ModelBinderAndFormatter\DateTimeModelBinder.cs" />
-    <Compile Include="ModelBinderAndFormatter\CustomJsonFormatter.cs" />
-    <Compile Include="ModelBinderAndFormatter\MultiPartMediaTypeFormatter.cs" />
     <Compile Include="ModelBinderAndFormatter\StringModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

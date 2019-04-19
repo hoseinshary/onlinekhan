@@ -70,7 +70,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-        public object GetAllByLessonId(int id)
+        public IList<QuestionViewModel> GetAllByLessonId(int id)
         {
             return _questions
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
@@ -126,14 +126,14 @@ namespace NasleGhalam.ServiceLayer.Services
             doc.Close();
             app.Quit();
 
-            foreach (var topicId in questionViewModel.TopicsId)
+            foreach (var topicId in questionViewModel.TopicIds)
             {
                 var topic = new Topic() { Id = topicId };
                 _uow.MarkAsUnChanged(topic);
                 question.Topics.Add(topic);
             }
 
-            foreach (var tagId in questionViewModel.TagsId)
+            foreach (var tagId in questionViewModel.TagIds)
             {
                 var tag = new Tag() { Id = tagId };
                 _uow.MarkAsUnChanged(tag);

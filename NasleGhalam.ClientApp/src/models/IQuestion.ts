@@ -13,6 +13,7 @@ export default interface IQuestion {
   Description: string;
   FileName: string;
   // IsActive: boolean;
+  AnswerNumber: number;
   QuestionWordPath: string;
   QuestionPicturePath: string;
   LookupId_QuestionType: number;
@@ -23,6 +24,8 @@ export default interface IQuestion {
   QuestionOptions?: Array<IQuestionOption>;
   Topics?: Array<ITopic>;
   Tags?: Array<ITopic>;
+  TopicIds?: Array<number>;
+  TagIds?: Array<number>;
 }
 
 export const DefaultQuestion: IQuestion = {
@@ -37,6 +40,7 @@ export const DefaultQuestion: IQuestion = {
   Description: "",
   FileName: "",
   // IsActive: true,
+  AnswerNumber: 0,
   QuestionWordPath: "",
   QuestionPicturePath: "",
   LookupId_QuestionType: 6,
@@ -46,5 +50,7 @@ export const DefaultQuestion: IQuestion = {
   LookupId_AreaType: 1036,
   QuestionOptions: [],
   Topics: [],
-  Tags: []
+  Tags: [],
+  TopicIds: [],
+  TagIds: []
 };

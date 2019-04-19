@@ -116,6 +116,10 @@ export class QuestionStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IQuestion>) => {
         util.mapObject(response.data, this.question);
+        if (response.data.Topics)
+          this.question.TopicIds = response.data.Topics.map(x => x.Id);
+        if (response.data.Tags)
+          this.question.TagIds = response.data.Tags.map(x => x.Id);
       });
   }
 
@@ -177,24 +181,61 @@ export class QuestionStore extends VuexModule {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
-    return axios
-      .post(`${baseUrl}/Create`, this.question)
-      .then((response: AxiosResponse<IMessageResult>) => {
-        let data = response.data;
-        this.notify({ vm, data });
+    var wordFile = this._createVue.$refs.wordFile;
+    var msg = "";
 
-        if (data.MessageType == MessageType.Success) {
-          this.CREATE(data.Obj);
-          this.OPEN_MODAL_CREATE(!closeModal);
-          this.resetCreate();
+    if (wordFile["files"].length == 0) {
+      msg = "فایل ورد انتخاب نشده است.<br/>";
+    }
+    if (this.question.TopicIds && this.question.TopicIds.length == 0) {
+      msg += "مبحثی انتخاب نکرده اید.<br/>";
+    }
+    if (
+      this.question.LookupId_QuestionType == 6 &&
+      (this.question.AnswerNumber < 1 || this.question.AnswerNumber > 4)
+    ) {
+      msg += "گزینه صحیح انتخاب نشده است.";
+    }
+
+    if (msg) {
+      this.notify({
+        vm: vm,
+        data: {
+          Message: msg,
+          MessageType: MessageType.Error,
+          Obj: null
         }
       });
+      return;
+    }
+
+    var formData = new FormData();
+    formData.append(wordFile["name"], wordFile["files"][0]);
+    var params = util.toParam(this.question);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/Create?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
+      let data = response.data;
+      this.notify({ vm, data });
+
+      if (data.MessageType == MessageType.Success) {
+        this.CREATE(data.Obj);
+        this.OPEN_MODAL_CREATE(!closeModal);
+        this.resetCreate();
+      }
+    });
   }
 
   @action()
   async resetCreate() {
     this.question.Id = 0;
     this.RESET(this._createVue);
+    var wordFile = this._createVue.$refs.wordFile;
+    wordFile["reset"]();
   }
 
   @action()

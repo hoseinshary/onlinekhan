@@ -6,20 +6,19 @@
     @confirm="questionStore.submitCreate"
     @reset="questionStore.resetCreate"
     @close="questionStore.OPEN_MODAL_CREATE(false)"
-    @open="fillAllDdl()"
+    @open="open"
   >
     <div class="col-sm-4">
       <section class="q-ma-sm q-pa-sm shadow-1">
         <q-input v-model="topicFilter" float-label="جستجوی مبحث" clearable/>
         <q-tree
-          :nodes="topicTreeData"
+          :nodes="topicTreeDataProp"
+          :filter="topicFilter"
+          :ticked.sync="question.TopicIds"
           tick-strategy="leaf"
           color="primary"
           accordion
           node-key="Id"
-          ref="topicTree"
-          :filter="topicFilter"
-          :ticked.sync="questionObj.TopicsId"
         />
       </section>
 
@@ -28,17 +27,17 @@
           filter
           chips
           multiple
-          v-model="questionObj.TagsId"
-          :options="tagDdl"
+          v-model="question.TagIds"
+          :options="tagStore.ddl"
           float-label="تگ ها"
         />
       </section>
 
       <q-slide-transition>
-        <section v-if="questionObj.LookupId_QuestionType==6" class="q-ma-sm q-pa-sm shadow-1">
+        <section v-if="question.LookupId_QuestionType==6" class="q-ma-sm q-pa-sm shadow-1">
           گزینه صحیح
           <base-select
-            :model="$v.questionObj.AnswerNumber"
+            :model="$v.question.AnswerNumber"
             :options="answersDdl"
             class="col-md-4"
             filter
@@ -50,7 +49,7 @@
     <div class="col-sm-8 row gutter-md">
       <q-field class="col-sm-4">
         <q-uploader
-          url="url"
+          url
           float-label="فایل سوال"
           name="word"
           hide-upload-button
@@ -58,71 +57,59 @@
           extensions=".doc,.docx"
         />
       </q-field>
-
-      <base-input :model="$v.questionObj.QuestionNumber" class="col-md-4"/>
-
+      <base-input :model="$v.question.QuestionNumber" class="col-md-4"/>
       <base-select
-        :model="$v.questionObj.LookupId_QuestionType"
-        :options="lookupQuestionType"
+        :model="$v.question.LookupId_QuestionType"
+        :options="lookupStore.questionTypeDdl"
         class="col-md-4"
         filter
       />
-
-      <base-input :model="$v.questionObj.QuestionPoint" class="col-md-4"/>
-
+      <base-input :model="$v.question.QuestionPoint" class="col-md-4"/>
       <base-select
-        :model="$v.questionObj.LookupId_QuestionHardnessType"
-        :options="lookupQuestionHardnessType"
+        :model="$v.question.LookupId_QuestionHardnessType"
+        :options="lookupStore.questionHardnessTypeDdl"
         class="col-md-4"
         filter
       />
-
       <base-select
-        :model="$v.questionObj.LookupId_RepeatnessType"
-        :options="lookupQuestionRepeatnessType"
+        :model="$v.question.LookupId_RepeatnessType"
+        :options="lookupStore.repeatnessTypeDdl"
         class="col-md-4"
         filter
       />
-
-      <base-field class="col-md-4" :model="$v.questionObj.UseEvaluation">
+      <base-field class="col-md-4" :model="$v.question.UseEvaluation">
         <template slot-scope="data">
           <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
           <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
         </template>
       </base-field>
-
-      <base-field class="col-md-4" :model="$v.questionObj.IsStandard">
+      <base-field class="col-md-4" :model="$v.question.IsStandard">
         <template slot-scope="data">
           <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
           <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
         </template>
       </base-field>
-
       <base-select
-        :model="$v.questionObj.LookupId_AuthorType"
-        :options="lookupQuestionAuthorType"
+        :model="$v.question.LookupId_AuthorType"
+        :options="lookupStore.authorTypeDdl"
         class="col-md-4"
         filter
       />
-
-      <base-input :model="$v.questionObj.AuthorName" class="col-md-4"/>
-
+      <base-input :model="$v.question.AuthorName" class="col-md-4"/>
       <base-select
-        :model="$v.questionObj.LookupId_AreaType"
-        :options="lookupTopicAreaTypeDdl"
+        :model="$v.question.LookupId_AreaType"
+        :options="lookupStore.areaTypeDdl"
         class="col-md-4"
         filter
       />
-
-      <base-input :model="$v.questionObj.ResponseSecond" class="col-md-4"/>
-
-      <base-input :model="$v.questionObj.Description" class="col-md-4"/>
+      <base-input :model="$v.question.ResponseSecond" class="col-md-4"/>
+      <base-input :model="$v.question.Description" class="col-12"/>
     </div>
   </base-modal-create>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { questionValidations } from "src/validations/questionValidation";
 
@@ -132,13 +119,41 @@ import { questionValidations } from "src/validations/questionValidation";
 export default class QuestionCreateVue extends Vue {
   $v: any;
 
+  //#region ### props ###
+  @Prop({ type: Array, required: true }) topicTreeDataProp;
+  @Prop({ type: Array, required: true }) topicTickedIdsProp;
+  //#endregion
+
   //#region ### data ###
   questionStore = vxm.questionStore;
+  lookupStore = vxm.lookupStore;
+  tagStore = vxm.tagStore;
+  topicStore = vxm.topicStore;
   question = vxm.questionStore.question;
+  topicFilter = "";
+  //#endregion
+
+  //#region ### computed ###
+  get answersDdl() {
+    return [
+      { value: 1, label: "1" },
+      { value: 2, label: "2" },
+      { value: 3, label: "3" },
+      { value: 4, label: "4" }
+    ];
+  }
   //#endregion
 
   //#region ### methods ###
-  fillAllDdl() {}
+  open() {
+    this.question.TopicIds = this.topicTickedIdsProp;
+    this.tagStore.fillList();
+    this.lookupStore.fillQuestionType();
+    this.lookupStore.fillQuestionHardnessType();
+    this.lookupStore.fillRepeatnessType();
+    this.lookupStore.fillAuthorType();
+    this.lookupStore.fillAreaType();
+  }
   //#endregion
 
   //#region ### hooks ###
@@ -199,7 +214,7 @@ export default class QuestionCreateVue extends Vue {
 //   computed: {
 //     ...mapState("questionStore", {
 //       modelName: "modelName",
-//       questionObj: "questionObj",
+//       question: "question",
 //       isOpenModalCreate: "isOpenModalCreate"
 //     }),
 //     ...mapState("tagStore", {

@@ -79,9 +79,9 @@ namespace NasleGhalam.ViewModels.Question
         [Range(1, 4, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
         public int AnswerNumber { get; set; }
 
-        public List<int> TopicsId { get; set; } = new List<int>();
+        public List<int> TopicIds { get; set; } = new List<int>();
 
-        public List<int> TagsId { get; set; } = new List<int>();
+        public List<int> TagIds { get; set; } = new List<int>();
 
         public List<QuestionOptionViewModel> Options { get; set; } = new List<QuestionOptionViewModel>();
     }

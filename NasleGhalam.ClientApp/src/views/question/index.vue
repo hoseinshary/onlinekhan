@@ -103,7 +103,11 @@
       </div>
     </base-panel>
     <!-- modals -->
-    <!-- <modal-create v-if="canCreate"></modal-create> -->
+    <modal-create
+      v-if="canCreate"
+      :topicTreeDataProp="topicTreeData"
+      :topicTickedIdsProp="topicTree.leafTicked"
+    ></modal-create>
     <!--<modal-edit v-if="canEdit"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
     <modal-question-judge></modal-question-judge>-->
@@ -118,7 +122,7 @@ import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
   components: {
-    // ModalCreate: () => import("./create.vue"),
+    ModalCreate: () => import("./create.vue")
     // ModalEdit: () => import("./edit.vue"),
     // ModalDelete: () => import("./delete.vue")
   }

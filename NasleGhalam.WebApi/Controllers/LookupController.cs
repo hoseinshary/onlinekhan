@@ -48,7 +48,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllByName("Nezam"));
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
         public IHttpActionResult GetAllBookType()
         {
@@ -60,7 +59,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_lookupService.GetAllByName("QuestionType"));
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.TopicCreateAccess,ActionBits.TopicReadAccess,ActionBits.TopicUpdateAccess)]
         public IHttpActionResult GetAllTopicHardnessType()

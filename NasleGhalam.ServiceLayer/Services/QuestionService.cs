@@ -27,7 +27,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _questions = uow.Set<Question>();
         }
 
-
         /// <summary>
         /// گرفتن  سوال با آی دی
         /// </summary>
@@ -81,7 +80,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
         /// <summary>
         /// گرفتن همه سوال های سوال گروهی
         /// </summary>
@@ -95,7 +93,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<QuestionViewModel>)
                 .ToList();
         }
-
 
         /// <summary>
         /// ثبت سوال
@@ -183,9 +180,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                 }
-
                 File.Delete(wordFilename);
-
             }
             msgRes.Id = question.Id;
             var resultVal = Mapper.Map<ClientMessageResult>(msgRes);
@@ -196,7 +191,6 @@ namespace NasleGhalam.ServiceLayer.Services
             };
             return resultVal;
         }
-
 
         /// <summary>
         /// ویرایش سوال
@@ -269,7 +263,6 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
 
         /// <summary>
         /// حذف سوال

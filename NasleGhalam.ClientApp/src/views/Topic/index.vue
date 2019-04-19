@@ -221,7 +221,9 @@ export default class TopicVue extends Vue {
   //#region ### hooks ###
   created() {
     this.topicStore.fillList();
-    this.educationTreeStore.fillList();
+    this.educationTreeStore.fillList().then(res => {
+      this.educationTree.expanded = this.educationTree.firstLevel;
+    });
   }
   //#endregion
 }

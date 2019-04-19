@@ -181,7 +181,7 @@ export default {
       "div",
       {
         attrs: {
-          class: "col-12"
+          class: "col-12 my-table-scroll-x"
         }
       },
       [table]
@@ -512,6 +512,11 @@ export default {
 </script>
 
 <style>
+.my-table-scroll-x {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
 .my-table {
   width: 100% !important;
 }

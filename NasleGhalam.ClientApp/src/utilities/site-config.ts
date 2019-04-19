@@ -11,8 +11,8 @@ export const EDUCATION_SUB_GROUP_URL = "/api/educationSubGroup";
 export const EDUCATION_YEAR_URL = "/api/educationYear";
 export const LESSON_URL = "/api/lesson";
 export const TOPIC_URL = "/api/topic";
-
 export const QUESTION_URL = "/api/question";
+
 export const QUESTION_GROUP_URL = "/api/questionGroup";
 export const QUESTION_JUDGE_URL = "/api/questionJudge";
 export const EDUCATION_BOOK_URL = "/api/educationBook";

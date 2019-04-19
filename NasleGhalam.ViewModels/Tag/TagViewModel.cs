@@ -4,9 +4,7 @@ namespace NasleGhalam.ViewModels.Tag
 {
     public class TagViewModel
     {
-
         public int Id { get; set; }
-
 
         [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
@@ -14,7 +12,5 @@ namespace NasleGhalam.ViewModels.Tag
         public string Name { get; set; }
 
         public bool IsSource { get; set; }
-
-
     }
 }

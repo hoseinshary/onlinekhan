@@ -15,23 +15,13 @@ namespace NasleGhalam.ViewModels.Question
 
         public int QuestionNumber { get; set; }
 
-        public int LookupId_QuestionType { get; set; }
-
         public int QuestionPoint { get; set; }
-
-        public int LookupId_QuestionHardnessType { get; set; }
-
-        public int LookupId_RepeatnessType { get; set; }
 
         public bool UseEvaluation { get; set; }
 
         public bool IsStandard { get; set; }
 
-        public int LookupId_AuthorType { get; set; }
-
         public string AuthorName { get; set; }
-
-        public int LookupId_AreaType { get; set; }
 
         public short ResponseSecond { get; set; }
 
@@ -50,6 +40,16 @@ namespace NasleGhalam.ViewModels.Question
         public string QuestionWordPath => $"/Api/Question/GetWordFile/{FileName}".ToFullRelativePath();
 
         public string QuestionPicturePath => $"/Api/Question/GetPictureFile/{FileName}".ToFullRelativePath();
+
+        public int LookupId_QuestionType { get; set; }
+
+        public int LookupId_QuestionHardnessType { get; set; }
+
+        public int LookupId_RepeatnessType { get; set; }
+
+        public int LookupId_AuthorType { get; set; }
+
+        public int LookupId_AreaType { get; set; }
 
         public List<QuestionOptionViewModel> QuestionOptions { get; set; } = new List<QuestionOptionViewModel>();
 

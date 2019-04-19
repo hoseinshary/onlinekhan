@@ -27,13 +27,11 @@ namespace NasleGhalam.WebApi.Controllers
             _questionService = questionService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetAllByTopicIds([FromUri] IEnumerable<int> ids)
         {
             return Ok(_questionService.GetAllByTopicIds(ids));
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetAllByTopicIdsNoJudge([FromUri] IEnumerable<int> ids)
@@ -41,20 +39,17 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionService.GetAllByTopicIdsNoJudge(ids, Request.GetUserId()));
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAllByQuestionGroupId(int id)
         {
             return Ok(_questionService.GetAllByQuestionGroupId(id));
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAllByLessonId(int id)
         {
             return Ok(_questionService.GetAllByLessonId(id));
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -66,7 +61,6 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(question);
         }
-
 
         [HttpGet]
         //[CheckUserAccess(ActionBits.QuestionReadAccess)]
@@ -93,7 +87,6 @@ namespace NasleGhalam.WebApi.Controllers
             return result;
         }
 
-
         [HttpGet]
         //[CheckUserAccess(ActionBits.QuestionReadAccess)]
         public HttpResponseMessage GetPictureFile(string id)
@@ -119,7 +112,6 @@ namespace NasleGhalam.WebApi.Controllers
             return result;
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionCreateAccess)]
         [CheckModelValidation]
@@ -132,7 +124,6 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _questionService.Create(questionViewModel, wordFile);
             return Ok(msgRes);
         }
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
@@ -162,7 +153,6 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(msgRes);
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.QuestionDeleteAccess)]
         public IHttpActionResult Delete(int id)

@@ -103,8 +103,8 @@
       </div>
     </base-panel>
     <!-- modals -->
-    <!-- <modal-create v-if="canCreate"></modal-create>
-    <modal-edit v-if="canEdit"></modal-edit>
+    <!-- <modal-create v-if="canCreate"></modal-create> -->
+    <!--<modal-edit v-if="canEdit"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
     <modal-question-judge></modal-question-judge>-->
   </section>

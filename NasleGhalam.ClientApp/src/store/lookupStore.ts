@@ -9,6 +9,15 @@ export class LookupStore extends VuexModule {
   private _topicNezam: Array<ILookup>;
   private _topicHardnessType: Array<ILookup>;
   private _topicAreaType: Array<ILookup>;
+  private _questionType: Array<ILookup>;
+  private _questionHardnessType: Array<ILookup>;
+  private _answerType: Array<ILookup>;
+  private _paperType: Array<ILookup>;
+  private _printType: Array<ILookup>;
+  private _bookType: Array<ILookup>;
+  private _areaType: Array<ILookup>;
+  private _repeatnessType: Array<ILookup>;
+  private _authorType: Array<ILookup>;
 
   /**
    * initialize data
@@ -19,6 +28,15 @@ export class LookupStore extends VuexModule {
     this._topicNezam = [];
     this._topicHardnessType = [];
     this._topicAreaType = [];
+    this._questionType = [];
+    this._questionHardnessType = [];
+    this._answerType = [];
+    this._paperType = [];
+    this._printType = [];
+    this._bookType = [];
+    this._areaType = [];
+    this._repeatnessType = [];
+    this._authorType = [];
   }
 
   //#region ### getters ###
@@ -49,6 +67,69 @@ export class LookupStore extends VuexModule {
       label: x.Value
     }));
   }
+
+  get questionTypeDdl() {
+    return this._questionType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get questionHardnessTypeDdl() {
+    return this._questionHardnessType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get answerTypeDdl() {
+    return this._answerType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get paperTypeDdl() {
+    return this._paperType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get printTypeDdl() {
+    return this._printType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get bookTypeDdl() {
+    return this._bookType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get areaTypeDdl() {
+    return this._areaType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get repeatnessTypeDdl() {
+    return this._repeatnessType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get authorTypeDdl() {
+    return this._authorType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
   //#endregion
 
   //#region ### mutations ###
@@ -70,6 +151,51 @@ export class LookupStore extends VuexModule {
   @mutation
   private SET_TOPIC_AREA_TYPE_LIST(list: Array<ILookup>) {
     this._topicAreaType = list;
+  }
+
+  @mutation
+  private SET_QUESTION_TYPE_LIST(list: Array<ILookup>) {
+    this._questionType = list;
+  }
+
+  @mutation
+  private SET_QUESTION_HARDNESS_TYPE_LIST(list: Array<ILookup>) {
+    this._questionHardnessType = list;
+  }
+
+  @mutation
+  private SET_ANSWER_TYPE_LIST(list: Array<ILookup>) {
+    this._answerType = list;
+  }
+
+  @mutation
+  private SET_PAPER_TYPE_LIST(list: Array<ILookup>) {
+    this._paperType = list;
+  }
+
+  @mutation
+  private SET_PRINT_TYPE_LIST(list: Array<ILookup>) {
+    this._printType = list;
+  }
+
+  @mutation
+  private SET_BOOK_TYPE_LIST(list: Array<ILookup>) {
+    this._bookType = list;
+  }
+
+  @mutation
+  private SET_AREA_TYPE_LIST(list: Array<ILookup>) {
+    this._areaType = list;
+  }
+
+  @mutation
+  private SET_REPEATNESS_TYPE_LIST(list: Array<ILookup>) {
+    this._repeatnessType = list;
+  }
+
+  @mutation
+  private SET_AUTHOR_TYPE_LIST(list: Array<ILookup>) {
+    this._authorType = list;
   }
   //#endregion
 
@@ -123,6 +249,123 @@ export class LookupStore extends VuexModule {
         });
     } else {
       return Promise.resolve(this._topicAreaType);
+    }
+  }
+
+  @action()
+  async fillQuestionType() {
+    if (!this._questionType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllQuestionType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_QUESTION_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._questionType);
+    }
+  }
+
+  @action()
+  async fillQuestionHardnessType() {
+    if (!this._questionHardnessType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllQuestionHardnessType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_QUESTION_HARDNESS_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._questionHardnessType);
+    }
+  }
+
+  @action()
+  async fillAnswerType() {
+    if (!this._answerType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllAnswerType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_ANSWER_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._answerType);
+    }
+  }
+
+  @action()
+  async fillPaperType() {
+    if (!this._paperType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllPaperType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_PAPER_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._paperType);
+    }
+  }
+
+  @action()
+  async fillPrintType() {
+    if (!this._printType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllPrintType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_PRINT_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._printType);
+    }
+  }
+
+  @action()
+  async fillBookType() {
+    if (!this._bookType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllBookType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_BOOK_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._bookType);
+    }
+  }
+
+  @action()
+  async fillAreaType() {
+    if (!this._areaType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllAreaType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_AREA_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._areaType);
+    }
+  }
+
+  @action()
+  async fillRepeatnessType() {
+    if (!this._repeatnessType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllRepeatnessType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_REPEATNESS_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._repeatnessType);
+    }
+  }
+
+  @action()
+  async fillAuthorType() {
+    if (!this._authorType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllAuthorType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_AUTHOR_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._authorType);
     }
   }
   //#endregion

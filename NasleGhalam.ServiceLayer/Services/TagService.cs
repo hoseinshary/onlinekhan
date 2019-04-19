@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Tag;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -22,7 +21,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _tags = uow.Set<Tag>();
         }
 
-
         /// <summary>
         /// گرفتن  برچسب با آی دی
         /// </summary>
@@ -31,15 +29,12 @@ namespace NasleGhalam.ServiceLayer.Services
         public TagViewModel GetById(int id)
         {
             return _tags
-                .Where(current => current.Id == id)
-                .Select(current => new TagViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    IsSource = current.IsSource
-                }).FirstOrDefault();
+                    .Where(current => current.Id == id)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<TagViewModel>)
+                    .FirstOrDefault();
         }
-
 
         /// <summary>
         /// گرفتن همه برچسب ها
@@ -47,14 +42,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<TagViewModel> GetAll()
         {
-            return _tags.Select(current => new TagViewModel()
-            {
-                Id = current.Id,
-                Name = current.Name,
-                IsSource = current.IsSource
-            }).ToList();
+            return _tags
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<TagViewModel>)
+                    .ToList();
         }
-
 
         /// <summary>
         /// ثبت برچسب
@@ -66,11 +59,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var tag = Mapper.Map<Tag>(tagViewModel);
             _tags.Add(tag);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = tag.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(tag.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// ویرایش برچسب
@@ -82,10 +78,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var tag = Mapper.Map<Tag>(tagViewModel);
             _uow.MarkAsChanged(tag);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(tag.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// حذف برچسب
@@ -96,29 +96,13 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var tagViewModel = GetById(id);
             if (tagViewModel == null)
-            {
                 return ClientMessageResult.NotFound();
-            }
 
             var tag = Mapper.Map<Tag>(tagViewModel);
             _uow.MarkAsDeleted(tag);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه برچسب ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _tags.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

@@ -12,5 +12,7 @@ namespace NasleGhalam.ViewModels.Tag
         public string Name { get; set; }
 
         public bool IsSource { get; set; }
+
+        public string IsSourceStr => IsSource ? "بلی" : "خیر";
     }
 }

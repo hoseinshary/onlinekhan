@@ -19,13 +19,11 @@ namespace NasleGhalam.WebApi.Controllers
             _tagService = tagService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_tagService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -38,7 +36,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(tag);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.TagCreateAccess)]
         [CheckModelValidation]
@@ -49,7 +46,6 @@ namespace NasleGhalam.WebApi.Controllers
 
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.TagUpdateAccess)]
         [CheckModelValidation]
@@ -58,7 +54,6 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _tagService.Update(tagViewModel);
             return Ok(msgRes);
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.TagDeleteAccess)]
         public IHttpActionResult Delete(int id)

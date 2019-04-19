@@ -174,7 +174,6 @@ export default class QuestionVue extends Vue {
   }
 
   get topicTreeData() {
-    debugger;
     var treeData = this.topicStore.treeDataByLessonId(this.lessonId);
     if (this.topicTree.setToFirstLevel) {
       this.topicTree.expanded = this.topicTree.firstLevel;

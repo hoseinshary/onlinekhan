@@ -14,7 +14,6 @@ const mapObject = function(
   ...ignoreKeys: Array<string>
 ) {
   Object.keys(cloneTo).forEach(key => {
-    debugger;
     if (ignoreKeys.indexOf(key) > -1) {
       return;
     }

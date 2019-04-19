@@ -1,116 +1,105 @@
 <template>
   <section class="col-md-8">
     <!-- panel -->
-    <my-panel>
-      <span slot="title">{{modelName}}</span>
+    <base-panel>
+      <span slot="title">{{tagStore.modelName}}</span>
       <div slot="body">
-        <my-btn-create v-if="pageAccess.canCreate"
-                       :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate" />
+        <base-btn-create
+          v-if="canCreate"
+          :label="`ایجاد (${tagStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
         <br>
-        <my-table :grid-data="tagGridData"
-                  :columns="tagGridColumn"
-                  hasIndex>
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
+        <base-table :grid-data="tagStore.gridData" :columns="tagGridColumn" hasIndex>
+          <template slot="Id" slot-scope="data">
+            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
-        </my-table>
+        </base-table>
       </div>
-    </my-panel>
+    </base-panel>
 
     <!-- modals -->
-    <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete>
+    <modal-create v-if="canCreate"></modal-create>
+    <modal-edit v-if="canEdit"></modal-edit>
+    <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex';
 
-export default {
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import util from "src/utilities";
+
+@Component({
   components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
-  },
-  /**
-   * data
-   */
-  data() {
-    var pageAccess = this.$util.initAccess('/tag');
-    return {
-      pageAccess,
-      tagGridColumn: [
-        {
-          title: 'نام',
-          data: 'Name'
-        },
-        {
-          title: 'منبع',
-          data: 'IsSource'
-        },
-        {
-          title: 'عملیات',
-          data: 'Id',
-          searchable: false,
-          sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
-        }
-      ]
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('tagStore', [
-      'toggleModalCreateStore',
-      'toggleModalEditStore',
-      'toggleModalDeleteStore',
-      'getByIdStore',
-      'fillGridStore',
-      'resetCreateStore',
-      'resetEditStore'
-    ]),
-    showModalCreate() {
-      // reset data on modal show
-      this.resetCreateStore();
-      // show modal
-      this.toggleModalCreateStore(true);
-    },
-    showModalEdit(id) {
-      // reset data on modal show
-      this.resetEditStore();
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalEditStore(true);
-      });
-    },
-    showModalDelete(id) {
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalDeleteStore(true);
-      });
-    }
-  },
-  computed: {
-    ...mapState('tagStore', {
-      modelName: 'modelName',
-      tagGridData: 'tagGridData'
-    })
-  },
-  created() {
-    this.fillGridStore();
+    ModalCreate: () => import("./create.vue"),
+    ModalEdit: () => import("./edit.vue"),
+    ModalDelete: () => import("./delete.vue")
   }
-};
-</script>
+})
+export default class TagVue extends Vue {
+  //#region ### data ###
+  tagStore = vxm.tagStore;
+  pageAccess = util.getAccess(this.tagStore.modelName);
+  tagGridColumn = [
+    {
+      title: "نام",
+      data: "Name"
+    },
+    {
+      title: "منبع",
+      data: "IsSourceStr"
+    },
+    {
+      title: "عملیات",
+      data: "Id",
+      searchable: false,
+      sortable: false,
+      visible: this.canEdit || this.canDelete
+    }
+  ];
+  //#endregion
 
+  //#region ### computed ###
+  get canCreate() {
+    return this.pageAccess.indexOf("ایجاد") > -1;
+  }
+
+  get canEdit() {
+    return this.pageAccess.indexOf("ویرایش") > -1;
+  }
+
+  get canDelete() {
+    return this.pageAccess.indexOf("حذف") > -1;
+  }
+  //#endregion
+
+  //#region ### methods ###
+  showModalCreate() {
+    this.tagStore.resetCreate();
+    this.tagStore.OPEN_MODAL_CREATE(true);
+  }
+
+  showModalEdit(id) {
+    this.tagStore.resetEdit();
+    this.tagStore.getById(id).then(() => {
+      this.tagStore.OPEN_MODAL_EDIT(true);
+    });
+  }
+
+  showModalDelete(id) {
+    this.tagStore.getById(id).then(() => {
+      this.tagStore.OPEN_MODAL_DELETE(true);
+    });
+  }
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.tagStore.fillList();
+  }
+  //#endregion
+}
+</script>

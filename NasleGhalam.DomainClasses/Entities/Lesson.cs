@@ -10,6 +10,8 @@ namespace NasleGhalam.DomainClasses.Entities
             EducationTrees = new HashSet<EducationTree>();
             Topics = new HashSet<Topic>();
             EducationBooks = new HashSet<EducationBook>();
+            Users = new HashSet<User>();
+
         }
         public int Id { get; set; }
 
@@ -30,5 +32,8 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<QuestionGroup> QuestionGroups { get; set; }
 
         public ICollection<EducationBook> EducationBooks { get; set; }
+
+        public ICollection<User> Users { get; set; }
+
     }
 }

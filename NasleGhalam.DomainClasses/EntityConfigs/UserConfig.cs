@@ -31,6 +31,17 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
 
             HasOptional(x => x.Student)
                 .WithRequired(x => x.User);
+
+
+            HasMany(x => x.Lessons)
+            .WithMany(x => x.Users)
+          .Map(config =>
+          {
+              config.MapLeftKey("LessonId");
+              config.MapRightKey("UserId");
+              config.ToTable("Lessons_Users");
+          });
+
         }
     }
 }

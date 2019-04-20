@@ -64,6 +64,8 @@
         QuestionCreateAccess = 47,
         QuestionUpdateAccess = 48,
         QuestionDeleteAccess = 49,
+        QuestionUpdateTopicAccess = 82,
+        QuestionUpdateImportAccess = 83,
 
         AnswerReadAccess = 50,
         AnswerCreateAccess = 51,

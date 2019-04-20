@@ -66,7 +66,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="word"></param>
         /// <param name="excel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
+        public MessageResultClient Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
             
@@ -231,12 +231,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".xlsx");
             }
 
-            var returnVal = Mapper.Map<ClientMessageResult>(msgRes);
+            var returnVal = Mapper.Map<MessageResultClient>(msgRes);
             returnVal.Obj = Mapper.Map<QuestionGroupViewModel>(questionGroup);
             return returnVal;
         }
 
-        public ClientMessageResult PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word )
+        public MessageResultClient PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word )
         {
             var returnGuidList = new List<string>();
 
@@ -319,7 +319,7 @@ namespace NasleGhalam.ServiceLayer.Services
             app.Quit();
             /////////////////////////////////
 
-            var msgRes = new ClientMessageResult {MessageType = MessageType.Success, Obj = returnGuidList};
+            var msgRes = new MessageResultClient {MessageType = MessageType.Success, Obj = returnGuidList};
             return msgRes;
         }
 
@@ -329,13 +329,24 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionGroupViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(QuestionGroupUpdateViewModel questionGroupViewModel)
+        public MessageResultClient Update(QuestionGroupUpdateViewModel questionGroupViewModel)
         {
-            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
-            _uow.MarkAsChanged(questionGroup);
+            var questionGroup = _questionGroups
+                .First(current => current.Id == questionGroupViewModel.Id);
+            if (!string.IsNullOrEmpty(questionGroupViewModel.Title))
+            {
+                questionGroup.Title = questionGroupViewModel.Title;
+            }
+
+            if (questionGroupViewModel.LessonId != 0 && questionGroupViewModel.LessonId != null)
+            {
+                questionGroup.LessonId = questionGroupViewModel.LessonId;
+            }
+            
+            
 
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
 
@@ -344,18 +355,44 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        /// todo: delete all questions in one commit
-        public ClientMessageResult Delete(int id)
+        public MessageResultClient Delete(int id)
         {
-            var questionGroupViewModel = GetById(id);
-            if (questionGroupViewModel == null)
-                return ClientMessageResult.NotFound();
+            var questionGroup = _questionGroups
+                .Include(current => current.Questions)
+                .First(current => current.Id == id);
 
-            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
+            if (questionGroup == null)
+            {
+                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
+            }
+
+            //remove questions relation
+            var questions = questionGroup.Questions.ToList();
+            foreach (var item in questions)
+            {
+                questionGroup.Questions.Remove(item);
+                _uow.MarkAsDeleted(item);
+            }
+
+            
+
             _uow.MarkAsDeleted(questionGroup);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                //remove questions file
+                foreach (var item in questions)
+                {
+                    File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".docx");
+                    File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".png");
+                }
+
+                File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".docx");
+                File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".xlsx");
+            }
+
+            return Mapper.Map<MessageResultClient>(msgRes);
         }
 
         public bool IsQuestionParagraph(string s)

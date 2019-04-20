@@ -53,6 +53,7 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 
+        //hatman por shavad 
         [Display(Name = "نام فایل")]
         public string FileName { get; set; }
 

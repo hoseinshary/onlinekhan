@@ -120,7 +120,7 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             questionViewModel.UserId = Request.GetUserId();
-        
+
             var msgRes = _questionService.Create(questionViewModel, wordFile);
             return Ok(msgRes);
         }
@@ -132,25 +132,33 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update([FromUri]QuestionUpdateViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
-            var updateFile = false;
-            var fileNamePrevious = "";
-            if (wordFile != null && wordFile.ContentLength > 0)
-            {
-                fileNamePrevious = questionViewModel.FileName;
-                questionViewModel.FileName = $"{Guid.NewGuid()}";
-                updateFile = true;
-            }
+            questionViewModel.UserId = Request.GetUserId();
 
-            var msgRes = _questionService.Update(questionViewModel);
+            var msgRes = _questionService.Update(questionViewModel, wordFile);
+            return Ok(msgRes);
+        }
 
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && updateFile)
-            {
-                if (File.Exists(SitePath.GetQuestionAbsPath(fileNamePrevious) + Path.GetExtension(wordFile.FileName)))
-                {
-                    File.Delete(SitePath.GetQuestionAbsPath(fileNamePrevious) + Path.GetExtension(wordFile.FileName));
-                }
-                wordFile.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + Path.GetExtension(wordFile.FileName));
-            }
+        [HttpPost]
+        [CheckUserAccess(ActionBits.QuestionUpdateImportAccess)]
+        [CheckModelValidation]
+        //[CheckWordFileUpdateValidation("word", 1024)]
+        public IHttpActionResult UpdateImport([FromUri]QuestionUpdateImportViewModel questionViewModel)
+        {
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
+
+            var msgRes = _questionService.UpdateImport(questionViewModel, wordFile);
+            return Ok(msgRes);
+        }
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.QuestionUpdateTopicAccess)]
+        [CheckModelValidation]
+        //[CheckWordFileUpdateValidation("word", 1024)]
+        public IHttpActionResult UpdateTopic([FromUri]QuestionUpdateTopicViewModel questionViewModel)
+        {
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
+
+            var msgRes = _questionService.UpdateTopic(questionViewModel, wordFile);
             return Ok(msgRes);
         }
 

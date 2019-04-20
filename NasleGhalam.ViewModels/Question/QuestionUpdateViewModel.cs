@@ -9,8 +9,10 @@ namespace NasleGhalam.ViewModels.Question
     {
         public int Id { get; set; }
 
+
         [Display(Name = "متن")]
         public string Context { get; set; }
+
 
         [Display(Name = "شماره سوال ")]
         public int QuestionNumber { get; set; }

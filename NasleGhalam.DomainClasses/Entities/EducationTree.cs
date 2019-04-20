@@ -6,11 +6,11 @@ namespace NasleGhalam.DomainClasses.Entities
     {
         public EducationTree()
         {
-            this.Exams = new HashSet<Exam>();
-            this.EducationSubGroups = new HashSet<EducationSubGroup>();
-            this.HistoryEducations = new HashSet<HistoryEducation>();
-            this.Lessons = new HashSet<Lesson>();
-            this.ChildrenEducationTree = new HashSet<EducationTree>();
+            Exams = new HashSet<Exam>();
+            EducationSubGroups = new HashSet<EducationSubGroup>();
+            HistoryEducations = new HashSet<HistoryEducation>();
+            Lessons = new HashSet<Lesson>();
+            ChildrenEducationTree = new HashSet<EducationTree>();
         }
         
         public int Id { get; set; }

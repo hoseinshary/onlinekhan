@@ -58,7 +58,7 @@ namespace NasleGhalam.DataAccess.Context
 
         public void DetachAll()
         {
-            foreach (DbEntityEntry dbEntityEntry in this.ChangeTracker.Entries())
+            foreach (DbEntityEntry dbEntityEntry in ChangeTracker.Entries())
             {
                 if (dbEntityEntry.Entity != null)
                 {
@@ -86,7 +86,7 @@ namespace NasleGhalam.DataAccess.Context
 
         public void ValidateOnSaveEnabled(bool validateOnSaveEnabled)
         {
-            this.Configuration.ValidateOnSaveEnabled = validateOnSaveEnabled;
+            Configuration.ValidateOnSaveEnabled = validateOnSaveEnabled;
         }
 
         public int SaveChanges(bool validateOnSaveEnabled)
@@ -131,10 +131,10 @@ namespace NasleGhalam.DataAccess.Context
             catch (SqlException ex)
             {
                 StringBuilder err = new StringBuilder();
-                foreach (SqlError sql_err in ex.Errors)
+                foreach (SqlError sqlErr in ex.Errors)
                 {
-                    err.Append(sql_err.Message);
-                    result.ErrorNumber = sql_err.Number;
+                    err.Append(sqlErr.Message);
+                    result.ErrorNumber = sqlErr.Number;
                 }
 
                 result.FaMessage = "خطا در اعمال اطلاعات! با مدیر تماس بگیرید.";
@@ -192,17 +192,17 @@ namespace NasleGhalam.DataAccess.Context
 
         public DbContextTransaction BeginTransaction()
         {
-            return this.Database.BeginTransaction();
+            return Database.BeginTransaction();
         }
 
         public DbRawSqlQuery<T> SqlQuery<T>(string sqlQuery, params object[] sqlParam)
         {
-            return this.Database.SqlQuery<T>(sqlQuery, sqlParam);
+            return Database.SqlQuery<T>(sqlQuery, sqlParam);
         }
 
         public int ExecuteSqlCommand(string sqlQuery, params object[] sqlParam)
         {
-            return this.Database.ExecuteSqlCommand(sqlQuery, sqlParam);
+            return Database.ExecuteSqlCommand(sqlQuery, sqlParam);
         }
         #endregion
     }

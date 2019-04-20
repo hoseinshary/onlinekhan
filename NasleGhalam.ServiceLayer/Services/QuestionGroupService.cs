@@ -69,7 +69,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
-            
+
             //save Doc and excel file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx");
             excel.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".xlsx");
@@ -98,11 +98,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     if (k == 1)
                     {
-                        dt.Columns.Add(Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range).Value2));
+                        dt.Columns.Add(Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range)?.Value2));
                     }
                     else
                     {
-                        dr[j - 1] = Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range).Value2);
+                        dr[j - 1] = Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range)?.Value2);
                     }
 
                 }
@@ -126,7 +126,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     if (IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
                     {
                         var context = "";
-                        
+
                         numberOfQ++;
                         var newDoc2 = app.Documents.Add(
                             ref missing, ref missing, ref missing, ref missing);
@@ -166,9 +166,9 @@ namespace NasleGhalam.ServiceLayer.Services
                         newQuestion.UserId = questionGroupViewModel.UserId;
                         newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
                         newQuestion.IsActive = false;
-                        newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان پاسخگویی"]!= DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] : 0);
+                        newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] : 0);
                         newQuestion.UseEvaluation = false;
-                        newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"]!= DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] : 0);
+                        newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] : 0);
 
                         questionGroup.Questions.Add(newQuestion);
 
@@ -188,7 +188,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         //crop and resize
                         try
                         {
-                            using (var ms = new MemoryStream((byte[]) (bits)))
+                            using (var ms = new MemoryStream((byte[])(bits)))
                             {
                                 var image = Image.FromStream(ms);
                                 var pngTarget = target; //Path.ChangeExtension(target , "png");
@@ -225,7 +225,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.File) && !string.IsNullOrEmpty(questionGroupViewModel.File))
             {
-               // File.Delete(SitePath.GetQuestionGroupTempAbsPath(wordFilename));
+                // File.Delete(SitePath.GetQuestionGroupTempAbsPath(wordFilename));
                 //File.Delete(SitePath.GetQuestionGroupTempAbsPath(excelFilename) );
                 word.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".docx");
                 excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".xlsx");
@@ -236,17 +236,17 @@ namespace NasleGhalam.ServiceLayer.Services
             return returnVal;
         }
 
-        public ClientMessageResult PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word )
+        public ClientMessageResult PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word)
         {
             var returnGuidList = new List<string>();
 
             //save Doc and excel file in temp memory
-            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) );
+            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File));
 
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
-            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) ;
-            
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File);
+
             var doc = app.Documents.Open(wordFilename);
             var missing = Type.Missing;
 
@@ -278,7 +278,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         }
 
                         var newGuid = Guid.NewGuid();
-                        var newEntry =  $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();
+                        var newEntry = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();
                         returnGuidList.Add(newEntry);
 
                         //تبدیل به عکس
@@ -290,7 +290,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         //crop and resize
                         try
                         {
-                            using (var ms = new MemoryStream((byte[]) (bits)))
+                            using (var ms = new MemoryStream((byte[])(bits)))
                             {
                                 var image = Image.FromStream(ms);
                                 var pngTarget = target; //Path.ChangeExtension(target , "png");
@@ -310,7 +310,7 @@ namespace NasleGhalam.ServiceLayer.Services
                             Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
                         }
 
-                        newDoc2.Close(WdSaveOptions.wdDoNotSaveChanges,WdOriginalFormat.wdOriginalDocumentFormat,false);
+                        newDoc2.Close(WdSaveOptions.wdDoNotSaveChanges, WdOriginalFormat.wdOriginalDocumentFormat, false);
                     }
                 }
             }
@@ -319,7 +319,7 @@ namespace NasleGhalam.ServiceLayer.Services
             app.Quit();
             /////////////////////////////////
 
-            var msgRes = new ClientMessageResult {MessageType = MessageType.Success, Obj = returnGuidList};
+            var msgRes = new ClientMessageResult { MessageType = MessageType.Success, Obj = returnGuidList };
             return msgRes;
         }
 
@@ -332,18 +332,16 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Update(QuestionGroupUpdateViewModel questionGroupViewModel)
         {
             var questionGroup = _questionGroups
-                .First(current => current.Id == questionGroupViewModel.Id);
-            if (!string.IsNullOrEmpty(questionGroupViewModel.Title))
-            {
-                questionGroup.Title = questionGroupViewModel.Title;
-            }
+                .FirstOrDefault(current => current.Id == questionGroupViewModel.Id);
 
-            if (questionGroupViewModel.LessonId != 0 && questionGroupViewModel.LessonId != null)
-            {
+            if(questionGroup==null)
+                return ClientMessageResult.NotFound();
+
+            if (!string.IsNullOrEmpty(questionGroupViewModel.Title))
+                questionGroup.Title = questionGroupViewModel.Title;
+
+            if (questionGroupViewModel.LessonId != 0)
                 questionGroup.LessonId = questionGroupViewModel.LessonId;
-            }
-            
-            
 
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
@@ -355,14 +353,14 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        /// todo: delete all questions in one commit
-        public MessageResultClient Delete(int id)
+        public ClientMessageResult Delete(int id)
         {
-            var questionGroupViewModel = GetById(id);
-            if (questionGroupViewModel == null)
-            {
-                return Mapper.Map<MessageResultClient>(Utility.NotFoundMessage());
-            }
+            var questionGroup = _questionGroups
+                .Include(current => current.Questions)
+                .First(current => current.Id == id);
+
+            if (questionGroup == null)
+                return ClientMessageResult.NotFound();
 
             //remove questions relation
             var questions = questionGroup.Questions.ToList();
@@ -372,12 +370,23 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.MarkAsDeleted(item);
             }
 
-            
-
             _uow.MarkAsDeleted(questionGroup);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<MessageResultClient>(msgRes);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                //remove questions file
+                foreach (var item in questions)
+                {
+                    File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".docx");
+                    File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".png");
+                }
+
+                File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".docx");
+                File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".xlsx");
+            }
+
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
         public bool IsQuestionParagraph(string s)

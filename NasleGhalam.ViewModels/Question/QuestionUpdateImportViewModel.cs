@@ -1,25 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System;
 using System.Collections.Generic;
-using NasleGhalam.ViewModels._MediaFormatter;
 using NasleGhalam.ViewModels._Attributes;
 
 namespace NasleGhalam.ViewModels.Question
 {
-    public class QuestionUpdateImportViewModel :IMultiPartMediaTypeFormatter
+    public class QuestionUpdateImportViewModel
     {
-        
         public int Id { get; set; }      
 
         [Display(Name = "شماره سوال ")]
         public int QuestionNumber { get; set; }
 
         [Display(Name = "نوع سوال ")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_QuestionType { get; set; }
 
         [Display(Name = "نوع طراح")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(NasleGhalam.ViewModels.ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_AuthorType { get; set; }
 
         [Display(Name = "نام طراح")]

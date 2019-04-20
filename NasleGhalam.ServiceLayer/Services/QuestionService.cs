@@ -27,7 +27,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _questions = uow.Set<Question>();
         }
 
-
         /// <summary>
         /// گرفتن  سوال با آی دی
         /// </summary>
@@ -81,7 +80,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
         /// <summary>
         /// گرفتن همه سوال های سوال گروهی
         /// </summary>
@@ -95,7 +93,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<QuestionViewModel>)
                 .ToList();
         }
-
 
         /// <summary>
         /// ثبت سوال
@@ -156,8 +153,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             _questions.Add(question);
             _uow.ValidateOnSaveEnabled(false);
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
                 //crop and resize
@@ -187,16 +184,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 File.Delete(wordFilename);
 
             }
-            msgRes.Id = question.Id;
-            var resultVal = Mapper.Map<ClientMessageResult>(msgRes);
-            resultVal.Obj = new
-            {
-                question.Context,
-                question.FileName
-            };
-            return resultVal;
-        }
 
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(question.Id);
+            return clientResult;
+        }
 
         /// <summary>
         /// ویرایش سوال
@@ -212,12 +205,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Tags)
                 .First(current => current.Id == questionViewModel.Id);
 
-            String previousFileName = questionViewModel.FileName;
+            var previousFileName = questionViewModel.FileName;
             questionViewModel.FileName = Guid.NewGuid().ToString();
-            String target = "";
+            var target = "";
             dynamic bits = null;
-            bool haveFileUpdate = false;
-            string wordFilename = "";
+            var haveFileUpdate = false;
+            var wordFilename = "";
             if (word != null && word.ContentLength > 0)
             {
                 haveFileUpdate = true;
@@ -244,11 +237,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 doc.Close();
                 app.Quit();
-
-
-
             }
-
 
             question.AuthorName = questionViewModel.AuthorName;
             question.Description = questionViewModel.Description;
@@ -308,8 +297,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             _uow.MarkAsChanged(question);
             _uow.ValidateOnSaveEnabled(false);
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
             {
                 if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".docx"))
                 {
@@ -346,10 +335,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
                 File.Delete(wordFilename);
-
             }
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(question.Id);
+            return clientResult;
         }
 
         /// <summary>
@@ -366,12 +357,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Tags)
                 .First(current => current.Id == questionViewModel.Id);
 
-            String previousFileName = questionViewModel.FileName;
+            var previousFileName = questionViewModel.FileName;
             questionViewModel.FileName = Guid.NewGuid().ToString();
-            String target = "";
+            var target = "";
             dynamic bits = null;
-            bool haveFileUpdate = false;
-            string wordFilename = "";
+            var haveFileUpdate = false;
+            var wordFilename = "";
             if (word != null && word.ContentLength > 0)
             {
                 haveFileUpdate = true;
@@ -399,11 +390,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 doc.Close();
                 app.Quit();
 
-
-
             }
-
-
             question.AuthorName = questionViewModel.AuthorName;
             question.Description = questionViewModel.Description;
             question.LookupId_AuthorType = questionViewModel.LookupId_AuthorType;
@@ -413,7 +400,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //delete tag
             var deleteTagList = question.Tags
-                .Where(oldTag => questionViewModel.TagsId.All(newTagId => newTagId != oldTag.Id))
+                .Where(oldTag => questionViewModel.TagIds.All(newTagId => newTagId != oldTag.Id))
                 .ToList();
             foreach (var tag in deleteTagList)
             {
@@ -421,7 +408,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             //add tag
-            var addTagList = questionViewModel.TagsId
+            var addTagList = questionViewModel.TagIds
                 .Where(oldTagId => question.Tags.All(newTag => newTag.Id != oldTagId))
                 .ToList();
             foreach (var tagId in addTagList)
@@ -433,8 +420,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             _uow.MarkAsChanged(question);
             _uow.ValidateOnSaveEnabled(false);
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
             {
                 if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".docx"))
                 {
@@ -471,10 +458,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
                 File.Delete(wordFilename);
-
             }
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(question.Id);
+            return clientResult;
         }
 
         /// <summary>
@@ -491,12 +480,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Tags)
                 .First(current => current.Id == questionViewModel.Id);
 
-            String previousFileName = questionViewModel.FileName;
+            var previousFileName = questionViewModel.FileName;
             questionViewModel.FileName = Guid.NewGuid().ToString();
-            String target = "";
+            var target = "";
             dynamic bits = null;
-            bool haveFileUpdate = false;
-            string wordFilename = "";
+            var haveFileUpdate = false;
+            var wordFilename = "";
             if (word != null && word.ContentLength > 0)
             {
                 haveFileUpdate = true;
@@ -523,19 +512,14 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 doc.Close();
                 app.Quit();
-
-
-
             }
-
-
 
             question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
             question.AnswerNumber = questionViewModel.AnswerNumber;
 
             //delete topics
             var deleteTopicList = question.Topics
-                .Where(oldTopic => questionViewModel.TopicsId.All(newTopicId => newTopicId != oldTopic.Id))
+                .Where(oldTopic => questionViewModel.TopicIds.All(newTopicId => newTopicId != oldTopic.Id))
                 .ToList();
             foreach (var topic in deleteTopicList)
             {
@@ -543,7 +527,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             //add topics
-            var addTopicList = questionViewModel.TopicsId
+            var addTopicList = questionViewModel.TopicIds
                 .Where(oldTopicId => question.Topics.All(newTopic => newTopic.Id != oldTopicId))
                 .ToList();
             foreach (var topicId in addTopicList)
@@ -555,7 +539,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //delete tag
             var deleteTagList = question.Tags
-                .Where(oldTag => questionViewModel.TagsId.All(newTagId => newTagId != oldTag.Id))
+                .Where(oldTag => questionViewModel.TagIds.All(newTagId => newTagId != oldTag.Id))
                 .ToList();
             foreach (var tag in deleteTagList)
             {
@@ -563,7 +547,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             //add tag
-            var addTagList = questionViewModel.TagsId
+            var addTagList = questionViewModel.TagIds
                 .Where(oldTagId => question.Tags.All(newTag => newTag.Id != oldTagId))
                 .ToList();
             foreach (var tagId in addTagList)
@@ -575,8 +559,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             _uow.MarkAsChanged(question);
             _uow.ValidateOnSaveEnabled(false);
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
             {
                 if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".docx"))
                 {
@@ -613,10 +597,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
                 File.Delete(wordFilename);
-
             }
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(question.Id);
+            return clientResult;
         }
 
         /// <summary>
@@ -640,7 +626,6 @@ namespace NasleGhalam.ServiceLayer.Services
             foreach (var item in topics)
             {
                 question.Topics.Remove(item);
-
             }
 
             //remove tags

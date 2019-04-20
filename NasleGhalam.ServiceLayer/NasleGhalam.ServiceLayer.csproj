@@ -125,7 +125,6 @@
     <Compile Include="Jwt\JsonWebToken.cs" />
     <Compile Include="Jwt\JwtPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="App_Readme\Elmah.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -196,6 +195,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Readme\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

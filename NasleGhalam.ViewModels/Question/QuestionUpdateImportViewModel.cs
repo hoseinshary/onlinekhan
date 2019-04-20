@@ -30,6 +30,6 @@ namespace NasleGhalam.ViewModels.Question
 
         public int AnswerNumber { get; set; }
 
-        public List<int> TagsId { get; set; } = new List<int>();
+        public List<int> TagIds { get; set; } = new List<int>();
     }
 }

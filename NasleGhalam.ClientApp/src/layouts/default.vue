@@ -146,4 +146,8 @@ export default {
   color: white;
   padding-left: 15px;
 }
+
+.layout-drawer aside .q-collapsible i.q-icon {
+  color: white;
+}
 </style>

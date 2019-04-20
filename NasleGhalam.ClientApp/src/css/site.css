@@ -24,3 +24,9 @@ body {
   max-height: 200px;
   overflow-y: auto;
 }
+
+.img-original-width {
+  max-width: 100% !important;
+  width: inherit !important;
+  height: auto;
+}

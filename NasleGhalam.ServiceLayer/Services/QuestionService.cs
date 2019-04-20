@@ -257,7 +257,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //delete topics
             var deleteTopicList = question.Topics
-                .Where(oldTopic => questionViewModel.TopicsId.All(newTopicId => newTopicId != oldTopic.Id))
+                .Where(oldTopic => questionViewModel.TopicIds.All(newTopicId => newTopicId != oldTopic.Id))
                 .ToList();
             foreach (var topic in deleteTopicList)
             {
@@ -265,7 +265,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             //add topics
-            var addTopicList = questionViewModel.TopicsId
+            var addTopicList = questionViewModel.TopicIds
                 .Where(oldTopicId => question.Topics.All(newTopic => newTopic.Id != oldTopicId))
                 .ToList();
             foreach (var topicId in addTopicList)
@@ -277,7 +277,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //delete tag
             var deleteTagList = question.Tags
-                .Where(oldTag => questionViewModel.TagsId.All(newTagId => newTagId != oldTag.Id))
+                .Where(oldTag => questionViewModel.TagIds.All(newTagId => newTagId != oldTag.Id))
                 .ToList();
             foreach (var tag in deleteTagList)
             {
@@ -285,7 +285,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             //add tag
-            var addTagList = questionViewModel.TagsId
+            var addTagList = questionViewModel.TagIds
                 .Where(oldTagId => question.Tags.All(newTag => newTag.Id != oldTagId))
                 .ToList();
             foreach (var tagId in addTagList)

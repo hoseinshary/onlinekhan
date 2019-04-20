@@ -181,7 +181,7 @@ export class QuestionStore extends VuexModule {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
-    var wordFile = this._createVue.$refs.wordFile;
+    var wordFile = vm.$refs.wordFile;
     var msg = "";
 
     if (wordFile["files"].length == 0) {
@@ -243,23 +243,56 @@ export class QuestionStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    return axios
-      .post(`${baseUrl}/Update`, this.question)
-      .then((response: AxiosResponse<IMessageResult>) => {
-        let data = response.data;
-        this.notify({ vm, data });
+    var wordFile = vm.$refs.wordFile;
+    var msg = "";
+    if (this.question.TopicIds && this.question.TopicIds.length == 0) {
+      msg += "مبحثی انتخاب نکرده اید.<br/>";
+    }
+    if (
+      this.question.LookupId_QuestionType == 6 &&
+      (this.question.AnswerNumber < 1 || this.question.AnswerNumber > 4)
+    ) {
+      msg += "گزینه صحیح انتخاب نشده است.";
+    }
 
-        if (data.MessageType == MessageType.Success) {
-          this.UPDATE(data.Obj);
-          this.OPEN_MODAL_EDIT(false);
-          this.resetEdit();
+    if (msg) {
+      this.notify({
+        vm: vm,
+        data: {
+          Message: msg,
+          MessageType: MessageType.Error,
+          Obj: null
         }
       });
+      return;
+    }
+
+    var formData = new FormData();
+    formData.append(wordFile["name"], wordFile["files"][0]);
+    var params = util.toParam(this.question);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/Update?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
+      let data = response.data;
+      this.notify({ vm, data });
+
+      if (data.MessageType == MessageType.Success) {
+        this.UPDATE(data.Obj);
+        this.OPEN_MODAL_EDIT(false);
+        this.resetEdit();
+      }
+    });
   }
 
   @action()
   async resetEdit() {
     this.RESET(this._editVue);
+    var wordFile = this._editVue.$refs.wordFile;
+    wordFile["reset"]();
   }
 
   @action()

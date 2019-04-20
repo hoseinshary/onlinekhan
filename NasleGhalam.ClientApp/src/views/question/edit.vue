@@ -1,215 +1,170 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 size='lg'
-                 @confirm="submitEditStore"
-                 @reset="resetEditStore"
-                 @close="toggleModalEditStore(false)"
-                 @open="getAllDdls()">
-
-    <q-card inline
-            class="col-12"
-            v-if="questionObj.FileName">
+  <base-modal-edit
+    :title="questionStore.modelName"
+    :show="questionStore.openModal.edit"
+    size="lg"
+    @confirm="questionStore.submitEdit"
+    @reset="questionStore.resetEdit"
+    @close="questionStore.OPEN_MODAL_EDIT(false)"
+    @open="open"
+  >
+    <q-card inline class="col-12" v-if="question.FileName">
       <q-card-media>
-        <img :src="questionObj.QuestionPicturePath">
+        <img :src="question.QuestionPicturePath" class="img-original-width">
       </q-card-media>
     </q-card>
 
     <div class="col-sm-4">
       <section class="q-ma-sm q-pa-sm shadow-1">
-        <q-input v-model="topicFilter"
-                 float-label="جستجوی مبحث"
-                 clearable />
-        <q-tree :nodes="topicTreeData"
-                tick-strategy="leaf"
-                color="primary"
-                accordion
-                node-key="Id"
-                ref="topicTree"
-                :filter="topicFilter"
-                :ticked.sync="questionObj.TopicsId" />
+        <q-input v-model="topicFilter" float-label="جستجوی مبحث" clearable/>
+        <q-tree
+          :nodes="topicTreeDataProp"
+          :filter="topicFilter"
+          :ticked.sync="question.TopicIds"
+          tick-strategy="leaf"
+          color="primary"
+          accordion
+          node-key="Id"
+        />
       </section>
 
       <section class="q-ma-sm q-pa-sm shadow-1">
-        <q-select filter
-                  chips
-                  multiple
-                  v-model="questionObj.TagsId"
-                  :options="tagDdl"
-                  float-label="تگ ها" />
+        <q-select
+          filter
+          chips
+          multiple
+          v-model="question.TagIds"
+          :options="tagStore.ddl"
+          float-label="تگ ها"
+        />
       </section>
 
       <q-slide-transition>
-        <section v-if="questionObj.LookupId_QuestionType==6"
-                 class="q-ma-sm q-pa-sm shadow-1">گزینه صحیح
-          <my-select :model="$v.questionObj.AnswerNumber"
-                     :options="answersDdl"
-                     class="col-md-4"
-                     filter />
+        <section v-if="question.LookupId_QuestionType==6" class="q-ma-sm q-pa-sm shadow-1">
+          گزینه صحیح
+          <base-select
+            :model="$v.question.AnswerNumber"
+            :options="answersDdl"
+            class="col-md-4"
+            filter
+          />
         </section>
       </q-slide-transition>
-
-      <a :href="questionObj.QuestionWordPath"
-         target="_blank">دانلود فایل ورد</a>
     </div>
 
     <div class="col-sm-8 row gutter-md">
       <q-field class="col-sm-4">
-        <q-uploader url="url"
-                    float-label="فایل سوال"
-                    name="word"
-                    hide-upload-button
-                    ref="wordFile"
-                    extensions=".doc,.docx" />
+        <q-uploader
+          url
+          float-label="فایل سوال"
+          name="word"
+          hide-upload-button
+          ref="wordFile"
+          extensions=".doc,.docx"
+        />
       </q-field>
-
-      <my-input :model="$v.questionObj.QuestionNumber"
-                class="col-md-4" />
-
-      <my-select :model="$v.questionObj.LookupId_QuestionType"
-                 :options="lookupQuestionType"
-                 class="col-md-4"
-                 filter />
-
-      <my-input :model="$v.questionObj.QuestionPoint"
-                class="col-md-4" />
-
-      <my-select :model="$v.questionObj.LookupId_QuestionHardnessType"
-                 :options="lookupQuestionHardnessType"
-                 class="col-md-4"
-                 filter />
-
-      <my-select :model="$v.questionObj.LookupId_RepeatnessType"
-                 :options="lookupQuestionRepeatnessType"
-                 class="col-md-4"
-                 filter />
-
-      <my-field class="col-md-4"
-                :model="$v.questionObj.UseEvaluation">
+      <base-input :model="$v.question.QuestionNumber" class="col-md-4"/>
+      <base-select
+        :model="$v.question.LookupId_QuestionType"
+        :options="lookupStore.questionTypeDdl"
+        class="col-md-4"
+        filter
+      />
+      <base-input :model="$v.question.QuestionPoint" class="col-md-4"/>
+      <base-select
+        :model="$v.question.LookupId_QuestionHardnessType"
+        :options="lookupStore.questionHardnessTypeDdl"
+        class="col-md-4"
+        filter
+      />
+      <base-select
+        :model="$v.question.LookupId_RepeatnessType"
+        :options="lookupStore.repeatnessTypeDdl"
+        class="col-md-4"
+        filter
+      />
+      <base-field class="col-md-4" :model="$v.question.UseEvaluation">
         <template slot-scope="data">
-          <q-radio v-model="data.obj.$model"
-                   :val="false"
-                   label="خیر" />
-          <q-radio v-model="data.obj.$model"
-                   :val="true"
-                   label="بلی" />
+          <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+          <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
         </template>
-      </my-field>
-
-      <my-field class="col-md-4"
-                :model="$v.questionObj.IsStandard">
+      </base-field>
+      <base-field class="col-md-4" :model="$v.question.IsStandard">
         <template slot-scope="data">
-          <q-radio v-model="data.obj.$model"
-                   :val="false"
-                   label="خیر" />
-          <q-radio v-model="data.obj.$model"
-                   :val="true"
-                   label="بلی" />
+          <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+          <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
         </template>
-      </my-field>
-
-      <my-select :model="$v.questionObj.LookupId_AuthorType"
-                 :options="lookupQuestionAuthorType"
-                 class="col-md-4"
-                 filter />
-
-      <my-input :model="$v.questionObj.AuthorName"
-                class="col-md-4" />
-
-      <my-select :model="$v.questionObj.LookupId_AreaType"
-                 :options="lookupTopicAreaTypeDdl"
-                 class="col-md-4"
-                 filter />
-
-      <my-input :model="$v.questionObj.ResponseSecond"
-                class="col-md-4" />
-
-      <my-input :model="$v.questionObj.Description"
-                class="col-md-4" />
+      </base-field>
+      <base-select
+        :model="$v.question.LookupId_AuthorType"
+        :options="lookupStore.authorTypeDdl"
+        class="col-md-4"
+        filter
+      />
+      <base-input :model="$v.question.AuthorName" class="col-md-4"/>
+      <base-select
+        :model="$v.question.LookupId_AreaType"
+        :options="lookupStore.areaTypeDdl"
+        class="col-md-4"
+        filter
+      />
+      <base-input :model="$v.question.ResponseSecond" class="col-md-4"/>
+      <base-input :model="$v.question.Description" class="col-12"/>
     </div>
-  </my-modal-edit>
+  </base-modal-edit>
 </template>
 
-<script>
-import viewModel from "viewModels/question/questionViewModel";
-import { mapState, mapActions, mapGetters } from "vuex";
-import util from "src/utilities";
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { questionValidations } from "src/validations/questionValidation";
 
-export default {
-  /**
-   * methods
-   */
-  data() {
-    return {
-      topicFilter: "",
-      answersDdl: [
-        { value: 1, label: "1" },
-        { value: 2, label: "2" },
-        { value: 3, label: "3" },
-        { value: 4, label: "4" }
-      ]
-    };
-  },
-  methods: {
-    ...mapActions("questionStore", [
-      "toggleModalEditStore",
-      "editVueStore",
-      "submitEditStore",
-      "resetEditStore"
-    ]),
-    ...mapActions("tagStore", {
-      fillTagDdlStore: "fillDdlStore"
-    }),
-    ...mapActions("lookupStore", [
-      "fillTopicAreaTypeDdlStore",
-      "getLookupQuestionType",
-      "getLookupQuestionHardnessType",
-      "getLookupQuestionRepeatnessType",
-      "getLookupQuestionAuthorType"
-    ]),
-    ...mapActions("topicStore", ["GetAllTreeStore"]),
-    getAllDdls() {
-      this.fillTagDdlStore();
-      this.getLookupQuestionType();
-      this.getLookupQuestionHardnessType();
-      this.getLookupQuestionRepeatnessType();
-      this.getLookupQuestionAuthorType();
-      this.fillTopicAreaTypeDdlStore();
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState("questionStore", {
-      modelName: "modelName",
-      questionObj: "questionObj",
-      isOpenModalEdit: "isOpenModalEdit"
-    }),
-    ...mapState("tagStore", {
-      tagDdl: "tagDdl"
-    }),
-    ...mapState("lookupStore", [
-      "lookupTopicAreaTypeDdl",
-      "lookupQuestionType",
-      "lookupQuestionHardnessType",
-      "lookupQuestionRepeatnessType",
-      "lookupQuestionAuthorType"
-    ]),
-    ...mapState("topicStore", {
-      topicTreeData: "topicTreeData"
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
-  created() {
-    this.editVueStore(this);
+@Component({
+  validations: questionValidations
+})
+export default class QuestionEditVue extends Vue {
+  $v: any;
+
+  //#region ### props ###
+  @Prop({ type: Array, required: true }) topicTreeDataProp;
+  //#endregion
+
+  //#region ### data ###
+  questionStore = vxm.questionStore;
+  lookupStore = vxm.lookupStore;
+  tagStore = vxm.tagStore;
+  topicStore = vxm.topicStore;
+  question = vxm.questionStore.question;
+  topicFilter = "";
+  //#endregion
+
+  //#region ### computed ###
+  get answersDdl() {
+    return [
+      { value: 1, label: "1" },
+      { value: 2, label: "2" },
+      { value: 3, label: "3" },
+      { value: 4, label: "4" }
+    ];
   }
-};
+  //#endregion
+
+  //#region ### methods ###
+  open() {
+    this.tagStore.fillList();
+    this.lookupStore.fillQuestionType();
+    this.lookupStore.fillQuestionHardnessType();
+    this.lookupStore.fillRepeatnessType();
+    this.lookupStore.fillAuthorType();
+    this.lookupStore.fillAreaType();
+  }
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.questionStore.SET_EDIT_VUE(this);
+  }
+  //#endregion
+}
 </script>
 

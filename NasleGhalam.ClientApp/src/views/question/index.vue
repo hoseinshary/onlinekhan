@@ -108,9 +108,9 @@
       :topicTreeDataProp="topicTreeData"
       :topicTickedIdsProp="topicTree.leafTicked"
     ></modal-create>
-    <!--<modal-edit v-if="canEdit"></modal-edit>
+    <modal-edit v-if="canEdit" :topicTreeDataProp="topicTreeData"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
-    <modal-question-judge></modal-question-judge>-->
+    <!--<modal-question-judge></modal-question-judge>-->
   </section>
 </template>
 
@@ -122,9 +122,9 @@ import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
   components: {
-    ModalCreate: () => import("./create.vue")
-    // ModalEdit: () => import("./edit.vue"),
-    // ModalDelete: () => import("./delete.vue")
+    ModalCreate: () => import("./create.vue"),
+    ModalEdit: () => import("./edit.vue"),
+    ModalDelete: () => import("./delete.vue")
   }
 })
 export default class QuestionVue extends Vue {
@@ -264,173 +264,5 @@ export default class QuestionVue extends Vue {
   }
   //#endregion
 }
-// import { mapState, mapActions } from "vuex";
-// import viewModel from "viewModels/question/questionIndexViewModel";
-
-// export default {
-//   components: {
-//     "modal-create": () => import("./create"),
-//     "modal-edit": () => import("./edit"),
-//     "modal-delete": () => import("./delete"),
-//     "modal-question-judge": () => import("../questionJudge/index")
-//   },
-//   /**
-//    * data
-//    */
-//   data() {
-//     var pageAccess = this.$util.initAccess("/question");
-//     return {
-//       pageAccess,
-//       educationTreeData: [],
-//       topicFilter: "",
-//       educationTreeFilter: "",
-//       showNoJudgement: false,
-//       showWithoutTopic: false,
-//       questionGridColumn: [
-//         {
-//           title: "متن سوال",
-//           data: "Context"
-//         },
-
-//         {
-//           title: "عملیات",
-//           data: "Id",
-//           searchable: false,
-//           sortable: false,
-//           visible: pageAccess.canEdit || pageAccess.canDelete
-//         }
-//       ]
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("questionStore", [
-//       "toggleModalCreateStore",
-//       "toggleModalEditStore",
-//       "toggleModalDeleteStore",
-//       "getByIdStore",
-//       "fillGridStore",
-//       "resetCreateStore",
-//       "resetEditStore"
-//     ]),
-//     ...mapActions("topicStore", {
-//       fillTopicTreeStore: "fillTreeStore"
-//     }),
-//     ...mapActions("educationTreeStore", {
-//       getAllGrade: "getAllGrade",
-//       fillEducationTreeStore: "fillTreeStore",
-//       fillEducationTreeByGradeIdStore: "fillTreeByGradeIdStore"
-//     }),
-//     ...mapActions("lessonStore", {
-//       fillLessonDdlStore: "fillDdlStore"
-//     }),
-//     ...mapActions("questionJudgeStore", {
-//       toggleModalQuestionJudgeStore: "toggleModalStore",
-//       fillGridQuestionJudgeByQuestionId: "fillGridStore"
-//     }),
-//     showModalCreate() {
-//       // reset data on modal show
-//       this.resetCreateStore();
-//       // show modal
-//       this.toggleModalCreateStore(true);
-//     },
-//     showModalEdit(id) {
-//       // reset data on modal show
-//       this.resetEditStore();
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalEditStore(true);
-//       });
-//     },
-//     showModalDelete(id) {
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalDeleteStore(true);
-//       });
-//     },
-//     showModalQuestionJudge(id) {
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.fillGridQuestionJudgeByQuestionId(id).then(() => {
-//           // show modal
-//           this.toggleModalQuestionJudgeStore({ isOpen: true, questionId: id });
-//         });
-//       });
-//       // get data by id
-//     },
-//     gradeDdlChange(val) {
-//       // filter lesson tree by gradeId
-//       var self = this;
-//       this.$util.clearArray(this.educationTreeData);
-//       this.$util.clearArray(this.topicTreeData);
-//       this.$util.clearArray(this.questionIndexObj.TickedEducationTreeIds);
-//       this.$util.clearArray(this.questionIndexObj.TickedTopicsIds);
-//       this.questionIndexObj.LessonId = 0;
-
-//       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
-//         self.educationTreeData = [treeData];
-//         setTimeout(() => {
-//           self.$refs.educationTree.expandAll();
-//         }, 300);
-//       });
-//     },
-//     lessonDdlChange(val) {
-//       this.questionIndexObj.LessonId = val;
-//       this.questionIndexObj.TickedTopicsIds = [];
-//       this.fillTopicTreeStore(val);
-//       if (this.showWithoutTopic) {
-//         this.fillGrid();
-//       }
-//     },
-//     fillGrid() {
-//       this.fillGridStore({
-//         lessonId: this.questionIndexObj.LessonId,
-//         topicsIds: this.questionIndexObj.TickedTopicsIds,
-//         showNoJudgement: this.showNoJudgement,
-//         showWithoutTopic: this.showWithoutTopic
-//       });
-//     }
-//   },
-//   computed: {
-//     ...mapState("questionStore", {
-//       modelName: "modelName",
-//       questionGridData: "questionGridData",
-//       questionIndexObj: "questionIndexObj"
-//     }),
-//     ...mapState("educationTreeStore", {
-//       educationTree_GradeDdl: "gradeDdl"
-//     }),
-//     ...mapState("lessonStore", {
-//       lessonDdl: "allObjDdl"
-//     }),
-//     ...mapState("topicStore", {
-//       topicTreeData: "topicTreeData"
-//     })
-//   },
-//   validations: viewModel,
-//   watch: {
-//     "questionIndexObj.TickedEducationTreeIds"(val) {
-//       this.questionIndexObj.LessonId = 0;
-//       this.$util.clearArray(this.questionIndexObj.TickedTopicsIds);
-//       this.$util.clearArray(this.topicTreeData);
-//       this.fillLessonDdlStore(val);
-//     },
-//     "questionIndexObj.TickedTopicsIds"(newVal, oldVal) {
-//       if (this.questionIndexObj.TickedTopicsIds.length > 0) {
-//         this.fillGrid();
-//       } else {
-//         this.$util.clearArray(this.questionGridData);
-//       }
-//     }
-//   },
-//   created() {
-//     this.getAllGrade();
-//     this.fillEducationTreeStore();
-//   }
-// };
 </script>
 

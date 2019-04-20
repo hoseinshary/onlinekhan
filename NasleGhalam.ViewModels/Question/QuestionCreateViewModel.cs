@@ -73,7 +73,6 @@ namespace NasleGhalam.ViewModels.Question
 
         public string FilePath { get; set; }
 
-
         [Display(Name = "گزینه صحیح")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [Range(1, 4, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]

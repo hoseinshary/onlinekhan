@@ -85,7 +85,8 @@
             <div v-else>{{data.row.Context}}</div>
           </template>
           <template slot="Id" slot-scope="data">
-            <!-- <q-btn
+            <q-btn
+              v-if="canQuestionJudge"
               outline
               round
               icon="list"
@@ -95,7 +96,7 @@
               @click="showModalQuestionJudge(data.row.Id)"
             >
               <q-tooltip>ارزیابی</q-tooltip>
-            </q-btn>-->
+            </q-btn>
             <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
             <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
@@ -110,7 +111,7 @@
     ></modal-create>
     <modal-edit v-if="canEdit" :topicTreeDataProp="topicTreeData"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
-    <!--<modal-question-judge></modal-question-judge>-->
+    <modal-question-judge v-if="canQuestionJudge"></modal-question-judge>
   </section>
 </template>
 
@@ -124,7 +125,8 @@ import { EducationTreeState } from "../../utilities/enumeration";
   components: {
     ModalCreate: () => import("./create.vue"),
     ModalEdit: () => import("./edit.vue"),
-    ModalDelete: () => import("./delete.vue")
+    ModalDelete: () => import("./delete.vue"),
+    ModalQuestionJudge: () => import("../questionJudge/index.vue")
   }
 })
 export default class QuestionVue extends Vue {
@@ -133,6 +135,7 @@ export default class QuestionVue extends Vue {
   topicStore = vxm.topicStore;
   educationTreeStore = vxm.educationTreeStore;
   lessonStore = vxm.lessonStore;
+  questionJudgeStore = vxm.questionJudgeStore;
   pageAccess = util.getAccess(this.questionStore.modelName);
   questionGridColumn = [
     {
@@ -165,6 +168,10 @@ export default class QuestionVue extends Vue {
 
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
+  }
+
+  get canQuestionJudge() {
+    return this.pageAccess.indexOf("مشاهده کارشناسی") > -1;
   }
 
   get educationTree_GradeDdl() {
@@ -251,6 +258,14 @@ export default class QuestionVue extends Vue {
       topicIds: this.topicTree.leafTicked,
       showNoJudgement: this.showNoJudgement,
       showWithoutTopic: this.showWithoutTopic
+    });
+  }
+
+  showModalQuestionJudge(id) {
+    this.questionStore.getById(id).then(() => {
+      this.questionJudgeStore.fillListByQuestionId(id).then(() => {
+        this.questionJudgeStore.OPEN_MODAL_INDEX(true);
+      });
     });
   }
   //#endregion

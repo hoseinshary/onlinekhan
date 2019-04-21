@@ -1,35 +1,26 @@
 <template>
-  <my-modal-delete :title="modelName"
-                   :recordName="recordName"
-                   :show="isOpenModalDelete"
-                   @confirm="submitDelete"
-                   @close="toggleModalDeleteStore(false)">
-  </my-modal-delete>
+  <base-modal-delete
+    :title="questionJudgeStore.modelName"
+    recordName="رکورد"
+    :show="questionJudgeStore.openModal.delete"
+    @confirm="confirm"
+    @close="questionJudgeStore.openModal.delete=false"
+  ></base-modal-delete>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+@Component
+export default class QuestionJudgeDeleteVue extends Vue {
+  //#region ### data ###
+  questionJudgeStore = vxm.questionJudgeStore;
+  //#endregion
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('questionJudgeStore', ['toggleModalDeleteStore', 'submitDeleteStore']),
-    submitDelete() {
-      this.submitDeleteStore(this);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('questionJudgeStore', {
-      modelName: 'modelName',
-      isOpenModalDelete: 'isOpenModalDelete'
-    }),
-    ...mapGetters('questionJudgeStore', ['recordName'])
+  //#region ### methods ###
+  confirm() {
+    this.questionJudgeStore.submitDelete(this);
   }
-};
-</script>
-
+  //#endregion
+}
+</script> 

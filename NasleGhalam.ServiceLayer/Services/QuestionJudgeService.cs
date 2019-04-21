@@ -37,6 +37,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public QuestionJudgeViewModel GetById(int id)
         {
             return _questionJudges
+                .Include(current => current.Lookup_QuestionHardnessType)
+                .Include(current => current.Lookup_RepeatnessType)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -52,6 +54,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionJudgeViewModel> GetAllByQuestionId(int questionId)
         {
             return _questionJudges
+                .Include(current => current.Lookup_QuestionHardnessType)
+                .Include(current => current.Lookup_RepeatnessType)
                 .Where(current => current.QuestionId == questionId)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -64,105 +68,16 @@ namespace NasleGhalam.ServiceLayer.Services
         /// ثبت کارشناسی سوال
         /// </summary>
         /// <param name="questionJudgeViewModel"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel, int userid)
+        public ClientMessageResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel, int userId)
         {
-
             var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
-            questionJudge.UserId = userid;
+            questionJudge.UserId = userId;
             _questionJudges.Add(questionJudge);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-
-            if (msgRes.MessageType == MessageType.Success)
-            {
-                if (_questionJudges.Count(current => current.QuestionId == questionJudgeViewModel.QuestionId) >= NumberOfJudges)
-                {
-                    var questionJudges = _questionJudges
-                        .Where(current => current.QuestionId == questionJudgeViewModel.QuestionId)
-                        .Include(current => current.Lookup_QuestionHardnessType)
-                        .Include(current => current.Lookup_RepeatnessType)
-                        .OrderByDescending(current => current.Id).Take(NumberOfJudges).ToList();
-
-                    double lookup_questionhardness = 0;
-                    double lookup_repeatness = 0;
-                    int count_isStandard = 0;
-                    int count_isDelete = 0;
-                    int count_isUpdate = 0;
-                    int count_isLearning = 0;
-                    int responseTime = 0;
-
-                    foreach (var judge in questionJudges)
-                    {
-                        if (judge.IsDelete == true)
-                            count_isDelete++;
-                        if (judge.IsUpdate == true)
-                            count_isUpdate++;
-                        if (judge.IsStandard == true)
-                            count_isStandard++;
-                        if (judge.IsLearning == true)
-                            count_isLearning++;
-
-                        lookup_questionhardness += judge.Lookup_QuestionHardnessType.State;
-                        lookup_repeatness += judge.Lookup_RepeatnessType.State;
-
-                        responseTime += judge.ResponseSecond;
-                    }
-
-                    var updateQuestion = _questions.First(x => x.Id == questionJudgeViewModel.QuestionId);
-                    updateQuestion.ResponseSecond = Convert.ToInt16( responseTime / NumberOfJudges);
-                    if (count_isStandard > NumberOfJudges / 2)
-                        updateQuestion.IsStandard = true;
-                    else
-                        updateQuestion.IsStandard = false;
-
-                    if (count_isLearning > NumberOfJudges / 2)
-                        updateQuestion.IsLearning = true;
-                    else
-                        updateQuestion.IsLearning = false;
-
-                    if (count_isDelete > NumberOfJudges / 2)
-                        updateQuestion.IsDelete = true;
-                    else
-                        updateQuestion.IsDelete = false;
-
-                    if (count_isUpdate > NumberOfJudges / 2)
-                        updateQuestion.IsUpdate = true;
-                    else
-                        updateQuestion.IsUpdate = false;
-
-                    updateQuestion.LookupId_QuestionHardnessType = _lookups
-                        .First(x=> x.Name=="QuestionHardnessType" && x.State == (int)Math.Round(lookup_questionhardness/NumberOfJudges))
-                        .Id;
-
-                    updateQuestion.LookupId_RepeatnessType= _lookups
-                        .First(x => x.Name == "RepeatnessType" && x.State == (int)Math.Round(lookup_repeatness / NumberOfJudges))
-                        .Id;
-
-                    _uow.MarkAsChanged(updateQuestion);
-                    _uow.ValidateOnSaveEnabled(false);
-                    var msgResUpdate = _uow.CommitChanges(CrudType.Update, Title);
-                }
-            }
-
-            msgRes.Id = questionJudge.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// ویرایش کارشناسی سوال
-        /// </summary>
-        /// <param name="questionJudgeViewModel"></param>
-        /// <returns></returns>
-        public ClientMessageResult Update(QuestionJudgeUpdateViewModel questionJudgeViewModel)
-        {
-            var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
-            _uow.MarkAsChanged(questionJudge);
-
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-
-            if (msgRes.MessageType == MessageType.Success)
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            if (serverResult.MessageType == MessageType.Success)
             {
                 if (_questionJudges.Count(current => current.QuestionId == questionJudgeViewModel.QuestionId) >= NumberOfJudges)
                 {
@@ -233,7 +148,101 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
             }
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(questionJudge.Id);
+            return clientResult;
+        }
+
+
+        /// <summary>
+        /// ویرایش کارشناسی سوال
+        /// </summary>
+        /// <param name="questionJudgeViewModel"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public ClientMessageResult Update(QuestionJudgeUpdateViewModel questionJudgeViewModel, int userId)
+        {
+            var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
+            questionJudge.UserId = userId;
+            _uow.MarkAsChanged(questionJudge);
+
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            if (serverResult.MessageType == MessageType.Success)
+            {
+                if (_questionJudges.Count(current => current.QuestionId == questionJudgeViewModel.QuestionId) >= NumberOfJudges)
+                {
+                    var questionJudges = _questionJudges
+                        .Where(current => current.QuestionId == questionJudgeViewModel.QuestionId)
+                        .Include(current => current.Lookup_QuestionHardnessType)
+                        .Include(current => current.Lookup_RepeatnessType)
+                        .OrderByDescending(current => current.Id).Take(NumberOfJudges).ToList();
+
+                    double lookup_questionhardness = 0;
+                    double lookup_repeatness = 0;
+                    int count_isStandard = 0;
+                    int count_isDelete = 0;
+                    int count_isUpdate = 0;
+                    int count_isLearning = 0;
+                    int responseTime = 0;
+
+                    foreach (var judge in questionJudges)
+                    {
+                        if (judge.IsDelete == true)
+                            count_isDelete++;
+                        if (judge.IsUpdate == true)
+                            count_isUpdate++;
+                        if (judge.IsStandard == true)
+                            count_isStandard++;
+                        if (judge.IsLearning == true)
+                            count_isLearning++;
+
+                        lookup_questionhardness += judge.Lookup_QuestionHardnessType.State;
+                        lookup_repeatness += judge.Lookup_RepeatnessType.State;
+
+                        responseTime += judge.ResponseSecond;
+                    }
+
+                    var updateQuestion = _questions.First(x => x.Id == questionJudgeViewModel.QuestionId);
+                    updateQuestion.ResponseSecond = Convert.ToInt16(responseTime / NumberOfJudges);
+                    if (count_isStandard > NumberOfJudges / 2)
+                        updateQuestion.IsStandard = true;
+                    else
+                        updateQuestion.IsStandard = false;
+
+                    if (count_isLearning > NumberOfJudges / 2)
+                        updateQuestion.IsLearning = true;
+                    else
+                        updateQuestion.IsLearning = false;
+
+                    if (count_isDelete > NumberOfJudges / 2)
+                        updateQuestion.IsDelete = true;
+                    else
+                        updateQuestion.IsDelete = false;
+
+                    if (count_isUpdate > NumberOfJudges / 2)
+                        updateQuestion.IsUpdate = true;
+                    else
+                        updateQuestion.IsUpdate = false;
+
+                    updateQuestion.LookupId_QuestionHardnessType = _lookups
+                        .First(x => x.Name == "QuestionHardnessType" && x.State == (int)Math.Round(lookup_questionhardness / NumberOfJudges))
+                        .Id;
+
+                    updateQuestion.LookupId_RepeatnessType = _lookups
+                        .First(x => x.Name == "RepeatnessType" && x.State == (int)Math.Round(lookup_repeatness / NumberOfJudges))
+                        .Id;
+
+                    _uow.MarkAsChanged(updateQuestion);
+                    _uow.ValidateOnSaveEnabled(false);
+                    var msgResUpdate = _uow.CommitChanges(CrudType.Update, Title);
+                }
+            }
+
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(questionJudge.Id);
+            return clientResult;
         }
 
 
@@ -258,6 +267,6 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-    
+
     }
 }

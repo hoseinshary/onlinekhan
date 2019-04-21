@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NasleGhalam.ViewModels.Lookup;
 
 namespace NasleGhalam.ViewModels.QuestionJudge
 {
@@ -6,28 +6,32 @@ namespace NasleGhalam.ViewModels.QuestionJudge
     {
         public int Id { get; set; }
 
-        [Display(Name = "")]
-        public int LookupId_QuestionHardnessType { get; set; }
-
-        [Display(Name = "")]
-        public int LookupId_RepeatnessType { get; set; }
-
-        [Display(Name = "")]
         public bool IsStandard { get; set; }
 
-        [Display(Name = "")]
         public bool IsDelete { get; set; }
 
-        [Display(Name = "")]
         public bool IsUpdate { get; set; }
 
-        [Display(Name = "")]
         public bool IsLearning { get; set; }
 
-        [Display(Name = "")]
+        public string IsStandardName => IsStandard ? "بلی" : "خیر";
+
+        public string IsDeleteName => IsDelete ? "بلی" : "خیر";
+
+        public string IsUpdateName => IsUpdate ? "بلی" : "خیر";
+
+        public string IsLearningName => IsLearning ? "بلی" : "خیر";
+
         public short ResponseSecond { get; set; }
 
-        [Display(Name = "")]
         public int QuestionId { get; set; }
+
+        public int LookupId_QuestionHardnessType { get; set; }
+
+        public int LookupId_RepeatnessType { get; set; }
+
+        public LookupViewModel Lookup_QuestionHardnessType { get; set; }
+
+        public LookupViewModel Lookup_RepeatnessType { get; set; }
     }
 }

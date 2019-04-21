@@ -1,106 +1,69 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 @confirm="submitEditStore"
-                 @reset="resetEditStore"
-                 @close="toggleModalEditStore(false)">
-
-    <my-field class="col-md-6"
-              :model="$v.questionJudgeObj.IsStandard">
+  <section class="row gutter-sm shadow-1 q-pa-sm q-ma-sm">
+    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6" helper="ثانیه"/>
+    <div class="row"></div>
+    <base-select
+      :model="$v.questionJudge.LookupId_RepeatnessType"
+      :options="lookupStore.repeatnessTypeDdl"
+      class="col-md-6"
+      clearable
+    />
+    <base-select
+      :model="$v.questionJudge.LookupId_QuestionHardnessType"
+      :options="lookupStore.questionHardnessTypeDdl"
+      class="col-md-6"
+      clearable
+    />
+    <base-field class="col-md-6" :model="$v.questionJudge.IsStandard">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
-    </my-field>
-
-    <my-field class="col-md-6"
-              :model="$v.questionJudgeObj.IsDelete">
+    </base-field>
+    <base-field class="col-md-6" :model="$v.questionJudge.IsLearning">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
-    </my-field>
-
-    <my-field class="col-md-6"
-              :model="$v.questionJudgeObj.IsUpdate">
+    </base-field>
+    <base-field class="col-md-6" :model="$v.questionJudge.IsUpdate">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
-    </my-field>
-
-    <my-field class="col-md-6"
-              :model="$v.questionJudgeObj.IsLearning">
+    </base-field>
+    <base-field class="col-md-6" :model="$v.questionJudge.IsDelete">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 val="false"
-                 label="false" />
-        <q-radio v-model="data.obj.$model"
-                 val="true"
-                 label="true" />
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
-    </my-field>
-
-    <my-input :model="$v.questionJudgeObj.ResponseSecond"
-              class="col-md-6" />
-
-    <!-- <my-select :model="$v.questionJudgeObj.LookupId_RepeatnessType" :options="" class="col-md-6" clearable />
-          
-          <my-select :model="$v.questionJudgeObj.LookupId_QuestionHardnessType" :options="" class="col-md-6" clearable />
-          
-           -->
-
-  </my-modal-edit>
+    </base-field>
+    <base-btn-edit @click="questionJudgeStore.submitEdit()"/>
+  </section>
 </template>
 
-<script>
-import viewModel from "viewModels/questionJudgeViewModel";
-import { mapState, mapActions } from "vuex";
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { questionJudgeValidations } from "src/validations/questionJudgeValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions("questionJudgeStore", [
-      "toggleModalEditStore",
-      "editVueStore",
-      "submitEditStore",
-      "resetEditStore"
-    ])
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState("questionJudgeStore", {
-      modelName: "modelName",
-      questionJudgeObj: "questionJudgeObj",
-      isOpenModalEdit: "isOpenModalEdit"
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: questionJudgeValidations
+})
+export default class QuestionJudgeEditVue extends Vue {
+  $v: any;
+
+  //#region ### data ###
+  questionJudgeStore = vxm.questionJudgeStore;
+  questionJudge = this.questionJudgeStore.questionJudge;
+  lookupStore = vxm.lookupStore;
+  //#endregion
+
+  //#region ### hooks ###
   created() {
-    this.editVueStore(this);
+    this.questionJudgeStore.SET_EDIT_VUE(this);
   }
-};
+  //#endregion
+}
 </script>
 

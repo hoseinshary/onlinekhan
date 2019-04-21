@@ -42,7 +42,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
                         // if public action 
                         if (_actionBits == null ||
                             _actionBits.Length == 0 ||
-                            _actionBits[0] == (short)ActionBits.PublicAcceess)
+                            _actionBits[0] == (short)ActionBits.PublicAccess)
                         {
                             isAuthenticated = true;
                         }

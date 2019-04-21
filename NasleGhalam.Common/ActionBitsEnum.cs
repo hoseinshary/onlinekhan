@@ -2,7 +2,7 @@
 {
     public enum ActionBits
     {
-        PublicAcceess = 0,
+        PublicAccess = 0,
 
         LessonReadAccess = 1,
         LessonCreateAccess = 2,

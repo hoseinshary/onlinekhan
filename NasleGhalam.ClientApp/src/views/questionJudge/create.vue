@@ -1,122 +1,119 @@
 <template>
   <section class="row gutter-sm shadow-1 q-pa-sm q-ma-sm">
-
-    <my-input :model="$v.questionJudgeObj.ResponseSecond"
-              class="col-md-6"
-              helper="ثانیه" />
-
+    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6" helper="ثانیه"/>
     <div class="row"></div>
-
-    <my-select :model="$v.questionJudgeObj.LookupId_RepeatnessType"
-               :options="lookupQuestionRepeatnessType"
-               class="col-md-6"
-               clearable />
-
-    <my-select :model="$v.questionJudgeObj.LookupId_QuestionHardnessType"
-               :options="lookupQuestionHardnessType"
-               class="col-md-6"
-               clearable />
-
-    <my-field class="col-md-6"
-              :model="$v.questionJudgeObj.IsStandard">
+    <base-select
+      :model="$v.questionJudge.LookupId_RepeatnessType"
+      :options="lookupStore.repeatnessTypeDdl"
+      class="col-md-6"
+      clearable
+    />
+    <base-select
+      :model="$v.questionJudge.LookupId_QuestionHardnessType"
+      :options="lookupStore.questionHardnessTypeDdl"
+      class="col-md-6"
+      clearable
+    />
+    <base-field class="col-md-6" :model="$v.questionJudge.IsStandard">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="خیر" />
-        <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="بلی" />
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
-    </my-field>
-
-    <my-field class="col-md-6"
-              :model="$v.questionJudgeObj.IsLearning">
+    </base-field>
+    <base-field class="col-md-6" :model="$v.questionJudge.IsLearning">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="خیر" />
-        <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="بلی" />
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
-    </my-field>
-
-    <my-field class="col-md-6"
-              :model="$v.questionJudgeObj.IsUpdate">
+    </base-field>
+    <base-field class="col-md-6" :model="$v.questionJudge.IsUpdate">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="خیر" />
-        <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="بلی" />
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
-    </my-field>
-
-    <my-field class="col-md-6"
-              :model="$v.questionJudgeObj.IsDelete">
+    </base-field>
+    <base-field class="col-md-6" :model="$v.questionJudge.IsDelete">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="خیر" />
-        <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="بلی" />
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
-    </my-field>
-    <my-btn-create @click="submitCreateStore()" />
+    </base-field>
+    <base-btn-create @click="questionJudgeStore.submitCreate()"/>
   </section>
 </template>
 
-<script>
-import viewModel from "viewModels/questionJudgeViewModel";
-import { mapState, mapActions } from "vuex";
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { questionJudgeValidations } from "src/validations/questionJudgeValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions("questionJudgeStore", [
-      "toggleModalCreateStore",
-      "createVueStore",
-      "submitCreateStore",
-      "resetCreateStore"
-    ]),
-    ...mapActions("lookupStore", [
-      "getLookupQuestionHardnessType",
-      "getLookupQuestionRepeatnessType"
-    ]),
-    fillAllDdls() {
-      this.getLookupQuestionHardnessType();
-      this.getLookupQuestionRepeatnessType();
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState("questionJudgeStore", {
-      modelName: "modelName",
-      questionJudgeObj: "questionJudgeObj",
-      isOpenModalCreate: "isOpenModalCreate"
-    }),
-    ...mapState("lookupStore", [
-      "lookupQuestionHardnessType",
-      "lookupQuestionRepeatnessType"
-    ])
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: questionJudgeValidations
+})
+export default class QuestionJudgeCreateVue extends Vue {
+  $v: any;
+
+  //#region ### data ###
+  questionJudgeStore = vxm.questionJudgeStore;
+  questionJudge = this.questionJudgeStore.questionJudge;
+  lookupStore = vxm.lookupStore;
+  //#endregion
+
+  //#region ### hooks ###
   created() {
-    this.createVueStore(this);
-    this.fillAllDdls();
+    this.questionJudgeStore.SET_CREATE_VUE(this);
   }
-};
+  //#endregion
+}
+
+// import viewModel from "viewModels/questionJudgeViewModel";
+// import { mapState, mapActions } from "vuex";
+
+// export default {
+//   /**
+//    * methods
+//    */
+//   methods: {
+//     ...mapActions("questionJudgeStore", [
+//       "toggleModalCreateStore",
+//       "createVueStore",
+//       "submitCreateStore",
+//       "resetCreateStore"
+//     ]),
+//     ...mapActions("lookupStore", [
+//       "getLookupQuestionJudgeHardnessType",
+//       "getLookupQuestionJudgeRepeatnessType"
+//     ]),
+//     fillAllDdls() {
+//       this.getLookupQuestionJudgeHardnessType();
+//       this.getLookupQuestionJudgeRepeatnessType();
+//     }
+//   },
+//   /**
+//    * computed
+//    */
+//   computed: {
+//     ...mapState("questionJudgeStore", {
+//       modelName: "modelName",
+//       questionJudge: "questionJudge",
+//       isOpenModalCreate: "isOpenModalCreate"
+//     }),
+//     ...mapState("lookupStore", [
+//       "lookupQuestionJudgeHardnessType",
+//       "lookupQuestionJudgeRepeatnessType"
+//     ])
+//   },
+//   /**
+//    * validations
+//    */
+//   validations: viewModel,
+//   /**
+//    * created
+//    */
+//   created() {
+//     this.createVueStore(this);
+//     this.fillAllDdls();
+//   }
+// };
 </script>
 

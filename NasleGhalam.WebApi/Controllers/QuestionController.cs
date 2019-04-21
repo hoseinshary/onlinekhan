@@ -4,7 +4,6 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Question;
-using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Net;

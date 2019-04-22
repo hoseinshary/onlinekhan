@@ -17,9 +17,10 @@ import {
 
 @Module({ namespacedPath: "questionJudgeStore/" })
 export class QuestionJudgeStore extends VuexModule {
-  openModal: { index: boolean; delete: boolean };
+  openModal: { index: boolean };
   questionJudge: IQuestionJudge;
   private _questionJudgeList: Array<IQuestionJudge>;
+  private _indexVue: Vue;
   private _createVue: Vue;
   private _editVue: Vue;
 
@@ -32,8 +33,7 @@ export class QuestionJudgeStore extends VuexModule {
     this.questionJudge = util.cloneObject(DefaultQuestionJudge);
     this._questionJudgeList = [];
     this.openModal = {
-      index: false,
-      delete: false
+      index: false
     };
   }
 
@@ -72,8 +72,13 @@ export class QuestionJudgeStore extends VuexModule {
   }
 
   @mutation
-  private RESET(vm: any) {
-    util.mapObject(DefaultQuestionJudge, this.questionJudge, "Id");
+  private RESET(vm?: any) {
+    util.mapObject(
+      DefaultQuestionJudge,
+      this.questionJudge,
+      "Id",
+      "QuestionId"
+    );
     if (vm && vm.$v) {
       vm.$v.$reset();
     }
@@ -87,6 +92,11 @@ export class QuestionJudgeStore extends VuexModule {
   @mutation
   OPEN_MODAL_INDEX(open: boolean) {
     this.openModal.index = open;
+  }
+
+  @mutation
+  SET_INDEX_VUE(vm: Vue) {
+    this._indexVue = vm;
   }
 
   @mutation
@@ -194,7 +204,8 @@ export class QuestionJudgeStore extends VuexModule {
   }
 
   @action()
-  async submitDelete(vm: Vue) {
+  async submitDelete() {
+    var vm = this._indexVue;
     return axios
       .post(`${baseUrl}/Delete/${this.questionJudge.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
@@ -203,6 +214,8 @@ export class QuestionJudgeStore extends VuexModule {
         if (data.MessageType == MessageType.Success) {
           this.DELETE();
         }
+        vm["selectedTab"] = "tab-create";
+        this.RESET();
       });
   }
   //#endregion

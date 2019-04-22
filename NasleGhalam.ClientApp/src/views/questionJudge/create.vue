@@ -65,55 +65,5 @@ export default class QuestionJudgeCreateVue extends Vue {
   }
   //#endregion
 }
-
-// import viewModel from "viewModels/questionJudgeViewModel";
-// import { mapState, mapActions } from "vuex";
-
-// export default {
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("questionJudgeStore", [
-//       "toggleModalCreateStore",
-//       "createVueStore",
-//       "submitCreateStore",
-//       "resetCreateStore"
-//     ]),
-//     ...mapActions("lookupStore", [
-//       "getLookupQuestionJudgeHardnessType",
-//       "getLookupQuestionJudgeRepeatnessType"
-//     ]),
-//     fillAllDdls() {
-//       this.getLookupQuestionJudgeHardnessType();
-//       this.getLookupQuestionJudgeRepeatnessType();
-//     }
-//   },
-//   /**
-//    * computed
-//    */
-//   computed: {
-//     ...mapState("questionJudgeStore", {
-//       modelName: "modelName",
-//       questionJudge: "questionJudge",
-//       isOpenModalCreate: "isOpenModalCreate"
-//     }),
-//     ...mapState("lookupStore", [
-//       "lookupQuestionJudgeHardnessType",
-//       "lookupQuestionJudgeRepeatnessType"
-//     ])
-//   },
-//   /**
-//    * validations
-//    */
-//   validations: viewModel,
-//   /**
-//    * created
-//    */
-//   created() {
-//     this.createVueStore(this);
-//     this.fillAllDdls();
-//   }
-// };
 </script>
 

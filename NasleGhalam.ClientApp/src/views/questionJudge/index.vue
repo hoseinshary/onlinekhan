@@ -42,7 +42,7 @@
         >{{data.row.Lookup_QuestionHardnessType.Value}}</template>
         <template slot="Id" slot-scope="data">
           <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)"/>
-          <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
+          <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
         </template>
       </base-table>
     </div>
@@ -50,9 +50,6 @@
     <template slot="footer">
       <base-btn-back @click="questionJudgeStore.OPEN_MODAL_INDEX(false)"></base-btn-back>
     </template>
-
-    <!-- modals -->
-    <modal-delete v-if="canDelete"></modal-delete>
   </bs-modal>
 </template>
 
@@ -66,7 +63,7 @@ import util from "src/utilities";
   components: {
     TabCreate: () => import("./create.vue"),
     TabEdit: () => import("./edit.vue"),
-    ModalDelete: () => import("./delete.vue")
+    BtnDelete: () => import("./delete.vue")
   }
 })
 export default class QuestionJudgeVue extends Vue {
@@ -143,12 +140,6 @@ export default class QuestionJudgeVue extends Vue {
     });
   }
 
-  showModalDelete(id) {
-    this.questionJudgeStore.getById(id).then(() => {
-      this.questionJudgeStore.openModal.delete = true;
-    });
-  }
-
   open() {
     if (this.canCreate || this.canEdit) {
       this.lookupStore.fillQuestionHardnessType();
@@ -156,94 +147,14 @@ export default class QuestionJudgeVue extends Vue {
 
       this.questionJudgeStore.resetCreate();
       this.questionJudge.QuestionId = this.question.Id;
-      this.selectedTab = "tab-create";
     }
   }
   //#endregion
 
   //#region ### hooks ###
   created() {
-    // this.questionJudgeStore.fillList();
+    this.questionJudgeStore.SET_INDEX_VUE(this);
   }
   //#endregion
 }
-// import { mapState, mapActions } from "vuex";
-
-// export default {
-//   components: {
-//     "create-question-judge": () => import("./create")
-//   },
-//   /**
-//    * data
-//    */
-//   data() {
-//     return {
-//       questionJudgeGridColumn: [
-//         {
-//           title: "استاندارد",
-//           data: "IsStandard"
-//         },
-//         {
-//           title: "حذف",
-//           data: "IsDelete"
-//         },
-//         {
-//           title: "ویرایش",
-//           data: "IsUpdate"
-//         },
-//         {
-//           title: "یادگیری",
-//           data: "IsLearning"
-//         },
-//         {
-//           title: "مدت پاسخ",
-//           data: "ResponseSecond"
-//         },
-//         {
-//           title: "درجه تکرار",
-//           data: "LookupId_RepeatnessType"
-//         },
-//         {
-//           title: "درجه سختی",
-//           data: "LookupId_QuestionHardnessType"
-//         }
-//         //,
-//         // {
-//         //   title: "عملیات",
-//         //   data: "Id",
-//         //   searchable: false,
-//         //   sortable: false,
-//         //   visible: pageAccess.canEdit || pageAccess.canDelete
-//         // }
-//       ]
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("questionJudgeStore", [
-//       "getByIdStore",
-//       "fillGridStore",
-//       "resetCreateStore",
-//       "resetEditStore"
-//     ]),
-//     ...mapActions("questionJudgeStore", {
-//       toggleModalQuestionStore: "toggleModalStore"
-//     })
-//   },
-//   computed: {
-//     ...mapState("questionJudgeStore", {
-//       modelName: "modelName",
-//       questionJudgeGridData: "questionJudgeGridData",
-//       isOpenModal: "isOpenModal"
-//     }),
-//     ...mapState("questionStore", {
-//       question: "question"
-//     })
-//   },
-//   created() {
-//     // this.fillGridStore();
-//   }
-// };
 </script>

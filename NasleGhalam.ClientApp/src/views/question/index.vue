@@ -109,7 +109,13 @@
       :topicTreeDataProp="topicTreeData"
       :topicTickedIdsProp="topicTree.leafTicked"
     ></modal-create>
-    <modal-edit v-if="canEdit" :topicTreeDataProp="topicTreeData"></modal-edit>
+    <modal-edit
+      v-if="canEdit"
+      :canEditAdminProp="canEditAdmin"
+      :canEditTopicProp="canEditTopic"
+      :canEditImportProp="canEditImport"
+      :topicTreeDataProp="topicTreeData"
+    ></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
     <modal-question-judge v-if="canQuestionJudge"></modal-question-judge>
   </section>
@@ -162,8 +168,20 @@ export default class QuestionVue extends Vue {
     return this.pageAccess.indexOf("ایجاد") > -1;
   }
 
+  get canEditAdmin() {
+    return this.pageAccess.indexOf("ویرایش ادمین") > -1;
+  }
+
+  get canEditTopic() {
+    return this.pageAccess.indexOf("ویرایش مبحث") > -1;
+  }
+
+  get canEditImport() {
+    return this.pageAccess.indexOf("ویرایش ورود سوال") > -1;
+  }
+
   get canEdit() {
-    return this.pageAccess.indexOf("ویرایش") > -1;
+    return this.canEditAdmin || this.canEditTopic || this.canEditImport;
   }
 
   get canDelete() {

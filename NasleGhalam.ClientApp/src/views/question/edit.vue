@@ -3,7 +3,7 @@
     :title="questionStore.modelName"
     :show="questionStore.openModal.edit"
     size="lg"
-    @confirm="questionStore.submitEdit"
+    @confirm="questionStore.submitEdit(activeAccess)"
     @reset="questionStore.resetEdit"
     @close="questionStore.OPEN_MODAL_EDIT(false)"
     @open="open"
@@ -15,7 +15,7 @@
     </q-card>
 
     <div class="col-sm-4">
-      <section class="q-ma-sm q-pa-sm shadow-1">
+      <section v-if="showElement('TopicIds')" class="q-ma-sm q-pa-sm shadow-1">
         <q-input v-model="topicFilter" float-label="جستجوی مبحث" clearable/>
         <q-tree
           :nodes="topicTreeDataProp"
@@ -40,7 +40,10 @@
       </section>
 
       <q-slide-transition>
-        <section v-if="question.LookupId_QuestionType==6" class="q-ma-sm q-pa-sm shadow-1">
+        <section
+          v-if="showElement('LookupId_QuestionType') && question.LookupId_QuestionType==6"
+          class="q-ma-sm q-pa-sm shadow-1"
+        >
           گزینه صحیح
           <base-select
             :model="$v.question.AnswerNumber"
@@ -63,53 +66,82 @@
           extensions=".doc,.docx"
         />
       </q-field>
-      <base-input :model="$v.question.QuestionNumber" class="col-md-4"/>
+      <base-input
+        v-if="showElement('QuestionNumber')"
+        :model="$v.question.QuestionNumber"
+        class="col-md-4"
+      />
       <base-select
+        v-if="showElement('LookupId_QuestionType')"
         :model="$v.question.LookupId_QuestionType"
         :options="lookupStore.questionTypeDdl"
         class="col-md-4"
         filter
       />
-      <base-input :model="$v.question.QuestionPoint" class="col-md-4"/>
+      <base-input
+        v-if="showElement('QuestionPoint')"
+        :model="$v.question.QuestionPoint"
+        class="col-md-4"
+      />
       <base-select
+        v-if="showElement('LookupId_QuestionHardnessType')"
         :model="$v.question.LookupId_QuestionHardnessType"
         :options="lookupStore.questionHardnessTypeDdl"
         class="col-md-4"
         filter
       />
       <base-select
+        v-if="showElement('LookupId_RepeatnessType')"
         :model="$v.question.LookupId_RepeatnessType"
         :options="lookupStore.repeatnessTypeDdl"
         class="col-md-4"
         filter
       />
-      <base-field class="col-md-4" :model="$v.question.UseEvaluation">
+      <base-field
+        v-if="showElement('UseEvaluation')"
+        class="col-md-4"
+        :model="$v.question.UseEvaluation"
+      >
         <template slot-scope="data">
           <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
           <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
         </template>
       </base-field>
-      <base-field class="col-md-4" :model="$v.question.IsStandard">
+      <base-field v-if="showElement('IsStandard')" class="col-md-4" :model="$v.question.IsStandard">
         <template slot-scope="data">
           <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
           <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
         </template>
       </base-field>
       <base-select
+        v-if="showElement('LookupId_AuthorType')"
         :model="$v.question.LookupId_AuthorType"
         :options="lookupStore.authorTypeDdl"
         class="col-md-4"
         filter
       />
-      <base-input :model="$v.question.AuthorName" class="col-md-4"/>
+      <base-input
+        v-if="showElement('AuthorName')"
+        :model="$v.question.AuthorName"
+        class="col-md-4"
+      />
       <base-select
+        v-if="showElement('LookupId_AreaType')"
         :model="$v.question.LookupId_AreaType"
         :options="lookupStore.areaTypeDdl"
         class="col-md-4"
         filter
       />
-      <base-input :model="$v.question.ResponseSecond" class="col-md-4"/>
-      <base-input :model="$v.question.Description" class="col-12"/>
+      <base-input
+        v-if="showElement('ResponseSecond')"
+        :model="$v.question.ResponseSecond"
+        class="col-md-4"
+      />
+      <base-input
+        v-if="showElement('Description')"
+        :model="$v.question.Description"
+        class="col-12"
+      />
     </div>
   </base-modal-edit>
 </template>
@@ -127,6 +159,9 @@ export default class QuestionEditVue extends Vue {
 
   //#region ### props ###
   @Prop({ type: Array, required: true }) topicTreeDataProp;
+  @Prop({ type: Boolean, required: true }) canEditAdminProp;
+  @Prop({ type: Boolean, required: true }) canEditTopicProp;
+  @Prop({ type: Boolean, required: true }) canEditImportProp;
   //#endregion
 
   //#region ### data ###
@@ -136,6 +171,73 @@ export default class QuestionEditVue extends Vue {
   topicStore = vxm.topicStore;
   question = vxm.questionStore.question;
   topicFilter = "";
+  questionAccessElement = {
+    QuestionNumber: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: true
+    },
+    QuestionPoint: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: false
+    },
+    UseEvaluation: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: false
+    },
+    IsStandard: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: false
+    },
+    AuthorName: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: true
+    },
+    ResponseSecond: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: false
+    },
+    Description: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: true
+    },
+    LookupId_QuestionType: {
+      canEditAdminProp: true,
+      canEditTopicProp: true,
+      canEditImportProp: true
+    },
+    LookupId_QuestionHardnessType: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: false
+    },
+    LookupId_RepeatnessType: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: false
+    },
+    LookupId_AuthorType: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: true
+    },
+    LookupId_AreaType: {
+      canEditAdminProp: true,
+      canEditTopicProp: true,
+      canEditImportProp: false
+    },
+    TopicIds: {
+      canEditAdminProp: true,
+      canEditTopicProp: true,
+      canEditImportProp: false
+    }
+  };
   //#endregion
 
   //#region ### computed ###
@@ -147,9 +249,25 @@ export default class QuestionEditVue extends Vue {
       { value: 4, label: "4" }
     ];
   }
+
+  get activeAccess() {
+    if (this.canEditAdminProp) {
+      return "canEditAdminProp";
+    } else if (this.canEditImportProp) {
+      return "canEditImportProp";
+    } else {
+      return "canEditTopicProp";
+    }
+  }
   //#endregion
 
   //#region ### methods ###
+  showElement(elementName) {
+    debugger;
+    var elem = this.questionAccessElement[elementName];
+    return elem && elem[this.activeAccess];
+  }
+
   open() {
     this.tagStore.fillList();
     this.lookupStore.fillQuestionType();

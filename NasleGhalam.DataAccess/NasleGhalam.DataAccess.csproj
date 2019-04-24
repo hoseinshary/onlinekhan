@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201903120929533_fixQuestionjudgeRel.Designer.cs">
       <DependentUpon>201903120929533_fixQuestionjudgeRel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904240602407_lessonuserAdded.cs" />
+    <Compile Include="Migrations\201904240602407_lessonuserAdded.Designer.cs">
+      <DependentUpon>201904240602407_lessonuserAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -101,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903120929533_fixQuestionjudgeRel.resx">
       <DependentUpon>201903120929533_fixQuestionjudgeRel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904240602407_lessonuserAdded.resx">
+      <DependentUpon>201904240602407_lessonuserAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

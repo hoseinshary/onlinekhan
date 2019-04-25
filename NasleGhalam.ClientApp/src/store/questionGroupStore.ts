@@ -78,7 +78,7 @@ export class QuestionGroupStore extends VuexModule {
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultQuestionGroup, this.questionGroup, "Id");
+    util.mapObject(DefaultQuestionGroup, this.questionGroup, "Id", "LessonId");
     if (vm.$v) {
       vm.$v.$reset();
     }
@@ -162,28 +162,90 @@ export class QuestionGroupStore extends VuexModule {
   }
 
   @action()
+  async submitPreCreate(closeModal: boolean) {
+    let vm = this._createVue;
+    if (!(await this.validateForm(vm))) return;
+
+    var formData = new FormData();
+    var wordFileUpload = vm.$refs.wordFileUpload;
+    if (wordFileUpload && wordFileUpload["files"]) {
+      formData.append(wordFileUpload["name"], wordFileUpload["files"][0]);
+    }
+
+    var excelFileUpload = vm.$refs.excelFileUpload;
+    if (excelFileUpload && excelFileUpload["files"]) {
+      formData.append(excelFileUpload["name"], excelFileUpload["files"][0]);
+    }
+    var params = util.toParam(this.questionGroup);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/PreCreate?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
+      let data = response.data;
+      debugger;
+      if (data.MessageType == MessageType.Success) {
+        vm["selectedTab"] = "previewTab";
+        vm["isPreCreate"] = false;
+        vm["previewImages"] = data.Obj;
+      }
+    });
+  }
+
+  @action()
   async submitCreate(closeModal: boolean) {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
-    return axios
-      .post(`${baseUrl}/Create`, this.questionGroup)
-      .then((response: AxiosResponse<IMessageResult>) => {
-        let data = response.data;
-        this.notify({ vm, data });
+    var formData = new FormData();
+    var wordFileUpload = vm.$refs.wordFileUpload;
+    if (wordFileUpload && wordFileUpload["files"]) {
+      formData.append(wordFileUpload["name"], wordFileUpload["files"][0]);
+    }
 
-        if (data.MessageType == MessageType.Success) {
-          this.CREATE(data.Obj);
-          this.OPEN_MODAL_CREATE(!closeModal);
-          this.resetCreate();
-        }
-      });
+    var excelFileUpload = vm.$refs.excelFileUpload;
+    if (excelFileUpload && excelFileUpload["files"]) {
+      formData.append(excelFileUpload["name"], excelFileUpload["files"][0]);
+    }
+    var params = util.toParam(this.questionGroup);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/Create?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
+      let data = response.data;
+      this.notify({ vm, data });
+
+      if (data.MessageType == MessageType.Success) {
+        this.CREATE(data.Obj);
+        this.OPEN_MODAL_CREATE(!closeModal);
+        this.resetCreate();
+      }
+    });
   }
 
   @action()
   async resetCreate() {
     this.questionGroup.Id = 0;
     this.RESET(this._createVue);
+
+    this._createVue["selectedTab"] = "preCreateTab";
+    this._createVue["previewImages"] = [];
+    this._createVue["isPreCreate"] = true;
+
+    var word = this._createVue.$refs.wordFileUpload;
+    if (word) {
+      word["reset"]();
+    }
+
+    var excel = this._createVue.$refs.excelFileUpload;
+    if (excel) {
+      excel["reset"]();
+    }
   }
 
   @action()

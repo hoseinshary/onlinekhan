@@ -1,17 +1,17 @@
 <template>
-  <bs-modal :show="isOpenModalCreate"
+  <bs-modal :show="questionGroupStore.openModal.create"
             :size="modalSize">
     <template slot="header">
       <q-toolbar slot="header"
                  color="cyan-9">
         <q-toolbar-title>
           ثبت
-          <span class="text-orange">{{modelName}}</span>
+          <span class="text-orange">{{questionGroupStore.modelName}}</span>
           جدید
         </q-toolbar-title>
         <q-btn dense
                icon="close"
-               @click="toggleModalCreateStore(false)" />
+               @click="questionGroupStore.OPEN_MODAL_CREATE(false)" />
       </q-toolbar>
     </template>
 
@@ -24,12 +24,13 @@
              label="ثبت موقت" />
       <q-tab slot="title"
              name="previewTab"
-             label="پیش نمایش" />
+             label="پیش نمایش" 
+             :disable="!previewMode"/>
 
       <q-tab-pane name="preCreateTab"
                   keep-alive
                   class="row">
-        <my-input :model="$v.questionGroupObj.Title"
+        <base-input :model="$v.questionGroup.Title"
                   class="col-md-6" />
 
         <q-field class="col-12">
@@ -72,7 +73,7 @@
              color="positive"
              class="shadow-1 bg-white q-mr-sm"
              type="submit"
-             @click="submitPreCreateStore()">
+             @click="questionGroupStore.submitPreCreate">
         <q-icon name="save" /> ثبت موقت
       </q-btn>
       <q-btn v-else
@@ -80,59 +81,91 @@
              color="primary"
              class="shadow-1 bg-white q-mr-sm"
              type="submit"
-             @click="submitCreateStore()">
+             @click="questionGroupStore.submitCreate">
         <q-icon name="save" /> ثبت نهایی
       </q-btn>
-      <my-btn-back @click="toggleModalCreateStore(false)"></my-btn-back>
+      <base-btn-back @click="questionGroupStore.OPEN_MODAL_CREATE(false)"></base-btn-back>
     </template>
   </bs-modal>
 </template>
 
-<script>
-import viewModel from "viewModels/questionGroup/questionGroupViewModel";
-import { mapState, mapActions } from "vuex";
 
-export default {
-  data() {
-    return {
-      selectedTab: "preCreateTab",
-      modalSize: "lg",
-      previewImages: [],
-      isPreCreate: true
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions("questionGroupStore", [
-      "toggleModalCreateStore",
-      "createVueStore",
-      "submitPreCreateStore",
-      "submitCreateStore",
-      "resetCreateStore"
-    ])
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState("questionGroupStore", {
-      modelName: "modelName",
-      questionGroupObj: "questionGroupObj",
-      isOpenModalCreate: "isOpenModalCreate"
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
-  created() {
-    this.createVueStore(this);
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { questionGroupValidations } from "src/validations/QuestionGroupValidation";
+
+@Component({
+  validations: questionGroupValidations
+})
+export default class QuestionGroupCreateVue extends Vue {
+  $v: any;
+
+  //#region ### data ###
+  questionGroupStore = vxm.questionGroupStore;
+  questionGroup = vxm.questionGroupStore.questionGroup;
+  selectedTab= "preCreateTab";
+  modalSize= "lg";
+  previewImages= [];
+  isPreCreate= true;
+  //#endregion
+
+  //#region ### computed ###
+  get previewMode() {
+    return this.selectedTab == "previewTab";
   }
-};
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.questionGroupStore.SET_CREATE_VUE(this);
+  }
+  //#endregion
+}
+// import viewModel from "viewModels/questionGroup/questionGroupViewModel";
+// import { mapState, mapActions } from "vuex";
+
+// export default {
+//   data() {
+//     return {
+//       selectedTab: "preCreateTab",
+//       modalSize: "lg",
+//       previewImages: [],
+//       isPreCreate: true
+//     };
+//   },
+//   /**
+//    * methods
+//    */
+//   methods: {
+//     ...mapActions("questionGroupStore", [
+//       "toggleModalCreateStore",
+//       "createVueStore",
+//       "submitPreCreateStore",
+//       "submitCreateStore",
+//       "resetCreateStore"
+//     ])
+//   },
+//   /**
+//    * computed
+//    */
+//   computed: {
+//     ...mapState("questionGroupStore", {
+//       questionGroupStore.modelName: "questionGroupStore.modelName",
+//       questionGroup: "questionGroup",
+//       isOpenModalCreate: "isOpenModalCreate"
+//     })
+//   },
+//   /**
+//    * validations
+//    */
+//   validations: viewModel,
+//   /**
+//    * created
+//    */
+//   created() {
+//     this.createVueStore(this);
+//   }
+// };
 </script>
 

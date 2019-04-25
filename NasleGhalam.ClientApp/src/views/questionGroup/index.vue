@@ -23,7 +23,7 @@
                 node-key="Id"
               />
               <q-select
-                :value="lessonId"
+                :value="questionGroup.LessonId"
                 @change="lessonIdChanged"
                 :options="lessonStore.ddl"
                 float-label="انتخاب درس"
@@ -33,7 +33,7 @@
           </div>
           <div class="col-sm-7">
             <base-btn-create
-              v-if="pageAccess.canCreate && questionGroupIndexObj.LessonId>0"
+              v-if="canCreate && questionGroup.LessonId>0"
               :label="`ایجاد (${questionGroupStore.modelName}) جدید`"
               @click="showModalCreate"
             />
@@ -44,17 +44,17 @@
               hasIndex
             >
               <template slot="Id" slot-scope="data">
-                <q-btn
+                <!-- <q-btn
                   outline
                   dense
                   color="primary"
                   class="shadow-1 bg-white q-mr-sm"
                   @click="showModalQuestion(data.row.Id)"
-                >سوال ها</q-btn>
+                >سوال ها</q-btn>-->
 
                 <a :href="data.row.QuestionGroupWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
                 <a :href="data.row.QuestionGroupExcelPath" target="_blank" class="q-mr-sm">فایل اکسل</a>
-                <!-- <base-btn-delete v-if="pageAccess.canDelete"
+                <!-- <base-btn-delete v-if="canDelete"
                                round
                 @click="showModalDelete(data.row.Id)" />-->
               </template>
@@ -65,9 +65,9 @@
     </base-panel>
 
     <!-- modals -->
-    <!-- <modal-create v-if="pageAccess.canCreate"></modal-create> -->
+    <modal-create v-if="canCreate"></modal-create>
     <!-- <modal-question></modal-question> -->
-    <!-- <modal-delete v-if="pageAccess.canDelete"></modal-delete> -->
+    <!-- <modal-delete v-if="canDelete"></modal-delete> -->
   </section>
 </template>
 
@@ -79,7 +79,7 @@ import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
   components: {
-    // ModalCreate: () => import("./create.vue"),
+    ModalCreate: () => import("./create.vue")
     // ModalEdit: () => import("./edit.vue"),
     // ModalDelete: () => import("./delete.vue")
   }
@@ -87,6 +87,7 @@ import { EducationTreeState } from "../../utilities/enumeration";
 export default class QuestionGroupVue extends Vue {
   //#region ### data ###
   questionGroupStore = vxm.questionGroupStore;
+  questionGroup = vxm.questionGroupStore.questionGroup;
   educationTreeStore = vxm.educationTreeStore;
   lessonStore = vxm.lessonStore;
   pageAccess = util.getAccess(this.questionGroupStore.modelName);
@@ -107,7 +108,6 @@ export default class QuestionGroupVue extends Vue {
       visible: this.canEdit || this.canDelete
     }
   ];
-  lessonId = 0;
   educationTree = this.educationTreeStore.qTreeData;
   //#endregion
 
@@ -138,7 +138,7 @@ export default class QuestionGroupVue extends Vue {
   //#region ### watch ###
   @Watch("educationTree.id")
   educationTreeIdChanged(newVal, oldVal) {
-    this.lessonId = 0;
+    this.questionGroup.LessonId = 0;
     // clear educationTree leaf
     this.educationTree.leafTicked.splice(
       0,
@@ -157,7 +157,7 @@ export default class QuestionGroupVue extends Vue {
 
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
-    this.lessonId = 0;
+    this.questionGroup.LessonId = 0;
     this.lessonStore.fillListByEducationTreeIds(newVal);
   }
   //#endregion
@@ -182,7 +182,7 @@ export default class QuestionGroupVue extends Vue {
   }
 
   lessonIdChanged(val) {
-    this.lessonId = val;
+    this.questionGroup.LessonId = val;
     this.questionGroupStore.fillListByLessonId(val);
   }
   //#endregion

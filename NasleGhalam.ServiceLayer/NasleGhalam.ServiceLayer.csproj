@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="MapperProfile\EducationTreeProfile.cs" />
     <Compile Include="MapperProfile\PublicProfile.cs" />
+    <Compile Include="MapperProfile\QuestionAnswerProfile.cs" />
     <Compile Include="MapperProfile\QuestionGroupProfile.cs" />
     <Compile Include="MapperProfile\QuestionJudgeProfile.cs" />
     <Compile Include="MapperProfile\UnivercityBranchProfile.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\ProvinceService.cs" />
     <Compile Include="Services\PublisherService.cs" />
+    <Compile Include="Services\QuestionAnswerService.cs" />
     <Compile Include="Services\QuestionGroupService.cs" />
     <Compile Include="Services\QuestionJudgeService.cs" />
     <Compile Include="Services\QuestionService.cs" />

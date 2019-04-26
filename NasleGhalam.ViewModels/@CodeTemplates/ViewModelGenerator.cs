@@ -1,43 +1,43 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.QuestionJudge
+namespace NasleGhalam.ViewModels.QuestionAnswer
 {
-	public class QuestionJudgeViewModel
+	public class QuestionAnswerViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public int LookupId_QuestionHardnessType { get; set; }
+		public string Title { get; set; }
 
 
 		[Display(Name = "")]
-		public int LookupId_RepeatnessType { get; set; }
+		public string Context { get; set; }
 
 
 		[Display(Name = "")]
-		public byte Repeatness { get; set; }
+		public string FilePath { get; set; }
 
 
 		[Display(Name = "")]
-		public bool IsStandard { get; set; }
+		public int LookupId_AnswerType { get; set; }
 
 
 		[Display(Name = "")]
-		public bool IsDelete { get; set; }
+		public string Description { get; set; }
 
 
 		[Display(Name = "")]
-		public bool IsUpdate { get; set; }
+		public string Author { get; set; }
 
 
 		[Display(Name = "")]
-		public bool IsLearning { get; set; }
+		public bool IsMaster { get; set; }
 
 
 		[Display(Name = "")]
-		public short ResponseSecond { get; set; }
+		public int UserId { get; set; }
 
 
 		[Display(Name = "")]

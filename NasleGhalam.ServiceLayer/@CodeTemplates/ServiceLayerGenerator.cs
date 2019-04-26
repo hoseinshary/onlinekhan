@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.QuestionJudge;
+using NasleGhalam.ViewModels.QuestionAnswer;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class QuestionJudgeService
+	public class QuestionAnswerService
 	{
-		private const string Title = "کارشناسی سوال";
+		private const string Title = "جواب سوال";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<QuestionJudge> _questionJudges;
+        private readonly IDbSet<QuestionAnswer> _questionAnswers;
        
-	    public QuestionJudgeService(IUnitOfWork uow)
+	    public QuestionAnswerService(IUnitOfWork uow)
         {
             _uow = uow;
-            _questionJudges = uow.Set<QuestionJudge>();
+            _questionAnswers = uow.Set<QuestionAnswer>();
         }
 
 
 		/// <summary>
-        /// گرفتن  کارشناسی سوال با آی دی
+        /// گرفتن  جواب سوال با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public QuestionJudgeViewModel GetById(int id)
+        public QuestionAnswerViewModel GetById(int id)
         {
-            return _questionJudges
+            return _questionAnswers
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<QuestionJudgeViewModel>)
+                .Select(Mapper.Map<QuestionAnswerViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه کارشناسی سوال ها
+        /// گرفتن همه جواب سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionJudgeViewModel> GetAll()
+        public IList<QuestionAnswerViewModel> GetAll()
         {
-            return _questionJudges
+            return _questionAnswers
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<QuestionJudgeViewModel>)
+                .Select(Mapper.Map<QuestionAnswerViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت کارشناسی سوال
+        /// ثبت جواب سوال
         /// </summary>
-        /// <param name="questionJudgeViewModel"></param>
+        /// <param name="questionAnswerViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel)
+        public ClientMessageResult Create(QuestionAnswerCreateViewModel questionAnswerViewModel)
         {
-            var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
-            _questionJudges.Add(questionJudge);
+            var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
+            _questionAnswers.Add(questionAnswer);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = questionJudge.Id;
+			msgRes.Id = questionAnswer.Id;
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش کارشناسی سوال
+        /// ویرایش جواب سوال
         /// </summary>
-        /// <param name="questionJudgeViewModel"></param>
+        /// <param name="questionAnswerViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(QuestionJudgeUpdateViewModel questionJudgeViewModel)
+        public ClientMessageResult Update(QuestionAnswerUpdateViewModel questionAnswerViewModel)
         {
-            var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
-            _uow.MarkAsChanged(questionJudge);
+            var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
+            _uow.MarkAsChanged(questionAnswer);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف کارشناسی سوال
+        /// حذف جواب سوال
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  questionJudgeViewModel = GetById(id);
-            if (questionJudgeViewModel == null)
+			var  questionAnswerViewModel = GetById(id);
+            if (questionAnswerViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
-            _uow.MarkAsDeleted(questionJudge);
+            var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
+            _uow.MarkAsDeleted(questionAnswer);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه کارشناسی سوال ها برای لیست کشویی
+        /// گرفتن همه جواب سوال ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _questionJudges.Select(current => new SelectViewModel
+            return _questionAnswers.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

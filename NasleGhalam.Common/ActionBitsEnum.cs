@@ -106,7 +106,12 @@
         QuestionJudgeCreateAccess = 79,
         QuestionJudgeDeleteAccess = 80,
         QuestionJudgeUpdateAccess = 81,
-        
-        
+
+        QuestionAnswerReadAccess = 84,
+        QuestionAnswerCreateAccess = 85,
+        QuestionAnswerDeleteAccess = 86,
+        QuestionAnswerUpdateAccess = 87,
+
+
     }
 }

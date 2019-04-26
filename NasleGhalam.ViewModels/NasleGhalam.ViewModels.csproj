@@ -65,6 +65,10 @@
     <Compile Include="EducationYear\EducationYearCreateViewModel.cs" />
     <Compile Include="Lesson\LessonUpdateViewModel.cs" />
     <Compile Include="Publisher\PublisherViewModel.cs" />
+    <Compile Include="QuestionAnswer\QuestionAnswerUpdateViewModel.cs" />
+    <Compile Include="QuestionAnswer\QuestionAnswerCreateViewModel.cs" />
+    <Compile Include="QuestionAnswer\QuestionAnswerCreateMultiViewModel.cs" />
+    <Compile Include="QuestionAnswer\QuestionAnswerViewModel.cs" />
     <Compile Include="QuestionGroup\QuestionGroupUpdateViewModel.cs" />
     <Compile Include="QuestionGroup\QuestionGroupCreateViewModel.cs" />
     <Compile Include="QuestionGroup\QuestionGroupViewModel.cs" />

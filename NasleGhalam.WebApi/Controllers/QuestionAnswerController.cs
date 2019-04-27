@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
@@ -23,13 +22,11 @@ namespace NasleGhalam.WebApi.Controllers
             _questionAnswerService = questionAnswerService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerReadAccess)]
         public IHttpActionResult GetAllByQuestionId(int id)
         {
             return Ok(_questionAnswerService.GetAllByQuestionId(id));
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -41,7 +38,6 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(questionAnswer);
         }
-        
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionAnswerCreateAccess)]
@@ -75,7 +71,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionAnswerService.PreCreateMulti(questionAnswerViewModel,wordFile));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionAnswerUpdateAccess)]
         [CheckModelValidation]
@@ -83,7 +78,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_questionAnswerService.Update(questionAnswerViewModel));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.QuestionAnswerDeleteAccess)]
         public IHttpActionResult Delete(int id)

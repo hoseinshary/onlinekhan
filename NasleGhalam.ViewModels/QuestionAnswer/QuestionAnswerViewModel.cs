@@ -4,7 +4,6 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
 {
     public class QuestionAnswerViewModel
     {
-        [Display(Name = "")]
         public int Id { get; set; }
 
 
@@ -42,7 +41,5 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
 
         [Display(Name = "سوال")]
         public int QuestionId { get; set; }
-
-
     }
 }

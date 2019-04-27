@@ -97,6 +97,18 @@
             >
               <q-tooltip>ارزیابی</q-tooltip>
             </q-btn>
+            <q-btn
+              v-if="canQuestionAnswer"
+              outline
+              round
+              icon="list"
+              color="cyan"
+              size="sm"
+              class="shadow-1 bg-white q-mr-sm"
+              @click="showModalQuestionAnswer(data.row.Id)"
+            >
+              <q-tooltip>جواب سوال</q-tooltip>
+            </q-btn>
             <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
             <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
@@ -118,6 +130,7 @@
     ></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
     <modal-question-judge v-if="canQuestionJudge"></modal-question-judge>
+    <modal-question-answer v-if="canQuestionAnswer"></modal-question-answer>
   </section>
 </template>
 
@@ -132,7 +145,8 @@ import { EducationTreeState } from "../../utilities/enumeration";
     ModalCreate: () => import("./create.vue"),
     ModalEdit: () => import("./edit.vue"),
     ModalDelete: () => import("./delete.vue"),
-    ModalQuestionJudge: () => import("../questionJudge/index.vue")
+    ModalQuestionJudge: () => import("../questionJudge/index.vue"),
+    ModalQuestionAnswer: () => import("../questionAnswer/index.vue")
   }
 })
 export default class QuestionVue extends Vue {
@@ -142,6 +156,7 @@ export default class QuestionVue extends Vue {
   educationTreeStore = vxm.educationTreeStore;
   lessonStore = vxm.lessonStore;
   questionJudgeStore = vxm.questionJudgeStore;
+  questionAnswerStore = vxm.questionAnswerStore;
   pageAccess = util.getAccess(this.questionStore.modelName);
   questionGridColumn = [
     {
@@ -190,6 +205,10 @@ export default class QuestionVue extends Vue {
 
   get canQuestionJudge() {
     return this.pageAccess.indexOf("مشاهده کارشناسی") > -1;
+  }
+
+  get canQuestionAnswer() {
+    return this.pageAccess.indexOf("مشاهده جواب سوال") > -1;
   }
 
   get educationTree_GradeDdl() {
@@ -283,6 +302,14 @@ export default class QuestionVue extends Vue {
     this.questionStore.getById(id).then(() => {
       this.questionJudgeStore.fillListByQuestionId(id).then(() => {
         this.questionJudgeStore.OPEN_MODAL_INDEX(true);
+      });
+    });
+  }
+
+  showModalQuestionAnswer(id) {
+    this.questionStore.getById(id).then(() => {
+      this.questionAnswerStore.fillListByQuestionId(id).then(() => {
+        this.questionAnswerStore.OPEN_MODAL_INDEX(true);
       });
     });
   }

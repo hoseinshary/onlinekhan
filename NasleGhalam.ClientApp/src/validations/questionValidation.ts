@@ -2,7 +2,8 @@ import {
   required,
   displayName,
   maxLength,
-  numeric
+  numeric,
+  requiredDdl
 } from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
 import IQuestion from "src/models/IQuestion";
@@ -21,7 +22,7 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     LookupId_QuestionType: {
       displayName: displayName("نوع سوال"),
       numeric,
-      required
+      requiredDdl: requiredDdl(0)
     },
     QuestionPoint: {
       displayName: displayName("نمره"),
@@ -31,7 +32,7 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     LookupId_QuestionHardnessType: {
       displayName: displayName("درجه سختی"),
       numeric,
-      required
+      requiredDdl: requiredDdl(0)
     },
     AnswerNumber: {
       displayName: displayName("شماره گزینه صحیح"),
@@ -40,7 +41,7 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     LookupId_RepeatnessType: {
       displayName: displayName("درجه تکرار"),
       numeric,
-      required
+      requiredDdl: requiredDdl(0)
     },
     UseEvaluation: {
       displayName: displayName("ارزیابی")
@@ -51,7 +52,7 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     LookupId_AuthorType: {
       displayName: displayName("نوع طراح"),
       numeric,
-      required
+      requiredDdl: requiredDdl(0)
     },
     AuthorName: {
       displayName: displayName("نام طراح"),
@@ -60,7 +61,7 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     LookupId_AreaType: {
       displayName: displayName("حیطه سوال"),
       numeric,
-      required
+      requiredDdl: requiredDdl(0)
     },
     ResponseSecond: {
       displayName: displayName("زمان پاسخ"),

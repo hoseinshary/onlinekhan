@@ -213,11 +213,11 @@ export class QuestionStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     var wordFile = vm.$refs.wordFile;
-    // var msg = "";
+    var msg = "";
 
-    // if (wordFile["files"].length == 0) {
-    //   msg = "فایل ورد انتخاب نشده است.<br/>";
-    // }
+    if (wordFile["files"].length == 0) {
+      msg = "فایل ورد انتخاب نشده است.<br/>";
+    }
     // if (this.question.TopicIds && this.question.TopicIds.length == 0) {
     //   msg += "مبحثی انتخاب نکرده اید.<br/>";
     // }
@@ -228,17 +228,17 @@ export class QuestionStore extends VuexModule {
     //   msg += "گزینه صحیح انتخاب نشده است.";
     // }
 
-    // if (msg) {
-    //   this.notify({
-    //     vm: vm,
-    //     data: {
-    //       Message: msg,
-    //       MessageType: MessageType.Error,
-    //       Obj: null
-    //     }
-    //   });
-    //   return;
-    // }
+    if (msg) {
+      this.notify({
+        vm: vm,
+        data: {
+          Message: msg,
+          MessageType: MessageType.Error,
+          Obj: null
+        }
+      });
+      return;
+    }
 
     var formData = new FormData();
     formData.append(wordFile["name"], wordFile["files"][0]);

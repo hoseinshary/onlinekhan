@@ -12,7 +12,6 @@ using Microsoft.Office.Interop.Word;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.QuestionAnswer;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -31,7 +30,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _questions = uow.Set<Question>();
         }
 
-
         /// <summary>
         /// گرفتن  جواب سوال با آی دی
         /// </summary>
@@ -47,7 +45,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن همه جواب سوال ها
         /// </summary>
@@ -55,22 +52,22 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionAnswerViewModel> GetAllByQuestionId(int id)
         {
             return _questionAnswers
-                .Where( current => current.QuestionId == id)
+                .Where(current => current.QuestionId == id)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionAnswerViewModel>)
                 .ToList();
         }
 
-
         /// <summary>
         /// ثبت جواب سوال
         /// </summary>
         /// <param name="questionAnswerViewModel"></param>
+        /// <param name="word"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(QuestionAnswerCreateViewModel questionAnswerViewModel,HttpPostedFile word)
+        public ClientMessageResult Create(QuestionAnswerCreateViewModel questionAnswerViewModel, HttpPostedFile word)
         {
-            
+
             var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
             questionAnswer.LookupId_AnswerType = 1042;
 
@@ -98,7 +95,7 @@ namespace NasleGhalam.ServiceLayer.Services
             doc.Close();
             app.Quit();
 
-            
+
             _questionAnswers.Add(questionAnswer);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
@@ -137,35 +134,35 @@ namespace NasleGhalam.ServiceLayer.Services
             if (clientResult.MessageType == MessageType.Success)
                 clientResult.Obj = GetById(questionAnswer.Id);
             return clientResult;
-            
-        }
 
+        }
 
         /// <summary>
         /// ثبت جواب سوال
         /// </summary>
         /// <param name="questionAnswerViewModel"></param>
+        /// <param name="word"></param>
         /// <returns></returns>
-        public ClientMessageResult CreateMulti(QuestionAnswerCreateMultiViewModel questionAnswerViewModel,HttpPostedFile word)
+        public ClientMessageResult CreateMulti(QuestionAnswerCreateMultiViewModel questionAnswerViewModel, HttpPostedFile word)
         {
             var wordFileName = Guid.NewGuid().ToString();
 
             //read questionids from questiongroup
             var questions = _questions.Where(current => current.QuestionGroups.Any(y => y.Id == questionAnswerViewModel.QuestionGroupId)).ToList();
-            
+
 
             //save Doc file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
-            
+
 
             // Open a doc file.
-            var app = new Microsoft.Office.Interop.Word.Application();
-            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx";            
+            var app = new Application();
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx";
             var doc = app.Documents.Open(wordFilename);
 
             var missing = Type.Missing;
 
-            
+
             //split question Answer
             var x = doc.Paragraphs.Count;
             var i = 1;
@@ -262,7 +259,7 @@ namespace NasleGhalam.ServiceLayer.Services
             app.Quit();
             /////////////////////////////////
 
-            
+
             _uow.ValidateOnSaveEnabled(false);
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
@@ -270,11 +267,11 @@ namespace NasleGhalam.ServiceLayer.Services
             return returnVal;
         }
 
-
         /// <summary>
         /// ثبت جواب سوال
         /// </summary>
         /// <param name="questionAnswerViewModel"></param>
+        /// <param name="word"></param>
         /// <returns></returns>
         public ClientMessageResult PreCreateMulti(QuestionAnswerCreateMultiViewModel questionAnswerViewModel, HttpPostedFile word)
         {
@@ -283,10 +280,10 @@ namespace NasleGhalam.ServiceLayer.Services
             var returnGuidList = new List<string>();
 
             //save Doc file in temp memory
-            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName)+".docx");
+            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
 
             // Open a doc file.
-            var app = new Microsoft.Office.Interop.Word.Application();
+            var app = new Application();
             var wordFilename = SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx";
 
             var doc = app.Documents.Open(wordFilename);
@@ -380,7 +377,6 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
-
         /// <summary>
         /// حذف جواب سوال
         /// </summary>
@@ -400,7 +396,6 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
 
         public bool IsQuestionParagraph(string s)
         {
@@ -437,7 +432,5 @@ namespace NasleGhalam.ServiceLayer.Services
             }
             return false;
         }
-
-
     }
 }

@@ -19,6 +19,10 @@ import { QuestionStore, questionStore } from "./questionStore";
 import { TagStore, tagStore } from "./tagStore";
 import { QuestionJudgeStore, questionJudgeStore } from "./questionJudgeStore";
 import { QuestionGroupStore, questionGroupStore } from "./questionGroupStore";
+import {
+  QuestionAnswerStore,
+  questionAnswerStore
+} from "./questionAnswerStore";
 
 Vue.use(Vuex);
 
@@ -79,7 +83,8 @@ const store = new Vuex.Store({
     questionStore,
     tagStore,
     questionJudgeStore,
-    questionGroupStore
+    questionGroupStore,
+    questionAnswerStore
   }
 });
 
@@ -121,5 +126,9 @@ export const vxm = {
   questionGroupStore: QuestionGroupStore.CreateProxy(
     store,
     QuestionGroupStore
-  ) as QuestionGroupStore
+  ) as QuestionGroupStore,
+  questionAnswerStore: QuestionAnswerStore.CreateProxy(
+    store,
+    QuestionAnswerStore
+  ) as QuestionAnswerStore
 };

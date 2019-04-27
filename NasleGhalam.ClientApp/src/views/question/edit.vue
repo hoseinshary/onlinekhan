@@ -263,7 +263,6 @@ export default class QuestionEditVue extends Vue {
 
   //#region ### methods ###
   showElement(elementName) {
-    debugger;
     var elem = this.questionAccessElement[elementName];
     return elem && elem[this.activeAccess];
   }

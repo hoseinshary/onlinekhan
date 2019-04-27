@@ -15,9 +15,15 @@ import {
 
 @Module({ namespacedPath: "questionStore/" })
 export class QuestionStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean };
+  openModal: {
+    create: boolean;
+    edit: boolean;
+    delete: boolean;
+    questions: boolean;
+  };
   question: IQuestion;
   private _questionList: Array<IQuestion>;
+  private _listByQuestionGroupId: Array<IQuestion>;
   private _createVue: Vue;
   private _editVue: Vue;
 
@@ -29,10 +35,12 @@ export class QuestionStore extends VuexModule {
 
     this.question = util.cloneObject(DefaultQuestion);
     this._questionList = [];
+    this._listByQuestionGroupId = [];
     this.openModal = {
       create: false,
       edit: false,
-      delete: false
+      delete: false,
+      questions: false
     };
   }
 
@@ -47,6 +55,10 @@ export class QuestionStore extends VuexModule {
 
   get gridData() {
     return this._questionList;
+  }
+
+  get gridDataByQuestionGroupId() {
+    return this._listByQuestionGroupId;
   }
   //#endregion
 
@@ -84,6 +96,11 @@ export class QuestionStore extends VuexModule {
   }
 
   @mutation
+  private SET_LIST_BY_QUESTION_GROUP_ID(list: Array<IQuestion>) {
+    this._listByQuestionGroupId = list;
+  }
+
+  @mutation
   OPEN_MODAL_CREATE(open: boolean) {
     this.openModal.create = open;
   }
@@ -96,6 +113,11 @@ export class QuestionStore extends VuexModule {
   @mutation
   OPEN_MODAL_DELETE(open: boolean) {
     this.openModal.delete = open;
+  }
+
+  @mutation
+  OPEN_MODAL_QUESTIONS(open: boolean) {
+    this.openModal.questions = open;
   }
 
   @mutation
@@ -147,6 +169,15 @@ export class QuestionStore extends VuexModule {
     return axios.get(url).then((response: AxiosResponse<Array<IQuestion>>) => {
       this.SET_LIST(response.data);
     });
+  }
+
+  @action()
+  async fillListByQuestionGroupId(questionGroupId: number) {
+    return axios
+      .get(`${baseUrl}/GetAllByQuestionGroupId/${questionGroupId}`)
+      .then((response: AxiosResponse<Array<IQuestion>>) => {
+        this.SET_LIST_BY_QUESTION_GROUP_ID(response.data);
+      });
   }
 
   @action({ mode: "raw" })
@@ -269,7 +300,6 @@ export class QuestionStore extends VuexModule {
     var formData = new FormData();
     formData.append(wordFile["name"], wordFile["files"][0]);
     var params = util.toParam(this.question);
-    debugger;
     var url = "";
     if (activeAccess == "canEditAdminProp") {
       url = `${baseUrl}/Update?${params}`;

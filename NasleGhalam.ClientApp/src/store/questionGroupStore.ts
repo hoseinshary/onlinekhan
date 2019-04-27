@@ -185,10 +185,8 @@ export class QuestionGroupStore extends VuexModule {
       headers: { "Content-Type": "multipart/form-data" }
     }).then((response: AxiosResponse<IMessageResult>) => {
       let data = response.data;
-      debugger;
       if (data.MessageType == MessageType.Success) {
         vm["selectedTab"] = "previewTab";
-        vm["isPreCreate"] = false;
         vm["previewImages"] = data.Obj;
       }
     });
@@ -235,7 +233,6 @@ export class QuestionGroupStore extends VuexModule {
 
     this._createVue["selectedTab"] = "preCreateTab";
     this._createVue["previewImages"] = [];
-    this._createVue["isPreCreate"] = true;
 
     var word = this._createVue.$refs.wordFileUpload;
     if (word) {

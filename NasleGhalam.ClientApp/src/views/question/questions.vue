@@ -1,52 +1,38 @@
 <template>
-  <bs-modal :show="isOpenModalQuestions"
-            size="lg">
+  <bs-modal :show="questionStore.openModal.questions" size="lg">
     <template slot="header">
-      <q-toolbar slot="header"
-                 color="cyan-9">
-        <q-toolbar-title>
-          مشاهده سوال ها
-        </q-toolbar-title>
-        <q-btn dense
-               icon="close"
-               @click="toggleModalQuestionStore(false)" />
+      <q-toolbar slot="header" color="cyan-9">
+        <q-toolbar-title>مشاهده سوال ها</q-toolbar-title>
+        <q-btn dense icon="close" @click="questionStore.OPEN_MODAL_QUESTIONS(false)"/>
       </q-toolbar>
     </template>
 
-    <q-card inline
-            v-for="question in questionByQuestionGroupIdData"
-            v-bind:key="question.Id"
-            class="col-12">
+    <q-card
+      inline
+      v-for="questionPic in questionStore.gridDataByQuestionGroupId"
+      v-bind:key="questionPic.Id"
+      class="col-12"
+    >
       <q-card-media>
-        <img :src="question.QuestionPicturePath">
+        <img :src="questionPic.QuestionPicturePath" class="img-original-width">
       </q-card-media>
     </q-card>
 
     <template slot="footer">
-      <my-btn-back @click="toggleModalQuestionStore(false)"></my-btn-back>
+      <base-btn-back @click="questionStore.OPEN_MODAL_QUESTIONS(false)"></base-btn-back>
     </template>
   </bs-modal>
 </template>
 
-<script>
-import { mapState, mapActions } from "vuex";
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions("questionStore", ["toggleModalQuestionStore"])
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState("questionStore", {
-      questionByQuestionGroupIdData: "questionByQuestionGroupIdData",
-      isOpenModalQuestions: "isOpenModalQuestions"
-    })
-  }
-};
+@Component
+export default class QuestionsVue extends Vue {
+  //#region ### data ###
+  questionStore = vxm.questionStore;
+  //#endregion
+}
 </script>
 

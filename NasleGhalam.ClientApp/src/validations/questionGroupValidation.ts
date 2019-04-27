@@ -1,4 +1,9 @@
-import { required, displayName, maxLength } from "src/plugins/vuelidate";
+import {
+  required,
+  displayName,
+  maxLength,
+  requiredDdl
+} from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
 import IQuestionGroup from "src/models/IQuestionGroup";
 
@@ -12,6 +17,10 @@ const questionGroupValidations: ValidationRuleset<TQuestionGroup> = {
       displayName: displayName("عنوان"),
       maxLength: maxLength(50),
       required
+    },
+    LessonId: {
+      displayName: displayName("درس"),
+      requiredDdl: requiredDdl(0)
     }
   }
 };

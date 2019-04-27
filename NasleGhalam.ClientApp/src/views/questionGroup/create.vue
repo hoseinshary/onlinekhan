@@ -25,7 +25,7 @@
       <q-tab slot="title"
              name="previewTab"
              label="پیش نمایش" 
-             :disable="!previewMode"/>
+             :disable="preCreateMode"/>
 
       <q-tab-pane name="preCreateTab"
                   keep-alive
@@ -68,7 +68,7 @@
       </q-tab-pane>
     </q-tabs>
     <template slot="footer">
-      <q-btn v-if="isPreCreate"
+      <q-btn v-if="preCreateMode"
              outline
              color="positive"
              class="shadow-1 bg-white q-mr-sm"
@@ -107,12 +107,11 @@ export default class QuestionGroupCreateVue extends Vue {
   selectedTab= "preCreateTab";
   modalSize= "lg";
   previewImages= [];
-  isPreCreate= true;
   //#endregion
 
   //#region ### computed ###
-  get previewMode() {
-    return this.selectedTab == "previewTab";
+  get preCreateMode() {
+    return this.selectedTab == "preCreateTab";
   }
   //#endregion
 
@@ -122,50 +121,5 @@ export default class QuestionGroupCreateVue extends Vue {
   }
   //#endregion
 }
-// import viewModel from "viewModels/questionGroup/questionGroupViewModel";
-// import { mapState, mapActions } from "vuex";
-
-// export default {
-//   data() {
-//     return {
-//       selectedTab: "preCreateTab",
-//       modalSize: "lg",
-//       previewImages: [],
-//       isPreCreate: true
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("questionGroupStore", [
-//       "toggleModalCreateStore",
-//       "createVueStore",
-//       "submitPreCreateStore",
-//       "submitCreateStore",
-//       "resetCreateStore"
-//     ])
-//   },
-//   /**
-//    * computed
-//    */
-//   computed: {
-//     ...mapState("questionGroupStore", {
-//       questionGroupStore.modelName: "questionGroupStore.modelName",
-//       questionGroup: "questionGroup",
-//       isOpenModalCreate: "isOpenModalCreate"
-//     })
-//   },
-//   /**
-//    * validations
-//    */
-//   validations: viewModel,
-//   /**
-//    * created
-//    */
-//   created() {
-//     this.createVueStore(this);
-//   }
-// };
 </script>
 

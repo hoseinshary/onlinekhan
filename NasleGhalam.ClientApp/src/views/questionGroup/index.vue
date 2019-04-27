@@ -14,7 +14,7 @@
                 clearable
               />
               <q-tree
-                :nodes="educationTreeData"
+:nodes="educationTreeData"
                 :expanded.sync="educationTree.expanded"
                 :ticked.sync="educationTree.leafTicked"
                 tick-strategy="leaf"
@@ -44,19 +44,16 @@
               hasIndex
             >
               <template slot="Id" slot-scope="data">
-                <!-- <q-btn
+                <q-btn
                   outline
                   dense
                   color="primary"
                   class="shadow-1 bg-white q-mr-sm"
-                  @click="showModalQuestion(data.row.Id)"
-                >سوال ها</q-btn>-->
-
+                  @click="showModalQuestions(data.row.Id)"
+                >سوال ها</q-btn>
                 <a :href="data.row.QuestionGroupWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
                 <a :href="data.row.QuestionGroupExcelPath" target="_blank" class="q-mr-sm">فایل اکسل</a>
-                <!-- <base-btn-delete v-if="canDelete"
-                               round
-                @click="showModalDelete(data.row.Id)" />-->
+                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
               </template>
             </base-table>
           </div>
@@ -66,8 +63,8 @@
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
-    <!-- <modal-question></modal-question> -->
-    <!-- <modal-delete v-if="canDelete"></modal-delete> -->
+    <modal-questions></modal-questions>
+    <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
 
@@ -79,15 +76,16 @@ import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
   components: {
-    ModalCreate: () => import("./create.vue")
-    // ModalEdit: () => import("./edit.vue"),
-    // ModalDelete: () => import("./delete.vue")
+    ModalCreate: () => import("./create.vue"),
+    ModalQuestions: () => import("../question/questions.vue"),
+    ModalDelete: () => import("./delete.vue")
   }
 })
 export default class QuestionGroupVue extends Vue {
   //#region ### data ###
   questionGroupStore = vxm.questionGroupStore;
   questionGroup = vxm.questionGroupStore.questionGroup;
+  questionStore = vxm.questionStore;
   educationTreeStore = vxm.educationTreeStore;
   lessonStore = vxm.lessonStore;
   pageAccess = util.getAccess(this.questionGroupStore.modelName);
@@ -178,6 +176,12 @@ export default class QuestionGroupVue extends Vue {
   showModalDelete(id) {
     this.questionGroupStore.getById(id).then(() => {
       this.questionGroupStore.OPEN_MODAL_DELETE(true);
+    });
+  }
+
+  showModalQuestions(id) {
+    this.questionStore.fillListByQuestionGroupId(id).then(() => {
+      this.questionStore.OPEN_MODAL_QUESTIONS(true);
     });
   }
 

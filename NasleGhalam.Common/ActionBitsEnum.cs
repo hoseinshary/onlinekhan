@@ -67,10 +67,10 @@
         QuestionUpdateTopicAccess = 82,
         QuestionUpdateImportAccess = 83,
 
-        AnswerReadAccess = 50,
-        AnswerCreateAccess = 51,
-        AnswerUpdateAccess = 52,
-        AnswerDeleteAccess = 53,
+        //AnswerReadAccess = 50,
+        //AnswerCreateAccess = 51,
+        //AnswerUpdateAccess = 52,
+        //AnswerDeleteAccess = 53,
 
         PublisherReadAccess = 54,
         PublisherCreateAccess = 55,

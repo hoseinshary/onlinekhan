@@ -14,7 +14,7 @@
                 clearable
               />
               <q-tree
-:nodes="educationTreeData"
+                :nodes="educationTreeData"
                 :expanded.sync="educationTree.expanded"
                 :ticked.sync="educationTree.leafTicked"
                 tick-strategy="leaf"
@@ -51,9 +51,16 @@
                   class="shadow-1 bg-white q-mr-sm"
                   @click="showModalQuestions(data.row.Id)"
                 >سوال ها</q-btn>
+                <q-btn
+                  outline
+                  dense
+                  color="primary"
+                  class="shadow-1 bg-white q-mr-sm"
+                  @click="showModalCreateMultiAnswer(data.row.Id)"
+                >ثبت جواب گروهی</q-btn>
                 <a :href="data.row.QuestionGroupWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
                 <a :href="data.row.QuestionGroupExcelPath" target="_blank" class="q-mr-sm">فایل اکسل</a>
-                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
               </template>
             </base-table>
           </div>
@@ -65,6 +72,7 @@
     <modal-create v-if="canCreate"></modal-create>
     <modal-questions></modal-questions>
     <modal-delete v-if="canDelete"></modal-delete>
+    <modal-create-multi-answer></modal-create-multi-answer>
   </section>
 </template>
 
@@ -78,7 +86,9 @@ import { EducationTreeState } from "../../utilities/enumeration";
   components: {
     ModalCreate: () => import("./create.vue"),
     ModalQuestions: () => import("../question/questions.vue"),
-    ModalDelete: () => import("./delete.vue")
+    ModalDelete: () => import("./delete.vue"),
+    ModalCreateMultiAnswer: () =>
+      import("../questionAnswer/createMultiAnswer.vue")
   }
 })
 export default class QuestionGroupVue extends Vue {
@@ -86,6 +96,7 @@ export default class QuestionGroupVue extends Vue {
   questionGroupStore = vxm.questionGroupStore;
   questionGroup = vxm.questionGroupStore.questionGroup;
   questionStore = vxm.questionStore;
+  questionAnswerStore = vxm.questionAnswerStore;
   educationTreeStore = vxm.educationTreeStore;
   lessonStore = vxm.lessonStore;
   pageAccess = util.getAccess(this.questionGroupStore.modelName);
@@ -183,6 +194,11 @@ export default class QuestionGroupVue extends Vue {
     this.questionStore.fillListByQuestionGroupId(id).then(() => {
       this.questionStore.OPEN_MODAL_QUESTIONS(true);
     });
+  }
+
+  showModalCreateMultiAnswer(id) {
+    this.questionAnswerStore.questionAnswer.QuestionId = id;
+    this.questionAnswerStore.OPEN_MODAL_CREATE_MULTI(true);
   }
 
   lessonIdChanged(val) {

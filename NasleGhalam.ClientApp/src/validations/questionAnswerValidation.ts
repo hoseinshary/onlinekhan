@@ -1,9 +1,4 @@
-import {
-  required,
-  displayName,
-  maxLength,
-  requiredDdl
-} from "src/plugins/vuelidate";
+import { displayName, maxLength, requiredDdl } from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
 import IQuestionAnswer from "src/models/IQuestionAnswer";
 

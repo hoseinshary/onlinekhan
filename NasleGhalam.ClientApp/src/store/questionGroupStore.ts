@@ -162,7 +162,7 @@ export class QuestionGroupStore extends VuexModule {
   }
 
   @action()
-  async submitPreCreate(closeModal: boolean) {
+  async submitPreCreate() {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 

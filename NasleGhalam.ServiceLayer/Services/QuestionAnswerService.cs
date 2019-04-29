@@ -325,12 +325,12 @@ namespace NasleGhalam.ServiceLayer.Services
                         var newGuid = Guid.NewGuid();
                         var newEntry = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();
 
-                        var returnitem = new
+                        var returnItem = new
                         {
                             questionPath = $"/content/question/{questions[numberOfQ-1].FileName}.png".ToFullRelativePath(),
                             answers = newEntry
                         };
-                        returnGuidList.Add(returnitem);
+                        returnGuidList.Add(returnItem);
 
                         //تبدیل به عکس
                         var pane = newDoc2.Windows[1].Panes[1];

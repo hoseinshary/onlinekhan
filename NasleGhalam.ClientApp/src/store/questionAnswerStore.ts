@@ -17,12 +17,13 @@ import {
 
 @Module({ namespacedPath: "questionAnswerStore/" })
 export class QuestionAnswerStore extends VuexModule {
-  openModal: { index: boolean };
+  openModal: { index: boolean; createMulti: boolean };
   questionAnswer: IQuestionAnswer;
   private _questionAnswerList: Array<IQuestionAnswer>;
   private _indexVue: Vue;
   private _createVue: Vue;
   private _editVue: Vue;
+  private _preCreateMultiVue: Vue;
 
   /**
    * initialize data
@@ -33,7 +34,8 @@ export class QuestionAnswerStore extends VuexModule {
     this.questionAnswer = util.cloneObject(DefaultQuestionAnswer);
     this._questionAnswerList = [];
     this.openModal = {
-      index: false
+      index: false,
+      createMulti: false
     };
   }
 
@@ -99,6 +101,11 @@ export class QuestionAnswerStore extends VuexModule {
   }
 
   @mutation
+  OPEN_MODAL_CREATE_MULTI(open: boolean) {
+    this.openModal.createMulti = open;
+  }
+
+  @mutation
   SET_INDEX_VUE(vm: Vue) {
     this._indexVue = vm;
   }
@@ -111,6 +118,11 @@ export class QuestionAnswerStore extends VuexModule {
   @mutation
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
+  }
+
+  @mutation
+  SET_PRE_CREATE_MULTI_VUE(vm: Vue) {
+    this._preCreateMultiVue = vm;
   }
   //#endregion
 
@@ -171,15 +183,6 @@ export class QuestionAnswerStore extends VuexModule {
     if (wordFile["files"].length == 0) {
       msg = "فایل ورد انتخاب نشده است.<br/>";
     }
-    // if (this.question.TopicIds && this.question.TopicIds.length == 0) {
-    //   msg += "مبحثی انتخاب نکرده اید.<br/>";
-    // }
-    // if (
-    //   this.question.LookupId_QuestionType == 6 &&
-    //   (this.question.AnswerNumber < 1 || this.question.AnswerNumber > 4)
-    // ) {
-    //   msg += "گزینه صحیح انتخاب نشده است.";
-    // }
 
     if (msg) {
       this.notify({
@@ -217,6 +220,83 @@ export class QuestionAnswerStore extends VuexModule {
   async resetCreate() {
     this.questionAnswer.Id = 0;
     this.RESET(this._createVue);
+  }
+
+  @action()
+  async submitPreCreateMulti() {
+    let vm = this._preCreateMultiVue;
+    if (!(await this.validateForm(vm))) return;
+
+    var wordFile = vm.$refs.wordFile;
+    var msg = "";
+    if (wordFile["files"].length == 0) {
+      msg = "فایل ورد انتخاب نشده است.<br/>";
+      this.notify({
+        vm: vm,
+        data: {
+          Message: msg,
+          MessageType: MessageType.Error,
+          Obj: null
+        }
+      });
+      return;
+    }
+
+    var formData = new FormData();
+    formData.append(wordFile["name"], wordFile["files"][0]);
+    var params = util.toParam(this.questionAnswer);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/PreCreateMulti?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
+      let data = response.data;
+
+      if (data.MessageType == MessageType.Success) {
+        vm["selectedTab"] = "previewTab";
+        vm["previewImages"] = data.Obj;
+      }
+    });
+  }
+
+  @action()
+  async submitCreateMulti() {
+    let vm = this._preCreateMultiVue;
+    if (!(await this.validateForm(vm))) return;
+
+    var wordFile = vm.$refs.wordFile;
+    var msg = "";
+    if (wordFile["files"].length == 0) {
+      msg = "فایل ورد انتخاب نشده است.<br/>";
+      this.notify({
+        vm: vm,
+        data: {
+          Message: msg,
+          MessageType: MessageType.Error,
+          Obj: null
+        }
+      });
+      return;
+    }
+
+    var formData = new FormData();
+    formData.append(wordFile["name"], wordFile["files"][0]);
+    var params = util.toParam(this.questionAnswer);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/CreateMulti?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
+      let data = response.data;
+
+      if (data.MessageType == MessageType.Success) {
+        this.OPEN_MODAL_CREATE_MULTI(false);
+      }
+    });
   }
 
   @action()

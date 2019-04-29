@@ -204,7 +204,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         newQuestionAQuestion.FilePath = newGuid.ToString();
                         newQuestionAQuestion.Context = context;
                         newQuestionAQuestion.UserId = questionAnswerViewModel.UserId;
-                        newQuestionAQuestion.QuestionId = questions[--numberOfQ].Id;
+                        newQuestionAQuestion.QuestionId = questions[numberOfQ-1].Id;
                         newQuestionAQuestion.Author = questionAnswerViewModel.Author;
                         newQuestionAQuestion.IsMaster = true;
                         newQuestionAQuestion.Title = questionAnswerViewModel.Title;
@@ -277,7 +277,11 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var wordFileName = Guid.NewGuid().ToString();
 
-            var returnGuidList = new List<string>();
+            //read questionids from questiongroup
+            var questions = _questions.Where(current => current.QuestionGroups.Any(y => y.Id == questionAnswerViewModel.QuestionGroupId)).ToList();
+
+          
+            var returnGuidList = new List<Object>();
 
             //save Doc file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
@@ -292,6 +296,7 @@ namespace NasleGhalam.ServiceLayer.Services
             //split question Answer
             var x = doc.Paragraphs.Count;
             var i = 1;
+            var numberOfQ = 0;
             while (i <= x)
             {
                 if (doc.Paragraphs[i].Range.Text == "\f" || doc.Paragraphs[i].Range.Text == "\f\r")
@@ -300,6 +305,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     if (IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
                     {
+                        numberOfQ++;
                         var newDoc2 = app.Documents.Add(ref missing, ref missing, ref missing, ref missing);
                         doc.Paragraphs[i].Range.Copy();
 
@@ -318,7 +324,13 @@ namespace NasleGhalam.ServiceLayer.Services
 
                         var newGuid = Guid.NewGuid();
                         var newEntry = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();
-                        returnGuidList.Add(newEntry);
+
+                        var returnitem = new
+                        {
+                            questionPath = $"/content/question/{questions[numberOfQ-1].FileName}.png".ToFullRelativePath(),
+                            answers = newEntry
+                        };
+                        returnGuidList.Add(returnitem);
 
                         //تبدیل به عکس
                         var pane = newDoc2.Windows[1].Panes[1];

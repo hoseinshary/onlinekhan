@@ -19,13 +19,11 @@ namespace NasleGhalam.WebApi.Controllers
             _publisherService = publisherService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_publisherService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -38,7 +36,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(publisher);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.PublisherCreateAccess)]
         [CheckModelValidation]
@@ -47,7 +44,6 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _publisherService.Create(publisherViewModel);
             return Ok(msgRes);
         }
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.PublisherUpdateAccess)]
@@ -58,19 +54,11 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(msgRes);
         }
 
-
         [HttpPost, CheckUserAccess(ActionBits.PublisherDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _publisherService.Delete(id);
             return Ok(msgRes);
-        }
-
-        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess,
-             ActionBits.AxillaryBookUpdateAccess)]
-        public IHttpActionResult GetAllDdl()
-        {
-            return Ok(_publisherService.GetAllDdl());
         }
     }
 }

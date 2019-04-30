@@ -1,53 +1,36 @@
 <template>
-  <my-modal-create :title="modelName"
-                   :show="isOpenModalCreate"
-                   @confirm="submitCreateStore"
-                   @reset="resetCreateStore"
-                   @close="toggleModalCreateStore(false)">
-
-    <my-input :model="$v.publisherObj.Name" class="col-md-6" />
-          
-          
-
-  </my-modal-create>
+  <base-modal-create
+    :title="publisherStore.modelName"
+    :show="publisherStore.openModal.create"
+    @confirm="publisherStore.submitCreate"
+    @reset="publisherStore.resetCreate"
+    @close="publisherStore.OPEN_MODAL_CREATE(false)"
+  >
+    <base-input :model="$v.publisher.Name" class="col-md-6"/>
+  </base-modal-create>
 </template>
 
-<script>
-import viewModel from 'viewModels/publisherViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { publisherValidations } from "src/validations/PublisherValidation";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('publisherStore', [
-      'toggleModalCreateStore',
-      'createVueStore',
-      'submitCreateStore',
-      'resetCreateStore'
-    ])
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('publisherStore', {
-      modelName: 'modelName',
-      publisherObj: 'publisherObj',
-      isOpenModalCreate: 'isOpenModalCreate'
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
+@Component({
+  validations: publisherValidations
+})
+export default class PublisherCreateVue extends Vue {
+  $v: any;
+
+  //#region ### data ###
+  publisherStore = vxm.publisherStore;
+  publisher = vxm.publisherStore.publisher;
+  //#endregion
+
+  //#region ### hooks ###
   created() {
-    this.createVueStore(this);
+    this.publisherStore.SET_CREATE_VUE(this);
   }
-};
+  //#endregion
+}
 </script>
 

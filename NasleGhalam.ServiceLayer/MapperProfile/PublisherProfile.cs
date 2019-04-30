@@ -8,7 +8,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
     {
         public PublisherProfile()
         {
-            CreateMap<PublisherViewModel, Publisher>();
+            CreateMap<PublisherViewModel, Publisher>().ReverseMap();
         }
     }
 }

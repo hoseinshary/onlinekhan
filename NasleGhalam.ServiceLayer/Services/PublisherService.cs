@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Publisher;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -22,7 +21,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _publishers = uow.Set<Publisher>();
         }
 
-
         /// <summary>
         /// گرفتن  انتشارات با آی دی
         /// </summary>
@@ -32,13 +30,11 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _publishers
                 .Where(current => current.Id == id)
-                .Select(current => new PublisherViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name
-                }).FirstOrDefault();
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<PublisherViewModel>)
+                .FirstOrDefault();
         }
-
 
         /// <summary>
         /// گرفتن همه انتشارات ها
@@ -46,13 +42,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<PublisherViewModel> GetAll()
         {
-            return _publishers.Select(current => new PublisherViewModel()
-            {
-                Id = current.Id,
-                Name = current.Name
-            }).ToList();
+            return _publishers
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<PublisherViewModel>)
+                .ToList();
         }
-
 
         /// <summary>
         /// ثبت انتشارات
@@ -64,11 +59,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _publishers.Add(publisher);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = publisher.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(publisher.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// ویرایش انتشارات
@@ -80,11 +78,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _uow.MarkAsChanged(publisher);
 
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(publisher.Id);
+
+            return clientResult;
         }
-
 
         /// <summary>
         /// حذف انتشارات
@@ -95,29 +96,13 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var publisherViewModel = GetById(id);
             if (publisherViewModel == null)
-            {
                 return ClientMessageResult.NotFound();
-            }
 
             var publisher = Mapper.Map<Publisher>(publisherViewModel);
             _uow.MarkAsDeleted(publisher);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه انتشارات ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _publishers.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

@@ -16,9 +16,9 @@ export const QUESTION_URL = "/api/question";
 export const QUESTION_GROUP_URL = "/api/questionGroup";
 export const QUESTION_JUDGE_URL = "/api/questionJudge";
 export const QUESTION_ANSWER_URL = "/api/questionAnswer";
+export const PUBLISHER_URL = "/api/publisher";
 
 export const EDUCATION_BOOK_URL = "/api/educationBook";
-export const PUBLISHER_URL = "/api/publisher";
 export const AXILLARY_BOOK_URL = "/api/axillaryBook";
 export const UNIVERSITY_BRANCH_URL = "/api/universityBranch";
 export const STUDENT_URL = "/api/student";

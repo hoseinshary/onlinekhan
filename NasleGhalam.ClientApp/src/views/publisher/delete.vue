@@ -1,35 +1,26 @@
 <template>
-  <my-modal-delete :title="modelName"
-                   :recordName="recordName"
-                   :show="isOpenModalDelete"
-                   @confirm="submitDelete"
-                   @close="toggleModalDeleteStore(false)">
-  </my-modal-delete>
+  <base-modal-delete
+    :title="publisherStore.modelName"
+    :recordName="publisherStore.recordName"
+    :show="publisherStore.openModal.delete"
+    @confirm="confirm"
+    @close="publisherStore.OPEN_MODAL_DELETE(false)"
+  ></base-modal-delete>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+@Component
+export default class PublisherDeleteVue extends Vue {
+  //#region ### data ###
+  publisherStore = vxm.publisherStore;
+  //#endregion
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('publisherStore', ['toggleModalDeleteStore', 'submitDeleteStore']),
-    submitDelete() {
-      this.submitDeleteStore(this);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('publisherStore', {
-      modelName: 'modelName',
-      isOpenModalDelete: 'isOpenModalDelete'
-    }),
-    ...mapGetters('publisherStore', ['recordName'])
+  //#region ### methods ###
+  confirm() {
+    this.publisherStore.submitDelete(this);
   }
-};
+  //#endregion
+}
 </script>
-

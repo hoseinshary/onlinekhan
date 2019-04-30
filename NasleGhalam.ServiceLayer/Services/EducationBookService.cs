@@ -6,7 +6,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.EducationBook;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -22,7 +21,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow = uow;
             _educationBooks = uow.Set<EducationBook>();
         }
-
 
         /// <summary>
         /// گرفتن  کتاب درسی با آی دی
@@ -40,7 +38,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         ///  گرفتن همه کتاب های درسی یک درس
         /// </summary>
@@ -53,7 +50,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<EducationBookViewModel>)
                 .ToList();
         }
-
 
         /// <summary>
         /// ثبت کتاب درسی
@@ -70,13 +66,14 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.MarkAsUnChanged(topic);
                 educationBook.Topics.Add(topic);
             }
-            _educationBooks.Add(educationBook);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = educationBook.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(educationBook.Id);
+
+            return clientResult;
         }
-
 
         /// <summary>
         /// ویرایش کتاب درسی
@@ -99,16 +96,17 @@ namespace NasleGhalam.ServiceLayer.Services
                 educationBook.Topics.Add(topic);
             }
 
-            var result = _uow.CommitChanges(CrudType.Update, Title);
-            if (result.MessageType == MessageType.Success)
-            {
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            if (serverResult.MessageType == MessageType.Success)
                 transaction.Commit();
-            }
             else
-            {
                 transaction.Rollback();
-            }
-            return Mapper.Map<ClientMessageResult>(result);
+
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(educationBook.Id);
+
+            return clientResult;
         }
 
 
@@ -137,20 +135,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه کتاب درسی ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _educationBooks.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

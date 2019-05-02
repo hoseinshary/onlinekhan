@@ -132,11 +132,5 @@ export default class QuestionAnswerVue extends Vue {
     }
   }
   //#endregion
-
-  //#region ### hooks ###
-  created() {
-    this.questionAnswerStore.SET_INDEX_VUE(this);
-  }
-  //#endregion
 }
 </script>

@@ -66,6 +66,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.MarkAsUnChanged(topic);
                 educationBook.Topics.Add(topic);
             }
+
+            _educationBooks.Add(educationBook);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 

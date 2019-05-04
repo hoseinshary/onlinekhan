@@ -323,12 +323,10 @@ namespace NasleGhalam.ServiceLayer.Services
                         }
 
                         var newGuid = Guid.NewGuid();
-                        var newEntry = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();
-
                         var returnItem = new
                         {
                             questionPath = $"/content/question/{questions[numberOfQ-1].FileName}.png".ToFullRelativePath(),
-                            answers = newEntry
+                            answerPath = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath()
                         };
                         returnGuidList.Add(returnItem);
 

@@ -96,7 +96,7 @@ export default class QuestionGroupVue extends Vue {
   questionGroupStore = vxm.questionGroupStore;
   questionGroup = vxm.questionGroupStore.questionGroup;
   questionStore = vxm.questionStore;
-  questionAnswerStore = vxm.questionAnswerStore;
+  questionAnswerMultiStore = vxm.questionAnswerMultiStore;
   educationTreeStore = vxm.educationTreeStore;
   lessonStore = vxm.lessonStore;
   pageAccess = util.getAccess(this.questionGroupStore.modelName);
@@ -197,8 +197,8 @@ export default class QuestionGroupVue extends Vue {
   }
 
   showModalCreateMultiAnswer(id) {
-    this.questionAnswerStore.questionAnswer.QuestionId = id;
-    this.questionAnswerStore.OPEN_MODAL_CREATE_MULTI(true);
+    this.questionAnswerMultiStore.questionAnswerMulti.QuestionGroupId = id;
+    this.questionAnswerMultiStore.OPEN_MODAL_CREATE(true);
   }
 
   lessonIdChanged(val) {

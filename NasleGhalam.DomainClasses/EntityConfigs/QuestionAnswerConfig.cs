@@ -14,7 +14,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             Property(x => x.Author).HasMaxLength(100);
 
             HasRequired(x => x.Question)
-                .WithMany(x => x.Answers)
+                .WithMany(x => x.QuestionAnswers)
                 .HasForeignKey(x => x.QuestionId)
                 .WillCascadeOnDelete(false);
 

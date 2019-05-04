@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NasleGhalam.Common;
+using NasleGhalam.ViewModels.QuestionAnswer;
 using NasleGhalam.ViewModels.QuestionOption;
 using NasleGhalam.ViewModels.Tag;
 using NasleGhalam.ViewModels.Topic;
@@ -52,6 +53,7 @@ namespace NasleGhalam.ViewModels.Question
         public int LookupId_AreaType { get; set; }
 
         public List<QuestionOptionViewModel> QuestionOptions { get; set; } = new List<QuestionOptionViewModel>();
+        public List<QuestionAnswerViewModel> QuestionAnswers { get; set; } = new List<QuestionAnswerViewModel>();
 
         public List<TopicViewModel> Topics { get; set; } = new List<TopicViewModel>();
 

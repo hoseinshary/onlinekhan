@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.ViewModels.QuestionAnswer
 {
@@ -18,6 +19,8 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
         [Display(Name = "آدرس فایل")]
         public string FilePath { get; set; }
 
+
+        public string QuestionAnswerPicturePath => $"/Api/QuestionAnswer/GetPictureFile/{FilePath}".ToFullRelativePath();
 
         [Display(Name = "نوع پاسخ")]
         public int LookupId_AnswerType { get; set; }

@@ -13,7 +13,7 @@ namespace NasleGhalam.DomainClasses.Entities
             QuestionEquals2 = new HashSet<QuestionEqual>();
             Tags = new HashSet<Tag>();
             Boxes = new HashSet<Box>();
-            Answers = new HashSet<QuestionAnswer>();
+            QuestionAnswers = new HashSet<QuestionAnswer>();
             Topics = new HashSet<Topic>();
             
         }
@@ -80,7 +80,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public ICollection<Box> Boxes { get; set; }
      
-        public ICollection<QuestionAnswer> Answers { get; set; }
+        public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
 
         public ICollection<Topic> Topics { get; set; }
         public ICollection<QuestionGroup> QuestionGroups { get; set; }

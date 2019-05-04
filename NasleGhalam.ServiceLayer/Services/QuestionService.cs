@@ -87,6 +87,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllByQuestionGroupId(int id)
         {
             return _questions
+                .Include(current => current.QuestionAnswers)
                 .Where(current => current.QuestionGroups.Any(x => x.Id == id))
                 .AsNoTracking()
                 .AsEnumerable()
@@ -652,6 +653,11 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             return Mapper.Map<ClientMessageResult>(msgRes);
+        }
+
+        public static implicit operator Lazy<object>(QuestionService v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

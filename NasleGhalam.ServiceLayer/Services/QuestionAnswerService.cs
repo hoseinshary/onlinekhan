@@ -21,13 +21,19 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "جواب سوال";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<QuestionAnswer> _questionAnswers;
+         //todo :1111
         private readonly IDbSet<Question> _questions;
+        private readonly Lazy<QuestionService> _questionService;
 
-        public QuestionAnswerService(IUnitOfWork uow)
+        
+
+        public QuestionAnswerService(IUnitOfWork uow, Lazy<QuestionService> questionService1)
         {
             _uow = uow;
+            _questionService = questionService1;
             _questionAnswers = uow.Set<QuestionAnswer>();
             _questions = uow.Set<Question>();
+
         }
 
         /// <summary>
@@ -151,6 +157,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var questions = _questions.Where(current => current.QuestionGroups.Any(y => y.Id == questionAnswerViewModel.QuestionGroupId)).ToList();
 
 
+
             //save Doc file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
 
@@ -263,7 +270,9 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.ValidateOnSaveEnabled(false);
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            
             var returnVal = Mapper.Map<ClientMessageResult>(msgRes);
+            returnVal.Obj = _questionService.Value.GetAllByQuestionGroupId(questionAnswerViewModel.QuestionGroupId);
             return returnVal;
         }
 

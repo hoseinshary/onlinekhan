@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\EducationTree.cs" />
+    <Compile Include="Entities\Log.cs" />
     <Compile Include="Entities\Lookup.cs" />
     <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\QuestionAnswerView.cs" />

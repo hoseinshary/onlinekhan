@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Web;
 using NasleGhalam.Common;
 
 namespace NasleGhalam.WebApi.Extensions
@@ -35,6 +36,62 @@ namespace NasleGhalam.WebApi.Extensions
             var obj = request.Properties["_userType"];
             var userType = Convert.ToInt32(obj);
             return (UserType)Enum.ToObject(typeof(UserType), userType);
+        }
+
+
+        public static BrowserInfoViewModel GetBrowserInfo(this HttpRequestBase request)
+        {
+            var browser = request.Browser;
+            return new BrowserInfoViewModel
+            {
+                Type = browser.Type,
+                Name = browser.Browser,
+                Version = browser.Version,
+                MajorVersion = browser.MajorVersion,
+                MinorVersion = browser.MinorVersion,
+                Platform = browser.Platform,
+                IsBeta = browser.Beta,
+                IsCrawler = browser.Crawler,
+                IsAol = browser.AOL,
+                IsWin16 = browser.Win16,
+                IsWin32 = browser.Win32,
+                SupportsFrames = browser.Frames,
+                SupportsTables = browser.Tables,
+                SupportsCookies = browser.Cookies,
+                SupportsVbScript = browser.VBScript,
+                SupportsJavaScript = browser.EcmaScriptVersion.ToString(),
+                SupportsJavaApplets = browser.JavaApplets,
+                SupportsActiveXControls = browser.ActiveXControls,
+                SupportsJavaScriptVersion = browser["JavaScriptVersion"],
+                Ip = request.GetIpAddress(),
+                UserAgent = browser.Browser,
+                Device = browser.IsMobileDevice ? "Mobile" : "Desktop"
+            };
+        }
+
+        public static string GetIpAddress(this HttpRequestBase request)
+        {
+            string ip;
+            try
+            {
+                ip = request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+                if (!string.IsNullOrEmpty(ip))
+                {
+                    if (ip.IndexOf(",", StringComparison.Ordinal) > 0)
+                    {
+                        string[] ipRange = ip.Split(',');
+                        int le = ipRange.Length - 1;
+                        ip = ipRange[le];
+                    }
+                }
+                else
+                {
+                    ip = request.UserHostAddress;
+                }
+            }
+            catch { ip = null; }
+
+            return ip;
         }
     }
 }

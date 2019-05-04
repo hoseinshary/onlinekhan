@@ -50,6 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="%40CodeTemplates\ViewModelGenerator.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewModelGenerator.tt</DependentUpon>
+    </Content>
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
     <Compile Include="City\CityUpdateViewModel.cs" />
     <Compile Include="City\CityCreateViewModel.cs" />
@@ -64,6 +69,8 @@
     <Compile Include="EducationYear\EducationYearUpdateViewModel.cs" />
     <Compile Include="EducationYear\EducationYearCreateViewModel.cs" />
     <Compile Include="Lesson\LessonUpdateViewModel.cs" />
+    <Compile Include="Log\BrowserInfoViewModel.cs" />
+    <Compile Include="Log\LogViewModel.cs" />
     <Compile Include="Publisher\PublisherViewModel.cs" />
     <Compile Include="QuestionAnswer\QuestionAnswerUpdateViewModel.cs" />
     <Compile Include="QuestionAnswer\QuestionAnswerCreateViewModel.cs" />
@@ -93,11 +100,6 @@
     <Compile Include="UniversityBranch\UniversityBranchViewModel.cs" />
     <Compile Include="Student\StudentCreateViewModel .cs" />
     <Compile Include="Student\StudentViewModel.cs" />
-    <Content Include="%40CodeTemplates\ViewModelGenerator.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewModelGenerator.tt</DependentUpon>
-    </Content>
     <Compile Include="Action\ActionViewModel.cs" />
     <Compile Include="Action\MenuViewModel.cs" />
     <Compile Include="City\CityViewModel.cs" />

@@ -1,47 +1,35 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.QuestionAnswer
+namespace NasleGhalam.ViewModels.Log
 {
-	public class QuestionAnswerViewModel
+	public class LogViewModel
 	{
 		[Display(Name = "")]
-		public int Id { get; set; }
+		public Guid Id { get; set; }
 
 
 		[Display(Name = "")]
-		public string Title { get; set; }
+		public string TableName { get; set; }
 
 
 		[Display(Name = "")]
-		public string Context { get; set; }
+		public CrudType CrudType { get; set; }
 
 
 		[Display(Name = "")]
-		public string FilePath { get; set; }
+		public DateTime DateTime { get; set; }
 
 
 		[Display(Name = "")]
-		public int LookupId_AnswerType { get; set; }
+		public string ObjectId { get; set; }
 
 
 		[Display(Name = "")]
-		public string Description { get; set; }
+		public string ObjectValue { get; set; }
 
 
 		[Display(Name = "")]
-		public string Author { get; set; }
-
-
-		[Display(Name = "")]
-		public bool IsMaster { get; set; }
-
-
-		[Display(Name = "")]
-		public int UserId { get; set; }
-
-
-		[Display(Name = "")]
-		public int QuestionId { get; set; }
+		public string BrowserInfo { get; set; }
 
 
 	}

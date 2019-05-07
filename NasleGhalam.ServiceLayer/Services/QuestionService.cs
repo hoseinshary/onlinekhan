@@ -87,13 +87,29 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllByQuestionGroupId(int id)
         {
             return _questions
-                .Include(current => current.QuestionAnswers)
+                .Include(current => current.QuestionAnswers.OrderBy(y => y.IsMaster))
                 .Where(current => current.QuestionGroups.Any(x => x.Id == id))
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)
                 .ToList();
         }
+
+
+        /// <summary>
+        /// گرفتن همه سوال های سوال گروهی
+        /// </summary>
+        /// <returns></returns>
+        public IList<Question> GetAllQuestionsByQuestionGroupId(int id)
+        {
+            return _questions
+                .Include(current => current.QuestionAnswers)
+                .Where(current => current.QuestionGroups.Any(x => x.Id == id))
+                .AsNoTracking()
+                .AsEnumerable()
+                .ToList();
+        }
+
 
         /// <summary>
         /// ثبت سوال

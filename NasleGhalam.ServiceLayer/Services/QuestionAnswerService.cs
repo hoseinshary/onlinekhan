@@ -21,8 +21,6 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "جواب سوال";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<QuestionAnswer> _questionAnswers;
-         //todo :1111
-        private readonly IDbSet<Question> _questions;
         private readonly Lazy<QuestionService> _questionService;
 
         
@@ -32,7 +30,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow = uow;
             _questionService = questionService1;
             _questionAnswers = uow.Set<QuestionAnswer>();
-            _questions = uow.Set<Question>();
 
         }
 
@@ -154,13 +151,10 @@ namespace NasleGhalam.ServiceLayer.Services
             var wordFileName = Guid.NewGuid().ToString();
 
             //read questionids from questiongroup
-            var questions = _questions.Where(current => current.QuestionGroups.Any(y => y.Id == questionAnswerViewModel.QuestionGroupId)).ToList();
-
-
-
+            var questions = _questionService.Value.GetAllQuestionsByQuestionGroupId(questionAnswerViewModel.QuestionGroupId);
+            
             //save Doc file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
-
 
             // Open a doc file.
             var app = new Application();
@@ -168,6 +162,29 @@ namespace NasleGhalam.ServiceLayer.Services
             var doc = app.Documents.Open(wordFilename);
 
             var missing = Type.Missing;
+
+
+            //بررسی تعداد سوالات با تعداد جواب ها 
+            var questoinAnswerCount = 0;
+            foreach (Paragraph paragraph in doc.Paragraphs)
+            {
+                if (IsQuestionParagraph(paragraph.Range.Text))
+                {
+                    questoinAnswerCount++;
+                }
+            }
+
+            if (questoinAnswerCount != questions.Count)
+            {
+                var msgRes2 = new ClientMessageResult
+                {
+                    MessageType = MessageType.Error,
+                    Message = $"تعداد سوالات با تعداد جواب سوالات برابر نیست!\nتعداد سوالات{questions.Count} است."
+
+                };
+                return msgRes2;
+            }
+
 
 
             //split question Answer
@@ -289,10 +306,10 @@ namespace NasleGhalam.ServiceLayer.Services
             var wordFileName = Guid.NewGuid().ToString();
 
             //read questionids from questiongroup
-            var questions = _questions.Where(current => current.QuestionGroups.Any(y => y.Id == questionAnswerViewModel.QuestionGroupId)).ToList();
+            var questions = _questionService.Value.GetAllQuestionsByQuestionGroupId(questionAnswerViewModel.QuestionGroupId);
+            
 
-          
-            var returnGuidList = new List<Object>();
+            
 
             //save Doc file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
@@ -303,6 +320,30 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var doc = app.Documents.Open(wordFilename);
             var missing = Type.Missing;
+
+            //بررسی تعداد سوالات با تعداد جواب ها 
+            var questoinAnswerCount = 0;
+            foreach (Paragraph paragraph in doc.Paragraphs)
+            {
+                if (IsQuestionParagraph(paragraph.Range.Text))
+                {
+                    questoinAnswerCount++;
+                }
+            }
+
+            if (questoinAnswerCount != questions.Count)
+            {
+                var msgRes2 = new ClientMessageResult
+                {
+                    MessageType = MessageType.Error,
+                    Message = $"تعداد سوالات با تعداد جواب سوالات برابر نیست!\nتعداد سوالات{questions.Count} است."
+
+                };
+                return msgRes2;
+            }
+
+
+            var returnGuidList = new List<Object>();
 
             //split question Answer
             var x = doc.Paragraphs.Count;
@@ -417,6 +458,39 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
+
+
+        /// <summary>
+        /// حذف جواب سوال
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ClientMessageResult DeleteMulti(int id)
+        {
+            //read questionids from questiongroup
+            var questions = _questionService.Value.GetAllQuestionsByQuestionGroupId(id);
+
+            if (questions == null || questions.Count == 0)
+            {
+                return ClientMessageResult.NotFound();
+            }
+
+            if ( questions.Any(current => current.QuestionAnswers.Count == 1)  )
+            {
+                foreach (var VARIABLE in questions.Select(x => x.QuestionAnswers).ToList())
+                {
+                    foreach (var answer in VARIABLE)
+                    {
+                        _uow.MarkAsDeleted(answer);
+                    }
+                }
+            }
+
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<ClientMessageResult>(msgRes);
+        }
+
+
 
         public bool IsQuestionParagraph(string s)
         {

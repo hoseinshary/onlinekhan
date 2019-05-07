@@ -228,8 +228,10 @@ namespace NasleGhalam.ServiceLayer.Services
                             ref missing, ref missing, ref missing, ref missing,
                             ref missing);
 
+                        
                         //تبدیل به عکس
                         var pane = newDoc2.Windows[1].Panes[1];
+                        Thread.Sleep(1000);
                         var page = pane.Pages[1];
                         var bits = page.EnhMetaFileBits;
                         var target = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".png";

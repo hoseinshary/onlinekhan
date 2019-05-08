@@ -11,7 +11,7 @@
       inline
       v-for="questionPic in questionStore.gridDataByQuestionGroupId"
       v-bind:key="questionPic.Id"
-      class="col-12"
+      class="col-12 q-mb-sm"
     >
       <q-card-media>
         <img :src="questionPic.QuestionPicturePath" class="img-original-width">

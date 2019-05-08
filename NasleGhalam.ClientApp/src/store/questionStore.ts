@@ -60,6 +60,12 @@ export class QuestionStore extends VuexModule {
   get gridDataByQuestionGroupId() {
     return this._listByQuestionGroupId;
   }
+
+  get hasQuestionAnswer() {
+    return this._listByQuestionGroupId.every(
+      x => x.QuestionAnswers != undefined && x.QuestionAnswers.length > 0
+    );
+  }
   //#endregion
 
   //#region ### mutations ###

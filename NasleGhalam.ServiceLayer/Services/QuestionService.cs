@@ -87,7 +87,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllByQuestionGroupId(int id)
         {
             return _questions
-                .Include(current => current.QuestionAnswers.OrderBy(y => y.IsMaster))
+                .Include(current => current.QuestionAnswers)
+                //.Include(current => current.QuestionAnswers.OrderBy(y => y.IsMaster))
                 .Where(current => current.QuestionGroups.Any(x => x.Id == id))
                 .AsNoTracking()
                 .AsEnumerable()

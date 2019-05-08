@@ -12,10 +12,21 @@
     </template>
 
     <q-tabs v-model="selectedTab" class="col-12" inverted color="primary">
-      <q-tab slot="title" name="preCreateTab" label="ثبت موقت"/>
-      <q-tab slot="title" name="previewTab" label="پیش نمایش" :disable="preCreateMode"/>
+      <q-tab
+        slot="title"
+        name="preCreateTab"
+        label="ثبت موقت"
+        :disabled="questionStore.hasQuestionAnswer"
+      />
+      <q-tab
+        slot="title"
+        name="previewTab"
+        label="پیش نمایش"
+        :disable="preCreateMode || questionStore.hasQuestionAnswer"
+      />
+      <q-tab slot="title" name="questionTab" label="سوال و جواب ها"/>
 
-      <q-tab-pane name="preCreateTab" keep-alive class="row">
+      <q-tab-pane name="preCreateTab" keep-alive class="row gutter-sm">
         <base-input :model="$v.questionAnswerMulti.Title" class="col-md-6"/>
         <base-input :model="$v.questionAnswerMulti.Author" class="col-md-6"/>
         <q-field class="col-12">
@@ -32,10 +43,41 @@
       </q-tab-pane>
 
       <q-tab-pane name="previewTab" keep-alive class="row">
-        <q-card inline v-for="img in previewImages" v-bind:key="img.questionPath" class="col-12">
+        <q-card
+          inline
+          v-for="(img, index) in previewImages"
+          v-bind:key="img.questionPath"
+          class="col-12 q-mb-sm"
+        >
           <q-card-media>
+            سوال {{index + 1}}
             <img :src="img.questionPath">
+            جواب {{index + 1}}
             <img :src="img.answerPath">
+          </q-card-media>
+        </q-card>
+      </q-tab-pane>
+
+      <q-tab-pane name="questionTab" keep-alive class="row">
+        <q-card
+          inline
+          v-for="(questionPic, index) in questionStore.gridDataByQuestionGroupId"
+          v-bind:key="questionPic.Id"
+          class="col-12 q-mb-sm"
+        >
+          <q-card-media>
+            سوال {{index+1}}:
+            <img :src="questionPic.QuestionPicturePath" class="img-original-width">
+            <div
+              v-for="(answerPic, indexAnswer) in questionPic.QuestionAnswers"
+              v-bind:key="answerPic.Id"
+            >
+              جواب {{indexAnswer+1}}:
+              <img
+                :src="answerPic.QuestionAnswerPicturePath"
+                class="img-original-width"
+              >
+            </div>
           </q-card-media>
         </q-card>
       </q-tab-pane>
@@ -81,6 +123,7 @@ export default class QuestionAnswerCreateMultiVue extends Vue {
   //#region ### data ###
   questionAnswerMultiStore = vxm.questionAnswerMultiStore;
   questionAnswerMulti = vxm.questionAnswerMultiStore.questionAnswerMulti;
+  questionStore = vxm.questionStore;
   selectedTab = "preCreateTab";
   previewImages = [];
   //#endregion

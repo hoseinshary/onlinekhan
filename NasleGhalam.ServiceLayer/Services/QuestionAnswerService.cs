@@ -523,6 +523,10 @@ namespace NasleGhalam.ServiceLayer.Services
                     }
                     return false;
                 }
+                else
+                {
+                    break;
+                }
                 i++;
             }
             return false;

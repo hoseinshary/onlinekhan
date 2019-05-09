@@ -153,7 +153,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         var newGuid = Guid.NewGuid();
                         newQuestion.FileName = newGuid.ToString();
                         newQuestion.Context = context;
-                        newQuestion.LookupId_QuestionType = dt.Rows[numberOfQ - 1]["نوع سوال"].ToString() == "تستی" ? 6 : 7;
+                        newQuestion.LookupId_QuestionType = dt.Rows[numberOfQ - 1]["نوع سوال"].ToString() == "تشریحی" ? 7 : 6;
                         newQuestion.QuestionPoint = Convert.ToInt32(dt.Rows[numberOfQ - 1]["بارم سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["بارم سوال"] : 0);
                         newQuestion.AnswerNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["گزینه صحیح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["گزینه صحیح"] : 0);
                         newQuestion.LookupId_QuestionHardnessType = 1040;

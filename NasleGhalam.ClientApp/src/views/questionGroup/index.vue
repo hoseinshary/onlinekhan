@@ -197,8 +197,11 @@ export default class QuestionGroupVue extends Vue {
   }
 
   showModalCreateMultiAnswer(id) {
-    this.questionAnswerMultiStore.questionAnswerMulti.QuestionGroupId = id;
-    this.questionAnswerMultiStore.OPEN_MODAL_CREATE(true);
+    this.questionStore.fillListByQuestionGroupId(id).then(() => {
+      this.questionAnswerMultiStore.resetCreate();
+      this.questionAnswerMultiStore.questionAnswerMulti.QuestionGroupId = id;
+      this.questionAnswerMultiStore.OPEN_MODAL_CREATE(true);
+    });
   }
 
   lessonIdChanged(val) {

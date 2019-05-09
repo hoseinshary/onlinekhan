@@ -1,5 +1,6 @@
 import IQuestionOption from "./IQuestionOption";
 import ITopic from "./ITopic";
+import IQuestionAnswer from "./IQuestionAnswer";
 
 export default interface IQuestion {
   Id: number;
@@ -22,6 +23,7 @@ export default interface IQuestion {
   LookupId_AuthorType: number;
   LookupId_AreaType: number;
   QuestionOptions?: Array<IQuestionOption>;
+  QuestionAnswers?: Array<IQuestionAnswer>;
   Topics?: Array<ITopic>;
   Tags?: Array<ITopic>;
   TopicIds?: Array<number>;
@@ -49,6 +51,7 @@ export const DefaultQuestion: IQuestion = {
   LookupId_AuthorType: 1039,
   LookupId_AreaType: 1036,
   QuestionOptions: [],
+  QuestionAnswers: [],
   Topics: [],
   Tags: [],
   TopicIds: [],

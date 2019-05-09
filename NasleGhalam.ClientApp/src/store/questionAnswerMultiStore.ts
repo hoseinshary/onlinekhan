@@ -123,7 +123,9 @@ export class QuestionAnswerMultiStore extends VuexModule {
       headers: { "Content-Type": "multipart/form-data" }
     }).then((response: AxiosResponse<IMessageResult>) => {
       let data = response.data;
-      this.notify({ vm, data });
+      if (data.Message) {
+        this.notify({ vm, data });
+      }
 
       if (data.MessageType == MessageType.Success) {
         vm["selectedTab"] = "previewTab";
@@ -163,9 +165,7 @@ export class QuestionAnswerMultiStore extends VuexModule {
       headers: { "Content-Type": "multipart/form-data" }
     }).then((response: AxiosResponse<IMessageResult>) => {
       let data = response.data;
-      if (data.MessageType == MessageType.Success) {
-        this.OPEN_MODAL_CREATE(false);
-      }
+      this.notify({ vm, data });
     });
   }
 

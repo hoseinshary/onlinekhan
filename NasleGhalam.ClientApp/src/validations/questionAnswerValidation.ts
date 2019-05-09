@@ -27,7 +27,7 @@ const questionAnswerValidations: ValidationRuleset<TQuestionAnswer> = {
       displayName: displayName("نویسنده")
     },
     IsMaster: {
-      displayName: displayName("اصلی")
+      displayName: displayName("آنلاین خوان")
     },
     QuestionId: {
       displayName: displayName("سوال"),

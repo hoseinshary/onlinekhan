@@ -27,27 +27,44 @@
       </q-tabs>
     </div>
     <div class="col-8">
-      <base-table
-        :grid-data="questionAnswerStore.gridData"
-        :columns="questionAnswerGridColumn"
-        hasIndex
-      >
-        <template slot="Context" slot-scope="data">
-          <div v-if="data.row.Context && data.row.Context.length> 100">
-            {{(`${data.row.Context.substring(0,100)} ...`)}}
-            <q-tooltip>{{data.row.Context}}</q-tooltip>
-          </div>
-          <div v-else>{{data.row.Context}}</div>
-        </template>
-        <!-- <template
-          slot="Lookup_QuestionHardnessType.Value"
-          slot-scope="data"
-        >{{data.row.Lookup_QuestionHardnessType.Value}}</template>-->
-        <template slot="Id" slot-scope="data">
-          <!-- <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)"/> -->
-          <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
-        </template>
-      </base-table>
+      <q-tabs inverted color="cyan-9">
+        <q-tab slot="title" name="detailTab" label="جزییات" default class="text-bold"/>
+        <q-tab slot="title" name="imageTab" label="تصاویر" class="text-bold"/>
+
+        <q-tab-pane name="detailTab" keep-alive class="row">
+          <base-table
+            :grid-data="questionAnswerStore.gridData"
+            :columns="questionAnswerGridColumn"
+            hasIndex
+          >
+            <template slot="IsMater" slot-scope="data">{{data.row.IsMater? "بلی" : "خیر"}}</template>
+            <template slot="Context" slot-scope="data">
+              <div v-if="data.row.Context && data.row.Context.length> 100">
+                {{(`${data.row.Context.substring(0,100)} ...`)}}
+                <q-tooltip>{{data.row.Context}}</q-tooltip>
+              </div>
+              <div v-else>{{data.row.Context}}</div>
+            </template>
+            <template slot="Id" slot-scope="data">
+              <!-- <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)"/> -->
+              <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
+            </template>
+          </base-table>
+        </q-tab-pane>
+        <q-tab-pane name="imageTab" keep-alive class="row">
+          <q-card
+            inline
+            v-for="(img, index) in questionAnswerStore.gridData"
+            v-bind:key="img.Id"
+            class="col-12 q-mb-sm"
+          >
+            <q-card-media>
+              جواب {{index + 1}}
+              <img :src="img.QuestionAnswerPicturePath">
+            </q-card-media>
+          </q-card>
+        </q-tab-pane>
+      </q-tabs>
     </div>
 
     <template slot="footer">
@@ -81,6 +98,14 @@ export default class QuestionAnswerVue extends Vue {
     {
       title: "عنوان",
       data: "Title"
+    },
+    {
+      title: "نویسنده",
+      data: "Author"
+    },
+    {
+      title: "آنلاین خوان",
+      data: "IsMater"
     },
     {
       title: "متن جواب",

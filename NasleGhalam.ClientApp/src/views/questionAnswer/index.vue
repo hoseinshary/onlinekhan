@@ -7,9 +7,16 @@
       </q-toolbar>
     </template>
 
-    <q-card inline class="col-12" v-if="question.FileName">
+    <q-card inline class="col-12 q-mb-sm" v-show="question.FileName">
       <q-card-media>
+        سوال:
         <img :src="question.QuestionPicturePath" class="img-original-width">
+      </q-card-media>
+    </q-card>
+    <q-card inline class="col-12 q-mb-sm" v-show="questionAnswer.FileName">
+      <q-card-media>
+        جواب:
+        <img :src="questionAnswer.QuestionAnswerPicturePath" class="img-original-width">
       </q-card-media>
     </q-card>
     <div class="col-4">
@@ -22,8 +29,15 @@
           <tab-create></tab-create>
         </q-tab-pane>
         <q-tab-pane keep-alive name="tab-edit">
-          <!-- <tab-edit></tab-edit> -->
+          <tab-edit></tab-edit>
         </q-tab-pane>
+        <q-tab
+          slot="title"
+          name="showQuestionJudge"
+          label="نمایش ارزیابی"
+          class="text-bold"
+          @click="showQuestionJudge"
+        />
       </q-tabs>
     </div>
     <div class="col-8">
@@ -37,7 +51,7 @@
             :columns="questionAnswerGridColumn"
             hasIndex
           >
-            <template slot="IsMater" slot-scope="data">{{data.row.IsMater? "بلی" : "خیر"}}</template>
+            <template slot="IsMaster" slot-scope="data">{{data.row.IsMaster? "بلی" : "خیر"}}</template>
             <template slot="Context" slot-scope="data">
               <div v-if="data.row.Context && data.row.Context.length> 100">
                 {{(`${data.row.Context.substring(0,100)} ...`)}}
@@ -46,7 +60,7 @@
               <div v-else>{{data.row.Context}}</div>
             </template>
             <template slot="Id" slot-scope="data">
-              <!-- <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)"/> -->
+              <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)"/>
               <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
             </template>
           </base-table>
@@ -60,7 +74,10 @@
           >
             <q-card-media>
               جواب {{index + 1}}
-              <img :src="img.QuestionAnswerPicturePath">
+              <img
+                :src="img.QuestionAnswerPicturePath"
+                class="img-original-width"
+              >
             </q-card-media>
           </q-card>
         </q-tab-pane>
@@ -82,7 +99,7 @@ import util from "src/utilities";
 @Component({
   components: {
     TabCreate: () => import("./create.vue"),
-    // TabEdit: () => import("./edit.vue"),
+    TabEdit: () => import("./edit.vue"),
     BtnDelete: () => import("./delete.vue")
   }
 })
@@ -105,7 +122,7 @@ export default class QuestionAnswerVue extends Vue {
     },
     {
       title: "آنلاین خوان",
-      data: "IsMater"
+      data: "IsMaster"
     },
     {
       title: "متن جواب",
@@ -155,6 +172,13 @@ export default class QuestionAnswerVue extends Vue {
       this.questionAnswerStore.resetCreate();
       this.questionAnswer.QuestionId = this.question.Id;
     }
+  }
+
+  showQuestionJudge() {
+    this.questionAnswerStore.OPEN_MODAL_INDEX(false);
+    vxm.questionJudgeStore.fillListByQuestionId(this.question.Id).then(() => {
+      vxm.questionJudgeStore.OPEN_MODAL_INDEX(true);
+    });
   }
   //#endregion
 }

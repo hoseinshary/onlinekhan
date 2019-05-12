@@ -51,9 +51,9 @@
         >
           <q-card-media>
             سوال {{index + 1}}
-            <img :src="img.questionPath">
+            <img :src="img.questionPath" class="img-original-width">
             جواب {{index + 1}}
-            <img :src="img.answerPath">
+            <img :src="img.answerPath" class="img-original-width">
           </q-card-media>
         </q-card>
       </q-tab-pane>

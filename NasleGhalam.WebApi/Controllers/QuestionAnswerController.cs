@@ -128,7 +128,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionAnswerUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(QuestionAnswerUpdateViewModel questionAnswerViewModel)
+        public IHttpActionResult Update([FromUri]QuestionAnswerUpdateViewModel questionAnswerViewModel)
         {
             return Ok(_questionAnswerService.Update(questionAnswerViewModel));
         }

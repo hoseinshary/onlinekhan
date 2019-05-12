@@ -1,67 +1,53 @@
 <template>
   <section class="row gutter-sm shadow-1 q-pa-sm q-ma-sm">
-    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6" helper="ثانیه"/>
-    <div class="row"></div>
+    <q-field class="col-md-6">
+      <q-uploader
+        url
+        float-label="فایل جواب"
+        name="word"
+        hide-upload-button
+        ref="wordFile"
+        extensions=".doc,.docx"
+      />
+    </q-field>
+    <base-input :model="$v.questionAnswer.Title" class="col-md-6"/>
+    <base-input :model="$v.questionAnswer.Author" class="col-md-6"/>
     <base-select
-      :model="$v.questionJudge.LookupId_RepeatnessType"
-      :options="lookupStore.repeatnessTypeDdl"
+      :model="$v.questionAnswer.LookupId_AnswerType"
+      :options="lookupStore.answerTypeDdl"
       class="col-md-6"
-      clearable
     />
-    <base-select
-      :model="$v.questionJudge.LookupId_QuestionHardnessType"
-      :options="lookupStore.questionHardnessTypeDdl"
-      class="col-md-6"
-      clearable
-    />
-    <base-field class="col-md-6" :model="$v.questionJudge.IsStandard">
+    <base-field class="col-md-6" :model="$v.questionAnswer.IsMaster">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
         <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
     </base-field>
-    <base-field class="col-md-6" :model="$v.questionJudge.IsLearning">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
-      </template>
-    </base-field>
-    <base-field class="col-md-6" :model="$v.questionJudge.IsUpdate">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
-      </template>
-    </base-field>
-    <base-field class="col-md-6" :model="$v.questionJudge.IsDelete">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
-      </template>
-    </base-field>
-    <base-btn-edit @click="questionJudgeStore.submitEdit()"/>
+    <base-input :model="$v.questionAnswer.Description" class="col-12"/>
+    <base-btn-edit @click="questionAnswerStore.submitEdit()"/>
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { vxm } from "src/store";
-import { questionJudgeValidations } from "src/validations/questionJudgeValidation";
+import { questionAnswerValidations } from "src/validations/questionAnswerValidation";
 
 @Component({
-  validations: questionJudgeValidations
+  validations: questionAnswerValidations
 })
-export default class QuestionJudgeEditVue extends Vue {
+export default class QuestionAnswerEditVue extends Vue {
   $v: any;
 
   //#region ### data ###
-  questionJudgeStore = vxm.questionJudgeStore;
-  questionJudge = this.questionJudgeStore.questionJudge;
+  questionAnswerStore = vxm.questionAnswerStore;
+  questionAnswer = this.questionAnswerStore.questionAnswer;
   lookupStore = vxm.lookupStore;
   //#endregion
 
   //#region ### hooks ###
   created() {
-    this.questionJudgeStore.SET_EDIT_VUE(this);
+    this.questionAnswerStore.SET_EDIT_VUE(this);
   }
   //#endregion
 }

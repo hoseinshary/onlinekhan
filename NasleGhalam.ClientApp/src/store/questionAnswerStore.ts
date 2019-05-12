@@ -88,7 +88,7 @@ export class QuestionAnswerStore extends VuexModule {
       "Id",
       "QuestionId"
     );
-    if (vm.$v) {
+    if (vm && vm.$v) {
       vm.$v.$reset();
     }
   }
@@ -208,6 +208,8 @@ export class QuestionAnswerStore extends VuexModule {
   async resetCreate() {
     this.questionAnswer.Id = 0;
     this.RESET(this._createVue);
+    var wordFile = this._createVue.$refs.wordFile;
+    wordFile["reset"]();
   }
 
   @action()
@@ -215,22 +217,34 @@ export class QuestionAnswerStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    return axios
-      .post(`${baseUrl}/Update`, this.questionAnswer)
-      .then((response: AxiosResponse<IMessageResult>) => {
-        let data = response.data;
-        this.notify({ vm, data });
+    var wordFile = vm.$refs.wordFile;
+    var formData = new FormData();
+    formData.append(wordFile["name"], wordFile["files"][0]);
+    var params = util.toParam(this.questionAnswer);
 
-        if (data.MessageType == MessageType.Success) {
-          this.UPDATE(data.Obj);
-          this.resetEdit();
-        }
-      });
+    return axios({
+      method: "post",
+      url: `${baseUrl}/Update?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
+      let data = response.data;
+      this.notify({ vm, data });
+
+      if (data.MessageType == MessageType.Success) {
+        this.UPDATE(data.Obj);
+        this.resetEdit();
+      }
+    });
   }
 
   @action()
   async resetEdit() {
     this.RESET(this._editVue);
+    if (this._editVue) {
+      var wordFile = this._editVue.$refs.wordFile;
+      wordFile["reset"]();
+    }
   }
 
   @action()

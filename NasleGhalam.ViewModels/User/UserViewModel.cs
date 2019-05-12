@@ -8,6 +8,8 @@
 
         public string Family { get; set; }
 
+        public string FullName => $"{Name} {Family}";
+
         public string Username { get; set; }
 
         public bool IsActive { get; set; }

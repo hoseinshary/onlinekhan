@@ -29,7 +29,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _actionService = actionService;
         }
 
-
         /// <summary>
         /// گرفتن  کاربر با آی دی
         /// </summary>
@@ -50,7 +49,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن همه کاربر ها
         /// </summary>
@@ -68,7 +66,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<UserViewModel>)
                 .ToList();
         }
-
 
         /// <summary>
         /// ثبت کاربر
@@ -111,7 +108,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
             return clientResult;
         }
-
 
         /// <summary>
         /// ویرایش کاربر
@@ -171,7 +167,6 @@ namespace NasleGhalam.ServiceLayer.Services
             return clientResult;
         }
 
-
         /// <summary>
         /// حذف کاربر
         /// </summary>
@@ -191,7 +186,6 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
 
         /// <summary>
         /// احراز هویت

@@ -2,6 +2,7 @@ export default interface IUser {
   Id: number;
   Name: string;
   Family: string;
+  FullName: string;
   Username: string;
   Password: string;
   IsActive: boolean;
@@ -18,6 +19,7 @@ export const DefaultUser: IUser = {
   Id: 0,
   Name: "",
   Family: "",
+  FullName: "",
   Username: "",
   Password: "",
   IsActive: true,

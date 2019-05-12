@@ -1,142 +1,90 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 size="lg"
-                 @confirm="submit"
-                 @reset="resetEditStore"
-                 @open="modalOpen"
-                 @close="toggleModalEditStore(false)">
-
-    <my-select :model="$v.studentObj.User.RoleId"
-               :options="roleDdl"
-               class="col-sm-6 col-md-4"
-               clearable
-               ref="roleId" />
-
-    <my-select :model="$v.studentObj.User.ProvinceId"
-               :options="provinceDdl"
-               class="col-sm-6 col-md-4"
-               clearable
-               @change="provinceChange" />
-
-    <my-select :model="$v.studentObj.User.CityId"
-               :options="cityByProvinceDdl"
-               class="col-sm-6 col-md-4"
-               clearable
-               ref="cityId" />
-    <!-- <my-hr/> -->
-
-    <my-input :model="$v.studentObj.User.Name"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.studentObj.User.Family"
-              class="col-sm-6 col-md-4" />
-
-    <my-field class="col-sm-6 col-md-4"
-              :model="$v.studentObj.User.Gender">
+  <base-modal-edit
+    :title="studentStore.modelName"
+    :show="studentStore.openModal.edit"
+    size="lg"
+    @confirm="studentStore.submitEdit"
+    @reset="studentStore.resetEdit"
+    @open="open"
+    @close="studentStore.OPEN_MODAL_EDIT(false)"
+  >
+    <base-select :model="$v.student.User.RoleId" :options="roleDdl" class="col-sm-6 col-md-4"/>
+    <base-select
+      :model="$v.student.User.ProvinceId"
+      :options="provinceStore.ddl"
+      class="col-sm-6 col-md-4"
+      filter
+      @change="student.User.CityId=0"
+    />
+    <base-select
+      :model="$v.student.User.CityId"
+      :options="cityStore.cityByProvinceIdDdl(student.User.ProvinceId)"
+      class="col-sm-6 col-md-4"
+      clearable
+      ref="cityId"
+    />
+    <base-input :model="$v.student.User.Name" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.student.User.Family" class="col-sm-6 col-md-4"/>
+    <base-field class="col-sm-6 col-md-4" :model="$v.student.User.Gender">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model"
-                 :val="false"
-                 label="دختر" />
-        <q-radio v-model="data.obj.$model"
-                 :val="true"
-                 label="پسر" />
+        <q-radio v-model="data.obj.$model" :val="false" label="دختر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="پسر"/>
       </template>
-    </my-field>
-
-    <my-input :model="$v.studentObj.User.NationalNo"
-              align="right"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.studentObj.User.Username"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.studentObj.User.Password"
-              type="password"
-              class="col-sm-6 col-md-4" />
-
-    <my-field class="col-sm-6 col-md-4"
-              :model="$v.studentObj.User.IsActive">
+    </base-field>
+    <base-input :model="$v.student.User.NationalNo" align="right" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.student.User.Username" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.student.User.Password" type="password" class="col-sm-6 col-md-4"/>
+    <base-field class="col-sm-6 col-md-4" :model="$v.student.User.IsActive">
       <template slot-scope="data">
-        <q-toggle v-model="data.obj.$model" />
+        <q-toggle v-model="data.obj.$model"/>
       </template>
-    </my-field>
-
-    <my-input :model="$v.studentObj.User.Phone"
-              align="right"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.studentObj.User.Mobile"
-              align="right"
-              class="col-sm-6 col-md-4" />
-
-    <my-input :model="$v.studentObj.FatherName"
-              class="col-md-6" />
-
-    <my-input :model="$v.studentObj.Address"
-              class="col-md-6" />
-
-  </my-modal-edit>
+    </base-field>
+    <base-input :model="$v.student.User.Phone" align="right" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.student.User.Mobile" align="right" class="col-sm-6 col-md-4"/>
+    <base-input :model="$v.student.FatherName" class="col-md-6"/>
+    <base-input :model="$v.student.Address" class="col-md-6"/>
+  </base-modal-edit>
 </template>
 
-<script>
-import viewModel from 'viewModels/student/studentEditViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { studentValidations } from "src/validations/student/studentEditValidation";
+import { UserType } from "../../utilities/enumeration";
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('studentStore', [
-      'toggleModalEditStore',
-      'editVueStore',
-      'submitEditStore',
-      'resetEditStore'
-    ]),
-    ...mapActions({
-      fillRoleDdl: 'roleStore/fillDdlByStudentStore',
-      fillProvinceDdl: 'provinceStore/fillDdlStore',
-      fillCityByProvincIdDdl: 'cityStore/fillCityByProvinceIdDdlStore'
-    }),
-    modalOpen() {
-      this.fillRoleDdl();
-      this.fillProvinceDdl();
-    },
-    provinceChange(value) {
-      this.fillCityByProvincIdDdl(value);
-    },
-    submit() {
-      this.studentObj.User.CityName = this.$refs.cityId.getSelectedLabel();
-      this.studentObj.User.RoleName = this.$refs.roleId.getSelectedLabel();
-      this.submitEditStore();
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('studentStore', {
-      modelName: 'modelName',
-      studentObj: 'studentObj',
-      isOpenModalEdit: 'isOpenModalEdit'
-    }),
-    ...mapState({
-      roleDdl: s => s.roleStore.roleDdl,
-      provinceDdl: s => s.provinceStore.provinceDdl,
-      cityByProvinceDdl: s => s.cityStore.cityByProvinceDdl
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
-  created() {
-    this.editVueStore(this);
+@Component({
+  validations: studentValidations
+})
+export default class StudentEditVue extends Vue {
+  $v: any;
+
+  //#region ### data ###
+  studentStore = vxm.studentStore;
+  student = vxm.studentStore.student;
+  roleStore = vxm.roleStore;
+  cityStore = vxm.cityStore;
+  provinceStore = vxm.provinceStore;
+  //#endregion
+
+  //#region ### computed ###
+  get roleDdl() {
+    return this.roleStore.ddlByUserType(UserType.Student);
   }
-};
+  //#endregion
+
+  //#region ### methods ###
+  open() {
+    this.provinceStore.fillList();
+    this.cityStore.fillList();
+    this.roleStore.fillList();
+  }
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.studentStore.SET_EDIT_VUE(this);
+  }
+  //#endregion
+}
 </script>
 

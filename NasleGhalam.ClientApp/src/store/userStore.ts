@@ -48,13 +48,13 @@ export class UserStore extends VuexModule {
   }
 
   get recordName() {
-    return this.user.Name || "";
+    return this.user.FullName || "";
   }
 
   get ddl() {
     return this._userList.map(x => ({
       value: x.Id,
-      label: x.Name
+      label: x.FullName
     }));
   }
 

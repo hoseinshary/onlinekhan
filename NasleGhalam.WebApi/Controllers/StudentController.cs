@@ -20,13 +20,11 @@ namespace NasleGhalam.WebApi.Controllers
             _studentService = studentService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.StudentReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_studentService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.StudentReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -39,7 +37,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(student);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.StudentCreateAccess)]
         [CheckModelValidation]
@@ -48,7 +45,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_studentService.Create(studentViewModel, Request.GetRoleLevel()));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.StudentUpdateAccess)]
         [CheckModelValidation]
@@ -56,7 +52,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_studentService.Update(studentViewModel, Request.GetRoleLevel()));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.StudentDeleteAccess)]
         public IHttpActionResult Delete(int id)

@@ -8,13 +8,7 @@
     @open="open"
     @close="userStore.OPEN_MODAL_CREATE(false)"
   >
-    <base-select
-      :model="$v.user.RoleId"
-      :options="roleStore.ddl"
-      class="col-sm-6 col-md-4"
-      filter
-      ref="roleId"
-    />
+    <base-select :model="$v.user.RoleId" :options="roleDdl" class="col-sm-6 col-md-4" filter/>
     <base-select
       :model="$v.user.ProvinceId"
       :options="provinceStore.ddl"
@@ -54,6 +48,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { userCreateValidations } from "src/validations/user/UserCreateValidation";
+import { UserType } from "src/utilities/enumeration";
 
 @Component({
   validations: userCreateValidations
@@ -67,6 +62,12 @@ export default class UserCreateVue extends Vue {
   cityStore = vxm.cityStore;
   roleStore = vxm.roleStore;
   user = vxm.userStore.user;
+  //#endregion
+
+  //#region ### computed ###
+  get roleDdl() {
+    return this.roleStore.ddlByUserType(UserType.Organ);
+  }
   //#endregion
 
   //#region ### methods ###

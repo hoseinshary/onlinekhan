@@ -10,7 +10,7 @@
   >
     <base-select
       :model="$v.user.RoleId"
-      :options="roleStore.ddl"
+      :options="roleDdl"
       class="col-sm-6 col-md-4"
       filter
       ref="roleId"
@@ -54,6 +54,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { userEditValidations } from "src/validations/user/UserEditValidation";
+import { UserType } from "src/utilities/enumeration";
 
 @Component({
   validations: userEditValidations
@@ -67,6 +68,12 @@ export default class UserEditVue extends Vue {
   cityStore = vxm.cityStore;
   roleStore = vxm.roleStore;
   user = vxm.userStore.user;
+  //#endregion
+
+  //#region ### computed ###
+  get roleDdl() {
+    return this.roleStore.ddlByUserType(UserType.Organ);
+  }
   //#endregion
 
   //### methods ###

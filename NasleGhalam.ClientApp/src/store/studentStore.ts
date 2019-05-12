@@ -1,9 +1,9 @@
 import Vue from "Vue";
-import IRole, { DefaultRole } from "src/models/IRole";
+import IStudent, { DefaultStudent } from "src/models/IStudent";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
-import { MessageType, UserType } from "src/utilities/enumeration";
-import { ROLE_URL as baseUrl } from "src/utilities/site-config";
+import { MessageType } from "src/utilities/enumeration";
+import { STUDENT_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
@@ -13,15 +13,11 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 
-@Module({ namespacedPath: "roleStore/" })
-export class RoleStore extends VuexModule {
-  openModal: {
-    create: boolean;
-    edit: boolean;
-    delete: boolean;
-  };
-  role: IRole;
-  private _roleList: Array<IRole>;
+@Module({ namespacedPath: "studentStore/" })
+export class StudentStore extends VuexModule {
+  openModal: { create: boolean; edit: boolean; delete: boolean };
+  student: IStudent;
+  private _studentList: Array<IStudent>;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -32,8 +28,8 @@ export class RoleStore extends VuexModule {
   constructor() {
     super();
 
-    this.role = util.cloneObject(DefaultRole);
-    this._roleList = [];
+    this.student = util.cloneObject(DefaultStudent);
+    this._studentList = [];
     this.openModal = {
       create: false,
       edit: false,
@@ -43,60 +39,56 @@ export class RoleStore extends VuexModule {
 
   //#region ### getters ###
   get modelName() {
-    return "نقش";
+    return "دانش آموز";
   }
 
   get recordName() {
-    return this.role.Name || "";
+    return this.student.User.FullName || "";
   }
 
-  get ddlByUserType() {
-    return (userType: UserType) => {
-      return this._roleList
-        .filter(x => x.UserType == userType)
-        .map(x => ({
-          value: x.Id,
-          label: x.Name
-        }));
-    };
+  get ddl() {
+    return this._studentList.map(x => ({
+      value: x.Id,
+      label: x.User.FullName
+    }));
   }
 
   get gridData() {
-    return this._roleList;
+    return this._studentList;
   }
   //#endregion
 
   //#region ### mutations ###
   @mutation
-  private CREATE(role: IRole) {
-    this._roleList.push(role);
+  private CREATE(student: IStudent) {
+    this._studentList.push(student);
   }
 
   @mutation
-  private UPDATE(role: IRole) {
-    let index = this._roleList.findIndex(x => x.Id == this.role.Id);
+  private UPDATE(student: IStudent) {
+    let index = this._studentList.findIndex(x => x.Id == this.student.Id);
     if (index < 0) return;
-    util.mapObject(role, this._roleList[index]);
+    util.mapObject(student, this._studentList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this._roleList.findIndex(x => x.Id == this.role.Id);
+    let index = this._studentList.findIndex(x => x.Id == this.student.Id);
     if (index < 0) return;
-    this._roleList.splice(index, 1);
+    this._studentList.splice(index, 1);
   }
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultRole, this.role, "Id");
+    util.mapObject(DefaultStudent, this.student, "Id");
     if (vm.$v) {
       vm.$v.$reset();
     }
   }
 
   @mutation
-  private SET_LIST(list: Array<IRole>) {
-    this._roleList = list;
+  private SET_LIST(list: Array<IStudent>) {
+    this._studentList = list;
   }
 
   @mutation
@@ -135,8 +127,8 @@ export class RoleStore extends VuexModule {
   async getById(id: number) {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
-      .then((response: AxiosResponse<IRole>) => {
-        util.mapObject(response.data, this.role);
+      .then((response: AxiosResponse<IStudent>) => {
+        util.mapObject(response.data, this.student);
       });
   }
 
@@ -145,20 +137,20 @@ export class RoleStore extends VuexModule {
     if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
-        .then((response: AxiosResponse<Array<IRole>>) => {
+        .then((response: AxiosResponse<Array<IStudent>>) => {
           this.SET_LIST(response.data);
           this.MODEL_CHANGED(false);
         });
     } else {
-      return Promise.resolve(this._roleList);
+      return Promise.resolve(this._studentList);
     }
   }
 
   @action({ mode: "raw" })
   async validateForm(vm: any) {
     return new Promise(resolve => {
-      vm.$v.role.$touch();
-      if (vm.$v.role.$error) {
+      vm.$v.student.$touch();
+      if (vm.$v.student.$error) {
         const context = getRawActionContext(this);
         context.dispatch("notifyInvalidForm", vm, { root: true });
         resolve(false);
@@ -187,7 +179,7 @@ export class RoleStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     return axios
-      .post(`${baseUrl}/Create`, this.role)
+      .post(`${baseUrl}/Create`, this.student)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -203,7 +195,7 @@ export class RoleStore extends VuexModule {
 
   @action()
   async resetCreate() {
-    this.role.Id = 0;
+    this.student.Id = 0;
     this.RESET(this._createVue);
   }
 
@@ -213,7 +205,7 @@ export class RoleStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     return axios
-      .post(`${baseUrl}/Update`, this.role)
+      .post(`${baseUrl}/Update`, this.student)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -235,7 +227,7 @@ export class RoleStore extends VuexModule {
   @action()
   async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this.role.Id}`)
+      .post(`${baseUrl}/Delete/${this.student.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -249,4 +241,4 @@ export class RoleStore extends VuexModule {
   //#endregion
 }
 
-export const roleStore = RoleStore.ExtractVuexModule(RoleStore);
+export const studentStore = StudentStore.ExtractVuexModule(StudentStore);

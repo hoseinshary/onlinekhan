@@ -25,7 +25,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _roleService = roleService;
         }
 
-
         /// <summary>
         /// گرفتن  دانش آموز با آی دی
         /// </summary>
@@ -42,7 +41,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن همه دانش آموز ها
         /// </summary>
@@ -57,7 +55,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<StudentViewModel>)
                 .ToList();
         }
-
 
         /// <summary>
         /// ثبت دانش آموز
@@ -82,11 +79,14 @@ namespace NasleGhalam.ServiceLayer.Services
             student.User.LastLogin = DateTime.Now;
             _students.Add(student);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = student.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(student.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// ویرایش دانش آموز
@@ -130,10 +130,24 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.ExcludeFieldsFromUpdate(student.User, x => x.LastLogin);
             }
 
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Obj = GetById(student.Id);
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_NationalNo"))
+            {
+                clientResult.Message = "کد ملی تکراری می باشد";
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_Username"))
+            {
+                clientResult.Message = "نام کاربری تکراری می باشد";
+            }
+
+            return clientResult;
+        }
 
         /// <summary>
         /// حذف دانش آموز
@@ -149,24 +163,12 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             var student = Mapper.Map<Student>(studentViewModel);
+            var user = student.User;
             _uow.MarkAsDeleted(student);
+            _uow.MarkAsDeleted(user);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
-
-        ///// <summary>
-        ///// گرفتن همه دانش آموز ها برای لیست کشویی
-        ///// </summary>
-        ///// <returns></returns>
-        //public IList<SelectViewModel> GetAllDdl()
-        //{
-        //    return _students.Select(current => new SelectViewModel
-        //    {
-        //        value = current.Id,
-        //        label = current.Name
-        //    }).ToList();
-        //}
     }
 }

@@ -18,14 +18,22 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<Question> _questions;
         private readonly IDbSet<Lookup> _lookups;
 
-        private const int NumberOfJudges = 3;
+        private readonly Lazy<QuestionGroupService> _questionGroupService;
+        private readonly Lazy<QuestionService> _questionService;
 
-        public QuestionJudgeService(IUnitOfWork uow)
+        private int NumberOfJudges = 1;
+
+        public QuestionJudgeService(IUnitOfWork uow, Lazy<QuestionGroupService> questionGroupService, Lazy<QuestionService> questionService)
         {
             _uow = uow;
             _questionJudges = uow.Set<QuestionJudge>();
             _questions = uow.Set<Question>();
             _lookups = uow.Set<Lookup>();
+
+            _questionGroupService = questionGroupService;
+            _questionService = questionService;
+
+
         }
 
 
@@ -72,6 +80,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel, int userId)
         {
+            SetNumberOfjudges(questionJudgeViewModel.QuestionId);
             var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
             questionJudge.UserId = userId;
             _questionJudges.Add(questionJudge);
@@ -163,6 +172,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Update(QuestionJudgeUpdateViewModel questionJudgeViewModel, int userId)
         {
+            SetNumberOfjudges(questionJudgeViewModel.QuestionId);
             var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
             questionJudge.UserId = userId;
             _uow.MarkAsChanged(questionJudge);
@@ -266,6 +276,17 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
+
+
+        /// <summary>
+        /// یافت تعدا کارشناس این درس
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public void SetNumberOfjudges(int questionId)
+        {
+            NumberOfJudges = _questionService.Value.GetNumberOfjudges(questionId);
+        }
 
 
     }

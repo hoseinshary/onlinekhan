@@ -73,6 +73,10 @@
     <Compile Include="Migrations\201904240602407_lessonuserAdded.Designer.cs">
       <DependentUpon>201904240602407_lessonuserAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905131244085_lessonField.cs" />
+    <Compile Include="Migrations\201905131244085_lessonField.Designer.cs">
+      <DependentUpon>201905131244085_lessonField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -108,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904240602407_lessonuserAdded.resx">
       <DependentUpon>201904240602407_lessonuserAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905131244085_lessonField.resx">
+      <DependentUpon>201905131244085_lessonField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

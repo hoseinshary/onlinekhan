@@ -7,6 +7,10 @@ namespace NasleGhalam.ViewModels.Lesson
 {
     public class LessonUpdateViewModel
     {
+        public LessonUpdateViewModel()
+        {
+            NumberOfJudges = 1;
+        }
         public int Id { get; set; }
 
         [Display(Name = "نام")]
@@ -20,6 +24,8 @@ namespace NasleGhalam.ViewModels.Lesson
         [Display(Name = "نظام")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_Nezam { get; set; }
+
+        public int NumberOfJudges { get; set; }
 
         public IEnumerable<RatioUpdateViewModel> Ratios { get; set; }
 

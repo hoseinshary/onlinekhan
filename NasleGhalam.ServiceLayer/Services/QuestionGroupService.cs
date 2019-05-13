@@ -428,5 +428,21 @@ namespace NasleGhalam.ServiceLayer.Services
             }
             return false;
         }
+
+
+
+        /// <summary>
+        /// وجود سوالی در سوال گروهی
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool IsInQuestionGroup(int questionId)
+        {
+            return _questionGroups.Any(x => x.Questions.Any(y => y.Id == questionId));
+
+        }
+
+
+        
     }
 }

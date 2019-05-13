@@ -21,6 +21,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int LookupId_Nezam { get; set; }
 
+        public int NumberOfJudges { get; set; }
+
         public Lookup Lookup_Nezam { get; set; }
 
         public ICollection<Ratio> Ratios { get; set; }

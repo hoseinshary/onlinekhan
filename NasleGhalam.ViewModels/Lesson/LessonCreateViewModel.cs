@@ -7,6 +7,11 @@ namespace NasleGhalam.ViewModels.Lesson
 {
     public class LessonCreateViewModel
     {
+        public LessonCreateViewModel()
+        {
+            NumberOfJudges = 1;
+        } 
+
         [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(200, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
@@ -18,6 +23,8 @@ namespace NasleGhalam.ViewModels.Lesson
         [Display(Name = "نظام")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_Nezam { get; set; }
+
+        public int NumberOfJudges { get; set; }
 
         public IEnumerable<RatioCreateViewModel> Ratios { get; set; }
 

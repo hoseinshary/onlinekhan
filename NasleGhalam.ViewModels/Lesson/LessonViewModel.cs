@@ -6,6 +6,10 @@ namespace NasleGhalam.ViewModels.Lesson
 {
     public class LessonViewModel
     {
+        public LessonViewModel()
+        {
+            NumberOfJudges = 1;
+        }
         public int Id { get; set; }
         
         public string Name { get; set; }
@@ -13,6 +17,8 @@ namespace NasleGhalam.ViewModels.Lesson
         public bool IsMain { get; set; }
         
         public int LookupId_Nezam { get; set; }
+
+        public int NumberOfJudges { get; set; }
 
         public IEnumerable<EducationTreeViewModel> EducationTrees { get; set; }
 

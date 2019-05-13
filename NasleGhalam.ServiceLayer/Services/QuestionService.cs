@@ -21,10 +21,13 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Question> _questions;
 
-        public QuestionService(IUnitOfWork uow)
+        private readonly Lazy<QuestionGroupService> _questionGroupService;
+
+        public QuestionService(IUnitOfWork uow, Lazy<QuestionGroupService> questionGroupService)
         {
             _uow = uow;
             _questions = uow.Set<Question>();
+            _questionGroupService = questionGroupService;
         }
 
         /// <summary>
@@ -672,9 +675,28 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
-        public static implicit operator Lazy<object>(QuestionService v)
+        
+
+        /// <summary>
+        /// برگشت تعدادکارشناس سوال
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// todo:   check with ali
+        public int GetNumberOfjudges(int questionId)
         {
-            throw new NotImplementedException();
+
+            if (_questionGroupService.Value.IsInQuestionGroup(questionId))
+            {
+                return _questions.First(x => x.Id == questionId).QuestionGroups.First().Lesson.NumberOfJudges;
+            }
+            else
+            {
+                return _questions.First(x => x.Id == questionId).Topics.First().Lesson.NumberOfJudges;
+            }            
         }
+
+  
+
     }
 }

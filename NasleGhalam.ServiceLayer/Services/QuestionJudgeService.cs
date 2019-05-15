@@ -102,6 +102,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     int count_isDelete = 0;
                     int count_isUpdate = 0;
                     int count_isLearning = 0;
+                    int count_isActiveQuestion = 0;
+                    int count_isActiveQuestionAnswer = 0;
                     int responseTime = 0;
 
                     foreach (var judge in questionJudges)
@@ -114,6 +116,10 @@ namespace NasleGhalam.ServiceLayer.Services
                             count_isStandard++;
                         if (judge.IsLearning == true)
                             count_isLearning++;
+                        if (judge.IsActiveQuestion == true)
+                            count_isActiveQuestion++;
+                        if (judge.IsActiveQuestionAnswer == true)
+                            count_isActiveQuestionAnswer++;
 
                         lookup_questionhardness += judge.Lookup_QuestionHardnessType.State;
                         lookup_repeatness += judge.Lookup_RepeatnessType.State;
@@ -121,7 +127,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         responseTime += judge.ResponseSecond;
                     }
 
-                    var updateQuestion = _questions.First(x => x.Id == questionJudgeViewModel.QuestionId);
+                    var updateQuestion = _questions.Include(x=>x.QuestionAnswers).First(x => x.Id == questionJudgeViewModel.QuestionId);
                     updateQuestion.ResponseSecond = Convert.ToInt16(responseTime / NumberOfJudges);
                     if (count_isStandard > NumberOfJudges / 2)
                         updateQuestion.IsStandard = true;
@@ -142,6 +148,15 @@ namespace NasleGhalam.ServiceLayer.Services
                         updateQuestion.IsUpdate = true;
                     else
                         updateQuestion.IsUpdate = false;
+                    if (count_isActiveQuestion > NumberOfJudges / 2)
+                        updateQuestion.IsActive = true;
+                    else
+                        updateQuestion.IsActive = false;
+
+                    if (count_isActiveQuestionAnswer > NumberOfJudges / 2)
+                        updateQuestion.QuestionAnswers.First(x => x.IsMaster == true).IsActive = true;
+                    else
+                        updateQuestion.QuestionAnswers.First(x => x.IsMaster == true).IsActive = false;
 
                     updateQuestion.LookupId_QuestionHardnessType = _lookups
                         .First(x => x.Name == "QuestionHardnessType" && x.State == (int)Math.Round(lookup_questionhardness / NumberOfJudges))
@@ -194,6 +209,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     int count_isDelete = 0;
                     int count_isUpdate = 0;
                     int count_isLearning = 0;
+                    int count_isActiveQuestion = 0;
+                    int count_isActiveQuestionAnswer = 0;
                     int responseTime = 0;
 
                     foreach (var judge in questionJudges)
@@ -206,6 +223,10 @@ namespace NasleGhalam.ServiceLayer.Services
                             count_isStandard++;
                         if (judge.IsLearning == true)
                             count_isLearning++;
+                        if (judge.IsActiveQuestion == true)
+                            count_isActiveQuestion++;
+                        if (judge.IsActiveQuestionAnswer == true)
+                            count_isActiveQuestionAnswer++;
 
                         lookup_questionhardness += judge.Lookup_QuestionHardnessType.State;
                         lookup_repeatness += judge.Lookup_RepeatnessType.State;
@@ -213,7 +234,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         responseTime += judge.ResponseSecond;
                     }
 
-                    var updateQuestion = _questions.First(x => x.Id == questionJudgeViewModel.QuestionId);
+                    var updateQuestion = _questions.Include(x => x.QuestionAnswers).First(x => x.Id == questionJudgeViewModel.QuestionId);
                     updateQuestion.ResponseSecond = Convert.ToInt16(responseTime / NumberOfJudges);
                     if (count_isStandard > NumberOfJudges / 2)
                         updateQuestion.IsStandard = true;
@@ -234,6 +255,16 @@ namespace NasleGhalam.ServiceLayer.Services
                         updateQuestion.IsUpdate = true;
                     else
                         updateQuestion.IsUpdate = false;
+
+                    if (count_isActiveQuestion > NumberOfJudges / 2)
+                        updateQuestion.IsActive = true;
+                    else
+                        updateQuestion.IsActive = false;
+
+                    if (count_isActiveQuestionAnswer > NumberOfJudges / 2)
+                        updateQuestion.QuestionAnswers.First(x => x.IsMaster == true).IsActive = true;
+                    else
+                        updateQuestion.QuestionAnswers.First(x => x.IsMaster == true).IsActive = false;
 
                     updateQuestion.LookupId_QuestionHardnessType = _lookups
                         .First(x => x.Name == "QuestionHardnessType" && x.State == (int)Math.Round(lookup_questionhardness / NumberOfJudges))

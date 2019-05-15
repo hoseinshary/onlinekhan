@@ -11,7 +11,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             Property(x => x.FilePath).HasMaxLength(200);
             Property(x => x.Context).IsRequired().HasColumnType("nvarchar(max)");
             Property(x => x.Description).HasMaxLength(300);
-            Property(x => x.Author).HasMaxLength(100);
+            
 
             HasRequired(x => x.Question)
                 .WithMany(x => x.QuestionAnswers)
@@ -26,6 +26,11 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             HasRequired(x => x.Lookup_AnswerType)
                 .WithMany(x => x.QuestionAnswers)
                 .HasForeignKey(x => x.LookupId_AnswerType)
+                .WillCascadeOnDelete(false);
+
+            HasRequired(x=>x.Writer)
+                .WithMany(x=>x.QuestionAnswers)
+                .HasForeignKey(x=>x.WriterId)
                 .WillCascadeOnDelete(false);
         }
     }

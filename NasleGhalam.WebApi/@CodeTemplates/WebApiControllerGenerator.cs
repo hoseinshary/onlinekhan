@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.QuestionAnswer;
+using NasleGhalam.ViewModels.Writer;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,56 +12,56 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class QuestionAnswerController : ApiController
+	public class WriterController : ApiController
 	{
-        private readonly QuestionAnswerService _questionAnswerService;
-		public QuestionAnswerController(QuestionAnswerService questionAnswerService)
+        private readonly WriterService _writerService;
+		public WriterController(WriterService writerService)
         {
-            _questionAnswerService = questionAnswerService;
+            _writerService = writerService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionAnswerReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.WriterReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_questionAnswerService.GetAll());
+            return Ok(_writerService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionAnswerReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.WriterReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var questionAnswer = _questionAnswerService.GetById(id);
-            if (questionAnswer == null)
+            var writer = _writerService.GetById(id);
+            if (writer == null)
             {
                 return NotFound();
             }
-            return Ok(questionAnswer);
+            return Ok(writer);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.QuestionAnswerCreateAccess)]
+        [CheckUserAccess(ActionBits.WriterCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(QuestionAnswerCreateViewModel questionAnswerViewModel)
+        public IHttpActionResult Create(WriterCreateViewModel writerViewModel)
         {
-            return Ok(_questionAnswerService.Create(questionAnswerViewModel));
+            return Ok(_writerService.Create(writerViewModel));
         }
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.QuestionAnswerUpdateAccess)]
+        [CheckUserAccess(ActionBits.WriterUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(QuestionAnswerUpdateViewModel questionAnswerViewModel)
+        public IHttpActionResult Update(WriterUpdateViewModel writerViewModel)
         {
-            return Ok(_questionAnswerService.Update(questionAnswerViewModel));
+            return Ok(_writerService.Update(writerViewModel));
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.QuestionAnswerDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.WriterDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_questionAnswerService.Delete(id));
+            return Ok(_writerService.Delete(id));
         }
 	}
 }

@@ -25,6 +25,9 @@ namespace NasleGhalam.ViewModels.QuestionJudge
         public short ResponseSecond { get; set; }
 
         public int QuestionId { get; set; }
+        public bool IsActiveQuestion { get; set; }
+
+        public bool IsActiveQuestionAnswer { get; set; }
 
         public int LookupId_QuestionHardnessType { get; set; }
 

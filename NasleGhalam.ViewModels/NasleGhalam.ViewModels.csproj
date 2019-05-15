@@ -122,6 +122,9 @@
     <Compile Include="User\UserViewModel.cs" />
     <Compile Include="User\UserUpdateViewModel.cs" />
     <Compile Include="User\UserCreateViewModel .cs" />
+    <Compile Include="Writer\WriterCreateVIewModel.cs" />
+    <Compile Include="Writer\WriterUpdateViewModel.cs" />
+    <Compile Include="Writer\WriterViewModel.cs" />
     <Compile Include="_Attributes\MinLengthExcludeEmptyAndNullAttribute.cs" />
     <Compile Include="_Attributes\NationalNoAttribute.cs" />
     <Compile Include="_Attributes\RequiredDdlAttribute.cs" />

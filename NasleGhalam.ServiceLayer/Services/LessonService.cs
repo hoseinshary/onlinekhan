@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -15,10 +16,14 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Lesson> _lessons;
 
-        public LessonService(IUnitOfWork uow)
+        private readonly Lazy<EducationTreeService> _educationTreeService;
+
+        public LessonService(IUnitOfWork uow, Lazy<EducationTreeService> educationTreeService)
         {
             _uow = uow;
             _lessons = uow.Set<Lesson>();
+
+            _educationTreeService = educationTreeService;
         }
 
         /// <summary>
@@ -60,6 +65,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Create(LessonCreateViewModel lessonViewModel)
         {
+            var educationTrees = _educationTreeService.Value.GetAll().Where(x => x.LookupId_EducationTreeState == 1034).Select(x => x.Id);
+            foreach (var educationTreeId in lessonViewModel.EducationTreeIds)
+            {
+                if (!educationTrees.Contains(educationTreeId))
+                {
+                    return new ClientMessageResult
+                    {
+                        MessageType = MessageType.Error,
+                        Message = "تنها مجاز به انتخاب پایه هستید!"
+                    };
+                }
+            }
             var lesson = Mapper.Map<Lesson>(lessonViewModel);
             _lessons.Add(lesson);
 

@@ -4,28 +4,34 @@ namespace NasleGhalam.ViewModels.QuestionJudge
 {
     public class QuestionJudgeCreateViewModel
     {
-        [Display(Name = "")]
+        [Display(Name = "درجه سختی")]
         public int LookupId_QuestionHardnessType { get; set; }
 
-        [Display(Name = "")]
+        [Display(Name = "درجه تکرار")]
         public int LookupId_RepeatnessType { get; set; }
 
-        [Display(Name = "")]
+        [Display(Name = "استاندارد")]
         public bool IsStandard { get; set; }
 
-        [Display(Name = "")]
+        [Display(Name = "حذف")]
         public bool IsDelete { get; set; }
 
-        [Display(Name = "")]
+        [Display(Name = "ویرایش")]
         public bool IsUpdate { get; set; }
 
-        [Display(Name = "")]
+        [Display(Name = "تایید")]
+        public bool IsActiveQuestion { get; set; }
+
+        [Display(Name = "تایید جواب")]
+        public bool IsActiveQuestionAnswer { get; set; }
+
+        [Display(Name = "یادگیری")]
         public bool IsLearning { get; set; }
 
-        [Display(Name = "")]
+        [Display(Name = "زمان پاسخ")]
         public short ResponseSecond { get; set; }
 
-        [Display(Name = "")]
+        [Display(Name = "سوال")]
         public int QuestionId { get; set; }
     }
 }

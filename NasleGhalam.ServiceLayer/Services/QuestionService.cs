@@ -688,11 +688,17 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (_questionGroupService.Value.IsInQuestionGroup(questionId))
             {
-                return _questions.First(x => x.Id == questionId).QuestionGroups.First().Lesson.NumberOfJudges;
+                return _questions
+                    .Include(x => x.QuestionGroups.Select(y => y.Lesson))
+                    .First(x => x.Id == questionId).QuestionGroups.First().Lesson.NumberOfJudges;
+
+
             }
             else
             {
-                return _questions.First(x => x.Id == questionId).Topics.First().Lesson.NumberOfJudges;
+                return _questions
+                    .Include(x=>x.Topics.Select(y=>y.Lesson))
+                    .First(x => x.Id == questionId).Topics.First().Lesson.NumberOfJudges;
             }            
         }
 

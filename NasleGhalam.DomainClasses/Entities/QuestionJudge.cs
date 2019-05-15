@@ -21,6 +21,10 @@
         public bool IsUpdate { get; set; }
 
         public bool IsLearning { get; set; }
+        public bool IsActiveQuestion { get; set; }
+
+        public bool IsActiveQuestionAnswer { get; set; }
+
 
         public short ResponseSecond { get; set; }
 

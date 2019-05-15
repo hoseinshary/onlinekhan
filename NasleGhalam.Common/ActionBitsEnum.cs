@@ -112,6 +112,9 @@
         QuestionAnswerDeleteAccess = 86,
         QuestionAnswerUpdateAccess = 87,
 
-
+        WriterReadAccess = 88,
+        WriterCreateAccess = 89,
+        WriterDeleteAccess = 90,
+        WriterUpdateAccess = 91,
     }
 }

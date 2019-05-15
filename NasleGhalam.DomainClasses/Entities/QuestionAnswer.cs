@@ -22,9 +22,14 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Description { get; set; }
 
-        public string Author { get; set; }
+        public int WriterId { get; set; }
+
+        public Writer Writer { get; set; }
 
         public bool IsMaster { get; set; }
+
+        public bool IsActive { get; set; }
+
 
         public int UserId { get; set; }
 

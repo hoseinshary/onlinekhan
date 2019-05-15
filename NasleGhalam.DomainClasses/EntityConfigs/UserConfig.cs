@@ -32,6 +32,8 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             HasOptional(x => x.Student)
                 .WithRequired(x => x.User);
 
+  
+
 
             HasMany(x => x.Lessons)
             .WithMany(x => x.Users)

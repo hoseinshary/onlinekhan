@@ -29,12 +29,16 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
 
 
         [Display(Name = "نویسنده")]
-        public string Author { get; set; }
+        public int WriterId { get; set; }
+
+
 
 
         [Display(Name = "اصلی")]
         public bool IsMaster { get; set; }
 
+        [Display(Name = "فعال")]
+        public bool IsActive { get; set; }
 
         [Display(Name = "کاربر")]
         public int UserId { get; set; }

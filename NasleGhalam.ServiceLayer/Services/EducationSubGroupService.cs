@@ -15,6 +15,8 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<EducationSubGroup> _educationSubGroups;
 
+        
+
         public EducationSubGroupService(IUnitOfWork uow)
         {
             _uow = uow;

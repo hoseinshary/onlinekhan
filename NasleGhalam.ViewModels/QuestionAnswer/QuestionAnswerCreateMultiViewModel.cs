@@ -9,7 +9,8 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
         public string Title { get; set; }
 
         [Display(Name = "نویسنده")]
-        public string Author { get; set; }
+        public int WriterId { get; set; }
+
 
         public int UserId { get; set; }
 

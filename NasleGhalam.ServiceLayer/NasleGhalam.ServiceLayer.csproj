@@ -97,6 +97,7 @@
     <Compile Include="MapperProfile\LookupProfile.cs" />
     <Compile Include="MapperProfile\UserProfile.cs" />
     <Compile Include="MapperProfile\RoleProfile.cs" />
+    <Compile Include="MapperProfile\WriterProfile.cs" />
     <Compile Include="Services\ActionService.cs" />
     <Compile Include="Services\AxillaryBookService.cs" />
     <Compile Include="Services\CityService.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Services\TagService.cs" />
     <Compile Include="Services\TopicService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\WriterService.cs" />
     <Content Include="%40CodeTemplates\ServiceLayerGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

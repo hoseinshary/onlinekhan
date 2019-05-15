@@ -7,78 +7,78 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels;
-using NasleGhalam.ViewModels.QuestionAnswer;
+using NasleGhalam.ViewModels.Writer;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class QuestionAnswerService
+	public class WriterService
 	{
-		private const string Title = "جواب سوال";
+		private const string Title = "نویسنده";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<QuestionAnswer> _questionAnswers;
+        private readonly IDbSet<Writer> _writers;
        
-	    public QuestionAnswerService(IUnitOfWork uow)
+	    public WriterService(IUnitOfWork uow)
         {
             _uow = uow;
-            _questionAnswers = uow.Set<QuestionAnswer>();
+            _writers = uow.Set<Writer>();
         }
 
 
 		/// <summary>
-        /// گرفتن  جواب سوال با آی دی
+        /// گرفتن  نویسنده با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public QuestionAnswerViewModel GetById(int id)
+        public WriterViewModel GetById(int id)
         {
-            return _questionAnswers
+            return _writers
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<QuestionAnswerViewModel>)
+                .Select(Mapper.Map<WriterViewModel>)
                 .FirstOrDefault();
         }
 
 
 		/// <summary>
-        /// گرفتن همه جواب سوال ها
+        /// گرفتن همه نویسنده ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionAnswerViewModel> GetAll()
+        public IList<WriterViewModel> GetAll()
         {
-            return _questionAnswers
+            return _writers
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<QuestionAnswerViewModel>)
+                .Select(Mapper.Map<WriterViewModel>)
                 .ToList();
         }
 
 
 		/// <summary>
-        /// ثبت جواب سوال
+        /// ثبت نویسنده
         /// </summary>
-        /// <param name="questionAnswerViewModel"></param>
+        /// <param name="writerViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(QuestionAnswerCreateViewModel questionAnswerViewModel)
+        public ClientMessageResult Create(WriterCreateViewModel writerViewModel)
         {
-            var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
-            _questionAnswers.Add(questionAnswer);
+            var writer = Mapper.Map<Writer>(writerViewModel);
+            _writers.Add(writer);
 
 			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = questionAnswer.Id;
+			msgRes.Id = writer.Id;
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
 
 		/// <summary>
-        /// ویرایش جواب سوال
+        /// ویرایش نویسنده
         /// </summary>
-        /// <param name="questionAnswerViewModel"></param>
+        /// <param name="writerViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(QuestionAnswerUpdateViewModel questionAnswerViewModel)
+        public ClientMessageResult Update(WriterUpdateViewModel writerViewModel)
         {
-            var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
-            _uow.MarkAsChanged(questionAnswer);
+            var writer = Mapper.Map<Writer>(writerViewModel);
+            _uow.MarkAsChanged(writer);
 			
 			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);
@@ -86,20 +86,20 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 		/// <summary>
-        /// حذف جواب سوال
+        /// حذف نویسنده
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  questionAnswerViewModel = GetById(id);
-            if (questionAnswerViewModel == null)
+			var  writerViewModel = GetById(id);
+            if (writerViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
-            _uow.MarkAsDeleted(questionAnswer);
+            var writer = Mapper.Map<Writer>(writerViewModel);
+            _uow.MarkAsDeleted(writer);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);
@@ -107,12 +107,12 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// گرفتن همه جواب سوال ها برای لیست کشویی
+        /// گرفتن همه نویسنده ها برای لیست کشویی
         /// </summary>
         /// <returns></returns>
         public IList<SelectViewModel> GetAllDdl()
         {
-            return _questionAnswers.Select(current => new SelectViewModel
+            return _writers.Select(current => new SelectViewModel
             {
                 value = current.Id,
                 label = current.Name

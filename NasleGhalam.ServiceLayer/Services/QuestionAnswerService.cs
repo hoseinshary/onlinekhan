@@ -229,7 +229,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         newQuestionAQuestion.Context = context;
                         newQuestionAQuestion.UserId = questionAnswerViewModel.UserId;
                         newQuestionAQuestion.QuestionId = questions[numberOfQ-1].Id;
-                        newQuestionAQuestion.Author = questionAnswerViewModel.Author;
+                        newQuestionAQuestion.WriterId = questionAnswerViewModel.WriterId;
                         newQuestionAQuestion.IsMaster = true;
                         newQuestionAQuestion.Title = questionAnswerViewModel.Title;
                         newQuestionAQuestion.LookupId_AnswerType = 1042;
@@ -251,7 +251,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         Thread.Sleep(1000);
                         var page = pane.Pages[1];
                         var bits = page.EnhMetaFileBits;
-                        var target = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".png";
+                        var target = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString()) + ".png";
 
                         //crop and resize
                         try

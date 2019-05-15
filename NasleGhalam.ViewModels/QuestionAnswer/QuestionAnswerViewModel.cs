@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using NasleGhalam.Common;
+using NasleGhalam.ViewModels.Writer;
 
 namespace NasleGhalam.ViewModels.QuestionAnswer
 {
@@ -25,14 +26,19 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
         [Display(Name = "نوع پاسخ")]
         public int LookupId_AnswerType { get; set; }
 
+        [Display(Name = "فعال")]
+        public bool IsActive { get; set; }
 
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 
 
         [Display(Name = "نویسنده")]
-        public string Author { get; set; }
+        public int WriterId { get; set; }
 
+        public WriterViewModel Writer { get; set; }
+
+        
 
         [Display(Name = "اصلی")]
         public bool IsMaster { get; set; }

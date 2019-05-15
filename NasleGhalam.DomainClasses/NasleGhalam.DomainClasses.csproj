@@ -79,6 +79,7 @@
     <Compile Include="Entities\Student.cs" />
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\Writer.cs" />
     <Compile Include="EntityConfigs\ActionConfig.cs" />
     <Compile Include="EntityConfigs\EducationTreeConfig.cs" />
     <Compile Include="EntityConfigs\LookupConfig.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="EntityConfigs\RoleConfig.cs" />
     <Compile Include="EntityConfigs\TeacherConfig.cs" />
     <Compile Include="EntityConfigs\UserConfig.cs" />
+    <Compile Include="EntityConfigs\WriterConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

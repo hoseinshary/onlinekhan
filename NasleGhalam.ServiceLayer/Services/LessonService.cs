@@ -65,17 +65,17 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Create(LessonCreateViewModel lessonViewModel)
         {
-            var educationTrees = _educationTreeService.Value.GetAll().Where(x => x.LookupId_EducationTreeState == 1034).Select(x => x.Id);
-            foreach (var educationTreeId in lessonViewModel.EducationTreeIds)
+            var educationTrees = _educationTreeService.Value.GetAll()
+                .Where(x => x.LookupId_EducationTreeState == 1034)
+                .Select(x => x.Id);
+
+            if (lessonViewModel.EducationTreeIds.Any(educationTreeId => !educationTrees.Contains(educationTreeId)))
             {
-                if (!educationTrees.Contains(educationTreeId))
+                return new ClientMessageResult
                 {
-                    return new ClientMessageResult
-                    {
-                        MessageType = MessageType.Error,
-                        Message = "تنها مجاز به انتخاب پایه هستید!"
-                    };
-                }
+                    MessageType = MessageType.Error,
+                    Message = "تنها مجاز به انتخاب پایه هستید!"
+                };
             }
             var lesson = Mapper.Map<Lesson>(lessonViewModel);
             _lessons.Add(lesson);
@@ -111,6 +111,7 @@ namespace NasleGhalam.ServiceLayer.Services
             lesson.IsMain = lessonUpdateViewModel.IsMain;
             lesson.Name = lessonUpdateViewModel.Name;
             lesson.LookupId_Nezam = lessonUpdateViewModel.LookupId_Nezam;
+            lesson.NumberOfJudges = lessonUpdateViewModel.NumberOfJudges;
 
             //delete education tree
             var deleteEducationTreeList = lesson.EducationTrees

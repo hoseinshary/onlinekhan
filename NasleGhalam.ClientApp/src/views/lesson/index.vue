@@ -71,6 +71,10 @@ export default class LessonVue extends Vue {
       data: "Name"
     },
     {
+      title: "تعداد ارزیابی",
+      data: "NumberOfJudges"
+    },
+    {
       title: "عملیات",
       data: "Id",
       searchable: false,

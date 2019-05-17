@@ -21,13 +21,14 @@
     </div>
     <div class="col-md-8">
       <section class="row gutter-sm">
-        <base-input :model="$v.lesson.Name" class="col-md-4"/>
+        <base-input :model="$v.lesson.Name" class="col-md-6"/>
         <base-select
           :model="$v.lesson.LookupId_Nezam"
           :options="lookupStore.topicNezamDdl"
-          class="col-md-4"
+          class="col-md-6"
         />
-        <base-field class="col-md-4" :model="$v.lesson.IsMain">
+        <base-input :model="$v.lesson.NumberOfJudges" class="col-md-6"/>
+        <base-field class="col-md-6" :model="$v.lesson.IsMain">
           <template slot-scope="data">
             <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
             <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>

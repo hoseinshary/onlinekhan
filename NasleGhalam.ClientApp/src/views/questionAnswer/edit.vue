@@ -23,6 +23,12 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
     </base-field>
+    <base-field class="col-md-6" :model="$v.questionAnswer.IsActive">
+      <template slot-scope="data">
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
+      </template>
+    </base-field>
     <base-input :model="$v.questionAnswer.Description" class="col-12"/>
     <base-btn-edit @click="questionAnswerStore.submitEdit()"/>
   </section>

@@ -6,6 +6,7 @@ export default interface IQuestionAnswer {
   Description: string;
   Author: string;
   IsMaster: boolean;
+  IsActive: boolean;
   QuestionId: number;
 }
 
@@ -17,5 +18,6 @@ export const DefaultQuestionAnswer: IQuestionAnswer = {
   Description: "",
   Author: "",
   IsMaster: false,
+  IsActive: false,
   QuestionId: 0
 };

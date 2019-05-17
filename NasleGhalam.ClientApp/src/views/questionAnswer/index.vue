@@ -52,6 +52,7 @@
             hasIndex
           >
             <template slot="IsMaster" slot-scope="data">{{data.row.IsMaster? "بلی" : "خیر"}}</template>
+            <template slot="IsActive" slot-scope="data">{{data.row.IsActive? "بلی" : "خیر"}}</template>
             <template slot="Context" slot-scope="data">
               <div v-if="data.row.Context && data.row.Context.length> 100">
                 {{(`${data.row.Context.substring(0,100)} ...`)}}
@@ -123,6 +124,10 @@ export default class QuestionAnswerVue extends Vue {
     {
       title: "آنلاین خوان",
       data: "IsMaster"
+    },
+    {
+      title: "فعال",
+      data: "IsActive"
     },
     {
       title: "متن جواب",

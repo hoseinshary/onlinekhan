@@ -29,6 +29,9 @@ const questionAnswerValidations: ValidationRuleset<TQuestionAnswer> = {
     IsMaster: {
       displayName: displayName("آنلاین خوان")
     },
+    IsActive: {
+      displayName: displayName("فعال")
+    },
     QuestionId: {
       displayName: displayName("سوال"),
       requiredDdl: requiredDdl(0)

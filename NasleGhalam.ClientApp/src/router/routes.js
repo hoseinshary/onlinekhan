@@ -78,6 +78,10 @@ export default [
       {
         path: "/questionGroup",
         component: () => import("src/views/questionGroup/index.vue")
+      },
+      {
+        path: "/writer",
+        component: () => import("src/views/writer/index.vue")
       }
     ]
   },

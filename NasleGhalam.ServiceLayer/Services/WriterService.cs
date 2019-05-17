@@ -6,7 +6,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Writer;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -23,7 +22,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _writers = uow.Set<Writer>();
         }
 
-
         /// <summary>
         /// گرفتن  نویسنده با آی دی
         /// </summary>
@@ -39,7 +37,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن همه نویسنده ها
         /// </summary>
@@ -53,7 +50,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
         /// <summary>
         /// ثبت نویسنده
         /// </summary>
@@ -64,11 +60,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var writer = Mapper.Map<Writer>(writerViewModel);
             _writers.Add(writer);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = writer.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(writer.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// ویرایش نویسنده
@@ -80,10 +79,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var writer = Mapper.Map<Writer>(writerViewModel);
             _uow.MarkAsChanged(writer);
 
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(writer.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// حذف نویسنده
@@ -103,20 +106,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه نویسنده ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _writers.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

@@ -19,6 +19,7 @@ export const QUESTION_ANSWER_URL = "/api/questionAnswer";
 export const PUBLISHER_URL = "/api/publisher";
 export const EDUCATION_BOOK_URL = "/api/educationBook";
 export const STUDENT_URL = "/api/student";
+export const WRITER_URL = "/api/writer";
 
 export const AXILLARY_BOOK_URL = "/api/axillaryBook";
 export const UNIVERSITY_BRANCH_URL = "/api/universityBranch";

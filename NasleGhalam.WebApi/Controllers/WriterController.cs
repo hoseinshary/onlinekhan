@@ -20,13 +20,11 @@ namespace NasleGhalam.WebApi.Controllers
             _writerService = writerService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.WriterReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_writerService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.WriterReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -39,7 +37,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(writer);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.WriterCreateAccess)]
         [CheckModelValidation]
@@ -48,7 +45,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_writerService.Create(writerViewModel));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.WriterUpdateAccess)]
         [CheckModelValidation]
@@ -56,7 +52,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_writerService.Update(writerViewModel));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.WriterDeleteAccess)]
         public IHttpActionResult Delete(int id)

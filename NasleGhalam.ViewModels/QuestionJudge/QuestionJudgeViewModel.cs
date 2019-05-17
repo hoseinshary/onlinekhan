@@ -24,14 +24,19 @@ namespace NasleGhalam.ViewModels.QuestionJudge
 
         public short ResponseSecond { get; set; }
 
-        public int QuestionId { get; set; }
         public bool IsActiveQuestion { get; set; }
 
         public bool IsActiveQuestionAnswer { get; set; }
 
+        public string IsActiveQuestionName => IsActiveQuestion ? "بلی" : "خیر";
+
+        public string IsActiveQuestionAnswerName => IsActiveQuestionAnswer ? "بلی" : "خیر";
+
         public int LookupId_QuestionHardnessType { get; set; }
 
         public int LookupId_RepeatnessType { get; set; }
+
+        public int QuestionId { get; set; }
 
         public LookupViewModel Lookup_QuestionHardnessType { get; set; }
 

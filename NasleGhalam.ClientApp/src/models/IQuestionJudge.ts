@@ -6,6 +6,8 @@ export default interface IQuestionJudge {
   IsDelete: boolean;
   IsUpdate: boolean;
   IsLearning: boolean;
+  IsActiveQuestion: boolean;
+  IsActiveQuestionAnswer: boolean;
   ResponseSecond: number;
   QuestionId: number;
   LookupId_QuestionHardnessType: number;
@@ -20,6 +22,8 @@ export const DefaultQuestionJudge: IQuestionJudge = {
   IsDelete: false,
   IsUpdate: false,
   IsLearning: false,
+  IsActiveQuestion: false,
+  IsActiveQuestionAnswer: false,
   ResponseSecond: 0,
   QuestionId: 0,
   LookupId_QuestionHardnessType: 0,

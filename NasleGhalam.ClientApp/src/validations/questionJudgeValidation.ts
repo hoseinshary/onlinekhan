@@ -29,6 +29,14 @@ const questionJudgeValidations: ValidationRuleset<TQuestionJudge> = {
       displayName: displayName("یادگیری"),
       required
     },
+    IsActiveQuestion: {
+      displayName: displayName("تایید"),
+      required
+    },
+    IsActiveQuestionAnswer: {
+      displayName: displayName("تایید جواب"),
+      required
+    },
     ResponseSecond: {
       displayName: displayName("مدت پاسخ"),
       numeric,

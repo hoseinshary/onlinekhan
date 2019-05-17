@@ -92,6 +92,14 @@ export default class QuestionJudgeVue extends Vue {
       data: "IsLearningName"
     },
     {
+      title: "تایید",
+      data: "IsActiveQuestionName"
+    },
+    {
+      title: "تایید جواب",
+      data: "IsActiveQuestionAnswerName"
+    },
+    {
       title: "مدت پاسخ",
       data: "ResponseSecond"
     },

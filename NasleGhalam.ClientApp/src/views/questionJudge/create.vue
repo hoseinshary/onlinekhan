@@ -38,6 +38,18 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
     </base-field>
+    <base-field class="col-md-6" :model="$v.questionJudge.IsActiveQuestion">
+      <template slot-scope="data">
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
+      </template>
+    </base-field>
+    <base-field class="col-md-6" :model="$v.questionJudge.IsActiveQuestionAnswer">
+      <template slot-scope="data">
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
+      </template>
+    </base-field>
     <base-btn-create @click="questionJudgeStore.submitCreate()"/>
   </section>
 </template>

@@ -23,7 +23,7 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<QuestionAnswer> _questionAnswers;
         private readonly Lazy<QuestionService> _questionService;
 
-        
+
 
         public QuestionAnswerService(IUnitOfWork uow, Lazy<QuestionService> questionService1)
         {
@@ -41,6 +41,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public QuestionAnswerViewModel GetById(int id)
         {
             return _questionAnswers
+                .Include(current => current.Writer)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -55,6 +56,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionAnswerViewModel> GetAllByQuestionId(int id)
         {
             return _questionAnswers
+                .Include(current => current.Writer)
                 .Where(current => current.QuestionId == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -152,7 +154,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //read questionids from questiongroup
             var questions = _questionService.Value.GetAllQuestionsByQuestionGroupId(questionAnswerViewModel.QuestionGroupId);
-            
+
             //save Doc file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
 
@@ -228,7 +230,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         newQuestionAQuestion.FilePath = newGuid.ToString();
                         newQuestionAQuestion.Context = context;
                         newQuestionAQuestion.UserId = questionAnswerViewModel.UserId;
-                        newQuestionAQuestion.QuestionId = questions[numberOfQ-1].Id;
+                        newQuestionAQuestion.QuestionId = questions[numberOfQ - 1].Id;
                         newQuestionAQuestion.WriterId = questionAnswerViewModel.WriterId;
                         newQuestionAQuestion.IsMaster = true;
                         newQuestionAQuestion.Title = questionAnswerViewModel.Title;
@@ -245,7 +247,7 @@ namespace NasleGhalam.ServiceLayer.Services
                             ref missing, ref missing, ref missing, ref missing,
                             ref missing);
 
-                        
+
                         //تبدیل به عکس
                         var pane = newDoc2.Windows[1].Panes[1];
                         Thread.Sleep(1000);
@@ -289,7 +291,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.ValidateOnSaveEnabled(false);
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            
+
             var returnVal = Mapper.Map<ClientMessageResult>(msgRes);
             returnVal.Obj = _questionService.Value.GetAllByQuestionGroupId(questionAnswerViewModel.QuestionGroupId);
             return returnVal;
@@ -307,9 +309,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //read questionids from questiongroup
             var questions = _questionService.Value.GetAllQuestionsByQuestionGroupId(questionAnswerViewModel.QuestionGroupId);
-            
 
-            
+
+
 
             //save Doc file in temp memory
             word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
@@ -377,7 +379,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         var newGuid = Guid.NewGuid();
                         var returnItem = new
                         {
-                            questionPath = $"/content/question/{questions[numberOfQ-1].FileName}.png".ToFullRelativePath(),
+                            questionPath = $"/content/question/{questions[numberOfQ - 1].FileName}.png".ToFullRelativePath(),
                             answerPath = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath()
                         };
                         returnGuidList.Add(returnItem);
@@ -475,7 +477,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 return ClientMessageResult.NotFound();
             }
 
-            if ( questions.Any(current => current.QuestionAnswers.Count == 1)  )
+            if (questions.Any(current => current.QuestionAnswers.Count == 1))
             {
                 foreach (var VARIABLE in questions.Select(x => x.QuestionAnswers).ToList())
                 {

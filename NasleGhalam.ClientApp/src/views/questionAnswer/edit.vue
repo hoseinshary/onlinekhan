@@ -11,7 +11,7 @@
       />
     </q-field>
     <base-input :model="$v.questionAnswer.Title" class="col-md-6"/>
-    <base-input :model="$v.questionAnswer.Author" class="col-md-6"/>
+    <base-select :model="$v.questionAnswer.WriterId" :options="writerStore.ddl" class="col-md-6"/>
     <base-select
       :model="$v.questionAnswer.LookupId_AnswerType"
       :options="lookupStore.answerTypeDdl"
@@ -49,6 +49,7 @@ export default class QuestionAnswerEditVue extends Vue {
   questionAnswerStore = vxm.questionAnswerStore;
   questionAnswer = this.questionAnswerStore.questionAnswer;
   lookupStore = vxm.lookupStore;
+  writerStore = vxm.writerStore;
   //#endregion
 
   //#region ### hooks ###

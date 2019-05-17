@@ -51,6 +51,7 @@
             :columns="questionAnswerGridColumn"
             hasIndex
           >
+            <template slot="Writer.Name" slot-scope="data">{{data.row.Writer.Name}}</template>
             <template slot="IsMaster" slot-scope="data">{{data.row.IsMaster? "بلی" : "خیر"}}</template>
             <template slot="IsActive" slot-scope="data">{{data.row.IsActive? "بلی" : "خیر"}}</template>
             <template slot="Context" slot-scope="data">
@@ -119,7 +120,7 @@ export default class QuestionAnswerVue extends Vue {
     },
     {
       title: "نویسنده",
-      data: "Author"
+      data: "Writer.Name"
     },
     {
       title: "آنلاین خوان",

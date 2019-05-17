@@ -1,13 +1,16 @@
+import IWriter from "./IWriter";
+
 export default interface IQuestionAnswer {
   Id: number;
   Title: string;
   Context: string;
   LookupId_AnswerType: number;
   Description: string;
-  Author: string;
+  WriterId: number;
   IsMaster: boolean;
   IsActive: boolean;
   QuestionId: number;
+  Writer?: IWriter;
 }
 
 export const DefaultQuestionAnswer: IQuestionAnswer = {
@@ -16,7 +19,7 @@ export const DefaultQuestionAnswer: IQuestionAnswer = {
   Context: "",
   LookupId_AnswerType: 0,
   Description: "",
-  Author: "",
+  WriterId: 0,
   IsMaster: false,
   IsActive: false,
   QuestionId: 0

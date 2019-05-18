@@ -13,6 +13,7 @@
         <img :src="question.QuestionPicturePath" class="img-original-width">
       </q-card-media>
     </q-card>
+    {{questionAnswer.FileName}}
     <q-card inline class="col-12 q-mb-sm" v-show="questionAnswer.FileName">
       <q-card-media>
         جواب:
@@ -111,6 +112,7 @@ export default class QuestionAnswerVue extends Vue {
   questionStore = vxm.questionStore;
   lookupStore = vxm.lookupStore;
   questionAnswer = this.questionAnswerStore.questionAnswer;
+  writerStore = vxm.writerStore;
   question = this.questionStore.question;
   pageAccess = util.getAccess(this.questionStore.modelName);
   questionAnswerGridColumn = [
@@ -174,6 +176,7 @@ export default class QuestionAnswerVue extends Vue {
   open() {
     if (this.canCreate || this.canEdit) {
       this.lookupStore.fillAnswerType();
+      this.writerStore.fillList();
 
       this.questionAnswerStore.resetCreate();
       this.questionAnswer.QuestionId = this.question.Id;

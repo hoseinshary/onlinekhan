@@ -38,9 +38,9 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.Lesson_UserCreateDeleteAccess)]
         [CheckModelValidation]
-        public IHttpActionResult SubmitChages(Lesson_UserViewModel lesson_UserViewModel)
+        public IHttpActionResult SubmitChanges(Lesson_UserViewModel lesson_UserViewModel)
         {
-            return Ok(_lesson_UserService.SubmitChages(lesson_UserViewModel));
+            return Ok(_lesson_UserService.SubmitChanges(lesson_UserViewModel));
         }
 
         

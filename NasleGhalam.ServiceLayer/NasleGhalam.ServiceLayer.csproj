@@ -106,6 +106,7 @@
     <Compile Include="Services\EducationTreeService.cs" />
     <Compile Include="Services\EducationYearService.cs" />
     <Compile Include="Services\LessonService.cs" />
+    <Compile Include="Services\Lesson_UserService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\ProvinceService.cs" />
     <Compile Include="Services\PublisherService.cs" />

@@ -470,7 +470,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             
             _uow.MarkAsChanged(questionAnswer);
-
+            if(questionAnswer.FilePath =="" || questionAnswer.FilePath is null)
+                _uow.ExcludeFieldsFromUpdate(questionAnswer ,x=>x.FilePath);
             _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
 

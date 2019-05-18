@@ -54,7 +54,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public IList<UserViewModel> GetAll(byte userRoleLevel)
+        public IList<UserViewModel> GetAll(byte userRoleLevel, UserType userType = UserType.Organ)
         {
             return _users
                 .Include(current => current.City)

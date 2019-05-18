@@ -122,6 +122,7 @@
     <Compile Include="Controllers\EducationTreeController.cs" />
     <Compile Include="Controllers\EducationYearController.cs" />
     <Compile Include="Controllers\LessonController.cs" />
+    <Compile Include="Controllers\Lesson_UserController.cs" />
     <Compile Include="Controllers\LookupController.cs" />
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\PublisherController.cs" />

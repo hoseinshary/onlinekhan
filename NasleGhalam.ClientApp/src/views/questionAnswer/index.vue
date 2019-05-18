@@ -13,8 +13,7 @@
         <img :src="question.QuestionPicturePath" class="img-original-width">
       </q-card-media>
     </q-card>
-    {{questionAnswer.FileName}}
-    <q-card inline class="col-12 q-mb-sm" v-show="questionAnswer.FileName">
+    <q-card inline class="col-12 q-mb-sm" v-show="questionAnswer.FilePath">
       <q-card-media>
         جواب:
         <img :src="questionAnswer.QuestionAnswerPicturePath" class="img-original-width">
@@ -188,6 +187,12 @@ export default class QuestionAnswerVue extends Vue {
     vxm.questionJudgeStore.fillListByQuestionId(this.question.Id).then(() => {
       vxm.questionJudgeStore.OPEN_MODAL_INDEX(true);
     });
+  }
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.questionAnswerStore.SET_INDEX_VUE(this);
   }
   //#endregion
 }

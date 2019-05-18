@@ -436,7 +436,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
 
-            var PngFileName = "";
+            var pngFileName = "";
             dynamic bits = null;
             var wordFilename = "";
             var haveFileUpdate = false;
@@ -462,7 +462,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 var pane = doc.Windows[1].Panes[1];
                 var page = pane.Pages[1];
                 bits = page.EnhMetaFileBits;
-                PngFileName = SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".png";
+                pngFileName = SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".png";
 
                 doc.Close();
                 app.Quit();
@@ -473,10 +473,9 @@ namespace NasleGhalam.ServiceLayer.Services
             if(questionAnswer.FilePath =="" || questionAnswer.FilePath is null)
                 _uow.ExcludeFieldsFromUpdate(questionAnswer ,x=>x.FilePath);
             _uow.ValidateOnSaveEnabled(false);
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
 
-
-            if (msgRes.MessageType == MessageType.Success  && haveFileUpdate)
+            if (serverResult.MessageType == MessageType.Success  && haveFileUpdate)
             {
                 if (File.Exists(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".docx"))
                 {
@@ -494,7 +493,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     using (var ms = new MemoryStream((byte[])(bits)))
                     {
                         var image = Image.FromStream(ms);
-                        var pngTarget = PngFileName; //Path.ChangeExtension(target , "png");
+                        var pngTarget = pngFileName; //Path.ChangeExtension(target , "png");
                         image.Save(pngTarget + "1.png", ImageFormat.Png);
                         image = new Bitmap(pngTarget + "1.png");
 
@@ -515,7 +514,10 @@ namespace NasleGhalam.ServiceLayer.Services
                 File.Delete(wordFilename);
             }
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(questionAnswer.Id);
+            return clientResult;
         }
 
         /// <summary>

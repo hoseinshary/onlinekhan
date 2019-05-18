@@ -227,7 +227,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .First(current => current.Id == questionViewModel.Id);
 
             var previousFileName = questionViewModel.FileName;
-            questionViewModel.FileName = Guid.NewGuid().ToString();
             var target = "";
             dynamic bits = null;
             var haveFileUpdate = false;
@@ -235,6 +234,8 @@ namespace NasleGhalam.ServiceLayer.Services
             if (word != null && word.ContentLength > 0)
             {
                 haveFileUpdate = true;
+                questionViewModel.FileName = Guid.NewGuid().ToString();
+
 
                 //save Doc file in temp memory
                 word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx");

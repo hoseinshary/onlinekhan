@@ -76,14 +76,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
             questionAnswer.LookupId_AnswerType = 1042;
 
-            var wordFileName = Guid.NewGuid().ToString();
+            var FileName = Guid.NewGuid().ToString();
 
             //save Doc file in temp memory
-            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx");
+            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(FileName) + ".docx");
 
             // Open a doc file.
             var app = new Application();
-            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx";
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(FileName) + ".docx";
             var doc = app.Documents.Open(wordFilename);
 
             foreach (Paragraph paragraph in doc.Paragraphs)
@@ -95,25 +95,25 @@ namespace NasleGhalam.ServiceLayer.Services
             var pane = doc.Windows[1].Panes[1];
             var page = pane.Pages[1];
             var bits = page.EnhMetaFileBits;
-            var target = SitePath.GetQuestionAnswerAbsPath(wordFileName) + ".png";
+            var PngFileName = SitePath.GetQuestionAnswerAbsPath(FileName) + ".png";
 
             doc.Close();
             app.Quit();
-
+            questionAnswer.FilePath = FileName;
 
             _questionAnswers.Add(questionAnswer);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
-            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(wordFileName) && !string.IsNullOrEmpty(wordFileName))
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(FileName) && !string.IsNullOrEmpty(FileName))
             {
-                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(wordFileName) + ".docx");
+                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(FileName) + ".docx");
                 //crop and resize
                 try
                 {
                     using (var ms = new MemoryStream((byte[])(bits)))
                     {
                         var image = Image.FromStream(ms);
-                        var pngTarget = target; //Path.ChangeExtension(target , "png");
+                        var pngTarget = PngFileName; //Path.ChangeExtension(target , "png");
                         image.Save(pngTarget + "1.png", ImageFormat.Png);
                         image = new Bitmap(pngTarget + "1.png");
 
@@ -432,12 +432,88 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="questionAnswerViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(QuestionAnswerUpdateViewModel questionAnswerViewModel)
+        public ClientMessageResult Update(QuestionAnswerUpdateViewModel questionAnswerViewModel, HttpPostedFile word)
         {
             var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
+
+            var PngFileName = "";
+            dynamic bits = null;
+            var wordFilename = "";
+            var haveFileUpdate = false;
+            if (word != null && word.ContentLength > 0)
+            {
+                haveFileUpdate = true;
+                questionAnswer.FilePath = Guid.NewGuid().ToString();
+
+                //save Doc file in temp memory
+                word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionAnswer.FilePath) + ".docx");
+
+                // Open a doc file.
+                var app = new Application();
+                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionAnswer.FilePath) + ".docx";
+                var doc = app.Documents.Open(wordFilename);
+                questionAnswer.Context = "";
+                foreach (Paragraph paragraph in doc.Paragraphs)
+                {
+                    questionAnswer.Context += paragraph.Range.Text;
+                }
+
+                //تبدیل به عکس
+                var pane = doc.Windows[1].Panes[1];
+                var page = pane.Pages[1];
+                bits = page.EnhMetaFileBits;
+                PngFileName = SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".png";
+
+                doc.Close();
+                app.Quit();
+            }
+
+            
             _uow.MarkAsChanged(questionAnswer);
 
+            _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
+
+
+            if (msgRes.MessageType == MessageType.Success  && haveFileUpdate)
+            {
+                if (File.Exists(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".docx"))
+                {
+                    File.Delete(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".docx");
+                }
+                if (File.Exists(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".png"))
+                {
+                    File.Delete(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".png");
+                }
+
+                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".docx");
+                //crop and resize
+                try
+                {
+                    using (var ms = new MemoryStream((byte[])(bits)))
+                    {
+                        var image = Image.FromStream(ms);
+                        var pngTarget = PngFileName; //Path.ChangeExtension(target , "png");
+                        image.Save(pngTarget + "1.png", ImageFormat.Png);
+                        image = new Bitmap(pngTarget + "1.png");
+
+                        var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
+                        // resizedImage.Save(pngTarget, ImageFormat.Png);
+                        var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
+                        var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
+                        croppedImage.Save(pngTarget, ImageFormat.Png);
+                        croppedImage.Dispose();
+                        File.Delete(pngTarget + "1.png");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                }
+
+                File.Delete(wordFilename);
+            }
+
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 

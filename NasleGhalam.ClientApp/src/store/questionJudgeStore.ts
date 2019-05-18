@@ -213,9 +213,9 @@ export class QuestionJudgeStore extends VuexModule {
         this.notify({ vm, data });
         if (data.MessageType == MessageType.Success) {
           this.DELETE();
+          vm["selectedTab"] = "tab-create";
+          this.RESET();
         }
-        vm["selectedTab"] = "tab-create";
-        this.RESET();
       });
   }
   //#endregion

@@ -24,6 +24,7 @@ export class QuestionAnswerStore extends VuexModule {
   questionAnswer: IQuestionAnswer;
   questionAnswerMulti: IQuestionAnswerMulti;
   private _questionAnswerList: Array<IQuestionAnswer>;
+  private _indexVue: Vue;
   private _createVue: Vue;
   private _editVue: Vue;
 
@@ -81,7 +82,7 @@ export class QuestionAnswerStore extends VuexModule {
   }
 
   @mutation
-  private RESET(vm: any) {
+  private RESET(vm?: any) {
     util.mapObject(
       DefaultQuestionAnswer,
       this.questionAnswer,
@@ -101,6 +102,11 @@ export class QuestionAnswerStore extends VuexModule {
   @mutation
   OPEN_MODAL_INDEX(open: boolean) {
     this.openModal.index = open;
+  }
+
+  @mutation
+  SET_INDEX_VUE(vm: Vue) {
+    this._indexVue = vm;
   }
 
   @mutation
@@ -210,6 +216,7 @@ export class QuestionAnswerStore extends VuexModule {
     this.RESET(this._createVue);
     var wordFile = this._createVue.$refs.wordFile;
     wordFile["reset"]();
+    this._indexVue["selectedTab"] = "tab-create";
   }
 
   @action()
@@ -245,10 +252,12 @@ export class QuestionAnswerStore extends VuexModule {
       var wordFile = this._editVue.$refs.wordFile;
       wordFile["reset"]();
     }
+    this._indexVue["selectedTab"] = "tab-create";
   }
 
   @action()
-  async submitDelete(vm: Vue) {
+  async submitDelete() {
+    var vm = this._indexVue;
     return axios
       .post(`${baseUrl}/Delete/${this.questionAnswer.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
@@ -256,6 +265,8 @@ export class QuestionAnswerStore extends VuexModule {
         this.notify({ vm, data });
         if (data.MessageType == MessageType.Success) {
           this.DELETE();
+          vm["selectedTab"] = "tab-create";
+          this.RESET();
         }
       });
   }

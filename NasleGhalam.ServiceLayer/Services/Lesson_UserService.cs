@@ -66,14 +66,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult SubmitChanges(Lesson_UserViewModel lesson_UserViewModel)
         {
-            var previousLessons = _lessons
-                .AsNoTracking()
-                .Where(x => x.Users.Any(y => lesson_UserViewModel.UsersId.Contains(y.Id)));
+            var previousLessons = _lessons.Include(x=>x.Users)
+                .Where(x => x.Users.Any(y => lesson_UserViewModel.UsersId.Contains(y.Id))).ToList();
 
 
-            var previousUsers = _users
-                .AsNoTracking()
-                .Where(x => x.Lessons.Any(y => lesson_UserViewModel.LessonsId.Contains(y.Id)));
+            var previousUsers = _users.Include(x=>x.Lessons)
+                .Where(x => x.Lessons.Any(y => lesson_UserViewModel.LessonsId.Contains(y.Id))).ToList();
+
 
             //حذف
             foreach (var user in previousUsers)
@@ -97,32 +96,30 @@ namespace NasleGhalam.ServiceLayer.Services
             //add
             foreach (var  userId in lesson_UserViewModel.UsersId)
             {
-                var user = _users.AsNoTracking().First(x => x.Id == userId);
+                var user = _users.First(x => x.Id == userId);
                 foreach (var lessonId in lesson_UserViewModel.LessonsId)
                 {
                     if (previousLessons.All(x => x.Id != lessonId))
                     {
-                        Lesson lesson = new Lesson() {Id = lessonId};
-                        _uow.MarkAsUnChanged(lesson);
+                        var lesson = _lessons.First(x => x.Id == lessonId);
+                        lesson.Users.Add(user);
+                    }
+                }
+            }
+
+            foreach (var lessonId in lesson_UserViewModel.LessonsId)
+            {
+                var lesson = _lessons.First(x => x.Id == lessonId);
+                foreach (var userId in lesson_UserViewModel.UsersId)
+                {
+                    if (previousUsers.All(x => x.Id != userId))
+                    {
+                        var user = _users.First(x => x.Id == userId);
                         user.Lessons.Add(lesson);
                     }
                 }
             }
 
-
-            foreach (var lessonId in lesson_UserViewModel.LessonsId)
-            {
-                var lesson = _lessons.AsNoTracking().First(x => x.Id == lessonId);
-                foreach (var userId in lesson_UserViewModel.UsersId)
-                {
-                    if (previousUsers.All(x => x.Id != userId))
-                    {
-                        User user = new User() {Id = userId};
-                        _uow.MarkAsUnChanged(user);
-                        lesson.Users.Add(user);
-                    }
-                }
-            }
 
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);

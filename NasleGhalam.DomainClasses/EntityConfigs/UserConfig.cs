@@ -39,8 +39,8 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             .WithMany(x => x.Users)
           .Map(config =>
           {
-              config.MapLeftKey("LessonId");
-              config.MapRightKey("UserId");
+              config.MapLeftKey("UserId");
+              config.MapRightKey("LessonId");
               config.ToTable("Lessons_Users");
           });
 

@@ -89,6 +89,10 @@
     <Compile Include="Migrations\201905151307226_writerTable.Designer.cs">
       <DependentUpon>201905151307226_writerTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905190854320_fixLessonUser.cs" />
+    <Compile Include="Migrations\201905190854320_fixLessonUser.Designer.cs">
+      <DependentUpon>201905190854320_fixLessonUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -136,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905151307226_writerTable.resx">
       <DependentUpon>201905151307226_writerTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905190854320_fixLessonUser.resx">
+      <DependentUpon>201905190854320_fixLessonUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

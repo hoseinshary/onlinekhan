@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.Lesson;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -18,17 +16,12 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<Lesson> _lessons;
         private readonly IDbSet<User> _users;
 
-
         public Lesson_UserService(IUnitOfWork uow)
         {
             _uow = uow;
             _lessons = uow.Set<Lesson>();
             _users = uow.Set<User>();
         }
-
-
-        
-
 
         /// <summary>
         /// گرفتن همه اختصاص کاربر به درس ها
@@ -39,11 +32,10 @@ namespace NasleGhalam.ServiceLayer.Services
             return _lessons
                 .AsNoTracking()
                 .AsEnumerable()
-                .Where(x=>x.Users.Any(y=>ids.Contains(y.Id)))
-                .Select(x=>x.Id)
+                .Where(x => x.Users.Any(y => ids.Contains(y.Id)))
+                .Select(x => x.Id)
                 .ToList();
         }
-
 
         /// <summary>
         /// گرفتن همه اختصاص کاربر به درس ها
@@ -54,8 +46,8 @@ namespace NasleGhalam.ServiceLayer.Services
             return _users
                 .AsNoTracking()
                 .AsEnumerable()
-                .Where(x=>x.Lessons.Any(y=>ids.Contains(y.Id)))
-                .Select(x=>x.Id)
+                .Where(x => x.Lessons.Any(y => ids.Contains(y.Id)))
+                .Select(x => x.Id)
                 .ToList();
         }
 
@@ -66,20 +58,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult SubmitChanges(Lesson_UserViewModel lesson_UserViewModel)
         {
-            var previousLessons = _lessons.Include(x=>x.Users)
-                .Where(x => x.Users.Any(y => lesson_UserViewModel.UsersId.Contains(y.Id))).ToList();
+            var previousLessons = _lessons.Include(x => x.Users)
+                .Where(x => x.Users.Any(y => lesson_UserViewModel.UserIds.Contains(y.Id))).ToList();
 
+            var previousUsers = _users.Include(x => x.Lessons)
+                .Where(x => x.Lessons.Any(y => lesson_UserViewModel.LessonIds.Contains(y.Id))).ToList();
 
-            var previousUsers = _users.Include(x=>x.Lessons)
-                .Where(x => x.Lessons.Any(y => lesson_UserViewModel.LessonsId.Contains(y.Id))).ToList();
-
-
-            //حذف
+            //delete
             foreach (var user in previousUsers)
             {
                 foreach (var lesson in previousLessons)
                 {
-                    if (lesson_UserViewModel.LessonsId.All(x => x != lesson.Id))
+                    if (lesson_UserViewModel.LessonIds.All(x => x != lesson.Id))
                         user.Lessons.Remove(lesson);
                 }
             }
@@ -88,16 +78,16 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 foreach (var user in previousUsers)
                 {
-                    if (lesson_UserViewModel.UsersId.All(x => x != user.Id))
+                    if (lesson_UserViewModel.UserIds.All(x => x != user.Id))
                         lesson.Users.Remove(user);
                 }
             }
 
             //add
-            foreach (var  userId in lesson_UserViewModel.UsersId)
+            foreach (var userId in lesson_UserViewModel.UserIds)
             {
                 var user = _users.First(x => x.Id == userId);
-                foreach (var lessonId in lesson_UserViewModel.LessonsId)
+                foreach (var lessonId in lesson_UserViewModel.LessonIds)
                 {
                     if (previousLessons.All(x => x.Id != lessonId))
                     {
@@ -107,10 +97,10 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
             }
 
-            foreach (var lessonId in lesson_UserViewModel.LessonsId)
+            foreach (var lessonId in lesson_UserViewModel.LessonIds)
             {
                 var lesson = _lessons.First(x => x.Id == lessonId);
-                foreach (var userId in lesson_UserViewModel.UsersId)
+                foreach (var userId in lesson_UserViewModel.UserIds)
                 {
                     if (previousUsers.All(x => x.Id != userId))
                     {
@@ -120,16 +110,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
             }
 
-
-
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
-
-
-        
-        
-
-   
     }
 }

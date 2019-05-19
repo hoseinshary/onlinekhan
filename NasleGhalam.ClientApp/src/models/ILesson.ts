@@ -10,6 +10,7 @@ export default interface ILesson {
   EducationTreeIds: Array<number>;
   EducationTrees?: Array<IEducationTree>;
   Ratios: Array<IRatio>;
+  Checked: boolean;
 }
 
 export const DefaultLesson: ILesson = {
@@ -19,5 +20,6 @@ export const DefaultLesson: ILesson = {
   NumberOfJudges: 1,
   LookupId_Nezam: 0,
   EducationTreeIds: [],
-  Ratios: []
+  Ratios: [],
+  Checked: false
 };

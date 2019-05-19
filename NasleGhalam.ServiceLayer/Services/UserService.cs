@@ -53,8 +53,9 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کاربر ها
         /// </summary>
         /// <param name="userRoleLevel"></param>
+        /// <param name="userType"></param>
         /// <returns></returns>
-        public IList<UserViewModel> GetAll(byte userRoleLevel, UserType userType = UserType.Organ)
+        public IList<UserViewModel> GetAll(byte userRoleLevel, UserType userType)
         {
             return _users
                 .Include(current => current.City)

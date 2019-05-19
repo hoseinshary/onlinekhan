@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
@@ -21,7 +20,6 @@ namespace NasleGhalam.WebApi.Controllers
             _lesson_UserService = lesson_UserService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.Lesson_UserReadAccess)]
         public IHttpActionResult GetAllByLessonIds (IEnumerable<int> ids)
         {
@@ -34,18 +32,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lesson_UserService.GetAllByUserIds(ids));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.Lesson_UserCreateDeleteAccess)]
         [CheckModelValidation]
         public IHttpActionResult SubmitChanges(Lesson_UserViewModel lesson_UserViewModel)
         {
             return Ok(_lesson_UserService.SubmitChanges(lesson_UserViewModel));
-        }
-
-        
-
-
-     
+        }     
     }
 }

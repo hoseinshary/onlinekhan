@@ -13,6 +13,7 @@ export default interface IUser {
   RoleId: number;
   CityId: number;
   ProvinceId: number;
+  Checked: boolean;
 }
 
 export const DefaultUser: IUser = {
@@ -29,5 +30,6 @@ export const DefaultUser: IUser = {
   Mobile: "",
   RoleId: 0,
   CityId: 0,
-  ProvinceId: 0
+  ProvinceId: 0,
+  Checked: false
 };

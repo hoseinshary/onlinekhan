@@ -50,8 +50,21 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<LessonViewModel> GetAllByEducationTreeIds(IEnumerable<int> ids)
         {
             return _lessons
-                .Where(current => current.EducationTrees.Any(x => ids.Contains(x.Id)))
                 .Include(current => current.Ratios.Select(ratio => ratio.EducationSubGroup))
+                .Where(current => current.EducationTrees.Any(x => ids.Contains(x.Id)))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<LessonViewModel>)
+                .ToList();
+        } 
+        
+        /// <summary>
+        /// گرفتن همه درس ها
+        /// </summary>
+        /// <returns></returns>
+        public IList<LessonViewModel> GetAll()
+        {
+            return _lessons
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<LessonViewModel>)

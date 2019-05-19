@@ -21,9 +21,9 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAll(UserType userType = UserType.Organ)
         {
-            return Ok(_userService.GetAll(Request.GetRoleLevel()));
+            return Ok(_userService.GetAll(Request.GetRoleLevel(), userType));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
@@ -65,7 +65,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult Login(LoginViewModel login)
         {
-            
+
             return Ok(_userService.Login(login));
         }
     }

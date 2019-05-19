@@ -1,5 +1,5 @@
 <template>
-  <bs-modal :show="questionAnswerMultiStore.openModal.create" size="lg">
+  <bs-modal :show="questionAnswerMultiStore.openModal.create" size="lg" @open="open">
     <template slot="header">
       <q-toolbar slot="header" color="cyan-9">
         <q-toolbar-title>
@@ -28,7 +28,11 @@
 
       <q-tab-pane name="preCreateTab" keep-alive class="row gutter-sm">
         <base-input :model="$v.questionAnswerMulti.Title" class="col-md-6"/>
-        <base-input :model="$v.questionAnswerMulti.Author" class="col-md-6"/>
+        <base-select
+          :model="$v.questionAnswerMulti.WriterId"
+          :options="writerStore.ddl"
+          class="col-md-6"
+        />
         <q-field class="col-12">
           <q-uploader
             url="wordUrl"
@@ -124,6 +128,7 @@ export default class QuestionAnswerCreateMultiVue extends Vue {
   questionAnswerMultiStore = vxm.questionAnswerMultiStore;
   questionAnswerMulti = vxm.questionAnswerMultiStore.questionAnswerMulti;
   questionStore = vxm.questionStore;
+  writerStore = vxm.writerStore;
   selectedTab = "preCreateTab";
   previewImages = [];
   //#endregion
@@ -131,6 +136,12 @@ export default class QuestionAnswerCreateMultiVue extends Vue {
   //#region ### computed ###
   get preCreateMode() {
     return this.selectedTab == "preCreateTab";
+  }
+  //#endregion
+
+  //#region ### methods ###
+  open() {
+    this.writerStore.fillList();
   }
   //#endregion
 

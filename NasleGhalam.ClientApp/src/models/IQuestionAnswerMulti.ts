@@ -1,11 +1,14 @@
+import IWriter from "./IWriter";
+
 export default interface IQuestionAnswerMulti {
   Title: string;
-  Author: string;
   QuestionGroupId: number;
+  WriterId: number;
+  Writer?: IWriter;
 }
 
 export const DefaultQuestionAnswerMulti: IQuestionAnswerMulti = {
   Title: "",
-  Author: "",
+  WriterId: 0,
   QuestionGroupId: 0
 };

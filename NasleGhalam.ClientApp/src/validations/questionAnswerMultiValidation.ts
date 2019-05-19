@@ -15,8 +15,9 @@ const questionAnswerMultiValidations: ValidationRuleset<
       maxLength: maxLength(50)
       // required
     },
-    Author: {
-      displayName: displayName("نویسنده")
+    WriterId: {
+      displayName: displayName("نویسنده"),
+      requiredDdl: requiredDdl(0)
     },
     QuestionGroupId: {
       displayName: displayName("سوال"),

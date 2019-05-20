@@ -11,7 +11,7 @@ namespace NasleGhalam.ServiceLayer.Services
 {
     public class Lesson_UserService
     {
-        private const string Title = "اختصاص کاربر به درس";
+        //private const string Title = "اختصاص کاربر به درس";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Lesson> _lessons;
         private readonly IDbSet<User> _users;
@@ -30,8 +30,6 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<int> GetAllByUserIds(IEnumerable<int> ids)
         {
             return _lessons
-                .AsNoTracking()
-                .AsEnumerable()
                 .Where(x => x.Users.Any(y => ids.Contains(y.Id)))
                 .Select(x => x.Id)
                 .ToList();
@@ -44,8 +42,6 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<int> GetAllByLessonIds(IEnumerable<int> ids)
         {
             return _users
-                .AsNoTracking()
-                .AsEnumerable()
                 .Where(x => x.Lessons.Any(y => ids.Contains(y.Id)))
                 .Select(x => x.Id)
                 .ToList();
@@ -110,7 +106,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
             }
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            var msgRes = _uow.CommitChanges();
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
     }

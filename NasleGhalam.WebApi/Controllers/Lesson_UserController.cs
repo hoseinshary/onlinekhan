@@ -21,13 +21,13 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.Lesson_UserReadAccess)]
-        public IHttpActionResult GetAllByLessonIds (IEnumerable<int> ids)
+        public IHttpActionResult GetAllByLessonIds([FromUri]IEnumerable<int> ids)
         {
             return Ok(_lesson_UserService.GetAllByLessonIds(ids));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.Lesson_UserReadAccess)]
-        public IHttpActionResult GetAllByUserIds(IEnumerable<int> ids)
+        public IHttpActionResult GetAllByUserIds([FromUri]IEnumerable<int> ids)
         {
             return Ok(_lesson_UserService.GetAllByUserIds(ids));
         }
@@ -38,6 +38,6 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult SubmitChanges(Lesson_UserViewModel lesson_UserViewModel)
         {
             return Ok(_lesson_UserService.SubmitChanges(lesson_UserViewModel));
-        }     
+        }
     }
 }

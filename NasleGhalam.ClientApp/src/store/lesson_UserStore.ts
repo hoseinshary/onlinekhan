@@ -49,17 +49,17 @@ export class Lesson_UserStore extends VuexModule {
   get userData() {
     return this._userList;
   }
+
+  get checkedLessonIds() {
+    return this._lessonList.filter(x => x.Checked).map(x => x.Id);
+  }
+
+  get checkedUserIds() {
+    return this._userList.filter(x => x.Checked).map(x => x.Id);
+  }
   //#endregion
 
   //#region ### mutations ###
-  @mutation
-  private RESET(vm: any) {
-    util.mapObject(DefaultLesson_User, this.lesson_User, "Id");
-    if (vm.$v) {
-      vm.$v.$reset();
-    }
-  }
-
   @mutation
   private SET_LESSON_LIST(list: Array<ILesson>) {
     list.forEach(lesson => {
@@ -101,6 +101,32 @@ export class Lesson_UserStore extends VuexModule {
       });
   }
 
+  @action()
+  async CheckUsersByLessonIds() {
+    var param = { ids: this.checkedLessonIds };
+    return axios
+      .get(`${baseUrl}/GetAllByLessonIds?${util.toParam(param)}`)
+      .then((response: AxiosResponse<Array<number>>) => {
+        var userIds = response.data;
+        this._userList.forEach(current => {
+          current.Checked = userIds.indexOf(current.Id) > -1;
+        });
+      });
+  }
+
+  @action()
+  async CheckLessonByUserIds() {
+    var param = { ids: this.checkedUserIds };
+    return axios
+      .get(`${baseUrl}/GetAllByUserIds?${util.toParam(param)}`)
+      .then((response: AxiosResponse<Array<number>>) => {
+        var lessonIds = response.data;
+        this._lessonList.forEach(current => {
+          current.Checked = lessonIds.indexOf(current.Id) > -1;
+        });
+      });
+  }
+
   @action({ mode: "raw" })
   async notify(payload: { vm: Vue; data: IMessageResult }) {
     const context = getRawActionContext(this);
@@ -118,15 +144,13 @@ export class Lesson_UserStore extends VuexModule {
   @action()
   async submitChanges() {
     let vm = this._indexVue;
-
+    this.lesson_User.LessonIds = this.checkedLessonIds;
+    this.lesson_User.UserIds = this.checkedUserIds;
     return axios
       .post(`${baseUrl}/SubmitChanges`, this.lesson_User)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
-
-        if (data.MessageType == MessageType.Success) {
-        }
       });
   }
   //#endregion

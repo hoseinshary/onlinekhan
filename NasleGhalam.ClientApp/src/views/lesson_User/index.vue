@@ -13,13 +13,34 @@
             </base-table>
           </div>
           <div class="col-md-2 text-center">
-            <q-btn outline color="primary" class="shadow-1 bg-white q-ma-sm">
+            <q-btn
+              outline
+              color="primary"
+              class="shadow-1 bg-white q-ma-sm"
+              @click="lesson_UserStore.CheckLessonByUserIds()"
+            >
               کاربرهای منتسب به درس
               <q-icon name="arrow_back"/>
             </q-btn>
             <br>
-            <q-btn outline color="primary" class="shadow-1 bg-white q-ma-sm">
+
+            <q-btn
+              outline
+              color="primary"
+              class="shadow-1 bg-white q-ma-sm"
+              @click="lesson_UserStore.CheckUsersByLessonIds()"
+            >
               <q-icon name="arrow_forward"/>درس های منتسب به کاربر
+            </q-btn>
+            <br>
+
+            <q-btn
+              outline
+              color="positive"
+              class="shadow-1 bg-white q-ma-sm"
+              @click="lesson_UserStore.submitChanges()"
+            >
+              <q-icon name="save"/>ذخیره تغییرات
             </q-btn>
           </div>
           <div class="col-md-5">

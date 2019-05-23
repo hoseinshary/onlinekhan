@@ -18,6 +18,19 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
               .WithMany(x => x.Lesson_Nezams)
               .HasForeignKey(x => x.LookupId_Nezam)
               .WillCascadeOnDelete(false);
+
+
+            HasMany(x => x.LessonDepartments)
+                .WithMany(x => x.Lessons)
+                .Map(config =>
+                {
+                    config.MapLeftKey("LessonId");
+                    config.MapRightKey("LessonDepartmentId");
+                    config.ToTable("Lessons_LessonDepartments");
+                });
+
+
+
         }
     }
 }

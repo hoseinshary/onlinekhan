@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MapperProfile\EducationTreeProfile.cs" />
+    <Compile Include="MapperProfile\LessonDepartmentProfile.cs" />
     <Compile Include="MapperProfile\PublicProfile.cs" />
     <Compile Include="MapperProfile\QuestionAnswerProfile.cs" />
     <Compile Include="MapperProfile\QuestionGroupProfile.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Services\ActionService.cs" />
     <Compile Include="Services\AxillaryBookService.cs" />
     <Compile Include="Services\CityService.cs" />
+    <Compile Include="Services\LessonDepartmentService.cs" />
     <Compile Include="Services\EducationBookService.cs" />
     <Compile Include="Services\EducationSubGroupService.cs" />
     <Compile Include="Services\EducationTreeService.cs" />

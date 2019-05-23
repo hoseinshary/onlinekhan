@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Writer
+namespace NasleGhalam.ViewModels.LessonDepartment
 {
-	public class WriterViewModel
+	public class LessonDepartmentViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }

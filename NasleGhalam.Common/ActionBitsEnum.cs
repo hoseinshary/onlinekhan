@@ -118,7 +118,12 @@
         WriterUpdateAccess = 91,
 
         Lesson_UserReadAccess = 92,
-        Lesson_UserCreateDeleteAccess =93
-        
+        Lesson_UserCreateDeleteAccess =93,
+
+        LessonDepartmentReadAccess = 94,
+        LessonDepartmentCreateAccess = 95,
+        LessonDepartmentDeleteAccess = 96,
+        LessonDepartmentUpdateAccess = 97,
+
     }
 }

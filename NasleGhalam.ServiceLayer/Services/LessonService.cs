@@ -43,6 +43,22 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
+
+        /// <summary>
+        /// گرفتن همه درس ها با آی دی بخش
+        /// </summary>
+        /// <returns></returns>
+        public IList<LessonViewModel> GetAllByDepartmentId(int id)
+        {
+            return _lessons
+                .Where(current => current.LessonDepartments.Any(x => x.Id == id))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<LessonViewModel>)
+                .ToList();
+        }
+
+
         /// <summary>
         /// گرفتن همه درس ها با آی دی درخت آموزشی
         /// </summary>

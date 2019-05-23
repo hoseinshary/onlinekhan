@@ -2,66 +2,66 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Lesson_User;
+using NasleGhalam.ViewModels.LessonDepartment;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: حسین شری
-	///     date: 1398/02/28
+	///     name: hosein shary  
+	///     date: 1398/03/02
 	/// </author>
-	public class Lesson_UserController : ApiController
+	public class LessonDepartmentController : ApiController
 	{
-        private readonly Lesson_UserService _lesson_UserService;
-		public Lesson_UserController(Lesson_UserService lesson_UserService)
+        private readonly LessonDepartmentService _lessonDepartmentService;
+		public LessonDepartmentController(LessonDepartmentService lessonDepartmentService)
         {
-            _lesson_UserService = lesson_UserService;
+            _lessonDepartmentService = lessonDepartmentService;
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.Lesson_UserReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.LessonDepartmentReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_lesson_UserService.GetAll());
+            return Ok(_lessonDepartmentService.GetAll());
         }
 
 
-		[HttpGet, CheckUserAccess(ActionBits.Lesson_UserReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.LessonDepartmentReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var lesson_User = _lesson_UserService.GetById(id);
-            if (lesson_User == null)
+            var lessonDepartment = _lessonDepartmentService.GetById(id);
+            if (lessonDepartment == null)
             {
                 return NotFound();
             }
-            return Ok(lesson_User);
+            return Ok(lessonDepartment);
         }
 
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.Lesson_UserCreateAccess)]
+        [CheckUserAccess(ActionBits.LessonDepartmentCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(Lesson_UserCreateViewModel lesson_UserViewModel)
+        public IHttpActionResult Create(LessonDepartmentCreateViewModel lessonDepartmentViewModel)
         {
-            return Ok(_lesson_UserService.Create(lesson_UserViewModel));
+            return Ok(_lessonDepartmentService.Create(lessonDepartmentViewModel));
         }
 
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.Lesson_UserUpdateAccess)]
+        [CheckUserAccess(ActionBits.LessonDepartmentUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(Lesson_UserUpdateViewModel lesson_UserViewModel)
+        public IHttpActionResult Update(LessonDepartmentUpdateViewModel lessonDepartmentViewModel)
         {
-            return Ok(_lesson_UserService.Update(lesson_UserViewModel));
+            return Ok(_lessonDepartmentService.Update(lessonDepartmentViewModel));
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.Lesson_UserDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.LessonDepartmentDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_lesson_UserService.Delete(id));
+            return Ok(_lessonDepartmentService.Delete(id));
         }
 	}
 }

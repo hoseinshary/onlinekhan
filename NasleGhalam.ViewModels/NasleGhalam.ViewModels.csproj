@@ -68,6 +68,8 @@
     <Compile Include="EducationTree\EducationTreeUpdateViewModel.cs" />
     <Compile Include="EducationYear\EducationYearUpdateViewModel.cs" />
     <Compile Include="EducationYear\EducationYearCreateViewModel.cs" />
+    <Compile Include="LessonDepartment\LessonDepartmentAssignViewModel.cs" />
+    <Compile Include="LessonDepartment\LessonDepatmentViewModel.cs" />
     <Compile Include="Lesson\LessonUpdateViewModel.cs" />
     <Compile Include="Lesson\Lesson_UserViewModel.cs" />
     <Compile Include="Log\BrowserInfoViewModel.cs" />

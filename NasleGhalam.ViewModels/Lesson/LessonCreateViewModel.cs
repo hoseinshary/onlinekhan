@@ -29,5 +29,7 @@ namespace NasleGhalam.ViewModels.Lesson
         public IEnumerable<RatioCreateViewModel> Ratios { get; set; }
 
         public IEnumerable<int> EducationTreeIds { get; set; }
+
+        public int LessonDepartmentId { get; set; }
     }
 }

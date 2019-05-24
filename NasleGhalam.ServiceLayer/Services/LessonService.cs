@@ -36,6 +36,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _lessons
                 .Include(current => current.EducationTrees)
                 .Include(current => current.Ratios.Select(ratio => ratio.EducationSubGroup))
+                .Include(x=>x.LessonDepartments)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -116,6 +117,13 @@ namespace NasleGhalam.ServiceLayer.Services
                 lesson.EducationTrees.Add(tree);
             }
 
+            if (lessonViewModel.LessonDepartmentId != 0)
+            {
+                var department = new LessonDepartment() { Id = lessonViewModel.LessonDepartmentId };
+                _uow.MarkAsUnChanged(department);
+                lesson.LessonDepartments.Add(department);
+            }
+
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
@@ -193,6 +201,13 @@ namespace NasleGhalam.ServiceLayer.Services
                 lesson.Ratios.Add(ratio);
             }
 
+            if (lessonUpdateViewModel.LessonDepartmentId != 0)
+            {
+                var department = new LessonDepartment() { Id = lessonUpdateViewModel.LessonDepartmentId };
+                _uow.MarkAsUnChanged(department);
+                lesson.LessonDepartments.Add(department);
+            }
+
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
@@ -212,6 +227,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var lesson = _lessons
                 .Include(current => current.EducationTrees)
                 .Include(current => current.Ratios)
+                .Include(x=>x.LessonDepartments)
                 .First(current => current.Id == id);
 
             if (lesson == null)
@@ -230,6 +246,13 @@ namespace NasleGhalam.ServiceLayer.Services
             //remove ratios
             var ratios = lesson.Ratios.ToList();
             foreach (var item in ratios)
+            {
+                _uow.MarkAsDeleted(item);
+            }
+
+            //remove lesson department
+            var lessonDepartments = lesson.LessonDepartments.ToList();
+            foreach (var item in lessonDepartments)
             {
                 _uow.MarkAsDeleted(item);
             }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Security.AccessControl;
 using NasleGhalam.ViewModels.EducationTree;
+using NasleGhalam.ViewModels.LessonDepartment;
 using NasleGhalam.ViewModels.Ratio;
 
 namespace NasleGhalam.ViewModels.Lesson
@@ -23,5 +25,7 @@ namespace NasleGhalam.ViewModels.Lesson
         public IEnumerable<EducationTreeViewModel> EducationTrees { get; set; }
 
         public IEnumerable<RatioViewModel> Ratios { get; set; }
+
+        public LessonDepartmentViewModel LessonDepartment { get; set; }
     }
 }

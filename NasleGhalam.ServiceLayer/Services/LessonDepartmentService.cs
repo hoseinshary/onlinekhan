@@ -5,7 +5,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.LessonDepartment;
 
 namespace NasleGhalam.ServiceLayer.Services

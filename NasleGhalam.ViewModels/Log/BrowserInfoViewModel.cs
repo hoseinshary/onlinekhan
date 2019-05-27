@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using NasleGhalam.Common;
-
-public class BrowserInfoViewModel
+﻿public class BrowserInfoViewModel
 {
     public string Type { get; set; }
 

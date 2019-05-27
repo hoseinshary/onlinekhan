@@ -8,7 +8,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
     {
         public RatioProfile()
         {
-            CreateMap<RatioViewModel, Ratio>();
+            CreateMap<RatioViewModel, Ratio>().ReverseMap();
             CreateMap<RatioCreateViewModel, Ratio>();
             CreateMap<RatioUpdateViewModel, Ratio>();
         }

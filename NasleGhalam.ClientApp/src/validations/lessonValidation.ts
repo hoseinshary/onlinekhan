@@ -28,6 +28,9 @@ const lessonValidations: ValidationRuleset<TLesson> = {
       displayName: displayName("تعداد ارزیابی"),
       required,
       numeric
+    },
+    LessonDepartmentId: {
+      displayName: displayName("بخش")
     }
   }
 };

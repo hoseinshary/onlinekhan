@@ -1,5 +1,6 @@
 import IEducationTree from "./IEducationTree";
 import IRatio from "./IRatio";
+import ILessonDepartment from "./ILessonDepartment";
 
 export default interface ILesson {
   Id: number;
@@ -11,6 +12,8 @@ export default interface ILesson {
   EducationTrees?: Array<IEducationTree>;
   Ratios: Array<IRatio>;
   Checked: boolean;
+  LessonDepartmentId: number;
+  LessonDepartments?: Array<ILessonDepartment>;
 }
 
 export const DefaultLesson: ILesson = {
@@ -21,5 +24,7 @@ export const DefaultLesson: ILesson = {
   LookupId_Nezam: 0,
   EducationTreeIds: [],
   Ratios: [],
-  Checked: false
+  Checked: false,
+  LessonDepartmentId: 0,
+  LessonDepartments: []
 };

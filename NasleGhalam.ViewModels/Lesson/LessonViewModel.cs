@@ -25,6 +25,6 @@ namespace NasleGhalam.ViewModels.Lesson
 
         public IEnumerable<RatioViewModel> Ratios { get; set; }
 
-        public LessonDepartmentViewModel LessonDepartment { get; set; }
+        public IEnumerable<LessonDepartmentViewModel> LessonDepartments { get; set; }
     }
 }

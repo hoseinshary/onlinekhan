@@ -34,6 +34,11 @@
             <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
           </template>
         </base-field>
+        <base-select
+          :model="$v.lesson.LessonDepartmentId"
+          :options="lessonDepartmentStore.ddl"
+          class="col-md-6"
+        />
 
         <q-slide-transition>
           <fieldset class="col-12" v-show="educationGroupByTickedEducationTreeIds.length > 0">
@@ -85,6 +90,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { lessonValidations } from "src/validations/lessonValidation";
 import { EducationTreeState } from "../../utilities/enumeration";
+import util from "src/utilities";
 
 @Component({
   validations: lessonValidations
@@ -101,6 +107,7 @@ export default class LessonCreateVue extends Vue {
   lessonStore = vxm.lessonStore;
   educationTreeStore = vxm.educationTreeStore;
   educationSubGroupStore = vxm.educationSubGroupStore;
+  lessonDepartmentStore = vxm.lessonDepartmentStore;
   lookupStore = vxm.lookupStore;
   lesson = vxm.lessonStore.lesson;
   expandedTreeIds: Array<number> = [];
@@ -177,6 +184,7 @@ export default class LessonCreateVue extends Vue {
   open() {
     this.expandedTreeIds = this.expandedTreeIdsProp;
     this.lookupStore.fillTopicNezam();
+    this.lessonDepartmentStore.fillList();
     this.educationTreeStore.fillList().then(() => {
       this.educationSubGroupStore.fillList().then(() => {
         this.fillEducationGroup();

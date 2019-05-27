@@ -36,7 +36,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _lessons
                 .Include(current => current.EducationTrees)
                 .Include(current => current.Ratios.Select(ratio => ratio.EducationSubGroup))
-                .Include(x=>x.LessonDepartments)
+                .Include(x => x.LessonDepartments)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -73,8 +73,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<LessonViewModel>)
                 .ToList();
-        } 
-        
+        }
+
         /// <summary>
         /// گرفتن همه درس ها
         /// </summary>
@@ -227,7 +227,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var lesson = _lessons
                 .Include(current => current.EducationTrees)
                 .Include(current => current.Ratios)
-                .Include(x=>x.LessonDepartments)
+                .Include(x => x.LessonDepartments)
                 .First(current => current.Id == id);
 
             if (lesson == null)

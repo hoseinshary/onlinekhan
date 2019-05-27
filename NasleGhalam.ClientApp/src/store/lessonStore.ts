@@ -157,6 +157,11 @@ export class LessonStore extends VuexModule {
       .then((response: AxiosResponse<ILesson>) => {
         this.SET_OBJECT(response.data);
         this.SET_SELECTED_ID(this.lesson.Id);
+        this.lesson.LessonDepartmentId =
+          this.lesson.LessonDepartments != undefined &&
+          this.lesson.LessonDepartments.length > 0
+            ? this.lesson.LessonDepartments[0].Id
+            : 0;
       });
   }
 

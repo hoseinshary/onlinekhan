@@ -86,6 +86,10 @@ export default [
       {
         path: "/lesson_User",
         component: () => import("src/views/lesson_User/index.vue")
+      },
+      {
+        path: "/lessonDepartment",
+        component: () => import("src/views/lessonDepartment/index.vue")
       }
     ]
   },

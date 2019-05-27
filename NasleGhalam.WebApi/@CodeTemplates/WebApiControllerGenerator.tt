@@ -35,13 +35,11 @@ namespace NasleGhalam.WebApi.Controllers
             _<#= instanceName #>Service = <#= instanceName #>Service;
         }
 
-
 		[HttpGet, CheckUserAccess(ActionBits.<#= modelName #>ReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_<#= instanceName #>Service.GetAll());
         }
-
 
 		[HttpGet, CheckUserAccess(ActionBits.<#= modelName #>ReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -54,7 +52,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(<#= instanceName #>);
         }
 
-
 		[HttpPost]
         [CheckUserAccess(ActionBits.<#= modelName #>CreateAccess)]
         [CheckModelValidation]
@@ -63,7 +60,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_<#= instanceName #>Service.Create(<#= instanceName #>ViewModel));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.<#= modelName #>UpdateAccess)]
         [CheckModelValidation]
@@ -71,7 +67,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_<#= instanceName #>Service.Update(<#= instanceName #>ViewModel));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.<#= modelName #>DeleteAccess)]
         public IHttpActionResult Delete(int id)

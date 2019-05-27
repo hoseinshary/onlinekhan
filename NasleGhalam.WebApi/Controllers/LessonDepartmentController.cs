@@ -20,13 +20,11 @@ namespace NasleGhalam.WebApi.Controllers
             _lessonDepartmentService = lessonDepartmentService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.LessonDepartmentReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_lessonDepartmentService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.LessonDepartmentReadAccess)]
         public IHttpActionResult GetById(int id)
@@ -38,7 +36,6 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(lessonDepartment);
         }
-
 
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonDepartmentCreateAccess)]
@@ -56,7 +53,6 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lessonDepartmentService.Assign(lessonDepartmentViewModel));
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.LessonDepartmentUpdateAccess)]
         [CheckModelValidation]
@@ -64,7 +60,6 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_lessonDepartmentService.Update(lessonDepartmentViewModel));
         }
-
 
         [HttpPost, CheckUserAccess(ActionBits.LessonDepartmentDeleteAccess)]
         public IHttpActionResult Delete(int id)

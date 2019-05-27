@@ -21,7 +21,6 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.<#= modelName #>;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -38,7 +37,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _<#= instanceName #>s = uow.Set<<#= modelName #>>();
         }
 
-
 		/// <summary>
         /// گرفتن  <#= faName #> با آی دی
         /// </summary>
@@ -54,7 +52,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
 		/// <summary>
         /// گرفتن همه <#= faName #> ها
         /// </summary>
@@ -68,7 +65,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
 		/// <summary>
         /// ثبت <#= faName #>
         /// </summary>
@@ -79,11 +75,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _<#= instanceName #>s.Add(<#= instanceName #>);
 
-			var msgRes =  _uow.CommitChanges(CrudType.Create, Title);
-			msgRes.Id = <#= instanceName #>.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(<#= instanceName #>.Id);
+
+            return clientResult;
+        }
 
 		/// <summary>
         /// ویرایش <#= faName #>
@@ -95,10 +94,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var <#= instanceName #> = Mapper.Map<<#= modelName #>>(<#= instanceName #>ViewModel);
             _uow.MarkAsChanged(<#= instanceName #>);
 			
-			var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-			return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(<#= instanceName #>.Id);
+
+            return clientResult;
+        }
 
 		/// <summary>
         /// حذف <#= faName #>
@@ -118,20 +121,6 @@ namespace NasleGhalam.ServiceLayer.Services
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه <#= faName #> ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _<#= instanceName #>s.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
 	}
 }

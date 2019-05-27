@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -23,7 +22,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _lessonDepartments = uow.Set<LessonDepartment>();
         }
 
-
         /// <summary>
         /// گرفتن  بخش با آی دی
         /// </summary>
@@ -39,7 +37,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-
         /// <summary>
         /// گرفتن همه بخش ها
         /// </summary>
@@ -53,7 +50,6 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-
         /// <summary>
         /// ثبت بخش
         /// </summary>
@@ -64,9 +60,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var lessonDepartment = Mapper.Map<LessonDepartment>(lessonDepartmentViewModel);
             _lessonDepartments.Add(lessonDepartment);
 
-            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = lessonDepartment.Id;
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(lessonDepartment.Id);
+
+            return clientResult;
         }
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Assign(LessonDepartmentAssignViewModel lessonDepartmentViewModel )
         {
             var lessonDepartment = Mapper.Map<LessonDepartment>(lessonDepartmentViewModel);
-            var previousLessonDepartment =
-                _lessonDepartments.Include(x => x.Lessons).First(x => x.Id == lessonDepartment.Id);
+            //var previousLessonDepartment =
+            //    _lessonDepartments.Include(x => x.Lessons).First(x => x.Id == lessonDepartment.Id);
 
             //delete 
             var deleteList = lessonDepartment.Lessons
@@ -105,7 +105,6 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
-
         /// <summary>
         /// ویرایش بخش
         /// </summary>
@@ -116,10 +115,14 @@ namespace NasleGhalam.ServiceLayer.Services
             var lessonDepartment = Mapper.Map<LessonDepartment>(lessonDepartmentViewModel);
             _uow.MarkAsChanged(lessonDepartment);
 
-            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(lessonDepartment.Id);
+
+            return clientResult;
+        }
 
         /// <summary>
         /// حذف بخش
@@ -139,20 +142,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
-        }
-
-
-        /// <summary>
-        /// گرفتن همه بخش ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _lessonDepartments.Select(current => new SelectViewModel
-            {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
         }
     }
 }

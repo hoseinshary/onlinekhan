@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels.LessonDepartment;
 
 namespace NasleGhalam.ServiceLayer.MapperProfile
@@ -9,7 +8,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
     {
         public LessonDepartmentProfile()
         {
-            CreateMap<LessonDepartment, LessonDepartment>();
+            CreateMap<LessonDepartmentViewModel, LessonDepartment>();
             CreateMap<LessonDepartmentAssignViewModel, LessonDepartment>();
             
         }

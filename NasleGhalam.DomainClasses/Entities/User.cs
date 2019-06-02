@@ -12,6 +12,7 @@ namespace NasleGhalam.DomainClasses.Entities
             QuestionJudges = new HashSet<QuestionJudge>();
             QuestionAnswers = new HashSet<QuestionAnswer>();
             Lessons = new HashSet<Lesson>();
+            Writers = new HashSet<Writer>();
 
         }
         public int Id { get; set; }
@@ -50,13 +51,16 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public ICollection<Teacher> Teachers { get; set; }
 
-        public Writer  Writer { get; set; }
+        public ICollection<Writer> Writers { get; set; }
 
         public ICollection<Question> Questions { get; set; }
+
         public ICollection<QuestionJudge> QuestionJudges { get; set; }
+
         public ICollection<QuestionGroup> QuestionGroups { get; set; }
 
         public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
+
         public ICollection<Lesson> Lessons { get; set; }
 
     }

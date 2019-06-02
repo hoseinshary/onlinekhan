@@ -4,13 +4,12 @@ namespace NasleGhalam.ViewModels.Writer
 {
     public class WriterUpdateViewModel
     {
-        [Display(Name = "")]
         public int Id { get; set; }
 
-
-        [Display(Name = "")]
+        [Display(Name = "نام")]
         public string Name { get; set; }
 
-
+        [Display(Name = "کاربر")]
+        public int? UserId { get; set; }
     }
 }

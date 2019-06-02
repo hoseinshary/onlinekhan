@@ -18,7 +18,6 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             Property(x => x.Phone).HasMaxLength(8);
             Property(x => x.Mobile).HasMaxLength(10);
 
-
             HasRequired(x => x.Role)
                 .WithMany(x => x.Users)
                 .HasForeignKey(x => x.RoleId)
@@ -32,18 +31,14 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             HasOptional(x => x.Student)
                 .WithRequired(x => x.User);
 
-  
-
-
             HasMany(x => x.Lessons)
-            .WithMany(x => x.Users)
-          .Map(config =>
-          {
-              config.MapLeftKey("UserId");
-              config.MapRightKey("LessonId");
-              config.ToTable("Lessons_Users");
-          });
-
+                .WithMany(x => x.Users)
+                .Map(config =>
+                {
+                    config.MapLeftKey("UserId");
+                    config.MapRightKey("LessonId");
+                    config.ToTable("Lessons_Users");
+                });
         }
     }
 }

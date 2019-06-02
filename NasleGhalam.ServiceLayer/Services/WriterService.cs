@@ -29,6 +29,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public WriterViewModel GetById(int id)
         {
             return _writers
+                .Include(current => current.User)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -43,6 +44,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<WriterViewModel> GetAll()
         {
             return _writers
+                .Include(current => current.User)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<WriterViewModel>)

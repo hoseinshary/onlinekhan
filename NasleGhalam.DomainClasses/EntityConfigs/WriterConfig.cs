@@ -8,11 +8,12 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         public WriterConfig()
         {
             HasKey(x => x.Id);
-            Property(x => x.Name).HasMaxLength(50).IsRequired();
+            Property(x => x.Name).HasMaxLength(150).IsRequired();
 
             HasOptional(x => x.User)
-                .WithOptionalDependent(x => x.Writer);
-
+                .WithMany(x => x.Writers)
+                .HasForeignKey(x => x.UserId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

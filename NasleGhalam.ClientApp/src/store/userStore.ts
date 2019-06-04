@@ -22,6 +22,7 @@ export class UserStore extends VuexModule {
   user: IUser;
   loginUser: ILogin;
   private _userList: Array<IUser>;
+  private _userListSearch: Array<IUser>;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -35,6 +36,7 @@ export class UserStore extends VuexModule {
     this.user = util.cloneObject(DefaultUser);
     this.loginUser = util.cloneObject(DefaultLogin);
     this._userList = [];
+    this._userListSearch = [];
     this.openModal = {
       create: false,
       edit: false,
@@ -55,6 +57,13 @@ export class UserStore extends VuexModule {
     return this._userList.map(x => ({
       value: x.Id,
       label: x.FullName
+    }));
+  }
+
+  get searchDdl() {
+    return this._userListSearch.map(x => ({
+      value: x.Id,
+      label: `${x.FullName} ${x.NationalNo}`
     }));
   }
 
@@ -94,6 +103,11 @@ export class UserStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<IUser>) {
     this._userList = list;
+  }
+
+  @mutation
+  private SET_LIST_Search(list: Array<IUser>) {
+    this._userListSearch = list;
   }
 
   @mutation
@@ -149,6 +163,16 @@ export class UserStore extends VuexModule {
     } else {
       return Promise.resolve(this._userList);
     }
+  }
+
+  @action()
+  async search(payload: { nationalNo: string; family: string; name: string }) {
+    var data = util.toParam(payload);
+    return axios
+      .get(`${baseUrl}/Search?${data}`)
+      .then((response: AxiosResponse<Array<IUser>>) => {
+        this.SET_LIST_Search(response.data);
+      });
   }
 
   @action({ mode: "raw" })

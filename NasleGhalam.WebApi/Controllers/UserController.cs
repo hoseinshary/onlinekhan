@@ -26,6 +26,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_userService.GetAll(Request.GetRoleLevel(), userType));
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.WriterCreateAccess, ActionBits.WriterCreateAccess)]
+        public IHttpActionResult Search(string nationalNo, string family, string name)
+        {
+            return Ok(_userService.Search(nationalNo, family, name, Request.GetRoleLevel()));
+        }
+
         [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
         public IHttpActionResult GetById(int id)
         {

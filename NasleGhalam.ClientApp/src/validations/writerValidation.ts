@@ -9,6 +9,9 @@ const writerValidations: ValidationRuleset<TWriter> = {
       displayName: displayName("نام"),
       maxLength: maxLength(50),
       required
+    },
+    UserId: {
+      displayName: displayName("کاربر")
     }
   }
 };

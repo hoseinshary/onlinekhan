@@ -6,6 +6,7 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
+using NasleGhalam.ServiceLayer.Configs;
 using NasleGhalam.ServiceLayer.Jwt;
 using NasleGhalam.ViewModels.User;
 
@@ -62,6 +63,28 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Role)
                 .Where(current => current.Role.Level > userRoleLevel)
                 .Where(current => current.Role.UserType == UserType.Organ)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<UserViewModel>)
+                .ToList();
+        }
+
+        /// <summary>
+        /// جستجوی همه کاربر ها
+        /// </summary>
+        /// <param name="userRoleLevel"></param>
+        /// <param name="nationalNo"></param>
+        /// <param name="family"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IList<UserViewModel> Search(string nationalNo, string family, string name, byte userRoleLevel)
+        {
+            return _users
+                .Where(current => current.Role.Level > userRoleLevel)
+                .Where(current => string.IsNullOrEmpty(nationalNo) || current.NationalNo.Contains(nationalNo))
+                .Where(current => string.IsNullOrEmpty(family) || current.Family.Contains(family))
+                .Where(current => string.IsNullOrEmpty(name) || current.Name.Contains(name))
+                .Take(SiteConfig.MaxDdlCount)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<UserViewModel>)

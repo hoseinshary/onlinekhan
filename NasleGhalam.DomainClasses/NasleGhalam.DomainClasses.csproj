@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Assay.cs" />
+    <Compile Include="Entities\AssayAnswerSheet.cs" />
+    <Compile Include="Entities\AssayQuestion.cs" />
     <Compile Include="Entities\EducationTree.cs" />
     <Compile Include="Entities\LessonDepartment.cs" />
     <Compile Include="Entities\Log.cs" />
@@ -63,6 +66,7 @@
     <Compile Include="Entities\QuestionOption.cs" />
     <Compile Include="Entities\QuestionJudge.cs" />
     <Compile Include="Entities\QuestionGroup.cs" />
+    <Compile Include="Entities\AssaySchadule.cs" />
     <Compile Include="Entities\Topic.cs" />
     <Compile Include="Entities\Publisher.cs" />
     <Compile Include="Entities\Lesson.cs" />
@@ -82,6 +86,10 @@
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\Writer.cs" />
     <Compile Include="EntityConfigs\ActionConfig.cs" />
+    <Compile Include="EntityConfigs\AssayAnswerSheetConfig.cs" />
+    <Compile Include="EntityConfigs\AssayConfig.cs" />
+    <Compile Include="EntityConfigs\AssayQuestionConfig.cs" />
+    <Compile Include="EntityConfigs\AssaySchaduleConfig.cs" />
     <Compile Include="EntityConfigs\EducationTreeConfig.cs" />
     <Compile Include="EntityConfigs\LessonDepartmentConfig.cs" />
     <Compile Include="EntityConfigs\LookupConfig.cs" />

@@ -12,6 +12,8 @@ namespace NasleGhalam.DomainClasses.Entities
             EducationBooks = new HashSet<EducationBook>();
             Users = new HashSet<User>();
             LessonDepartments = new HashSet<LessonDepartment>();
+            AssayQuestions = new HashSet<AssayQuestion>();
+
 
 
         }
@@ -39,6 +41,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public ICollection<User> Users { get; set; }
         public ICollection<LessonDepartment> LessonDepartments { get; set; }
+
+        public ICollection<AssayQuestion> AssayQuestions { get; set; }
 
 
     }

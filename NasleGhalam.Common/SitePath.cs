@@ -12,15 +12,12 @@ namespace NasleGhalam.Common
         public static string QuestionGroupTempRelPath => "~/Content/QuestionGroupTemp/";
         //-------------------------------------------------------------------------------------
 
-
-        public static string GetAxillaryBookAbsPath(string name) => ToAbsolutePath($"{AxillaryBookRelPath}{name}");
-        //-------------------------------------------------------------------------------------
-
-
         public static string GetQuestionAbsPath(string name) => ToAbsolutePath($"{QuestionRelPath}{name}");
+
         public static string GetQuestionAnswerAbsPath(string name) => ToAbsolutePath($"{QuestionAnswerRelPath}{name}");
 
         public static string GetQuestionGroupAbsPath(string name) => ToAbsolutePath($"{QuestionGroupRelPath}{name}");
+
         public static string GetQuestionGroupTempAbsPath(string name) => ToAbsolutePath($"{QuestionGroupTempRelPath}{name}");
 
         public static string ToAbsolutePath(this string relativePath)

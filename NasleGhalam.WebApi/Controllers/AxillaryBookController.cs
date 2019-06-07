@@ -22,20 +22,16 @@ namespace NasleGhalam.WebApi.Controllers
             _axillaryBookService = axillaryBookService;
         }
 
-
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookReadAccess)]
         public IHttpActionResult GetAll()
         {
-            var imgUrlPath = Url.Content(SitePath.AxillaryBookRelPath);
-            return Ok(_axillaryBookService.GetAll(imgUrlPath));
+            return Ok(_axillaryBookService.GetAll());
         }
-
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var imgUrlPath = Url.Content(SitePath.AxillaryBookRelPath);
-            var axillaryBook = _axillaryBookService.GetById(id, imgUrlPath);
+            var axillaryBook = _axillaryBookService.GetById(id);
             if (axillaryBook == null)
             {
                 return NotFound();
@@ -43,12 +39,11 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(axillaryBook);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.AxillaryBookCreateAccess)]
         [CheckModelValidation]
         [CheckImageValidationNotRequired("img", 1024)]
-        public IHttpActionResult Create([FromUri]AxillaryBookViewModel axillaryBookViewModel)
+        public IHttpActionResult Create([FromUri]AxillaryBookCreateViewModel axillaryBookViewModel)
         {
             var postedFile = HttpContext.Current.Request.Files.Get("img");
             if (postedFile != null && postedFile.ContentLength > 0)
@@ -59,24 +54,23 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _axillaryBookService.Create(axillaryBookViewModel);
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBookViewModel.ImgName))
             {
-                postedFile.SaveAs(SitePath.GetAxillaryBookAbsPath(axillaryBookViewModel.ImgName));
+                postedFile?.SaveAs(axillaryBookViewModel.ImgAbsPath);
             }
 
             return Ok(msgRes);
         }
 
-
         [HttpPost]
         [CheckUserAccess(ActionBits.AxillaryBookUpdateAccess)]
         [CheckModelValidation]
         [CheckImageValidationNotRequired("img", 1024)]
-        public IHttpActionResult Update([FromUri] AxillaryBookViewModel axillaryBookViewModel)
+        public IHttpActionResult Update([FromUri] AxillaryBookUpdateViewModel axillaryBookViewModel)
         {
             var axillaryBook = _axillaryBookService.GetById(axillaryBookViewModel.Id);
             if (axillaryBook == null)
                 return NotFound();
 
-            string oldImgName = axillaryBook.ImgName;
+            var oldImgName = axillaryBook.ImgName;
             var postedFile = HttpContext.Current.Request.Files.Get("img");
 
             if (postedFile != null && postedFile.ContentLength > 0)
@@ -89,25 +83,15 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _axillaryBookService.Update(axillaryBookViewModel);
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBookViewModel.ImgName))
             {
-                postedFile.SaveAs(SitePath.GetAxillaryBookAbsPath(axillaryBookViewModel.ImgName)); // update image if exist
+                postedFile?.SaveAs(axillaryBookViewModel.ImgName); // update image if exist
             }
             return Ok(msgRes);
         }
 
-
         [HttpPost, CheckUserAccess(ActionBits.AxillaryBookDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            var axillaryBook = _axillaryBookService.GetById(id);
-            if (axillaryBook == null)
-                return NotFound();
-
             var msgRes = _axillaryBookService.Delete(id);
-            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBook.ImgName))
-            {
-                File.Delete(SitePath.GetAxillaryBookAbsPath(axillaryBook.ImgName));
-            }
-
             return Ok(msgRes);
         }
     }

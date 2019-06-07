@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels;
 using NasleGhalam.ViewModels.AxillaryBook;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -22,7 +22,6 @@ namespace NasleGhalam.ServiceLayer.Services
             _axillaryBooks = uow.Set<AxillaryBook>();
         }
 
-
         /// <summary>
         /// گرفتن  کتاب کمک درسی با آی دی
         /// </summary>
@@ -32,77 +31,57 @@ namespace NasleGhalam.ServiceLayer.Services
         public AxillaryBookViewModel GetById(int id, string imgUrlPath = "")
         {
             return _axillaryBooks
+                .Include(current => current.LookupId_BookType)
+                .Include(current => current.Lookup_PaperType)
+                .Include(current => current.Lookup_PrintType)
+                .Include(current => current.Publisher)
                 .Where(current => current.Id == id)
-                .Select(current => new AxillaryBookViewModel
-                {
-                    Id = current.Id,
-                    Name = current.Name,
-                    Author = current.Author,
-                    PublishYear = current.PublishYear,
-                    Description = current.Description,
-                    Font = current.Font,
-                    Isbn = current.Isbn,
-                    Price = current.Price,
-                    OriginalPrice = current.OriginalPrice,
-                    LookupId_BookType = current.LookupId_BookType,
-                    LookupId_PaperType = current.LookupId_PaperType,
-                    LookupId_PrintType = current.LookupId_PrintType,
-                    PublisherId = current.PublisherId,
-                    ImgName = current.ImgName,
-                    ImgPath = string.IsNullOrEmpty(current.ImgName) ? "" : imgUrlPath + current.ImgName
-                }).FirstOrDefault();
+                .AsEnumerable()
+                .Select(Mapper.Map<AxillaryBookViewModel>)
+                .FirstOrDefault();
         }
-
 
         /// <summary>
         /// گرفتن همه کتاب کمک درسی ها
         /// </summary>
         /// <returns></returns>
-        public IList<AxillaryBookViewModel> GetAll(string imgUrlPath)
+        public IList<AxillaryBookViewModel> GetAll()
         {
-            return _axillaryBooks.Select(current => new AxillaryBookViewModel()
-            {
-                Id = current.Id,
-                Name = current.Name,
-                Author = current.Author,
-                PublishYear = current.PublishYear,
-                Description = current.Description,
-                Font = current.Font,
-                Isbn = current.Isbn,
-                Price = current.Price,
-                OriginalPrice = current.OriginalPrice,
-                BookTypeName = current.Lookup_BookType.Value,
-                PaperTypeName = current.Lookup_PaperType.Value,
-                PrintTypeName = current.Lookup_PrintType.Value,
-                PublisherName = current.Publisher.Name,
-                ImgPath = string.IsNullOrEmpty(current.ImgName) ? "" : imgUrlPath + current.ImgName
-            }).ToList();
+            return _axillaryBooks
+                .Include(current => current.LookupId_BookType)
+                .Include(current => current.Lookup_PaperType)
+                .Include(current => current.Lookup_PrintType)
+                .Include(current => current.Publisher)
+                .AsEnumerable()
+                .Select(Mapper.Map<AxillaryBookViewModel>)
+                .ToList();
         }
-
 
         /// <summary>
         /// ثبت کتاب کمک درسی
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(AxillaryBookViewModel axillaryBookViewModel)
+        public ClientMessageResult Create(AxillaryBookCreateViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _axillaryBooks.Add(axillaryBook);
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            msgRes.Id = axillaryBook.Id;
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(axillaryBook.Id);
+
+            return clientResult;
         }
-
 
         /// <summary>
         /// ویرایش کتاب کمک درسی
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(AxillaryBookViewModel axillaryBookViewModel)
+        public ClientMessageResult Update(AxillaryBookUpdateViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             if (string.IsNullOrEmpty(axillaryBook.ImgName))
@@ -114,11 +93,14 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.MarkAsChanged(axillaryBook);
             }
 
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(axillaryBook.Id);
+
+            return clientResult;
         }
-
 
         /// <summary>
         /// حذف کتاب کمک درسی
@@ -129,29 +111,17 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var axillaryBookViewModel = GetById(id);
             if (axillaryBookViewModel == null)
-            {
-                 
                 return ClientMessageResult.NotFound();
-            }
 
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _uow.MarkAsDeleted(axillaryBook);
-            ServerMessageResult msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
-        }
 
-
-        /// <summary>
-        /// گرفتن همه کتاب کمک درسی ها برای لیست کشویی
-        /// </summary>
-        /// <returns></returns>
-        public IList<SelectViewModel> GetAllDdl()
-        {
-            return _axillaryBooks.Select(current => new SelectViewModel
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBook.ImgName))
             {
-                value = current.Id,
-                label = current.Name
-            }).ToList();
+                File.Delete(axillaryBookViewModel.ImgPath.ToAbsolutePath());
+            }
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
     }
 }

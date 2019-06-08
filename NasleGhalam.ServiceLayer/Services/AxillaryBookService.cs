@@ -31,11 +31,12 @@ namespace NasleGhalam.ServiceLayer.Services
         public AxillaryBookViewModel GetById(int id, string imgUrlPath = "")
         {
             return _axillaryBooks
-                .Include(current => current.LookupId_BookType)
+                .Include(current => current.Lookup_BookType)
                 .Include(current => current.Lookup_PaperType)
                 .Include(current => current.Lookup_PrintType)
                 .Include(current => current.Publisher)
                 .Where(current => current.Id == id)
+                .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<AxillaryBookViewModel>)
                 .FirstOrDefault();
@@ -48,10 +49,11 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<AxillaryBookViewModel> GetAll()
         {
             return _axillaryBooks
-                .Include(current => current.LookupId_BookType)
+                .Include(current => current.Lookup_BookType)
                 .Include(current => current.Lookup_PaperType)
                 .Include(current => current.Lookup_PrintType)
                 .Include(current => current.Publisher)
+                .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<AxillaryBookViewModel>)
                 .ToList();
@@ -119,7 +121,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBook.ImgName))
             {
-                File.Delete(axillaryBookViewModel.ImgPath.ToAbsolutePath());
+                File.Delete(axillaryBookViewModel.ImgAbsPath);
             }
             return Mapper.Map<ClientMessageResult>(msgRes);
         }

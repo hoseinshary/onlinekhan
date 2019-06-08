@@ -1,35 +1,26 @@
 <template>
-  <my-modal-delete :title="modelName"
-                   :recordName="recordName"
-                   :show="isOpenModalDelete"
-                   @confirm="submitDelete"
-                   @close="toggleModalDeleteStore(false)">
-  </my-modal-delete>
+  <base-modal-delete
+    :title="axillaryBookStore.modelName"
+    :recordName="axillaryBookStore.recordName"
+    :show="axillaryBookStore.openModal.delete"
+    @confirm="confirm"
+    @close="axillaryBookStore.OPEN_MODAL_DELETE(false)"
+  ></base-modal-delete>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+@Component
+export default class AxillaryBookDeleteVue extends Vue {
+  //#region ### data ###
+  axillaryBookStore = vxm.axillaryBookStore;
+  //#endregion
 
-export default {
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('axillaryBookStore', ['toggleModalDeleteStore', 'submitDeleteStore']),
-    submitDelete() {
-      this.submitDeleteStore(this);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('axillaryBookStore', {
-      modelName: 'modelName',
-      isOpenModalDelete: 'isOpenModalDelete'
-    }),
-    ...mapGetters('axillaryBookStore', ['recordName'])
+  //#region ### methods ###
+  confirm() {
+    this.axillaryBookStore.submitDelete(this);
   }
-};
+  //#endregion
+}
 </script>
-

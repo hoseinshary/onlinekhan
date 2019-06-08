@@ -1,167 +1,117 @@
 <template>
-  <my-modal-edit :title="modelName"
-                 :show="isOpenModalEdit"
-                 size="lg"
-                 @confirm="submit"
-                 @reset="resetEditStore"
-                 @open="modalOpen"
-                 @close="toggleModalEditStore(false)">
-
+  <base-modal-edit
+    :title="axillaryBookStore.modelName"
+    :show="axillaryBookStore.openModal.edit"
+    size="lg"
+    @confirm="axillaryBookStore.submitEdit"
+    @reset="axillaryBookStore.resetEdit"
+    @open="open"
+    @close="axillaryBookStore.OPEN_MODAL_EDIT(false)"
+  >
     <section class="col-md-8">
       <div class="row gutter-sm q-mx-sm">
-        <my-input :model="$v.axillaryBookObj.Name"
-                  class="col-sm-6" />
-
-        <my-input :model="$v.axillaryBookObj.PublishYear"
-                  class="col-sm-6" />
-
-        <my-input :model="$v.axillaryBookObj.Author"
-                  class="col-sm-6" />
-
-        <my-input :model="$v.axillaryBookObj.Isbn"
-                  class="col-sm-6" />
-
-        <my-input :model="$v.axillaryBookObj.Price"
-                  class="col-sm-6" />
-
-        <my-input :model="$v.axillaryBookObj.OriginalPrice"
-                  class="col-sm-6" />
-
-        <my-input :model="$v.axillaryBookObj.Font"
-                  class="col-sm-6" />
-
-        <my-select :model="$v.axillaryBookObj.LookupId_BookType"
-                   :options="lookupBookTypeDdl"
-                   class="col-sm-6"
-                   clearable
-                   ref="LookupId_BookType" />
-
-        <my-select :model="$v.axillaryBookObj.LookupId_PaperType"
-                   :options="lookupPaperTypeDdl"
-                   class="col-sm-6"
-                   clearable
-                   ref="LookupId_PaperType" />
-
-        <my-select :model="$v.axillaryBookObj.LookupId_PrintType"
-                   :options="lookupPrintTypeDdl"
-                   class="col-sm-6"
-                   clearable
-                   ref="LookupId_PrintType" />
-
-        <my-select :model="$v.axillaryBookObj.PublisherId"
-                   :options="publisherDdl"
-                   class="col-sm-6"
-                   clearable
-                   ref="PublisherId" />
+        <base-input :model="$v.axillaryBook.Name" class="col-sm-6"/>
+        <base-input :model="$v.axillaryBook.PublishYear" class="col-sm-6"/>
+        <base-input :model="$v.axillaryBook.Author" class="col-sm-6"/>
+        <base-input :model="$v.axillaryBook.Isbn" class="col-sm-6"/>
+        <base-input :model="$v.axillaryBook.Price" class="col-sm-6"/>
+        <base-input :model="$v.axillaryBook.OriginalPrice" class="col-sm-6"/>
+        <base-input :model="$v.axillaryBook.Font" class="col-sm-6"/>
+        <base-select
+          :model="$v.axillaryBook.LookupId_BookType"
+          :options="lookupStore.bookTypeDdl"
+          class="col-sm-6"
+        />
+        <base-select
+          :model="$v.axillaryBook.LookupId_PaperType"
+          :options="lookupStore.paperTypeDdl"
+          class="col-sm-6"
+        />
+        <base-select
+          :model="$v.axillaryBook.LookupId_PrintType"
+          :options="lookupStore.printTypeDdl"
+          class="col-sm-6"
+        />
+        <base-select
+          :model="$v.axillaryBook.PublisherId"
+          :options="publisherStore.ddl"
+          class="col-sm-6"
+        />
       </div>
     </section>
 
     <section class="col-md-4">
       <div class="row q-ml-sm">
         <q-field class="col-12 q-mb-lg">
-          <q-uploader url="url"
-                      float-label="تصویر"
-                      name="img"
-                      hide-upload-button
-                      auto-expand
-                      ref="fileUpload"
-                      extensions=".jpg,.jpeg,.png"
-                      @add="imageSelected"
-                      @remove:cancel="imageRemoved" />
+          <q-uploader
+            url="url"
+            float-label="تصویر"
+            name="img"
+            hide-upload-button
+            auto-expand
+            ref="fileUpload"
+            extensions=".jpg,.jpeg,.png"
+            @add="imageSelected"
+            @remove:cancel="imageRemoved"
+          />
         </q-field>
 
-        <div class="col-12 text-center"
-             v-if="showPreview && axillaryBookObj.ImgPath.length != 0">
-          <q-card inline
-                  style="width:150px">
+        <div class="col-12 text-center" v-if="showPreview && axillaryBook.ImgPath.length != 0">
+          <q-card inline style="width:150px">
             <q-card-media>
-              <img :src="axillaryBookObj.ImgPath" alt="preview">
-        </q-card-media>
+              <img :src="axillaryBook.ImgPath" alt="preview">
+            </q-card-media>
           </q-card>
         </div>
       </div>
     </section>
 
-    <my-input :model="$v.axillaryBookObj.Description"
-              type="textarea"
-              class="col-12" />
-
-  </my-modal-edit>
+    <base-input :model="$v.axillaryBook.Description" type="textarea" class="col-12"/>
+  </base-modal-edit>
 </template>
 
-<script>
-import viewModel from 'viewModels/axillaryBookViewModel';
-import { mapState, mapActions } from 'vuex';
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import { axillaryBookValidations } from "src/validations/axillaryBookValidation";
 
-export default {
-  data() {
-    return {
-      showPreview: true
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    imageSelected() {
-      this.showPreview = false;
-    },
-    imageRemoved() {
-      this.showPreview = true;
-    },
-    ...mapActions('axillaryBookStore', [
-      'toggleModalEditStore',
-      'editVueStore',
-      'submitEditStore',
-      'resetEditStore'
-    ]),
-    ...mapActions({
-      fillPrintTypeDdl: 'lookupStore/fillPrintTypeDdlStore',
-      fillBookTypeDdl: 'lookupStore/fillBookTypeDdlStore',
-      fillPaperTypeDdl: 'lookupStore/fillPaperTypeDdlStore',
-      fillPublisherDdl: 'publisherStore/fillDdlStore'
-    }),
-    modalOpen() {
-      this.showPreview = true;
-      this.fillPrintTypeDdl();
-      this.fillBookTypeDdl();
-      this.fillPaperTypeDdl();
-      this.fillPublisherDdl();
-    },
-    submit(closeModal) {
-      this.axillaryBookObj.PublisherName = this.$refs.PublisherId.getSelectedLabel();
-      this.axillaryBookObj.BookTypeName = this.$refs.LookupId_BookType.getSelectedLabel();
-      this.axillaryBookObj.PaperTypeName = this.$refs.LookupId_PaperType.getSelectedLabel();
-      this.axillaryBookObj.PrintTypeName = this.$refs.LookupId_PrintType.getSelectedLabel();
-      this.submitEditStore(closeModal);
-    }
-  },
-  /**
-   * computed
-   */
-  computed: {
-    ...mapState('axillaryBookStore', {
-      modelName: 'modelName',
-      axillaryBookObj: 'axillaryBookObj',
-      isOpenModalEdit: 'isOpenModalEdit'
-    }),
-    ...mapState({
-      lookupPrintTypeDdl: s => s.lookupStore.lookupPrintTypeDdl,
-      lookupBookTypeDdl: s => s.lookupStore.lookupBookTypeDdl,
-      lookupPaperTypeDdl: s => s.lookupStore.lookupPaperTypeDdl,
-      publisherDdl: s => s.publisherStore.publisherDdl
-    })
-  },
-  /**
-   * validations
-   */
-  validations: viewModel,
-  /**
-   * created
-   */
-  created() {
-    this.editVueStore(this);
+@Component({
+  validations: axillaryBookValidations
+})
+export default class AxillaryBookEditVue extends Vue {
+  $v: any;
+
+  //#region ### data ###
+  axillaryBookStore = vxm.axillaryBookStore;
+  lookupStore = vxm.lookupStore;
+  publisherStore = vxm.publisherStore;
+  axillaryBook = vxm.axillaryBookStore.axillaryBook;
+  showPreview = true;
+  //#endregion
+
+  //#region ### methods ###
+  open() {
+    this.lookupStore.fillPrintType();
+    this.lookupStore.fillBookType();
+    this.lookupStore.fillPaperType();
+    this.publisherStore.fillList();
+    this.showPreview = true;
   }
-};
+
+  imageSelected() {
+    this.showPreview = false;
+  }
+
+  imageRemoved() {
+    this.showPreview = true;
+  }
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.axillaryBookStore.SET_EDIT_VUE(this);
+  }
+  //#endregion
+}
 </script>
 

@@ -36,6 +36,7 @@ import {
   LessonDepartmentStore,
   lessonDepartmentStore
 } from "./lessonDepartmentStore";
+import { AxillaryBookStore, axillaryBookStore } from "./axillaryBookStore";
 
 Vue.use(Vuex);
 
@@ -104,7 +105,8 @@ const store = new Vuex.Store({
     studentStore,
     writerStore,
     lesson_UserStore,
-    lessonDepartmentStore
+    lessonDepartmentStore,
+    axillaryBookStore
   }
 });
 
@@ -172,5 +174,9 @@ export const vxm = {
   lessonDepartmentStore: LessonDepartmentStore.CreateProxy(
     store,
     LessonDepartmentStore
-  ) as LessonDepartmentStore
+  ) as LessonDepartmentStore,
+  axillaryBookStore: AxillaryBookStore.CreateProxy(
+    store,
+    AxillaryBookStore
+  ) as AxillaryBookStore
 };

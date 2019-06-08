@@ -5,7 +5,7 @@ namespace NasleGhalam.Common
 {
     public static class SitePath
     {
-        public static string AxillaryBookRelPath => "~/Content/AxillaryBook/";
+        public static string AxillaryBookRelPath => "/Content/AxillaryBook/";
         public static string QuestionRelPath => "~/Content/Question/";
         public static string QuestionAnswerRelPath => "~/Content/QuestionAnswer/";
         public static string QuestionGroupRelPath => "~/Content/QuestionGroup/";

@@ -83,7 +83,7 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _axillaryBookService.Update(axillaryBookViewModel);
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(axillaryBookViewModel.ImgName))
             {
-                postedFile?.SaveAs(axillaryBookViewModel.ImgName); // update image if exist
+                postedFile?.SaveAs(axillaryBookViewModel.ImgAbsPath); // update image if exist
             }
             return Ok(msgRes);
         }

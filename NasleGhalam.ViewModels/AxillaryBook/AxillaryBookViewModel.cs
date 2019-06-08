@@ -1,4 +1,6 @@
 ﻿using NasleGhalam.Common;
+using NasleGhalam.ViewModels.Lookup;
+using NasleGhalam.ViewModels.Publisher;
 
 namespace NasleGhalam.ViewModels.AxillaryBook
 {
@@ -20,7 +22,9 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 
         public string ImgName { get; set; }
 
-        public string ImgPath => string.IsNullOrEmpty(ImgName) ? "" : $"{SitePath.AxillaryBookRelPath}{ImgName}";
+        public string ImgPath => string.IsNullOrEmpty(ImgName) ? "" : $"{SitePath.AxillaryBookRelPath}{ImgName}".ToFullRelativePath();
+
+        public string ImgAbsPath => $"{SitePath.AxillaryBookRelPath.ToAbsolutePath()}{ImgName}";
 
         public int Price { get; set; }
 
@@ -34,12 +38,12 @@ namespace NasleGhalam.ViewModels.AxillaryBook
 
         public int PublisherId { get; set; }
 
-        public string PublisherName { get; set; }
+        public PublisherViewModel Publisher { get; set; }
 
-        public string BookTypeName { get; set; }
+        public LookupViewModel Lookup_BookType { get; set; }
 
-        public string PaperTypeName { get; set; }
+        public LookupViewModel Lookup_PaperType { get; set; }
 
-        public string PrintTypeName { get; set; }
+        public LookupViewModel Lookup_PrintType { get; set; }
     }
 }

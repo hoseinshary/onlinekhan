@@ -1,152 +1,159 @@
 <template>
   <section class="col-xs-12 q-px-md">
     <!-- panel -->
-    <my-panel>
-      <span slot="title">{{modelName}}</span>
+    <base-panel>
+      <span slot="title">{{axillaryBookStore.modelName}}</span>
       <div slot="body">
-        <my-btn-create v-if="pageAccess.canCreate"
-                       :label="`ایجاد (${modelName}) جدید`"
-                       @click="showModalCreate" />
+        <base-btn-create
+          v-if="canCreate"
+          :label="`ایجاد (${axillaryBookStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
         <br>
-        <my-table :grid-data="axillaryBookGridData"
-                  :columns="axillaryBookGridColumn"
-                  hasIndex>
-          <template slot="Id"
-                    slot-scope="data">
-            <my-btn-edit v-if="pageAccess.canEdit"
-                         round
-                         @click="showModalEdit(data.row.Id)" />
-            <my-btn-delete v-if="pageAccess.canDelete"
-                           round
-                           @click="showModalDelete(data.row.Id)" />
+        <base-table
+          :grid-data="axillaryBookStore.gridData"
+          :columns="axillaryBookGridColumn"
+          hasIndex
+        >
+          <template
+            slot="Lookup_PrintType.Value"
+            slot-scope="data"
+          >{{data.row.Lookup_PrintType.Value}}</template>
+          <template
+            slot="Lookup_BookType.Value"
+            slot-scope="data"
+          >{{data.row.Lookup_BookType.Value}}</template>
+          <template
+            slot="Lookup_PaperType.Value"
+            slot-scope="data"
+          >{{data.row.Lookup_PaperType.Value}}</template>
+          <template slot="Publisher.Name" slot-scope="data">{{data.row.Publisher.Name}}</template>
+          <template slot="Id" slot-scope="data">
+            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
           </template>
-        </my-table>
+        </base-table>
       </div>
-    </my-panel>
+    </base-panel>
 
     <!-- modals -->
-    <modal-create v-if="pageAccess.canCreate"></modal-create>
-    <modal-edit v-if="pageAccess.canEdit"></modal-edit>
-    <modal-delete v-if="pageAccess.canDelete"></modal-delete>
+    <modal-create v-if="canCreate"></modal-create>
+    <modal-edit v-if="canEdit"></modal-edit>
+    <modal-delete v-if="canDelete"></modal-delete>
   </section>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex';
 
-export default {
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { vxm } from "src/store";
+import util from "src/utilities";
+
+@Component({
   components: {
-    'modal-create': () => import('./create'),
-    'modal-edit': () => import('./edit'),
-    'modal-delete': () => import('./delete')
-  },
-  /**
-   * data
-   */
-  data() {
-    var pageAccess = this.$util.initAccess('/axillaryBook');
-    return {
-      pageAccess,
-      axillaryBookGridColumn: [
-        {
-          title: 'نام',
-          data: 'Name'
-        },
-        {
-          title: 'سال انتشار',
-          data: 'PublishYear'
-        },
-        {
-          title: 'نویسنده',
-          data: 'Author'
-        },
-        {
-          title: 'شابک',
-          data: 'Isbn'
-        },
-        {
-          title: 'قلم',
-          data: 'Font'
-        },
-        {
-          title: 'قیمت',
-          data: 'Price'
-        },
-        {
-          title: 'قیمت پشت جلد',
-          data: 'OriginalPrice'
-        },
-        {
-          title: 'انتشارات',
-          data: 'PublisherName'
-        },
-        {
-          title: 'نوع چاپ',
-          data: 'PrintTypeName'
-        },
-        {
-          title: 'نوع قطع',
-          data: 'BookTypeName'
-        },
-        {
-          title: 'نوع کاغذ',
-          data: 'PaperTypeName'
-        },
-        {
-          title: 'عملیات',
-          data: 'Id',
-          searchable: false,
-          sortable: false,
-          visible: pageAccess.canEdit || pageAccess.canDelete
-        }
-      ]
-    };
-  },
-  /**
-   * methods
-   */
-  methods: {
-    ...mapActions('axillaryBookStore', [
-      'toggleModalCreateStore',
-      'toggleModalEditStore',
-      'toggleModalDeleteStore',
-      'getByIdStore',
-      'fillGridStore',
-      'resetCreateStore',
-      'resetEditStore'
-    ]),
-    showModalCreate() {
-      // reset data on modal show
-      this.resetCreateStore();
-      // show modal
-      this.toggleModalCreateStore(true);
-    },
-    showModalEdit(id) {
-      // reset data on modal show
-      this.resetEditStore();
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalEditStore(true);
-      });
-    },
-    showModalDelete(id) {
-      // get data by id
-      this.getByIdStore(id).then(() => {
-        // show modal
-        this.toggleModalDeleteStore(true);
-      });
-    }
-  },
-  computed: {
-    ...mapState('axillaryBookStore', {
-      modelName: 'modelName',
-      axillaryBookGridData: 'axillaryBookGridData'
-    })
-  },
-  created() {
-    this.fillGridStore();
+    ModalCreate: () => import("./create.vue"),
+    ModalEdit: () => import("./edit.vue"),
+    ModalDelete: () => import("./delete.vue")
   }
-};
+})
+export default class AxillaryBookVue extends Vue {
+  //#region ### data ###
+  axillaryBookStore = vxm.axillaryBookStore;
+  pageAccess = util.getAccess(this.axillaryBookStore.modelName);
+  axillaryBookGridColumn = [
+    {
+      title: "نام",
+      data: "Name"
+    },
+    {
+      title: "سال انتشار",
+      data: "PublishYear"
+    },
+    {
+      title: "نویسنده",
+      data: "Author"
+    },
+    {
+      title: "شابک",
+      data: "Isbn"
+    },
+    {
+      title: "قلم",
+      data: "Font"
+    },
+    {
+      title: "قیمت",
+      data: "Price"
+    },
+    {
+      title: "قیمت پشت جلد",
+      data: "OriginalPrice"
+    },
+    {
+      title: "انتشارات",
+      data: "Publisher.Name"
+    },
+    {
+      title: "نوع چاپ",
+      data: "Lookup_PaperType.Value"
+    },
+    {
+      title: "نوع قطع",
+      data: "Lookup_BookType.Value"
+    },
+    {
+      title: "نوع کاغذ",
+      data: "Lookup_PaperType.Value"
+    },
+    {
+      title: "عملیات",
+      data: "Id",
+      searchable: false,
+      sortable: false,
+      visible: this.canEdit || this.canDelete
+    }
+  ];
+  //#endregion
+
+  //#region ### computed ###
+  get canCreate() {
+    return this.pageAccess.indexOf("ایجاد") > -1;
+  }
+
+  get canEdit() {
+    return this.pageAccess.indexOf("ویرایش") > -1;
+  }
+
+  get canDelete() {
+    return this.pageAccess.indexOf("حذف") > -1;
+  }
+  //#endregion
+
+  //#region ### methods ###
+  showModalCreate() {
+    this.axillaryBookStore.resetCreate();
+    this.axillaryBookStore.OPEN_MODAL_CREATE(true);
+  }
+
+  showModalEdit(id) {
+    this.axillaryBookStore.resetEdit();
+    this.axillaryBookStore.getById(id).then(() => {
+      this.axillaryBookStore.OPEN_MODAL_EDIT(true);
+    });
+  }
+
+  showModalDelete(id) {
+    this.axillaryBookStore.getById(id).then(() => {
+      this.axillaryBookStore.OPEN_MODAL_DELETE(true);
+    });
+  }
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.axillaryBookStore.fillList();
+  }
+  //#endregion
+}
 </script>
 

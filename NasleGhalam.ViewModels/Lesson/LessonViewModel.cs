@@ -7,10 +7,7 @@ namespace NasleGhalam.ViewModels.Lesson
 {
     public class LessonViewModel
     {
-        public LessonViewModel()
-        {
-            NumberOfJudges = 1;
-        }
+     
         public int Id { get; set; }
         
         public string Name { get; set; }

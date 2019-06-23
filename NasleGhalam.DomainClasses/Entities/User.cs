@@ -12,7 +12,7 @@ namespace NasleGhalam.DomainClasses.Entities
             QuestionJudges = new HashSet<QuestionJudge>();
             QuestionAnswers = new HashSet<QuestionAnswer>();
             Lessons = new HashSet<Lesson>();
-            AssayAnswerSheets = new HashSet<AssayAnswerSheet>(AssayAnswerSheets);
+            AssayAnswerSheets = new HashSet<AssayAnswerSheet>();
             Assays = new HashSet<Assay>();
 
         }

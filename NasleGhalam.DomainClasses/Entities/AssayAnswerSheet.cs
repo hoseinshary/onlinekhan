@@ -8,7 +8,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int AssaySchaduleId { get; set; }
 
-        public AssaySchadule AssaySchadule { get; set; }
+        public AssaySchedule AssaySchadule { get; set; }
 
         public int AssayQuestionId { get; set; }
 

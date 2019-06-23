@@ -66,7 +66,7 @@
     <Compile Include="Entities\QuestionOption.cs" />
     <Compile Include="Entities\QuestionJudge.cs" />
     <Compile Include="Entities\QuestionGroup.cs" />
-    <Compile Include="Entities\AssaySchadule.cs" />
+    <Compile Include="Entities\AssaySchedule.cs" />
     <Compile Include="Entities\Topic.cs" />
     <Compile Include="Entities\Publisher.cs" />
     <Compile Include="Entities\Lesson.cs" />

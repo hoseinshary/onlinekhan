@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace NasleGhalam.DomainClasses.Entities
 {
-    public class AssaySchadule
+    public class AssaySchedule
     {
-        public AssaySchadule()
+        public AssaySchedule()
         {
             AssayAnswerSheets = new HashSet<AssayAnswerSheet>();
         }

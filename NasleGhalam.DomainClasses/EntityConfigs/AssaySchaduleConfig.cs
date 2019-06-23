@@ -3,7 +3,7 @@ using NasleGhalam.DomainClasses.Entities;
 
 namespace NasleGhalam.DomainClasses.EntityConfigs
 {
-    public class AssaySchaduleConfig : EntityTypeConfiguration<AssaySchadule>
+    public class AssaySchaduleConfig : EntityTypeConfiguration<AssaySchedule>
     {
         public AssaySchaduleConfig()
         {
@@ -12,7 +12,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             
 
             HasRequired(x => x.Assay)
-                .WithMany(x => x.AssaySchadules)
+                .WithMany(x => x.AssaySchedules)
                 .HasForeignKey(x => x.AssayId)
                 .WillCascadeOnDelete(false);
 

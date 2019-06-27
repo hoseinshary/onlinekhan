@@ -55,6 +55,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewModelGenerator.tt</DependentUpon>
     </Content>
+    <Compile Include="Assey\AssayCreateViewModel.cs" />
+    <Compile Include="Assey\AssayGetQuestionsViewModel.cs" />
+    <Compile Include="Assey\AssayViewModel.cs" />
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
     <Compile Include="City\CityUpdateViewModel.cs" />
     <Compile Include="City\CityCreateViewModel.cs" />

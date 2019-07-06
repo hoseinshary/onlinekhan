@@ -90,6 +90,10 @@ export default [
       {
         path: "/lessonDepartment",
         component: () => import("src/views/lessonDepartment/index.vue")
+      },
+      {
+        path: "/assay",
+        component: () => import("src/views/assay/index.vue")
       }
     ]
   },

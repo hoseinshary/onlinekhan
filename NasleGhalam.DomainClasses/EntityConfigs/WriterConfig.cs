@@ -11,9 +11,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             Property(x => x.Name).HasMaxLength(150).IsRequired();
 
             HasOptional(x => x.User)
-                .WithMany(x => x.Writers)
-                .HasForeignKey(x => x.UserId)
-                .WillCascadeOnDelete(false);
+                .WithOptionalDependent(x => x.Writer);
         }
     }
 }

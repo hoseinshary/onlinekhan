@@ -64,7 +64,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(AxillaryBookCreateViewModel axillaryBookViewModel)
+        public ClientMessageResult Create(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             _axillaryBooks.Add(axillaryBook);
@@ -83,7 +83,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="axillaryBookViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(AxillaryBookUpdateViewModel axillaryBookViewModel)
+        public ClientMessageResult Update(AxillaryBookViewModel axillaryBookViewModel)
         {
             var axillaryBook = Mapper.Map<AxillaryBook>(axillaryBookViewModel);
             if (string.IsNullOrEmpty(axillaryBook.ImgName))

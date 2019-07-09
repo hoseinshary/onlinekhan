@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapperProfile\AssayProfile.cs" />
     <Compile Include="MapperProfile\EducationTreeProfile.cs" />
     <Compile Include="MapperProfile\LessonDepartmentProfile.cs" />
     <Compile Include="MapperProfile\PublicProfile.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="MapperProfile\RoleProfile.cs" />
     <Compile Include="MapperProfile\WriterProfile.cs" />
     <Compile Include="Services\ActionService.cs" />
+    <Compile Include="Services\AssayService.cs" />
     <Compile Include="Services\AxillaryBookService.cs" />
     <Compile Include="Services\CityService.cs" />
     <Compile Include="Services\LessonDepartmentService.cs" />

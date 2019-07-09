@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.ViewModels.Assey
 {
@@ -13,6 +15,9 @@ namespace NasleGhalam.ViewModels.Assey
         public string  Name { get; set; }
 
         public IEnumerable<TopicAssayViewModel> Topics { get; set; }
+
+        public IEnumerable<QuestionViewModel> Questions { get; set; }
+        
 
         public int QuestionNum { get; set; }
 

@@ -6,103 +6,103 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.LessonDepartment;
+using NasleGhalam.ViewModels.Assay;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class LessonDepartmentService
+	public class AssayService
 	{
-		private const string Title = "بخش";
+		private const string Title = "آزمون";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<LessonDepartment> _lessonDepartments;
+        private readonly IDbSet<Assay> _assays;
        
-	    public LessonDepartmentService(IUnitOfWork uow)
+	    public AssayService(IUnitOfWork uow)
         {
             _uow = uow;
-            _lessonDepartments = uow.Set<LessonDepartment>();
+            _assays = uow.Set<Assay>();
         }
 
 		/// <summary>
-        /// گرفتن  بخش با آی دی
+        /// گرفتن  آزمون با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public LessonDepartmentViewModel GetById(int id)
+        public AssayViewModel GetById(int id)
         {
-            return _lessonDepartments
+            return _assays
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<LessonDepartmentViewModel>)
+                .Select(Mapper.Map<AssayViewModel>)
                 .FirstOrDefault();
         }
 
 		/// <summary>
-        /// گرفتن همه بخش ها
+        /// گرفتن همه آزمون ها
         /// </summary>
         /// <returns></returns>
-        public IList<LessonDepartmentViewModel> GetAll()
+        public IList<AssayViewModel> GetAll()
         {
-            return _lessonDepartments
+            return _assays
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<LessonDepartmentViewModel>)
+                .Select(Mapper.Map<AssayViewModel>)
                 .ToList();
         }
 
 		/// <summary>
-        /// ثبت بخش
+        /// ثبت آزمون
         /// </summary>
-        /// <param name="lessonDepartmentViewModel"></param>
+        /// <param name="assayViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(LessonDepartmentCreateViewModel lessonDepartmentViewModel)
+        public ClientMessageResult Create(AssayCreateViewModel assayViewModel)
         {
-            var lessonDepartment = Mapper.Map<LessonDepartment>(lessonDepartmentViewModel);
-            _lessonDepartments.Add(lessonDepartment);
+            var assay = Mapper.Map<Assay>(assayViewModel);
+            _assays.Add(assay);
 
 			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(lessonDepartment.Id);
+                clientResult.Obj = GetById(assay.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// ویرایش بخش
+        /// ویرایش آزمون
         /// </summary>
-        /// <param name="lessonDepartmentViewModel"></param>
+        /// <param name="assayViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(LessonDepartmentUpdateViewModel lessonDepartmentViewModel)
+        public ClientMessageResult Update(AssayUpdateViewModel assayViewModel)
         {
-            var lessonDepartment = Mapper.Map<LessonDepartment>(lessonDepartmentViewModel);
-            _uow.MarkAsChanged(lessonDepartment);
+            var assay = Mapper.Map<Assay>(assayViewModel);
+            _uow.MarkAsChanged(assay);
 			
 			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(lessonDepartment.Id);
+                clientResult.Obj = GetById(assay.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// حذف بخش
+        /// حذف آزمون
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  lessonDepartmentViewModel = GetById(id);
-            if (lessonDepartmentViewModel == null)
+			var  assayViewModel = GetById(id);
+            if (assayViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var lessonDepartment = Mapper.Map<LessonDepartment>(lessonDepartmentViewModel);
-            _uow.MarkAsDeleted(lessonDepartment);
+            var assay = Mapper.Map<Assay>(assayViewModel);
+            _uow.MarkAsDeleted(assay);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);

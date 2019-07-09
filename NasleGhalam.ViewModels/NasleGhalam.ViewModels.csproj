@@ -59,6 +59,7 @@
     <Compile Include="Assey\AssayGetQuestionsViewModel.cs" />
     <Compile Include="Assey\AssayViewModel.cs" />
     <Compile Include="Assey\LessonAssayViewModel.cs" />
+    <Compile Include="Assey\QuestionAssayViewModel.cs" />
     <Compile Include="Assey\TopicAssayViewModel.cs" />
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
     <Compile Include="City\CityUpdateViewModel.cs" />

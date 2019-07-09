@@ -73,6 +73,22 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
+        /// <summary>
+        /// گرفتن همه سوال های مباحث
+        /// </summary>
+        /// <returns></returns>
+        public IList<QuestionViewModel> GetAllByTopicIdsForAssay(List<int> ids , int lookupId_QuestionHardnessType , int count)
+        {
+            return _questions
+                .Where(current => current.Topics.Any(x => ids.Contains(x.Id) && current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType))
+                .OrderBy(x => Guid.NewGuid())
+                .Take(count)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
+
         public object GetAllByLessonId(int id)
         {
             return _questions

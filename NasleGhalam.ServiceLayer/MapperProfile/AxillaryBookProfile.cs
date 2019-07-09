@@ -9,8 +9,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         public AxillaryBookProfile()
         {
             CreateMap<AxillaryBookViewModel, AxillaryBook>();
-            CreateMap<AxillaryBookCreateViewModel, AxillaryBook>();
-            CreateMap<AxillaryBookUpdateViewModel, AxillaryBook>();
+            
         }
     }
 }

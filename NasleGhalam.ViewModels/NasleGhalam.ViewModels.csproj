@@ -55,8 +55,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewModelGenerator.tt</DependentUpon>
     </Content>
-    <Compile Include="AxillaryBook\AxillaryBookUpdateViewModel.cs" />
-    <Compile Include="AxillaryBook\AxillaryBookCreateViewModel.cs" />
+    <Compile Include="Assey\AssayCreateViewModel.cs" />
+    <Compile Include="Assey\AssayGetQuestionsViewModel.cs" />
+    <Compile Include="Assey\AssayViewModel.cs" />
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
     <Compile Include="City\CityUpdateViewModel.cs" />
     <Compile Include="City\CityCreateViewModel.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="_Attributes\NationalNoAttribute.cs" />
     <Compile Include="_Attributes\RequiredDdlAttribute.cs" />
     <Compile Include="EducationBook\EducationBookCreateViewModel.cs" />
+    <Compile Include="SelectViewModel.cs" />
     <Compile Include="Lesson\LessonViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

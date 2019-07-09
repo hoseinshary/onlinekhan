@@ -26,6 +26,10 @@ namespace NasleGhalam.DomainClasses.Entities
             Topic_Hardnesses = new HashSet<Topic>();
             Lesson_Nezams = new HashSet<Lesson>();
             EducationTree_States = new HashSet<EducationTree>();
+
+            Assay_Importance = new HashSet<Assay>();
+            Assay_QuestionType = new HashSet<Assay>();
+            Assay_Type = new HashSet<Assay>();
         }
 
         public int Id { get; set; }
@@ -61,5 +65,11 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<Lesson> Lesson_Nezams { get; set; }
 
         public ICollection<EducationTree> EducationTree_States { get; set; }
+
+        public ICollection<Assay> Assay_Importance { get; set; }
+
+        public ICollection<Assay> Assay_Type { get; set; }
+
+        public ICollection<Assay> Assay_QuestionType { get; set; }
     }
 }

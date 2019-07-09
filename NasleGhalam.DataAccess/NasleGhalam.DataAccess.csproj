@@ -97,9 +97,9 @@
     <Compile Include="Migrations\201905231429021_lessonDepartment.Designer.cs">
       <DependentUpon>201905231429021_lessonDepartment.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201906021911292_UpdateWriterRelation.cs" />
-    <Compile Include="Migrations\201906021911292_UpdateWriterRelation.Designer.cs">
-      <DependentUpon>201906021911292_UpdateWriterRelation.cs</DependentUpon>
+    <Compile Include="Migrations\201906071900266_azmoon.cs" />
+    <Compile Include="Migrations\201906071900266_azmoon.Designer.cs">
+      <DependentUpon>201906071900266_azmoon.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -155,8 +155,8 @@
     <EmbeddedResource Include="Migrations\201905231429021_lessonDepartment.resx">
       <DependentUpon>201905231429021_lessonDepartment.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201906021911292_UpdateWriterRelation.resx">
-      <DependentUpon>201906021911292_UpdateWriterRelation.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201906071900266_azmoon.resx">
+      <DependentUpon>201906071900266_azmoon.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -87,6 +87,22 @@ export class TopicStore extends VuexModule {
       return tree;
     };
   }
+
+  get treeDataByLessonIds() {
+    return (lessonIds: Array<number>) => {
+      var list = this._topicList
+        .filter(x => lessonIds.indexOf(x.LessonId) > -1)
+        .map(x => ({
+          Id: x.Id,
+          label: x.Title,
+          ParentTopicId: x.ParentTopicId,
+          lessonId: x.LessonId,
+          header: "custom"
+        }));
+      var tree = util.listToTree(list, "Id", "ParentTopicId");
+      return tree;
+    };
+  }
   //#endregion
 
   //#region ### mutations ###

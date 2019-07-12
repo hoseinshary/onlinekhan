@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NasleGhalam.DomainClasses.Entities
+﻿namespace NasleGhalam.DomainClasses.Entities
 {
     public class AssayAnswerSheet
     {

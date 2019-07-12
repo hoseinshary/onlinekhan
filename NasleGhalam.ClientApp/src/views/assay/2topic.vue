@@ -1,77 +1,45 @@
 <template>
-  <section class="col-md-8">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{assayStore.modelName}}</span>
-      <div slot="body" class="row gutter-sm">
-        <div class="col-md-4">
-          <q-select
+  <section class="row gutter-sm">
+    <div class="col-md-4">
+      <!-- <q-tree :nodes="topicTreeData" tick-strategy="leaf" 
+      color="blue" node-key="Id" />-->
+      <!-- <q-tree
+        :nodes="topicTreeData"
+        tick-strategy="leaf"
+        class="q-pt-lg"
+        color="primary"
+        node-key="Id"
+      >
+        <div slot="header-custom" slot-scope="prop">
+          {{prop.node.label}}
+          <template>
+            <q-btn
+              outline
+              color="positive"
+              class="shadow-1 bg-white q-mr-sm q-px-xs"
+              icon="save"
+              size="sm"
+              @click.stop="showModalCreate(prop.node.Id, prop.node.label)"
+            />
+          </template>
+        </div>
+      </q-tree>-->
+      <div
+        class="col-12 shadow-1 q-ma-sm q-pa-sm"
+        v-for="lesson in checkedLessons"
+        :key="lesson.Id"
+      >
+        {{lesson.Name}} ({{lesson.CountOfQuestions}} سوال)
+        <q-tree :nodes="lesson.Topics" tick-strategy="leaf" color="blue" node-key="Id" />
+      </div>
+      <!-- <q-select
             v-model="educationTree.id"
             :options="educationTree_GradeDdl"
             float-label="فیلتر درخت آموزش با مقطع"
             clearable
           />
-          <q-tree
-            :nodes="educationTreeData"
-            :expanded.sync="educationTree.expanded"
-            :ticked.sync="educationTree.leafTicked"
-            tick-strategy="leaf"
-            color="blue"
-            node-key="Id"
-          />
-        </div>
-        <div class="col-md-8">
-          <ul>
-            <li
-              v-for="lesson in lessonList"
-              :key="lesson.LessonId"
-              class="row shadow-1 q-ma-sm q-pa-sm"
-            >
-              <div class="col-md-5">
-                <q-checkbox v-model="lesson.Checked" />
-                {{lesson.LessonName}}
-              </div>
-              <div v-if="lesson.Checked" class="col-md-7">
-                <section class="row">
-                  <q-input
-                    v-model="lesson.CountOfQuestion"
-                    float-label="تعداد سوال ها"
-                    @focus="$event.target.select()"
-                    class="col"
-                    align="center"
-                    type="number"
-                  />
-                  <q-input
-                    v-model="lesson.CountOfEasy"
-                    float-label="آسان"
-                    @focus="$event.target.select()"
-                    class="col"
-                    align="center"
-                    type="number"
-                  />
-                  <q-input
-                    v-model="lesson.CountOfMedium"
-                    float-label="متوسط"
-                    @focus="$event.target.select()"
-                    class="col"
-                    align="center"
-                    type="number"
-                  />
-                  <q-input
-                    v-model="lesson.CountOfHard"
-                    float-label="سخت"
-                    @focus="$event.target.select()"
-                    class="col"
-                    align="center"
-                    type="number"
-                  />
-                </section>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </base-panel>
+      -->
+    </div>
   </section>
 </template>
 
@@ -79,100 +47,47 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
-import { EducationTreeState } from "../../utilities/enumeration";
-type TLessonList = {
-  LessonId: number;
-  LessonName: string;
-  Checked: boolean;
-  CountOfQuestion: number;
-};
 @Component({
   components: {}
 })
 export default class TopicTabVue extends Vue {
   //#region ### data ###
   assayStore = vxm.assayStore;
-  lessonStore = vxm.lessonStore;
-  educationTreeStore = vxm.educationTreeStore;
-  pageAccess = util.getAccess(this.assayStore.modelName);
-  educationTree = this.educationTreeStore.qTreeData;
-  lessonList: Array<any> = [];
+  topicStore = vxm.topicStore;
+  assayCreate = vxm.assayStore.assayCreate;
   //#endregion
 
   //#region ### computed ###
-  // get canCreate() {
-  //   return this.pageAccess.indexOf("ایجاد") > -1;
-  // }
-
-  // get canEdit() {
-  //   return this.pageAccess.indexOf("ویرایش") > -1;
-  // }
-
-  // get canDelete() {
-  //   return this.pageAccess.indexOf("حذف") > -1;
-  // }
-
-  get educationTree_GradeDdl() {
-    return this.educationTreeStore.byStateDdl(EducationTreeState.Grade);
+  get checkedLessons() {
+    return this.assayCreate.Lessons.filter(x => x.Checked == true);
   }
-
-  get educationTreeData() {
-    return this.educationTreeStore.treeDataByEducationTreeId(
-      this.educationTree.id
-    );
+  get lessonIds() {
+    return this.checkedLessons.map(x => x.Id);
   }
   //#endregion
 
   //#region ### watch ###
-  @Watch("educationTree.id")
-  educationTreeIdChanged(newVal, oldVal) {
-    this.educationTree.leafTicked.splice(
-      0,
-      this.educationTree.leafTicked.length
-    );
-    let index = this.educationTree.expanded.indexOf(oldVal);
-    if (index > -1) {
-      this.educationTree.expanded.splice(index, 1);
-    }
+  @Watch("lessonIds")
+  lessonIdsChanged(newVal) {
+    this.topicStore.fillList().then(x => {
+      var topicTreeData = this.topicStore.treeDataByLessonIds(newVal);
 
-    if (this.educationTree.expanded.indexOf(newVal) == -1) {
-      this.educationTree.expanded.push(newVal);
-    }
-  }
-
-  @Watch("educationTree.leafTicked")
-  tickedEducationTreeIdsChanged(newVal) {
-    this.lessonStore.fillListByEducationTreeIds(newVal);
-  }
-
-  @Watch("lessonStore.gridData")
-  lessonGridDataChanged(value) {
-    var list = value.map(x => ({
-      LessonId: x.Id,
-      LessonName: x.Name,
-      Checked: false,
-      CountOfQuestion: 0,
-      CountOfEasy: 0,
-      CountOfMedium: 0,
-      CountOfHard: 0
-    }));
-
-    util.clearArray(this.lessonList);
-    list.forEach(element => {
-      this.lessonList.push(element);
+      // set assayTopics
+      this.checkedLessons.forEach(lesson => {
+        debugger;
+        util.clearArray(lesson.Topics);
+        var tree = topicTreeData.find(x => x.lessonId == lesson.Id);
+        if (tree) {
+          lesson.Topics = [tree];
+        }
+      });
     });
   }
-  //#endregion
-
-  //#region ### methods ###
-
   //#endregion
 
   //#region ### hooks ###
   created() {
-    this.educationTreeStore.fillList().then(res => {
-      this.educationTree.expanded = this.educationTree.firstLevel;
-    });
+    this.lessonIdsChanged(this.lessonIds);
   }
   //#endregion
 }

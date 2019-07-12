@@ -17,75 +17,86 @@
       />
     </div>
     <div class="col-md-8">
-      <ul>
+      <ul style="max-height:500px; overflow-y:auto">
         <li
-          v-for="lesson in lessonList"
-          :key="lesson.LessonId"
+          v-for="lesson in assayCreate.Lessons"
+          :key="lesson.Id"
           class="row shadow-1 q-ma-sm q-pa-sm"
         >
           <div class="col-md-5">
             <q-checkbox v-model="lesson.Checked" />
-            {{lesson.LessonName}}
+            {{lesson.Name}}
           </div>
           <div v-if="lesson.Checked" class="col-md-7">
-            <section class="row">
-              <q-input
-                v-model="lesson.CountOfQuestion"
-                float-label="تعداد سوال ها"
-                @focus="$event.target.select()"
-                class="col"
-                align="center"
-                type="number"
-              />
-              <q-input
-                v-model="lesson.CountOfEasy"
-                float-label="آسان"
-                @focus="$event.target.select()"
-                class="col"
-                align="center"
-                type="number"
-              />
-              <q-input
-                v-model="lesson.CountOfMedium"
-                float-label="متوسط"
-                @focus="$event.target.select()"
-                class="col"
-                align="center"
-                type="number"
-              />
-              <q-input
-                v-model="lesson.CountOfHard"
-                float-label="سخت"
-                @focus="$event.target.select()"
-                class="col"
-                align="center"
-                type="number"
-              />
+            <section class="row gutter-sm">
+              <div class="col">
+                <q-input
+                  v-model="lesson.CountOfEasy"
+                  float-label="آسان"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <q-input
+                  v-model="lesson.CountOfMedium"
+                  float-label="متوسط"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <q-input
+                  v-model="lesson.CountOfHard"
+                  float-label="سخت"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <q-input
+                  v-model="lesson.CountOfQuestions"
+                  float-label="تعداد سوال ها"
+                  class="col"
+                  align="center"
+                  readonly
+                />
+              </div>
             </section>
           </div>
         </li>
       </ul>
     </div>
+    <div class="col-12">
+      <q-btn color="primary" class="float-right" @click="goToTopicTab">
+        انتخاب مبحث
+        <q-icon name="arrow_back" />
+      </q-btn>
+    </div>
   </section>
 </template>
-
-
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
+import AssayCreate, { AssayLesson } from "src/models/IAssay";
+import ILesson from "src/models/ILesson";
 
 @Component({})
 export default class LessonTabVue extends Vue {
   //#region ### data ###
-
-  assayStore = vxm.assayStore;
   lessonStore = vxm.lessonStore;
   educationTreeStore = vxm.educationTreeStore;
   educationTree = this.educationTreeStore.qTreeData;
-  lessonList: Array<any> = [];
+  assayCreate = vxm.assayStore.assayCreate;
   //#endregion
 
   //#region ### computed ###
@@ -123,25 +134,18 @@ export default class LessonTabVue extends Vue {
   }
 
   @Watch("lessonStore.gridData")
-  lessonGridDataChanged(value) {
-    var list = value.map(x => ({
-      LessonId: x.Id,
-      LessonName: x.Name,
-      Checked: false,
-      CountOfQuestion: 0,
-      CountOfEasy: 0,
-      CountOfMedium: 0,
-      CountOfHard: 0
-    }));
-
-    util.clearArray(this.lessonList);
-    list.forEach(element => {
-      this.lessonList.push(element);
+  lessonGridDataChanged(value: Array<ILesson>) {
+    util.clearArray(this.assayCreate.Lessons);
+    var list = value.forEach(x => {
+      this.assayCreate.Lessons.push(new AssayLesson(x.Id, x.Name));
     });
   }
   //#endregion
 
   //#region ### methods ###
+  goToTopicTab() {
+    this.$emit("changeTab", "topicTab");
+  }
   //#endregion
 
   //#region ### hooks ###

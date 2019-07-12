@@ -55,12 +55,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewModelGenerator.tt</DependentUpon>
     </Content>
-    <Compile Include="Assey\AssayCreateViewModel.cs" />
-    <Compile Include="Assey\AssayGetQuestionsViewModel.cs" />
-    <Compile Include="Assey\AssayViewModel.cs" />
-    <Compile Include="Assey\LessonAssayViewModel.cs" />
-    <Compile Include="Assey\QuestionAssayViewModel.cs" />
-    <Compile Include="Assey\TopicAssayViewModel.cs" />
+    <Compile Include="Assay\AssayCreateViewModel.cs" />
+    <Compile Include="Assay\AssayGetQuestionsViewModel.cs" />
+    <Compile Include="Assay\AssayViewModel.cs" />
+    <Compile Include="Assay\LessonAssayViewModel.cs" />
+    <Compile Include="Assay\QuestionAssayViewModel.cs" />
+    <Compile Include="Assay\TopicAssayViewModel.cs" />
     <Compile Include="AxillaryBook\AxillaryBookViewModel.cs" />
     <Compile Include="City\CityUpdateViewModel.cs" />
     <Compile Include="City\CityCreateViewModel.cs" />

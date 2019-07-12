@@ -5,7 +5,6 @@ namespace NasleGhalam.ViewModels.Assay
 {
     public class AssayCreateViewModel
     {
-        [Display(Name = "")]
         public int Id { get; set; }
 
 
@@ -52,7 +51,5 @@ namespace NasleGhalam.ViewModels.Assay
 
         [Display(Name = "فایل")]
         public string File { get; set; }
-
-
     }
 }

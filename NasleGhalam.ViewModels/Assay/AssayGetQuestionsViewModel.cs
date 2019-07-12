@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Security.AccessControl;
-using NasleGhalam.ViewModels.Lesson;
 
-namespace NasleGhalam.ViewModels.Assey
+namespace NasleGhalam.ViewModels.Assay
 {
     public class AssayGetQuestionsViewModel
     {

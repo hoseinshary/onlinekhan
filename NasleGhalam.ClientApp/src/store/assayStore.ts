@@ -1,12 +1,16 @@
 import { VuexModule, Module } from "vuex-class-component";
+import AssayCreate from "src/models/IAssay";
 
 @Module({ namespacedPath: "assayStore/" })
 export class AssayStore extends VuexModule {
+  assayCreate: AssayCreate;
+
   /**
    * initialize data
    */
   constructor() {
     super();
+    this.assayCreate = new AssayCreate();
   }
 
   //#region ### getters ###

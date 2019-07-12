@@ -7,7 +7,6 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Assay;
-using NasleGhalam.ViewModels.Assey;
 using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -56,13 +55,13 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     var qEasy = _questionService.Value.GetAllByTopicIdsForAssay(
                         lesson.Topics.Select(x => x.Id).ToList(), 11,
-                        lesson.QuestionNumEasy);
+                        lesson.CountOfEasy);
                     var qMedium = _questionService.Value.GetAllByTopicIdsForAssay(
                         lesson.Topics.Select(x => x.Id).ToList(), 12,
-                        lesson.QuestionNumMedium);
+                        lesson.CountOfMedium);
                     var qHard = _questionService.Value.GetAllByTopicIdsForAssay(
                         lesson.Topics.Select(x => x.Id).ToList(), 13,
-                        lesson.QuestionNumHard);
+                        lesson.CountOfHard);
 
                     MergeQuestionLists(ref questionsReturn, qEasy, lesson.Id, lesson.Name);
                     MergeQuestionLists(ref questionsReturn, qMedium, lesson.Id, lesson.Name);
@@ -79,13 +78,13 @@ namespace NasleGhalam.ServiceLayer.Services
                     {
                         var qEasy = _questionService.Value.GetAllByTopicIdsForAssay(
                             new List<int> { topic.Id }, 11,
-                            lesson.QuestionNumEasy);
+                            lesson.CountOfEasy);
                         var qMedium = _questionService.Value.GetAllByTopicIdsForAssay(
                             new List<int> { topic.Id }, 12,
-                            lesson.QuestionNumMedium);
+                            lesson.CountOfMedium);
                         var qHard = _questionService.Value.GetAllByTopicIdsForAssay(
                             new List<int> { topic.Id }, 13,
-                            lesson.QuestionNumHard);
+                            lesson.CountOfHard);
 
                         MergeQuestionLists(ref questionsReturn, qEasy, lesson.Id, lesson.Name);
                         MergeQuestionLists(ref questionsReturn, qMedium, lesson.Id, lesson.Name);
@@ -130,7 +129,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         LessonId = lesson.Id,
                         QuestionId = question.Id,
 
-                        ///todo: complete
+                        //todo: complete
                         AnswerNumber = 0,
                         File = null
                     });
@@ -195,7 +194,6 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 QuestionAssayViewModel q = Mapper.Map<QuestionAssayViewModel>(question);
                 q.LessonId = lessonId;
-                q.LessonName = lessonName;
                 questionAssayViewModels.Add(q);
             }
         }

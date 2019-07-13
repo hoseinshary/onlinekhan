@@ -46,13 +46,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن سوالات یک آزمون
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionAssayViewModel> GetAllQuestion(AssayGetQuestionsViewModel assayGetQuestionsViewModel)
+        public IList<QuestionAssayViewModel> GetAllQuestion(AssayCreateViewModel assayGetQuestionsViewModel)
         {
             List<QuestionAssayViewModel> questionsReturn = new List<QuestionAssayViewModel>();
             if (assayGetQuestionsViewModel.RandomQuestion)
             {
                 foreach (var lesson in assayGetQuestionsViewModel.Lessons)
                 {
+
+                    QuestionAssayViewModel lessonItem = new QuestionAssayViewModel();
+                    lessonItem.LessonId = lesson.Id;
+
+
+
                     var qEasy = _questionService.Value.GetAllByTopicIdsForAssay(
                         lesson.Topics.Select(x => x.Id).ToList(), 11,
                         lesson.CountOfEasy);
@@ -63,9 +69,11 @@ namespace NasleGhalam.ServiceLayer.Services
                         lesson.Topics.Select(x => x.Id).ToList(), 13,
                         lesson.CountOfHard);
 
-                    MergeQuestionLists(ref questionsReturn, qEasy, lesson.Id, lesson.Name);
-                    MergeQuestionLists(ref questionsReturn, qMedium, lesson.Id, lesson.Name);
-                    MergeQuestionLists(ref questionsReturn, qHard, lesson.Id, lesson.Name);
+                    lessonItem.Questions.AddRange(qEasy);
+                    lessonItem.Questions.AddRange(qMedium);
+                    lessonItem.Questions.AddRange(qHard);
+
+                    questionsReturn.Add(lessonItem);
                 }
 
                 return questionsReturn;
@@ -74,6 +82,8 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 foreach (var lesson in assayGetQuestionsViewModel.Lessons)
                 {
+                    QuestionAssayViewModel lessonItem = new QuestionAssayViewModel();
+                    lessonItem.LessonId = lesson.Id;
                     foreach (var topic in lesson.Topics)
                     {
                         var qEasy = _questionService.Value.GetAllByTopicIdsForAssay(
@@ -86,10 +96,11 @@ namespace NasleGhalam.ServiceLayer.Services
                             new List<int> { topic.Id }, 13,
                             lesson.CountOfHard);
 
-                        MergeQuestionLists(ref questionsReturn, qEasy, lesson.Id, lesson.Name);
-                        MergeQuestionLists(ref questionsReturn, qMedium, lesson.Id, lesson.Name);
-                        MergeQuestionLists(ref questionsReturn, qHard, lesson.Id, lesson.Name);
+                        lessonItem.Questions.AddRange(qEasy);
+                        lessonItem.Questions.AddRange(qMedium);
+                        lessonItem.Questions.AddRange(qHard);
                     }
+                    questionsReturn.Add(lessonItem);
                 }
 
                 return questionsReturn;
@@ -187,15 +198,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-        private void MergeQuestionLists(ref List<QuestionAssayViewModel> questionAssayViewModels,
-            IList<QuestionViewModel> questionViewModels, int lessonId, string lessonName)
-        {
-            foreach (var question in questionViewModels)
-            {
-                QuestionAssayViewModel q = Mapper.Map<QuestionAssayViewModel>(question);
-                q.LessonId = lessonId;
-                questionAssayViewModels.Add(q);
-            }
-        }
+        
     }
 }

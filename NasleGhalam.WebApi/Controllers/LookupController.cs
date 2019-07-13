@@ -93,13 +93,13 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.PublicAccess)]
         public IHttpActionResult GetAllImportance()
         {
-            return Ok(_lookupService.GetAllByName("Importance"));
+            return Ok(_lookupService.GetAllByName("AssayImportance"));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.PublicAccess)]
         public IHttpActionResult GetAllType()
         {
-            return Ok(_lookupService.GetAllByName("Type"));
+            return Ok(_lookupService.GetAllByName("AssayType"));
         }
     }
 }

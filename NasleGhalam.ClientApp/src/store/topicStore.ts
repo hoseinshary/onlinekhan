@@ -4,6 +4,7 @@ import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
 import { TOPIC_URL as baseUrl } from "src/utilities/site-config";
+import { AssayTopic } from "src/models/IAssay";
 import util from "src/utilities";
 import {
   VuexModule,
@@ -92,13 +93,14 @@ export class TopicStore extends VuexModule {
     return (lessonIds: Array<number>) => {
       var list = this._topicList
         .filter(x => lessonIds.indexOf(x.LessonId) > -1)
-        .map(x => ({
-          Id: x.Id,
-          label: x.Title,
-          ParentTopicId: x.ParentTopicId,
-          lessonId: x.LessonId,
-          header: "custom"
-        }));
+        .map(x => {
+          // Id: x.Id,
+          // label: x.Title,
+          // ParentTopicId: x.ParentTopicId,
+          // lessonId: x.LessonId,
+          // header: "custom"
+          return new AssayTopic(x.Id, x.Title, x.LessonId, x.ParentTopicId);
+        });
       var tree = util.listToTree(list, "Id", "ParentTopicId");
       return tree;
     };

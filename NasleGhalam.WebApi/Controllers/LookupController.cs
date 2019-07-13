@@ -18,8 +18,8 @@ namespace NasleGhalam.WebApi.Controllers
             _lookupService = lookupService;
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerCreateAccess ,ActionBits.QuestionAnswerReadAccess , ActionBits.QuestionAnswerUpdateAccess)] 
-        public IHttpActionResult GetAllAnswerType() 
+        [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerCreateAccess, ActionBits.QuestionAnswerReadAccess, ActionBits.QuestionAnswerUpdateAccess)]
+        public IHttpActionResult GetAllAnswerType()
         {
             return Ok(_lookupService.GetAllByName("AnswerType"));
         }
@@ -30,7 +30,7 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllByName("EducationTreeState"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess , ActionBits.AxillaryBookReadAccess , ActionBits.AxillaryBookUpdateAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
         public IHttpActionResult GetAllPaperType()
         {
             return Ok(_lookupService.GetAllByName("PaperType"));
@@ -54,13 +54,13 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllByName("BookType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess,ActionBits.QuestionReadAccess , ActionBits.QuestionUpdateAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
         public IHttpActionResult GetAllQuestionType()
         {
             return Ok(_lookupService.GetAllByName("QuestionType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.TopicCreateAccess,ActionBits.TopicReadAccess,ActionBits.TopicUpdateAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.TopicCreateAccess, ActionBits.TopicReadAccess, ActionBits.TopicUpdateAccess)]
         public IHttpActionResult GetAllTopicHardnessType()
         {
             return Ok(_lookupService.GetAllByName("TopicHardnessType"));
@@ -88,6 +88,18 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult GetAllAuthorType()
         {
             return Ok(_lookupService.GetAllByName("AuthorType"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.PublicAccess)]
+        public IHttpActionResult GetAllImportance()
+        {
+            return Ok(_lookupService.GetAllByName("Importance"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.PublicAccess)]
+        public IHttpActionResult GetAllType()
+        {
+            return Ok(_lookupService.GetAllByName("Type"));
         }
     }
 }

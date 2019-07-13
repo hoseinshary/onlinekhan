@@ -18,6 +18,8 @@ export class LookupStore extends VuexModule {
   private _areaType: Array<ILookup>;
   private _repeatnessType: Array<ILookup>;
   private _authorType: Array<ILookup>;
+  private _importance: Array<ILookup>;
+  private _type: Array<ILookup>;
 
   /**
    * initialize data
@@ -37,6 +39,8 @@ export class LookupStore extends VuexModule {
     this._areaType = [];
     this._repeatnessType = [];
     this._authorType = [];
+    this._importance = [];
+    this._type = [];
   }
 
   //#region ### getters ###
@@ -130,6 +134,20 @@ export class LookupStore extends VuexModule {
       label: x.Value
     }));
   }
+
+  get importanceDdl() {
+    return this._importance.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get typeDdl() {
+    return this._type.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
   //#endregion
 
   //#region ### mutations ###
@@ -196,6 +214,16 @@ export class LookupStore extends VuexModule {
   @mutation
   private SET_AUTHOR_TYPE_LIST(list: Array<ILookup>) {
     this._authorType = list;
+  }
+
+  @mutation
+  private SET_IMPORTANCE_LIST(list: Array<ILookup>) {
+    this._importance = list;
+  }
+
+  @mutation
+  private SET_TYPE_LIST(list: Array<ILookup>) {
+    this._type = list;
   }
   //#endregion
 
@@ -366,6 +394,32 @@ export class LookupStore extends VuexModule {
         });
     } else {
       return Promise.resolve(this._authorType);
+    }
+  }
+
+  @action()
+  async fillImportance() {
+    if (!this._importance.length) {
+      return axios
+        .get(`${baseUrl}/GetAllImportance`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_IMPORTANCE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._importance);
+    }
+  }
+
+  @action()
+  async fillType() {
+    if (!this._type.length) {
+      return axios
+        .get(`${baseUrl}/GetAllType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._type);
     }
   }
   //#endregion

@@ -1,45 +1,79 @@
 <template>
-  <section class="row gutter-sm">
-    <div class="col-md-4">
-      <!-- <q-tree :nodes="topicTreeData" tick-strategy="leaf" 
-      color="blue" node-key="Id" />-->
-      <!-- <q-tree
-        :nodes="topicTreeData"
-        tick-strategy="leaf"
-        class="q-pt-lg"
-        color="primary"
-        node-key="Id"
-      >
-        <div slot="header-custom" slot-scope="prop">
-          {{prop.node.label}}
-          <template>
-            <q-btn
-              outline
-              color="positive"
-              class="shadow-1 bg-white q-mr-sm q-px-xs"
-              icon="save"
-              size="sm"
-              @click.stop="showModalCreate(prop.node.Id, prop.node.label)"
-            />
-          </template>
-        </div>
-      </q-tree>-->
-      <div
-        class="col-12 shadow-1 q-ma-sm q-pa-sm"
-        v-for="lesson in checkedLessons"
-        :key="lesson.Id"
-      >
-        {{lesson.Name}} ({{lesson.CountOfQuestions}} سوال)
-        <q-tree :nodes="lesson.Topics" tick-strategy="leaf" color="blue" node-key="Id" />
-      </div>
-      <!-- <q-select
+  <section class="row">
+    <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
+      <q-checkbox label="سوال تصادفی" v-model="assayCreate.RandomQuestion" />
+    </div>
+    <div class="col-12 shadow-1 q-ma-sm q-pa-sm" v-for="lesson in checkedLessons" :key="lesson.Id">
+      {{lesson.Name}} ({{lesson.CountOfQuestions}} سوال)
+      <q-tree :nodes="lesson.Topics" class="q-pt-lg" color="primary" node-key="Id">
+        <template slot="header-custom" slot-scope="prop">
+          <div
+            :class="assayCreate.RandomQuestion && prop.node.children.length == 0 && prop.node.Checked?'col-sm-4': 'col'"
+          >
+            <template v-if="prop.node.children.length==0">
+              <q-checkbox :label="prop.node.Name" v-model="prop.node.Checked" />
+            </template>
+            <template v-else>{{prop.node.Name}}</template>
+          </div>
+          <div
+            class="col-sm-8"
+            v-show="!assayCreate.RandomQuestion && prop.node.children.length==0 && prop.node.Checked"
+          >
+            <section class="row gutter-xs">
+              <div class="col">
+                <q-input
+                  v-model="prop.node.CountOfEasy"
+                  float-label="آسان"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <q-input
+                  v-model="prop.node.CountOfMedium"
+                  float-label="متوسط"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <q-input
+                  v-model="prop.node.CountOfHard"
+                  float-label="سخت"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <!-- <input type="number" v-model="prop.node.CountOfQuestions" /> -->
+                <q-input
+                  v-model="prop.node.CountOfQuestions"
+                  float-label="کل"
+                  class="col"
+                  align="center"
+                  readonly
+                />
+                <!-- <label>کل سوال ها</label>
+                <span>{{prop.node.CountOfQuestions}}</span>-->
+              </div>
+            </section>
+          </div>
+        </template>
+      </q-tree>
+    </div>
+    <!-- <q-select
             v-model="educationTree.id"
             :options="educationTree_GradeDdl"
             float-label="فیلتر درخت آموزش با مقطع"
             clearable
           />
-      -->
-    </div>
+    -->
   </section>
 </template>
 
@@ -74,11 +108,11 @@ export default class TopicTabVue extends Vue {
 
       // set assayTopics
       this.checkedLessons.forEach(lesson => {
-        debugger;
         util.clearArray(lesson.Topics);
-        var tree = topicTreeData.find(x => x.lessonId == lesson.Id);
+        var tree = topicTreeData.find(x => x.LessonId == lesson.Id);
         if (tree) {
-          lesson.Topics = [tree];
+          debugger;
+          lesson.Topics.push(tree);
         }
       });
     });

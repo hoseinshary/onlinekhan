@@ -62,7 +62,7 @@
               <div class="col">
                 <q-input
                   v-model="lesson.CountOfQuestions"
-                  float-label="تعداد سوال ها"
+                  float-label="کل"
                   class="col"
                   align="center"
                   readonly

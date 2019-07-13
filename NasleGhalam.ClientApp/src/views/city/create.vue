@@ -7,8 +7,8 @@
     @open="provinceStore.fillList"
     @close="cityStore.OPEN_MODAL_CREATE(false)"
   >
-    <base-select :model="$v.city.ProvinceId" :options="provinceStore.ddl" filter class="col-md-6"/>
-    <base-input :model="$v.city.Name" class="col-md-6"/>
+    <base-select :model="$v.city.ProvinceId" :options="provinceStore.ddl" filter class="col-md-6" />
+    <base-input :model="$v.city.Name" class="col-md-6" />
   </base-modal-create>
 </template>
 

@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace NasleGhalam.ViewModels.Assay
 {
     public class AssayCreateViewModel
     {
-        public int Id { get; set; }
+        public IEnumerable<LessonAssayViewModel> Lessons { get; set; }
 
+        public bool RandomQuestion { get; set; }
+
+        public bool RandomOptions { get; set; }
 
         [Display(Name = "عنوان")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
@@ -51,5 +55,6 @@ namespace NasleGhalam.ViewModels.Assay
 
         [Display(Name = "فایل")]
         public string File { get; set; }
+
     }
 }

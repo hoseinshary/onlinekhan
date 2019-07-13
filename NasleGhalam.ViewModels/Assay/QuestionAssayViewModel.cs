@@ -7,6 +7,6 @@ namespace NasleGhalam.ViewModels.Assay
     {
         public int LessonId { get; set; }
 
-        public IEnumerable<QuestionViewModel> Questions { get; set; }
+        public List<QuestionViewModel> Questions { get; set; }
     }
 }

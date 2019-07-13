@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.LessonDepartment;
+using NasleGhalam.ViewModels.Assay;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,51 +12,51 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class LessonDepartmentController : ApiController
+	public class AssayController : ApiController
 	{
-        private readonly LessonDepartmentService _lessonDepartmentService;
-		public LessonDepartmentController(LessonDepartmentService lessonDepartmentService)
+        private readonly AssayService _assayService;
+		public AssayController(AssayService assayService)
         {
-            _lessonDepartmentService = lessonDepartmentService;
+            _assayService = assayService;
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.LessonDepartmentReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.AssayReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_lessonDepartmentService.GetAll());
+            return Ok(_assayService.GetAll());
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.LessonDepartmentReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.AssayReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var lessonDepartment = _lessonDepartmentService.GetById(id);
-            if (lessonDepartment == null)
+            var assay = _assayService.GetById(id);
+            if (assay == null)
             {
                 return NotFound();
             }
-            return Ok(lessonDepartment);
+            return Ok(assay);
         }
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.LessonDepartmentCreateAccess)]
+        [CheckUserAccess(ActionBits.AssayCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(LessonDepartmentCreateViewModel lessonDepartmentViewModel)
+        public IHttpActionResult Create(AssayCreateViewModel assayViewModel)
         {
-            return Ok(_lessonDepartmentService.Create(lessonDepartmentViewModel));
+            return Ok(_assayService.Create(assayViewModel));
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.LessonDepartmentUpdateAccess)]
+        [CheckUserAccess(ActionBits.AssayUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(LessonDepartmentUpdateViewModel lessonDepartmentViewModel)
+        public IHttpActionResult Update(AssayUpdateViewModel assayViewModel)
         {
-            return Ok(_lessonDepartmentService.Update(lessonDepartmentViewModel));
+            return Ok(_assayService.Update(assayViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.LessonDepartmentDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.AssayDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_lessonDepartmentService.Delete(id));
+            return Ok(_assayService.Delete(id));
         }
 	}
 }

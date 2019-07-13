@@ -125,5 +125,11 @@
         LessonDepartmentDeleteAccess = 96,
         LessonDepartmentUpdateAccess = 97,
 
+        AssayReadAccess = 98,
+        AssayCreateAccess = 99,
+        AssayDeleteAccess = 100,
+        AssayUpdateAccess = 101,
+
+
     }
 }

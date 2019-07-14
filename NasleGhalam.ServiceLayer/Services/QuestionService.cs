@@ -141,27 +141,20 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var question = Mapper.Map<Question>(questionViewModel);
 
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
+
             //save Doc file in temp memory
-            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx");
+            word.SaveAs(wordFilename);
 
             // Open a doc file.
             var app = new Application();
-            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
-            var doc = app.Documents.Open(wordFilename);
+            var source = app.Documents.Open(wordFilename);
 
-            foreach (Paragraph paragraph in doc.Paragraphs)
+            foreach (Paragraph paragraph in source.Paragraphs)
             {
                 question.Context += paragraph.Range.Text;
             }
 
-            //تبدیل به عکس
-            var pane = doc.Windows[1].Panes[1];
-            var page = pane.Pages[1];
-            var bits = page.EnhMetaFileBits;
-            var target = SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png";
-
-            doc.Close();
-            app.Quit();
 
             foreach (var topicId in questionViewModel.TopicIds)
             {
@@ -194,39 +187,158 @@ namespace NasleGhalam.ServiceLayer.Services
             if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                //crop and resize
-                try
-                {
-                    using (var ms = new MemoryStream((byte[])(bits)))
-                    {
-                        var image = Image.FromStream(ms);
-                        var pngTarget = target; //Path.ChangeExtension(target , "png");
-                        image.Save(pngTarget + "1.png", ImageFormat.Png);
-                        image = new Bitmap(pngTarget + "1.png");
+                SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
-                        var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                        // resizedImage.Save(pngTarget, ImageFormat.Png);
-                        var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                        var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                        croppedImage.Save(pngTarget, ImageFormat.Png);
-                        croppedImage.Dispose();
-                        File.Delete(pngTarget + "1.png");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                }
-
-                File.Delete(wordFilename);
-
+                var target = app.Documents.Add();
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName , question.AnswerNumber);
+                
+                target.Close();
             }
+
+            File.Delete(wordFilename);
+            source.Close();
+            app.Quit();
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             if (clientResult.MessageType == MessageType.Success)
                 clientResult.Obj = GetById(question.Id);
             return clientResult;
         }
+
+
+        /// <summary>
+        /// ذخیره عکس فایل ورد
+        /// </summary>
+        public void SaveOptionsOfQuestions(Document source,Document target , string FileName , int answer)
+        {
+            //تریک درست شدن گزینه ها 
+            source.ActiveWindow.Selection.WholeStory();
+            source.ActiveWindow.Selection.Copy();
+            target.ActiveWindow.Selection.Paste();
+            target.ActiveWindow.Selection.WholeStory();
+            target.ActiveWindow.Selection.Delete();
+            target.ActiveWindow.Selection.Paste();
+
+            int j = source.Paragraphs.Count;
+            int k = 0;
+            Paragraph p1 = null, p2 = null, p3 = null, p4 = null;
+            int i1 = 0, i2 = 0, i3 = 0, i4 = 0;
+            while (j > 0 && k < 4)
+            {
+                if (source.Paragraphs[j].Range.Text != "\f" && source.Paragraphs[j].Range.Text != "\f\r"
+                                                            && source.Paragraphs[j].Range.Text != "\r")
+                {
+                    k++;
+                    switch (k)
+                    {
+                        case 1:
+                            p4 = source.Paragraphs[j];
+                            i4 = j;
+                            break;
+                        case 2:
+                            p3 = source.Paragraphs[j];
+                            i3 = j;
+                            break;
+                        case 3:
+                            p2 = source.Paragraphs[j];
+                            i2 = j;
+                            break;
+                        case 4:
+                            p1 = source.Paragraphs[j];
+                            i1 = j;
+                            break;
+                    }
+
+
+                }
+                j--;
+            }
+
+            var filename3 = Encryption.Encrypt(answer+"-"+FileName);
+            source.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) +".docx");
+
+            source.Paragraphs[i4].Range.Copy();
+            target.Paragraphs[i1].Range.Paste();
+
+            source.Paragraphs[i1].Range.Copy();
+            target.Paragraphs[i2].Range.Paste();
+
+            source.Paragraphs[i2].Range.Copy();
+            target.Paragraphs[i3].Range.Paste();
+
+            source.Paragraphs[i3].Range.Copy();
+            target.Paragraphs[i4].Range.Paste();
+
+            filename3 = Encryption.Encrypt(((answer + 1) % 4 ) + "-" + FileName);
+            target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+
+            source.Paragraphs[i3].Range.Copy();
+            target.Paragraphs[i1].Range.Paste();
+
+            source.Paragraphs[i4].Range.Copy();
+            target.Paragraphs[i2].Range.Paste();
+
+            source.Paragraphs[i1].Range.Copy();
+            target.Paragraphs[i3].Range.Paste();
+
+            source.Paragraphs[i2].Range.Copy();
+            target.Paragraphs[i4].Range.Paste();
+
+            filename3 = Encryption.Encrypt(((answer + 1) % 4) + "-" + FileName);
+            target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+
+            source.Paragraphs[i2].Range.Copy();
+            target.Paragraphs[i1].Range.Paste();
+
+            source.Paragraphs[i1].Range.Copy();
+            target.Paragraphs[i2].Range.Paste();
+
+            source.Paragraphs[i4].Range.Copy();
+            target.Paragraphs[i3].Range.Paste();
+
+            source.Paragraphs[i3].Range.Copy();
+            target.Paragraphs[i4].Range.Paste();
+
+            filename3 = Encryption.Encrypt(((answer + 1) % 4) + "-" + FileName);
+            target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+
+        }
+
+
+
+        /// <summary>
+        /// ذخیره عکس فایل ورد
+        /// </summary>
+        public void SaveImageOfWord(dynamic bits, string target)
+        {
+            //crop and resize
+            try
+            {
+                using (var ms = new MemoryStream((byte[])(bits)))
+                {
+                    var image = Image.FromStream(ms);
+                    image.Save(target + "1.png", ImageFormat.Png);
+                    image = new Bitmap(target + "1.png");
+
+                    var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
+                    // resizedImage.Save(pngTarget, ImageFormat.Png);
+                    var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
+                    var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
+                    croppedImage.Save(target, ImageFormat.Png);
+                    croppedImage.Dispose();
+                    File.Delete(target + "1.png");
+                }
+            }
+            catch (Exception ex)
+            {
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                File.Delete(target + "1.png");
+            }
+        }
+
+
+
+
 
         /// <summary>
         /// ویرایش سوال
@@ -692,7 +804,11 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
+
+
         
+
+
 
         /// <summary>
         /// برگشت تعدادکارشناس سوال

@@ -7,12 +7,15 @@ namespace NasleGhalam.Common
     {
         public static string AxillaryBookRelPath => "/Content/AxillaryBook/";
         public static string QuestionRelPath => "~/Content/Question/";
+        public static string QuestionOptionsRelPath => "~/Content/QuestionOptions/";
         public static string QuestionAnswerRelPath => "~/Content/QuestionAnswer/";
         public static string QuestionGroupRelPath => "~/Content/QuestionGroup/";
         public static string QuestionGroupTempRelPath => "~/Content/QuestionGroupTemp/";
         //-------------------------------------------------------------------------------------
 
         public static string GetQuestionAbsPath(string name) => ToAbsolutePath($"{QuestionRelPath}{name}");
+
+        public static string GetQuestionOptionsAbsPath(string name) => ToAbsolutePath($"{QuestionOptionsRelPath}{name}");
 
         public static string GetQuestionAnswerAbsPath(string name) => ToAbsolutePath($"{QuestionAnswerRelPath}{name}");
 

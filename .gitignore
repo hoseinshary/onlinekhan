@@ -86,7 +86,6 @@ yarn-error.log
 *.ntvs*
 *.njsproj
 *.sln
-*.png
 
 # Client App 
 .quasar

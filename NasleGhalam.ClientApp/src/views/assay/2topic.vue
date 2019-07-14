@@ -111,7 +111,6 @@ export default class TopicTabVue extends Vue {
         util.clearArray(lesson.Topics);
         var tree = topicTreeData.find(x => x.LessonId == lesson.Id);
         if (tree) {
-          debugger;
           lesson.Topics.push(tree);
         }
       });

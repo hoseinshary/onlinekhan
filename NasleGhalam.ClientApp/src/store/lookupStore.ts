@@ -18,8 +18,8 @@ export class LookupStore extends VuexModule {
   private _areaType: Array<ILookup>;
   private _repeatnessType: Array<ILookup>;
   private _authorType: Array<ILookup>;
-  private _importance: Array<ILookup>;
-  private _type: Array<ILookup>;
+  private _assayImportance: Array<ILookup>;
+  private _assayType: Array<ILookup>;
 
   /**
    * initialize data
@@ -39,8 +39,8 @@ export class LookupStore extends VuexModule {
     this._areaType = [];
     this._repeatnessType = [];
     this._authorType = [];
-    this._importance = [];
-    this._type = [];
+    this._assayImportance = [];
+    this._assayType = [];
   }
 
   //#region ### getters ###
@@ -135,15 +135,15 @@ export class LookupStore extends VuexModule {
     }));
   }
 
-  get importanceDdl() {
-    return this._importance.map(x => ({
+  get assayImportanceDdl() {
+    return this._assayImportance.map(x => ({
       value: x.Id,
       label: x.Value
     }));
   }
 
-  get typeDdl() {
-    return this._type.map(x => ({
+  get assayTypeDdl() {
+    return this._assayType.map(x => ({
       value: x.Id,
       label: x.Value
     }));
@@ -217,13 +217,13 @@ export class LookupStore extends VuexModule {
   }
 
   @mutation
-  private SET_IMPORTANCE_LIST(list: Array<ILookup>) {
-    this._importance = list;
+  private SET_ASSAY_IMPORTANCE_LIST(list: Array<ILookup>) {
+    this._assayImportance = list;
   }
 
   @mutation
-  private SET_TYPE_LIST(list: Array<ILookup>) {
-    this._type = list;
+  private SET_ASSAY_TYPE_LIST(list: Array<ILookup>) {
+    this._assayType = list;
   }
   //#endregion
 
@@ -398,28 +398,28 @@ export class LookupStore extends VuexModule {
   }
 
   @action()
-  async fillImportance() {
-    if (!this._importance.length) {
+  async fillAssayImportance() {
+    if (!this._assayImportance.length) {
       return axios
-        .get(`${baseUrl}/GetAllImportance`)
+        .get(`${baseUrl}/GetAllAssayImportance`)
         .then((response: AxiosResponse<Array<ILookup>>) => {
-          this.SET_IMPORTANCE_LIST(response.data);
+          this.SET_ASSAY_IMPORTANCE_LIST(response.data);
         });
     } else {
-      return Promise.resolve(this._importance);
+      return Promise.resolve(this._assayImportance);
     }
   }
 
   @action()
-  async fillType() {
-    if (!this._type.length) {
+  async fillAssayType() {
+    if (!this._assayType.length) {
       return axios
-        .get(`${baseUrl}/GetAllType`)
+        .get(`${baseUrl}/GetAllAssayType`)
         .then((response: AxiosResponse<Array<ILookup>>) => {
-          this.SET_TYPE_LIST(response.data);
+          this.SET_ASSAY_TYPE_LIST(response.data);
         });
     } else {
-      return Promise.resolve(this._type);
+      return Promise.resolve(this._assayType);
     }
   }
   //#endregion

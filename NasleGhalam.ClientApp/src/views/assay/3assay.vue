@@ -4,7 +4,7 @@
     <base-input :model="$v.assayCreate.Time" class="col-md-6" />
     <base-select
       :model="$v.assayCreate.LookupId_Importance"
-      :options="lookupStore.importanceDdl"
+      :options="lookupStore.assayImportanceDdl"
       filter
       class="col-md-4"
     />
@@ -16,7 +16,7 @@
     />
     <base-select
       :model="$v.assayCreate.LookupId_Type"
-      :options="lookupStore.typeDdl"
+      :options="lookupStore.assayTypeDdl"
       filter
       class="col-md-4"
     />
@@ -68,8 +68,8 @@ export default class AssayTabVue extends Vue {
   //#region ### hooks ###
   created() {
     this.lookupStore.fillQuestionType();
-    this.lookupStore.fillImportance();
-    this.lookupStore.fillType();
+    this.lookupStore.fillAssayImportance();
+    this.lookupStore.fillAssayType();
   }
   //#endregion
 }

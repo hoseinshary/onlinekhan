@@ -126,7 +126,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="assayViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(AssayGetQuestionsViewModel assayViewModel)
+        public ClientMessageResult Create(AssayCreateViewModel assayViewModel)
         {
             var assay = Mapper.Map<Assay>(assayViewModel);
             _assays.Add(assay);
@@ -162,7 +162,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="assayViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(AssayViewModel assayViewModel)
+        public ClientMessageResult Update(AssayCreateViewModel assayViewModel)
         {
             var assay = Mapper.Map<Assay>(assayViewModel);
             _uow.MarkAsChanged(assay);

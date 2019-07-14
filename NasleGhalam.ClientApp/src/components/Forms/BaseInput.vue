@@ -20,6 +20,9 @@
       :min="min"
       :max="max"
       :step="step"
+      :color="color"
+      :inverted="inverted"
+      :invertedLight="invertedLight"
       :autocomplete="autocomplete"
       @input="$emit('input', model)"
       @change="$emit('change', model)"
@@ -62,6 +65,9 @@ export default {
     min: String,
     max: String,
     step: String,
+    color: String,
+    inverted: Boolean,
+    invertedLight: Boolean,
     autocomplete: String,
     ltr: Boolean
   },
@@ -120,13 +126,9 @@ export default {
       } else if (this.model.required !== undefined && !this.model.required) {
         return `(${this.displayName}) خالی میباشد`;
       } else if (this.model.minLength !== undefined && !this.model.minLength) {
-        return `حداقل تعداد کاراکتر وارد شده برای (${this.displayName}) باید (${
-          this.minLen
-        }) باشد`;
+        return `حداقل تعداد کاراکتر وارد شده برای (${this.displayName}) باید (${this.minLen}) باشد`;
       } else if (this.model.maxLength !== undefined && !this.model.maxLength) {
-        return `تعداد کاراکتر وارد شده برای (${this.displayName}) بیش از (${
-          this.maxLen
-        }) می باشد`;
+        return `تعداد کاراکتر وارد شده برای (${this.displayName}) بیش از (${this.maxLen}) می باشد`;
       }
       return "";
     },

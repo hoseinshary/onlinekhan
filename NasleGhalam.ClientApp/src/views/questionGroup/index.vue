@@ -37,7 +37,7 @@
               :label="`ایجاد (${questionGroupStore.modelName}) جدید`"
               @click="showModalCreate"
             />
-            <br>
+            <br />
             <base-table
               :grid-data="questionGroupStore.gridData"
               :columns="questionGroupGridColumn"
@@ -60,7 +60,7 @@
                 >ثبت جواب گروهی</q-btn>
                 <a :href="data.row.QuestionGroupWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
                 <a :href="data.row.QuestionGroupExcelPath" target="_blank" class="q-mr-sm">فایل اکسل</a>
-                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
+                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
               </template>
             </base-table>
           </div>
@@ -218,132 +218,5 @@ export default class QuestionGroupVue extends Vue {
   }
   //#endregion
 }
-// import { mapState, mapActions, mapGetters } from "vuex";
-// import viewModel from "viewModels/questionGroup/questionGroupIndexViewModel";
-
-// export default {
-//   components: {
-//     "modal-create": () => import("./create"),
-//     "modal-question": () => import("../question/questions"),
-//     "modal-delete": () => import("./delete")
-//   },
-//   /**
-//    * data
-//    */
-//   data() {
-//     var pageAccess = this.$util.initAccess("/questionGroup");
-//     return {
-//       pageAccess,
-//       educationTreeData: [],
-//       questionGroupGridColumn: [
-//         {
-//           title: "عنوان",
-//           data: "Title"
-//         },
-//         {
-//           title: "زمان ثبت",
-//           data: "PInsertTime"
-//         },
-//         {
-//           title: "عملیات",
-//           data: "Id",
-//           searchable: false,
-//           sortable: false
-//           // visible: pageAccess.canViewQuestion //|| pageAccess.canDelete
-//         }
-//       ]
-//     };
-//   },
-//   /**
-//    * methods
-//    */
-//   methods: {
-//     ...mapActions("questionGroupStore", [
-//       "toggleModalCreateStore",
-//       "toggleModalDeleteStore",
-//       "getByIdStore",
-//       "fillGridByLessonIdStore",
-//       "resetCreateStore"
-//     ]),
-//     ...mapActions("questionStore", [
-//       "getByQuestionGroupIdStore",
-//       "toggleModalQuestionStore",
-//       "resetQuestionStore"
-//     ]),
-//     ...mapActions("educationTreeStore", {
-//       getAllGrade: "getAllGrade",
-//       fillEducationTreeStore: "fillTreeStore",
-//       fillEducationTreeByGradeIdStore: "fillTreeByGradeIdStore"
-//     }),
-//     ...mapActions("lessonStore", {
-//       fillLessonDdlStore: "fillDdlStore"
-//     }),
-//     showModalCreate() {
-//       // reset data on modal show
-//       this.resetCreateStore();
-//       // show modal
-//       this.toggleModalCreateStore(true);
-//     },
-//     showModalQuestion(id) {
-//       // reset data on modal show
-//       this.resetQuestionStore();
-//       // get data by id
-
-//       this.getByQuestionGroupIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalQuestionStore(true);
-//       });
-//     },
-//     showModalDelete(id) {
-//       // get data by id
-//       this.getByIdStore(id).then(() => {
-//         // show modal
-//         this.toggleModalDeleteStore(true);
-//       });
-//     },
-//     gradeDdlChange(val) {
-//       // filter lesson tree by gradeId
-//       var self = this;
-//       this.questionGroupIndexObj.LessonId = 0;
-//       this.$util.clearArray(this.questionGroupIndexObj.EducationTreeIds);
-//       this.fillEducationTreeByGradeIdStore(val).then(treeData => {
-//         self.educationTreeData = [treeData];
-//         setTimeout(() => {
-//           self.$refs.educationTree.expandAll();
-//         }, 300);
-//       });
-//     },
-//     lessonDdlChange(val) {
-//       this.questionGroupObj.LessonId = val;
-//       this.fillGridByLessonIdStore(val);
-//     }
-//   },
-//   computed: {
-//     ...mapState("questionGroupStore", {
-//       questionGroupStore.modelName: "questionGroupStore.modelName",
-//       questionGroupObj: "questionGroupObj",
-//       questionGroupIndexObj: "questionGroupIndexObj",
-//       questionGroupGridData: "questionGroupGridData"
-//     }),
-//     ...mapState("educationTreeStore", {
-//       educationTree_GradeDdl: "gradeDdl"
-//     }),
-//     ...mapState("lessonStore", {
-//       lessonDdl: "allObjDdl"
-//     })
-//   },
-//   watch: {
-//     "questionGroupIndexObj.EducationTreeIds"(val) {
-//       this.$util.clearArray(this.questionGroupGridData);
-//       this.questionGroupIndexObj.LessonId = 0;
-//       this.fillLessonDdlStore(val);
-//     }
-//   },
-//   validations: viewModel,
-//   created() {
-//     this.getAllGrade();
-//     this.fillEducationTreeStore();
-//   }
-// };
 </script>
 

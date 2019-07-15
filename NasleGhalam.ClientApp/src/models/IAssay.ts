@@ -23,6 +23,7 @@ export class AssayTopic {
 
   Id: number;
   Name: string;
+  label: string;
   ParentTopicId?: number | null;
   LessonId: number;
   header: string;
@@ -43,6 +44,7 @@ export class AssayTopic {
   ) {
     this.Id = topicId;
     this.Name = topicName;
+    this.label = topicName;
     this.ParentTopicId = parentTopicId;
     this.LessonId = lessonId;
     this.header = "custom";
@@ -64,6 +66,7 @@ export class AssayLesson {
     return this.CountOfEasy + this.CountOfMedium + this.CountOfHard;
   }
   Topics: Array<AssayTopic>;
+  TopicsTree: Array<AssayTopic>;
   /**
    * constructor
    */
@@ -75,6 +78,7 @@ export class AssayLesson {
     this.CountOfMedium = 0;
     this.CountOfHard = 0;
     this.Topics = [];
+    this.TopicsTree = [];
   }
 }
 

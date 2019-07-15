@@ -38,6 +38,9 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
       </template>
     </base-field>
+    <div class="col-12">
+      <base-btn-save @click="assayStore.submitPreCreate" />
+    </div>
   </section>
 </template>
 
@@ -70,6 +73,7 @@ export default class AssayTabVue extends Vue {
     this.lookupStore.fillQuestionType();
     this.lookupStore.fillAssayImportance();
     this.lookupStore.fillAssayType();
+    this.assayStore.SET_ASSAY_VUE(this);
   }
   //#endregion
 }

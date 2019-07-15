@@ -59,7 +59,9 @@ export default class AssayVue extends Vue {
   //#endregion
 
   //#region ### hooks ###
-  // created() {}
+  created() {
+    this.assayStore.SET_INDEX_VUE(this);
+  }
   //#endregion
 }
 </script>

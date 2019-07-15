@@ -272,6 +272,43 @@ const searchTree = function(element: any, key: string, value: string) {
   }
   return null;
 };
+
+/**
+ * convert tree to list
+ * @param root
+ */
+const treeToList = function(root: any) {
+  var stack: Array<any> = [],
+    array: Array<any> = [],
+    hashMap = {};
+  stack.push(root);
+
+  while (stack.length !== 0) {
+    var node = stack.pop();
+    if (node.children === null || node.children.length == 0) {
+      visitNode(node, hashMap, array);
+    } else {
+      for (var i = node.children.length - 1; i >= 0; i--) {
+        stack.push(node.children[i]);
+      }
+    }
+  }
+  return array;
+};
+
+function visitNode(node: any, hashMap: object, array: Array<any>) {
+  if (!hashMap[node.Id]) {
+    hashMap[node.Id] = true;
+    if (node.Checked)
+      array.push({
+        Id: node.Id,
+        CountOfEasy: node.CountOfEasy,
+        CountOfMedium: node.CountOfMedium,
+        CountOfHard: node.CountOfHard
+      });
+  }
+}
+
 /**
  * export data
  */
@@ -290,5 +327,6 @@ export default {
   logout,
   getAccess,
   listToTree,
-  searchTreeArray
+  searchTreeArray,
+  treeToList
 };

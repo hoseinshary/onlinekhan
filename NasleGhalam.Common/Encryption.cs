@@ -13,6 +13,10 @@ namespace NasleGhalam.Common
 
         private static readonly string passPhrase = @"thisIsMyPassForQuestionEncryption|-|0$3!|\|";
 
+        private static readonly byte[] SaltStringBytes = { 89, 109, 241, 244, 122, 73, 189, 3, 212, 224, 180, 61, 150, 152, 81, 225 };
+        private static readonly byte[] IvStringBytes = { 229, 210, 86, 148, 234, 98, 72, 240, 202, 133, 111, 71, 205, 176, 248, 198 };
+
+
         // This constant is used to determine the keysize of the encryption algorithm in bits.
         // We divide this by 8 within the code below to get the equivalent number of bytes.
         private const int Keysize = 128;
@@ -24,8 +28,8 @@ namespace NasleGhalam.Common
         {
             // Salt and IV is randomly generated each time, but is preprended to encrypted cipher text
             // so that the same Salt and IV values can be used when decrypting.  
-            var saltStringBytes = Generate128BitsOfRandomEntropy();
-            var ivStringBytes = Generate128BitsOfRandomEntropy();
+            var saltStringBytes = SaltStringBytes;//Generate128BitsOfRandomEntropy();
+            var ivStringBytes = IvStringBytes;//Generate128BitsOfRandomEntropy();
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
             {
@@ -105,5 +109,20 @@ namespace NasleGhalam.Common
             }
             return randomBytes;
         }
+
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
+
     }
 }

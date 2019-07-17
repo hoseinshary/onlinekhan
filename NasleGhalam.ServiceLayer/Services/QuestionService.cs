@@ -181,11 +181,16 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.QuestionOptions.Add(newOption);
             }
 
+
             _questions.Add(question);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+        
+
+         
             if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
+
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
                 ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
@@ -193,11 +198,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 SaveOptionsOfQuestions(source, target, questionViewModel.FileName , question.AnswerNumber);
                 
                 target.Close();
+                File.Delete(wordFilename);
+                source.Close();
+                app.Quit();
             }
 
-            File.Delete(wordFilename);
-            source.Close();
-            app.Quit();
+           
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             if (clientResult.MessageType == MessageType.Success)
@@ -254,7 +260,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 j--;
             }
 
-            var filename3 = Encryption.Encrypt(answer+"-"+FileName);
+            var filename3 = Encryption.Base64Encode( Encryption.Encrypt(answer+"-"+FileName));
             source.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) +".docx");
             ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
@@ -270,7 +276,7 @@ namespace NasleGhalam.ServiceLayer.Services
             source.Paragraphs[i3].Range.Copy();
             target.Paragraphs[i4].Range.Paste();
 
-            filename3 = Encryption.Encrypt(((answer++) % 4 ) + "-" + FileName);
+            filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
             ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
@@ -286,7 +292,7 @@ namespace NasleGhalam.ServiceLayer.Services
             source.Paragraphs[i2].Range.Copy();
             target.Paragraphs[i4].Range.Paste();
 
-            filename3 = Encryption.Encrypt(((answer++) % 4) + "-" + FileName);
+            filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
             ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
@@ -302,7 +308,7 @@ namespace NasleGhalam.ServiceLayer.Services
             source.Paragraphs[i1].Range.Copy();
             target.Paragraphs[i4].Range.Paste();
 
-            filename3 = Encryption.Encrypt(((answer++) % 4) + "-" + FileName);
+            filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
             ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
@@ -311,6 +317,48 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
+        /// <summary>
+        /// پاک کردن فایل های گزینه یک سوال 
+        /// </summary>
+        public static void DeleteOptionsOfQuestion(string FileName)
+        {
+            var filename1 = Encryption.Base64Encode(Encryption.Encrypt(1 + "-" + FileName));
+            if (File.Exists(SitePath.GetQuestionOptionsAbsPath(filename1) + ".docx"))
+            {
+                File.Delete(SitePath.GetQuestionOptionsAbsPath(filename1) + ".docx");
+            }
+            if (File.Exists(SitePath.GetQuestionOptionsAbsPath(filename1) + ".png"))
+            {
+                File.Delete(SitePath.GetQuestionOptionsAbsPath(filename1) + ".png");
+            }
+            filename1 = Encryption.Base64Encode(Encryption.Encrypt(2 + "-" + FileName));
+            if (File.Exists(SitePath.GetQuestionOptionsAbsPath(filename1) + ".docx"))
+            {
+                File.Delete(SitePath.GetQuestionOptionsAbsPath(filename1) + ".docx");
+            }
+            if (File.Exists(SitePath.GetQuestionOptionsAbsPath(filename1) + ".png"))
+            {
+                File.Delete(SitePath.GetQuestionOptionsAbsPath(filename1) + ".png");
+            }
+            filename1 = Encryption.Base64Encode(Encryption.Encrypt(3 + "-" + FileName));
+            if (File.Exists(SitePath.GetQuestionOptionsAbsPath(filename1) + ".docx"))
+            {
+                File.Delete(SitePath.GetQuestionOptionsAbsPath(filename1) + ".docx");
+            }
+            if (File.Exists(SitePath.GetQuestionOptionsAbsPath(filename1) + ".png"))
+            {
+                File.Delete(SitePath.GetQuestionOptionsAbsPath(filename1) + ".png");
+            }
+            filename1 = Encryption.Base64Encode(Encryption.Encrypt(0 + "-" + FileName));
+            if (File.Exists(SitePath.GetQuestionOptionsAbsPath(filename1) + ".docx"))
+            {
+                File.Delete(SitePath.GetQuestionOptionsAbsPath(filename1) + ".docx");
+            }
+            if (File.Exists(SitePath.GetQuestionOptionsAbsPath(filename1) + ".png"))
+            {
+                File.Delete(SitePath.GetQuestionOptionsAbsPath(filename1) + ".png");
+            }
+        }
 
 
 
@@ -330,38 +378,29 @@ namespace NasleGhalam.ServiceLayer.Services
                 .First(current => current.Id == questionViewModel.Id);
 
             var previousFileName = questionViewModel.FileName;
-            var target = "";
-            dynamic bits = null;
+            Application app = null;
+            Document source= null;
+            string wordFilename = null;
             var haveFileUpdate = false;
-            var wordFilename = "";
             if (word != null && word.ContentLength > 0)
             {
+                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
                 haveFileUpdate = true;
                 questionViewModel.FileName = Guid.NewGuid().ToString();
 
 
                 //save Doc file in temp memory
-                word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx");
+                word.SaveAs(wordFilename);
 
                 // Open a doc file.
-                var app = new Application();
-                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
-                var doc = app.Documents.Open(wordFilename);
+                app = new Application();
+                source = app.Documents.Open(wordFilename);
 
-                question.Context = "";
-                foreach (Paragraph paragraph in doc.Paragraphs)
+                foreach (Paragraph paragraph in source.Paragraphs)
                 {
                     question.Context += paragraph.Range.Text;
                 }
 
-                //تبدیل به عکس
-                var pane = doc.Windows[1].Panes[1];
-                var page = pane.Pages[1];
-                bits = page.EnhMetaFileBits;
-                target = SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png";
-
-                doc.Close();
-                app.Quit();
             }
 
             question.AuthorName = questionViewModel.AuthorName;
@@ -423,43 +462,32 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsChanged(question);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
-            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) &&
+                !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
             {
                 if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".docx"))
                 {
                     File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".docx");
                 }
+
                 if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".png"))
                 {
                     File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".png");
                 }
 
+                DeleteOptionsOfQuestion(previousFileName);
+
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                //crop and resize
-                try
-                {
-                    using (var ms = new MemoryStream((byte[])(bits)))
-                    {
-                        var image = Image.FromStream(ms);
-                        var pngTarget = target; //Path.ChangeExtension(target , "png");
-                        image.Save(pngTarget + "1.png", ImageFormat.Png);
-                        image = new Bitmap(pngTarget + "1.png");
+                ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
+                    SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
-                        var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                        // resizedImage.Save(pngTarget, ImageFormat.Png);
-                        var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                        var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                        croppedImage.Save(pngTarget, ImageFormat.Png);
-                        croppedImage.Dispose();
-                        File.Delete(pngTarget + "1.png");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                }
+                var target = app.Documents.Add();
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);
 
+                target.Close();
                 File.Delete(wordFilename);
+                source.Close();
+                app.Quit();
             }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
@@ -483,37 +511,28 @@ namespace NasleGhalam.ServiceLayer.Services
                 .First(current => current.Id == questionViewModel.Id);
 
             var previousFileName = questionViewModel.FileName;
-            questionViewModel.FileName = Guid.NewGuid().ToString();
-            var target = "";
-            dynamic bits = null;
+            Application app = null;
+            Document source = null;
+            string wordFilename = null;
             var haveFileUpdate = false;
-            var wordFilename = "";
             if (word != null && word.ContentLength > 0)
             {
+                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
                 haveFileUpdate = true;
+                questionViewModel.FileName = Guid.NewGuid().ToString();
+
 
                 //save Doc file in temp memory
-                word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx");
+                word.SaveAs(wordFilename);
 
                 // Open a doc file.
-                var app = new Application();
-                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
-                var doc = app.Documents.Open(wordFilename);
+                app = new Application();
+                source = app.Documents.Open(wordFilename);
 
-                question.Context = "";
-                foreach (Paragraph paragraph in doc.Paragraphs)
+                foreach (Paragraph paragraph in source.Paragraphs)
                 {
                     question.Context += paragraph.Range.Text;
                 }
-
-                //تبدیل به عکس
-                var pane = doc.Windows[1].Panes[1];
-                var page = pane.Pages[1];
-                bits = page.EnhMetaFileBits;
-                target = SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png";
-
-                doc.Close();
-                app.Quit();
 
             }
             question.AuthorName = questionViewModel.AuthorName;
@@ -552,37 +571,25 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".docx");
                 }
+
                 if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".png"))
                 {
                     File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".png");
                 }
 
+                DeleteOptionsOfQuestion(previousFileName);
+
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                //crop and resize
-                try
-                {
-                    using (var ms = new MemoryStream((byte[])(bits)))
-                    {
-                        var image = Image.FromStream(ms);
-                        var pngTarget = target; //Path.ChangeExtension(target , "png");
-                        image.Save(pngTarget + "1.png", ImageFormat.Png);
-                        image = new Bitmap(pngTarget + "1.png");
+                ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
+                    SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
-                        var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                        // resizedImage.Save(pngTarget, ImageFormat.Png);
-                        var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                        var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                        croppedImage.Save(pngTarget, ImageFormat.Png);
-                        croppedImage.Dispose();
-                        File.Delete(pngTarget + "1.png");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                }
+                var target = app.Documents.Add();
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);
 
+                target.Close();
                 File.Delete(wordFilename);
+                source.Close();
+                app.Quit();
             }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
@@ -606,37 +613,29 @@ namespace NasleGhalam.ServiceLayer.Services
                 .First(current => current.Id == questionViewModel.Id);
 
             var previousFileName = questionViewModel.FileName;
-            questionViewModel.FileName = Guid.NewGuid().ToString();
-            var target = "";
-            dynamic bits = null;
+            Application app = null;
+            Document source = null;
+            string wordFilename = null;
             var haveFileUpdate = false;
-            var wordFilename = "";
             if (word != null && word.ContentLength > 0)
             {
+                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
                 haveFileUpdate = true;
+                questionViewModel.FileName = Guid.NewGuid().ToString();
+
 
                 //save Doc file in temp memory
-                word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx");
+                word.SaveAs(wordFilename);
 
                 // Open a doc file.
-                var app = new Application();
-                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
-                var doc = app.Documents.Open(wordFilename);
+                app = new Application();
+                source = app.Documents.Open(wordFilename);
 
-                question.Context = "";
-                foreach (Paragraph paragraph in doc.Paragraphs)
+                foreach (Paragraph paragraph in source.Paragraphs)
                 {
                     question.Context += paragraph.Range.Text;
                 }
 
-                //تبدیل به عکس
-                var pane = doc.Windows[1].Panes[1];
-                var page = pane.Pages[1];
-                bits = page.EnhMetaFileBits;
-                target = SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png";
-
-                doc.Close();
-                app.Quit();
             }
 
             question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
@@ -691,37 +690,25 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".docx");
                 }
+
                 if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".png"))
                 {
                     File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".png");
                 }
 
+                DeleteOptionsOfQuestion(previousFileName);
+
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                //crop and resize
-                try
-                {
-                    using (var ms = new MemoryStream((byte[])(bits)))
-                    {
-                        var image = Image.FromStream(ms);
-                        var pngTarget = target; //Path.ChangeExtension(target , "png");
-                        image.Save(pngTarget + "1.png", ImageFormat.Png);
-                        image = new Bitmap(pngTarget + "1.png");
+                ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
+                    SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
-                        var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                        // resizedImage.Save(pngTarget, ImageFormat.Png);
-                        var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                        var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                        croppedImage.Save(pngTarget, ImageFormat.Png);
-                        croppedImage.Dispose();
-                        File.Delete(pngTarget + "1.png");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                }
+                var target = app.Documents.Add();
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);
 
+                target.Close();
                 File.Delete(wordFilename);
+                source.Close();
+                app.Quit();
             }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
@@ -772,8 +759,17 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             if (msgRes.MessageType == MessageType.Success)
             {
-                File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".docx");
-                File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".png");
+                if (File.Exists(SitePath.GetQuestionAbsPath(question.FileName) + ".docx"))
+                {
+                    File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".docx");
+                }
+
+                if (File.Exists(SitePath.GetQuestionAbsPath(question.FileName) + ".png"))
+                {
+                    File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".png");
+                }
+
+                DeleteOptionsOfQuestion(question.FileName);
             }
 
             return Mapper.Map<ClientMessageResult>(msgRes);

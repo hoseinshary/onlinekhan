@@ -8,7 +8,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string Name { get; set; }
 
-        public int? UserId { get; set; }
+        //public int? User_Id { get; set; }
 
         public User User { get; set; }
 

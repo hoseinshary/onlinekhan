@@ -8,7 +8,7 @@ namespace NasleGhalam.ViewModels.Writer
 
         public string Name { get; set; }
 
-        public int? UserId { get; set; }
+      //  public int? User_Id { get; set; }
 
         public UserViewModel User { get; set; }
     }

@@ -14,7 +14,7 @@ export class AssayTopic {
   }
   set Checked(value: boolean) {
     this._checked = value;
-    if (value) {
+    if (!value) {
       this.CountOfEasy = 0;
       this.CountOfMedium = 0;
       this.CountOfHard = 0;
@@ -23,10 +23,8 @@ export class AssayTopic {
 
   Id: number;
   Name: string;
-  label: string;
   ParentTopicId?: number | null;
   LessonId: number;
-  header: string;
   CountOfEasy: number;
   CountOfMedium: number;
   CountOfHard: number;
@@ -44,10 +42,8 @@ export class AssayTopic {
   ) {
     this.Id = topicId;
     this.Name = topicName;
-    this.label = topicName;
     this.ParentTopicId = parentTopicId;
     this.LessonId = lessonId;
-    this.header = "custom";
     this.Checked = false;
     this.CountOfEasy = 0;
     this.CountOfMedium = 0;
@@ -66,7 +62,6 @@ export class AssayLesson {
     return this.CountOfEasy + this.CountOfMedium + this.CountOfHard;
   }
   Topics: Array<AssayTopic>;
-  TopicsTree: Array<AssayTopic>;
   /**
    * constructor
    */
@@ -78,7 +73,6 @@ export class AssayLesson {
     this.CountOfMedium = 0;
     this.CountOfHard = 0;
     this.Topics = [];
-    this.TopicsTree = [];
   }
 }
 

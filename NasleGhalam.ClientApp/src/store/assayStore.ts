@@ -91,18 +91,16 @@ export class AssayStore extends VuexModule {
       Lessons: this.assayCreate.Lessons.filter(x => x.Checked)
     };
     data.Lessons.forEach(x => {
-      utilities.clearArray(x.Topics);
-      x.Topics = utilities.treeToList(x.TopicsTree[0]);
-      x.TopicsTree = [];
+      x.Topics = x.Topics.filter(x => x.Checked);
     });
-    debugger;
     return axios
-      .post(`${baseUrl}/Create`, data)
+      .post(`${baseUrl}/GetAllQuestion`, data)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
+          debugger;
         }
       });
   }

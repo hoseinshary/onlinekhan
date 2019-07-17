@@ -3,7 +3,59 @@
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-checkbox label="سوال تصادفی" v-model="assayCreate.RandomQuestion" />
     </div>
-    <div class="col-12 shadow-1 q-ma-sm q-pa-sm" v-for="lesson in checkedLessons" :key="lesson.Id">
+    <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
+      <q-tree
+        :nodes="topicStore.treeDataByLessonIds(lessonIds)"
+        ref="tree"
+        class="q-pt-lg"
+        color="primary"
+        node-key="Id"
+        tick-strategy="leaf"
+        :ticked.sync="topicLeafTicked"
+      >
+        <template slot="header-custom" slot-scope="prop">
+          <template
+            v-if="prop.node.ParentTopicId== null"
+          >({{getLesson(prop.node.lessonId).CountOfQuestions}}) سوال از درس ({{getLesson(prop.node.lessonId).Name}})</template>
+          <template v-else>{{prop.node.label}}</template>
+          <q-input
+            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
+            v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfEasy"
+            float-label="آسان"
+            @focus="$event.target.select()"
+            align="center"
+            type="number"
+            class="q-mx-sm"
+          />
+          <q-input
+            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
+            v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfMedium"
+            float-label="متوسط"
+            @focus="$event.target.select()"
+            align="center"
+            type="number"
+            class="q-mx-sm"
+          />
+          <q-input
+            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
+            v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfHard"
+            float-label="سخت"
+            @focus="$event.target.select()"
+            align="center"
+            type="number"
+            class="q-mx-sm"
+          />
+          <q-input
+            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
+            v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfQuestions"
+            float-label="کل"
+            align="center"
+            readonly
+          />
+        </template>
+      </q-tree>
+    </div>
+    <!-- <div class="col-12 shadow-1 q-ma-sm q-pa-sm" v-for="lesson in checkedLessons" :key="lesson.Id">
       {{lesson.Name}} ({{lesson.CountOfQuestions}} سوال)
       <q-btn color="primary" @click="expandTree('tree'+lesson.Id)" icon="unfold_more">
         <q-tooltip>باز کردن درخت</q-tooltip>
@@ -18,6 +70,8 @@
         class="q-pt-lg"
         color="primary"
         node-key="Id"
+        tick-strategy="leaf"
+        :ticked.sync="topicLeafTicked[lesson.Id]"
       >
         <template slot="header-custom" slot-scope="prop">
           <template v-if="prop.node.children.length==0">
@@ -60,7 +114,7 @@
           />
         </template>
       </q-tree>
-    </div>
+    </div>-->
     <div class="col-12">
       <q-btn color="primary" class="float-right" @click="goToTopicTab">
         اطلاعات آزمون
@@ -74,6 +128,8 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
+import { AssayTopic } from "src/models/IAssay";
+
 @Component({
   components: {}
 })
@@ -82,6 +138,8 @@ export default class TopicTabVue extends Vue {
   assayStore = vxm.assayStore;
   topicStore = vxm.topicStore;
   assayCreate = vxm.assayStore.assayCreate;
+  topicLeafTicked: Array<number> = [];
+  topicTreeData = [];
   //#endregion
 
   //#region ### computed ###
@@ -91,22 +149,59 @@ export default class TopicTabVue extends Vue {
   get lessonIds() {
     return this.checkedLessons.map(x => x.Id);
   }
+  get getLesson() {
+    return lessonId => {
+      return this.checkedLessons.find(x => x.Id == lessonId);
+    };
+  }
+  get getTopic() {
+    return (lessonId, topicId): AssayTopic | null => {
+      var lesson = this.checkedLessons.find(x => x.Id == lessonId);
+      if (!lesson) return null;
+      var assayTopic = lesson.Topics.find(x => x.Id == topicId);
+      if (assayTopic) return assayTopic;
+      else {
+        var topic = this.topicStore.detail(topicId);
+        if (topic) {
+          assayTopic = new AssayTopic(
+            topic.Id,
+            topic.Title,
+            topic.LessonId,
+            topic.ParentTopicId
+          );
+          lesson.Topics.push(assayTopic);
+          return assayTopic;
+        }
+        return null;
+      }
+    };
+  }
   //#endregion
 
   //#region ### watch ###
   @Watch("lessonIds")
   lessonIdsChanged(newVal) {
-    this.topicStore.fillList().then(x => {
-      var topicTreeData = this.topicStore.treeDataByLessonIds(newVal);
+    this.topicStore.fillList();
+  }
 
-      // set assayTopicsTree
-      this.checkedLessons.forEach(lesson => {
-        util.clearArray(lesson.TopicsTree);
-        var tree = topicTreeData.find(x => x.LessonId == lesson.Id);
-        if (tree) {
-          lesson.TopicsTree.push(tree);
-        }
-      });
+  @Watch("topicLeafTicked")
+  topicLeafTickedChanged(newVal, oldVal) {
+    var getNodeByKey = this.$refs["tree"]["getNodeByKey"];
+    newVal.forEach(topicId => {
+      var node = getNodeByKey(topicId);
+      var topic = this.getTopic(node.lessonId, node.Id);
+      if (topic && !topic.Checked) {
+        topic.Checked = true;
+      }
+    });
+
+    oldVal.forEach(topicId => {
+      if (this.topicLeafTicked.indexOf(topicId) > -1) return;
+      var node = getNodeByKey(topicId);
+      var topic = this.getTopic(node.lessonId, node.Id);
+      if (topic && topic.Checked) {
+        topic.Checked = false;
+      }
     });
   }
   //#endregion

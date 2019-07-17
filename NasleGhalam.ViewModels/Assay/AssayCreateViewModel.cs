@@ -50,11 +50,10 @@ namespace NasleGhalam.ViewModels.Assay
 
 
         [Display(Name = "تاریخ ثبت")]
-        public DateTime DateTimeCreate { get; set; }
+        public DateTime DateTimeCreate => DateTime.Now;
 
 
         [Display(Name = "فایل")]
         public string File { get; set; }
-
     }
 }

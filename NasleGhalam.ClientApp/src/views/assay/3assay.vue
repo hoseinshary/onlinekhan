@@ -5,19 +5,16 @@
     <base-select
       :model="$v.assayCreate.LookupId_Importance"
       :options="lookupStore.assayImportanceDdl"
-      filter
       class="col-md-4"
     />
     <base-select
       :model="$v.assayCreate.LookupId_QuestionType"
       :options="lookupStore.questionTypeDdl"
-      filter
       class="col-md-4"
     />
     <base-select
       :model="$v.assayCreate.LookupId_Type"
       :options="lookupStore.assayTypeDdl"
-      filter
       class="col-md-4"
     />
     <base-field class="col-md-4" :model="$v.assayCreate.IsOnline">

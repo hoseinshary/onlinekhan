@@ -48,6 +48,14 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.AssayCreateAccess)]
         [CheckModelValidation]
+        public IHttpActionResult GetAllQuestion(AssayCreateViewModel assayViewModel)
+        {
+            return Ok(_assayService.GetAllQuestion(assayViewModel));
+        }
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.AssayCreateAccess)]
+        [CheckModelValidation]
         public IHttpActionResult Update(AssayCreateViewModel assayViewModel)
         {
             return Ok(_assayService.Update(assayViewModel));

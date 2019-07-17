@@ -80,7 +80,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllByTopicIdsForAssay(List<int> ids , int lookupId_QuestionHardnessType , int count)
         {
             return _questions
-                .Where(current => current.Topics.Any(x => ids.Contains(x.Id) && current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType))
+                .Where(current => current.Topics.Any(x => ids.Contains(x.Id) && current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType ))
                 .OrderBy(x => Guid.NewGuid())
                 .Take(count)
                 .AsNoTracking()
@@ -187,7 +187,7 @@ namespace NasleGhalam.ServiceLayer.Services
             if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
+                ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
                 SaveOptionsOfQuestions(source, target, questionViewModel.FileName , question.AnswerNumber);
@@ -209,7 +209,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// ذخیره عکس فایل ورد
         /// </summary>
-        public void SaveOptionsOfQuestions(Document source,Document target , string FileName , int answer)
+        public static void SaveOptionsOfQuestions(Document source,Document target , string FileName , int answer)
         {
             //تریک درست شدن گزینه ها 
             source.ActiveWindow.Selection.WholeStory();
@@ -256,6 +256,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var filename3 = Encryption.Encrypt(answer+"-"+FileName);
             source.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) +".docx");
+            ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i4].Range.Copy();
             target.Paragraphs[i1].Range.Paste();
@@ -269,8 +270,9 @@ namespace NasleGhalam.ServiceLayer.Services
             source.Paragraphs[i3].Range.Copy();
             target.Paragraphs[i4].Range.Paste();
 
-            filename3 = Encryption.Encrypt(((answer + 1) % 4 ) + "-" + FileName);
+            filename3 = Encryption.Encrypt(((answer++) % 4 ) + "-" + FileName);
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+            ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i3].Range.Copy();
             target.Paragraphs[i1].Range.Paste();
@@ -284,57 +286,30 @@ namespace NasleGhalam.ServiceLayer.Services
             source.Paragraphs[i2].Range.Copy();
             target.Paragraphs[i4].Range.Paste();
 
-            filename3 = Encryption.Encrypt(((answer + 1) % 4) + "-" + FileName);
+            filename3 = Encryption.Encrypt(((answer++) % 4) + "-" + FileName);
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+            ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i2].Range.Copy();
             target.Paragraphs[i1].Range.Paste();
 
-            source.Paragraphs[i1].Range.Copy();
+            source.Paragraphs[i3].Range.Copy();
             target.Paragraphs[i2].Range.Paste();
 
             source.Paragraphs[i4].Range.Copy();
             target.Paragraphs[i3].Range.Paste();
 
-            source.Paragraphs[i3].Range.Copy();
+            source.Paragraphs[i1].Range.Copy();
             target.Paragraphs[i4].Range.Paste();
 
-            filename3 = Encryption.Encrypt(((answer + 1) % 4) + "-" + FileName);
+            filename3 = Encryption.Encrypt(((answer++) % 4) + "-" + FileName);
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+            ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
         }
 
 
 
-        /// <summary>
-        /// ذخیره عکس فایل ورد
-        /// </summary>
-        public void SaveImageOfWord(dynamic bits, string target)
-        {
-            //crop and resize
-            try
-            {
-                using (var ms = new MemoryStream((byte[])(bits)))
-                {
-                    var image = Image.FromStream(ms);
-                    image.Save(target + "1.png", ImageFormat.Png);
-                    image = new Bitmap(target + "1.png");
-
-                    var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                    // resizedImage.Save(pngTarget, ImageFormat.Png);
-                    var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                    var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                    croppedImage.Save(target, ImageFormat.Png);
-                    croppedImage.Dispose();
-                    File.Delete(target + "1.png");
-                }
-            }
-            catch (Exception ex)
-            {
-                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                File.Delete(target + "1.png");
-            }
-        }
 
 
 

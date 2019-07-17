@@ -240,83 +240,64 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var returnGuidList = new List<string>();
 
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File);
             //save Doc and excel file in temp memory
-            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File));
+            word.SaveAs(wordFilename);
 
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
-            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File);
-
-            var doc = app.Documents.Open(wordFilename);
+            var source = app.Documents.Open(wordFilename);
             var missing = Type.Missing;
 
             //split question group
-            var x = doc.Paragraphs.Count;
+            var x = source.Paragraphs.Count;
             var i = 1;
             while (i <= x)
             {
-                if (doc.Paragraphs[i].Range.Text == "\f" || doc.Paragraphs[i].Range.Text == "\f\r")
+                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                {
+                    var target = app.Documents.Add();
+                    //تریک درست شدن گزینه ها 
+                    source.ActiveWindow.Selection.WholeStory();
+                    source.ActiveWindow.Selection.Copy();
+                    target.ActiveWindow.Selection.Paste();
+                    target.ActiveWindow.Selection.WholeStory();
+                    target.ActiveWindow.Selection.Delete();
+
+                    int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
+
                     i++;
+                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    {
+                        i++;
+                    }
+
+                    int endOfQuestionIndex = source.Paragraphs[i - 1].Range.Sentences.Parent.End;
+
+                    source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
+                    source.ActiveWindow.Selection.Copy();
+                    target.ActiveWindow.Selection.Paste();
+
+                    var newGuid = Guid.NewGuid();
+                    var newEntry = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();
+                    returnGuidList.Add(newEntry);
+                    var filename2 = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
+
+                    ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, filename2);
+                    target.Close();
+                }
                 else
                 {
-                    if (IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
-                    {
-                        var newDoc2 = app.Documents.Add(ref missing, ref missing, ref missing, ref missing);
-                        doc.Paragraphs[i].Range.Copy();
-
-                        app.Selection.Paste();
-                        i++;
-                        while (i <= x && !IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
-                        {
-                            if (doc.Paragraphs[i].Range.Text != "\f" && doc.Paragraphs[i].Range.Text != "\f\r")
-                            {
-                                doc.Paragraphs[i].Range.Copy();
-
-                                app.Selection.Paste();
-                            }
-                            i++;
-                        }
-
-                        var newGuid = Guid.NewGuid();
-                        var newEntry = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();
-                        returnGuidList.Add(newEntry);
-
-                        //تبدیل به عکس
-                        var pane = newDoc2.Windows[1].Panes[1];
-                        var page = pane.Pages[1];
-                        var bits = page.EnhMetaFileBits;
-                        var target = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
-
-                        //crop and resize
-                        try
-                        {
-                            using (var ms = new MemoryStream((byte[])(bits)))
-                            {
-                                var image = Image.FromStream(ms);
-                                var pngTarget = target; //Path.ChangeExtension(target , "png");
-                                image.Save(pngTarget + "1.png", ImageFormat.Png);
-                                image = new Bitmap(pngTarget + "1.png");
-
-                                var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                                //resizedImage.Save(pngTarget, ImageFormat.Png);
-                                var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                                var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                                croppedImage.Save(pngTarget + ".png", ImageFormat.Png);
-                                File.Delete(pngTarget + "1.png");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                        }
-
-                        newDoc2.Close(WdSaveOptions.wdDoNotSaveChanges, WdOriginalFormat.wdOriginalDocumentFormat, false);
-                    }
+                    i++;
                 }
-            }
 
-            doc.Close();
+
+            }
+            
+            source.Close();
             app.Quit();
+
+            File.Delete(wordFilename);
             /////////////////////////////////
 
             var msgRes = new ClientMessageResult { MessageType = MessageType.Success, Obj = returnGuidList };
@@ -334,7 +315,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var questionGroup = _questionGroups
                 .FirstOrDefault(current => current.Id == questionGroupViewModel.Id);
 
-            if(questionGroup==null)
+            if (questionGroup == null)
                 return ClientMessageResult.NotFound();
 
             if (!string.IsNullOrEmpty(questionGroupViewModel.Title))
@@ -443,6 +424,6 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-        
+
     }
 }

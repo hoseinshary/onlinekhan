@@ -63,5 +63,11 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_topicService.Delete(id));
         }
+
+        [HttpGet ,CheckUserAccess(ActionBits.TopicCreateAccess)]
+        public IHttpActionResult CopyTopicsToLesson(int sourceId , int targetID)
+        {
+            return Ok(_topicService.CopyTopicsToLesson(sourceId,targetID));
+        }
     }
 }

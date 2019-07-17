@@ -133,5 +133,72 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
+
+
+
+        /// <summary>
+        /// کپی مبجث های یک درس به درس دیگر
+        /// </summary>
+
+        public ClientMessageResult CopyTopicsToLesson(int LessonIdSource, int LessonIdTarget)
+        {
+            var sourceTopic = _topics.Where(x => x.LessonId == LessonIdSource).AsNoTracking().OrderBy(x => x.ParentTopicId).ToList();
+            if (sourceTopic == null)
+            {
+                return ClientMessageResult.NotFound();
+            }
+
+            var topic = sourceTopic.Where(x => x.ParentTopicId == null).First();
+
+            if (topic.ParentTopicId == null)
+            {
+                topic.LessonId = LessonIdTarget;
+                Topic root = _topics.Add(topic);
+                var childTopics = sourceTopic.Where(x => x.ParentTopicId == root.Id);
+                foreach (Topic childTopic in childTopics)
+                {
+                    childTopic.LessonId = LessonIdTarget;
+                    root.ChildrenTopic.Add(childTopic);
+                    var childTopics2 = sourceTopic.Where(x => x.ParentTopicId == childTopic.Id);
+                    foreach (Topic childTopic2 in childTopics2)
+                    {
+                        childTopic2.LessonId = LessonIdTarget;
+                        childTopic.ChildrenTopic.Add(childTopic2);
+                        var childTopics3 = sourceTopic.Where(x => x.ParentTopicId == childTopic2.Id);
+                        foreach (Topic childTopic3 in childTopics3)
+                        {
+                            childTopic3.LessonId = LessonIdTarget;
+                            childTopic2.ChildrenTopic.Add(childTopic3);
+                            var childTopics4 = sourceTopic.Where(x => x.ParentTopicId == childTopic3.Id);
+                            foreach (Topic childTopic4 in childTopics4)
+                            {
+                                childTopic4.LessonId = LessonIdTarget;
+                                childTopic3.ChildrenTopic.Add(childTopic4);
+                                var childTopics5 = sourceTopic.Where(x => x.ParentTopicId == childTopic4.Id);
+                                foreach (Topic childTopic5 in childTopics5)
+                                {
+                                    childTopic5.LessonId = LessonIdTarget;
+                                    childTopic4.ChildrenTopic.Add(childTopic5);
+                                    var childTopics6 = sourceTopic.Where(x => x.ParentTopicId == childTopic5.Id);
+                                    foreach (Topic childTopic6 in childTopics6)
+                                    {
+                                        childTopic6.LessonId = LessonIdTarget;
+                                        childTopic5.ChildrenTopic.Add(childTopic6);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            return Mapper.Map<ClientMessageResult>(msgRes);
+        }
+
+
+
+
     }
 }

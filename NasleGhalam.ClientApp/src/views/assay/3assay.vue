@@ -4,7 +4,7 @@
     <base-input :model="$v.assayCreate.Time" class="col-md-6" />
     <base-select
       :model="$v.assayCreate.LookupId_Importance"
-      :options="lookupStore.importanceDdl"
+      :options="lookupStore.assayImportanceDdl"
       filter
       class="col-md-4"
     />
@@ -16,7 +16,7 @@
     />
     <base-select
       :model="$v.assayCreate.LookupId_Type"
-      :options="lookupStore.typeDdl"
+      :options="lookupStore.assayTypeDdl"
       filter
       class="col-md-4"
     />
@@ -38,6 +38,9 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
       </template>
     </base-field>
+    <div class="col-12">
+      <base-btn-save @click="assayStore.submitPreCreate" />
+    </div>
   </section>
 </template>
 
@@ -68,8 +71,9 @@ export default class AssayTabVue extends Vue {
   //#region ### hooks ###
   created() {
     this.lookupStore.fillQuestionType();
-    this.lookupStore.fillImportance();
-    this.lookupStore.fillType();
+    this.lookupStore.fillAssayImportance();
+    this.lookupStore.fillAssayType();
+    this.assayStore.SET_ASSAY_VUE(this);
   }
   //#endregion
 }

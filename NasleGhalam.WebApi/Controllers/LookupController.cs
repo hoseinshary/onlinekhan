@@ -90,14 +90,14 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllByName("AuthorType"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.PublicAccess)]
-        public IHttpActionResult GetAllImportance()
+        [HttpGet, CheckUserAccess(ActionBits.AssayCreateAccess)]
+        public IHttpActionResult GetAllAssayImportance()
         {
             return Ok(_lookupService.GetAllByName("AssayImportance"));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.PublicAccess)]
-        public IHttpActionResult GetAllType()
+        [HttpGet, CheckUserAccess(ActionBits.AssayCreateAccess)]
+        public IHttpActionResult GetAllAssayType()
         {
             return Ok(_lookupService.GetAllByName("AssayType"));
         }

@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf" class="login-layout row items-center">
     <q-page-container class="col-12">
       <section class="row">
-        <div class="col-md-7 main-pic"></div>
+        <div class="col-md-7 main-pic gt-md"></div>
         <div class="col-md-5 main-input q-pa-lg">
           <section class="row justify-start content-center">
             <div class="logo"></div>
@@ -59,7 +59,7 @@
             </div>
           </section>
         </div>
-        <div class="col-12 footer-pic">
+        <div class="col-12 footer-pic gt-md">
           <span></span>
         </div>
       </section>

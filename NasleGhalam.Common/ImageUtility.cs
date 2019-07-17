@@ -24,7 +24,7 @@ namespace NasleGhalam.Common
 
                     var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
                     // resizedImage.Save(pngTarget, ImageFormat.Png);
-                    var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
+                    var rectangle = ImageUtility.GetCropArea(resizedImage, 20);
                     var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
                     croppedImage.Save(target, ImageFormat.Png);
                     croppedImage.Dispose();

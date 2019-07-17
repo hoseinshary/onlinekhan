@@ -70,15 +70,17 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
 
+            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx";
+            var excelFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".xlsx";
+
             //save Doc and excel file in temp memory
-            word.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx");
-            excel.SaveAs(SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".xlsx");
+            word.SaveAs(wordFilename);
+            excel.SaveAs(excelFilename);
 
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
-            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".docx";
-            var excelFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File) + ".xlsx";
-            var doc = app.Documents.Open(wordFilename);
+            
+            var source = app.Documents.Open(wordFilename);
 
             var missing = Type.Missing;
 
@@ -114,16 +116,16 @@ namespace NasleGhalam.ServiceLayer.Services
             xlApp.Quit();
 
             //split question group
-            var x = doc.Paragraphs.Count;
+            var x = source.Paragraphs.Count;
             var i = 1;
             var numberOfQ = 0;
             while (i <= x)
             {
-                if (doc.Paragraphs[i].Range.Text == "\f" || doc.Paragraphs[i].Range.Text == "\f\r")
+                if (source.Paragraphs[i].Range.Text == "\f" || source.Paragraphs[i].Range.Text == "\f\r")
                     i++;
                 else
                 {
-                    if (IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
+                    if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                     {
                         var context = "";
 
@@ -131,19 +133,19 @@ namespace NasleGhalam.ServiceLayer.Services
                         var newDoc2 = app.Documents.Add(
                             ref missing, ref missing, ref missing, ref missing);
 
-                        doc.Paragraphs[i].Range.Copy();
+                        source.Paragraphs[i].Range.Copy();
 
                         app.Selection.Paste();
-                        context += doc.Paragraphs[i].Range.Text;
+                        context += source.Paragraphs[i].Range.Text;
                         i++;
-                        while (i <= x && !IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
+                        while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                         {
-                            if (doc.Paragraphs[i].Range.Text != "\f" && doc.Paragraphs[i].Range.Text != "\f\r")
+                            if (source.Paragraphs[i].Range.Text != "\f" && source.Paragraphs[i].Range.Text != "\f\r")
                             {
-                                doc.Paragraphs[i].Range.Copy();
+                                source.Paragraphs[i].Range.Copy();
 
                                 app.Selection.Paste();
-                                context += doc.Paragraphs[i].Range.Text;
+                                context += source.Paragraphs[i].Range.Text;
                             }
                             i++;
                         }
@@ -213,7 +215,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
             }
 
-            doc.Close();
+            source.Close();
             app.Quit();
             /////////////////////////////////
 
@@ -283,8 +285,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     returnGuidList.Add(newEntry);
                     var filename2 = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
 
-                    ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, filename2);
-                    target.Close();
+                    ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, filename2 + ".png");
+                    target.Close(WdSaveOptions.wdDoNotSaveChanges);
                 }
                 else
                 {

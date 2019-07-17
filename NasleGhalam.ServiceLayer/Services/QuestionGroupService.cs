@@ -79,7 +79,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
-            
+
             var source = app.Documents.Open(wordFilename);
 
             var missing = Type.Missing;
@@ -132,6 +132,16 @@ namespace NasleGhalam.ServiceLayer.Services
                         numberOfQ++;
                         var newDoc2 = app.Documents.Add(
                             ref missing, ref missing, ref missing, ref missing);
+
+
+                        int j = 1;
+                        while (j < source.Paragraphs[i].Range.Characters.Count &&
+                               source.Paragraphs[i].Range.Characters[j].Text != "-")
+                        {
+                            source.Paragraphs[i].Range.Characters[j].Delete();
+                        }
+                        source.Paragraphs[i].Range.Characters[j].Delete();
+
 
                         source.Paragraphs[i].Range.Copy();
 
@@ -295,7 +305,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
             }
-            
+
             source.Close();
             app.Quit();
 
@@ -372,7 +382,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
-        public bool IsQuestionParagraph(string s)
+        public static bool IsQuestionParagraph(string s)
         {
             var arrayTemp = s.ToCharArray();
 

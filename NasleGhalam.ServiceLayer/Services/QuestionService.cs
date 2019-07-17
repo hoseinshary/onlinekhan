@@ -149,6 +149,18 @@ namespace NasleGhalam.ServiceLayer.Services
             // Open a doc file.
             var app = new Application();
             var source = app.Documents.Open(wordFilename);
+            
+            //حذف عدد اول سوال
+            if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+            {
+                int i = 1;
+                while (i < source.Paragraphs[1].Range.Characters.Count &&
+                       source.Paragraphs[1].Range.Characters[i].Text != "-")
+                {
+                    source.Paragraphs[1].Range.Characters[i].Delete();
+                }
+                source.Paragraphs[1].Range.Characters[i].Delete();
+            }
 
             foreach (Paragraph paragraph in source.Paragraphs)
             {
@@ -396,6 +408,18 @@ namespace NasleGhalam.ServiceLayer.Services
                 app = new Application();
                 source = app.Documents.Open(wordFilename);
 
+                //حذف عدد اول سوال
+                if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                {
+                    int i = 1;
+                    while (i < source.Paragraphs[1].Range.Characters.Count &&
+                           source.Paragraphs[1].Range.Characters[i].Text != "-")
+                    {
+                        source.Paragraphs[1].Range.Characters[i].Delete();
+                    }
+                    source.Paragraphs[1].Range.Characters[i].Delete();
+                }
+
                 foreach (Paragraph paragraph in source.Paragraphs)
                 {
                     question.Context += paragraph.Range.Text;
@@ -529,6 +553,18 @@ namespace NasleGhalam.ServiceLayer.Services
                 app = new Application();
                 source = app.Documents.Open(wordFilename);
 
+
+                //حذف عدد اول سوال
+                if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                {
+                    int i = 1;
+                    while (i < source.Paragraphs[1].Range.Characters.Count &&
+                           source.Paragraphs[1].Range.Characters[i].Text != "-")
+                    {
+                        source.Paragraphs[1].Range.Characters[i].Delete();
+                    }
+                    source.Paragraphs[1].Range.Characters[i].Delete();
+                }
                 foreach (Paragraph paragraph in source.Paragraphs)
                 {
                     question.Context += paragraph.Range.Text;
@@ -631,6 +667,17 @@ namespace NasleGhalam.ServiceLayer.Services
                 app = new Application();
                 source = app.Documents.Open(wordFilename);
 
+                //حذف عدد اول سوال
+                if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                {
+                    int i = 1;
+                    while (i < source.Paragraphs[1].Range.Characters.Count &&
+                           source.Paragraphs[1].Range.Characters[i].Text != "-")
+                    {
+                        source.Paragraphs[1].Range.Characters[i].Delete();
+                    }
+                    source.Paragraphs[1].Range.Characters[i].Delete();
+                }
                 foreach (Paragraph paragraph in source.Paragraphs)
                 {
                     question.Context += paragraph.Range.Text;

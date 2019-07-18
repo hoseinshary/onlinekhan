@@ -207,15 +207,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName , question.AnswerNumber);
+                SaveOptionsOfQuestions(source, target, question.FileName , question.AnswerNumber);
 
                 target.Close();
-                File.Delete(wordFilename);
-                source.Close();
-                app.Quit();
             }
 
-           
+          
+            File.Delete(wordFilename);
+            source.Close();
+            app.Quit();
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             if (clientResult.MessageType == MessageType.Success)
@@ -506,7 +506,26 @@ namespace NasleGhalam.ServiceLayer.Services
                     SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+
+                target.Close();
+                File.Delete(wordFilename);
+                source.Close();
+                app.Quit();
+            }
+            else if (question.AnswerNumber != questionViewModel.AnswerNumber)
+            {
+                //save Doc file in temp memory
+                word.SaveAs(wordFilename);
+
+                // Open a doc file.
+                app = new Application();
+                source = app.Documents.Open(wordFilename);
+
+                DeleteOptionsOfQuestion(previousFileName);
+
+                var target = app.Documents.Add();
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -620,7 +639,26 @@ namespace NasleGhalam.ServiceLayer.Services
                     SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+
+                target.Close();
+                File.Delete(wordFilename);
+                source.Close();
+                app.Quit();
+            }
+            else if (question.AnswerNumber != questionViewModel.AnswerNumber)
+            {
+                //save Doc file in temp memory
+                word.SaveAs(wordFilename);
+
+                // Open a doc file.
+                app = new Application();
+                source = app.Documents.Open(wordFilename);
+
+                DeleteOptionsOfQuestion(previousFileName);
+
+                var target = app.Documents.Add();
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -751,6 +789,25 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 var target = app.Documents.Add();
                 SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);
+
+                target.Close();
+                File.Delete(wordFilename);
+                source.Close();
+                app.Quit();
+            }
+            else if (question.AnswerNumber != questionViewModel.AnswerNumber)
+            {
+                //save Doc file in temp memory
+                word.SaveAs(wordFilename);
+
+                // Open a doc file.
+                app = new Application();
+                source = app.Documents.Open(wordFilename);
+
+                DeleteOptionsOfQuestion(previousFileName);
+
+                var target = app.Documents.Add();
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);

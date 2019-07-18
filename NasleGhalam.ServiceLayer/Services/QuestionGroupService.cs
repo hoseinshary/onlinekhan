@@ -121,112 +121,106 @@ namespace NasleGhalam.ServiceLayer.Services
             var numberOfQ = 0;
             while (i <= x)
             {
-                if (source.Paragraphs[i].Range.Text == "\f" || source.Paragraphs[i].Range.Text == "\f\r")
-                    i++;
-                else
+                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                 {
-                    if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    var context = "";
+
+                    numberOfQ++;
+                    var target = app.Documents.Add();
+
+                    //تریک درست شدن گزینه ها 
+                    source.ActiveWindow.Selection.WholeStory();
+                    source.ActiveWindow.Selection.Copy();
+                    target.ActiveWindow.Selection.Paste();
+                    target.ActiveWindow.Selection.WholeStory();
+                    target.ActiveWindow.Selection.Delete();
+
+                    //حذف عدد اول سوال
+                    int k = 1;
+                    while (k < source.Paragraphs[i].Range.Characters.Count &&
+                           source.Paragraphs[i].Range.Characters[k].Text != "-")
                     {
-                        var context = "";
-
-                        numberOfQ++;
-                        var newDoc2 = app.Documents.Add(
-                            ref missing, ref missing, ref missing, ref missing);
+                        source.Paragraphs[i].Range.Characters[k].Delete();
+                    }
+                    source.Paragraphs[i].Range.Characters[k].Delete();
 
 
-                        int j = 1;
-                        while (j < source.Paragraphs[i].Range.Characters.Count &&
-                               source.Paragraphs[i].Range.Characters[j].Text != "-")
-                        {
-                            source.Paragraphs[i].Range.Characters[j].Delete();
-                        }
-                        source.Paragraphs[i].Range.Characters[j].Delete();
+                    int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
 
-
-                        source.Paragraphs[i].Range.Copy();
-
-                        app.Selection.Paste();
+                    context += source.Paragraphs[i].Range.Text;
+                    i++;
+                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    {
                         context += source.Paragraphs[i].Range.Text;
                         i++;
-                        while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
-                        {
-                            if (source.Paragraphs[i].Range.Text != "\f" && source.Paragraphs[i].Range.Text != "\f\r")
-                            {
-                                source.Paragraphs[i].Range.Copy();
-
-                                app.Selection.Paste();
-                                context += source.Paragraphs[i].Range.Text;
-                            }
-                            i++;
-                        }
-
-                        //create single question
-                        var newQuestion = new Question();
-                        var newGuid = Guid.NewGuid();
-                        newQuestion.FileName = newGuid.ToString();
-                        newQuestion.Context = context;
-                        newQuestion.LookupId_QuestionType = dt.Rows[numberOfQ - 1]["نوع سوال"].ToString() == "تشریحی" ? 7 : 6;
-                        newQuestion.QuestionPoint = Convert.ToInt32(dt.Rows[numberOfQ - 1]["بارم سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["بارم سوال"] : 0);
-                        newQuestion.AnswerNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["گزینه صحیح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["گزینه صحیح"] : 0);
-                        newQuestion.LookupId_QuestionHardnessType = 1040;
-                        newQuestion.LookupId_AreaType = 1036;
-                        newQuestion.LookupId_AuthorType = 1039;
-                        newQuestion.LookupId_RepeatnessType = 21;
-                        newQuestion.InsertDateTime = DateTime.Now;
-                        newQuestion.IsStandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
-                        newQuestion.AuthorName = dt.Rows[numberOfQ - 1]["نام طراح"].ToString();
-                        newQuestion.UserId = questionGroupViewModel.UserId;
-                        newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
-                        newQuestion.IsActive = false;
-                        newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] : 0);
-                        newQuestion.UseEvaluation = false;
-                        newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] : 0);
-
-                        questionGroup.Questions.Add(newQuestion);
-
-                        var filename2 = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".docx";
-                        newDoc2.SaveAs(filename2, ref missing, ref missing,
-                            ref missing, ref missing, ref missing, ref missing,
-                            ref missing, ref missing, ref missing, ref missing,
-                            ref missing, ref missing, ref missing, ref missing,
-                            ref missing);
-
-                        //تبدیل به عکس
-                        var pane = newDoc2.Windows[1].Panes[1];
-                        var page = pane.Pages[1];
-                        var bits = page.EnhMetaFileBits;
-                        var target = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".png";
-
-                        //crop and resize
-                        try
-                        {
-                            using (var ms = new MemoryStream((byte[])(bits)))
-                            {
-                                var image = Image.FromStream(ms);
-                                var pngTarget = target; //Path.ChangeExtension(target , "png");
-                                image.Save(pngTarget + "1.png", ImageFormat.Png);
-                                image = new Bitmap(pngTarget + "1.png");
-
-                                var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                                // resizedImage.Save(pngTarget, ImageFormat.Png);
-                                var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                                var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                                croppedImage.Save(pngTarget, ImageFormat.Png);
-                                File.Delete(pngTarget + "1.png");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                        }
-
-                        newDoc2.Close();
                     }
+
+                    int endOfQuestionIndex = source.Paragraphs[i - 1].Range.Sentences.Parent.End;
+
+                    source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
+                    source.ActiveWindow.Selection.Copy();
+
+                    target.ActiveWindow.Selection.Paste();
+
+                    //create single question
+                    var newQuestion = new Question();
+                    var newGuid = Guid.NewGuid();
+                    newQuestion.FileName = newGuid.ToString();
+                    newQuestion.Context = context;
+                    newQuestion.LookupId_QuestionType = dt.Rows[numberOfQ - 1]["نوع سوال"].ToString() == "تشریحی" ? 7 : 6;
+                    newQuestion.QuestionPoint = Convert.ToInt32(dt.Rows[numberOfQ - 1]["بارم سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["بارم سوال"] : 0);
+                    newQuestion.AnswerNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["گزینه صحیح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["گزینه صحیح"] : 0);
+                    newQuestion.LookupId_QuestionHardnessType = 1040;
+                    newQuestion.LookupId_AreaType = 1036;
+                    newQuestion.LookupId_AuthorType = 1039;
+                    newQuestion.LookupId_RepeatnessType = 21;
+                    newQuestion.InsertDateTime = DateTime.Now;
+                    newQuestion.IsStandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
+                    newQuestion.AuthorName = dt.Rows[numberOfQ - 1]["نام طراح"].ToString();
+                    newQuestion.UserId = questionGroupViewModel.UserId;
+                    newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
+                    newQuestion.IsActive = false;
+                    newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] : 0);
+                    newQuestion.UseEvaluation = false;
+                    newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] : 0);
+
+                    questionGroup.Questions.Add(newQuestion);
+
+                    var filename2 = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".docx";
+                    target.SaveAs(filename2);
+                    ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
+                        SitePath.GetQuestionAbsPath(newQuestion.FileName) + ".png");
+
+                    if (newQuestion.AnswerNumber != 0 || newQuestion != null)
+                    {
+                        //چرخش گزینه
+                        Document target2 = app.Documents.Add();
+                        //تریک درست شدن گزینه ها 
+                        target.ActiveWindow.Selection.WholeStory();
+                        target.ActiveWindow.Selection.Copy();
+                        target2.ActiveWindow.Selection.Paste();
+                        target2.ActiveWindow.Selection.WholeStory();
+                        target2.ActiveWindow.Selection.Delete();
+
+                        target2.ActiveWindow.Selection.Paste();
+
+                        QuestionService.SaveOptionsOfQuestions(target, target2,newQuestion.FileName,newQuestion.AnswerNumber);
+                        target2.Close();
+                    }
+                    target.Close();
+                }
+                else
+                {
+                    i++;
                 }
             }
 
+          
             source.Close();
             app.Quit();
+
+            File.Delete(wordFilename);
+            File.Delete(excelFilename);
             /////////////////////////////////
 
             _questionGroups.Add(questionGroup);
@@ -237,8 +231,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.File) && !string.IsNullOrEmpty(questionGroupViewModel.File))
             {
-                // File.Delete(SitePath.GetQuestionGroupTempAbsPath(wordFilename));
-                //File.Delete(SitePath.GetQuestionGroupTempAbsPath(excelFilename) );
                 word.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".docx");
                 excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".xlsx");
             }
@@ -361,6 +353,10 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 questionGroup.Questions.Remove(item);
                 _uow.MarkAsDeleted(item);
+                if (item.AnswerNumber != 0 || item.AnswerNumber != null)
+                {
+                    QuestionService.DeleteOptionsOfQuestion(item.FileName);
+                }
             }
 
             _uow.MarkAsDeleted(questionGroup);

@@ -191,7 +191,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
                         SitePath.GetQuestionAbsPath(newQuestion.FileName) + ".png");
 
-                    if (newQuestion.AnswerNumber != 0 || newQuestion != null)
+                    if (newQuestion.AnswerNumber != 0 )
                     {
                         //چرخش گزینه
                         Document target2 = app.Documents.Add();

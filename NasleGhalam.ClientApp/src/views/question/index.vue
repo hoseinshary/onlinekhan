@@ -127,6 +127,7 @@
       :canEditTopicProp="canEditTopic"
       :canEditImportProp="canEditImport"
       :topicTreeDataProp="topicTreeData"
+      :lessonIdProp="lessonId"
     ></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
     <modal-question-judge v-if="canQuestionJudge"></modal-question-judge>

@@ -2,7 +2,7 @@
   <base-modal-edit
     :title="questionStore.modelName"
     :show="questionStore.openModal.edit"
-    size="lg"
+    size="xl"
     @confirm="questionStore.submitEdit(activeAccess)"
     @reset="questionStore.resetEdit"
     @close="questionStore.OPEN_MODAL_EDIT(false)"
@@ -10,13 +10,13 @@
   >
     <q-card inline class="col-12" v-if="question.FileName">
       <q-card-media>
-        <img :src="question.QuestionPicturePath" class="img-original-width">
+        <img :src="question.QuestionPicturePath" class="img-original-width" />
       </q-card-media>
     </q-card>
 
-    <div class="col-sm-4">
+    <div class="col-md-3 col-sm-6">
       <section v-if="showElement('TopicIds')" class="q-ma-sm q-pa-sm shadow-1">
-        <q-input v-model="topicFilter" float-label="جستجوی مبحث" clearable/>
+        <q-input v-model="topicFilter" float-label="جستجوی مبحث" clearable />
         <q-tree
           :nodes="topicTreeDataProp"
           :filter="topicFilter"
@@ -55,93 +55,112 @@
       </q-slide-transition>
     </div>
 
-    <div class="col-sm-8 row gutter-md">
-      <q-field class="col-sm-4">
-        <q-uploader
-          url
-          float-label="فایل سوال"
-          name="word"
-          hide-upload-button
-          ref="wordFile"
-          extensions=".doc,.docx"
+    <div class="col-md-3 col-sm-6" v-if="showElement('TopicIds')">
+      <q-input v-model="topicFilter2" float-label="جستجوی مبحث 2" clearable />
+      <q-tree
+        :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
+        :ticked.sync="question.TopicIds"
+        :filter="topicFilter2"
+        tick-strategy="leaf"
+        color="primary"
+        accordion
+        node-key="Id"
+      />
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+      <section class="row gutter-md">
+        <q-field class="col-sm-4">
+          <q-uploader
+            url
+            float-label="فایل سوال"
+            name="word"
+            hide-upload-button
+            ref="wordFile"
+            extensions=".doc,.docx"
+          />
+        </q-field>
+        <base-input
+          v-if="showElement('QuestionNumber')"
+          :model="$v.question.QuestionNumber"
+          class="col-md-4"
         />
-      </q-field>
-      <base-input
-        v-if="showElement('QuestionNumber')"
-        :model="$v.question.QuestionNumber"
-        class="col-md-4"
-      />
-      <base-select
-        v-if="showElement('LookupId_QuestionType')"
-        :model="$v.question.LookupId_QuestionType"
-        :options="lookupStore.questionTypeDdl"
-        class="col-md-4"
-        filter
-      />
-      <base-input
-        v-if="showElement('QuestionPoint')"
-        :model="$v.question.QuestionPoint"
-        class="col-md-4"
-      />
-      <base-select
-        v-if="showElement('LookupId_QuestionHardnessType')"
-        :model="$v.question.LookupId_QuestionHardnessType"
-        :options="lookupStore.questionHardnessTypeDdl"
-        class="col-md-4"
-        filter
-      />
-      <base-select
-        v-if="showElement('LookupId_RepeatnessType')"
-        :model="$v.question.LookupId_RepeatnessType"
-        :options="lookupStore.repeatnessTypeDdl"
-        class="col-md-4"
-        filter
-      />
-      <base-field
-        v-if="showElement('UseEvaluation')"
-        class="col-md-4"
-        :model="$v.question.UseEvaluation"
-      >
-        <template slot-scope="data">
-          <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-          <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
-        </template>
-      </base-field>
-      <base-field v-if="showElement('IsStandard')" class="col-md-4" :model="$v.question.IsStandard">
-        <template slot-scope="data">
-          <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-          <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
-        </template>
-      </base-field>
-      <base-select
-        v-if="showElement('LookupId_AuthorType')"
-        :model="$v.question.LookupId_AuthorType"
-        :options="lookupStore.authorTypeDdl"
-        class="col-md-4"
-        filter
-      />
-      <base-input
-        v-if="showElement('AuthorName')"
-        :model="$v.question.AuthorName"
-        class="col-md-4"
-      />
-      <base-select
-        v-if="showElement('LookupId_AreaType')"
-        :model="$v.question.LookupId_AreaType"
-        :options="lookupStore.areaTypeDdl"
-        class="col-md-4"
-        filter
-      />
-      <base-input
-        v-if="showElement('ResponseSecond')"
-        :model="$v.question.ResponseSecond"
-        class="col-md-4"
-      />
-      <base-input
-        v-if="showElement('Description')"
-        :model="$v.question.Description"
-        class="col-12"
-      />
+        <base-select
+          v-if="showElement('LookupId_QuestionType')"
+          :model="$v.question.LookupId_QuestionType"
+          :options="lookupStore.questionTypeDdl"
+          class="col-md-4"
+          filter
+        />
+        <base-input
+          v-if="showElement('QuestionPoint')"
+          :model="$v.question.QuestionPoint"
+          class="col-md-4"
+        />
+        <base-select
+          v-if="showElement('LookupId_QuestionHardnessType')"
+          :model="$v.question.LookupId_QuestionHardnessType"
+          :options="lookupStore.questionHardnessTypeDdl"
+          class="col-md-4"
+          filter
+        />
+        <base-select
+          v-if="showElement('LookupId_RepeatnessType')"
+          :model="$v.question.LookupId_RepeatnessType"
+          :options="lookupStore.repeatnessTypeDdl"
+          class="col-md-4"
+          filter
+        />
+        <base-field
+          v-if="showElement('UseEvaluation')"
+          class="col-md-4"
+          :model="$v.question.UseEvaluation"
+        >
+          <template slot-scope="data">
+            <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+            <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+          </template>
+        </base-field>
+        <base-field
+          v-if="showElement('IsStandard')"
+          class="col-md-4"
+          :model="$v.question.IsStandard"
+        >
+          <template slot-scope="data">
+            <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+            <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+          </template>
+        </base-field>
+        <base-select
+          v-if="showElement('LookupId_AuthorType')"
+          :model="$v.question.LookupId_AuthorType"
+          :options="lookupStore.authorTypeDdl"
+          class="col-md-4"
+          filter
+        />
+        <base-input
+          v-if="showElement('AuthorName')"
+          :model="$v.question.AuthorName"
+          class="col-md-4"
+        />
+        <base-select
+          v-if="showElement('LookupId_AreaType')"
+          :model="$v.question.LookupId_AreaType"
+          :options="lookupStore.areaTypeDdl"
+          class="col-md-4"
+          filter
+        />
+        <base-input
+          v-if="showElement('ResponseSecond')"
+          :model="$v.question.ResponseSecond"
+          class="col-md-4"
+        />
+        <base-input
+          v-if="showElement('Description')"
+          :model="$v.question.Description"
+          class="col-12"
+        />
+      </section>
     </div>
   </base-modal-edit>
 </template>
@@ -162,6 +181,7 @@ export default class QuestionEditVue extends Vue {
   @Prop({ type: Boolean, required: true }) canEditAdminProp;
   @Prop({ type: Boolean, required: true }) canEditTopicProp;
   @Prop({ type: Boolean, required: true }) canEditImportProp;
+  @Prop({ type: Number, required: true }) lessonIdProp;
   //#endregion
 
   //#region ### data ###
@@ -169,8 +189,10 @@ export default class QuestionEditVue extends Vue {
   lookupStore = vxm.lookupStore;
   tagStore = vxm.tagStore;
   topicStore = vxm.topicStore;
+  lessonStore = vxm.lessonStore;
   question = vxm.questionStore.question;
   topicFilter = "";
+  topicFilter2 = "";
   questionAccessElement = {
     QuestionNumber: {
       canEditAdminProp: true,

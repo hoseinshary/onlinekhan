@@ -188,6 +188,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                     var filename2 = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".docx";
                     target.SaveAs(filename2);
+                    while (target.Windows[1].Panes[1].Pages.Count < 0) ;
                     ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
                         SitePath.GetQuestionAbsPath(newQuestion.FileName) + ".png");
 
@@ -287,7 +288,10 @@ namespace NasleGhalam.ServiceLayer.Services
                     returnGuidList.Add(newEntry);
                     var filename2 = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
 
-                    ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, filename2 + ".png");
+                    while (target.Windows[1].Panes[1].Pages.Count < 0) ;
+
+                    var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                    ImageUtility.SaveImageOfWord(bits, filename2 + ".png");
                     target.Close(WdSaveOptions.wdDoNotSaveChanges);
                 }
                 else

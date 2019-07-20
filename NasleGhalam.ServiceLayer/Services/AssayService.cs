@@ -55,6 +55,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
 
                     QuestionAssayViewModel lessonItem = new QuestionAssayViewModel();
+                    lessonItem.Questions= new List<QuestionViewModel>();
                     lessonItem.LessonId = lesson.Id;
 
 

@@ -25,7 +25,7 @@
               <q-select
                 :value="questionGroup.LessonId"
                 @change="lessonIdChanged"
-                :options="lessonStore.ddl"
+                :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
                 float-label="انتخاب درس"
                 class="q-pt-lg"
               />
@@ -167,7 +167,6 @@ export default class QuestionGroupVue extends Vue {
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
     this.questionGroup.LessonId = 0;
-    this.lessonStore.fillListByEducationTreeIds(newVal);
   }
   //#endregion
 
@@ -212,6 +211,7 @@ export default class QuestionGroupVue extends Vue {
 
   //#region ### hooks ###
   created() {
+    this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
       this.educationTree.expanded = this.educationTree.firstLevel;
     });

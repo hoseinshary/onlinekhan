@@ -68,6 +68,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _lessons
                 .Include(current => current.Ratios.Select(ratio => ratio.EducationSubGroup))
+                .Include(current => current.LessonDepartments)
                 .Where(current => current.EducationTrees.Any(x => ids.Contains(x.Id)))
                 .AsNoTracking()
                 .AsEnumerable()
@@ -82,6 +83,9 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<LessonViewModel> GetAll()
         {
             return _lessons
+                .Include(current => current.Ratios.Select(ratio => ratio.EducationSubGroup))
+                .Include(current => current.LessonDepartments)
+                .Include(current => current.EducationTrees)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<LessonViewModel>)

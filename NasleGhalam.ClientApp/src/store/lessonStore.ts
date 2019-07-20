@@ -18,6 +18,7 @@ export class LessonStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   lesson: ILesson;
   private _lessonList: Array<ILesson>;
+  private _modelChanged: boolean = true;
   private _selectedId: number;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -50,11 +51,67 @@ export class LessonStore extends VuexModule {
     return this._lessonList;
   }
 
+  get gridDataByEducationTreeIds() {
+    return (ids: Array<number>) => {
+      return this._lessonList.filter(
+        lesson =>
+          lesson.EducationTrees &&
+          lesson.EducationTrees.some(
+            educationTree => ids.indexOf(educationTree.Id) > -1
+          )
+      );
+    };
+  }
+
+  get relatedLessonIds() {
+    return (lessonId: number) => {
+      var currentLesson = this._lessonList.find(
+        lesson => lesson.Id == lessonId
+      );
+      var currentDepartmentIds: Array<number> =
+        (currentLesson &&
+          currentLesson.LessonDepartments &&
+          currentLesson.LessonDepartments.map(x => x.Id)) ||
+        [];
+
+      return this._lessonList
+        .filter(
+          lesson =>
+            currentLesson &&
+            lesson.Id != currentLesson.Id &&
+            lesson.LessonDepartments &&
+            lesson.LessonDepartments.some(department =>
+              currentDepartmentIds.some(
+                currentDepartment => currentDepartment == department.Id
+              )
+            )
+        )
+        .map(x => x.Id);
+    };
+  }
+
   get ddl() {
     return this._lessonList.map(x => ({
       value: x.Id,
       label: x.Name
     }));
+  }
+
+  get ddlByEducationTreeIds() {
+    return (ids: Array<number>) => {
+      return this._lessonList
+        .filter(
+          lesson =>
+            lesson.EducationTrees &&
+            lesson.EducationTrees.some(
+              educationTree => ids.indexOf(educationTree.Id) > -1
+            )
+        )
+        .map(x => ({
+          value: x.Id,
+          label: x.Name
+        }));
+    };
   }
   //#endregion
 
@@ -119,6 +176,11 @@ export class LessonStore extends VuexModule {
   }
 
   @mutation
+  private MODEL_CHANGED(changed: boolean) {
+    this._modelChanged = changed;
+  }
+
+  @mutation
   private SET_SELECTED_ID(id: number) {
     this._selectedId = id;
   }
@@ -166,14 +228,28 @@ export class LessonStore extends VuexModule {
   }
 
   @action()
-  async fillListByEducationTreeIds(ids: Array<number>) {
-    let params = util.toParam({ ids });
-    return axios
-      .get(`${baseUrl}/GetAllByEducationTreeIds?${params}`)
-      .then((response: AxiosResponse<Array<ILesson>>) => {
-        this.SET_LIST(response.data);
-      });
+  async fillList() {
+    if (this._modelChanged) {
+      return axios
+        .get(`${baseUrl}/GetAll`)
+        .then((response: AxiosResponse<Array<ILesson>>) => {
+          this.SET_LIST(response.data);
+          this.MODEL_CHANGED(false);
+        });
+    } else {
+      return Promise.resolve(this._lessonList);
+    }
   }
+
+  // @action()
+  // async fillListByEducationTreeIds(ids: Array<number>) {
+  //   let params = util.toParam({ ids });
+  //   return axios
+  //     .get(`${baseUrl}/GetAllByEducationTreeIds?${params}`)
+  //     .then((response: AxiosResponse<Array<ILesson>>) => {
+  //       this.SET_LIST(response.data);
+  //     });
+  // }
 
   @action({ mode: "raw" })
   async validateForm(vm: any) {
@@ -217,6 +293,7 @@ export class LessonStore extends VuexModule {
         if (data.MessageType == MessageType.Success) {
           this.CREATE(data.Obj);
           this.OPEN_MODAL_CREATE(!payload.closeModal);
+          this.MODEL_CHANGED(true);
           this.resetCreate();
         }
       });
@@ -243,6 +320,7 @@ export class LessonStore extends VuexModule {
         if (data.MessageType == MessageType.Success) {
           this.UPDATE(data.Obj);
           this.OPEN_MODAL_EDIT(false);
+          this.MODEL_CHANGED(true);
           this.resetEdit();
         }
       });
@@ -263,6 +341,7 @@ export class LessonStore extends VuexModule {
         if (data.MessageType == MessageType.Success) {
           this.DELETE();
           this.OPEN_MODAL_DELETE(false);
+          this.MODEL_CHANGED(true);
         }
       });
   }

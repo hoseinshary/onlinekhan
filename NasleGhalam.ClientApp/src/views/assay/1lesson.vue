@@ -130,13 +130,8 @@ export default class LessonTabVue extends Vue {
 
   @Watch("educationTree.leafTicked")
   tickedEducationTreeIdsChanged(newVal) {
-    this.lessonStore.fillListByEducationTreeIds(newVal);
-  }
-
-  @Watch("lessonStore.gridData")
-  lessonGridDataChanged(value: Array<ILesson>) {
     util.clearArray(this.assayCreate.Lessons);
-    var list = value.forEach(x => {
+    this.lessonStore.gridDataByEducationTreeIds(newVal).forEach(x => {
       this.assayCreate.Lessons.push(new AssayLesson(x.Id, x.Name));
     });
   }
@@ -150,6 +145,7 @@ export default class LessonTabVue extends Vue {
 
   //#region ### hooks ###
   created() {
+    this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
       this.educationTree.expanded = this.educationTree.firstLevel;
     });

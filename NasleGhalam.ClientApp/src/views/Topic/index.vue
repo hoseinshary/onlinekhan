@@ -26,7 +26,7 @@
               <q-select
                 :value="lessonId"
                 @change="lessonIdChanged"
-                :options="lessonStore.ddl"
+                :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
                 float-label="انتخاب درس"
                 class="q-pt-lg"
               />
@@ -39,7 +39,7 @@
                 :label="`ایجاد (${topicStore.modelName}) جدید`"
                 @click="showModalCreate(0)"
               />
-              <q-input v-model="topicTree.filter" float-label="جستجو در مبحث" clearable/>
+              <q-input v-model="topicTree.filter" float-label="جستجو در مبحث" clearable />
               <q-tree
                 :nodes="topicTreeData"
                 :expanded.sync="topicTree.expanded"
@@ -183,7 +183,6 @@ export default class TopicVue extends Vue {
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
     this.lessonId = 0;
-    this.lessonStore.fillListByEducationTreeIds(newVal);
   }
   //#endregion
 
@@ -221,6 +220,7 @@ export default class TopicVue extends Vue {
   //#region ### hooks ###
   created() {
     this.topicStore.fillList();
+    this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
       this.educationTree.expanded = this.educationTree.firstLevel;
     });

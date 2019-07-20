@@ -26,7 +26,7 @@
               <q-select
                 :value="lessonId"
                 @change="lessonIdChanged"
-                :options="lessonStore.ddl"
+                :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
                 float-label="انتخاب درس"
                 class="q-pt-lg"
               />
@@ -39,24 +39,24 @@
               :label="`ایجاد (${educationBookStore.modelName}) جدید`"
               @click="showModalCreate"
             />
-            <br>
+            <br />
             <base-table
               :grid-data="educationBookStore.gridData"
               :columns="educationBookGridColumn"
               hasIndex
             >
               <template slot="IsActive" slot-scope="data">
-                <q-checkbox v-model="data.row.IsActive" readonly/>
+                <q-checkbox v-model="data.row.IsActive" readonly />
               </template>
               <template slot="IsExamSource" slot-scope="data">
-                <q-checkbox v-model="data.row.IsExamSource" readonly/>
+                <q-checkbox v-model="data.row.IsExamSource" readonly />
               </template>
               <template slot="IsChanged" slot-scope="data">
-                <q-checkbox v-model="data.row.IsChanged" readonly/>
+                <q-checkbox v-model="data.row.IsChanged" readonly />
               </template>
               <template slot="Id" slot-scope="data">
-                <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
+                <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
               </template>
             </base-table>
           </div>
@@ -177,7 +177,6 @@ export default class EducationBookVue extends Vue {
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
     this.lessonId = 0;
-    this.lessonStore.fillListByEducationTreeIds(newVal);
   }
   //#endregion
 
@@ -209,6 +208,7 @@ export default class EducationBookVue extends Vue {
 
   //#region ### hooks ###
   created() {
+    this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
       this.educationTree.expanded = this.educationTree.firstLevel;
     });

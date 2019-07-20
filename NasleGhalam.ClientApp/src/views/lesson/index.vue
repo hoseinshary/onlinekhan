@@ -26,11 +26,15 @@
             :label="`ایجاد (${lessonStore.modelName}) جدید`"
             @click="showModalCreate"
           />
-          <br>
-          <base-table :grid-data="lessonStore.gridData" :columns="lessonGridColumn" hasIndex>
+          <br />
+          <base-table
+            :grid-data="lessonStore.gridDataByEducationTreeIds(educationTree.leafTicked)"
+            :columns="lessonGridColumn"
+            hasIndex
+          >
             <template slot="Id" slot-scope="data">
-              <base-btn-edit round v-if="canEdit" @click="showModalEdit(data.row.Id)"/>
-              <base-btn-delete round v-if="canDelete" @click="showModalDelete(data.row.Id)"/>
+              <base-btn-edit round v-if="canEdit" @click="showModalEdit(data.row.Id)" />
+              <base-btn-delete round v-if="canDelete" @click="showModalDelete(data.row.Id)" />
             </template>
           </base-table>
         </div>
@@ -126,11 +130,6 @@ export default class LessonVue extends Vue {
       this.educationTree.expanded.push(newVal);
     }
   }
-
-  @Watch("educationTree.leafTicked")
-  tickedEducationTreeIdsChanged(newVal) {
-    this.lessonStore.fillListByEducationTreeIds(newVal);
-  }
   //#endregion
 
   //#region ### methods ###
@@ -155,6 +154,7 @@ export default class LessonVue extends Vue {
 
   //#region ### hooks ###
   created() {
+    this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
       this.educationTree.expanded = this.educationTree.firstLevel;
     });

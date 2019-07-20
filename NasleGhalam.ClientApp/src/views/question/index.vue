@@ -12,7 +12,7 @@
                 label="نمایش سوال های بدون ارزیابی"
                 @input="fillGrid()"
               />
-              <br>
+              <br />
               <q-checkbox
                 v-model="showWithoutTopic"
                 label="نمایش سوال های بدون مبحث"
@@ -43,7 +43,7 @@
               <q-select
                 :value="lessonId"
                 @change="lessonIdChanged"
-                :options="lessonStore.ddl"
+                :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
                 float-label="انتخاب درس"
                 class="q-pt-lg"
               />
@@ -52,7 +52,7 @@
           <div class="col-sm-7" v-if="!showWithoutTopic">
             <section class="q-ma-sm q-pa-sm shadow-1">
               <q-field class="col-12">
-                <q-input v-model="topicTree.filter" float-label="جستجوی مبحث" clearable/>
+                <q-input v-model="topicTree.filter" float-label="جستجوی مبحث" clearable />
               </q-field>
               <q-tree
                 :nodes="topicTreeData"
@@ -68,14 +68,14 @@
               />
             </section>
           </div>
-          <br>
+          <br />
         </section>
         <base-btn-create
           v-if="canCreate"
           :label="`ایجاد (${questionStore.modelName}) جدید`"
           @click="showModalCreate"
         />
-        <br>
+        <br />
         <base-table :grid-data="questionStore.gridData" :columns="questionGridColumn" hasIndex>
           <template slot="Context" slot-scope="data">
             <div v-if="data.row.Context && data.row.Context.length> 100">
@@ -109,8 +109,8 @@
             >
               <q-tooltip>جواب سوال</q-tooltip>
             </q-btn>
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
+            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
           </template>
         </base-table>
       </div>
@@ -254,7 +254,6 @@ export default class QuestionVue extends Vue {
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
     this.lessonId = 0;
-    this.lessonStore.fillListByEducationTreeIds(newVal);
   }
 
   @Watch("topicTree.leafTicked")
@@ -317,6 +316,7 @@ export default class QuestionVue extends Vue {
 
   //#region ### hooks ###
   created() {
+    this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
       this.topicStore.fillList();
       this.educationTree.expanded = this.educationTree.firstLevel;

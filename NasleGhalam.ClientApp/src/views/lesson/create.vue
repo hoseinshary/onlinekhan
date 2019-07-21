@@ -38,6 +38,7 @@
           :model="$v.lesson.LessonDepartmentId"
           :options="lessonDepartmentStore.ddl"
           class="col-md-6"
+          clearable
         />
 
         <q-slide-transition>

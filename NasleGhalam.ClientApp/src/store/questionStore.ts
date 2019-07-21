@@ -144,10 +144,12 @@ export class QuestionStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IQuestion>) => {
         util.mapObject(response.data, this.question);
-        if (response.data.Topics)
+        if (response.data.Topics) {
           this.question.TopicIds = response.data.Topics.map(x => x.Id);
-        if (response.data.Tags)
+        }
+        if (response.data.Tags) {
           this.question.TagIds = response.data.Tags.map(x => x.Id);
+        }
       });
   }
 
@@ -248,7 +250,27 @@ export class QuestionStore extends VuexModule {
 
     var formData = new FormData();
     formData.append(wordFile["name"], wordFile["files"][0]);
-    var params = util.toParam(this.question);
+
+    var newData = {
+      Id: this.question.Id,
+      QuestionNumber: this.question.QuestionNumber,
+      QuestionPoint: this.question.QuestionPoint,
+      UseEvaluation: this.question.UseEvaluation,
+      IsStandard: this.question.IsStandard,
+      AuthorName: this.question.AuthorName,
+      ResponseSecond: this.question.ResponseSecond,
+      Description: this.question.Description,
+      AnswerNumber: this.question.AnswerNumber,
+      LookupId_QuestionType: this.question.LookupId_QuestionType,
+      LookupId_QuestionHardnessType: this.question
+        .LookupId_QuestionHardnessType,
+      LookupId_RepeatnessType: this.question.LookupId_RepeatnessType,
+      LookupId_AuthorType: this.question.LookupId_AuthorType,
+      LookupId_AreaType: this.question.LookupId_AreaType,
+      TopicIds: this.question.TopicIds,
+      TagIds: this.question.TagIds
+    };
+    var params = util.toParam(newData);
 
     return axios({
       method: "post",
@@ -305,7 +327,27 @@ export class QuestionStore extends VuexModule {
     // }
     var formData = new FormData();
     formData.append(wordFile["name"], wordFile["files"][0]);
-    var params = util.toParam(this.question);
+    var newData = {
+      Id: this.question.Id,
+      QuestionNumber: this.question.QuestionNumber,
+      QuestionPoint: this.question.QuestionPoint,
+      UseEvaluation: this.question.UseEvaluation,
+      IsStandard: this.question.IsStandard,
+      AuthorName: this.question.AuthorName,
+      ResponseSecond: this.question.ResponseSecond,
+      Description: this.question.Description,
+      AnswerNumber: this.question.AnswerNumber,
+      LookupId_QuestionType: this.question.LookupId_QuestionType,
+      LookupId_QuestionHardnessType: this.question
+        .LookupId_QuestionHardnessType,
+      LookupId_RepeatnessType: this.question.LookupId_RepeatnessType,
+      LookupId_AuthorType: this.question.LookupId_AuthorType,
+      LookupId_AreaType: this.question.LookupId_AreaType,
+      TopicIds: this.question.TopicIds,
+      TagIds: this.question.TagIds
+    };
+    var params = util.toParam(newData);
+
     var url = "";
     if (activeAccess == "canEditAdminProp") {
       url = `${baseUrl}/Update?${params}`;

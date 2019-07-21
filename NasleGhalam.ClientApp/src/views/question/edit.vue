@@ -55,19 +55,6 @@
       </q-slide-transition>
     </div>
 
-    <div class="col-md-3 col-sm-6" v-if="showElement('TopicIds')">
-      <q-input v-model="topicFilter2" float-label="جستجوی مبحث 2" clearable />
-      <q-tree
-        :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
-        :ticked.sync="question.TopicIds"
-        :filter="topicFilter2"
-        tick-strategy="leaf"
-        color="primary"
-        accordion
-        node-key="Id"
-      />
-    </div>
-
     <div class="col-md-6 col-sm-12">
       <section class="row gutter-md">
         <q-field class="col-sm-4">
@@ -161,6 +148,19 @@
           class="col-12"
         />
       </section>
+    </div>
+
+     <div class="col-md-3 col-sm-6" v-if="showElement('TopicIds')">
+      <q-input v-model="topicFilter2" float-label="جستجوی مبحث 2" clearable />
+      <q-tree
+        :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
+        :ticked.sync="question.TopicIds"
+        :filter="topicFilter2"
+        tick-strategy="leaf"
+        color="primary"
+        accordion
+        node-key="Id"
+      />
     </div>
   </base-modal-edit>
 </template>

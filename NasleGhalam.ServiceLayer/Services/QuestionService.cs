@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -204,6 +202,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
+                while (source.Windows[1].Panes[1].Pages.Count < 0) ;
                 ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
@@ -274,6 +273,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var filename3 = Encryption.Base64Encode( Encryption.Encrypt(answer+"-"+FileName));
             source.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) +".docx");
+            while (source.Windows[1].Panes[1].Pages.Count < 0) ;
             ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i4].Range.Copy();
@@ -290,6 +290,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+            while (target.Windows[1].Panes[1].Pages.Count < 0) ;
             ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i3].Range.Copy();
@@ -306,6 +307,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+            while (target.Windows[1].Panes[1].Pages.Count < 0) ;
             ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i2].Range.Copy();
@@ -322,6 +324,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
+            while (target.Windows[1].Panes[1].Pages.Count < 0) ;
             ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
         }
@@ -502,6 +505,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
+                while (source.Windows[1].Panes[1].Pages.Count < 0) ;
                 ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
                     SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
@@ -635,6 +639,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
+                while (source.Windows[1].Panes[1].Pages.Count < 0) ;
                 ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
                     SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
@@ -784,6 +789,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
+                while (source.Windows[1].Panes[1].Pages.Count < 0) ;
                 ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
                     SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 

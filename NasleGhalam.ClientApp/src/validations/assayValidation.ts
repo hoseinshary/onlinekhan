@@ -42,11 +42,11 @@ const assayValidations: ValidationRuleset<TAssay> = {
       required
     },
     RandomOptions: {
-      displayName: displayName("سوال تصادفی"),
+      displayName: displayName("جابجایی گزینه ها"),
       required
     },
     RandomQuestion: {
-      displayName: displayName("گزینه های تصادفی"),
+      displayName: displayName("سوال تصادفی"),
       required
     }
   }

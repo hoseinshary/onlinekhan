@@ -36,7 +36,7 @@
       </template>
     </base-field>
     <div class="col-12">
-      <base-btn-save @click="assayStore.submitPreCreate" />
+      <base-btn-save @click="getAllQuestions" />
     </div>
   </section>
 </template>
@@ -62,7 +62,12 @@ export default class AssayTabVue extends Vue {
   //#region ### computed ###
   //#endregion
 
-  //#region ### watch ###
+  //#region ### methods ###
+  getAllQuestions() {
+    this.assayStore.submitPreCreate().then(() => {
+      this.$emit("changeTab", "questionTab");
+    });
+  }
   //#endregion
 
   //#region ### hooks ###

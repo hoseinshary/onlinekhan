@@ -8,6 +8,7 @@
           <q-tab slot="title" name="lessonTab" label="درس" />
           <q-tab slot="title" name="topicTab" label="مبحث" />
           <q-tab slot="title" name="assayTab" label="آزمون" />
+          <q-tab slot="title" name="questionTab" label="سوال" />
           <q-tab-pane name="lessonTab" keep-alive>
             <lesson-tab @changeTab="changeTab"></lesson-tab>
           </q-tab-pane>
@@ -16,6 +17,9 @@
           </q-tab-pane>
           <q-tab-pane name="assayTab" keep-alive>
             <assay-tab @changeTab="changeTab"></assay-tab>
+          </q-tab-pane>
+          <q-tab-pane name="questionTab" keep-alive>
+            <question-tab @changeTab="changeTab"></question-tab>
           </q-tab-pane>
         </q-tabs>
       </div>
@@ -32,7 +36,8 @@ import util from "src/utilities";
   components: {
     lessonTab: () => import("./1lesson.vue"),
     topicTab: () => import("./2topic.vue"),
-    assayTab: () => import("./3assay.vue")
+    assayTab: () => import("./3assay.vue"),
+    questionTab: () => import("./4question.vue")
   }
 })
 export default class AssayVue extends Vue {
@@ -46,10 +51,6 @@ export default class AssayVue extends Vue {
   // get canCreate() {
   //   return this.pageAccess.indexOf("ایجاد") > -1;
   // }
-
-  //#endregion
-
-  //#region ### watch ###
   //#endregion
 
   //#region ### methods ###

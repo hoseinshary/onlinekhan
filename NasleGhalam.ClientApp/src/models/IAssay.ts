@@ -1,3 +1,5 @@
+import IQuestion from "./IQuestion";
+
 // interface IAssay {
 //   LessonId?: number;
 //   LessonName?: string;
@@ -62,6 +64,7 @@ export class AssayLesson {
     return this.CountOfEasy + this.CountOfMedium + this.CountOfHard;
   }
   Topics: Array<AssayTopic>;
+  Questions: Array<IQuestion>;
   /**
    * constructor
    */
@@ -73,6 +76,7 @@ export class AssayLesson {
     this.CountOfMedium = 0;
     this.CountOfHard = 0;
     this.Topics = [];
+    this.Questions = [];
   }
 }
 

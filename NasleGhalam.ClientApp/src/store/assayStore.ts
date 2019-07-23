@@ -12,6 +12,7 @@ import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
 import { ASSAY_URL as baseUrl } from "src/utilities/site-config";
 import utilities from "src/utilities";
+import IQuestion from "src/models/IQuestion";
 
 @Module({ namespacedPath: "assayStore/" })
 export class AssayStore extends VuexModule {
@@ -30,6 +31,10 @@ export class AssayStore extends VuexModule {
   //#region ### getters ###
   get modelName() {
     return "آزمون";
+  }
+
+  get checkedLessons() {
+    return this.assayCreate.Lessons.filter(x => x.Checked);
   }
   //#endregion
 
@@ -93,15 +98,16 @@ export class AssayStore extends VuexModule {
     data.Lessons.forEach(x => {
       x.Topics = x.Topics.filter(x => x.Checked);
     });
+
+    type TQuestionAssay = { LessonId: number; Questions: Array<IQuestion> };
     return axios
       .post(`${baseUrl}/GetAllQuestion`, data)
-      .then((response: AxiosResponse<IMessageResult>) => {
+      .then((response: AxiosResponse<Array<TQuestionAssay>>) => {
         let data = response.data;
-        this.notify({ vm, data });
-
-        if (data.MessageType == MessageType.Success) {
-          debugger;
-        }
+        this.checkedLessons.forEach(lesson => {
+          var found = data.find(x => x.LessonId == lesson.Id);
+          if (found) lesson.Questions = found.Questions;
+        });
       });
   }
 

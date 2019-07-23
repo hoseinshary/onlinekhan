@@ -147,7 +147,15 @@ namespace NasleGhalam.ServiceLayer.Services
             var lesson = _lessons
                 .Include(current => current.EducationTrees)
                 .Include(current => current.Ratios)
+                .Include(x => x.LessonDepartments)
                 .First(current => current.Id == lessonUpdateViewModel.Id);
+
+            //var departments = _lessons
+            //    .Include(x => x.LessonDepartments)
+            //    .AsNoTracking()
+            //    .Where(current => current.Id == lessonUpdateViewModel.Id)
+            //    .Select(x => x.LessonDepartments)
+            //    .First();
 
             lesson.IsMain = lessonUpdateViewModel.IsMain;
             lesson.Name = lessonUpdateViewModel.Name;
@@ -205,10 +213,18 @@ namespace NasleGhalam.ServiceLayer.Services
                 lesson.Ratios.Add(ratio);
             }
 
-            if (lessonUpdateViewModel.LessonDepartmentId != 0)
+            if (lessonUpdateViewModel.LessonDepartmentId != 0 &&( lesson.LessonDepartments.FirstOrDefault() == null) || lesson.LessonDepartments.FirstOrDefault().Id != lessonUpdateViewModel.LessonDepartmentId)
             {
+                foreach (var item in lesson.LessonDepartments.ToList())
+                {
+                    lesson.LessonDepartments.Remove(item);
+                    //_uow.MarkAsDeleted(item);
+                }
+
+                //lesson.LessonDepartments.Clear();
                 var department = new LessonDepartment() { Id = lessonUpdateViewModel.LessonDepartmentId };
                 _uow.MarkAsUnChanged(department);
+
                 lesson.LessonDepartments.Add(department);
             }
 
@@ -258,7 +274,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var lessonDepartments = lesson.LessonDepartments.ToList();
             foreach (var item in lessonDepartments)
             {
-                _uow.MarkAsDeleted(item);
+                lesson.LessonDepartments.Remove(item);
             }
 
             _uow.MarkAsDeleted(lesson);

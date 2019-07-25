@@ -56,7 +56,6 @@
       <DependentUpon>ViewModelGenerator.tt</DependentUpon>
     </Content>
     <Compile Include="Assay\AssayCreateViewModel.cs" />
-    <Compile Include="Assay\AssayGetQuestionsViewModel.cs" />
     <Compile Include="Assay\AssayViewModel.cs" />
     <Compile Include="Assay\LessonAssayViewModel.cs" />
     <Compile Include="Assay\QuestionAssayViewModel.cs" />

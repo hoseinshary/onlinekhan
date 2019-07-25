@@ -9,6 +9,13 @@ namespace NasleGhalam.Common
         HS512
     }
 
+    public enum Fonts
+    {
+        B_Nazanin = 0,
+        Arial = 1,
+
+    }
+
     public enum MessageType
     {
         Error = 0,

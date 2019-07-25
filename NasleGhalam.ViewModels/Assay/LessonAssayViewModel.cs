@@ -20,5 +20,7 @@ namespace NasleGhalam.ViewModels.Assay
         public int CountOfHard { get; set; }
 
         public int CountOfQuestions => CountOfEasy + CountOfMedium + CountOfHard;
+
+        public int LessonOrder { get; set; }
     }
 }

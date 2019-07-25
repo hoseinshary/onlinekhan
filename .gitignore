@@ -67,7 +67,8 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
-Content/
+#Content/
+Content/QuestionGroupTemp
 App_Data/
 
 node_modules
@@ -108,3 +109,4 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+/NasleGhalam.WebApi/Content/QuestionGroupTemp

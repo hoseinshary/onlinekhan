@@ -287,6 +287,7 @@ namespace NasleGhalam.ServiceLayer.Services
             app.Quit();
             /////////////////////////////////
 
+            File.Delete(wordFilename);
 
             _uow.ValidateOnSaveEnabled(false);
 
@@ -422,6 +423,7 @@ namespace NasleGhalam.ServiceLayer.Services
             doc.Close();
             app.Quit();
             /////////////////////////////////
+            File.Delete(wordFilename);
 
             var msgRes = new ClientMessageResult { MessageType = MessageType.Success, Obj = returnGuidList };
             return msgRes;

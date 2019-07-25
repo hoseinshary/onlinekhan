@@ -9,7 +9,7 @@ export default interface IQuestion {
   QuestionPoint: number;
   UseEvaluation: boolean;
   IsStandard: boolean;
-  AuthorName: string;
+  WriterId: number;
   ResponseSecond: number;
   Description: string;
   FileName: string;
@@ -37,7 +37,7 @@ export const DefaultQuestion: IQuestion = {
   QuestionPoint: 0,
   UseEvaluation: false,
   IsStandard: false,
-  AuthorName: "",
+  WriterId: 0,
   ResponseSecond: 0,
   Description: "",
   FileName: "",

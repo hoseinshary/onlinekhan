@@ -54,9 +54,9 @@ const questionValidations: ValidationRuleset<TQuestion> = {
       numeric,
       requiredDdl: requiredDdl(0)
     },
-    AuthorName: {
+    WriterId: {
       displayName: displayName("نام طراح"),
-      maxLength: maxLength(50)
+      requiredDdl: requiredDdl(0)
     },
     LookupId_AreaType: {
       displayName: displayName("حیطه سوال"),

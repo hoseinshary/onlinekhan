@@ -11,7 +11,7 @@ namespace NasleGhalam.Common
 
     public enum Fonts
     {
-        B_Nazanin = 0,
+        BNazanin = 0,
         Arial = 1,
 
     }

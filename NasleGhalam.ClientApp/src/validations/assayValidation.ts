@@ -48,6 +48,24 @@ const assayValidations: ValidationRuleset<TAssay> = {
     RandomQuestion: {
       displayName: displayName("سوال تصادفی"),
       required
+    },
+    QuestionsRelocation: {
+      displayName: displayName("جابجایی سوال")
+    },
+    FontSize: {
+      displayName: displayName("سایز فونت"),
+      numeric,
+      required
+    },
+    Font: {
+      displayName: displayName("فونت"),
+      required
+    },
+    TwoPageInOne: {
+      displayName: displayName("دو صفحه در یک صفحه")
+    },
+    HaveWhiteSpace: {
+      displayName: displayName("جای چرک نویس")
     }
   }
 };

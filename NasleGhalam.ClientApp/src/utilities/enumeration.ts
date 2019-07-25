@@ -19,4 +19,9 @@ enum EducationTreeState {
   GradeLevel = 4
 }
 
-export { UserType, MessageType, EducationTreeState };
+enum Fonts {
+  BNazanin = 0,
+  Arial = 1
+}
+
+export { UserType, MessageType, EducationTreeState, Fonts };

@@ -430,7 +430,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             }
 
-            question.AuthorName = questionViewModel.AuthorName;
+            question.WriterId = questionViewModel.WriterId;
             question.Description = questionViewModel.Description;
             question.InsertDateTime = DateTime.Now;
             question.IsActive = questionViewModel.IsActive;
@@ -594,7 +594,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
             }
-            question.AuthorName = questionViewModel.AuthorName;
+            question.WriterId = questionViewModel.WriterId;
             question.Description = questionViewModel.Description;
             question.LookupId_AuthorType = questionViewModel.LookupId_AuthorType;
             question.LookupId_QuestionType = questionViewModel.LookupId_QuestionType;

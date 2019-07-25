@@ -42,8 +42,11 @@ namespace NasleGhalam.ViewModels.Question
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_AuthorType { get; set; }
 
-        [Display(Name = "نام طراح")]
-        public string AuthorName { get; set; }
+        [Display(Name = "نویسنده")]
+        public int WriterId { get; set; }
+
+
+
 
         [Display(Name = "نوع طراح")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]

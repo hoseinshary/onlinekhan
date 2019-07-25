@@ -9,7 +9,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             HasKey(x => x.Id);
             Property(x => x.Context).IsRequired().HasColumnType("nvarchar(max)");
-            Property(x => x.AuthorName).HasMaxLength(100);
+            
             Property(x => x.Description).HasMaxLength(300);
             Property(x => x.FileName).IsRequired();
 
@@ -66,6 +66,12 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                     config.MapRightKey("BoxId");
                     config.ToTable("Questions_Boxes");
                 });
+
+
+            HasRequired(x => x.Writer)
+                .WithMany(x => x.Questions)
+                .HasForeignKey(x => x.WriterId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

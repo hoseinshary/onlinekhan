@@ -176,7 +176,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     newQuestion.LookupId_RepeatnessType = 21;
                     newQuestion.InsertDateTime = DateTime.Now;
                     newQuestion.IsStandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
-                    newQuestion.AuthorName = dt.Rows[numberOfQ - 1]["نام طراح"].ToString();
+                    //newQuestion.AuthorName = dt.Rows[numberOfQ - 1]["نام طراح"].ToString();
                     newQuestion.UserId = questionGroupViewModel.UserId;
                     newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
                     newQuestion.IsActive = false;
@@ -357,7 +357,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 questionGroup.Questions.Remove(item);
                 _uow.MarkAsDeleted(item);
-                if (item.AnswerNumber != 0 || item.AnswerNumber != null)
+                if (item.AnswerNumber != 0 )
                 {
                     QuestionService.DeleteOptionsOfQuestion(item.FileName);
                 }

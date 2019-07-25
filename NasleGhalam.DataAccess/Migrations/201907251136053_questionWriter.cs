@@ -7,8 +7,8 @@ namespace NasleGhalam.DataAccess.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.Questions", "WriterId", c => c.Int(nullable: false));
-            CreateIndex("dbo.Questions", "WriterId");
+            AddColumn("dbo.Questions", "WriterId", c => c.Int(nullable: false, defaultValue: 1) );
+            CreateIndex("dbo.Questions", "WriterId" );
             AddForeignKey("dbo.Questions", "WriterId", "dbo.Writers", "Id");
             DropColumn("dbo.Questions", "AuthorName");
         }

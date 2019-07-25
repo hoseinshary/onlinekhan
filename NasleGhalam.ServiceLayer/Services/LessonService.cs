@@ -227,8 +227,15 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 lesson.LessonDepartments.Add(department);
             }
+            else if (lessonUpdateViewModel.LessonDepartmentId == 0)
+            {
+                foreach (var item in lesson.LessonDepartments.ToList())
+                {
+                    lesson.LessonDepartments.Remove(item);
+                }
+            }
 
-            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+                var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)

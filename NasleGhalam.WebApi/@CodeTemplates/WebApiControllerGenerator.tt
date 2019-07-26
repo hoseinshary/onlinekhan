@@ -10,8 +10,8 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Reflection" #>
 <#
-	string modelName = "Assay";
-	string instanceName = "assay";
+	string modelName = "Resume";
+	string instanceName = "resume";
 #>
 using System.Web.Http;
 using NasleGhalam.Common;

@@ -13,6 +13,58 @@ namespace NasleGhalam.Common
     {
         BNazanin = 0,
         Arial = 1,
+    }
+
+    public enum KindRequest
+    {
+        testi = 0,
+        tashrihi = 1,
+        both = 2
+    }
+
+    
+
+    public enum Maghta
+    {
+        dah = 0,
+        yazdah = 1,
+        davazdah =2 ,
+        konkoor = 3,
+    }
+
+    public enum TypeEducationCenter
+    {
+        dolati = 0,
+        azad = 1,
+        gheyreEntefaie = 2,
+        payamnoor = 3,
+        beynolmelal =4,
+        others=5
+    }
+
+    public enum Degree
+    {
+        zireDiplom = 0,
+        diplom = 1,
+        kardani = 2 ,
+        karshenasi = 3,
+        karshenasiarshad = 4,
+        doktora = 5
+
+    }
+
+    public enum DegreeCertificate
+    {
+        daneshamooz = 0,
+        diplom = 1,
+        kardaniStudent = 2,
+        kardani = 3,
+        karshenasiStudent = 4,
+        karshenasi = 5,
+        karshenasiarshadStudent = 6,
+        karshenasiarshad = 7,
+        doktoraStudent = 8,
+        doktora = 9
 
     }
 

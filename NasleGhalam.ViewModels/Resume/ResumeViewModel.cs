@@ -1,0 +1,244 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using NasleGhalam.Common;
+
+namespace NasleGhalam.ViewModels.Resume
+{
+    public class ResumeViewModel
+    {
+        [Display(Name = "")]
+        public int Id { get; set; }
+
+
+        [Display(Name = "شعبه")]
+        public string Branch { get; set; }
+
+
+        [Display(Name = "تاریخ ساخت")]
+        public DateTime CreationDateTime { get; set; }
+
+
+        [Display(Name = "نام")]
+        public string Name { get; set; }
+
+
+        [Display(Name = "نام خانوادگی")]
+        public string Family { get; set; }
+
+
+        [Display(Name = "نام پدر")]
+        public string FatherName { get; set; }
+
+
+        [Display(Name = "شماره شناسنامه")]
+        public string IdNumber { get; set; }
+
+
+        [Display(Name = "کد ملی")]
+        public string NationalNo { get; set; }
+
+
+        [Display(Name = "جنسیت")]
+        public bool Gender { get; set; }
+
+
+        [Display(Name = "تلفن")]
+        public string Phone { get; set; }
+
+
+        [Display(Name = "موبایل")]
+        public string Mobile { get; set; }
+
+
+        [Display(Name = "صادره")]
+        public string CityBorn { get; set; }
+
+
+        [Display(Name = "تاریخ تولد")]
+        public DateTime Birthday { get; set; }
+
+
+        [Display(Name = "وضعیت تاهل")]
+        public bool Marriage { get; set; }
+
+
+        [Display(Name = "مذهب")]
+        public string Religion { get; set; }
+
+
+        [Display(Name = "آدرس")]
+        public string Address { get; set; }
+
+
+        [Display(Name = "شهر")]
+        public int CityId { get; set; }
+
+
+        [Display(Name = "کد پستی")]
+        public string PostCode { get; set; }
+
+
+        [Display(Name = "شغل پدر")]
+        public string FatherJob { get; set; }
+
+
+        [Display(Name = "مدرک پدر")]
+        public Degree FatherDegree { get; set; }
+
+
+        [Display(Name = "شماره تماس پدر")]
+        public string FatherPhone { get; set; }
+
+
+        [Display(Name = "شغل مادر")]
+        public string MotherJob { get; set; }
+
+
+        [Display(Name = "مدرک مادر")]
+        public Degree MotherDegree { get; set; }
+
+
+        [Display(Name = "شماره تماس مادر")]
+        public string MotherPhone { get; set; }
+
+
+        [Display(Name = "شغل همسر")]
+        public string WifeJob { get; set; }
+
+
+        [Display(Name = "مدرک همسر")]
+        public Degree WifeDegree { get; set; }
+
+
+        [Display(Name = "شماره تماس همسر")]
+        public string WifePhone { get; set; }
+
+
+        [Display(Name = "معرف 1")]
+        public string Reagent1 { get; set; }
+
+
+        [Display(Name = "نسبت معرف 1")]
+        public string RelationReagent1 { get; set; }
+
+
+        [Display(Name = "شعل معرف 1")]
+        public string JobReagent1 { get; set; }
+
+
+        [Display(Name = "شماره تماس معرف 1")]
+        public string PhoneReagent1 { get; set; }
+
+
+        [Display(Name = "آدرس معرف 1")]
+        public string AddressReagent1 { get; set; }
+
+
+        [Display(Name = "معرف 2")]
+        public string Reagent2 { get; set; }
+
+
+        [Display(Name = "نسبت معرف 2")]
+        public string RelationReagent2 { get; set; }
+
+
+        [Display(Name = "شغل معرف 2")]
+        public string JobReagent2 { get; set; }
+
+
+        [Display(Name = "شماره تماس معرف 2")]
+        public string PhoneReagent2 { get; set; }
+
+
+        [Display(Name = "آدرس معرف 2")]
+        public string AddressReagent2 { get; set; }
+
+
+        [Display(Name = "گزینش آموزش و پرورش دارد /ندارد")]
+        public bool HaveEducationCertificate { get; set; }
+
+
+        [Display(Name = "گزینش از ارگان دیگر ")]
+        public bool HaveAnotherCertificate { get; set; }
+
+
+        [Display(Name = "نام ارگان")]
+        public string AnotherCertificate { get; set; }
+
+
+        [Display(Name = "مدارک تحصیلی")]
+        public ICollection<EducationCertificateViewModel> EducationCertificates { get; set; }
+
+
+        [Display(Name = "سابقه تالیف")]
+        public bool HavePublication { get; set; }
+
+
+        [Display(Name = "تعداد تالیفات")]
+        public int NumberOfPublication { get; set; }
+
+
+        [Display(Name = "سابقه تالیف")]
+        public ICollection<PublicationViewModel> Publication { get; set; }
+
+
+
+        [Display(Name = "سابقه تدریس")]
+        public bool HaveTeachingResume { get; set; }
+
+
+        [Display(Name = "تعداد سال سابقه تدریس")]
+        public int NumberOfTeachingYear { get; set; }
+
+
+        [Display(Name = "سابقه تدریس")]
+        public ICollection<TeachingResumeViewModel> TeachingResumes { get; set; }
+
+
+        [Display(Name = "تقاضای تدریس یا تالیف 1")]
+        public bool TeachingOrPublishingRequest1 { get; set; }
+
+
+        [Display(Name = "پایه تقاضای 1")]
+        public Maghta MaghtaRequest1 { get; set; }
+
+
+        [Display(Name = "نوع تقاضای 1")]
+        public KindRequest KindRequestRequest1 { get; set; }
+
+
+        [Display(Name = "درس تقاضای 1")]
+        public string LessonNameRequest1 { get; set; }
+
+
+        [Display(Name = "تقاضای تدریس یا تالیف تقاضای 2")]
+        public bool TeachingOrPublishingRequest2 { get; set; }
+
+
+        [Display(Name = "پایه تقاضای 2")]
+        public Maghta MaghtaRequest2 { get; set; }
+
+
+        [Display(Name = "نوع تقاضای 2")]
+        public KindRequest KindRequestRequest2 { get; set; }
+
+
+        [Display(Name = "درس تقاضای 2")]
+        public string LessonNameRequest2 { get; set; }
+
+
+        [Display(Name = "درخواست برای مشاوره")]
+        public bool RequestForAdvice { get; set; }
+
+
+        [Display(Name = "پایه مشاوره")]
+        public Maghta MaghtaAdvice { get; set; }
+
+
+        [Display(Name = "توضیحات")]
+        public string Description { get; set; }
+
+
+    }
+}

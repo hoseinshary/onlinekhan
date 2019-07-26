@@ -81,6 +81,7 @@
     <Compile Include="MapperProfile\QuestionAnswerProfile.cs" />
     <Compile Include="MapperProfile\QuestionGroupProfile.cs" />
     <Compile Include="MapperProfile\QuestionJudgeProfile.cs" />
+    <Compile Include="MapperProfile\ResumeProfile.cs" />
     <Compile Include="MapperProfile\UnivercityBranchProfile.cs" />
     <Compile Include="MapperProfile\QuestionProfile.cs" />
     <Compile Include="MapperProfile\TagProfile.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Services\QuestionGroupService.cs" />
     <Compile Include="Services\QuestionJudgeService.cs" />
     <Compile Include="Services\QuestionService.cs" />
+    <Compile Include="Services\ResumeService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\StudentService.cs" />
     <Compile Include="Services\TagService.cs" />

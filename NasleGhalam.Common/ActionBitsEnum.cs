@@ -130,6 +130,10 @@
         AssayDeleteAccess = 100,
         AssayUpdateAccess = 101,
 
+        ResumeReadAccess = 102,
+        ResumeCreateAccess = 103,
+        ResumeDeleteAccess = 104,
+        ResumeUpdateAccess = 105,
 
     }
 }

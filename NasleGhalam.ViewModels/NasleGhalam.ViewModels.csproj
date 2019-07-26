@@ -98,6 +98,10 @@
     <Compile Include="Question\QuestionCreateViewModel.cs" />
     <Compile Include="Ratio\RatioUpdateViewModel.cs" />
     <Compile Include="Ratio\RatioCreateViewModel.cs" />
+    <Compile Include="Resume\EducationCertificateViewModel.cs" />
+    <Compile Include="Resume\PublicationViewModel.cs" />
+    <Compile Include="Resume\ResumeViewModel.cs" />
+    <Compile Include="Resume\TeachingResumeViewModel.cs" />
     <Compile Include="Role\RoleUpdateViewModel.cs" />
     <Compile Include="Role\RoleCreateViewModel.cs" />
     <Compile Include="Student\StudentUpdateViewModel.cs" />

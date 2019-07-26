@@ -101,6 +101,10 @@
     <Compile Include="Migrations\201907251136053_questionWriter.Designer.cs">
       <DependentUpon>201907251136053_questionWriter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907261415438_resumeadd.cs" />
+    <Compile Include="Migrations\201907261415438_resumeadd.Designer.cs">
+      <DependentUpon>201907261415438_resumeadd.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -157,6 +161,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907251136053_questionWriter.resx">
       <DependentUpon>201907251136053_questionWriter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907261415438_resumeadd.resx">
+      <DependentUpon>201907261415438_resumeadd.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

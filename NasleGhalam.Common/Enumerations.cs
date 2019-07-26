@@ -17,54 +17,54 @@ namespace NasleGhalam.Common
 
     public enum KindRequest
     {
-        testi = 0,
-        tashrihi = 1,
-        both = 2
+        Testi = 0,
+        Tashrihi = 1,
+        Both = 2
     }
 
-    
+
 
     public enum Maghta
     {
-        dah = 0,
-        yazdah = 1,
-        davazdah =2 ,
-        konkoor = 3,
+        Dah = 0,
+        Yazdah = 1,
+        Davazdah = 2,
+        Konkoor = 3,
     }
 
     public enum TypeEducationCenter
     {
-        dolati = 0,
-        azad = 1,
-        gheyreEntefaie = 2,
-        payamnoor = 3,
-        beynolmelal =4,
-        others=5
+        Dolati = 0,
+        Azad = 1,
+        GheyreEntefaie = 2,
+        Payamnoor = 3,
+        Beynolmelal = 4,
+        Others = 5
     }
 
     public enum Degree
     {
-        zireDiplom = 0,
-        diplom = 1,
-        kardani = 2 ,
-        karshenasi = 3,
-        karshenasiarshad = 4,
-        doktora = 5
+        ZireDiplom = 0,
+        Diplom = 1,
+        Kardani = 2,
+        Karshenasi = 3,
+        Karshenasiarshad = 4,
+        Doktora = 5
 
     }
 
     public enum DegreeCertificate
     {
-        daneshamooz = 0,
-        diplom = 1,
-        kardaniStudent = 2,
-        kardani = 3,
-        karshenasiStudent = 4,
-        karshenasi = 5,
-        karshenasiarshadStudent = 6,
-        karshenasiarshad = 7,
-        doktoraStudent = 8,
-        doktora = 9
+        Daneshamooz = 0,
+        Diplom = 1,
+        KardaniStudent = 2,
+        Kardani = 3,
+        KarshenasiStudent = 4,
+        Karshenasi = 5,
+        KarshenasiarshadStudent = 6,
+        Karshenasiarshad = 7,
+        DoktoraStudent = 8,
+        Doktora = 9
 
     }
 

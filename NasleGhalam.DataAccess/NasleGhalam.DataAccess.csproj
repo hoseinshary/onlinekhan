@@ -105,6 +105,10 @@
     <Compile Include="Migrations\201907261415438_resumeadd.Designer.cs">
       <DependentUpon>201907261415438_resumeadd.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907261825421_UpdateResume.cs" />
+    <Compile Include="Migrations\201907261825421_UpdateResume.Designer.cs">
+      <DependentUpon>201907261825421_UpdateResume.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -164,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907261415438_resumeadd.resx">
       <DependentUpon>201907261415438_resumeadd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907261825421_UpdateResume.resx">
+      <DependentUpon>201907261825421_UpdateResume.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,7 +7,13 @@ namespace NasleGhalam.ViewModels.Resume
 {
     public class ResumeViewModel
     {
-        [Display(Name = "")]
+        public ResumeViewModel()
+        {
+            Publications = new List<PublicationViewModel>();
+            EducationCertificates = new List<EducationCertificateViewModel>();
+            TeachingResumes = new List<TeachingResumeViewModel>();
+        }
+
         public int Id { get; set; }
 
 
@@ -104,15 +110,15 @@ namespace NasleGhalam.ViewModels.Resume
 
 
         [Display(Name = "شغل همسر")]
-        public string WifeJob { get; set; }
+        public string PartnerJob { get; set; }
 
 
         [Display(Name = "مدرک همسر")]
-        public Degree WifeDegree { get; set; }
+        public Degree PartnerDegree { get; set; }
 
 
         [Display(Name = "شماره تماس همسر")]
-        public string WifePhone { get; set; }
+        public string PartnerPhone { get; set; }
 
 
         [Display(Name = "معرف 1")]
@@ -167,10 +173,6 @@ namespace NasleGhalam.ViewModels.Resume
         public string AnotherCertificate { get; set; }
 
 
-        [Display(Name = "مدارک تحصیلی")]
-        public ICollection<EducationCertificateViewModel> EducationCertificates { get; set; }
-
-
         [Display(Name = "سابقه تالیف")]
         public bool HavePublication { get; set; }
 
@@ -179,21 +181,12 @@ namespace NasleGhalam.ViewModels.Resume
         public int NumberOfPublication { get; set; }
 
 
-        [Display(Name = "سابقه تالیف")]
-        public ICollection<PublicationViewModel> Publication { get; set; }
-
-
-
         [Display(Name = "سابقه تدریس")]
         public bool HaveTeachingResume { get; set; }
 
 
         [Display(Name = "تعداد سال سابقه تدریس")]
         public int NumberOfTeachingYear { get; set; }
-
-
-        [Display(Name = "سابقه تدریس")]
-        public ICollection<TeachingResumeViewModel> TeachingResumes { get; set; }
 
 
         [Display(Name = "تقاضای تدریس یا تالیف 1")]
@@ -235,10 +228,16 @@ namespace NasleGhalam.ViewModels.Resume
         [Display(Name = "پایه مشاوره")]
         public Maghta MaghtaAdvice { get; set; }
 
-
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 
+        [Display(Name = "سابقه تالیف")]
+        public List<PublicationViewModel> Publications { get; set; }
 
+        [Display(Name = "مدارک تحصیلی")]
+        public List<EducationCertificateViewModel> EducationCertificates { get; set; }
+
+        [Display(Name = "سابقه تدریس")]
+        public List<TeachingResumeViewModel> TeachingResumes { get; set; }
     }
 }

@@ -101,13 +101,9 @@
     <Compile Include="Migrations\201907251136053_questionWriter.Designer.cs">
       <DependentUpon>201907251136053_questionWriter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201907261415438_resumeadd.cs" />
-    <Compile Include="Migrations\201907261415438_resumeadd.Designer.cs">
-      <DependentUpon>201907261415438_resumeadd.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201907261825421_UpdateResume.cs" />
-    <Compile Include="Migrations\201907261825421_UpdateResume.Designer.cs">
-      <DependentUpon>201907261825421_UpdateResume.cs</DependentUpon>
+    <Compile Include="Migrations\201907281507576_AddResume.cs" />
+    <Compile Include="Migrations\201907281507576_AddResume.Designer.cs">
+      <DependentUpon>201907281507576_AddResume.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -166,11 +162,8 @@
     <EmbeddedResource Include="Migrations\201907251136053_questionWriter.resx">
       <DependentUpon>201907251136053_questionWriter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201907261415438_resumeadd.resx">
-      <DependentUpon>201907261415438_resumeadd.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201907261825421_UpdateResume.resx">
-      <DependentUpon>201907261825421_UpdateResume.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201907281507576_AddResume.resx">
+      <DependentUpon>201907281507576_AddResume.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

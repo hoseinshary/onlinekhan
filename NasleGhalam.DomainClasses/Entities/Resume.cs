@@ -95,7 +95,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Maghta MaghtaRequest1 { get; set; }
 
-        public KindRequest KindRequestRequest1 { get; set; }
+        public KindRequest KindRequest1 { get; set; }
 
         public string LessonNameRequest1 { get; set; }
 
@@ -103,7 +103,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Maghta MaghtaRequest2 { get; set; }
 
-        public KindRequest KindRequestRequest2 { get; set; }
+        public KindRequest KindRequest2 { get; set; }
 
         public string LessonNameRequest2 { get; set; }
 

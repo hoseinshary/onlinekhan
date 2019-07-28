@@ -198,7 +198,7 @@ namespace NasleGhalam.ViewModels.Resume
 
 
         [Display(Name = "نوع تقاضای 1")]
-        public KindRequest KindRequestRequest1 { get; set; }
+        public KindRequest KindRequest1 { get; set; }
 
 
         [Display(Name = "درس تقاضای 1")]
@@ -214,7 +214,7 @@ namespace NasleGhalam.ViewModels.Resume
 
 
         [Display(Name = "نوع تقاضای 2")]
-        public KindRequest KindRequestRequest2 { get; set; }
+        public KindRequest KindRequest2 { get; set; }
 
 
         [Display(Name = "درس تقاضای 2")]
@@ -223,7 +223,6 @@ namespace NasleGhalam.ViewModels.Resume
 
         [Display(Name = "درخواست برای مشاوره")]
         public bool RequestForAdvice { get; set; }
-
 
         [Display(Name = "پایه مشاوره")]
         public Maghta MaghtaAdvice { get; set; }

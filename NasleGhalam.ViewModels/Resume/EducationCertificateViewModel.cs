@@ -22,7 +22,7 @@ namespace NasleGhalam.ViewModels.Resume
         public TypeEducationCenter TypeEducationCenter { get; set; }
 
         [Display(Name = "سال")]
-        public string year { get; set; }
+        public string Year { get; set; }
 
         [Display(Name = "معدل")]
         public float Score { get; set; }

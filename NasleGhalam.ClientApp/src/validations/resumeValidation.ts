@@ -167,8 +167,7 @@ const resumeValidations: ValidationRuleset<TResume> = {
       required
     },
     HaveAnotherCertificate: {
-      displayName: displayName("گزینش از ارگان دیگر"),
-      required
+      displayName: displayName("گزینش از ارگان دیگر")
     },
     AnotherCertificate: {
       displayName: displayName("نام ارگان"),

@@ -38,7 +38,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.ResumeCreateAccess)]
+        //[CheckUserAccess(ActionBits.ResumeCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(ResumeViewModel resumeViewModel)
         {

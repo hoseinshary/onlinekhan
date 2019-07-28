@@ -118,11 +118,6 @@ export default class AssayTabVue extends Vue {
         label: x,
         value: Fonts[x]
       }));
-    // debugger
-    // return Object.keys(Fonts).map(x => ({
-    //   label: Fonts[x],
-    //   value: x
-    // }));
   }
   //#endregion
 

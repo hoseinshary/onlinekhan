@@ -4,6 +4,10 @@ export default [
     component: () => import("src/views/user/login.vue")
   },
   {
+    path: "/resume",
+    component: () => import("src/views/resume/index.vue")
+  },
+  {
     path: "/",
     component: () => import("layouts/default.vue"),
     children: [

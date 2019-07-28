@@ -67,7 +67,7 @@ export default interface IResume {
 
 export const DefaultResume: IResume = {
   Id: 0,
-  Branch: "",
+  Branch: "آنلاین خوان",
   Name: "",
   Family: "",
   FatherName: "",
@@ -110,11 +110,11 @@ export const DefaultResume: IResume = {
   NumberOfTeachingYear: 0,
   TeachingOrPublishingRequest1: false,
   MaghtaRequest1: Maghta.Dah,
-  KindRequestRequest1: KindRequest.Both,
+  KindRequest1: KindRequest.Both,
   LessonNameRequest1: "",
   TeachingOrPublishingRequest2: false,
   MaghtaRequest2: Maghta.Dah,
-  KindRequestRequest2: KindRequest.Both,
+  KindRequest2: KindRequest.Both,
   LessonNameRequest2: "",
   RequestForAdvice: false,
   MaghtaAdvice: Maghta.Dah,

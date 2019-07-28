@@ -23,7 +23,7 @@
         CityCreateAccess = 14,
         CityUpdateAccess = 15,
         CityDeleteAccess = 16,
-        
+
         RoleReadAccess = 17,
         RoleCreateAccess = 18,
         RoleUpdateAccess = 19,
@@ -118,7 +118,7 @@
         WriterUpdateAccess = 91,
 
         Lesson_UserReadAccess = 92,
-        Lesson_UserCreateDeleteAccess =93,
+        Lesson_UserCreateDeleteAccess = 93,
 
         LessonDepartmentReadAccess = 94,
         LessonDepartmentCreateAccess = 95,

@@ -21,14 +21,14 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet]
-        //[ CheckUserAccess(ActionBits.ResumeReadAccess)]
+        [CheckUserAccess(ActionBits.ResumeReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_resumeService.GetAll());
         }
 
         [HttpGet]
-        //[CheckUserAccess(ActionBits.ResumeReadAccess)]
+        [CheckUserAccess(ActionBits.ResumeReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var resume = _resumeService.GetById(id);
@@ -50,7 +50,7 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [HttpPost]
-        //[ CheckUserAccess(ActionBits.ResumeDeleteAccess)]
+        [CheckUserAccess(ActionBits.ResumeDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
             return Ok(_resumeService.Delete(id));

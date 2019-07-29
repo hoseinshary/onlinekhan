@@ -126,7 +126,7 @@ export const DefaultResume: IResume = {
   TeachingResumes: []
 };
 
-interface IPublication {
+export interface IPublication {
   Publisher: string;
   Grade: string;
   LessonName: string;
@@ -135,21 +135,47 @@ interface IPublication {
   PublishedOrEdit: boolean;
 }
 
-interface IEducationCertificate {
+export const DefaultPublication: IPublication = {
+  Publisher: "",
+  Grade: "",
+  LessonName: "",
+  KindRequest: KindRequest.Both,
+  Year: "",
+  PublishedOrEdit: false
+};
+
+export interface IEducationCertificate {
   DegreeCertificate: DegreeCertificate;
   Subject: string;
   EducationCenterName: string;
   CityName: string;
   TypeEducationCenter: TypeEducationCenter;
-  PublishedOrEdit: boolean;
   Year: string;
   Score: number;
 }
 
-interface ITeachingResume {
+export const DefaultEducationCertificate: IEducationCertificate = {
+  DegreeCertificate: DegreeCertificate.Karshenasi,
+  Subject: "",
+  EducationCenterName: "",
+  CityName: "",
+  TypeEducationCenter: TypeEducationCenter.Azad,
+  Year: "",
+  Score: 0
+};
+
+export interface ITeachingResume {
   School: string;
   LessonName: string;
   Grade: string;
   StartYear: string;
   EndYear: string;
 }
+
+export const DefaultTeachingResume: ITeachingResume = {
+  School: "",
+  LessonName: "",
+  Grade: "",
+  StartYear: "",
+  EndYear: ""
+};

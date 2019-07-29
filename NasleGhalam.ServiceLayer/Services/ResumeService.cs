@@ -60,6 +60,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var resume = Mapper.Map<Resume>(resumeViewModel);
             _resumes.Add(resume);
 
+            _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 

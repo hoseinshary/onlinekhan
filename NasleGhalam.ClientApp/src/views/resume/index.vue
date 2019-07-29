@@ -245,6 +245,10 @@
                 </fieldset>
 
                 <base-input :model="$v.resume.Description" class="col-12" />
+                <publication></publication>
+                <education-certificate></education-certificate>
+                <teaching-resume></teaching-resume>
+
                 <div class="col-12">
                   <base-btn-save @click="resumeStore.submitCreate" />
                 </div>
@@ -271,7 +275,12 @@ import {
 } from "../../utilities/enumeration";
 
 @Component({
-  validations: resumeValidations
+  validations: resumeValidations,
+  components: {
+    Publication: () => import("./publication.vue"),
+    EducationCertificate: () => import("./educationCertificate.vue"),
+    TeachingResume: () => import("./teachingResume.vue")
+  }
 })
 export default class ResumeVue extends Vue {
   $v: any;

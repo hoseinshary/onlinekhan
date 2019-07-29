@@ -7,7 +7,11 @@ import {
   requiredIf
 } from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
-import IResume from "src/models/IResume";
+import IResume, {
+  IPublication,
+  IEducationCertificate,
+  ITeachingResume
+} from "src/models/IResume";
 
 type TResume = { resume: IResume; validationGroup: string[] };
 const resumeValidations: ValidationRuleset<TResume> = {
@@ -114,8 +118,7 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     MotherJob: {
       displayName: displayName("شغل مادر"),
-      maxLength: maxLength(150),
-      required
+      maxLength: maxLength(150)
     },
     MotherDegree: {
       displayName: displayName("مدرک مادر"),
@@ -124,8 +127,7 @@ const resumeValidations: ValidationRuleset<TResume> = {
     MotherPhone: {
       displayName: displayName("شماره تماس مادر"),
       maxLength: maxLength(10),
-      numeric,
-      required
+      numeric
     },
     PartnerJob: {
       displayName: displayName("شغل همسر"),
@@ -184,13 +186,11 @@ const resumeValidations: ValidationRuleset<TResume> = {
     PhoneReagent2: {
       displayName: displayName("شماره تماس معرف 2"),
       maxLength: maxLength(10),
-      numeric,
-      required
+      numeric
     },
     AddressReagent2: {
       displayName: displayName("آدرس معرف 2"),
-      maxLength: maxLength(300),
-      required
+      maxLength: maxLength(300)
     },
     HaveAnotherCertificate: {
       displayName: displayName("گزینش از ارگان دیگر")
@@ -284,9 +284,126 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     Description: {
       displayName: displayName("توضیحات"),
+      maxLength: maxLength(300)
+    }
+  }
+};
+
+type TPublication = { publication: IPublication; validationGroup: string[] };
+const publicationValidations: ValidationRuleset<TPublication> = {
+  publication: {
+    Publisher: {
+      displayName: displayName("ناشر"),
+      maxLength: maxLength(50),
+      required
+    },
+    Grade: {
+      displayName: displayName("مقطع"),
+      maxLength: maxLength(50),
+      required
+    },
+    LessonName: {
+      displayName: displayName("درس"),
+      maxLength: maxLength(50),
+      required
+    },
+    KindRequest: {
+      displayName: displayName("نوع کتاب"),
+      required
+    },
+    Year: {
+      displayName: displayName("سال"),
+      required,
+      numeric
+    },
+    PublishedOrEdit: {
+      displayName: displayName("تالیف یا ویرایش"),
       required
     }
   }
 };
 
-export { validationMixin, resumeValidations };
+type TEducationCertificate = {
+  educationCertificate: IEducationCertificate;
+  validationGroup: string[];
+};
+const educationCertificateValidations: ValidationRuleset<
+  TEducationCertificate
+> = {
+  educationCertificate: {
+    DegreeCertificate: {
+      displayName: displayName("مدرک"),
+      required
+    },
+    Subject: {
+      displayName: displayName("رشته"),
+      required
+    },
+    EducationCenterName: {
+      displayName: displayName("مرکز تحصیلی"),
+      maxLength: maxLength(50),
+      required
+    },
+    CityName: {
+      displayName: displayName("شهر"),
+      maxLength: maxLength(50),
+      required
+    },
+    TypeEducationCenter: {
+      displayName: displayName("نوع"),
+      required,
+      numeric
+    },
+    Year: {
+      displayName: displayName("سال"),
+      required,
+      numeric
+    },
+    Score: {
+      displayName: displayName("معدل"),
+      required,
+      numeric
+    }
+  }
+};
+
+type TTeachingResume = {
+  teachingResume: ITeachingResume;
+  validationGroup: string[];
+};
+const teachingResumeValidations: ValidationRuleset<TTeachingResume> = {
+  teachingResume: {
+    School: {
+      displayName: displayName("آموزشگاه"),
+      maxLength: maxLength(50),
+      required
+    },
+    LessonName: {
+      displayName: displayName("رشته"),
+      maxLength: maxLength(50),
+      required
+    },
+    Grade: {
+      displayName: displayName("مقطع"),
+      maxLength: maxLength(50),
+      required
+    },
+    StartYear: {
+      displayName: displayName("سال شروع"),
+      required
+    },
+    EndYear: {
+      displayName: displayName("سال پایان"),
+      required,
+      numeric
+    }
+  }
+};
+
+export {
+  validationMixin,
+  resumeValidations,
+  publicationValidations,
+  educationCertificateValidations,
+  teachingResumeValidations
+};

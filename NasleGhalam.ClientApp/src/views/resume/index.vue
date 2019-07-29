@@ -151,6 +151,8 @@
                   </section>
                 </fieldset>
 
+                <publication v-show="resume.HavePublication"></publication>
+
                 <fieldset class="col-12 q-my-sm">
                   <legend>سابقه تدریس</legend>
                   <section class="row gutter-sm">
@@ -167,6 +169,8 @@
                     />
                   </section>
                 </fieldset>
+
+                <teaching-resume v-show="resume.HaveTeachingResume"></teaching-resume>
 
                 <fieldset class="col-12 q-my-sm">
                   <legend>تقاضای تدریس یا تالیف 1</legend>
@@ -245,9 +249,7 @@
                 </fieldset>
 
                 <base-input :model="$v.resume.Description" class="col-12" />
-                <publication></publication>
                 <education-certificate></education-certificate>
-                <teaching-resume></teaching-resume>
 
                 <div class="col-12">
                   <base-btn-save @click="resumeStore.submitCreate" />

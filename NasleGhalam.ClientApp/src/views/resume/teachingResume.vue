@@ -1,6 +1,6 @@
 <template>
   <fieldset class="col-12 q-my-sm">
-    <legend>سابقه تالیف</legend>
+    <legend>سابقه تدریس</legend>
     <section class="row gutter-sm">
       <base-input :model="$v.teachingResume.School" class="col-md-3" />
       <base-input :model="$v.teachingResume.LessonName" class="col-md-3" />

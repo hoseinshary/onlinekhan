@@ -19,7 +19,7 @@ namespace NasleGhalam.WebApi.Controllers
             _provinceService = provinceService;
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.ProvinceReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.ProvinceReadAccess,ActionBits.PublicAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_provinceService.GetAll());

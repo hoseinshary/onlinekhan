@@ -48,6 +48,10 @@ export default [
         component: () => import("src/views/topic/index.vue")
       },
       {
+        path: "/topic/printTopic",
+        component: () => import("src/views/topic/printTopic.vue")
+      },
+      {
         path: "/educationBook",
         component: () => import("src/views/educationBook/index.vue")
       },

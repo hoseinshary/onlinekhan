@@ -28,6 +28,11 @@ Router.beforeEach((to, from, next) => {
     document.title = "رزومه";
     return;
   }
+  if (to.fullPath == "/topic/printTopic") {
+    next();
+    document.title = "چاپ مبحث";
+    return;
+  }
 
   var authList = LocalStorage.get.item("authList");
   var subMenuList = LocalStorage.get.item("subMenuList");

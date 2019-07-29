@@ -38,13 +38,20 @@
                 <fieldset class="col-12 q-my-sm">
                   <legend>آدرس</legend>
                   <section class="row gutter-sm">
-                    <base-input :model="$v.resume.PostCode" class="col-md-6" />
+                    <base-select
+                      :model="$v.resume.ProvinceId"
+                      :options="provinceStore.ddl"
+                      class="col-md-4"
+                      filter
+                      @change="resume.CityId=0"
+                    />
                     <base-select
                       :model="$v.resume.CityId"
-                      :options="cityStore.ddl"
-                      class="col-md-6"
+                      :options="cityStore.ddlByProvinceId(resume.ProvinceId)"
+                      class="col-md-4"
                       filter
                     />
+                    <base-input :model="$v.resume.PostCode" class="col-md-4" />
                     <base-input :model="$v.resume.Address" class="col-md-12" />
                   </section>
                 </fieldset>
@@ -75,7 +82,7 @@
                   </section>
                 </fieldset>
 
-                <fieldset class="col-12 q-my-sm">
+                <fieldset class="col-12 q-my-sm" v-show="resume.Marriage">
                   <legend>مشخصات همسر</legend>
                   <section class="row gutter-sm">
                     <base-input :model="$v.resume.PartnerJob" class="col-md-4" />
@@ -141,8 +148,20 @@
                       :model="$v.resume.NumberOfPublication"
                       class="col-md-3"
                     />
+                  </section>
+                </fieldset>
+
+                <fieldset class="col-12 q-my-sm">
+                  <legend>سابقه تدریس</legend>
+                  <section class="row gutter-sm">
+                    <base-field class="col-md-3" :model="$v.resume.HaveTeachingResume">
+                      <template slot-scope="data">
+                        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+                        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+                      </template>
+                    </base-field>
                     <base-input
-                      v-show="resume.HavePublication"
+                      v-show="resume.HaveTeachingResume"
                       :model="$v.resume.NumberOfTeachingYear"
                       class="col-md-3"
                     />
@@ -229,7 +248,6 @@
                 <div class="col-12">
                   <base-btn-save @click="resumeStore.submitCreate" />
                 </div>
-
               </section>
             </div>
           </base-panel>
@@ -262,6 +280,7 @@ export default class ResumeVue extends Vue {
   resumeStore = vxm.resumeStore;
   resume = vxm.resumeStore.resume;
   cityStore = vxm.cityStore;
+  provinceStore = vxm.provinceStore;
   //#endregion
 
   //#region ### computed ###
@@ -293,6 +312,7 @@ export default class ResumeVue extends Vue {
   created() {
     this.resumeStore.SET_INDEX_VUE(this);
     this.cityStore.fillList();
+    this.provinceStore.fillList();
   }
   //#endregion
 }

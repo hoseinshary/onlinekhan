@@ -53,7 +53,7 @@ export class CityStore extends VuexModule {
     }));
   }
 
-  get cityByProvinceIdDdl() {
+  get ddlByProvinceId() {
     return provinceId =>
       this._cityList
         .filter(x => x.ProvinceId == provinceId)

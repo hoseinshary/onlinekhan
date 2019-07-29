@@ -10,7 +10,8 @@ import {
   minValue,
   maxValue,
   between,
-  sameAs
+  sameAs,
+  requiredIf
 } from "vuelidate/lib/validators";
 
 // leave the export, even if you don't use it
@@ -72,5 +73,6 @@ export {
   sameAs,
   requiredDdl,
   onlyPersianChar,
-  notPersianChar
+  notPersianChar,
+  requiredIf
 };

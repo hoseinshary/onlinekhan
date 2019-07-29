@@ -22,6 +22,7 @@ export default interface IResume {
   Marriage: boolean;
   Religion: string;
   Address: string;
+  ProvinceId: number;
   CityId: number;
   PostCode: string;
   FatherJob: string;
@@ -81,6 +82,7 @@ export const DefaultResume: IResume = {
   Marriage: false,
   Religion: "",
   Address: "",
+  ProvinceId: 0,
   CityId: 0,
   PostCode: "",
   FatherJob: "",

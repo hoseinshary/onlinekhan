@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Resume;
 using Newtonsoft.Json;
@@ -19,11 +20,11 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
                     opt => opt.MapFrom(src => JsonConvert.SerializeObject(src.Publications)))
                 .ReverseMap()
                 .ForMember(dst => dst.TeachingResumes,
-                    opt => opt.MapFrom(src => JsonConvert.DeserializeObject<TeachingResumeViewModel>(src.TeachingResumeJson)))
+                    opt => opt.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<TeachingResumeViewModel>>(src.TeachingResumeJson)))
                 .ForMember(dst => dst.EducationCertificates,
-                    opt => opt.MapFrom(src => JsonConvert.DeserializeObject<EducationCertificateViewModel>(src.EducationCertificateJson)))
+                    opt => opt.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<EducationCertificateViewModel>>(src.EducationCertificateJson)))
                 .ForMember(dst => dst.Publications,
-                    opt => opt.MapFrom(src => JsonConvert.DeserializeObject<PublicationViewModel>(src.PublicationJson)));
+                    opt => opt.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<PublicationViewModel>>(src.PublicationJson)));
         }
     }
 }

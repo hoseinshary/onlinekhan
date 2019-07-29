@@ -18,7 +18,7 @@
     />
     <base-select
       :model="$v.user.CityId"
-      :options="cityStore.cityByProvinceIdDdl(user.ProvinceId)"
+      :options="cityStore.ddlByProvinceId(user.ProvinceId)"
       class="col-sm-6 col-md-4"
       filter
     />

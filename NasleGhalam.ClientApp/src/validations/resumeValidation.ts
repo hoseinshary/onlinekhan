@@ -1,4 +1,11 @@
-import { required, displayName, maxLength } from "src/plugins/vuelidate";
+import {
+  required,
+  displayName,
+  maxLength,
+  requiredDdl,
+  numeric,
+  requiredIf
+} from "src/plugins/vuelidate";
 import { ValidationRuleset, validationMixin } from "vuelidate";
 import IResume from "src/models/IResume";
 
@@ -28,11 +35,13 @@ const resumeValidations: ValidationRuleset<TResume> = {
     IdNumber: {
       displayName: displayName("شماره شناسنامه"),
       maxLength: maxLength(10),
+      numeric,
       required
     },
     NationalNo: {
       displayName: displayName("کد ملی"),
       maxLength: maxLength(10),
+      numeric,
       required
     },
     Gender: {
@@ -42,11 +51,13 @@ const resumeValidations: ValidationRuleset<TResume> = {
     Phone: {
       displayName: displayName("تلفن"),
       maxLength: maxLength(8),
+      numeric,
       required
     },
     Mobile: {
       displayName: displayName("موبایل"),
       maxLength: maxLength(10),
+      numeric,
       required
     },
     CityBorn: {
@@ -74,14 +85,18 @@ const resumeValidations: ValidationRuleset<TResume> = {
       maxLength: maxLength(300),
       required
     },
+    ProvinceId: {
+      displayName: displayName("استان"),
+      requiredDdl: requiredDdl(0)
+    },
     CityId: {
       displayName: displayName("شهر"),
-      maxLength: maxLength(50),
-      required
+      requiredDdl: requiredDdl(0)
     },
     PostCode: {
       displayName: displayName("کد پستی"),
       maxLength: maxLength(10),
+      numeric,
       required
     },
     FatherJob: {
@@ -94,6 +109,7 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     FatherPhone: {
       displayName: displayName("شماره تماس پدر"),
+      numeric,
       maxLength: maxLength(10)
     },
     MotherJob: {
@@ -108,21 +124,29 @@ const resumeValidations: ValidationRuleset<TResume> = {
     MotherPhone: {
       displayName: displayName("شماره تماس مادر"),
       maxLength: maxLength(10),
+      numeric,
       required
     },
     PartnerJob: {
       displayName: displayName("شغل همسر"),
       maxLength: maxLength(150),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.Marriage;
+      })
     },
     PartnerDegree: {
       displayName: displayName("مدرک همسر"),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.Marriage;
+      })
     },
     PartnerPhone: {
       displayName: displayName("شماره تماس همسر"),
       maxLength: maxLength(10),
-      required
+      numeric,
+      required: requiredIf((model: IResume) => {
+        return model.Marriage;
+      })
     },
     Reagent1: {
       displayName: displayName("معرف 1"),
@@ -138,6 +162,7 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     PhoneReagent1: {
       displayName: displayName("شماره تماس معرف 1"),
+      numeric,
       maxLength: maxLength(10)
     },
     AddressReagent1: {
@@ -159,6 +184,7 @@ const resumeValidations: ValidationRuleset<TResume> = {
     PhoneReagent2: {
       displayName: displayName("شماره تماس معرف 2"),
       maxLength: maxLength(10),
+      numeric,
       required
     },
     AddressReagent2: {
@@ -172,7 +198,9 @@ const resumeValidations: ValidationRuleset<TResume> = {
     AnotherCertificate: {
       displayName: displayName("نام ارگان"),
       maxLength: maxLength(50),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.HaveAnotherCertificate;
+      })
     },
     HavePublication: {
       displayName: displayName("سابقه تالیف"),
@@ -180,15 +208,23 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     NumberOfPublication: {
       displayName: displayName("تعداد تالیفات"),
-      required
+      numeric,
+      required: requiredIf((model: IResume) => {
+        return model.HavePublication;
+      })
     },
     HaveTeachingResume: {
       displayName: displayName("سابقه تدریس"),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.HavePublication;
+      })
     },
     NumberOfTeachingYear: {
       displayName: displayName("تعداد سال سابقه تدریس"),
-      required
+      numeric,
+      required: requiredIf((model: IResume) => {
+        return model.HaveTeachingResume;
+      })
     },
     TeachingOrPublishingRequest1: {
       displayName: displayName("تقاضای تدریس یا تالیف 1"),
@@ -196,16 +232,22 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     MaghtaRequest1: {
       displayName: displayName("پایه تقاضای 1"),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.TeachingOrPublishingRequest1;
+      })
     },
     KindRequest1: {
       displayName: displayName("نوع تقاضای 1"),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.TeachingOrPublishingRequest1;
+      })
     },
     LessonNameRequest1: {
       displayName: displayName("درس تقاضای 1"),
       maxLength: maxLength(50),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.TeachingOrPublishingRequest1;
+      })
     },
     TeachingOrPublishingRequest2: {
       displayName: displayName("تقاضای تدریس یا تالیف 2"),
@@ -213,16 +255,22 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     MaghtaRequest2: {
       displayName: displayName("پایه تقاضای 2"),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.TeachingOrPublishingRequest2;
+      })
     },
     KindRequest2: {
       displayName: displayName("نوع تقاضای 2"),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.TeachingOrPublishingRequest2;
+      })
     },
     LessonNameRequest2: {
       displayName: displayName("درس تقاضای 2"),
       maxLength: maxLength(50),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.TeachingOrPublishingRequest2;
+      })
     },
     RequestForAdvice: {
       displayName: displayName("درخواست برای مشاوره"),
@@ -230,7 +278,9 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     MaghtaAdvice: {
       displayName: displayName("پایه مشاوره"),
-      required
+      required: requiredIf((model: IResume) => {
+        return model.RequestForAdvice;
+      })
     },
     Description: {
       displayName: displayName("توضیحات"),

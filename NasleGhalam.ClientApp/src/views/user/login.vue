@@ -24,6 +24,7 @@
                 type="password"
                 placeholder="رمز عبور"
                 color="white"
+                @keyup.enter="login"
                 :before="[
                   {
                     icon: 'lock',
@@ -31,31 +32,12 @@
                 ]"
               />
             </div>
-            <!-- <base-input
-              :model="$v.loginUser.Username1"
-              class="text-bold q-title col-xl-8 col-lg-9 col-md-10 col-sm-12"
-              :before="[
-                {
-                  icon: 'person',
-                }
-              ]"
-            />
-            <base-input
-              :model="$v.loginUser.Password1"
-              type="password"
-              class="text-bold q-title col-xl-8 col-lg-9 col-md-10 col-sm-12"
-              @keyup.enter="login"
-              :before="[
-                {
-                  icon: 'lock',
-                }
-              ]"
-            />-->
             <div class="col-12">
-              <button class="q-mr-sm" @click="login">
+              <button class="q-mr-sm btn btn-login" @click="login">
                 ورود
                 <q-icon name="keyboard_backspace"></q-icon>
               </button>
+              <router-link to="/resume" class="q-mr-sm btn btn-contribute">همکاری با ما</router-link>
             </div>
           </section>
         </div>
@@ -63,27 +45,6 @@
           <span></span>
         </div>
       </section>
-      <!-- <div class="row justify-center">
-        <q-card class="col-lg-4 col-md-6 col-sm-8">
-          <q-card-title class="text-center text-bold text-white shadow-10 card-header">آنلاین خوان</q-card-title>
-          <q-card-separator/>
-          <q-card-main>
-            <base-input :model="$v.loginUser.Username1" class="text-bold"/>
-            <base-input
-              :model="$v.loginUser.Password1"
-              type="password"
-              class="text-bold"
-              @keyup.enter="login"
-            />
-            <div class="text-center">
-              <q-btn color="light-blue-10" class="q-mr-sm" outline @click="login">
-                ورود
-                <q-icon name="keyboard_backspace"></q-icon>
-              </q-btn>
-            </div>
-          </q-card-main>
-        </q-card>
-      </div>-->
     </q-page-container>
   </q-layout>
 </template>
@@ -148,15 +109,25 @@ export default class UserLoginVue extends Vue {
   font-size: 25px;
 }
 
-.login-layout .main-input button {
+.login-layout .main-input .btn {
   height: 80px;
   width: 170px;
   border-radius: 20px;
   border: none;
   font-weight: bold;
   font-size: 25px;
+}
+
+.btn-login {
   background-color: #ee6c1e;
   color: #fffbf7;
+}
+
+.btn-contribute {
+  background-color: green;
+  color: #fffbf7;
+  padding: 21px;
+  text-decoration: none;
 }
 
 .login-layout .main-pic {
@@ -184,24 +155,4 @@ export default class UserLoginVue extends Vue {
   border: none;
   background-color: #0072bb;
 }
-/* .login-layout {
-  background-image: url("../../assets/img/bg.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.login-layout .q-card {
-  opacity: 0.92;
-  background-color: #34495e;
-  border-radius: 10px;
-  border: 1px solid #111866;
-}
-.login-layout .q-card .card-header {
-  background-color: #111866;
-}
-
-.login-layout .q-card .q-card-main {
-  background-color: white;
-} */
 </style>

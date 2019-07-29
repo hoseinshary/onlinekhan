@@ -23,6 +23,12 @@ const Router = new VueRouter({
 });
 
 Router.beforeEach((to, from, next) => {
+  if (to.fullPath == "/resume") {
+    next();
+    document.title = "رزومه";
+    return;
+  }
+
   var authList = LocalStorage.get.item("authList");
   var subMenuList = LocalStorage.get.item("subMenuList");
 

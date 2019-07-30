@@ -44,6 +44,7 @@ export default interface IResume {
   JobReagent2: string;
   PhoneReagent2: string;
   AddressReagent2: string;
+  HaveEducationCertificate: boolean;
   HaveAnotherCertificate: boolean;
   AnotherCertificate: string;
   HavePublication: boolean;
@@ -86,13 +87,13 @@ export const DefaultResume: IResume = {
   CityId: 0,
   PostCode: "",
   FatherJob: "",
-  FatherDegree: Degree.Karshenasi,
+  FatherDegree: Degree["کارشناسی"],
   FatherPhone: "",
   MotherJob: "",
-  MotherDegree: Degree.Karshenasi,
+  MotherDegree: Degree["کارشناسی"],
   MotherPhone: "",
   PartnerJob: "",
-  PartnerDegree: Degree.Karshenasi,
+  PartnerDegree: Degree["کارشناسی"],
   PartnerPhone: "",
   Reagent1: "",
   RelationReagent1: "",
@@ -104,6 +105,7 @@ export const DefaultResume: IResume = {
   JobReagent2: "",
   PhoneReagent2: "",
   AddressReagent2: "",
+  HaveEducationCertificate: true,
   HaveAnotherCertificate: false,
   AnotherCertificate: "",
   HavePublication: false,
@@ -111,15 +113,15 @@ export const DefaultResume: IResume = {
   HaveTeachingResume: false,
   NumberOfTeachingYear: 0,
   TeachingOrPublishingRequest1: false,
-  MaghtaRequest1: Maghta.Dah,
-  KindRequest1: KindRequest.Both,
+  MaghtaRequest1: Maghta["ده"],
+  KindRequest1: KindRequest["هر دو"],
   LessonNameRequest1: "",
   TeachingOrPublishingRequest2: false,
-  MaghtaRequest2: Maghta.Dah,
-  KindRequest2: KindRequest.Both,
+  MaghtaRequest2: Maghta["ده"],
+  KindRequest2: KindRequest["هر دو"],
   LessonNameRequest2: "",
   RequestForAdvice: false,
-  MaghtaAdvice: Maghta.Dah,
+  MaghtaAdvice: Maghta["ده"],
   Description: "",
   Publications: [],
   EducationCertificates: [],
@@ -139,7 +141,7 @@ export const DefaultPublication: IPublication = {
   Publisher: "",
   Grade: "",
   LessonName: "",
-  KindRequest: KindRequest.Both,
+  KindRequest: KindRequest["هر دو"],
   Year: "",
   PublishedOrEdit: false
 };
@@ -155,11 +157,11 @@ export interface IEducationCertificate {
 }
 
 export const DefaultEducationCertificate: IEducationCertificate = {
-  DegreeCertificate: DegreeCertificate.Karshenasi,
+  DegreeCertificate: DegreeCertificate["کارشناسی"],
   Subject: "",
   EducationCenterName: "",
   CityName: "",
-  TypeEducationCenter: TypeEducationCenter.Azad,
+  TypeEducationCenter: TypeEducationCenter["آزاد"],
   Year: "",
   Score: 0
 };

@@ -2,6 +2,7 @@
   <fieldset class="col-12 q-my-sm">
     <legend>مدارک تحصیلی</legend>
     <section class="row gutter-sm">
+      <p class="col-12 q-pt-lg q-pl-sm text-negative text-weight-bold">همه مدارک تحصیلی از دبیرستان به بعد پر شود.</p>
       <base-select
         :model="$v.educationCertificate.DegreeCertificate"
         :options="degreeCertificateDdl"

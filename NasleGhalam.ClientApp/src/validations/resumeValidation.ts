@@ -192,6 +192,9 @@ const resumeValidations: ValidationRuleset<TResume> = {
       displayName: displayName("آدرس معرف 2"),
       maxLength: maxLength(300)
     },
+    HaveEducationCertificate: {
+      displayName: displayName("گزینش آموزش و پرورش")
+    },
     HaveAnotherCertificate: {
       displayName: displayName("گزینش از ارگان دیگر")
     },
@@ -232,22 +235,16 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     MaghtaRequest1: {
       displayName: displayName("پایه تقاضای 1"),
-      required: requiredIf((model: IResume) => {
-        return model.TeachingOrPublishingRequest1;
-      })
+      required
     },
     KindRequest1: {
       displayName: displayName("نوع تقاضای 1"),
-      required: requiredIf((model: IResume) => {
-        return model.TeachingOrPublishingRequest1;
-      })
+      required
     },
     LessonNameRequest1: {
       displayName: displayName("درس تقاضای 1"),
       maxLength: maxLength(50),
-      required: requiredIf((model: IResume) => {
-        return model.TeachingOrPublishingRequest1;
-      })
+      required
     },
     TeachingOrPublishingRequest2: {
       displayName: displayName("تقاضای تدریس یا تالیف 2"),
@@ -255,22 +252,16 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     MaghtaRequest2: {
       displayName: displayName("پایه تقاضای 2"),
-      required: requiredIf((model: IResume) => {
-        return model.TeachingOrPublishingRequest2;
-      })
+      required
     },
     KindRequest2: {
       displayName: displayName("نوع تقاضای 2"),
-      required: requiredIf((model: IResume) => {
-        return model.TeachingOrPublishingRequest2;
-      })
+      required
     },
     LessonNameRequest2: {
       displayName: displayName("درس تقاضای 2"),
       maxLength: maxLength(50),
-      required: requiredIf((model: IResume) => {
-        return model.TeachingOrPublishingRequest2;
-      })
+      required
     },
     RequestForAdvice: {
       displayName: displayName("درخواست برای مشاوره"),

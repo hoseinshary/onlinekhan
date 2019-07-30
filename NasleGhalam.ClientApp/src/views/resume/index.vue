@@ -95,7 +95,7 @@
                   </section>
                 </fieldset>
 
-                <fieldset class="col-12 q-my-sm">
+                <!-- <fieldset class="col-12 q-my-sm">
                   <legend>معرف1</legend>
                   <section class="row gutter-sm">
                     <base-input :model="$v.resume.Reagent1" class="col-md-4" />
@@ -115,12 +115,22 @@
                     <base-input :model="$v.resume.PhoneReagent2" class="col-md-3" />
                     <base-input :model="$v.resume.AddressReagent2" class="col-md-9" />
                   </section>
-                </fieldset>
+                </fieldset>-->
 
                 <fieldset class="col-12 q-my-sm">
-                  <legend>گزینش از ارگان دیگر</legend>
+                  <legend>گزینش آموزش و پرورش</legend>
                   <section class="row gutter-sm">
-                    <base-field class="col-md-3" :model="$v.resume.HaveAnotherCertificate">
+                    <base-field class="col-md-3" :model="$v.resume.HaveEducationCertificate">
+                      <template slot-scope="data">
+                        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+                        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+                      </template>
+                    </base-field>
+                    <base-field
+                      v-show="!resume.HaveEducationCertificate"
+                      class="col-md-3"
+                      :model="$v.resume.HaveAnotherCertificate"
+                    >
                       <template slot-scope="data">
                         <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
                         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
@@ -177,27 +187,21 @@
                   <section class="row gutter-sm">
                     <base-field class="col-md-3" :model="$v.resume.TeachingOrPublishingRequest1">
                       <template slot-scope="data">
-                        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-                        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+                        <q-radio v-model="data.obj.$model" :val="false" label="تالیف" />
+                        <q-radio v-model="data.obj.$model" :val="true" label="تدریس" />
                       </template>
                     </base-field>
                     <base-select
-                      v-show="resume.TeachingOrPublishingRequest1"
                       :model="$v.resume.MaghtaRequest1"
                       :options="maghtaDdl"
                       class="col-md-3"
                     />
                     <base-select
-                      v-show="resume.TeachingOrPublishingRequest1"
                       :model="$v.resume.KindRequest1"
                       :options="kindRequestDdl"
                       class="col-md-3"
                     />
-                    <base-input
-                      v-show="resume.TeachingOrPublishingRequest1"
-                      :model="$v.resume.LessonNameRequest1"
-                      class="col-md-3"
-                    />
+                    <base-input :model="$v.resume.LessonNameRequest1" class="col-md-3" />
                   </section>
                 </fieldset>
 
@@ -206,27 +210,21 @@
                   <section class="row gutter-sm">
                     <base-field class="col-md-3" :model="$v.resume.TeachingOrPublishingRequest2">
                       <template slot-scope="data">
-                        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-                        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+                        <q-radio v-model="data.obj.$model" :val="false" label="تالیف" />
+                        <q-radio v-model="data.obj.$model" :val="true" label="تدریس" />
                       </template>
                     </base-field>
                     <base-select
-                      v-show="resume.TeachingOrPublishingRequest2"
                       :model="$v.resume.MaghtaRequest2"
                       :options="maghtaDdl"
                       class="col-md-3"
                     />
                     <base-select
-                      v-show="resume.TeachingOrPublishingRequest2"
                       :model="$v.resume.KindRequest2"
                       :options="kindRequestDdl"
                       class="col-md-3"
                     />
-                    <base-input
-                      v-show="resume.TeachingOrPublishingRequest2"
-                      :model="$v.resume.LessonNameRequest2"
-                      class="col-md-3"
-                    />
+                    <base-input :model="$v.resume.LessonNameRequest2" class="col-md-3" />
                   </section>
                 </fieldset>
 

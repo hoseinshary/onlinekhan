@@ -35,9 +35,14 @@ import ModalDelete from "src/Components/Modals/BaseModalDelete.vue";
 import BaseField from "src/Components/Forms/BaseField.vue";
 import BaseInput from "src/Components/Forms/BaseInput.vue";
 import BaseSelect from "src/Components/Forms/BaseSelect.vue";
+import BaseDatePicker from "src/Components/Forms/BaseDatePicker.vue";
 
 /* util js file */
 import util from "src/utilities";
+
+/* datetime picker */
+// https://talkhabi.github.io/vue-persian-datetime-picker
+import VuePersianDatetimePicker from "vue-persian-datetime-picker";
 
 // leave the export, even if you don't use it
 export default ({ app, router, Vue }) => {
@@ -73,6 +78,10 @@ export default ({ app, router, Vue }) => {
   Vue.component("base-field", BaseField);
   Vue.component("base-input", BaseInput);
   Vue.component("base-select", BaseSelect);
+  Vue.component("base-date-picker", BaseDatePicker);
+
+  /* datetime picker */
+  Vue.component("date-picker", VuePersianDatetimePicker);
 
   // register this.util
   Object.defineProperty(Vue.prototype, "$util", {

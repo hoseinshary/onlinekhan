@@ -22,8 +22,6 @@ namespace NasleGhalam.Common
         Both = 2
     }
 
-
-
     public enum Maghta
     {
         Dah = 0,

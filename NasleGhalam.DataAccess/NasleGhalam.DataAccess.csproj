@@ -105,6 +105,10 @@
     <Compile Include="Migrations\201907281507576_AddResume.Designer.cs">
       <DependentUpon>201907281507576_AddResume.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908031734388_UpdateMobileNumberLen.cs" />
+    <Compile Include="Migrations\201908031734388_UpdateMobileNumberLen.Designer.cs">
+      <DependentUpon>201908031734388_UpdateMobileNumberLen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -164,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907281507576_AddResume.resx">
       <DependentUpon>201907281507576_AddResume.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908031734388_UpdateMobileNumberLen.resx">
+      <DependentUpon>201908031734388_UpdateMobileNumberLen.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

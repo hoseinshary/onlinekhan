@@ -16,7 +16,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             Property(x => x.NationalNo).HasMaxLength(10);
             HasIndex(x => x.NationalNo).IsUnique().HasName("UK_User_NationalNo");
             Property(x => x.Phone).HasMaxLength(8);
-            Property(x => x.Mobile).HasMaxLength(10);
+            Property(x => x.Mobile).HasMaxLength(11);
 
             HasRequired(x => x.Role)
                 .WithMany(x => x.Users)

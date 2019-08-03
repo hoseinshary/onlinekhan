@@ -60,8 +60,8 @@ const userEditValidations: ValidationRuleset<TUser> = {
     },
     Mobile: {
       displayName: displayName("موبایل"),
-      maxLength: maxLength(10),
-      minLength: minLength(10),
+      maxLength: maxLength(11),
+      minLength: minLength(11),
       required,
       numeric
     },

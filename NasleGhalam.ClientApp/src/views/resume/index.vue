@@ -22,7 +22,7 @@
                   </template>
                 </base-field>
 
-                <base-input :model="$v.resume.Phone" class="col-md-3" />
+                <base-input :model="$v.resume.Phone" class="col-md-3" helper="به همراه کد استان" />
                 <base-input :model="$v.resume.Mobile" class="col-md-3" />
                 <base-input :model="$v.resume.CityBorn" class="col-md-3" />
                 <base-date-picker :model="$v.resume.Birthday" view="year" class="col-md-3" />

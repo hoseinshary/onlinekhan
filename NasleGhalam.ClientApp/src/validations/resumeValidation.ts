@@ -2,6 +2,7 @@ import {
   required,
   displayName,
   maxLength,
+  minLength,
   requiredDdl,
   numeric,
   requiredIf
@@ -54,13 +55,15 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     Phone: {
       displayName: displayName("تلفن"),
-      maxLength: maxLength(8),
+      maxLength: maxLength(11),
+      minLength: minLength(11),
       numeric,
       required
     },
     Mobile: {
       displayName: displayName("موبایل"),
-      maxLength: maxLength(10),
+      maxLength: maxLength(11),
+      minLength: minLength(11),
       numeric,
       required
     },
@@ -114,7 +117,8 @@ const resumeValidations: ValidationRuleset<TResume> = {
     FatherPhone: {
       displayName: displayName("شماره تماس پدر"),
       numeric,
-      maxLength: maxLength(10)
+      minLength: minLength(11),
+      maxLength: maxLength(11)
     },
     MotherJob: {
       displayName: displayName("شغل مادر"),
@@ -126,7 +130,8 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     MotherPhone: {
       displayName: displayName("شماره تماس مادر"),
-      maxLength: maxLength(10),
+      minLength: minLength(11),
+      maxLength: maxLength(11),
       numeric
     },
     PartnerJob: {
@@ -144,7 +149,8 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     PartnerPhone: {
       displayName: displayName("شماره تماس همسر"),
-      maxLength: maxLength(10),
+      minLength: minLength(11),
+      maxLength: maxLength(11),
       numeric,
       required: requiredIf((model: IResume) => {
         return model.Marriage;
@@ -165,7 +171,8 @@ const resumeValidations: ValidationRuleset<TResume> = {
     PhoneReagent1: {
       displayName: displayName("شماره تماس معرف 1"),
       numeric,
-      maxLength: maxLength(10)
+      minLength: minLength(11),
+      maxLength: maxLength(11)
     },
     AddressReagent1: {
       displayName: displayName("آدرس معرف 1"),
@@ -185,7 +192,8 @@ const resumeValidations: ValidationRuleset<TResume> = {
     },
     PhoneReagent2: {
       displayName: displayName("شماره تماس معرف 2"),
-      maxLength: maxLength(10),
+      minLength: minLength(11),
+      maxLength: maxLength(11),
       numeric
     },
     AddressReagent2: {

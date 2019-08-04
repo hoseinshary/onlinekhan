@@ -84,6 +84,10 @@
                 </div>
               </q-tree>
             </section>
+            <q-btn class="q-mr-sm float-right" @click="printTopic" color="primary">
+              چاپ مبحث
+              <q-icon name="print" />
+            </q-btn>
           </div>
         </section>
       </div>
@@ -102,6 +106,7 @@ import { vxm } from "src/store";
 import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
 import ITopic, { DefaultTopic } from "../../models/ITopic";
+import router from "src/router";
 
 @Component({
   components: {
@@ -215,10 +220,15 @@ export default class TopicVue extends Vue {
     this.lessonId = val;
     this.topicTree.setToFirstLevel = true;
   }
+
+  printTopic() {
+    this.topic.LessonId = this.lessonId;
+    router.push("/topic/printTopic");
+  }
   //#endregion
 
   //#region ### hooks ###
-  created() {
+  mounted() {
     this.topicStore.fillList();
     this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {

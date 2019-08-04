@@ -12,6 +12,7 @@ using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.QuestionGroup;
 using System.Drawing.Imaging;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.Office.Interop.Excel;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -176,7 +177,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     newQuestion.LookupId_RepeatnessType = 21;
                     newQuestion.InsertDateTime = DateTime.Now;
                     newQuestion.IsStandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
-                    newQuestion.AuthorName = dt.Rows[numberOfQ - 1]["نام طراح"].ToString();
+                    newQuestion.WriterId = 1;
                     newQuestion.UserId = questionGroupViewModel.UserId;
                     newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
                     newQuestion.IsActive = false;
@@ -188,8 +189,10 @@ namespace NasleGhalam.ServiceLayer.Services
 
                     var filename2 = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".docx";
                     target.SaveAs(filename2);
+
                     while (target.Windows[1].Panes[1].Pages.Count < 0) ;
-                    ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
+                    var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                    ImageUtility.SaveImageOfWord(bits,
                         SitePath.GetQuestionAbsPath(newQuestion.FileName) + ".png");
 
                     if (newQuestion.AnswerNumber != 0 )
@@ -357,7 +360,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 questionGroup.Questions.Remove(item);
                 _uow.MarkAsDeleted(item);
-                if (item.AnswerNumber != 0 || item.AnswerNumber != null)
+                if (item.AnswerNumber != 0 )
                 {
                     QuestionService.DeleteOptionsOfQuestion(item.FileName);
                 }

@@ -35,8 +35,53 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
       </template>
     </base-field>
+    <base-select :model="$v.assayCreate.Font" :options="fontDdl" class="col-md-4" />
+    <base-input :model="$v.assayCreate.FontSize" class="col-md-4" />
+    <base-field class="col-md-4" :model="$v.assayCreate.TwoPageInOne">
+      <template slot-scope="data">
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+      </template>
+    </base-field>
+
+    <base-field class="col-md-6" :model="$v.assayCreate.QuestionsRelocation">
+      <template slot-scope="data">
+        <q-checkbox v-model="data.obj.$model" />
+        <q-radio
+          v-show="data.obj.$model"
+          v-model="assayCreate.QuestionsRelocationMode"
+          :val="true"
+          label="در مبحث"
+        />
+        <q-radio
+          v-show="data.obj.$model"
+          v-model="assayCreate.QuestionsRelocationMode"
+          :val="false"
+          label="در درس"
+        />
+      </template>
+    </base-field>
+
+    <base-field class="col-md-6" :model="$v.assayCreate.HaveWhiteSpace">
+      <template slot-scope="data">
+        <q-checkbox v-model="data.obj.$model" />
+        <q-radio
+          v-show="data.obj.$model"
+          v-model="assayCreate.WhiteSpacePosition"
+          :val="true"
+          label="بغل"
+        />
+        <q-radio
+          v-show="data.obj.$model"
+          v-model="assayCreate.WhiteSpacePosition"
+          :val="false"
+          label="زیر"
+        />
+      </template>
+    </base-field>
+
     <div class="col-12">
-      <base-btn-save @click="assayStore.submitPreCreate" />
+      <base-btn-save @click="getAllQuestions" />
     </div>
   </section>
 </template>
@@ -46,6 +91,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { assayValidations } from "src/validations/assayValidation";
+import { Fonts } from "src/utilities/enumeration";
 
 @Component({
   validations: assayValidations
@@ -60,9 +106,27 @@ export default class AssayTabVue extends Vue {
   //#endregion
 
   //#region ### computed ###
+  get fontDdl() {
+    return Object.keys(Fonts)
+      .reduce((arr: Array<any>, key: string) => {
+        if (!arr.includes(key)) {
+          arr.push(Fonts[key]);
+        }
+        return arr;
+      }, [])
+      .map(x => ({
+        label: x,
+        value: Fonts[x]
+      }));
+  }
   //#endregion
 
-  //#region ### watch ###
+  //#region ### methods ###
+  getAllQuestions() {
+    this.assayStore.submitPreCreate().then(() => {
+      this.$emit("changeTab", "questionTab");
+    });
+  }
   //#endregion
 
   //#region ### hooks ###

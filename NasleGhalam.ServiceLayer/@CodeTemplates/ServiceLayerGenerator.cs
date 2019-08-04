@@ -6,103 +6,103 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.Assay;
+using NasleGhalam.ViewModels.Resume;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class AssayService
+	public class ResumeService
 	{
-		private const string Title = "آزمون";
+		private const string Title = "رزومه";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Assay> _assays;
+        private readonly IDbSet<Resume> _resumes;
        
-	    public AssayService(IUnitOfWork uow)
+	    public ResumeService(IUnitOfWork uow)
         {
             _uow = uow;
-            _assays = uow.Set<Assay>();
+            _resumes = uow.Set<Resume>();
         }
 
 		/// <summary>
-        /// گرفتن  آزمون با آی دی
+        /// گرفتن  رزومه با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public AssayViewModel GetById(int id)
+        public ResumeViewModel GetById(int id)
         {
-            return _assays
+            return _resumes
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<AssayViewModel>)
+                .Select(Mapper.Map<ResumeViewModel>)
                 .FirstOrDefault();
         }
 
 		/// <summary>
-        /// گرفتن همه آزمون ها
+        /// گرفتن همه رزومه ها
         /// </summary>
         /// <returns></returns>
-        public IList<AssayViewModel> GetAll()
+        public IList<ResumeViewModel> GetAll()
         {
-            return _assays
+            return _resumes
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<AssayViewModel>)
+                .Select(Mapper.Map<ResumeViewModel>)
                 .ToList();
         }
 
 		/// <summary>
-        /// ثبت آزمون
+        /// ثبت رزومه
         /// </summary>
-        /// <param name="assayViewModel"></param>
+        /// <param name="resumeViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(AssayCreateViewModel assayViewModel)
+        public ClientMessageResult Create(ResumeCreateViewModel resumeViewModel)
         {
-            var assay = Mapper.Map<Assay>(assayViewModel);
-            _assays.Add(assay);
+            var resume = Mapper.Map<Resume>(resumeViewModel);
+            _resumes.Add(resume);
 
 			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(assay.Id);
+                clientResult.Obj = GetById(resume.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// ویرایش آزمون
+        /// ویرایش رزومه
         /// </summary>
-        /// <param name="assayViewModel"></param>
+        /// <param name="resumeViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(AssayUpdateViewModel assayViewModel)
+        public ClientMessageResult Update(ResumeUpdateViewModel resumeViewModel)
         {
-            var assay = Mapper.Map<Assay>(assayViewModel);
-            _uow.MarkAsChanged(assay);
+            var resume = Mapper.Map<Resume>(resumeViewModel);
+            _uow.MarkAsChanged(resume);
 			
 			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(assay.Id);
+                clientResult.Obj = GetById(resume.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// حذف آزمون
+        /// حذف رزومه
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  assayViewModel = GetById(id);
-            if (assayViewModel == null)
+			var  resumeViewModel = GetById(id);
+            if (resumeViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var assay = Mapper.Map<Assay>(assayViewModel);
-            _uow.MarkAsDeleted(assay);
+            var resume = Mapper.Map<Resume>(resumeViewModel);
+            _uow.MarkAsDeleted(resume);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);

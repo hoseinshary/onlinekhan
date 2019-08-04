@@ -123,6 +123,8 @@ export default {
         return "کیبورد را انگلیسی نمایید";
       } else if (this.isNumeric) {
         return "فقط عدد وارد شود";
+      } else if (this.isMobile) {
+        return `(${this.displayName}) صحیح نمی باشد.`;
       } else if (this.model.required !== undefined && !this.model.required) {
         return `(${this.displayName}) خالی میباشد`;
       } else if (this.model.minLength !== undefined && !this.model.minLength) {
@@ -135,7 +137,13 @@ export default {
     keydown(e) {
       this.$emit("keydown", e);
 
-      if (this.isOnlyPersianChar || this.isNotPersianChar || this.isNumeric) {
+      if (
+        this.isOnlyPersianChar ||
+        this.isNotPersianChar ||
+        this.isNumeric 
+        // ||
+        // this.isMobile
+      ) {
         if (
           [46, 8, 9, 27, 13, 190, 32].includes(e.keyCode) || // {46:delete, 8:backspace, 9:tab, 27:escape, 13:enter, 110:decimal point, 190:period, 32:space}
           // Allow: Ctrl/cmd+A
@@ -178,7 +186,7 @@ export default {
       return 0;
     },
     /**
-     * get jmax value of model
+     * get max value of model
      */
     maxLen() {
       if (this.model && this.model.$params && this.model.$params.maxLength) {
@@ -207,6 +215,14 @@ export default {
      */
     isNumeric() {
       return this.model.numeric !== undefined && !this.model.numeric;
+    },
+    /**
+     * check if mobile validator assign to model
+     */
+    isMobile() {
+      return (
+        this.model.mobileValidator !== undefined && !this.model.mobileValidator
+      );
     }
   },
   /**

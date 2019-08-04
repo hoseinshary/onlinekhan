@@ -44,8 +44,9 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Lookup Lookup_AuthorType { get; set; }
 
-        public string AuthorName { get; set; }
+        public int WriterId { get; set; }
 
+        public Writer Writer { get; set; }
         public short ResponseSecond { get; set; }
         public int LookupId_AreaType { get; set; }
         public Lookup Lookup_AreaType { get; set; }

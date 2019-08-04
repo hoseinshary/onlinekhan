@@ -19,7 +19,7 @@ namespace NasleGhalam.WebApi.Controllers
             _cityService = cityService;
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.CityReadAccess)]
+        [HttpGet/*, CheckUserAccess(ActionBits.CityReadAccess,ActionBits.PublicAccess)*/]
         public IHttpActionResult GetAll()
         {
             return Ok(_cityService.GetAll());

@@ -203,7 +203,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
                 while (source.Windows[1].Panes[1].Pages.Count < 0) ;
-                ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
+                var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
                 SaveOptionsOfQuestions(source, target, question.FileName , question.AnswerNumber);
@@ -274,7 +275,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var filename3 = Encryption.Base64Encode( Encryption.Encrypt(answer+"-"+FileName));
             source.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) +".docx");
             while (source.Windows[1].Panes[1].Pages.Count < 0) ;
-            ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
+            var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+            ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i4].Range.Copy();
             target.Paragraphs[i1].Range.Paste();
@@ -290,8 +292,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
-            while (target.Windows[1].Panes[1].Pages.Count < 0) ;
-            ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
+            while (source.Windows[1].Panes[1].Pages.Count < 0) ;
+            bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+            ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i3].Range.Copy();
             target.Paragraphs[i1].Range.Paste();
@@ -307,8 +310,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
-            while (target.Windows[1].Panes[1].Pages.Count < 0) ;
-            ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
+            while (source.Windows[1].Panes[1].Pages.Count < 0) ;
+            bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+            ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
 
             source.Paragraphs[i2].Range.Copy();
             target.Paragraphs[i1].Range.Paste();
@@ -324,9 +328,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             filename3 = Encryption.Base64Encode(Encryption.Encrypt(((++answer) % 4) + "-" + FileName));
             target.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
-            while (target.Windows[1].Panes[1].Pages.Count < 0) ;
-            ImageUtility.SaveImageOfWord(target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
-
+            while (source.Windows[1].Panes[1].Pages.Count < 0) ;
+            bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+            ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
         }
 
 
@@ -430,7 +434,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             }
 
-            question.AuthorName = questionViewModel.AuthorName;
+            question.WriterId = questionViewModel.WriterId;
             question.Description = questionViewModel.Description;
             question.InsertDateTime = DateTime.Now;
             question.IsActive = questionViewModel.IsActive;
@@ -506,8 +510,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
                 while (source.Windows[1].Panes[1].Pages.Count < 0) ;
-                ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
-                    SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
+                var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(questionViewModel.FileName) + ".png");
+             
 
                 var target = app.Documents.Add();
                 SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
@@ -594,7 +599,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
             }
-            question.AuthorName = questionViewModel.AuthorName;
+            question.WriterId = questionViewModel.WriterId;
             question.Description = questionViewModel.Description;
             question.LookupId_AuthorType = questionViewModel.LookupId_AuthorType;
             question.LookupId_QuestionType = questionViewModel.LookupId_QuestionType;
@@ -640,8 +645,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
                 while (source.Windows[1].Panes[1].Pages.Count < 0) ;
-                ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
-                    SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
+                var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
                 SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
@@ -790,8 +795,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
                 while (source.Windows[1].Panes[1].Pages.Count < 0) ;
-                ImageUtility.SaveImageOfWord(source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits,
-                    SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
+                var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
                 SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);

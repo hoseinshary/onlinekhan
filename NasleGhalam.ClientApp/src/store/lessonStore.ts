@@ -284,6 +284,9 @@ export class LessonStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     this.SET_LESSON_RATIO(payload.educationGroup);
+    if (!this.lesson.LessonDepartmentId) {
+      this.lesson.LessonDepartmentId = 0;
+    }
     return axios
       .post(`${baseUrl}/Create`, this.lesson)
       .then((response: AxiosResponse<IMessageResult>) => {
@@ -311,6 +314,9 @@ export class LessonStore extends VuexModule {
 
     this.SET_LESSON_RATIO(educationGroup);
     this.lesson.Id = this._selectedId;
+    if (!this.lesson.LessonDepartmentId) {
+      this.lesson.LessonDepartmentId = 0;
+    }
     return axios
       .post(`${baseUrl}/Update/${this._selectedId}`, this.lesson)
       .then((response: AxiosResponse<IMessageResult>) => {

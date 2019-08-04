@@ -1,8 +1,10 @@
-﻿using System.Web.Http;
+﻿using System.Data.Entity.Infrastructure;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Assay;
+using NasleGhalam.WebApi.Extensions;
 
 
 namespace NasleGhalam.WebApi.Controllers
@@ -42,6 +44,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(AssayCreateViewModel assayViewModel)
         {
+            assayViewModel.UserId = Request.GetUserId();
             return Ok(_assayService.Create(assayViewModel));
         }
 
@@ -50,6 +53,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult GetAllQuestion(AssayCreateViewModel assayViewModel)
         {
+            assayViewModel.UserId = Request.GetUserId();
             return Ok(_assayService.GetAllQuestion(assayViewModel));
         }
 
@@ -58,6 +62,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(AssayCreateViewModel assayViewModel)
         {
+            assayViewModel.UserId = Request.GetUserId();
             return Ok(_assayService.Update(assayViewModel));
         }
 

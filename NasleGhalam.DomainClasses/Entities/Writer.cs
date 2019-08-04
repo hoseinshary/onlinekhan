@@ -13,5 +13,6 @@ namespace NasleGhalam.DomainClasses.Entities
         public User User { get; set; }
 
         public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
+        public ICollection<Question> Questions { get; set; }
     }
 }

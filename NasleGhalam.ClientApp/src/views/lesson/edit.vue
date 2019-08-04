@@ -21,23 +21,24 @@
     </div>
     <div class="col-md-8">
       <section class="row gutter-sm">
-        <base-input :model="$v.lesson.Name" class="col-md-6"/>
+        <base-input :model="$v.lesson.Name" class="col-md-6" />
         <base-select
           :model="$v.lesson.LookupId_Nezam"
           :options="lookupStore.topicNezamDdl"
           class="col-md-6"
         />
-        <base-input :model="$v.lesson.NumberOfJudges" class="col-md-6"/>
+        <base-input :model="$v.lesson.NumberOfJudges" class="col-md-6" />
         <base-field class="col-md-6" :model="$v.lesson.IsMain">
           <template slot-scope="data">
-            <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-            <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
+            <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+            <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
           </template>
         </base-field>
-         <base-select
+        <base-select
           :model="$v.lesson.LessonDepartmentId"
           :options="lessonDepartmentStore.ddl"
           class="col-md-6"
+          clearable
         />
 
         <q-slide-transition>
@@ -49,7 +50,7 @@
                 v-for="group in educationGroupByTickedEducationTreeIds"
                 :key="group.Id"
               >
-                <q-checkbox v-model="group.IsChecked" :label="group.Name"/>
+                <q-checkbox v-model="group.IsChecked" :label="group.Name" />
               </div>
             </div>
           </fieldset>

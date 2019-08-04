@@ -48,7 +48,7 @@ namespace NasleGhalam.ViewModels.User
         public string Phone { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-        [StringLength(maximumLength: 10, MinimumLength = 10, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Length")]
+        [StringLength(maximumLength: 11, MinimumLength = 11, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Length")]
         [RegularExpression("\\d+", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Numeric")]
         [Display(Name = "موبایل")]
         public string Mobile { get; set; }

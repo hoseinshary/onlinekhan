@@ -24,5 +24,6 @@ export const LESSON_USER_URL = "/api/lesson_User";
 export const LESSON_DEPARTMENT_URL = "/api/lessonDepartment";
 export const AXILLARY_BOOK_URL = "/api/axillaryBook";
 export const ASSAY_URL = "/api/assay";
+export const RESUME_URL = "/api/resume";
 
 export const UNIVERSITY_BRANCH_URL = "/api/universityBranch";

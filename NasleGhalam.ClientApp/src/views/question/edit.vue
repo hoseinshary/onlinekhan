@@ -55,19 +55,6 @@
       </q-slide-transition>
     </div>
 
-    <div class="col-md-3 col-sm-6" v-if="showElement('TopicIds')">
-      <q-input v-model="topicFilter2" float-label="جستجوی مبحث 2" clearable />
-      <q-tree
-        :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
-        :ticked.sync="question.TopicIds"
-        :filter="topicFilter2"
-        tick-strategy="leaf"
-        color="primary"
-        accordion
-        node-key="Id"
-      />
-    </div>
-
     <div class="col-md-6 col-sm-12">
       <section class="row gutter-md">
         <q-field class="col-sm-4">
@@ -138,10 +125,12 @@
           class="col-md-4"
           filter
         />
-        <base-input
-          v-if="showElement('AuthorName')"
-          :model="$v.question.AuthorName"
+          <base-select
+          v-if="showElement('WriterId')"
+          :model="$v.question.WriterId"
+          :options="writerStore.ddl"
           class="col-md-4"
+          filter
         />
         <base-select
           v-if="showElement('LookupId_AreaType')"
@@ -161,6 +150,19 @@
           class="col-12"
         />
       </section>
+    </div>
+
+     <div class="col-md-3 col-sm-6" v-if="showElement('TopicIds')">
+      <q-input v-model="topicFilter2" float-label="جستجوی مبحث 2" clearable />
+      <q-tree
+        :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
+        :ticked.sync="question.TopicIds"
+        :filter="topicFilter2"
+        tick-strategy="leaf"
+        color="primary"
+        accordion
+        node-key="Id"
+      />
     </div>
   </base-modal-edit>
 </template>
@@ -191,6 +193,7 @@ export default class QuestionEditVue extends Vue {
   topicStore = vxm.topicStore;
   lessonStore = vxm.lessonStore;
   question = vxm.questionStore.question;
+  writerStore = vxm.writerStore;
   topicFilter = "";
   topicFilter2 = "";
   questionAccessElement = {
@@ -214,7 +217,7 @@ export default class QuestionEditVue extends Vue {
       canEditTopicProp: false,
       canEditImportProp: false
     },
-    AuthorName: {
+    WriterId: {
       canEditAdminProp: true,
       canEditTopicProp: false,
       canEditImportProp: true
@@ -296,6 +299,7 @@ export default class QuestionEditVue extends Vue {
     this.lookupStore.fillRepeatnessType();
     this.lookupStore.fillAuthorType();
     this.lookupStore.fillAreaType();
+    this.writerStore.fillList();
   }
   //#endregion
 

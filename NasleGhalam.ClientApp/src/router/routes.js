@@ -4,6 +4,10 @@ export default [
     component: () => import("src/views/user/login.vue")
   },
   {
+    path: "/resume",
+    component: () => import("src/views/resume/index.vue")
+  },
+  {
     path: "/",
     component: () => import("layouts/default.vue"),
     children: [
@@ -42,6 +46,10 @@ export default [
       {
         path: "/topic",
         component: () => import("src/views/topic/index.vue")
+      },
+      {
+        path: "/topic/printTopic",
+        component: () => import("src/views/topic/printTopic.vue")
       },
       {
         path: "/educationBook",

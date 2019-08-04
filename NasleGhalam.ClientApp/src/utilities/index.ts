@@ -309,6 +309,22 @@ function visitNode(node: any, hashMap: object, array: Array<any>) {
   }
 }
 
+function enumToArray(enumObject: any) {
+  return Object.keys(enumObject).reduce((arr: Array<any>, key: string) => {
+    if (!arr.includes(key)) {
+      arr.push(enumObject[key]);
+    }
+    return arr;
+  }, []);
+}
+
+function enumToDdl(enumObject: any) {
+  return enumToArray(enumObject).map(x => ({
+    label: x,
+    value: enumObject[x]
+  }));
+}
+
 /**
  * export data
  */
@@ -328,5 +344,6 @@ export default {
   getAccess,
   listToTree,
   searchTreeArray,
-  treeToList
+  treeToList,
+  enumToDdl
 };

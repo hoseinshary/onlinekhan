@@ -1,3 +1,6 @@
+import IQuestion from "./IQuestion";
+import { Fonts } from "src/utilities/enumeration";
+
 // interface IAssay {
 //   LessonId?: number;
 //   LessonName?: string;
@@ -58,10 +61,12 @@ export class AssayLesson {
   CountOfEasy: number;
   CountOfMedium: number;
   CountOfHard: number;
+  LessonOrder: number;
   get CountOfQuestions(): number {
     return this.CountOfEasy + this.CountOfMedium + this.CountOfHard;
   }
   Topics: Array<AssayTopic>;
+  Questions: Array<IQuestion>;
   /**
    * constructor
    */
@@ -72,7 +77,9 @@ export class AssayLesson {
     this.CountOfEasy = 0;
     this.CountOfMedium = 0;
     this.CountOfHard = 0;
+    this.LessonOrder = 0;
     this.Topics = [];
+    this.Questions = [];
   }
 }
 
@@ -86,6 +93,13 @@ export default class AssayCreate {
   IsOnline: boolean;
   RandomQuestion: boolean;
   RandomOptions: boolean;
+  QuestionsRelocation: boolean;
+  QuestionsRelocationMode: boolean;
+  FontSize: number;
+  Font: Fonts;
+  TwoPageInOne: boolean;
+  HaveWhiteSpace: boolean;
+  WhiteSpacePosition: boolean;
   Lessons: Array<AssayLesson>;
 
   /**
@@ -101,6 +115,13 @@ export default class AssayCreate {
     this.IsOnline = false;
     this.RandomOptions = false;
     this.RandomQuestion = false;
+    this.QuestionsRelocation = false;
+    this.QuestionsRelocationMode = false;
+    this.FontSize = 11;
+    this.Font = Fonts.BNazanin;
+    this.TwoPageInOne = false;
+    this.HaveWhiteSpace = false;
+    this.WhiteSpacePosition = false;
     this.Lessons = [];
   }
   // constructor(obj?: IAssay) {

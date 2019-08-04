@@ -18,7 +18,7 @@
     />
     <base-select
       :model="$v.student.User.CityId"
-      :options="cityStore.cityByProvinceIdDdl(student.User.ProvinceId)"
+      :options="cityStore.ddlByProvinceId(student.User.ProvinceId)"
       class="col-sm-6 col-md-4"
       clearable
       ref="cityId"

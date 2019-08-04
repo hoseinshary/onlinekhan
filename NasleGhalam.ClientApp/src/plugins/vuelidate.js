@@ -10,7 +10,8 @@ import {
   minValue,
   maxValue,
   between,
-  sameAs
+  sameAs,
+  requiredIf
 } from "vuelidate/lib/validators";
 
 // leave the export, even if you don't use it
@@ -29,7 +30,7 @@ const displayName = param =>
     value => true
   );
 
-// add requried validator for ddl
+// add required validator for ddl
 const requiredDdl = invalidValue =>
   helpers.withParams(
     {
@@ -59,6 +60,19 @@ const notPersianChar = () =>
     value => !helpers.req(value) || /[^=^[\u0600-\u06FF\s]+$]*/.test(value)
   );
 
+const mobileValidator = () =>
+  helpers.withParams(
+    {
+      type: "mobileValidator"
+    },
+    value => {
+      console.log(value);
+      return (
+        /*!helpers.req(value) || */ value.length == 11 && value.startsWith("09")
+      );
+    }
+  );
+
 // export
 export {
   displayName,
@@ -72,5 +86,7 @@ export {
   sameAs,
   requiredDdl,
   onlyPersianChar,
-  notPersianChar
+  notPersianChar,
+  requiredIf,
+  mobileValidator
 };

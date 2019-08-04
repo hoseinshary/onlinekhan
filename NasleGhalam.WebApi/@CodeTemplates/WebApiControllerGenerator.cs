@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Assay;
+using NasleGhalam.ViewModels.Resume;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,51 +12,51 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class AssayController : ApiController
+	public class ResumeController : ApiController
 	{
-        private readonly AssayService _assayService;
-		public AssayController(AssayService assayService)
+        private readonly ResumeService _resumeService;
+		public ResumeController(ResumeService resumeService)
         {
-            _assayService = assayService;
+            _resumeService = resumeService;
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.AssayReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.ResumeReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_assayService.GetAll());
+            return Ok(_resumeService.GetAll());
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.AssayReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.ResumeReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var assay = _assayService.GetById(id);
-            if (assay == null)
+            var resume = _resumeService.GetById(id);
+            if (resume == null)
             {
                 return NotFound();
             }
-            return Ok(assay);
+            return Ok(resume);
         }
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.AssayCreateAccess)]
+        [CheckUserAccess(ActionBits.ResumeCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(AssayCreateViewModel assayViewModel)
+        public IHttpActionResult Create(ResumeCreateViewModel resumeViewModel)
         {
-            return Ok(_assayService.Create(assayViewModel));
+            return Ok(_resumeService.Create(resumeViewModel));
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.AssayUpdateAccess)]
+        [CheckUserAccess(ActionBits.ResumeUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(AssayUpdateViewModel assayViewModel)
+        public IHttpActionResult Update(ResumeUpdateViewModel resumeViewModel)
         {
-            return Ok(_assayService.Update(assayViewModel));
+            return Ok(_resumeService.Update(resumeViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.AssayDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.ResumeDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_assayService.Delete(id));
+            return Ok(_resumeService.Delete(id));
         }
 	}
 }

@@ -95,7 +95,12 @@
         class="col-md-4"
         filter
       />
-      <base-input :model="$v.question.AuthorName" class="col-md-4"/>
+      <base-select
+        :model="$v.question.WriterId"
+        :options="writerStore.ddl"
+        class="col-md-4"
+        filter
+      />
       <base-select
         :model="$v.question.LookupId_AreaType"
         :options="lookupStore.areaTypeDdl"
@@ -130,6 +135,7 @@ export default class QuestionCreateVue extends Vue {
   tagStore = vxm.tagStore;
   topicStore = vxm.topicStore;
   question = vxm.questionStore.question;
+  writerStore = vxm.writerStore;
   topicFilter = "";
   //#endregion
 
@@ -153,6 +159,7 @@ export default class QuestionCreateVue extends Vue {
     this.lookupStore.fillRepeatnessType();
     this.lookupStore.fillAuthorType();
     this.lookupStore.fillAreaType();
+    this.writerStore.fillList();
   }
   //#endregion
 

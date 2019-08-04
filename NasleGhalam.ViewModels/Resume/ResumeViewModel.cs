@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using NasleGhalam.Common;
+using NasleGhalam.ViewModels.City;
 
 namespace NasleGhalam.ViewModels.Resume
 {
@@ -21,8 +22,10 @@ namespace NasleGhalam.ViewModels.Resume
         public string Branch { get; set; }
 
 
-        [Display(Name = "تاریخ ساخت")]
+        [Display(Name = "زمان ثبت")]
         public DateTime CreationDateTime { get; set; }
+
+        public string PCreationDateTime => CreationDateTime.ToPersianDateTime();
 
 
         [Display(Name = "نام")]
@@ -48,6 +51,8 @@ namespace NasleGhalam.ViewModels.Resume
         [Display(Name = "جنسیت")]
         public bool Gender { get; set; }
 
+        public string GenderName => Gender ? "مرد" : "زن";
+
 
         [Display(Name = "تلفن")]
         public string Phone { get; set; }
@@ -63,6 +68,8 @@ namespace NasleGhalam.ViewModels.Resume
 
         [Display(Name = "تاریخ تولد")]
         public DateTime Birthday { get; set; }
+
+        public string PBirthday => Birthday.ToPersianDate();
 
 
         [Display(Name = "وضعیت تاهل")]
@@ -238,5 +245,9 @@ namespace NasleGhalam.ViewModels.Resume
 
         [Display(Name = "سابقه تدریس")]
         public List<TeachingResumeViewModel> TeachingResumes { get; set; }
+
+        public CityViewModel City { get; set; }
+
+        public int ProvinceId { get; set; }
     }
 }

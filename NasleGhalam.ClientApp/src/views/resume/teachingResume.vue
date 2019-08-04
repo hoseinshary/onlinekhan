@@ -9,7 +9,11 @@
       <base-input :model="$v.teachingResume.EndYear" class="col-md-3" />
 
       <div class="col-3">
-        <base-btn-create label="ایجاد" @click="resumeStore.addTeachingResume" />
+        <base-btn-create
+          v-if="showCreateBtnProp"
+          label="ایجاد"
+          @click="resumeStore.addTeachingResume"
+        />
       </div>
 
       <div class="col-12">
@@ -39,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component, Watch, Prop } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { teachingResumeValidations } from "src/validations/ResumeValidation";
@@ -50,6 +54,10 @@ import { KindRequest } from "../../utilities/enumeration";
 })
 export default class TeachingResumeVue extends Vue {
   $v: any;
+
+  //#region ### props ###
+  @Prop({ type: Boolean, default: false }) showCreateBtnProp;
+  //#endregion
 
   //#region ### data ###
   resumeStore = vxm.resumeStore;

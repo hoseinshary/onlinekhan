@@ -23,7 +23,7 @@ const Router = new VueRouter({
 });
 
 Router.beforeEach((to, from, next) => {
-  if (to.fullPath == "/resume") {
+  if (to.fullPath == "/resume/registration") {
     next();
     document.title = "رزومه";
     return;

@@ -4,8 +4,8 @@ export default [
     component: () => import("src/views/user/login.vue")
   },
   {
-    path: "/resume",
-    component: () => import("src/views/resume/index.vue")
+    path: "/resume/registration",
+    component: () => import("src/views/resume/registration.vue")
   },
   {
     path: "/",
@@ -102,6 +102,10 @@ export default [
       {
         path: "/assay",
         component: () => import("src/views/assay/index.vue")
+      },
+      {
+        path: "/resume",
+        component: () => import("src/views/resume/index.vue")
       }
     ]
   },

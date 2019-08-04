@@ -24,10 +24,12 @@ import utilities from "src/utilities";
 
 @Module({ namespacedPath: "resumeStore/" })
 export class ResumeStore extends VuexModule {
+  openModal: { detail: boolean };
   resume: IResume;
   publication: IPublication;
   educationCertificate: IEducationCertificate;
   teachingResume: ITeachingResume;
+  private _resumeList: Array<IResume>;
 
   private _indexVue: Vue;
   private _publicationVue: Vue;
@@ -43,6 +45,10 @@ export class ResumeStore extends VuexModule {
     this.publication = util.cloneObject(DefaultPublication);
     this.educationCertificate = util.cloneObject(DefaultEducationCertificate);
     this.teachingResume = util.cloneObject(DefaultTeachingResume);
+    this._resumeList = [];
+    this.openModal = {
+      detail: false
+    };
   }
 
   //#region ### getters ###
@@ -52,6 +58,10 @@ export class ResumeStore extends VuexModule {
 
   get recordName() {
     return this.resume.Name || "";
+  }
+
+  get gridData() {
+    return this._resumeList;
   }
   //#endregion
 
@@ -107,9 +117,37 @@ export class ResumeStore extends VuexModule {
       vm.$v.$reset();
     }
   }
+
+  @mutation
+  private SET_LIST(list: Array<IResume>) {
+    this._resumeList = list;
+  }
+
+  @mutation
+  OPEN_MODAL_DETAIL(open: boolean) {
+    this.openModal.detail = open;
+  }
   //#endregion
 
   //#region ### actions ###
+  @action()
+  async getById(id: number) {
+    return axios
+      .get(`${baseUrl}/GetById/${id}`)
+      .then((response: AxiosResponse<IResume>) => {
+        util.mapObject(response.data, this.resume);
+      });
+  }
+
+  @action()
+  async fillList() {
+    return axios
+      .get(`${baseUrl}/GetAll`)
+      .then((response: AxiosResponse<Array<IResume>>) => {
+        this.SET_LIST(response.data);
+      });
+  }
+
   @action({ mode: "raw" })
   async validateForm(payload: { vm: any; model: any }) {
     return new Promise(resolve => {

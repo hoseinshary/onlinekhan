@@ -78,6 +78,11 @@ const resumeValidations: ValidationRuleset<TResume> = {
       maxLength: maxLength(50),
       required
     },
+    PBirthday: {
+      displayName: displayName("تاریخ تولد"),
+      maxLength: maxLength(50),
+      required
+    },
     Marriage: {
       displayName: displayName("وضعیت تاهل"),
       maxLength: maxLength(50),

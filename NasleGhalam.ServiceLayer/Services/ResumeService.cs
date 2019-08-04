@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -30,6 +29,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public ResumeViewModel GetById(int id)
         {
             return _resumes
+                .Include(current => current.City)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -44,6 +44,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<ResumeViewModel> GetAll()
         {
             return _resumes
+                .Include(current => current.City)
+                .OrderByDescending(current => current.CreationDateTime)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<ResumeViewModel>)
@@ -70,7 +72,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return clientResult;
         }
 
-    
+
 
         /// <summary>
         /// حذف رزومه

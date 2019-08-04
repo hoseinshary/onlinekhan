@@ -37,7 +37,7 @@
                 ورود
                 <q-icon name="keyboard_backspace"></q-icon>
               </button>
-              <router-link to="/resume" class="q-mr-sm btn btn-contribute">همکاری با ما</router-link>
+              <router-link to="/resume/registration" class="q-mr-sm btn btn-contribute">همکاری با ما</router-link>
             </div>
           </section>
         </div>

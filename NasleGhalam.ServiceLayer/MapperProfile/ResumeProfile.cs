@@ -24,7 +24,9 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
                 .ForMember(dst => dst.EducationCertificates,
                     opt => opt.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<EducationCertificateViewModel>>(src.EducationCertificateJson)))
                 .ForMember(dst => dst.Publications,
-                    opt => opt.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<PublicationViewModel>>(src.PublicationJson)));
+                    opt => opt.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<PublicationViewModel>>(src.PublicationJson)))
+                .ForPath(dst => dst.ProvinceId, opt => opt.MapFrom(src => src.City.ProvinceId));
+
         }
     }
 }

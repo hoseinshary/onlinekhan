@@ -2,7 +2,9 @@
   <fieldset class="col-12 q-my-sm">
     <legend>مدارک تحصیلی</legend>
     <section class="row gutter-sm">
-      <p class="col-12 q-pt-lg q-pl-sm text-negative text-weight-bold">همه مدارک تحصیلی از دبیرستان به بعد پر شود.</p>
+      <p
+        class="col-12 q-pt-lg q-pl-sm text-negative text-weight-bold"
+      >همه مدارک تحصیلی از دبیرستان به بعد پر شود.</p>
       <base-select
         :model="$v.educationCertificate.DegreeCertificate"
         :options="degreeCertificateDdl"
@@ -20,7 +22,11 @@
       <base-input :model="$v.educationCertificate.Score" class="col-md-3" />
 
       <div class="col-3">
-        <base-btn-create label="ایجاد" @click="resumeStore.addEducationCertificate" />
+        <base-btn-create
+          v-if="showCreateBtnProp"
+          label="ایجاد"
+          @click="resumeStore.addEducationCertificate"
+        />
       </div>
 
       <div class="col-12">
@@ -54,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component, Watch, Prop } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { educationCertificateValidations } from "src/validations/ResumeValidation";
@@ -69,6 +75,10 @@ import {
 })
 export default class EducationCertificateVue extends Vue {
   $v: any;
+
+  //#region ### props ###
+  @Prop({ type: Boolean, default: false }) showCreateBtnProp;
+  //#endregion
 
   //#region ### data ###
   resumeStore = vxm.resumeStore;

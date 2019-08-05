@@ -19,6 +19,7 @@ export default interface IResume {
   Mobile: string;
   CityBorn: string;
   Birthday: string;
+  PBirthday: string;
   Marriage: boolean;
   Religion: string;
   Address: string;
@@ -80,6 +81,7 @@ export const DefaultResume: IResume = {
   Mobile: "",
   CityBorn: "",
   Birthday: "",
+  PBirthday: "",
   Marriage: false,
   Religion: "",
   Address: "",

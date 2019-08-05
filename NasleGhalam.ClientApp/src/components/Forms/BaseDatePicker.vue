@@ -23,7 +23,13 @@
       :invertedLight="invertedLight"
     />
 
-    <date-picker v-model="model.$model" :view="view" :format="format" :element="uid" />
+    <date-picker
+      v-model="model.$model"
+      :view="view"
+      :format="format"
+      :element="uid"
+      :append-to="appendTo"
+    />
   </q-field>
 </template>
 
@@ -42,6 +48,7 @@ export default {
     },
     type: String,
     helper: String,
+    appendTo: String,
     readonly: Boolean,
     clearable: Boolean,
     maxHeight: Number,
@@ -65,7 +72,7 @@ export default {
    */
   data() {
     return {
-      uid: uid()
+      uid: "dateId1" + uid()
     };
   },
   methods: {

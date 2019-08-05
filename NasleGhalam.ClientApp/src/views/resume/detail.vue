@@ -22,7 +22,7 @@
     <base-input :model="$v.resume.Phone" class="col-md-3" helper="به همراه کد استان" />
     <base-input :model="$v.resume.Mobile" class="col-md-3" />
     <base-input :model="$v.resume.CityBorn" class="col-md-3" />
-    <base-date-picker :model="$v.resume.PBirthday" view="year" class="col-md-3" />
+    <base-input :model="$v.resume.PBirthday" class="col-md-3" />
     <base-field class="col-md-3" :model="$v.resume.Marriage">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="مجرد" />
@@ -217,7 +217,7 @@
 
     <base-input :model="$v.resume.Description" class="col-12" />
     <education-certificate></education-certificate>
-    
+
     <template slot="footer">
       <base-btn-back @click="resumeStore.OPEN_MODAL_DETAIL(false)"></base-btn-back>
     </template>

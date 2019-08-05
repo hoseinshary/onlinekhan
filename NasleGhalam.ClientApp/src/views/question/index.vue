@@ -85,6 +85,7 @@
             <div v-else>{{data.row.Context}}</div>
           </template>
           <template slot="Id" slot-scope="data">
+            <a :href="data.row.QuestionWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
             <q-btn
               v-if="canQuestionJudge"
               outline

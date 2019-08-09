@@ -45,5 +45,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public ICollection<Question> Questions { get; set; }
 
+        public int DisplayPriority { get; set; }
+
     }
 }

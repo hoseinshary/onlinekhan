@@ -38,5 +38,7 @@ namespace NasleGhalam.ViewModels.Topic
 
         [Display(Name = "مبحث پدر")]
         public int? ParentTopicId { get; set; }
+
+        public int DisplayPriority { get; set; }
     }
 }

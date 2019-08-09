@@ -196,8 +196,10 @@ namespace NasleGhalam.ViewModels.Resume
         public int NumberOfTeachingYear { get; set; }
 
 
-        [Display(Name = "تقاضای تدریس یا تالیف 1")]
-        public bool TeachingOrPublishingRequest1 { get; set; }
+        [Display(Name = "تقاضای تدریس 1")]
+        public bool TeachingRequest1 { get; set; }
+        [Display(Name = "تقاضای  تالیف 1")]
+        public bool PublishingRequest1 { get; set; }
 
 
         [Display(Name = "پایه تقاضای 1")]
@@ -212,9 +214,10 @@ namespace NasleGhalam.ViewModels.Resume
         public string LessonNameRequest1 { get; set; }
 
 
-        [Display(Name = "تقاضای تدریس یا تالیف تقاضای 2")]
-        public bool TeachingOrPublishingRequest2 { get; set; }
-
+        [Display(Name = "تقاضای تدریس تقاضای 2")]
+        public bool TeachingRequest2 { get; set; }
+        [Display(Name = "تقاضای تالیف تقاضای 2")]
+        public bool PublishingRequest2 { get; set; }
 
         [Display(Name = "پایه تقاضای 2")]
         public Maghta MaghtaRequest2 { get; set; }

@@ -23,5 +23,7 @@
         public int LessonId { get; set; }
 
         public int? ParentTopicId { get; set; }
+
+        public int DisplayPriority { get; set; }
     }
 }

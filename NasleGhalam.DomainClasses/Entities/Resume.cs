@@ -91,7 +91,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int NumberOfTeachingYear { get; set; }
 
-        public bool TeachingOrPublishingRequest1 { get; set; }
+        public bool TeachingRequest1 { get; set; }
+        public bool PublishingRequest1 { get; set; }
 
         public Maghta MaghtaRequest1 { get; set; }
 
@@ -99,7 +100,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string LessonNameRequest1 { get; set; }
 
-        public bool TeachingOrPublishingRequest2 { get; set; }
+        public bool TeachingRequest2 { get; set; }
+        public bool PublishingRequest2 { get; set; }
 
         public Maghta MaghtaRequest2 { get; set; }
 

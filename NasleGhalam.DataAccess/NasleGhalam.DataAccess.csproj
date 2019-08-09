@@ -109,6 +109,14 @@
     <Compile Include="Migrations\201908031734388_UpdateMobileNumberLen.Designer.cs">
       <DependentUpon>201908031734388_UpdateMobileNumberLen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908091223241_fixresume.cs" />
+    <Compile Include="Migrations\201908091223241_fixresume.Designer.cs">
+      <DependentUpon>201908091223241_fixresume.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908091228594_prioritytopic.cs" />
+    <Compile Include="Migrations\201908091228594_prioritytopic.Designer.cs">
+      <DependentUpon>201908091228594_prioritytopic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -171,6 +179,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908031734388_UpdateMobileNumberLen.resx">
       <DependentUpon>201908031734388_UpdateMobileNumberLen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908091223241_fixresume.resx">
+      <DependentUpon>201908091223241_fixresume.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908091228594_prioritytopic.resx">
+      <DependentUpon>201908091228594_prioritytopic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

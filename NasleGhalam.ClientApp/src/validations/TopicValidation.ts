@@ -38,6 +38,11 @@ const topicValidations: ValidationRuleset<TTopic> = {
       displayName: displayName("حیطه مبحث"),
       requiredDdl: requiredDdl(0)
     },
+    DisplayPriority: {
+      displayName: displayName("اولویت نمایش"),
+      numeric,
+      required
+    },
     IsActive: {
       displayName: displayName("فعال"),
       required

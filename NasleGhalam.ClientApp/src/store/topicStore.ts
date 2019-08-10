@@ -84,9 +84,15 @@ export class TopicStore extends VuexModule {
           Id: x.Id,
           label: x.Title,
           ParentTopicId: x.ParentTopicId,
-          header: "custom"
+          header: "custom",
+          displayPriority: x.DisplayPriority
         }));
-      var tree = util.listToTree(list, "Id", "ParentTopicId");
+      var tree = util.listToTree(
+        list,
+        "Id",
+        "ParentTopicId",
+        "displayPriority"
+      );
       // set expanded list to show first level of tree
       this.qTreeData.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
 
@@ -103,9 +109,15 @@ export class TopicStore extends VuexModule {
           label: x.Title,
           ParentTopicId: x.ParentTopicId,
           lessonId: x.LessonId,
-          header: "custom"
+          header: "custom",
+          displayPriority: x.DisplayPriority
         }));
-      var tree = util.listToTree(list, "Id", "ParentTopicId");
+      var tree = util.listToTree(
+        list,
+        "Id",
+        "ParentTopicId",
+        "displayPriority"
+      );
       return tree;
     };
   }

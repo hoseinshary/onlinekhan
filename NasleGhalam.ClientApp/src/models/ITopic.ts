@@ -6,6 +6,7 @@ export default interface ITopic {
   Importance: number;
   IsExamSource: boolean;
   IsActive: boolean;
+  DisplayPriority: number;
   LookupId_HardnessType: number;
   LookupId_AreaType: number;
   LessonId: number;
@@ -21,6 +22,7 @@ export const DefaultTopic: ITopic = {
   Importance: 0,
   IsExamSource: false,
   IsActive: true,
+  DisplayPriority: 0,
   LookupId_HardnessType: 0,
   LookupId_AreaType: 0,
   LessonId: 0,

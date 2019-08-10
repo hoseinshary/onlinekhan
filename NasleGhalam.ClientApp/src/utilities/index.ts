@@ -213,7 +213,12 @@ const getAccess = function(modelName: string) {
  * @param {string} key
  * @param {string} parentKey
  */
-const listToTree = function(list: any, key: string, parentKey: string) {
+const listToTree = function(
+  list: any,
+  key: string,
+  parentKey: string,
+  childrenSortKey: string = ""
+) {
   var map = {},
     node: any,
     roots: any = [],
@@ -231,6 +236,11 @@ const listToTree = function(list: any, key: string, parentKey: string) {
       // if you have dangling branches check that map[node.parentId] exists
       currentNode = list[map[node[parentKey]]];
       currentNode.children.push(node);
+      if (childrenSortKey) {
+        currentNode.children = currentNode.children.sort(
+          (x, y) => x[childrenSortKey] - y[childrenSortKey]
+        );
+      }
       node.parent = currentNode;
       // if (node.parent !== null) {
       //   delete node.parent.children;

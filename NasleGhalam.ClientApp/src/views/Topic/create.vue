@@ -16,13 +16,14 @@
         : ""}}
       </label>
     </div>
-    <base-input :model="$v.topic.Title" class="col-md-4 col-sm-6"/>
-    <base-input :model="$v.topic.ExamStock" class="col-md-4 col-sm-6"/>
-    <base-input :model="$v.topic.Importance" class="col-md-4 col-sm-6"/>
+    <base-input :model="$v.topic.Title" class="col-md-3 col-sm-6" />
+    <base-input :model="$v.topic.ExamStock" class="col-md-3 col-sm-6" />
+    <base-input :model="$v.topic.Importance" class="col-md-3 col-sm-6" />
+    <base-input :model="$v.topic.DisplayPriority" class="col-md-3 col-sm-6" />
     <base-field class="col-md-3 col-sm-6" :model="$v.topic.IsExamSource">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
       </template>
     </base-field>
     <base-select
@@ -39,8 +40,8 @@
     />
     <base-field class="col-md-3 col-sm-6" :model="$v.topic.IsActive">
       <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
+        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
       </template>
     </base-field>
   </base-modal-create>

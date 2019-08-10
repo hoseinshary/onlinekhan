@@ -9,6 +9,8 @@ namespace NasleGhalam.ViewModels.Resume
         [Display(Name = "مدرک")]
         public DegreeCertificate DegreeCertificate { get; set; }
 
+        public string DegreeCertificateName => DegreeCertificate.GetDisplayName();
+
         [Display(Name = "رشته")]
         public string Subject { get; set; }
 
@@ -21,14 +23,11 @@ namespace NasleGhalam.ViewModels.Resume
         [Display(Name = "نوع")]
         public TypeEducationCenter TypeEducationCenter { get; set; }
 
+
         [Display(Name = "سال")]
         public string Year { get; set; }
 
         [Display(Name = "معدل")]
         public float Score { get; set; }
-
-
-
-
     }
 }

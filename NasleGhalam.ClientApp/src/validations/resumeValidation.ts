@@ -243,8 +243,12 @@ const resumeValidations: ValidationRuleset<TResume> = {
         return model.HaveTeachingResume;
       })
     },
-    TeachingOrPublishingRequest1: {
-      displayName: displayName("تقاضای تدریس یا تالیف 1"),
+    TeachingRequest1: {
+      displayName: displayName("تدریس"),
+      required
+    },
+    PublishingRequest1: {
+      displayName: displayName("تالیف"),
       required
     },
     MaghtaRequest1: {
@@ -260,8 +264,12 @@ const resumeValidations: ValidationRuleset<TResume> = {
       maxLength: maxLength(50),
       required
     },
-    TeachingOrPublishingRequest2: {
-      displayName: displayName("تقاضای تدریس یا تالیف 2"),
+    TeachingRequest2: {
+      displayName: displayName("تدریس"),
+      required
+    },
+    PublishingRequest2: {
+      displayName: displayName("تالیف"),
       required
     },
     MaghtaRequest2: {

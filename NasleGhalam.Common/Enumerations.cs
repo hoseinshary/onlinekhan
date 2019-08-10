@@ -32,11 +32,22 @@ namespace NasleGhalam.Common
 
     public enum TypeEducationCenter
     {
+        [Display(Name = "دولتی")]
         Dolati = 0,
+
+        [Display(Name = "آزاد")]
         Azad = 1,
+
+        [Display(Name = "غیر انتفاعی")]
         GheyreEntefaie = 2,
+
+        [Display(Name = "پیام نور")]
         Payamnoor = 3,
+
+        [Display(Name = "بین الملل")]
         Beynolmelal = 4,
+
+        [Display(Name = "سایر")]
         Others = 5
     }
 
@@ -53,17 +64,35 @@ namespace NasleGhalam.Common
 
     public enum DegreeCertificate
     {
+        [Display(Name = "دانش آموز")]
         Daneshamooz = 0,
-        Diplom = 1,
-        KardaniStudent = 2,
-        Kardani = 3,
-        KarshenasiStudent = 4,
-        Karshenasi = 5,
-        KarshenasiarshadStudent = 6,
-        Karshenasiarshad = 7,
-        DoktoraStudent = 8,
-        Doktora = 9
 
+        [Display(Name = "دیپلم")]
+        Diplom = 1,
+
+        [Display(Name = "دانشجو کاردانی")]
+        KardaniStudent = 2,
+
+        [Display(Name = "کاردانی")]
+        Kardani = 3,
+
+        [Display(Name = "دانشجو کارشناسی")]
+        KarshenasiStudent = 4,
+
+        [Display(Name = "کارشناسی")]
+        Karshenasi = 5,
+
+        [Display(Name = "دانشجو کارشناسی ارشد")]
+        KarshenasiArshadStudent = 6,
+
+        [Display(Name = "کارشناسی ارشد")]
+        KarshenasiArshad = 7,
+
+        [Display(Name = "دانشجو دکترا")]
+        DoktoraStudent = 8,
+
+        [Display(Name = "دکترا")]
+        Doktora = 9
     }
 
     public enum MessageType

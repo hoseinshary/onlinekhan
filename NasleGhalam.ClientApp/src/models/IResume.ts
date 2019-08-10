@@ -52,11 +52,13 @@ export default interface IResume {
   NumberOfPublication: number;
   HaveTeachingResume: boolean;
   NumberOfTeachingYear: number;
-  TeachingOrPublishingRequest1: boolean;
+  TeachingRequest1: boolean;
+  PublishingRequest1: boolean;
   MaghtaRequest1: Maghta;
   KindRequest1: KindRequest;
   LessonNameRequest1: string;
-  TeachingOrPublishingRequest2: boolean;
+  TeachingRequest2: boolean;
+  PublishingRequest2: boolean;
   MaghtaRequest2: Maghta;
   KindRequest2: KindRequest;
   LessonNameRequest2: string;
@@ -114,11 +116,13 @@ export const DefaultResume: IResume = {
   NumberOfPublication: 0,
   HaveTeachingResume: false,
   NumberOfTeachingYear: 0,
-  TeachingOrPublishingRequest1: false,
+  TeachingRequest1: false,
+  PublishingRequest1: false,
   MaghtaRequest1: Maghta["دهم"],
   KindRequest1: KindRequest["هر دو"],
   LessonNameRequest1: "",
-  TeachingOrPublishingRequest2: false,
+  TeachingRequest2: false,
+  PublishingRequest2: false,
   MaghtaRequest2: Maghta["دهم"],
   KindRequest2: KindRequest["هر دو"],
   LessonNameRequest2: "",

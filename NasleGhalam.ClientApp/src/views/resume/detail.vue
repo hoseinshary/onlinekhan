@@ -170,10 +170,14 @@
     <fieldset class="col-12 q-my-sm">
       <legend>تقاضای تدریس یا تالیف 1</legend>
       <section class="row gutter-sm">
-        <base-field class="col-md-3" :model="$v.resume.TeachingOrPublishingRequest1">
+        <base-field class="col-1" :model="$v.resume.TeachingRequest1">
           <template slot-scope="data">
-            <q-radio v-model="data.obj.$model" :val="false" label="تالیف" />
-            <q-radio v-model="data.obj.$model" :val="true" label="تدریس" />
+            <q-checkbox v-model="data.obj.$model" />
+          </template>
+        </base-field>
+        <base-field class="col-1" :model="$v.resume.PublishingRequest1">
+          <template slot-scope="data">
+            <q-checkbox v-model="data.obj.$model" />
           </template>
         </base-field>
         <base-select :model="$v.resume.MaghtaRequest1" :options="maghtaDdl" class="col-md-3" />
@@ -185,10 +189,14 @@
     <fieldset class="col-12 q-my-sm">
       <legend>تقاضای تدریس یا تالیف 2</legend>
       <section class="row gutter-sm">
-        <base-field class="col-md-3" :model="$v.resume.TeachingOrPublishingRequest2">
+        <base-field class="col-1" :model="$v.resume.TeachingRequest2">
           <template slot-scope="data">
-            <q-radio v-model="data.obj.$model" :val="false" label="تالیف" />
-            <q-radio v-model="data.obj.$model" :val="true" label="تدریس" />
+            <q-checkbox v-model="data.obj.$model" />
+          </template>
+        </base-field>
+        <base-field class="col-1" :model="$v.resume.PublishingRequest2">
+          <template slot-scope="data">
+            <q-checkbox v-model="data.obj.$model" />
           </template>
         </base-field>
         <base-select :model="$v.resume.MaghtaRequest2" :options="maghtaDdl" class="col-md-3" />

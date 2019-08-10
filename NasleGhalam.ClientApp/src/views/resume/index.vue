@@ -38,10 +38,10 @@ export default class ResumeVue extends Vue {
   resumeStore = vxm.resumeStore;
   pageAccess = util.getAccess(this.resumeStore.modelName);
   resumeGridColumn = [
-    {
-      title: "زمان ثبت",
-      data: "PCreationDateTime"
-    },
+    // {
+    //   title: "زمان ثبت",
+    //   data: "PCreationDateTime"
+    // },
     {
       title: "نام",
       data: "Name"
@@ -55,20 +55,16 @@ export default class ResumeVue extends Vue {
       data: "GenderName"
     },
     {
-      title: "کد ملی",
-      data: "NationalNo"
-    },
-    {
-      title: "تلفن ثابت",
-      data: "Phone"
-    },
-    {
       title: "موبایل",
       data: "Mobile"
     },
     {
       title: "شهر",
       data: "City.Name"
+    },
+    {
+      title: "آخرین مدرک",
+      data: "LastEducationCertificate"
     },
     {
       title: "جزییات",

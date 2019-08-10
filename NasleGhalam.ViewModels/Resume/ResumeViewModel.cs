@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels.City;
 
@@ -252,5 +253,14 @@ namespace NasleGhalam.ViewModels.Resume
         public CityViewModel City { get; set; }
 
         public int ProvinceId { get; set; }
+
+        public string LastEducationCertificate
+        {
+            get
+            {
+                var education = EducationCertificates.OrderByDescending(x => x.Year).FirstOrDefault();
+                return education != null ? $"{education.Subject} - {education.DegreeCertificateName}" : "";
+            }
+        }
     }
 }

@@ -1,22 +1,29 @@
 <template>
-  <section class="col-12 q-px-sm">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{topicStore.modelName}}</span>
-      <div slot="body">
-        <section class="row">
-          <q-tree
-            :nodes="topicTreeData"
-            :expanded.sync="topicExpandedData"
-            class="q-pt-lg"
-            color="primary"
-            node-key="Id"
-            ref="topicTree"
-          ></q-tree>
+  <q-layout view="lHh Lpr lFf">
+    <q-page-container>
+      <br />
+      <div class="row justify-center q-mt-lg">
+        <section class="col-12 q-px-sm">
+          <!-- panel -->
+          <base-panel>
+            <span slot="title">{{topicStore.modelName}}</span>
+            <div slot="body">
+              <section class="row">
+                <q-tree
+                  :nodes="topicTreeData"
+                  :expanded.sync="topicExpandedData"
+                  class="q-pt-lg"
+                  color="primary"
+                  node-key="Id"
+                  ref="topicTree"
+                ></q-tree>
+              </section>
+            </div>
+          </base-panel>
         </section>
       </div>
-    </base-panel>
-  </section>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script lang="ts">

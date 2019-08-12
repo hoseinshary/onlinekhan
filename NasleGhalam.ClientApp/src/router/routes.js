@@ -8,13 +8,13 @@ export default [
     component: () => import("src/views/resume/registration.vue")
   },
   {
+    path: "/topic/printTopic",
+    component: () => import("src/views/topic/printTopic.vue")
+  },
+  {
     path: "/",
     component: () => import("layouts/default.vue"),
     children: [
-      // {
-      //   path: "",
-      //   component: () => import("src/views/test/HelloDecorator/index.vue")
-      // },
       {
         path: "",
         component: () => import("src/views/city/index.vue")
@@ -46,10 +46,6 @@ export default [
       {
         path: "/topic",
         component: () => import("src/views/topic/index.vue")
-      },
-      {
-        path: "/topic/printTopic",
-        component: () => import("src/views/topic/printTopic.vue")
       },
       {
         path: "/educationBook",

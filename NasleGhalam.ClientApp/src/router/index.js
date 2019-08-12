@@ -23,12 +23,30 @@ const Router = new VueRouter({
 });
 
 Router.beforeEach((to, from, next) => {
-  if (to.fullPath == "/resume/registration") {
+  var path = (to.fullPath || "").toLowerCase();
+  path = path.replace(/\//g, "/").replace(/\/\//g, "/");
+  if (path.startsWith("/")) {
+    path = path.substr(1);
+  }
+  if (path.endsWith("/")) {
+    path = path.substr(0, path.length - 1);
+  }
+
+  var arr = path.split("/");
+  var controller = arr[0] || "";
+  var action = arr[1] || "";
+
+  if (controller == "user" && action == "login") {
+    next();
+    document.title = "ورود";
+    return;
+  }
+  if (controller == "resume" && action == "registration") {
     next();
     document.title = "رزومه";
     return;
   }
-  if (to.fullPath == "/topic/printTopic") {
+  if (controller == "topic" && action == "printTopic".toLowerCase()) {
     next();
     document.title = "چاپ مبحث";
     return;
@@ -37,17 +55,20 @@ Router.beforeEach((to, from, next) => {
   var authList = LocalStorage.get.item("authList");
   var subMenuList = LocalStorage.get.item("subMenuList");
 
-  if (to.fullPath == "/user/login") {
-    next();
-    document.title = "ورود";
-  } else if (!authList || !authList.includes(to.fullPath.toLowerCase())) {
+  if (
+    !authList ||
+    !authList.filter(
+      x =>
+        (x.startsWith("/") ? x.replace("/", "") : x).toLowerCase() == controller
+    ).length
+  ) {
     next("/user/login");
     util.logout();
     document.title = "ورود";
   } else {
     next();
-    document.title = subMenuList.filter(
-      x => x.EnName.toLowerCase() == to.fullPath.toLowerCase()
+    document.title = subMenuList.filter(x =>
+      x.EnName.toLowerCase().endsWith(controller)
     )[0].FaName;
   }
 });

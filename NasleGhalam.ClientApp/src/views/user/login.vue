@@ -3,8 +3,8 @@
     <q-page-container class="col-12">
       <section class="row">
         <div class="col-md-7 main-pic gt-md"></div>
-        <div class="col-md-5 main-input q-pa-lg">
-          <section class="row justify-start content-center">
+        <div class="col-lg-5 main-input q-pa-sm">
+          <section class="row justify-center content-center">
             <div class="logo"></div>
             <div class="col-xl-8 col-lg-9 col-md-10 col-sm-12 q-py-lg">
               <q-input
@@ -32,12 +32,12 @@
                 ]"
               />
             </div>
-            <div class="col-12">
-              <button class="q-mr-sm btn btn-login" @click="login">
+            <div class="col-12 text-center">
+              <button class="q-ma-sm btn btn-login" @click="login">
                 ورود
                 <q-icon name="keyboard_backspace"></q-icon>
               </button>
-              <router-link to="/resume/registration" class="q-mr-sm btn btn-contribute">همکاری با ما</router-link>
+              <router-link to="/resume/registration" class="q-ma-sm btn btn-contribute">همکاری با ما</router-link>
             </div>
           </section>
         </div>
@@ -83,7 +83,9 @@ export default class UserLoginVue extends Vue {
 .login-layout .main-input .logo {
   background-image: url("../../assets/img/logo2.png");
   background-repeat: no-repeat;
+  background-size: contain;
   height: 177px;
+  max-width: 100%;
   width: 477px;
 }
 
@@ -116,6 +118,7 @@ export default class UserLoginVue extends Vue {
   border: none;
   font-weight: bold;
   font-size: 25px;
+  display: inline-block;
 }
 
 .btn-login {
@@ -134,9 +137,10 @@ export default class UserLoginVue extends Vue {
   background-image: url("../../assets/img/login_main.png");
   background-repeat: no-repeat;
   /* background-position: center; */
-  /* background-size: cover; */
+  background-size: contain;
   height: 731px;
   width: 732px;
+  max-width: 100%;
 }
 
 .login-layout .footer-pic {

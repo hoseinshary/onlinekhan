@@ -1,7 +1,7 @@
 <template>
-  <q-btn outline
+  <q-btn 
          color="warning"
-         class="shadow-1 bg-white q-mr-sm"
+         class="shadow-2 q-mr-sm"
          @click="$emit('click')">
     <q-icon name="clear" /> جدید
   </q-btn>

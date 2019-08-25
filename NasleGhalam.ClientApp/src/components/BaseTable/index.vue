@@ -526,7 +526,7 @@ export default {
 }
 
 .my-table tr th {
-  background-color: #006b7b;
+  background-color: #ff6004;
   color: white;
   vertical-align: middle;
   text-align: center;

@@ -8,10 +8,10 @@
       @close="$emit('close')"
     >
       <template slot="header">
-        <q-toolbar slot="header" color="cyan-9" text-color>
+        <q-toolbar slot="header" color="blue-8" text-color>
           <q-toolbar-title>
             ثبت
-            <span class="text-orange">{{title}}</span>
+            <span class="text-orange" >{{title}}</span>
             جدید
           </q-toolbar-title>
           <q-btn dense icon="close" @click="$emit('close')"/>

@@ -1,7 +1,7 @@
 <template>
-  <q-btn outline
+  <q-btn 
          :color="color"
-         class="shadow-1 bg-white q-mr-sm"
+         class="shadow-2 q-mr-sm"
          :icon="icon"
          :label="label"
          @click="$emit('click')"
@@ -18,7 +18,7 @@ export default {
     },
     color: {
       type: String,
-      default: 'secondary'
+      default: 'positive'
     },
     icon: {
       type: String,

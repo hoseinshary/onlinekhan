@@ -8,7 +8,7 @@
       @close="$emit('close')"
     >
       <template slot="header">
-        <q-toolbar slot="header" color="cyan-9" text-color>
+        <q-toolbar slot="header" color="blue-8" text-color>
           <q-toolbar-title>
             ویرایش
             <span class="text-orange">{{title}}</span>

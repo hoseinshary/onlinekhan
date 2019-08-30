@@ -1,7 +1,7 @@
 <template>
-  <q-btn outline
-         color="primary"
-         class="shadow-1 bg-white q-mr-sm"
+  <q-btn 
+         color="deep-orange"
+         class="shadow-2  q-mr-sm"
          @click="$emit('click')">
     بازگشت
     <q-icon name="arrow_back" />

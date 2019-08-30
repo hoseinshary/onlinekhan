@@ -1,7 +1,7 @@
 <template>
-  <q-btn outline
+  <q-btn 
          color="positive"
-         class="shadow-1 bg-white q-mr-sm"
+         class="shadow-2 q-mr-sm"
          type="submit"
          @click="$emit('click')">
     <q-icon name="save" /> ثبت

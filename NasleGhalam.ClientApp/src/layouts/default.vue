@@ -1,15 +1,21 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
-      <q-toolbar class="toolbar-header" color>
+      <div class="hoseinsharyToolbar">
+      </div>
+      <q-toolbar class="toolbar-header" color="indigo-6">
         <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu"/>
         </q-btn>
 
+        <div class="hoseinlogo" ></div>
+
         <q-toolbar-title>
           {{siteName}}
-          <div slot="subtitle">سامانه جامع کنکور</div>
+          <div slot="subtitle"  >سامانه جامع کنکور</div>
         </q-toolbar-title>
+
+
 
         <q-btn flat dense class="q-mr-sm">
           <q-icon name="account_circle"/>
@@ -105,6 +111,7 @@ export default {
 <style>
 .toolbar-header {
   background-color: #34495e;
+  height: 70px;
 }
 
 .layout-drawer aside {
@@ -150,4 +157,20 @@ export default {
 .layout-drawer aside .q-collapsible i.q-icon {
   color: white;
 }
+
+.hoseinsharyToolbar{
+  width: 100;
+height: 15px;
+background-color: rgb(248, 107, 25);
+}
+
+.hoseinlogo {
+  background-image: url("../assets/img/logo2.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 75px;
+  max-width: 100%;
+  width: 180px;
+}
+
 </style>

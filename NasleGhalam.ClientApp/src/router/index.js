@@ -36,6 +36,14 @@ Router.beforeEach((to, from, next) => {
   var controller = arr[0] || "";
   var action = arr[1] || "";
 
+  if (
+    (controller == "" && action == "") ||
+    (controller == "home" && action == "index")
+  ) {
+    next();
+    document.title = "آنلاین خوان";
+    return;
+  }
   if (controller == "user" && action == "login") {
     next();
     document.title = "ورود";

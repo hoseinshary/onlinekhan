@@ -81,7 +81,7 @@ export default class UserLoginVue extends Vue {
   height: 80vh;
 }
 .login-layout .main-input .logo {
-  background-image: url("../../assets/img/logo2.png");
+  background-image: url("../../assets/img/logo1.png");
   background-repeat: no-repeat;
   background-size: contain;
   height: 177px;

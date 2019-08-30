@@ -1,5 +1,13 @@
 export default [
   {
+    path: "/",
+    component: () => import("src/views/home/index.vue")
+  },
+  {
+    path: "/home/index",
+    component: () => import("src/views/home/index.vue")
+  },
+  {
     path: "/user/login",
     component: () => import("src/views/user/login.vue")
   },
@@ -15,10 +23,10 @@ export default [
     path: "/",
     component: () => import("layouts/default.vue"),
     children: [
-      {
-        path: "",
-        component: () => import("src/views/city/index.vue")
-      },
+      // {
+      //   path: "",
+      //   component: () => import("src/views/city/index.vue")
+      // },
       {
         path: "/province",
         component: () => import("src/views/province/index.vue")

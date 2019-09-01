@@ -14,8 +14,11 @@
       </q-card-media>
     </q-card>
 
+    <div class="col-12" v-if="showElement('TopicIds')">
+      <p v-for="elem in concatTopicArray" :key="elem">{{elem}}</p>
+    </div>
     <div class="col-md-3 col-sm-6">
-      <section v-if="showElement('TopicIds')" class="q-ma-sm q-pa-sm shadow-1">
+      <section v-if="showElement('TopicIds')" class="q-my-sm shadow-1">
         <q-input v-model="topicFilter" float-label="جستجوی مبحث" clearable />
         <q-tree
           :nodes="topicTreeDataProp"
@@ -25,6 +28,7 @@
           color="primary"
           accordion
           node-key="Id"
+          ref="topicTree"
         />
       </section>
 
@@ -125,7 +129,7 @@
           class="col-md-4"
           filter
         />
-          <base-select
+        <base-select
           v-if="showElement('WriterId')"
           :model="$v.question.WriterId"
           :options="writerStore.ddl"
@@ -152,7 +156,7 @@
       </section>
     </div>
 
-     <div class="col-md-3 col-sm-6" v-if="showElement('TopicIds')">
+    <div class="col-md-3 col-sm-6" v-if="showElement('TopicIds')">
       <q-input v-model="topicFilter2" float-label="جستجوی مبحث 2" clearable />
       <q-tree
         :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
@@ -168,9 +172,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { questionValidations } from "src/validations/questionValidation";
+import util from "src/utilities";
 
 @Component({
   validations: questionValidations
@@ -263,6 +268,7 @@ export default class QuestionEditVue extends Vue {
       canEditImportProp: false
     }
   };
+  concatTopicArray: Array<string> = [];
   //#endregion
 
   //#region ### computed ###
@@ -283,6 +289,25 @@ export default class QuestionEditVue extends Vue {
     } else {
       return "canEditTopicProp";
     }
+  }
+  //#endregion
+
+  //#region ### watch ###
+  @Watch("question.TopicIds")
+  questionTopicIdsChanged(newVal) {
+    var getNodeByKey = this.$refs["topicTree"]["getNodeByKey"];
+    debugger;
+    util.clearArray(this.concatTopicArray);
+    var strArr: Array<string> = [];
+    newVal.forEach(x => {
+      strArr = [];
+      var node = getNodeByKey(x);
+      while (node) {
+        strArr.unshift(node.label);
+        node = node.parent;
+      }
+      this.concatTopicArray.push(strArr.join(" => "));
+    });
   }
   //#endregion
 

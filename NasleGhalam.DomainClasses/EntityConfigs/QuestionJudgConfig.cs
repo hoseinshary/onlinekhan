@@ -8,6 +8,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         public QuestionJudgConfig()
         {
             HasKey(x => x.Id);
+            Property(x => x.Description).HasMaxLength(400);
 
             HasRequired(x => x.Question)
                 .WithMany(x => x.QuestionJudges)
@@ -29,6 +30,16 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             HasRequired(x => x.Lookup_RepeatnessType)
                 .WithMany(x => x.QuestionJudge_RepeatnessTypes)
                 .HasForeignKey(x => x.LookupId_RepeatnessType)
+                .WillCascadeOnDelete(false);
+
+            HasRequired(x => x.Lookup_WhereProblem)
+                .WithMany(x => x.QuestionJudge_WhereProblem)
+                .HasForeignKey(x => x.LookupId_WhereProblem)
+                .WillCascadeOnDelete(false);
+
+            HasRequired(x => x.Lookup_ReasonProblem)
+                .WithMany(x => x.QuestionJudge_ReasonProblem)
+                .HasForeignKey(x => x.LookupId_ReasonProblem)
                 .WillCascadeOnDelete(false);
         }
     }

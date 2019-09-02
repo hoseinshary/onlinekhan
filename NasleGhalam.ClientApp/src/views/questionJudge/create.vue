@@ -1,6 +1,7 @@
 <template>
   <section class="row gutter-sm shadow-1 q-pa-sm q-ma-sm">
     <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6" helper="ثانیه"/>
+   
     <div class="row"></div>
     <base-select
       :model="$v.questionJudge.LookupId_RepeatnessType"
@@ -50,6 +51,19 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
     </base-field>
+      <base-select
+      :model="$v.questionJudge.LookupId_WhereProblem"
+      :options="lookupStore.whereProblemDdl"
+      class="col-md-6"
+      clearable
+    />
+      <base-select
+      :model="$v.questionJudge.LookupId_ReasonProblem"
+      :options="lookupStore.reasonProblemDdl"
+      class="col-md-6"
+      clearable
+    />
+         <base-input :model="$v.questionJudge.Description" class="col-6" />
     <base-btn-create @click="questionJudgeStore.submitCreate()"/>
   </section>
 </template>

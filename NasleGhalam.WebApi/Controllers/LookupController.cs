@@ -30,6 +30,19 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllByName("EducationTreeState"));
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.QuestionJudgeCreateAccess, ActionBits.QuestionJudgeReadAccess, ActionBits.QuestionJudgeUpdateAccess)]
+        public IHttpActionResult GetAllWhereProblem()
+        {
+            return Ok(_lookupService.GetAllByName("WhereProblem"));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionJudgeCreateAccess, ActionBits.QuestionJudgeReadAccess, ActionBits.QuestionJudgeUpdateAccess)]
+        public IHttpActionResult GetAllReasonProblem()
+        {
+            return Ok(_lookupService.GetAllByName("ReasonProblem"));
+        }
+
+
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookCreateAccess, ActionBits.AxillaryBookReadAccess, ActionBits.AxillaryBookUpdateAccess)]
         public IHttpActionResult GetAllPaperType()
         {

@@ -34,5 +34,17 @@
 
         public int UserId { get; set; }
         public User User { get; set; }
+
+
+        public int LookupId_WhereProblem { get; set; }
+        public Lookup Lookup_WhereProblem { get; set; }
+
+        public int LookupId_ReasonProblem { get; set; }
+        public Lookup Lookup_ReasonProblem { get; set; }
+
+
+        public string Description { get; set; }
+
+
     }
 }

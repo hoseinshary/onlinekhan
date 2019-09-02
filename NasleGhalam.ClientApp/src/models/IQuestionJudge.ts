@@ -12,8 +12,14 @@ export default interface IQuestionJudge {
   QuestionId: number;
   LookupId_QuestionHardnessType: number;
   LookupId_RepeatnessType: number;
+  LookupId_WhereProblem: number;
+  LookupId_ReasonProblem: number;
   Lookup_QuestionHardnessType?: ILookup;
   Lookup_RepeatnessType?: ILookup;
+  Lookup_WhereProblem?: ILookup;
+  Lookup_ReasonProblem?: ILookup;
+  Description: string;
+  
 }
 
 export const DefaultQuestionJudge: IQuestionJudge = {
@@ -27,5 +33,8 @@ export const DefaultQuestionJudge: IQuestionJudge = {
   ResponseSecond: 0,
   QuestionId: 0,
   LookupId_QuestionHardnessType: 0,
-  LookupId_RepeatnessType: 0
+  LookupId_RepeatnessType: 0,
+  LookupId_WhereProblem: 0,
+  LookupId_ReasonProblem: 0,
+  Description: ""
 };

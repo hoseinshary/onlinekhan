@@ -39,7 +39,7 @@
         <div class="col-12 introduce-section">
           <h3>سامانه آموزشی چگونه به شما کمک می کند؟</h3>
           <section class="row justify-center">
-            <div class="col-sm-4">
+            <div class="col-md-6 col-lg-5 col-sm-12 right-side">
               <div class="box">
                 <img src="/assets/img/home-intelligent-consult.png" alt="مشاوره هوشمند" />
                 <p>مشاوره هوشمند</p>
@@ -53,7 +53,7 @@
                 <p>تحلیل و مقایسه آزمون ها</p>
               </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-6 col-lg-5 col-sm-12">
               <div class="box">
                 <img src="/assets/img/home-step-management.png" alt="مدیریت کلیه مراحل آموزشی" />
                 <p>مدیریت کلیه مراحل آموزشی</p>
@@ -72,21 +72,21 @@
 
         <div class="col-12 counter-section">
           <section class="row">
-            <div class="col-4 text-center">
+            <div class="col-sm-4 text-center">
               <div class="box">
                 <img src="assets/img/counter-customer.png" alt="مشتری" />
                 <span>4</span>
                 <p>مشتری</p>
               </div>
             </div>
-            <div class="col-4 text-center">
+            <div class="col-sm-4 text-center">
               <div class="box">
                 <img src="assets/img/counter-assay.png" alt="آزمون" />
                 <span>8</span>
                 <p>آزمون</p>
               </div>
             </div>
-            <div class="col-4 text-center">
+            <div class="col-sm-4 text-center">
               <div class="box">
                 <img src="assets/img/counter-volunteer.png" alt="داوطلب" />
                 <span>33</span>
@@ -99,7 +99,7 @@
         <div class="col-12 introduce2-section">
           <h3>سامانه آموزشی چگونه به شما کمک می کند؟</h3>
           <section class="row justify-center">
-            <div class="col-sm-4">
+            <div class="col-lg-4 col-md-5 col-sm-12">
               <div class="box">
                 <img src="/assets/img/introduce2-register-information.png" alt="ثبت اطلاعات" />
                 <p>ثبت اطلاعات</p>
@@ -126,7 +126,7 @@
                 <span></span>
               </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4 col-md-5 col-sm-12">
               <div class="box">
                 <img src="/assets/img/introduce2-assay-management.png" alt="مدیریت آزمون" />
                 <p>مدیریت آزمون</p>
@@ -207,7 +207,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 @Component({})
-export default class UserLoginVue extends Vue {
+export default class HomeVue extends Vue {
   //### data ###
   //--------------------------------------------------
   //### methods ###
@@ -273,9 +273,10 @@ export default class UserLoginVue extends Vue {
 }
 
 .home .main-image-section img {
-  height: 800px;
-  max-width: 100%;
+  height: auto;
   width: 100%;
+  max-height: 800px;
+  max-width: 100%;
 }
 /* --- */
 
@@ -290,8 +291,13 @@ export default class UserLoginVue extends Vue {
   font-size: 40px;
 }
 
+.home .introduce-section .right-side .box {
+  float: left;
+}
+
 .home .introduce-section .box {
   margin-top: 30px;
+  width: 540px;
 }
 
 .home .introduce-section .box p {
@@ -306,6 +312,12 @@ export default class UserLoginVue extends Vue {
   height: 65px;
   display: inline-block;
   margin-right: 10px;
+}
+
+@media screen and (min-width: 768px) {
+  .home .introduce-section .right-side .box {
+    float: right;
+  }
 }
 /* --- */
 

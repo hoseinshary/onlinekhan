@@ -296,7 +296,6 @@ export default class QuestionEditVue extends Vue {
   @Watch("question.TopicIds")
   questionTopicIdsChanged(newVal) {
     var getNodeByKey = this.$refs["topicTree"]["getNodeByKey"];
-    debugger;
     util.clearArray(this.concatTopicArray);
     var strArr: Array<string> = [];
     newVal.forEach(x => {

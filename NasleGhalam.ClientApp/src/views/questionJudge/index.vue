@@ -152,6 +152,8 @@ export default class QuestionJudgeVue extends Vue {
     if (this.canCreate || this.canEdit) {
       this.lookupStore.fillQuestionHardnessType();
       this.lookupStore.fillRepeatnessType();
+      this.lookupStore.fillReasonProblem();
+      this.lookupStore.fillWhereProblem();
 
       this.questionJudgeStore.resetCreate();
       this.questionJudge.QuestionId = this.question.Id;

@@ -39,6 +39,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
                 .Include(current => current.Tags)
+                .Include(current => current.Lookup_AreaType)
+                .Include(current => current.Writer)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -75,10 +77,10 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه سوال های مباحث
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionViewModel> GetAllByTopicIdsForAssay(List<int> ids , int lookupId_QuestionHardnessType , int count)
+        public IList<QuestionViewModel> GetAllByTopicIdsForAssay(List<int> ids, int lookupId_QuestionHardnessType, int count)
         {
             return _questions
-                .Where(current => current.Topics.Any(x => ids.Contains(x.Id) && current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType ))
+                .Where(current => current.Topics.Any(x => ids.Contains(x.Id) && current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType))
                 .OrderBy(x => Guid.NewGuid())
                 .Take(count)
                 .AsNoTracking()
@@ -147,7 +149,7 @@ namespace NasleGhalam.ServiceLayer.Services
             // Open a doc file.
             var app = new Application();
             var source = app.Documents.Open(wordFilename);
-            
+
             //حذف عدد اول سوال
             if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
             {
@@ -195,9 +197,9 @@ namespace NasleGhalam.ServiceLayer.Services
             _questions.Add(question);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
-        
 
-         
+
+
             if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
             {
 
@@ -207,12 +209,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, question.FileName , question.AnswerNumber);
+                SaveOptionsOfQuestions(source, target, question.FileName, question.AnswerNumber);
 
                 target.Close();
             }
 
-          
+
             File.Delete(wordFilename);
             source.Close();
             app.Quit();
@@ -227,7 +229,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <summary>
         /// ذخیره عکس فایل ورد
         /// </summary>
-        public static void SaveOptionsOfQuestions(Document source,Document target , string FileName , int answer)
+        public static void SaveOptionsOfQuestions(Document source, Document target, string FileName, int answer)
         {
             //تریک درست شدن گزینه ها 
             source.ActiveWindow.Selection.WholeStory();
@@ -272,8 +274,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 j--;
             }
 
-            var filename3 = Encryption.Base64Encode( Encryption.Encrypt(answer+"-"+FileName));
-            source.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) +".docx");
+            var filename3 = Encryption.Base64Encode(Encryption.Encrypt(answer + "-" + FileName));
+            source.SaveAs(SitePath.GetQuestionOptionsAbsPath(filename3) + ".docx");
             while (source.Windows[1].Panes[1].Pages.Count < 0) ;
             var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
             ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(filename3) + ".png");
@@ -398,7 +400,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var previousFileName = questionViewModel.FileName;
             Application app = null;
-            Document source= null;
+            Document source = null;
             string wordFilename = null;
             var haveFileUpdate = false;
             if (word != null && word.ContentLength > 0)
@@ -512,7 +514,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 while (source.Windows[1].Panes[1].Pages.Count < 0) ;
                 var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
                 ImageUtility.SaveImageOfWord(bits, SitePath.GetQuestionOptionsAbsPath(questionViewModel.FileName) + ".png");
-             
+
 
                 var target = app.Documents.Add();
                 SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
@@ -892,7 +894,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-        
+
 
 
 
@@ -916,12 +918,12 @@ namespace NasleGhalam.ServiceLayer.Services
             else
             {
                 return _questions
-                    .Include(x=>x.Topics.Select(y=>y.Lesson))
+                    .Include(x => x.Topics.Select(y => y.Lesson))
                     .First(x => x.Id == questionId).Topics.First().Lesson.NumberOfJudges;
-            }            
+            }
         }
 
-  
+
 
     }
 }

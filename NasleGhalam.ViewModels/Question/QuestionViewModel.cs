@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using NasleGhalam.Common;
+using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.QuestionAnswer;
 using NasleGhalam.ViewModels.QuestionOption;
 using NasleGhalam.ViewModels.Tag;
@@ -23,12 +24,6 @@ namespace NasleGhalam.ViewModels.Question
         public bool UseEvaluation { get; set; }
 
         public bool IsStandard { get; set; }
-
-        [Display(Name = "نویسنده")]
-        public int WriterId { get; set; }
-
-        public WriterViewModel Writer { get; set; }
-
 
         public short ResponseSecond { get; set; }
 
@@ -58,7 +53,14 @@ namespace NasleGhalam.ViewModels.Question
 
         public int LookupId_AreaType { get; set; }
 
+        public int WriterId { get; set; }
+
+        public WriterViewModel Writer { get; set; }
+
+        public  LookupViewModel Lookup_AreaType { get; set; }
+
         public List<QuestionOptionViewModel> QuestionOptions { get; set; } = new List<QuestionOptionViewModel>();
+
         public List<QuestionAnswerViewModel> QuestionAnswers { get; set; } = new List<QuestionAnswerViewModel>();
 
         public List<TopicViewModel> Topics { get; set; } = new List<TopicViewModel>();

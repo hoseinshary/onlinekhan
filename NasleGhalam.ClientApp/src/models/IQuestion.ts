@@ -1,6 +1,8 @@
 import IQuestionOption from "./IQuestionOption";
 import ITopic from "./ITopic";
 import IQuestionAnswer from "./IQuestionAnswer";
+import ILookup, { DefaultLookup } from "./ILookup";
+import IWriter, { DefaultWriter } from "./IWriter";
 
 export default interface IQuestion {
   Id: number;
@@ -22,6 +24,8 @@ export default interface IQuestion {
   LookupId_RepeatnessType: number;
   LookupId_AuthorType: number;
   LookupId_AreaType: number;
+  Lookup_AreaType?: ILookup;
+  Writer?: IWriter;
   QuestionOptions?: Array<IQuestionOption>;
   QuestionAnswers?: Array<IQuestionAnswer>;
   Topics?: Array<ITopic>;
@@ -50,6 +54,8 @@ export const DefaultQuestion: IQuestion = {
   LookupId_RepeatnessType: 22,
   LookupId_AuthorType: 1039,
   LookupId_AreaType: 1036,
+  Lookup_AreaType: DefaultLookup,
+  Writer: DefaultWriter,
   QuestionOptions: [],
   QuestionAnswers: [],
   Topics: [],

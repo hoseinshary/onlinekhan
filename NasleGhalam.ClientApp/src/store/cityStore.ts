@@ -54,7 +54,7 @@ export class CityStore extends VuexModule {
   }
 
   get ddlByProvinceId() {
-    return provinceId =>
+    return (provinceId) =>
       this._cityList
         .filter(x => x.ProvinceId == provinceId)
         .map(x => ({

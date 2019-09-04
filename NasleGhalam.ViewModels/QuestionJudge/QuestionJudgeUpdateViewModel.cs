@@ -35,5 +35,15 @@ namespace NasleGhalam.ViewModels.QuestionJudge
 
         [Display(Name = "سوال")]
         public int QuestionId { get; set; }
+
+        [Display(Name = "مکان مشکل")]
+        public int LookupId_WhereProblem { get; set; }
+
+        [Display(Name = "علت مشکل")]
+        public int LookupId_ReasonProblem { get; set; }
+
+        [Display(Name = "توضیحات")]
+        public string Description { get; set; }
+
     }
 }

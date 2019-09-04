@@ -1,7 +1,7 @@
 <template>
   <bs-modal :show="questionAnswerStore.openModal.index" size="xl" @open="open">
     <template slot="header">
-      <q-toolbar slot="header" color="cyan-9">
+      <q-toolbar slot="header" color="purple-6">
         <q-toolbar-title>{{questionAnswerStore.modelName}}</q-toolbar-title>
         <q-btn dense icon="close" @click="questionAnswerStore.OPEN_MODAL_INDEX(false)"/>
       </q-toolbar>
@@ -20,7 +20,7 @@
       </q-card-media>
     </q-card>
     <div class="col-4">
-      <q-tabs color="cyan-9" v-model="selectedTab">
+      <q-tabs color="purple-6" v-model="selectedTab">
         <!-- tabs -->
         <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add"/>
         <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create"/>
@@ -56,7 +56,7 @@
             <template slot="IsActive" slot-scope="data">{{data.row.IsActive? "بلی" : "خیر"}}</template>
             <template slot="Context" slot-scope="data">
               <div v-if="data.row.Context && data.row.Context.length> 100">
-                {{(`${data.row.Context.substring(0,100)} ...`)}}
+                {{(`${data.row.Context.substring(0,50)} ...`)}}
                 <q-tooltip>{{data.row.Context}}</q-tooltip>
               </div>
               <div v-else>{{data.row.Context}}</div>

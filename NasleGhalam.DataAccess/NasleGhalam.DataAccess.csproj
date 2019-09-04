@@ -117,6 +117,14 @@
     <Compile Include="Migrations\201908091228594_prioritytopic.Designer.cs">
       <DependentUpon>201908091228594_prioritytopic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909022124465_addFieldToQuestionJudge.cs" />
+    <Compile Include="Migrations\201909022124465_addFieldToQuestionJudge.Designer.cs">
+      <DependentUpon>201909022124465_addFieldToQuestionJudge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909022127042_fixbefore.cs" />
+    <Compile Include="Migrations\201909022127042_fixbefore.Designer.cs">
+      <DependentUpon>201909022127042_fixbefore.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -185,6 +193,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908091228594_prioritytopic.resx">
       <DependentUpon>201908091228594_prioritytopic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909022124465_addFieldToQuestionJudge.resx">
+      <DependentUpon>201909022124465_addFieldToQuestionJudge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909022127042_fixbefore.resx">
+      <DependentUpon>201909022127042_fixbefore.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

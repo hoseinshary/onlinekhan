@@ -20,6 +20,8 @@ export class LookupStore extends VuexModule {
   private _authorType: Array<ILookup>;
   private _assayImportance: Array<ILookup>;
   private _assayType: Array<ILookup>;
+  private _whereProblem: Array<ILookup>;
+  private _reasonProblem: Array<ILookup>;
 
   /**
    * initialize data
@@ -41,6 +43,8 @@ export class LookupStore extends VuexModule {
     this._authorType = [];
     this._assayImportance = [];
     this._assayType = [];
+    this._whereProblem = [];
+    this._reasonProblem = [];
   }
 
   //#region ### getters ###
@@ -148,6 +152,22 @@ export class LookupStore extends VuexModule {
       label: x.Value
     }));
   }
+
+  
+  get whereProblemDdl() {
+    return this._whereProblem.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  
+  get reasonProblemDdl() {
+    return this._reasonProblem.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
   //#endregion
 
   //#region ### mutations ###
@@ -224,6 +244,16 @@ export class LookupStore extends VuexModule {
   @mutation
   private SET_ASSAY_TYPE_LIST(list: Array<ILookup>) {
     this._assayType = list;
+  }
+
+  @mutation
+  private SET_WHERE_PROBLEM_LIST(list: Array<ILookup>) {
+    this._whereProblem = list;
+  }
+
+  @mutation
+  private SET_REASON_PROBLEM_LIST(list: Array<ILookup>) {
+    this._reasonProblem = list;
   }
   //#endregion
 
@@ -420,6 +450,32 @@ export class LookupStore extends VuexModule {
         });
     } else {
       return Promise.resolve(this._assayType);
+    }
+  }
+  
+  @action()
+  async fillWhereProblem() {
+    if (!this._whereProblem.length) {
+      return axios
+        .get(`${baseUrl}/GetAllWhereProblem`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_WHERE_PROBLEM_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._whereProblem);
+    }
+  }
+  
+  @action()
+  async fillReasonProblem() {
+    if (!this._reasonProblem.length) {
+      return axios
+        .get(`${baseUrl}/GetAllReasonProblem`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_REASON_PROBLEM_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._reasonProblem);
     }
   }
   //#endregion

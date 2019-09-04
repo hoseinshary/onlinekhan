@@ -1,7 +1,7 @@
 <template>
   <bs-modal :show="questionJudgeStore.openModal.index" size="xl" @open="open">
     <template slot="header">
-      <q-toolbar slot="header" color="cyan-9">
+      <q-toolbar slot="header" color="blue-8">
         <q-toolbar-title>{{questionJudgeStore.modelName}}</q-toolbar-title>
         <q-btn dense icon="close" @click="questionJudgeStore.OPEN_MODAL_INDEX(false)" />
       </q-toolbar>
@@ -21,7 +21,7 @@
       </q-card-main>
     </q-card>
     <div class="col-4">
-      <q-tabs color="cyan-9" v-model="selectedTab">
+      <q-tabs color="blue-8" v-model="selectedTab">
         <!-- tabs -->
         <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add" />
         <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create" />
@@ -160,6 +160,8 @@ export default class QuestionJudgeVue extends Vue {
     if (this.canCreate || this.canEdit) {
       this.lookupStore.fillQuestionHardnessType();
       this.lookupStore.fillRepeatnessType();
+      this.lookupStore.fillReasonProblem();
+      this.lookupStore.fillWhereProblem();
 
       this.questionJudgeStore.resetCreate();
       this.questionJudge.QuestionId = this.question.Id;

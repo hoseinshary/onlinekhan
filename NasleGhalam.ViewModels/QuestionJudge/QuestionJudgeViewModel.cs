@@ -41,5 +41,17 @@ namespace NasleGhalam.ViewModels.QuestionJudge
         public LookupViewModel Lookup_QuestionHardnessType { get; set; }
 
         public LookupViewModel Lookup_RepeatnessType { get; set; }
+
+        public LookupViewModel Lookup_WhereProblem { get; set; }
+        public LookupViewModel Lookup_ReasonProblem { get; set; }
+
+        public int LookupId_WhereProblem { get; set; }
+
+        
+        public int LookupId_ReasonProblem { get; set; }
+
+        
+        public string Description { get; set; }
+
     }
 }

@@ -1,8 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
-      <div class="hoseinsharyToolbar">
-      </div>
+      <!-- <div class="hoseinsharyToolbar"> -->
+      <!-- </div> -->
       <q-toolbar class="toolbar-header" color="indigo-6">
         <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu"/>

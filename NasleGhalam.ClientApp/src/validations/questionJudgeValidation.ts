@@ -49,6 +49,17 @@ const questionJudgeValidations: ValidationRuleset<TQuestionJudge> = {
     LookupId_QuestionHardnessType: {
       displayName: displayName("درجه سختی"),
       requiredDdl: requiredDdl(0)
+    },
+    LookupId_WhereProblem: {
+      displayName: displayName("مکان مشکل"),
+      requiredDdl: requiredDdl(0)
+    },
+    LookupId_ReasonProblem: {
+      displayName: displayName("علت مشکل"),
+      requiredDdl: requiredDdl(0)
+    },
+    Description: {
+      displayName: displayName("توضیحات")
     }
   }
 };

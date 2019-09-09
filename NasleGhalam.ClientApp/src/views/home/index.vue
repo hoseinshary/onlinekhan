@@ -28,6 +28,9 @@
         <li>
           <a href="#">ثبت نام</a>
         </li>
+        <li>
+          <router-link to="/resume/registration">همکاری با ما</router-link>
+        </li>
       </ul>
     </q-layout-header>
     <q-page-container class="col-12">

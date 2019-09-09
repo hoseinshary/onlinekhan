@@ -21,6 +21,7 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 import utilities from "src/utilities";
+import router from "src/router";
 
 @Module({ namespacedPath: "resumeStore/" })
 export class ResumeStore extends VuexModule {
@@ -188,6 +189,7 @@ export class ResumeStore extends VuexModule {
 
         if (data.MessageType == MessageType.Success) {
           this.resetCreate();
+          router.push("/");
         }
       });
   }

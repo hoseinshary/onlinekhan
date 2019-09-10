@@ -43,6 +43,15 @@
         </div>
         <div class="col-12 footer-pic gt-md">
           <span></span>
+          <div class="text-center">
+            <div class="line">
+              <span class="circle"></span>
+            </div>
+            <p>سامانه جامع آموزش</p>
+            <div class="line">
+              <span class="circle"></span>
+            </div>
+          </div>
         </div>
       </section>
     </q-page-container>
@@ -81,7 +90,7 @@ export default class UserLoginVue extends Vue {
   height: 80vh;
 }
 .login-layout .main-input .logo {
-  background-image: url("../../assets/img/logo1.png");
+  background-image: url("../../assets/img/logo2.png");
   background-repeat: no-repeat;
   background-size: contain;
   height: 177px;
@@ -149,7 +158,7 @@ export default class UserLoginVue extends Vue {
   position: relative;
 }
 
-.login-layout .footer-pic span {
+.login-layout .footer-pic > span {
   width: 100px;
   height: 100px;
   position: absolute;
@@ -158,5 +167,41 @@ export default class UserLoginVue extends Vue {
   top: -45px;
   border: none;
   background-color: #0072bb;
+}
+
+.login-layout .footer-pic p {
+  display: inline-block;
+  text-align: center;
+  color: white;
+  margin-top: 41px;
+  font-size: 41px;
+  font-weight: bold;
+}
+
+.login-layout .footer-pic .line {
+  background-color: white;
+  display: inline-block;
+  height: 2px;
+  position: relative;
+  vertical-align: middle;
+  width: 400px;
+  margin: 0 25px;
+}
+
+.login-layout .footer-pic .line .circle {
+  background-color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+  position: absolute;
+  top: -8px;
+}
+
+.login-layout .footer-pic .line:first-child .circle {
+  right: 0px;
+}
+
+.login-layout .footer-pic .line:last-child .circle {
+  left: 0px;
 }
 </style>

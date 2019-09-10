@@ -1,28 +1,29 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
-      <!-- <div class="hoseinsharyToolbar"> -->
-      <!-- </div> -->
-      <q-toolbar class="toolbar-header" color="indigo-6">
-        <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
-          <q-icon name="menu"/>
+      <q-toolbar class="toolbar-header1">
+        <q-btn
+          flat
+          dense
+          round
+          @click="leftDrawerOpen = !leftDrawerOpen"
+          aria-label="Menu"
+          color="black"
+        >
+          <q-icon name="menu" />
         </q-btn>
+        <div class="logo"></div>
+      </q-toolbar>
 
-        <div class="hoseinlogo" ></div>
-
-        <q-toolbar-title>
-          {{siteName}}
-          <div slot="subtitle"  >سامانه جامع کنکور</div>
-        </q-toolbar-title>
-
-
+      <q-toolbar class="toolbar-header2">
+        <q-toolbar-title>{{$q.localStorage.get.item("title")}}</q-toolbar-title>
 
         <q-btn flat dense class="q-mr-sm">
-          <q-icon name="account_circle"/>
-          {{fullName}}
+          <q-icon name="account_circle" />
+          {{$q.localStorage.get.item("FullName")}}
         </q-btn>
         <q-btn @click="logout" flat dense>
-          <q-icon name="exit_to_app"/>خروج
+          <q-icon name="exit_to_app" />خروج
         </q-btn>
       </q-toolbar>
     </q-layout-header>
@@ -52,7 +53,7 @@
             <q-item>
               <!-- <q-item-side icon='map' /> -->
               <!--"item.Icon" />-->
-              <q-item-main :label="item.FaName" sublabel color="white"/>
+              <q-item-main :label="item.FaName" sublabel color="white" />
             </q-item>
           </router-link>
         </q-collapsible>
@@ -60,7 +61,7 @@
     </q-layout-drawer>
 
     <q-page-container class>
-      <br>
+      <br />
       <div class="row justify-center q-mt-lg">
         <transition
           name="transitions"
@@ -68,7 +69,7 @@
           leave-active-class="animated bounceOutUp"
           mode="out-in"
         >
-          <router-view/>
+          <router-view />
         </transition>
       </div>
     </q-page-container>
@@ -85,8 +86,7 @@ export default {
       leftDrawerOpen: true,
       miniState: false,
       menuList: null,
-      subMenuList: null,
-      fullName: ""
+      subMenuList: null
     };
   },
   methods: {
@@ -101,7 +101,6 @@ export default {
     }
   },
   created: function() {
-    this.fullName = this.$q.localStorage.get.item("FullName");
     this.menuList = this.$q.localStorage.get.item("menuList");
     this.subMenuList = this.$q.localStorage.get.item("subMenuList");
   }
@@ -109,11 +108,55 @@ export default {
 </script>
 
 <style>
-.toolbar-header {
-  background-color: #34495e;
-  height: 70px;
+.q-layout-header {
+  border-top: 14px solid #f36f21;
 }
 
+/* toolbar-header1 */
+.toolbar-header1 {
+  background-color: white !important;
+  height: 115px;
+}
+
+.toolbar-header1 .logo {
+  background-image: url("../assets/img/logo1.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 90px;
+  width: 240px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+/* --- */
+
+/* toolbar-header2 */
+.toolbar-header2 {
+  background-color: #0072bc;
+  height: 60px;
+  color: white;
+}
+
+.toolbar-header2 .q-toolbar-title {
+  margin-left: 120px;
+}
+
+.toolbar-header2 .q-btn,
+.toolbar-header2 .q-toolbar-title {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.toolbar-header2 .q-btn .q-icon {
+  color: #f36f21;
+}
+
+.toolbar-header2 .q-btn:last-child {
+  margin-right: 100px;
+}
+
+/* --- */
+
+/* sidebar */
 .layout-drawer aside {
   width: 220px;
   background-color: #3d566e;
@@ -157,20 +200,5 @@ export default {
 .layout-drawer aside .q-collapsible i.q-icon {
   color: white;
 }
-
-.hoseinsharyToolbar{
-  width: 100;
-height: 15px;
-background-color: rgb(248, 107, 25);
-}
-
-.hoseinlogo {
-  background-image: url("../assets/img/logo2.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 75px;
-  max-width: 100%;
-  width: 180px;
-}
-
+/* --- */
 </style>

@@ -35,28 +35,30 @@ Router.beforeEach((to, from, next) => {
   var arr = path.split("/");
   var controller = arr[0] || "";
   var action = arr[1] || "";
+  var title = "";
 
   if (
     (controller == "" && action == "") ||
     (controller == "home" && action == "index")
   ) {
     next();
-    document.title = "آنلاین خوان";
-    return;
+    title = document.title = "آنلاین خوان";
   }
   if (controller == "user" && action == "login") {
     next();
-    document.title = "ورود";
-    return;
+    title = document.title = "ورود";
   }
   if (controller == "resume" && action == "registration") {
     next();
-    document.title = "رزومه";
-    return;
+    title = document.title = "رزومه";
   }
   if (controller == "topic" && action == "printTopic".toLowerCase()) {
     next();
-    document.title = "چاپ مبحث";
+    title = document.title = "چاپ مبحث";
+  }
+
+  if (title) {
+    LocalStorage.set("title", title);
     return;
   }
 
@@ -72,12 +74,14 @@ Router.beforeEach((to, from, next) => {
   ) {
     next("/user/login");
     util.logout();
-    document.title = "ورود";
+    title = document.title = "ورود";
   } else {
     next();
-    document.title = subMenuList.filter(x =>
+    title = document.title = subMenuList.filter(x =>
       x.EnName.toLowerCase().endsWith(controller)
     )[0].FaName;
+
+    LocalStorage.set("title", title);
   }
 });
 

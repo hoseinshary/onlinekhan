@@ -213,7 +213,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 lesson.Ratios.Add(ratio);
             }
 
-            if (lessonUpdateViewModel.LessonDepartmentId != 0 &&( lesson.LessonDepartments.FirstOrDefault() == null) || lesson.LessonDepartments.FirstOrDefault().Id != lessonUpdateViewModel.LessonDepartmentId)
+            if (lessonUpdateViewModel.LessonDepartmentId != 0 &&( lesson.LessonDepartments.FirstOrDefault() == null || lesson.LessonDepartments.FirstOrDefault().Id != lessonUpdateViewModel.LessonDepartmentId))
             {
                 foreach (var item in lesson.LessonDepartments.ToList())
                 {

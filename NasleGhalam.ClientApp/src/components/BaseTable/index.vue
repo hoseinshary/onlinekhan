@@ -519,6 +519,7 @@ export default {
 }
 .my-table {
   width: 100% !important;
+  
 }
 
 .my-table tr {
@@ -526,7 +527,7 @@ export default {
 }
 
 .my-table tr th {
-  background-color: #ff6004;
+  background-color: #9b938f;
   color: white;
   vertical-align: middle;
   text-align: center;

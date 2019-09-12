@@ -1,8 +1,9 @@
 <template>
-  <q-field count :helper="helper" :error-label="errorLabel()">
+  <q-field :count="count" :helper="helper" :error-label="errorLabel()">
     <!-- v-model="model.$model" -->
     <q-select
       ref="input"
+      class="q-input-border"
       :value="model.$model"
       @change="val => { model.$model = val; $emit('change', val); }"
       :options="options"
@@ -46,6 +47,7 @@ export default {
       type: Array,
       required: true
     },
+    count: Boolean,
     helper: String,
     multiple: Boolean,
     radio: Boolean,

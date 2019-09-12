@@ -1,10 +1,11 @@
 <template>
-  <q-field count :helper="helper" :error-label="errorLabel()" :error="model.$error">
-    <label class="lbl">{{displayName}}</label>
-    <br>
-    <div class="gutter-sm">
-      <slot :obj="model"></slot>
-    </div>
+  <q-field :count="count" :helper="helper" :error-label="errorLabel()" :error="model.$error">
+    <section class="q-field-border">
+      <label class="q-field-label">{{displayName}}</label>
+      <div class="gutter-sm q-field-body">
+        <slot :obj="model"></slot>
+      </div>
+    </section>
   </q-field>
 </template>
 
@@ -18,6 +19,7 @@ export default {
       type: Object,
       required: true
     },
+    count: Boolean,
     helper: String
   },
   /**
@@ -51,11 +53,25 @@ export default {
 };
 </script>
 
-<style scoped>
-.lbl {
-  color: #bdbdbd;
+<style>
+.q-field-border {
+  border: 1px solid #cecece;
+  border-radius: 2px;
+  padding: 3px;
+  margin: 0 1px;
   position: relative;
-  top: -7px;
-  font-size: bold;
+  height: 43px;
+}
+
+.q-field-border .q-field-label {
+  color: #bdbdbd;
+  font-size: 11px;
+  position: absolute;
+  top: 0;
+}
+
+.q-field-border .q-field-body {
+  position: absolute;
+  top: 14px;
 }
 </style>

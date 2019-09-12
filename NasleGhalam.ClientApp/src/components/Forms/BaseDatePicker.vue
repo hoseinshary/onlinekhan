@@ -1,7 +1,8 @@
 <template>
-  <q-field count :helper="helper" :error-label="errorLabel()">
+  <q-field :count="count" :helper="helper" :error-label="errorLabel()">
     <q-input
       ref="input"
+      class="q-input-border"
       :type="type"
       v-model="model.$model"
       :id="uid"
@@ -48,6 +49,7 @@ export default {
     },
     type: String,
     helper: String,
+    count: Boolean,
     appendTo: String,
     readonly: Boolean,
     clearable: Boolean,

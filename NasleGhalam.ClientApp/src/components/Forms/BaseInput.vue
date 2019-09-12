@@ -1,7 +1,8 @@
 <template>
-  <q-field count :helper="helper" :error-label="errorLabel()">
+  <q-field :count="count" :helper="helper" :error-label="errorLabel()">
     <q-input
       ref="input"
+      class="q-input-border"
       :type="type"
       v-model="model.$model"
       :float-label="displayName"
@@ -51,6 +52,7 @@ export default {
       default: "text"
     },
     helper: String,
+    count: Boolean,
     readonly: Boolean,
     clearable: Boolean,
     maxHeight: Number,
@@ -140,7 +142,7 @@ export default {
       if (
         this.isOnlyPersianChar ||
         this.isNotPersianChar ||
-        this.isNumeric 
+        this.isNumeric
         // ||
         // this.isMobile
       ) {

@@ -1,121 +1,124 @@
 <template>
   <section class="col-12 q-px-sm">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{questionStore.modelName}}</span>
-      <div slot="body">
-        <section class="row">
-          <div class="col-12">
-            <section class="q-ma-sm q-pa-sm shadow-1">
-              <q-checkbox
-                v-model="showNoJudgement"
-                label="نمایش سوال های بدون ارزیابی"
-                @input="fillGrid()"
-              />
-              <br />
-              <q-checkbox
-                v-model="showWithoutTopic"
-                label="نمایش سوال های بدون مبحث"
-                @input="fillGrid()"
-              />
-            </section>
-          </div>
-          <div class="col-sm-5">
-            <section class="q-ma-sm q-pa-sm shadow-1">
-              <q-select
-                v-model="educationTree.id"
-                :options="educationTree_GradeDdl"
-                float-label="فیلتر درخت آموزش با مقطع"
-                clearable
-              />
-              <!-- <q-field class="col-12">
-                <q-input v-model="educationTreeFilter" float-label="جستجو در درخت آموزش" clearable/>
-              </q-field>-->
-              <q-tree
-                :nodes="educationTreeData"
-                :expanded.sync="educationTree.expanded"
-                :ticked.sync="educationTree.leafTicked"
-                tick-strategy="leaf"
-                class="tree-max-height"
-                color="blue"
-                node-key="Id"
-              />
-              <q-select
-                :value="lessonId"
-                @change="lessonIdChanged"
-                :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
-                float-label="انتخاب درس"
-                class="q-pt-lg"
-              />
-            </section>
-          </div>
-          <div class="col-sm-7" v-if="!showWithoutTopic">
-            <section class="q-ma-sm q-pa-sm shadow-1">
-              <q-field class="col-12">
-                <q-input v-model="topicTree.filter" float-label="جستجوی مبحث" clearable />
-              </q-field>
-              <q-tree
-                :nodes="topicTreeData"
-                :expanded.sync="topicTree.expanded"
-                :selected.sync="topicTree.selected"
-                :ticked.sync="topicTree.leafTicked"
-                :filter="topicTree.filter"
-                tick-strategy="leaf"
-                class="q-pt-lg"
-                color="primary"
-                accordion
-                node-key="Id"
-              />
-            </section>
-          </div>
+    <section class="row">
+      <div class="col-md-4 col-lg-3">
+        <section class="s-border s-spacing">
+          <q-checkbox
+            v-model="showNoJudgement"
+            label="نمایش سوال های بدون ارزیابی"
+            @input="fillGrid()"
+          />
           <br />
+          <q-checkbox
+            v-model="showWithoutTopic"
+            label="نمایش سوال های بدون مبحث"
+            @input="fillGrid()"
+          />
         </section>
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${questionStore.modelName}) جدید`"
-          @click="showModalCreate"
+
+        <q-select
+          v-model="educationTree.id"
+          :options="educationTree_GradeDdl"
+          float-label="فیلتر درخت آموزش با مقطع"
+          clearable
+          class="s-q-input-border s-spacing"
         />
-        <br />
-        <base-table :grid-data="questionStore.gridData" :columns="questionGridColumn" hasIndex>
-          <template slot="Context" slot-scope="data">
-            <div v-if="data.row.Context && data.row.Context.length> 100">
-              {{(`${data.row.Context.substring(0,100)} ...`)}}
-              <q-tooltip>{{data.row.Context}}</q-tooltip>
-            </div>
-            <div v-else>{{data.row.Context}}</div>
-          </template>
-          <template slot="Id" slot-scope="data">
-            <a :href="data.row.QuestionWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
-            <q-btn
-              v-if="canQuestionJudge"
-              outline
-              round
-              icon="list"
-              color="brown"
-              size="sm"
-              class="shadow-1 bg-white q-mr-sm"
-              @click="showModalQuestionJudge(data.row.Id)"
-            >
-              <q-tooltip>ارزیابی</q-tooltip>
-            </q-btn>
-            <q-btn
-              v-if="canQuestionAnswer"
-              outline
-              round
-              icon="list"
-              color="cyan"
-              size="sm"
-              class="shadow-1 bg-white q-mr-sm"
-              @click="showModalQuestionAnswer(data.row.Id)"
-            >
-              <q-tooltip>جواب سوال</q-tooltip>
-            </q-btn>
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
-          </template>
-        </base-table>
+
+        <q-tree
+          :nodes="educationTreeData"
+          :expanded.sync="educationTree.expanded"
+          :ticked.sync="educationTree.leafTicked"
+          tick-strategy="leaf"
+          class="tree-max-height s-spacing s-border"
+          color="blue"
+          node-key="Id"
+        />
+
+        <q-select
+          :value="lessonId"
+          @change="lessonIdChanged"
+          :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
+          float-label="انتخاب درس"
+          class="s-q-input-border s-spacing s-border"
+        />
       </div>
-    </base-panel>
+      <div class="col-md-8 col-lg-9">
+        <section class="s-border s-spacing row">
+          <q-input
+            v-show="!showWithoutTopic"
+            v-model="topicTree.filter"
+            float-label="جستجوی مبحث"
+            clearable
+            class="col-md-5 s-q-input-border"
+          />
+
+          <q-tree
+            v-show="!showWithoutTopic"
+            :nodes="topicTreeData"
+            :expanded.sync="topicTree.expanded"
+            :selected.sync="topicTree.selected"
+            :ticked.sync="topicTree.leafTicked"
+            :filter="topicTree.filter"
+            tick-strategy="leaf"
+            class="q-py-lg col-12"
+            color="primary"
+            accordion
+            node-key="Id"
+          />
+
+          <hr class="col-12 q-mb-sm" />
+          
+          <base-btn-create
+            v-if="canCreate"
+            :label="`ایجاد (${questionStore.modelName}) جدید`"
+            @click="showModalCreate"
+            class="s-spacing"
+          />
+
+          <div class="col-12">
+            <base-table :grid-data="questionStore.gridData" :columns="questionGridColumn" hasIndex>
+              <template slot="Context" slot-scope="data">
+                <div v-if="data.row.Context && data.row.Context.length> 100">
+                  {{(`${data.row.Context.substring(0,100)} ...`)}}
+                  <q-tooltip>{{data.row.Context}}</q-tooltip>
+                </div>
+                <div v-else>{{data.row.Context}}</div>
+              </template>
+              <template slot="Id" slot-scope="data">
+                <a :href="data.row.QuestionWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
+                <q-btn
+                  v-if="canQuestionJudge"
+                  outline
+                  round
+                  icon="list"
+                  color="brown"
+                  size="sm"
+                  class="shadow-1 bg-white q-mr-sm"
+                  @click="showModalQuestionJudge(data.row.Id)"
+                >
+                  <q-tooltip>ارزیابی</q-tooltip>
+                </q-btn>
+                <q-btn
+                  v-if="canQuestionAnswer"
+                  outline
+                  round
+                  icon="list"
+                  color="cyan"
+                  size="sm"
+                  class="shadow-1 bg-white q-mr-sm"
+                  @click="showModalQuestionAnswer(data.row.Id)"
+                >
+                  <q-tooltip>جواب سوال</q-tooltip>
+                </q-btn>
+                <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+              </template>
+            </base-table>
+          </div>
+        </section>
+      </div>
+    </section>
+
     <!-- modals -->
     <modal-create
       v-if="canCreate"

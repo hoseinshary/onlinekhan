@@ -142,7 +142,7 @@ export default {
 
 .toolbar-header2 .q-btn,
 .toolbar-header2 .q-toolbar-title {
-  font-size: 25px;
+  font-size: 23px;
   font-weight: bold;
 }
 

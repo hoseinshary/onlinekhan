@@ -3,7 +3,7 @@
     <!-- v-model="model.$model" -->
     <q-select
       ref="input"
-      class="q-input-border"
+      class="s-q-input-border"
       :value="model.$model"
       @change="val => { model.$model = val; $emit('change', val); }"
       :options="options"

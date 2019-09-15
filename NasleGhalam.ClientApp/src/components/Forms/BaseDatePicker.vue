@@ -2,7 +2,7 @@
   <q-field :count="count" :helper="helper" :error-label="errorLabel()">
     <q-input
       ref="input"
-      class="q-input-border"
+      class="s-q-input-border"
       :type="type"
       v-model="model.$model"
       :id="uid"

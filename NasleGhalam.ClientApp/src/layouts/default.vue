@@ -16,6 +16,7 @@
       </q-toolbar>
 
       <q-toolbar class="toolbar-header2">
+        <img src="/assets/img/header/default.png" alt="header image" />
         <q-toolbar-title>{{$q.localStorage.get.item("title")}}</q-toolbar-title>
 
         <q-btn flat dense class="q-mr-sm">
@@ -134,10 +135,18 @@ export default {
   background-color: #0072bc;
   height: 60px;
   color: white;
+  position: relative;
 }
 
 .toolbar-header2 .q-toolbar-title {
-  margin-left: 120px;
+  margin-left: 210px;
+}
+
+.toolbar-header2 img {
+  position: fixed;
+  left: 140px;
+  top: 88px;
+  width: 90px;
 }
 
 .toolbar-header2 .q-btn,

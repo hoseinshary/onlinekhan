@@ -7,52 +7,70 @@
       </q-toolbar>
     </template>
 
-    <q-card inline class="col-12" v-if="question.FileName">
-      <q-card-media>
-        <img :src="question.QuestionPicturePath" class="img-original-width" />
-      </q-card-media>
-      <q-card-main class="shadow-3">
-        <p class="text-faded">مشخصه های سوال</p>
-        <section class="row">
-          <div class="col-sm-3 clo-md-2">جواب صحیح: <span class="text-bold">{{question.AnswerNumber}}</span></div>
-          <div class="col-sm-3 clo-md-2">نویسنده: <span class="text-bold">{{question.Writer.Name}}</span></div>
-          <div class="col-sm-3 clo-md-2">حیطه سوال: <span class="text-bold">{{question.Lookup_AreaType.Value}}</span></div>
-        </section>
-      </q-card-main>
-    </q-card>
-    <div class="col-4">
-      <q-tabs color="blue-8" v-model="selectedTab">
-        <!-- tabs -->
-        <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add" />
-        <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create" />
-        <!-- tab-panes -->
-        <q-tab-pane keep-alive name="tab-create">
-          <tab-create></tab-create>
-        </q-tab-pane>
-        <q-tab-pane keep-alive name="tab-edit">
-          <tab-edit></tab-edit>
-        </q-tab-pane>
-      </q-tabs>
+    <div class="col-md-5 col-lg-4">
+      <section class="row s-border s-spacing">
+        <p class="col-12 text-primary text-weight-bold q-pa-sm">مشخصه های سوال</p>
+        <div class="col-12 q-pa-sm">
+          جواب صحیح:
+          <span class="text-black">{{question.AnswerNumber}}</span>
+        </div>
+        <div class="col-12 q-pa-sm">
+          نویسنده:
+          <span class="text-black">{{question.Writer.Name}}</span>
+        </div>
+        <div class="col-12 q-pa-sm">
+          حیطه سوال:
+          <span class="text-black">{{question.Lookup_AreaType.Value}}</span>
+        </div>
+      </section>
+
+      <section class="row s-border s-spacing">
+        <q-tabs color="blue-8" v-model="selectedTab">
+          <!-- tabs -->
+          <q-tab
+            slot="title"
+            name="tab-create"
+            label="ایجاد"
+            icon="library_add"
+            @select="showTabCreate()"
+          />
+          <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create" />
+          <!-- tab-panes -->
+          <q-tab-pane keep-alive name="tab-create" class="no-border">
+            <tab-create></tab-create>
+          </q-tab-pane>
+          <q-tab-pane keep-alive name="tab-edit" class="no-border">
+            <tab-edit></tab-edit>
+          </q-tab-pane>
+        </q-tabs>
+      </section>
     </div>
-    <div class="col-8">
-      <base-table
-        :grid-data="questionJudgeStore.gridData"
-        :columns="questionJudgeGridColumn"
-        hasIndex
-      >
-        <template
-          slot="Lookup_RepeatnessType.Value"
-          slot-scope="data"
-        >{{data.row.Lookup_RepeatnessType.Value}}</template>
-        <template
-          slot="Lookup_QuestionHardnessType.Value"
-          slot-scope="data"
-        >{{data.row.Lookup_QuestionHardnessType.Value}}</template>
-        <template slot="Id" slot-scope="data">
-          <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)" />
-          <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
-        </template>
-      </base-table>
+
+    <div class="col-md-7 col-lg-8">
+      <section class="s-border s-spacing" v-show="question.FileName">
+        <img :src="question.QuestionPicturePath" class="img-original-width" />
+      </section>
+
+      <section class="row s-border s-spacing">
+        <base-table
+          :grid-data="questionJudgeStore.gridData"
+          :columns="questionJudgeGridColumn"
+          hasIndex
+        >
+          <template
+            slot="Lookup_RepeatnessType.Value"
+            slot-scope="data"
+          >{{data.row.Lookup_RepeatnessType.Value}}</template>
+          <template
+            slot="Lookup_QuestionHardnessType.Value"
+            slot-scope="data"
+          >{{data.row.Lookup_QuestionHardnessType.Value}}</template>
+          <template slot="Id" slot-scope="data">
+            <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)" />
+            <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
+          </template>
+        </base-table>
+      </section>
     </div>
 
     <template slot="footer">
@@ -60,7 +78,6 @@
     </template>
   </bs-modal>
 </template>
-
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
@@ -149,6 +166,11 @@ export default class QuestionJudgeVue extends Vue {
   //#endregion
 
   //#region ### methods ###
+  showTabCreate() {
+    this.questionJudgeStore.resetCreate();
+    this.questionJudge.QuestionId = this.question.Id;
+  }
+
   showTabEdit(id) {
     this.questionJudgeStore.resetEdit();
     this.questionJudgeStore.getById(id).then(() => {

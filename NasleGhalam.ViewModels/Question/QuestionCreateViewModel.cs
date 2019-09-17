@@ -75,6 +75,9 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "فعال")]
         public bool IsActive { get; set; }
 
+        [Display(Name = "سوال ترکیبی")]
+        public bool IsHybrid { get; set; }
+
         public string FilePath { get; set; }
 
         [Display(Name = "گزینه صحیح")]

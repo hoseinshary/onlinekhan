@@ -125,6 +125,10 @@
     <Compile Include="Migrations\201909022127042_fixbefore.Designer.cs">
       <DependentUpon>201909022127042_fixbefore.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909110941432_questionAddField.cs" />
+    <Compile Include="Migrations\201909110941432_questionAddField.Designer.cs">
+      <DependentUpon>201909110941432_questionAddField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -199,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909022127042_fixbefore.resx">
       <DependentUpon>201909022127042_fixbefore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909110941432_questionAddField.resx">
+      <DependentUpon>201909110941432_questionAddField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

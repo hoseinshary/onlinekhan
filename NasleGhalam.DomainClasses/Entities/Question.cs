@@ -69,6 +69,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public bool IsDelete { get; set; }
         public bool IsUpdate { get; set; }
 
+        public bool IsHybrid { get; set; }
         public int AnswerNumber { get; set; }
 
         public ICollection<QuestionJudge> QuestionJudges { get; set; }

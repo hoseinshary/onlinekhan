@@ -16,6 +16,7 @@ export default interface IQuestion {
   Description: string;
   FileName: string;
   // IsActive: boolean;
+  IsHybrid : boolean;
   AnswerNumber: number;
   QuestionWordPath: string;
   QuestionPicturePath: string;
@@ -46,6 +47,7 @@ export const DefaultQuestion: IQuestion = {
   Description: "",
   FileName: "",
   // IsActive: true,
+  IsHybrid : false,
   AnswerNumber: 0,
   QuestionWordPath: "",
   QuestionPicturePath: "",

@@ -15,6 +15,9 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "نام فایل")]
         public string FileName { get; set; }
 
+        [Display(Name = "سوال ترکیبی")]
+        public bool IsHybrid { get; set; }
+
         public int AnswerNumber { get; set; }
 
         public List<int> TopicIds { get; set; } = new List<int>();

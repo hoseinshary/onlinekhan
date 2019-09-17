@@ -1,56 +1,18 @@
 <template>
-  <section class="row gutter-sm shadow-1 q-pa-sm q-ma-sm">
-    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6" helper="ثانیه" />
-
-    <div class="row"></div>
+  <section class="row gutter-sm">
+    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6 col-lg-4" suffix="ثانیه" />
     <base-select
       :model="$v.questionJudge.LookupId_RepeatnessType"
       :options="lookupStore.repeatnessTypeDdl"
-      class="col-md-6"
+      class="col-md-6 col-lg-4"
       clearable
     />
     <base-select
       :model="$v.questionJudge.LookupId_QuestionHardnessType"
       :options="lookupStore.questionHardnessTypeDdl"
-      class="col-md-6"
+      class="col-md-6 col-lg-4"
       clearable
     />
-    <base-field class="col-md-6" :model="$v.questionJudge.IsStandard">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
-      </template>
-    </base-field>
-    <base-field class="col-md-6" :model="$v.questionJudge.IsLearning">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
-      </template>
-    </base-field>
-    <base-field class="col-md-6" :model="$v.questionJudge.IsUpdate">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
-      </template>
-    </base-field>
-    <base-field class="col-md-6" :model="$v.questionJudge.IsDelete">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
-      </template>
-    </base-field>
-    <base-field class="col-md-6" :model="$v.questionJudge.IsActiveQuestion">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
-      </template>
-    </base-field>
-    <base-field class="col-md-6" :model="$v.questionJudge.IsActiveQuestionAnswer">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
-      </template>
-    </base-field>
     <base-select
       :model="$v.questionJudge.LookupId_WhereProblem"
       :options="lookupStore.whereProblemDdl"
@@ -63,8 +25,44 @@
       class="col-md-6"
       clearable
     />
+    <q-field class="col-12">
+      <div class="s-border q-pa-sm">
+        <q-toggle
+          v-model="$v.questionJudge.IsStandard.$model"
+          :label="$v.questionJudge.IsStandard.$params.displayName.value"
+          class="q-mx-md"
+        />
+        <q-toggle
+          v-model="$v.questionJudge.IsLearning.$model"
+          :label="$v.questionJudge.IsLearning.$params.displayName.value"
+          class="q-mx-md"
+        />
+        <q-toggle
+          v-model="$v.questionJudge.IsUpdate.$model"
+          :label="$v.questionJudge.IsUpdate.$params.displayName.value"
+          class="q-mx-md"
+        />
+        <q-toggle
+          v-model="$v.questionJudge.IsDelete.$model"
+          :label="$v.questionJudge.IsDelete.$params.displayName.value"
+          class="q-mx-md"
+        />
+        <q-toggle
+          v-model="$v.questionJudge.IsActiveQuestion.$model"
+          :label="$v.questionJudge.IsActiveQuestion.$params.displayName.value"
+          class="q-mx-md"
+        />
+        <q-toggle
+          v-model="$v.questionJudge.IsActiveQuestionAnswer.$model"
+          :label="$v.questionJudge.IsActiveQuestionAnswer.$params.displayName.value"
+          class="q-mx-md"
+        />
+      </div>
+    </q-field>
     <base-input :model="$v.questionJudge.Description" class="col-12" />
-    <base-btn-create @click="questionJudgeStore.submitCreate()" />
+    <div class="col-12">
+      <base-btn-create @click="questionJudgeStore.submitCreate()" />
+    </div>
   </section>
 </template>
 

@@ -27,6 +27,10 @@ body {
 .q-input-shadow {
   color: #95979a;
 }
+
+.q-option-inner + .q-option-label {
+  margin-left: 2px;
+}
 /* --- */
 .tree-max-height {
   max-height: 200px;

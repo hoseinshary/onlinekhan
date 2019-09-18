@@ -215,7 +215,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
 
-            File.Delete(wordFilename);
+           // File.Delete(wordFilename);
             source.Close();
             app.Quit();
 

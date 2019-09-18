@@ -44,6 +44,15 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpPost]
+        [CheckModelValidation]
+        public IHttpActionResult Register(UserCreateViewModel userViewModel)
+        {
+            var msgRes = _userService.Register(userViewModel, Request.GetRoleLevel());
+            return Ok(msgRes);
+        }
+
+
+        [HttpPost]
         [CheckUserAccess(ActionBits.UserCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(UserCreateViewModel userViewModel)

@@ -48,6 +48,10 @@ Router.beforeEach((to, from, next) => {
     next();
     title = document.title = "ورود";
   }
+  if (controller == "user" && action == "register") {
+    next();
+    title = document.title = "ثبت نام";
+  }
   if (controller == "resume" && action == "registration") {
     next();
     title = document.title = "رزومه";

@@ -91,6 +91,49 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
+
+        /// <summary>
+        /// ثبت نام کاربر
+        /// </summary>
+        /// <param name="userViewModel"></param>
+        /// <param name="userRoleLevel"></param>
+        /// <returns></returns>
+        public ClientMessageResult Register(UserCreateViewModel userViewModel, byte userRoleLevel)
+        {
+            // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
+            var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
+            if (role.Level <= userRoleLevel)
+            {
+                return new ClientMessageResult()
+                {
+                    Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
+                    MessageType = MessageType.Error
+                };
+            }
+
+            var user = Mapper.Map<User>(userViewModel);
+            user.LastLogin = DateTime.Now;
+            _users.Add(user);
+
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Obj = GetById(user.Id, userRoleLevel);
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_NationalNo"))
+            {
+                clientResult.Message = "کد ملی تکراری می باشد";
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_Username"))
+            {
+                clientResult.Message = "نام کاربری تکراری می باشد";
+            }
+
+            return clientResult;
+        }
+
         /// <summary>
         /// ثبت کاربر
         /// </summary>

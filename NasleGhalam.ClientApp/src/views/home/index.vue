@@ -26,7 +26,7 @@
           <router-link to="/user/login">ورود</router-link>
         </li>
         <li>
-          <a href="#">ثبت نام</a>
+          <router-link to="/user/register">ثبت نام</router-link>
         </li>
         <li>
           <router-link to="/resume/registration">همکاری با ما</router-link>

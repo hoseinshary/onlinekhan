@@ -519,33 +519,56 @@ export default {
 }
 .my-table {
   width: 100% !important;
-  
+  border-collapse: collapse;
 }
 
 .my-table tr {
   white-space: nowrap;
 }
 
-.my-table tr th {
-  background-color: #9b938f;
-  color: white;
+.my-table tr th,
+.my-table tr td {
   vertical-align: middle;
   text-align: center;
   font-weight: bold;
+}
+
+.my-table tr th {
+  background-color: #c3c3c3;
+  color: white;
   font-size: 15px;
   height: 35px;
-  padding: 1px;
+  border: 2px solid #e6e7e8;
+}
+.my-table tr th:first-child {
+  border-radius: 10px 0 0 0;
+  border-top: 0;
+  border-left: 0;
+}
+
+.my-table tr th:last-child {
+  border-radius: 0 10px 0 0;
+  border-top: 0;
+  border-right: 0;
 }
 
 .my-table tr td {
   color: #524f4f;
-  vertical-align: middle;
-  text-align: center;
-  border: 1px solid rgb(230, 230, 230);
+  border: 2px solid #e6e7e8;
   height: 25px;
-  font-weight: bold;
   font-size: 12px;
-  padding: 1px;
+}
+
+.my-table tr:last-child td:first-child {
+  border-radius: 0 0 0 10px;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.my-table tr:last-child td:last-child {
+  border-radius: 0 0 10px 0;
+  border-bottom: 0;
+  border-right: 0;
 }
 
 .my-table tr:nth-child(2n + 2) {
@@ -556,21 +579,11 @@ export default {
   background-color: #fafafa;
 }
 
-/* .my-table tr td table tr td {
-  width: 22px;
-  font-weight: bold;
-} */
-
 table.my-table tbody tr.selected {
   background-color: #b0bed9 !important;
   transition: all 400ms linear; /*cubic-bezier(1, 0, 1, 0); */
   color: #c50505;
   font-weight: bold;
-  /* background-color: purple; */
 }
-
-/* table.my-table thead th.active {
-  color: #c50505;
-} */
 </style>
 

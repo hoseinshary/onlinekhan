@@ -60,3 +60,11 @@ body {
   margin: 8px;
   padding: 5px;
 }
+
+.s-grid-q-btn {
+  box-shadow: none;
+}
+
+.s-grid-q-btn .q-icon {
+  font-size: 32px;
+}

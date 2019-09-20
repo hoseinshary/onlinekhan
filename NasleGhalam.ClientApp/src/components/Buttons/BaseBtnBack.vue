@@ -1,10 +1,6 @@
 <template>
-  <q-btn 
-         color="deep-orange"
-         class="shadow-2  q-mr-sm"
-         @click="$emit('click')">
-    بازگشت
-    <q-icon name="arrow_back" />
+  <q-btn class="s-btn-back" @click="$emit('click')">
+    <q-icon name="reply_all" />بازگشت
   </q-btn>
 </template>
 
@@ -13,4 +9,13 @@ export default {};
 </script>
 
 <style>
+.s-btn-back {
+  font-weight: bold;
+  background-color: #ed1c24;
+  color: white;
+  margin-right: 6px;
+}
+.s-btn-back .q-icon {
+  font-size: 25px;
+}
 </style>

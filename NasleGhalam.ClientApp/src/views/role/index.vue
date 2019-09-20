@@ -1,37 +1,29 @@
 <template>
-  <section class="col-md-8">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{roleStore.modelName}}</span>
-      <div slot="body">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${roleStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br>
-        <base-table :grid-data="roleStore.gridData" :columns="roleGridColumn" hasIndex>
-          <q-btn
-            v-if="canAccess"
-            slot="role"
-            slot-scope="data"
-            outline
-            round
-            icon="list"
-            color="brown"
-            size="sm"
-            class="shadow-1 bg-white q-mr-sm"
-            @click="showModalAccess(data.row.Id)"
-          >
-            <q-tooltip>انتساب نقش</q-tooltip>
-          </q-btn>
-          <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
+  <section class="col-md-10 col-lg-8">
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${roleStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table :grid-data="roleStore.gridData" :columns="roleGridColumn" hasIndex>
+      <q-btn
+        v-if="canAccess"
+        slot="role"
+        slot-scope="data"
+        round
+        size="sm"
+        icon="swap_horiz"
+        class="s-grid-q-btn text-yellow"
+        @click="showModalAccess(data.row.Id)"
+      >
+        <q-tooltip>انتساب نقش</q-tooltip>
+      </q-btn>
+      <template slot="Id" slot-scope="data">
+        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+      </template>
+    </base-table>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

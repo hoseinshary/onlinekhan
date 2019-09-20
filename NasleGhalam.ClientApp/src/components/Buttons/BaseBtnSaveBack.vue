@@ -1,10 +1,6 @@
 <template>
-  <q-btn color="info"
-         
-         class="shadow-2 q-mr-sm"
-         @click="$emit('click')">
-    <q-icon name="save" /> ثبت و بازگشت
-    <q-icon name="arrow_back" />
+  <q-btn class="s-btn-save-back" @click="$emit('click')">
+    <q-icon name="reply" />ثبت و بازگشت
   </q-btn>
 </template>
 
@@ -13,5 +9,14 @@ export default {};
 </script>
 
 <style>
+.s-btn-save-back {
+  font-weight: bold;
+  background-color: #faa61a;
+  color: white;
+  margin-right: 6px;
+}
+.s-btn-save-back .q-icon {
+  font-size: 25px;
+}
 </style>
 

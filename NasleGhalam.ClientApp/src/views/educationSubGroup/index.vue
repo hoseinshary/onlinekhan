@@ -1,28 +1,22 @@
 <template>
   <section class="col-md-8">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{educationSubGroupStore.modelName}}</span>
-      <div slot="body">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${educationSubGroupStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br>
-        <base-table
-          :grid-data="educationSubGroupStore.gridData"
-          :columns="educationSubGroupGridColumn"
-          hasIndex
-        >
-          <template slot="EducationTree.Name" slot-scope="data">{{data.row.EducationTree.Name}}</template>
-          <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${educationSubGroupStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table
+      :grid-data="educationSubGroupStore.gridData"
+      :columns="educationSubGroupGridColumn"
+      hasIndex
+    >
+      <template slot="EducationTree.Name" slot-scope="data">{{data.row.EducationTree.Name}}</template>
+      <template slot="Id" slot-scope="data">
+        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+      </template>
+    </base-table>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

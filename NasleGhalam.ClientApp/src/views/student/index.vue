@@ -1,35 +1,29 @@
 <template>
-  <section class="col-xs-12 q-px-md">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{studentStore.modelName}}</span>
-      <div slot="body">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${studentStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br>
-        <base-table :grid-data="studentStore.gridData" :columns="studentGridColumn" hasIndex>
-          <template slot="User.Name" slot-scope="data">{{data.row.User.Name}}</template>
-          <template slot="User.Family" slot-scope="data">{{data.row.User.Family}}</template>
-          <template slot="User.GenderName" slot-scope="data">{{data.row.User.GenderName}}</template>
-          <template slot="User.NationalNo" slot-scope="data">{{data.row.User.NationalNo}}</template>
-          <template slot="User.Username" slot-scope="data">{{data.row.User.Username}}</template>
-          <template slot="User.IsActive" slot-scope="data">
-            <q-checkbox v-model="data.row.User.IsActive" readonly/>
-          </template>
-          <template slot="User.Phone" slot-scope="data">{{data.row.User.Phone}}</template>
-          <template slot="User.Mobile" slot-scope="data">{{data.row.User.Mobile}}</template>
-          <template slot="User.RoleName" slot-scope="data">{{data.row.User.RoleName}}</template>
-          <template slot="User.CityName" slot-scope="data">{{data.row.User.CityName}}</template>
-          <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
+  <section class="col-12 q-px-md">
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${studentStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table :grid-data="studentStore.gridData" :columns="studentGridColumn" hasIndex>
+      <template slot="User.Name" slot-scope="data">{{data.row.User.Name}}</template>
+      <template slot="User.Family" slot-scope="data">{{data.row.User.Family}}</template>
+      <template slot="User.GenderName" slot-scope="data">{{data.row.User.GenderName}}</template>
+      <template slot="User.NationalNo" slot-scope="data">{{data.row.User.NationalNo}}</template>
+      <template slot="User.Username" slot-scope="data">{{data.row.User.Username}}</template>
+      <template slot="User.IsActive" slot-scope="data">
+        <q-checkbox v-model="data.row.User.IsActive" readonly />
+      </template>
+      <template slot="User.Phone" slot-scope="data">{{data.row.User.Phone}}</template>
+      <template slot="User.Mobile" slot-scope="data">{{data.row.User.Mobile}}</template>
+      <template slot="User.RoleName" slot-scope="data">{{data.row.User.RoleName}}</template>
+      <template slot="User.CityName" slot-scope="data">{{data.row.User.CityName}}</template>
+      <template slot="Id" slot-scope="data">
+        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+      </template>
+    </base-table>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

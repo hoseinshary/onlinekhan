@@ -1,23 +1,17 @@
 <template>
   <section class="col-md-8">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{resumeStore.modelName}}</span>
-      <div slot="body">
-        <base-table :grid-data="resumeStore.gridData" :columns="resumeGridColumn" hasIndex>
-          <template slot="City.Name" slot-scope="data">{{data.row.City.Name}}</template>
-          <template slot="Id" slot-scope="data">
-            <q-btn
-              outline
-              dense
-              color="primary"
-              class="shadow-1 bg-white q-mr-sm"
-              @click="showModalDetail(data.row.Id)"
-            >جزییات</q-btn>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
+    <base-table :grid-data="resumeStore.gridData" :columns="resumeGridColumn" hasIndex>
+      <template slot="City.Name" slot-scope="data">{{data.row.City.Name}}</template>
+      <template slot="Id" slot-scope="data">
+        <q-btn
+          outline
+          dense
+          color="primary"
+          class="shadow-1 bg-white q-mr-sm"
+          @click="showModalDetail(data.row.Id)"
+        >جزییات</q-btn>
+      </template>
+    </base-table>
     <!-- modals -->
     <modal-detail></modal-detail>
   </section>

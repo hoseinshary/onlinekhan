@@ -1,40 +1,21 @@
 <template>
-  <section class="col-xs-12 q-px-md">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{axillaryBookStore.modelName}}</span>
-      <div slot="body">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${axillaryBookStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br>
-        <base-table
-          :grid-data="axillaryBookStore.gridData"
-          :columns="axillaryBookGridColumn"
-          hasIndex
-        >
-          <template
-            slot="Lookup_PrintType.Value"
-            slot-scope="data"
-          >{{data.row.Lookup_PrintType.Value}}</template>
-          <template
-            slot="Lookup_BookType.Value"
-            slot-scope="data"
-          >{{data.row.Lookup_BookType.Value}}</template>
-          <template
-            slot="Lookup_PaperType.Value"
-            slot-scope="data"
-          >{{data.row.Lookup_PaperType.Value}}</template>
-          <template slot="Publisher.Name" slot-scope="data">{{data.row.Publisher.Name}}</template>
-          <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
+  <section class="col-12 q-px-md">
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${axillaryBookStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table :grid-data="axillaryBookStore.gridData" :columns="axillaryBookGridColumn" hasIndex>
+      <template slot="Lookup_PrintType.Value" slot-scope="data">{{data.row.Lookup_PrintType.Value}}</template>
+      <template slot="Lookup_BookType.Value" slot-scope="data">{{data.row.Lookup_BookType.Value}}</template>
+      <template slot="Lookup_PaperType.Value" slot-scope="data">{{data.row.Lookup_PaperType.Value}}</template>
+      <template slot="Publisher.Name" slot-scope="data">{{data.row.Publisher.Name}}</template>
+      <template slot="Id" slot-scope="data">
+        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+      </template>
+    </base-table>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

@@ -1,5 +1,5 @@
 <template>
-<section class="col-xs-12 q-px-md">
+<section class="col-12 q-px-md">
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
 

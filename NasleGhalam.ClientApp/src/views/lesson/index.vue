@@ -1,45 +1,42 @@
 <template>
   <section class="col-md-12 q-px-lg">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{lessonStore.modelName}}</span>
-      <div slot="body" class="row gutter-sm">
-        <div class="col-md-4">
-          <q-select
-            v-model="educationTree.id"
-            :options="educationTree_GradeDdl"
-            float-label="فیلتر درخت آموزش با مقطع"
-            clearable
-          />
-          <q-tree
-            :nodes="educationTreeData"
-            :expanded.sync="educationTree.expanded"
-            :ticked.sync="educationTree.leafTicked"
-            tick-strategy="leaf"
-            color="blue"
-            node-key="Id"
-          />
-        </div>
-        <div class="col-md-8">
-          <base-btn-create
-            v-if="canCreate"
-            :label="`ایجاد (${lessonStore.modelName}) جدید`"
-            @click="showModalCreate"
-          />
-          <br />
-          <base-table
-            :grid-data="lessonStore.gridDataByEducationTreeIds(educationTree.leafTicked)"
-            :columns="lessonGridColumn"
-            hasIndex
-          >
-            <template slot="Id" slot-scope="data">
-              <base-btn-edit round v-if="canEdit" @click="showModalEdit(data.row.Id)" />
-              <base-btn-delete round v-if="canDelete" @click="showModalDelete(data.row.Id)" />
-            </template>
-          </base-table>
-        </div>
+    <section slot="body" class="row gutter-sm">
+      <div class="col-md-4">
+        <q-select
+          v-model="educationTree.id"
+          :options="educationTree_GradeDdl"
+          float-label="فیلتر درخت آموزش با مقطع"
+          clearable
+        />
+        <q-tree
+          :nodes="educationTreeData"
+          :expanded.sync="educationTree.expanded"
+          :ticked.sync="educationTree.leafTicked"
+          tick-strategy="leaf"
+          color="blue"
+          node-key="Id"
+        />
       </div>
-    </base-panel>
+      <div class="col-md-8">
+        <base-btn-create
+          v-if="canCreate"
+          :label="`ایجاد (${lessonStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
+        <br />
+        <base-table
+          :grid-data="lessonStore.gridDataByEducationTreeIds(educationTree.leafTicked)"
+          :columns="lessonGridColumn"
+          hasIndex
+        >
+          <template slot="Id" slot-scope="data">
+            <base-btn-edit round v-if="canEdit" @click="showModalEdit(data.row.Id)" />
+            <base-btn-delete round v-if="canDelete" @click="showModalDelete(data.row.Id)" />
+          </template>
+        </base-table>
+      </div>
+    </section>
+
     <!-- modals -->
     <modal-create
       v-if="canCreate"

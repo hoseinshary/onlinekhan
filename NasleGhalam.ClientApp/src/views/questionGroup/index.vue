@@ -1,72 +1,66 @@
 <template>
   <section class="col-12 q-px-sm">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{questionGroupStore.modelName}}</span>
-      <div slot="body">
-        <section class="row">
-          <div class="col-sm-5">
-            <section class="q-ma-sm q-pa-sm shadow-1">
-              <q-select
-                v-model="educationTree.id"
-                :options="educationTree_GradeDdl"
-                float-label="فیلتر درخت آموزش با مقطع"
-                clearable
-              />
-              <q-tree
-                :nodes="educationTreeData"
-                :expanded.sync="educationTree.expanded"
-                :ticked.sync="educationTree.leafTicked"
-                tick-strategy="leaf"
-                class="tree-max-height"
-                color="blue"
-                node-key="Id"
-              />
-              <q-select
-                :value="questionGroup.LessonId"
-                @change="lessonIdChanged"
-                :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
-                float-label="انتخاب درس"
-                class="q-pt-lg"
-              />
-            </section>
-          </div>
-          <div class="col-sm-7">
-            <base-btn-create
-              v-if="canCreate && questionGroup.LessonId>0"
-              :label="`ایجاد (${questionGroupStore.modelName}) جدید`"
-              @click="showModalCreate"
-            />
-            <br />
-            <base-table
-              :grid-data="questionGroupStore.gridData"
-              :columns="questionGroupGridColumn"
-              hasIndex
-            >
-              <template slot="Id" slot-scope="data">
-                <q-btn
-                  outline
-                  dense
-                  color="primary"
-                  class="shadow-1 bg-white q-mr-sm"
-                  @click="showModalQuestions(data.row.Id)"
-                >سوال ها</q-btn>
-                <q-btn
-                  outline
-                  dense
-                  color="primary"
-                  class="shadow-1 bg-white q-mr-sm"
-                  @click="showModalCreateMultiAnswer(data.row.Id)"
-                >ثبت جواب گروهی</q-btn>
-                <a :href="data.row.QuestionGroupWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
-                <a :href="data.row.QuestionGroupExcelPath" target="_blank" class="q-mr-sm">فایل اکسل</a>
-                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
-              </template>
-            </base-table>
-          </div>
+    <section class="row">
+      <div class="col-sm-5">
+        <section class="q-ma-sm q-pa-sm shadow-1">
+          <q-select
+            v-model="educationTree.id"
+            :options="educationTree_GradeDdl"
+            float-label="فیلتر درخت آموزش با مقطع"
+            clearable
+          />
+          <q-tree
+            :nodes="educationTreeData"
+            :expanded.sync="educationTree.expanded"
+            :ticked.sync="educationTree.leafTicked"
+            tick-strategy="leaf"
+            class="tree-max-height"
+            color="blue"
+            node-key="Id"
+          />
+          <q-select
+            :value="questionGroup.LessonId"
+            @change="lessonIdChanged"
+            :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
+            float-label="انتخاب درس"
+            class="q-pt-lg"
+          />
         </section>
       </div>
-    </base-panel>
+      <div class="col-sm-7">
+        <base-btn-create
+          v-if="canCreate && questionGroup.LessonId>0"
+          :label="`ایجاد (${questionGroupStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
+        <br />
+        <base-table
+          :grid-data="questionGroupStore.gridData"
+          :columns="questionGroupGridColumn"
+          hasIndex
+        >
+          <template slot="Id" slot-scope="data">
+            <q-btn
+              outline
+              dense
+              color="primary"
+              class="shadow-1 bg-white q-mr-sm"
+              @click="showModalQuestions(data.row.Id)"
+            >سوال ها</q-btn>
+            <q-btn
+              outline
+              dense
+              color="primary"
+              class="shadow-1 bg-white q-mr-sm"
+              @click="showModalCreateMultiAnswer(data.row.Id)"
+            >ثبت جواب گروهی</q-btn>
+            <a :href="data.row.QuestionGroupWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
+            <a :href="data.row.QuestionGroupExcelPath" target="_blank" class="q-mr-sm">فایل اکسل</a>
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+          </template>
+        </base-table>
+      </div>
+    </section>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

@@ -562,7 +562,7 @@ export default {
   font-size: 12px;
 }
 
-.my-table tr:last-child td:first-child {
+/* .my-table tr:last-child td:first-child {
   border-radius: 0 0 0 10px;
   border-bottom: 0;
   border-left: 0;
@@ -572,7 +572,7 @@ export default {
   border-radius: 0 0 10px 0;
   border-bottom: 0;
   border-right: 0;
-}
+} */
 
 .my-table tr:nth-child(2n + 2) {
   background-color: #f3f3f3;

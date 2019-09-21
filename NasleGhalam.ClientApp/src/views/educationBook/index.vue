@@ -1,68 +1,62 @@
 <template>
   <section class="col-12 q-px-sm">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{educationBookStore.modelName}}</span>
-      <div slot="body">
-        <section class="row gutter-sm">
-          <div class="col-sm-5">
-            <section class="q-ma-sm q-pa-sm shadow-1">
-              <q-select
-                v-model="educationTree.id"
-                :options="educationTree_GradeDdl"
-                float-label="فیلتر درخت آموزش با مقطع"
-                clearable
-              />
-              <q-tree
-                :nodes="educationTreeData"
-                :expanded.sync="educationTree.expanded"
-                :ticked.sync="educationTree.leafTicked"
-                :selected.sync="educationTree.selected"
-                class="tree-max-height"
-                tick-strategy="leaf"
-                color="blue"
-                node-key="Id"
-              />
-              <q-select
-                :value="lessonId"
-                @change="lessonIdChanged"
-                :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
-                float-label="انتخاب درس"
-                class="q-pt-lg"
-              />
-            </section>
-          </div>
-
-          <div class="col-sm-7">
-            <base-btn-create
-              v-if="canCreate && lessonId > 0"
-              :label="`ایجاد (${educationBookStore.modelName}) جدید`"
-              @click="showModalCreate"
-            />
-            <br />
-            <base-table
-              :grid-data="educationBookStore.gridData"
-              :columns="educationBookGridColumn"
-              hasIndex
-            >
-              <template slot="IsActive" slot-scope="data">
-                <q-checkbox v-model="data.row.IsActive" readonly />
-              </template>
-              <template slot="IsExamSource" slot-scope="data">
-                <q-checkbox v-model="data.row.IsExamSource" readonly />
-              </template>
-              <template slot="IsChanged" slot-scope="data">
-                <q-checkbox v-model="data.row.IsChanged" readonly />
-              </template>
-              <template slot="Id" slot-scope="data">
-                <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
-                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
-              </template>
-            </base-table>
-          </div>
+    <section class="row gutter-sm">
+      <div class="col-sm-5">
+        <section class="q-ma-sm q-pa-sm shadow-1">
+          <q-select
+            v-model="educationTree.id"
+            :options="educationTree_GradeDdl"
+            float-label="فیلتر درخت آموزش با مقطع"
+            clearable
+          />
+          <q-tree
+            :nodes="educationTreeData"
+            :expanded.sync="educationTree.expanded"
+            :ticked.sync="educationTree.leafTicked"
+            :selected.sync="educationTree.selected"
+            class="tree-max-height"
+            tick-strategy="leaf"
+            color="blue"
+            node-key="Id"
+          />
+          <q-select
+            :value="lessonId"
+            @change="lessonIdChanged"
+            :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
+            float-label="انتخاب درس"
+            class="q-pt-lg"
+          />
         </section>
       </div>
-    </base-panel>
+
+      <div class="col-sm-7">
+        <base-btn-create
+          v-if="canCreate && lessonId > 0"
+          :label="`ایجاد (${educationBookStore.modelName}) جدید`"
+          @click="showModalCreate"
+        />
+        <br />
+        <base-table
+          :grid-data="educationBookStore.gridData"
+          :columns="educationBookGridColumn"
+          hasIndex
+        >
+          <template slot="IsActive" slot-scope="data">
+            <q-checkbox v-model="data.row.IsActive" readonly />
+          </template>
+          <template slot="IsExamSource" slot-scope="data">
+            <q-checkbox v-model="data.row.IsExamSource" readonly />
+          </template>
+          <template slot="IsChanged" slot-scope="data">
+            <q-checkbox v-model="data.row.IsChanged" readonly />
+          </template>
+          <template slot="Id" slot-scope="data">
+            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+          </template>
+        </base-table>
+      </div>
+    </section>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

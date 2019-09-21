@@ -1,23 +1,18 @@
 <template>
   <section class="col-md-8">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{writerStore.modelName}}</span>
-      <div slot="body">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${writerStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br>
-        <base-table :grid-data="writerStore.gridData" :columns="writerGridColumn" hasIndex>
-          <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${writerStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table :grid-data="writerStore.gridData" :columns="writerGridColumn" hasIndex>
+      <template slot="Id" slot-scope="data">
+        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+      </template>
+    </base-table>
+
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
     <modal-edit v-if="canEdit"></modal-edit>

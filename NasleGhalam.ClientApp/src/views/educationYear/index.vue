@@ -1,30 +1,24 @@
 <template>
   <section class="col-md-8">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{educationYearStore.modelName}}</span>
-      <div slot="body">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${educationYearStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br>
-        <base-table
-          :grid-data="educationYearStore.gridData"
-          :columns="educationYearGridColumn"
-          hasIndex
-        >
-          <template slot="IsActiveYear" slot-scope="data">
-            <q-checkbox v-model="data.row.IsActiveYear" readonly/>
-          </template>
-          <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${educationYearStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table
+      :grid-data="educationYearStore.gridData"
+      :columns="educationYearGridColumn"
+      hasIndex
+    >
+      <template slot="IsActiveYear" slot-scope="data">
+        <q-checkbox v-model="data.row.IsActiveYear" readonly />
+      </template>
+      <template slot="Id" slot-scope="data">
+        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+      </template>
+    </base-table>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

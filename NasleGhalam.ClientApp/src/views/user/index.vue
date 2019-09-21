@@ -1,27 +1,20 @@
 <template>
-  <section class="col-xs-12 q-px-md">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{userStore.modelName}}</span>
-      <div slot="body">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${userStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br>
-        <base-table :grid-data="userStore.gridData" :columns="userGridColumn" hasIndex>
-          <template slot="IsActive" slot-scope="data">
-            <q-checkbox v-model="data.row.IsActive" readonly/>
-          </template>
-          <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
-
+  <section class="col-12 q-px-md">
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${userStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table :grid-data="userStore.gridData" :columns="userGridColumn" hasIndex>
+      <template slot="IsActive" slot-scope="data">
+        <q-checkbox v-model="data.row.IsActive" readonly />
+      </template>
+      <template slot="Id" slot-scope="data">
+        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+      </template>
+    </base-table>
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
     <modal-edit v-if="canEdit"></modal-edit>

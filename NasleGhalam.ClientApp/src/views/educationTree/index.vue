@@ -1,57 +1,51 @@
 <template>
   <section class="col-md-8">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{educationTreeStore.modelName}}</span>
-      <div slot="body">
-        <q-input
-          v-model="educationTreeStore.qTreeData.filter"
-          float-label="جستجو در درخت آموزش"
-          clearable
-        />
-        <q-tree
-          :nodes="educationTreeStore.treeData"
-          :expanded.sync="educationTreeStore.qTreeData.expanded"
-          :selected.sync="educationTreeStore.qTreeData.selected"
-          :filter="educationTreeStore.qTreeData.filter"
-          color="blue"
-          node-key="Id"
-        >
-          <div slot="header-custom" slot-scope="prop">
-            {{prop.node.label}}
-            <template>
-              <q-btn
-                v-if="canCreate"
-                outline
-                color="positive"
-                class="shadow-1 bg-white q-mr-sm q-px-xs"
-                icon="save"
-                size="sm"
-                @click.stop="showModalCreate(prop.node.Id, prop.node.label)"
-              />
-              <q-btn
-                v-if="canEdit"
-                outline
-                color="purple"
-                class="shadow-1 bg-white q-mr-sm q-px-xs"
-                icon="create"
-                size="sm"
-                @click.stop="showModalEdit(prop.node.Id, prop.node.label)"
-              />
-              <q-btn
-                v-if="canDelete && !(prop.node.children && prop.node.children.length)"
-                outline
-                color="red"
-                class="shadow-1 bg-white q-mr-sm q-px-xs"
-                icon="delete"
-                size="sm"
-                @click.stop="showModalDelete(prop.node.Id)"
-              />
-            </template>
-          </div>
-        </q-tree>
+    <q-input
+      v-model="educationTreeStore.qTreeData.filter"
+      float-label="جستجو در درخت آموزش"
+      clearable
+    />
+    <q-tree
+      :nodes="educationTreeStore.treeData"
+      :expanded.sync="educationTreeStore.qTreeData.expanded"
+      :selected.sync="educationTreeStore.qTreeData.selected"
+      :filter="educationTreeStore.qTreeData.filter"
+      color="blue"
+      node-key="Id"
+    >
+      <div slot="header-custom" slot-scope="prop">
+        {{prop.node.label}}
+        <template>
+          <q-btn
+            v-if="canCreate"
+            outline
+            color="positive"
+            class="shadow-1 bg-white q-mr-sm q-px-xs"
+            icon="save"
+            size="sm"
+            @click.stop="showModalCreate(prop.node.Id, prop.node.label)"
+          />
+          <q-btn
+            v-if="canEdit"
+            outline
+            color="purple"
+            class="shadow-1 bg-white q-mr-sm q-px-xs"
+            icon="create"
+            size="sm"
+            @click.stop="showModalEdit(prop.node.Id, prop.node.label)"
+          />
+          <q-btn
+            v-if="canDelete && !(prop.node.children && prop.node.children.length)"
+            outline
+            color="red"
+            class="shadow-1 bg-white q-mr-sm q-px-xs"
+            icon="delete"
+            size="sm"
+            @click.stop="showModalDelete(prop.node.Id)"
+          />
+        </template>
       </div>
-    </base-panel>
+    </q-tree>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

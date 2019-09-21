@@ -1,97 +1,91 @@
 <template>
   <section class="col-12 q-px-sm">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{topicStore.modelName}}</span>
-      <div slot="body">
-        <section class="row">
-          <div class="col-sm-5">
-            <section class="q-ma-sm q-pa-sm shadow-1">
-              <q-select
-                v-model="educationTree.id"
-                :options="educationTree_GradeDdl"
-                float-label="فیلتر درخت آموزش با مقطع"
-                clearable
-              />
-              <q-tree
-                :nodes="educationTreeData"
-                :expanded.sync="educationTree.expanded"
-                :ticked.sync="educationTree.leafTicked"
-                :selected.sync="educationTree.selected"
-                class="tree-max-height"
-                tick-strategy="leaf"
-                color="blue"
-                node-key="Id"
-              />
-              <q-select
-                :value="lessonId"
-                @change="lessonIdChanged"
-                :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
-                float-label="انتخاب درس"
-                class="q-pt-lg"
-              />
-            </section>
-          </div>
-          <div class="col-sm-7">
-            <section class="q-ma-sm q-pa-sm shadow-1">
-              <base-btn-create
-                v-if="canCreate && lessonStore.ddl.length && !topicTreeData.length && lessonId != 0"
-                :label="`ایجاد (${topicStore.modelName}) جدید`"
-                @click="showModalCreate(0)"
-              />
-              <q-input v-model="topicTree.filter" float-label="جستجو در مبحث" clearable />
-              <q-tree
-                :nodes="topicTreeData"
-                :expanded.sync="topicTree.expanded"
-                :selected.sync="topicTree.selected"
-                :filter="topicTree.filter"
-                class="q-pt-lg"
-                color="primary"
-                accordion
-                node-key="Id"
-              >
-                <div slot="header-custom" slot-scope="prop">
-                  {{prop.node.label}}
-                  <template>
-                    <q-btn
-                      v-if="canCreate"
-                      outline
-                      color="positive"
-                      class="shadow-1 bg-white q-mr-sm q-px-xs"
-                      icon="save"
-                      size="sm"
-                      @click.stop="showModalCreate(prop.node.Id, prop.node.label)"
-                    />
-                    <q-btn
-                      v-if="canEdit"
-                      outline
-                      color="purple"
-                      class="shadow-1 bg-white q-mr-sm q-px-xs"
-                      icon="create"
-                      size="sm"
-                      @click.stop="showModalEdit(prop.node.Id, prop.node.label)"
-                    />
-                    <q-btn
-                      v-if="canDelete && !(prop.node.children && prop.node.children.length)"
-                      outline
-                      color="red"
-                      class="shadow-1 bg-white q-mr-sm q-px-xs"
-                      icon="delete"
-                      size="sm"
-                      @click.stop="showModalDelete(prop.node.Id)"
-                    />
-                  </template>
-                </div>
-              </q-tree>
-            </section>
-            <q-btn class="q-mr-sm float-right" @click="printTopic" color="primary">
-              چاپ مبحث
-              <q-icon name="print" />
-            </q-btn>
-          </div>
+    <section class="row">
+      <div class="col-sm-5">
+        <section class="q-ma-sm q-pa-sm shadow-1">
+          <q-select
+            v-model="educationTree.id"
+            :options="educationTree_GradeDdl"
+            float-label="فیلتر درخت آموزش با مقطع"
+            clearable
+          />
+          <q-tree
+            :nodes="educationTreeData"
+            :expanded.sync="educationTree.expanded"
+            :ticked.sync="educationTree.leafTicked"
+            :selected.sync="educationTree.selected"
+            class="tree-max-height"
+            tick-strategy="leaf"
+            color="blue"
+            node-key="Id"
+          />
+          <q-select
+            :value="lessonId"
+            @change="lessonIdChanged"
+            :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
+            float-label="انتخاب درس"
+            class="q-pt-lg"
+          />
         </section>
       </div>
-    </base-panel>
+      <div class="col-sm-7">
+        <section class="q-ma-sm q-pa-sm shadow-1">
+          <base-btn-create
+            v-if="canCreate && lessonStore.ddl.length && !topicTreeData.length && lessonId != 0"
+            :label="`ایجاد (${topicStore.modelName}) جدید`"
+            @click="showModalCreate(0)"
+          />
+          <q-input v-model="topicTree.filter" float-label="جستجو در مبحث" clearable />
+          <q-tree
+            :nodes="topicTreeData"
+            :expanded.sync="topicTree.expanded"
+            :selected.sync="topicTree.selected"
+            :filter="topicTree.filter"
+            class="q-pt-lg"
+            color="primary"
+            accordion
+            node-key="Id"
+          >
+            <div slot="header-custom" slot-scope="prop">
+              {{prop.node.label}}
+              <template>
+                <q-btn
+                  v-if="canCreate"
+                  outline
+                  color="positive"
+                  class="shadow-1 bg-white q-mr-sm q-px-xs"
+                  icon="save"
+                  size="sm"
+                  @click.stop="showModalCreate(prop.node.Id, prop.node.label)"
+                />
+                <q-btn
+                  v-if="canEdit"
+                  outline
+                  color="purple"
+                  class="shadow-1 bg-white q-mr-sm q-px-xs"
+                  icon="create"
+                  size="sm"
+                  @click.stop="showModalEdit(prop.node.Id, prop.node.label)"
+                />
+                <q-btn
+                  v-if="canDelete && !(prop.node.children && prop.node.children.length)"
+                  outline
+                  color="red"
+                  class="shadow-1 bg-white q-mr-sm q-px-xs"
+                  icon="delete"
+                  size="sm"
+                  @click.stop="showModalDelete(prop.node.Id)"
+                />
+              </template>
+            </div>
+          </q-tree>
+        </section>
+        <q-btn class="q-mr-sm float-right" @click="printTopic" color="primary">
+          چاپ مبحث
+          <q-icon name="print" />
+        </q-btn>
+      </div>
+    </section>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>

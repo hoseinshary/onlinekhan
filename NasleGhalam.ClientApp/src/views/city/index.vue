@@ -1,24 +1,19 @@
 <template>
   <section class="col-md-8">
-    <!-- panel -->
-    <base-panel>
-      <span slot="title">{{cityStore.modelName}}</span>
-      <div slot="body">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${cityStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br>
-        <base-table :grid-data="cityStore.gridData" :columns="cityGridColumn" hasIndex>
-          <template slot="Province.Name" slot-scope="data">{{data.row.Province.Name}}</template>
-          <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)"/>
-            <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)"/>
-          </template>
-        </base-table>
-      </div>
-    </base-panel>
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${cityStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table :grid-data="cityStore.gridData" :columns="cityGridColumn" hasIndex>
+      <template slot="Province.Name" slot-scope="data">{{data.row.Province.Name}}</template>
+      <template slot="Id" slot-scope="data">
+        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+      </template>
+    </base-table>
+
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
     <modal-edit v-if="canEdit"></modal-edit>

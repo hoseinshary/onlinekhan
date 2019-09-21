@@ -181,7 +181,7 @@ export default {
       "div",
       {
         attrs: {
-          class: "col-12 my-table-scroll-x"
+          class: "col-12 my-table-responsive"
         }
       },
       [table]
@@ -247,7 +247,7 @@ export default {
       "div",
       {
         attrs: {
-          class: "row col-xs-12"
+          class: "row"
         }
       },
       [
@@ -512,13 +512,14 @@ export default {
 </script>
 
 <style>
-.my-table-scroll-x {
+.my-table-responsive {
   display: block;
   overflow-x: auto;
   white-space: nowrap;
 }
+
 .my-table {
-  width: 100% !important;
+  width: calc(100% - 2px) !important;
   border-collapse: collapse;
 }
 
@@ -526,11 +527,12 @@ export default {
   white-space: nowrap;
 }
 
-.my-table tr th,
-.my-table tr td {
+.my-table th,
+.my-table td {
   vertical-align: middle;
   text-align: center;
   font-weight: bold;
+  padding: 5px;
 }
 
 .my-table tr th {
@@ -540,6 +542,7 @@ export default {
   height: 35px;
   border: 2px solid #e6e7e8;
 }
+
 .my-table tr th:first-child {
   border-radius: 10px 0 0 0;
   border-top: 0;

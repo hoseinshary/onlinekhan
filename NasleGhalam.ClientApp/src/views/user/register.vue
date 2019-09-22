@@ -85,15 +85,16 @@ export default class UserCreateVue extends Vue {
 
   //#region ### methods ###
   open() {
-    this.provinceStore.fillList();
-    this.cityStore.fillList();
-    this.roleStore.fillList();
+    
   }
   //#endregion
 
   //#region ### hooks ###
   created() {
     this.userStore.SET_CREATE_VUE(this);
+    this.provinceStore.fillList();
+    this.cityStore.fillList();
+    
   }
   //#endregion
 }

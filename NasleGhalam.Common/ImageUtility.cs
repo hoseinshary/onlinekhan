@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -7,6 +8,54 @@ namespace NasleGhalam.Common
 {
     public static class ImageUtility
     {
+
+        /// <summary>
+        /// ذخیره عکس فایل پی دی اف
+        /// </summary>
+        public static void SaveImageOfWordPdf(String path , string distnation)
+        {
+            // Use ProcessStartInfo class
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = false;
+            startInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["PDFConverterPath"].ToString(); ;
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.Arguments = "-f 1 -r 600 \"" + path + "\" \"" + distnation + "\"";
+
+            try
+            {
+                // Start the process with the info we specified.
+                // Call WaitForExit and then the using statement will close.
+                using (Process exeProcess = Process.Start(startInfo))
+                {
+                    exeProcess.WaitForExit();
+                }
+
+
+                var image = new Bitmap(distnation + "-000001.png");
+
+                var resizedImage = GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
+                // resizedImage.Save(pngTarget, ImageFormat.Png);
+                var rectangle = GetCropArea(resizedImage, 20);
+                var croppedImage = CropImage(resizedImage, rectangle);
+                croppedImage.Save(distnation + ".png", ImageFormat.Png);
+                croppedImage.Dispose();
+
+                File.Delete(distnation + "-000001.png");
+                
+
+            }
+            catch (Exception ex)
+            {
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                File.Delete(distnation + "-000001.png");
+                
+            }
+
+
+        }
+
+
 
         /// <summary>
         /// ذخیره عکس فایل ورد
@@ -112,7 +161,7 @@ namespace NasleGhalam.Common
 
 
 
-        public static Rectangle GetCropArea(Bitmap data, int padding)
+        public static System.Drawing.Rectangle GetCropArea(Bitmap data, int padding)
 
         {
 
@@ -156,7 +205,7 @@ namespace NasleGhalam.Common
 
                 {
 
-                    if (!HasOpacity(data.GetPixel(i, j))) continue;
+                    if (!IsWhite(data.GetPixel(i, j))) continue;
 
                     y1 = j;
 
@@ -182,7 +231,7 @@ namespace NasleGhalam.Common
 
                 {
 
-                    if (!HasOpacity(data.GetPixel(i, j))) continue;
+                    if (!IsWhite(data.GetPixel(i, j))) continue;
 
                     x2 = i;
 
@@ -208,7 +257,7 @@ namespace NasleGhalam.Common
 
                 {
 
-                    if (!HasOpacity(data.GetPixel(i, j))) continue;
+                    if (!IsWhite(data.GetPixel(i, j))) continue;
 
                     y2 = j;
 
@@ -233,7 +282,7 @@ namespace NasleGhalam.Common
 
             y2 += padding;
 
-           
+
 
 
             var width = x2 - x1;
@@ -242,18 +291,23 @@ namespace NasleGhalam.Common
 
 
 
-            return new Rectangle(x1, y1, width, height);
+            return new System.Drawing.Rectangle(x1, y1, width, height);
 
         }
 
 
 
         public static bool HasOpacity(Color c)
-
         {
-
             return c.A > 0;
-
         }
+
+        public static bool IsWhite(Color c)
+        {
+            if (c.R == 255 && c.B == 255 && c.G == 255)
+                return false;
+            return true;
+        }
+
     }
 }

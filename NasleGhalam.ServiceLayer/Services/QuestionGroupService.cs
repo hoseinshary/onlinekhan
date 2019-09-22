@@ -188,12 +188,15 @@ namespace NasleGhalam.ServiceLayer.Services
                     questionGroup.Questions.Add(newQuestion);
 
                     var filename2 = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".docx";
+                    var filename3 = SitePath.GetQuestionAbsPath(newGuid.ToString());
                     target.SaveAs(filename2);
+                    target.SaveAs(filename3, WdSaveFormat.wdFormatPDF);
 
-                    while (target.Windows[1].Panes[1].Pages.Count < 0) ;
-                    var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
-                    ImageUtility.SaveImageOfWord(bits,
-                        SitePath.GetQuestionAbsPath(newQuestion.FileName) + ".png");
+                    //while (target.Windows[1].Panes[1].Pages.Count < 0) ;
+                    //var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                    ImageUtility.SaveImageOfWordPdf(filename3 + ".pdf", filename3);
+
+                    File.Delete(filename3 + ".pdf");
 
                     if (newQuestion.AnswerNumber != 0 )
                     {
@@ -251,7 +254,6 @@ namespace NasleGhalam.ServiceLayer.Services
             var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File);
             //save Doc and excel file in temp memory
             word.SaveAs(wordFilename);
-
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
             var source = app.Documents.Open(wordFilename);
@@ -291,11 +293,15 @@ namespace NasleGhalam.ServiceLayer.Services
                     returnGuidList.Add(newEntry);
                     var filename2 = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
 
-                    while (target.Windows[1].Panes[1].Pages.Count < 0) ;
+                    target.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);
 
-                    var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
-                    ImageUtility.SaveImageOfWord(bits, filename2 + ".png");
+                    //while (target.Windows[1].Panes[1].Pages.Count < 0) ;
+
+                    //var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                    ImageUtility.SaveImageOfWordPdf(filename2 + ".pdf", filename2 );
                     target.Close(WdSaveOptions.wdDoNotSaveChanges);
+
+                    File.Delete(filename2 + ".pdf");
                 }
                 else
                 {

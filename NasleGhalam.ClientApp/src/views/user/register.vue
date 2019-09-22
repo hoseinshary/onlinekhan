@@ -94,6 +94,8 @@ export default class UserCreateVue extends Vue {
     this.userStore.SET_CREATE_VUE(this);
     this.provinceStore.fillList();
     this.cityStore.fillList();
+
+    
     
   }
   //#endregion

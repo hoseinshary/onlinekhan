@@ -60,32 +60,32 @@ namespace NasleGhalam.Common
         /// <summary>
         /// ذخیره عکس فایل ورد
         /// </summary>
-        public static void SaveImageOfWord(dynamic bits, string target)
-        {
-            //crop and resize
-            try
-            {
-                using (var ms = new MemoryStream((byte[])(bits)))
-                {
-                    var image = Image.FromStream(ms);
-                    image.Save(target + "1.png", ImageFormat.Png);
-                    image = new Bitmap(target + "1.png");
+        //public static void SaveImageOfWord(dynamic bits, string target)
+        //{
+        //    //crop and resize
+        //    try
+        //    {
+        //        using (var ms = new MemoryStream((byte[])(bits)))
+        //        {
+        //            var image = Image.FromStream(ms);
+        //            image.Save(target + "1.png", ImageFormat.Png);
+        //            image = new Bitmap(target + "1.png");
 
-                    var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                    // resizedImage.Save(pngTarget, ImageFormat.Png);
-                    var rectangle = ImageUtility.GetCropArea(resizedImage, 20);
-                    var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                    croppedImage.Save(target, ImageFormat.Png);
-                    croppedImage.Dispose();
-                    File.Delete(target + "1.png");
-                }
-            }
-            catch (Exception ex)
-            {
-                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                File.Delete(target + "1.png");
-            }
-        }
+        //            var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
+        //            // resizedImage.Save(pngTarget, ImageFormat.Png);
+        //            var rectangle = ImageUtility.GetCropArea(resizedImage, 20);
+        //            var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
+        //            croppedImage.Save(target, ImageFormat.Png);
+        //            croppedImage.Dispose();
+        //            File.Delete(target + "1.png");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+        //        File.Delete(target + "1.png");
+        //    }
+        //}
 
         public static Bitmap GetImageWithRatioSize(Image stream, double widthRatio, double heightRatio)
 

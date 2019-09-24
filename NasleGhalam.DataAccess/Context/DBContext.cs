@@ -140,6 +140,7 @@ namespace NasleGhalam.DataAccess.Context
                 result.FaMessage = "خطا در اعمال اطلاعات! با مدیر تماس بگیرید.";
                 result.MessageType = MessageType.Error;
                 result.EnMessage = err.ToString();
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
             }
             catch (DbUpdateException ex)
             {
@@ -171,6 +172,7 @@ namespace NasleGhalam.DataAccess.Context
 
                 result.MessageType = MessageType.Error;
                 result.EnMessage = innerException?.ToString() ?? ex.ToString();
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
             }
             catch (DbEntityValidationException e)
             {
@@ -185,6 +187,7 @@ namespace NasleGhalam.DataAccess.Context
                 }
 
                 result.MessageType = MessageType.Error;
+                Elmah.ErrorSignal.FromCurrentContext().Raise(e);
             }
 
             return result;

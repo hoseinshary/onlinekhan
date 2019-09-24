@@ -91,11 +91,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 questionAnswer.Context += paragraph.Range.Text;
             }
 
-            //تبدیل به عکس
-            var pane = doc.Windows[1].Panes[1];
-            var page = pane.Pages[1];
-            var bits = page.EnhMetaFileBits;
-            var PngFileName = SitePath.GetQuestionAnswerAbsPath(FileName) + ".png";
+           
 
             doc.Close();
             app.Quit();
@@ -108,29 +104,10 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 word.SaveAs(SitePath.GetQuestionAnswerAbsPath(FileName) + ".docx");
                 //crop and resize
-                try
-                {
-                    using (var ms = new MemoryStream((byte[])(bits)))
-                    {
-                        var image = Image.FromStream(ms);
-                        var pngTarget = PngFileName; //Path.ChangeExtension(target , "png");
-                        image.Save(pngTarget + "1.png", ImageFormat.Png);
-                        image = new Bitmap(pngTarget + "1.png");
-
-                        var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                        // resizedImage.Save(pngTarget, ImageFormat.Png);
-                        var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                        var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                        croppedImage.Save(pngTarget, ImageFormat.Png);
-                        croppedImage.Dispose();
-                        File.Delete(pngTarget + "1.png");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                }
-
+                //تبدیل به عکس
+                doc.SaveAs2(SitePath.GetQuestionAnswerAbsPath(FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
+                ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionAnswerAbsPath(FileName) + ".pdf", SitePath.GetQuestionAnswerAbsPath(FileName));
+                File.Delete(SitePath.GetQuestionAnswerAbsPath(FileName) + ".pdf");
                 File.Delete(wordFilename);
 
             }
@@ -249,34 +226,13 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
                         //تبدیل به عکس
-                        var pane = newDoc2.Windows[1].Panes[1];
-                        Thread.Sleep(1000);
-                        var page = pane.Pages[1];
-                        var bits = page.EnhMetaFileBits;
-                        var target = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString()) + ".png";
+                        var target = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString());
+                        newDoc2.SaveAs2(target + ".pdf", WdSaveFormat.wdFormatPDF);
+                        ImageUtility.SaveImageOfWordPdf(target + ".pdf", target);
+                        File.Delete(target + ".pdf");
+                        
 
-                        //crop and resize
-                        try
-                        {
-                            using (var ms = new MemoryStream((byte[])(bits)))
-                            {
-                                var image = Image.FromStream(ms);
-                                var pngTarget = target; //Path.ChangeExtension(target , "png");
-                                image.Save(pngTarget + "1.png", ImageFormat.Png);
-                                image = new Bitmap(pngTarget + "1.png");
-
-                                var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                                // resizedImage.Save(pngTarget, ImageFormat.Png);
-                                var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                                var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                                croppedImage.Save(pngTarget, ImageFormat.Png);
-                                File.Delete(pngTarget + "1.png");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                        }
+                        
 
                         newDoc2.Close();
                     }
@@ -385,35 +341,18 @@ namespace NasleGhalam.ServiceLayer.Services
                         };
                         returnGuidList.Add(returnItem);
 
+
+                        
+
                         //تبدیل به عکس
-                        var pane = newDoc2.Windows[1].Panes[1];
-                        Thread.Sleep(1000);
-                        var page = pane.Pages[1];
-                        var bits = page.EnhMetaFileBits;
+
+
                         var target = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
+                        newDoc2.SaveAs2(SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()) + ".pdf", WdSaveFormat.wdFormatPDF);
+                        ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()) + ".pdf", SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()));
+                        File.Delete(SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()) + ".pdf");
 
-                        //crop and resize
-                        try
-                        {
-                            using (var ms = new MemoryStream((byte[])(bits)))
-                            {
-                                var image = Image.FromStream(ms);
-                                var pngTarget = target; //Path.ChangeExtension(target , "png");
-                                image.Save(pngTarget + "1.png", ImageFormat.Png);
-                                image = new Bitmap(pngTarget + "1.png");
-
-                                var resizedImage = ImageUtility.GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                                //resizedImage.Save(pngTarget, ImageFormat.Png);
-                                var rectangle = ImageUtility.GetCropArea(resizedImage, 10);
-                                var croppedImage = ImageUtility.CropImage(resizedImage, rectangle);
-                                croppedImage.Save(pngTarget + ".png", ImageFormat.Png);
-                                File.Delete(pngTarget + "1.png");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
-                        }
+                        
 
                         newDoc2.Close(WdSaveOptions.wdDoNotSaveChanges, WdOriginalFormat.wdOriginalDocumentFormat, false);
                     }
@@ -461,10 +400,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
                 //تبدیل به عکس
-                var pane = doc.Windows[1].Panes[1];
-                var page = pane.Pages[1];
-                bits = page.EnhMetaFileBits;
-                pngFileName = SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".png";
+                doc.SaveAs2(SitePath.GetQuestionGroupTempAbsPath(questionAnswer.FilePath) + ".pdf", WdSaveFormat.wdFormatPDF);
+
+                ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionGroupTempAbsPath(questionAnswer.FilePath) + ".pdf", SitePath.GetQuestionGroupTempAbsPath(questionAnswer.FilePath));
+
+                File.Delete(SitePath.GetQuestionGroupTempAbsPath(questionAnswer.FilePath) + ".pdf");
 
                 doc.Close();
                 app.Quit();

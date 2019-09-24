@@ -198,22 +198,22 @@ namespace NasleGhalam.ServiceLayer.Services
 
                     File.Delete(filename3 + ".pdf");
 
-                    if (newQuestion.AnswerNumber != 0 )
-                    {
-                        //چرخش گزینه
-                        Document target2 = app.Documents.Add();
-                        //تریک درست شدن گزینه ها 
-                        target.ActiveWindow.Selection.WholeStory();
-                        target.ActiveWindow.Selection.Copy();
-                        target2.ActiveWindow.Selection.Paste();
-                        target2.ActiveWindow.Selection.WholeStory();
-                        target2.ActiveWindow.Selection.Delete();
+                    //if (newQuestion.AnswerNumber != 0 )
+                    //{
+                    //    //چرخش گزینه
+                    //    Document target2 = app.Documents.Add();
+                    //    //تریک درست شدن گزینه ها 
+                    //    target.ActiveWindow.Selection.WholeStory();
+                    //    target.ActiveWindow.Selection.Copy();
+                    //    target2.ActiveWindow.Selection.Paste();
+                    //    target2.ActiveWindow.Selection.WholeStory();
+                    //    target2.ActiveWindow.Selection.Delete();
 
-                        target2.ActiveWindow.Selection.Paste();
+                    //    target2.ActiveWindow.Selection.Paste();
 
-                        QuestionService.SaveOptionsOfQuestions(target, target2,newQuestion.FileName,newQuestion.AnswerNumber);
-                        target2.Close();
-                    }
+                    //    QuestionService.SaveOptionsOfQuestions(target, target2,newQuestion.FileName,newQuestion.AnswerNumber);
+                    //    target2.Close();
+                    //}
                     target.Close();
                 }
                 else

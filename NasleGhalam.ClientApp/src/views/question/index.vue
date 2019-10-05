@@ -120,10 +120,11 @@
     </section>
 
     <!-- modals -->
-    <modal-create
+     <modal-create
       v-if="canCreate"
       :topicTreeDataProp="topicTreeData"
       :topicTickedIdsProp="topicTree.leafTicked"
+      :lessonIdProp="lessonId"
     ></modal-create>
     <modal-edit
       v-if="canEdit"
@@ -135,7 +136,9 @@
     ></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
     <modal-question-judge v-if="canQuestionJudge"></modal-question-judge>
-    <modal-question-answer v-if="canQuestionAnswer"></modal-question-answer>
+    <modal-question-answer v-if="canQuestionAnswer"
+      :lessonIdProp="lessonId"
+    ></modal-question-answer>
   </section>
 </template>
 
@@ -269,6 +272,7 @@ export default class QuestionVue extends Vue {
 
   //#region ### methods ###
   showModalCreate() {
+    
     this.questionStore.resetCreate();
     this.questionStore.OPEN_MODAL_CREATE(true);
   }
@@ -291,6 +295,7 @@ export default class QuestionVue extends Vue {
     this.topicTree.setToFirstLevel = true;
     // clear topicTree leaf
     this.topicTree.leafTicked.splice(0, this.topicTree.leafTicked.length);
+
   }
 
   fillGrid() {

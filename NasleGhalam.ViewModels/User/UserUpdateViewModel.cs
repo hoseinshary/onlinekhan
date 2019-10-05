@@ -63,6 +63,9 @@ namespace NasleGhalam.ViewModels.User
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         [Display(Name = "شهر")]
         public int CityId { get; set; }
+
+        [Display(Name = "عکس کاربری")]
+        public string ProfilePic { get; set; }
     }
 }
 

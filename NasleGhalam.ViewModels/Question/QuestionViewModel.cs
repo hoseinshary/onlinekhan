@@ -41,6 +41,9 @@ namespace NasleGhalam.ViewModels.Question
 
         public int AnswerNumber { get; set; }
 
+        
+        public string TopicAnswer { get; set; }
+
         public string QuestionWordPath => $"/Api/Question/GetWordFile/{FileName}".ToFullRelativePath();
 
         public string QuestionPicturePath => $"/Api/Question/GetPictureFile/{FileName}".ToFullRelativePath();
@@ -54,10 +57,13 @@ namespace NasleGhalam.ViewModels.Question
         public int LookupId_AuthorType { get; set; }
 
         public int LookupId_AreaType { get; set; }
+        public int LookupId_QuestionRank { get; set; }
+        
 
         public int WriterId { get; set; }
 
         public WriterViewModel Writer { get; set; }
+
 
         public  LookupViewModel Lookup_AreaType { get; set; }
 

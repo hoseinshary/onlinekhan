@@ -20,6 +20,8 @@ namespace NasleGhalam.DomainClasses.Entities
         public int LookupId_AnswerType { get; set; }
         public Lookup Lookup_AnswerType { get; set; }
 
+        public string LessonName { get; set; }
+
         public string Description { get; set; }
 
         public int WriterId { get; set; }

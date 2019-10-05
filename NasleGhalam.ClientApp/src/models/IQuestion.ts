@@ -18,6 +18,7 @@ export default interface IQuestion {
   // IsActive: boolean;
   IsHybrid : boolean;
   AnswerNumber: number;
+  TopicAnswer : string;
   QuestionWordPath: string;
   QuestionPicturePath: string;
   LookupId_QuestionType: number;
@@ -25,6 +26,7 @@ export default interface IQuestion {
   LookupId_RepeatnessType: number;
   LookupId_AuthorType: number;
   LookupId_AreaType: number;
+  LookupId_QuestionRank: number;
   Lookup_AreaType?: ILookup;
   Writer?: IWriter;
   QuestionOptions?: Array<IQuestionOption>;
@@ -49,6 +51,7 @@ export const DefaultQuestion: IQuestion = {
   // IsActive: true,
   IsHybrid : false,
   AnswerNumber: 0,
+  TopicAnswer : "",
   QuestionWordPath: "",
   QuestionPicturePath: "",
   LookupId_QuestionType: 6,
@@ -56,6 +59,7 @@ export const DefaultQuestion: IQuestion = {
   LookupId_RepeatnessType: 22,
   LookupId_AuthorType: 1039,
   LookupId_AreaType: 1036,
+  LookupId_QuestionRank: 1063,
   Lookup_AreaType: DefaultLookup,
   Writer: DefaultWriter,
   QuestionOptions: [],

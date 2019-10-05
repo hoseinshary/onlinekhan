@@ -98,31 +98,41 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="userViewModel"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public ClientMessageResult Register(UserCreateViewModel userViewModel, byte userRoleLevel)
+        public ClientMessageResult Register(UserCreateViewModel userViewModel)
         {
-            // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
-            var role = _roleService.Value.GetById(userViewModel.RoleId, userRoleLevel);
-            if (role.Level <= userRoleLevel)
+            var user = Mapper.Map<User>(userViewModel);
+            if(userViewModel.RoleId == -1)
+            {
+                user.RoleId =2015;
+            }
+            else if(userViewModel.RoleId == -2)
+            {
+                user.RoleId = 2005;
+            }
+            else if(userViewModel.RoleId == -3)
+            {
+                user.RoleId = 2010;
+            }
+            else
             {
                 return new ClientMessageResult()
                 {
-                    Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
+                    Message = $"خطا امنیتی در سطح دسترسی!",
                     MessageType = MessageType.Error
                 };
             }
 
-            var user = Mapper.Map<User>(userViewModel);
+            user.IsActive = true;
+            user.IsAdmin = false;
+            
+
             user.LastLogin = DateTime.Now;
             _users.Add(user);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
-            if (clientResult.MessageType == MessageType.Success)
-            {
-                clientResult.Obj = GetById(user.Id, userRoleLevel);
-            }
-            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_NationalNo"))
+            if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_NationalNo"))
             {
                 clientResult.Message = "کد ملی تکراری می باشد";
             }

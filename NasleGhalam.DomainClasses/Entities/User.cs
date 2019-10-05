@@ -50,6 +50,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Student Student { get; set; }
 
+        public string ProfilePic { get; set; }
+
         public ICollection<Teacher> Teachers { get; set; }
 
         public  Writer  Writer { get; set; }

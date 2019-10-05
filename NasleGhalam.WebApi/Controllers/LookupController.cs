@@ -55,6 +55,8 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_lookupService.GetAllByName("PrintType"));
         }
 
+
+
         [HttpGet, CheckUserAccess(ActionBits.LessonCreateAccess, ActionBits.LessonUpdateAccess, ActionBits.LessonReadAccess)]
         public IHttpActionResult GetAllNezam()
         {
@@ -72,6 +74,14 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_lookupService.GetAllByName("QuestionType"));
         }
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionCreateAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionUpdateAccess)]
+        public IHttpActionResult GetAllQuestionRank()
+        {
+            return Ok(_lookupService.GetAllByName("QuestionRank"));
+        }
+
+
 
         [HttpGet, CheckUserAccess(ActionBits.TopicCreateAccess, ActionBits.TopicReadAccess, ActionBits.TopicUpdateAccess)]
         public IHttpActionResult GetAllTopicHardnessType()

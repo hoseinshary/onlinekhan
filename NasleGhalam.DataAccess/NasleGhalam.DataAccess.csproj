@@ -132,6 +132,18 @@
     <Compile Include="Migrations\201909110941432_questionAddField.Designer.cs">
       <DependentUpon>201909110941432_questionAddField.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909252141122_questionrank.cs" />
+    <Compile Include="Migrations\201909252141122_questionrank.Designer.cs">
+      <DependentUpon>201909252141122_questionrank.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909270502382_profilepic.cs" />
+    <Compile Include="Migrations\201909270502382_profilepic.Designer.cs">
+      <DependentUpon>201909270502382_profilepic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910010745518_dbchanges.cs" />
+    <Compile Include="Migrations\201910010745518_dbchanges.Designer.cs">
+      <DependentUpon>201910010745518_dbchanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -209,6 +221,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909110941432_questionAddField.resx">
       <DependentUpon>201909110941432_questionAddField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909252141122_questionrank.resx">
+      <DependentUpon>201909252141122_questionrank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909270502382_profilepic.resx">
+      <DependentUpon>201909270502382_profilepic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910010745518_dbchanges.resx">
+      <DependentUpon>201910010745518_dbchanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

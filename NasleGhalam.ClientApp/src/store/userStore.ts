@@ -25,6 +25,7 @@ export class UserStore extends VuexModule {
   private _userListSearch: Array<IUser>;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
+  private _registerVue: Vue;
   private _editVue: Vue;
 
   /**
@@ -136,9 +137,17 @@ export class UserStore extends VuexModule {
   }
 
   @mutation
+  SET_REGISTER_VUE(vm: Vue) {
+    this._registerVue = vm;
+  }
+
+  @mutation
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
   }
+
+  
+
   //#endregion
 
   //#region ### actions ###
@@ -229,6 +238,12 @@ export class UserStore extends VuexModule {
   }
 
   @action()
+  async resetRegister() {
+    this.user.Id = 0;
+    this.RESET(this._registerVue);
+  }
+
+  @action()
   async submitEdit() {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
@@ -295,6 +310,39 @@ export class UserStore extends VuexModule {
         }
       });
   }
+
+  @action()
+  async register() {
+    let vm = this._registerVue;
+    if (!(await this.validateForm(vm))) return;
+
+    var formData = new FormData();
+    var fileUpload = vm.$refs.fileUpload;
+
+    if (fileUpload && fileUpload["files"].length > 0) {
+      formData.append(fileUpload["name"], fileUpload["files"][0]);
+    }
+    var params = util.toParam(this.user);
+
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/Register?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    })
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+  
+          this.resetRegister();
+          router.push("/user/login");
+        }
+      });
+  }
+
   //#endregion
 }
 

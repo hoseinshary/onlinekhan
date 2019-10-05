@@ -22,6 +22,7 @@ export class LookupStore extends VuexModule {
   private _assayType: Array<ILookup>;
   private _whereProblem: Array<ILookup>;
   private _reasonProblem: Array<ILookup>;
+  private _questionRank: Array<ILookup>;
 
   /**
    * initialize data
@@ -45,6 +46,7 @@ export class LookupStore extends VuexModule {
     this._assayType = [];
     this._whereProblem = [];
     this._reasonProblem = [];
+    this._questionRank = [];
   }
 
   //#region ### getters ###
@@ -78,6 +80,13 @@ export class LookupStore extends VuexModule {
 
   get questionTypeDdl() {
     return this._questionType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
+
+  get questionRankDdl() {
+    return this._questionRank.map(x => ({
       value: x.Id,
       label: x.Value
     }));
@@ -194,6 +203,11 @@ export class LookupStore extends VuexModule {
   @mutation
   private SET_QUESTION_TYPE_LIST(list: Array<ILookup>) {
     this._questionType = list;
+  }
+
+  @mutation
+  private SET_QUESTION_RANK_LIST(list: Array<ILookup>) {
+    this._questionRank = list;
   }
 
   @mutation
@@ -322,6 +336,20 @@ export class LookupStore extends VuexModule {
       return Promise.resolve(this._questionType);
     }
   }
+
+  @action()
+  async fillQuestionRank() {
+    if (!this._questionRank.length) {
+      return axios
+        .get(`${baseUrl}/GetAllQuestionRank`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_QUESTION_RANK_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._questionRank);
+    }
+  }
+
 
   @action()
   async fillQuestionHardnessType() {

@@ -102,6 +102,13 @@
           class="col-md-4"
           filter
         />
+         <base-select
+          v-if="showElement('LookupId_QuestionRank')"
+          :model="$v.question.LookupId_QuestionRank"
+          :options="lookupStore.questionRankTypeDdl"
+          class="col-md-4"
+          filter
+        />
         <base-field
           v-if="showElement('UseEvaluation')"
           class="col-md-4"
@@ -148,6 +155,12 @@
           :model="$v.question.ResponseSecond"
           class="col-md-4"
         />
+              <base-field class="col-md-4" :model="$v.question.IsHybrid">
+        <template slot-scope="data">
+          <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
+          <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
+        </template>
+      </base-field>
         <base-input
           v-if="showElement('Description')"
           :model="$v.question.Description"
@@ -319,6 +332,7 @@ export default class QuestionEditVue extends Vue {
   open() {
     this.tagStore.fillList();
     this.lookupStore.fillQuestionType();
+    this.lookupStore.fillQuestionRank();
     this.lookupStore.fillQuestionHardnessType();
     this.lookupStore.fillRepeatnessType();
     this.lookupStore.fillAuthorType();

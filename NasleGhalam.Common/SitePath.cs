@@ -11,6 +11,8 @@ namespace NasleGhalam.Common
         public static string QuestionAnswerRelPath => "~/Content/QuestionAnswer/";
         public static string QuestionGroupRelPath => "~/Content/QuestionGroup/";
         public static string QuestionGroupTempRelPath => "~/Content/QuestionGroupTemp/";
+
+        public static string UserProfileRelPath => "~/Content/UserProfile/";
         //-------------------------------------------------------------------------------------
 
         public static string GetQuestionAbsPath(string name) => ToAbsolutePath($"{QuestionRelPath}{name}");
@@ -22,6 +24,8 @@ namespace NasleGhalam.Common
         public static string GetQuestionGroupAbsPath(string name) => ToAbsolutePath($"{QuestionGroupRelPath}{name}");
 
         public static string GetQuestionGroupTempAbsPath(string name) => ToAbsolutePath($"{QuestionGroupTempRelPath}{name}");
+
+        
 
         public static string ToAbsolutePath(this string relativePath)
         {

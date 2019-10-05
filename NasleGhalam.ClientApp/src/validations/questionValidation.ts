@@ -38,6 +38,10 @@ const questionValidations: ValidationRuleset<TQuestion> = {
       displayName: displayName("شماره گزینه صحیح"),
       numeric
     },
+    TopicAnswer: {
+      displayName: displayName("مبحث پاسخ صحیح"),
+      
+    },
     LookupId_RepeatnessType: {
       displayName: displayName("درجه تکرار"),
       numeric,
@@ -54,6 +58,11 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     },
     LookupId_AuthorType: {
       displayName: displayName("نوع طراح"),
+      numeric,
+      requiredDdl: requiredDdl(0)
+    },
+    LookupId_QuestionRank: {
+      displayName: displayName("امتیاز سوال"),
       numeric,
       requiredDdl: requiredDdl(0)
     },

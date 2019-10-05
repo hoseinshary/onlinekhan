@@ -40,6 +40,11 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.LookupId_AreaType)
                 .WillCascadeOnDelete(false);
 
+            HasRequired(x => x.Lookup_QuestionRank)
+                .WithMany(x => x.Question_QuestionRanks)
+                .HasForeignKey(x => x.LookupId_QuestionRank)
+                .WillCascadeOnDelete(false);
+
             HasRequired(x => x.Lookup_AuthorType)
                 .WithMany(x => x.Question_AuthorTypes)
                 .HasForeignKey(x => x.LookupId_AuthorType)

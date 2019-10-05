@@ -90,6 +90,32 @@ export class LessonStore extends VuexModule {
     };
   }
 
+  get relatedLessons() {
+    return (lessonId: number) => {
+      var currentLesson = this._lessonList.find(
+        lesson => lesson.Id == lessonId
+      );
+      var currentDepartmentIds: Array<number> =
+        (currentLesson &&
+          currentLesson.LessonDepartments &&
+          currentLesson.LessonDepartments.map(x => x.Id)) ||
+        [];
+
+      return this._lessonList
+        .filter(
+          lesson =>
+            currentLesson &&
+            lesson.Id != currentLesson.Id &&
+            lesson.LessonDepartments &&
+            lesson.LessonDepartments.some(department =>
+              currentDepartmentIds.some(
+                currentDepartment => currentDepartment == department.Id
+              )
+            )
+        );
+    };
+  }
+
   get ddl() {
     return this._lessonList.map(x => ({
       value: x.Id,

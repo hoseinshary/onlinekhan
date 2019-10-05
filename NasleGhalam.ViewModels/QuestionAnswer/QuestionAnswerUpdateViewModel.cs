@@ -23,6 +23,9 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
         [Display(Name = "نوع پاسخ")]
         public int LookupId_AnswerType { get; set; }
 
+        [Display(Name = "درس")]
+        public string LessonName { get; set; }
+
 
         [Display(Name = "توضیحات")]
         public string Description { get; set; }

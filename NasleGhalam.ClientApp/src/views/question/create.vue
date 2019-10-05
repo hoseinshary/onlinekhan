@@ -18,6 +18,7 @@
           tick-strategy="leaf"
           color="primary"
           accordion
+          ref= "topicTree"
           node-key="Id"
         />
       </section>
@@ -33,7 +34,7 @@
         />
       </section>
 
-      <q-slide-transition>
+      
         <section v-if="question.LookupId_QuestionType==6" class="q-ma-sm q-pa-sm shadow-1">
           گزینه صحیح
           <base-select
@@ -43,7 +44,14 @@
             filter
           />
         </section>
-      </q-slide-transition>
+
+        <base-select 
+          :model="$v.question.TopicAnswer"
+            :options="topicAnswerDdl"
+            class="col-md-4"
+            >
+        </base-select>
+      
     </div>
 
     <div class="col-sm-8 row gutter-md">
@@ -107,6 +115,12 @@
         class="col-md-4"
         filter
       />
+      <base-select
+        :model="$v.question.LookupId_QuestionRank"
+        :options="lookupStore.questionRankDdl"
+        class="col-md-4"
+        filter
+      />
       <base-input :model="$v.question.ResponseSecond" class="col-md-4"/>
       <base-field class="col-md-4" :model="$v.question.IsHybrid">
         <template slot-scope="data">
@@ -115,14 +129,21 @@
         </template>
       </base-field>
       <base-input :model="$v.question.Description" class="col-12"/>
+
+
+    <div class="col-12" >
+      <p v-for="elem in concatTopicArray" :key="elem">{{elem}}</p>
+    </div>
+
     </div>
   </base-modal-create>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { questionValidations } from "src/validations/questionValidation";
+import util from "src/utilities";
 
 @Component({
   validations: questionValidations
@@ -143,6 +164,7 @@ export default class QuestionCreateVue extends Vue {
   question = vxm.questionStore.question;
   writerStore = vxm.writerStore;
   topicFilter = "";
+  concatTopicArray: Array<string> = [];
   //#endregion
 
   //#region ### computed ###
@@ -154,6 +176,12 @@ export default class QuestionCreateVue extends Vue {
       { value: 4, label: "4" }
     ];
   }
+
+  get topicAnswerDdl(){
+    return this.concatTopicArray.map(x => ({value: x , label: x}))
+    //return [];
+  }
+
   //#endregion
 
   //#region ### methods ###
@@ -165,6 +193,7 @@ export default class QuestionCreateVue extends Vue {
     this.lookupStore.fillRepeatnessType();
     this.lookupStore.fillAuthorType();
     this.lookupStore.fillAreaType();
+    this.lookupStore.fillQuestionRank();
     this.writerStore.fillList();
   }
   //#endregion
@@ -174,6 +203,27 @@ export default class QuestionCreateVue extends Vue {
     this.questionStore.SET_CREATE_VUE(this);
   }
   //#endregion
+
+//#region ### watch ###
+  @Watch("question.TopicIds")
+  questionTopicIdsChanged(newVal) {
+    var getNodeByKey = this.$refs["topicTree"]["getNodeByKey"];
+    util.clearArray(this.concatTopicArray);
+    var strArr: Array<string> = [];
+    newVal.forEach(x => {
+      strArr = [];
+      var node = getNodeByKey(x);
+      while (node) {
+        strArr.unshift(node.label);
+        node = node.parent;
+      }
+      this.concatTopicArray.push(strArr.join(" => "));
+    });
+  }
+  //#endregion
+
+
 }
+
 </script>
 

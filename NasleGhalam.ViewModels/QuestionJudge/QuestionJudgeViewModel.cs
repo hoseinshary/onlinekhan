@@ -35,6 +35,9 @@ namespace NasleGhalam.ViewModels.QuestionJudge
         public int LookupId_QuestionHardnessType { get; set; }
 
         public int LookupId_RepeatnessType { get; set; }
+        
+        public int LookupId_QuestionRank { get; set; }
+
 
         public int QuestionId { get; set; }
 
@@ -51,6 +54,8 @@ namespace NasleGhalam.ViewModels.QuestionJudge
         public int LookupId_ReasonProblem { get; set; }
 
         
+        public string EducationGroup { get; set; }
+
         public string Description { get; set; }
 
     }

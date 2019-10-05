@@ -51,6 +51,9 @@ namespace NasleGhalam.DomainClasses.Entities
         public int LookupId_AreaType { get; set; }
         public Lookup Lookup_AreaType { get; set; }
 
+        public int LookupId_QuestionRank { get; set; }
+        public Lookup Lookup_QuestionRank { get; set; }
+
         public string Description { get; set; }
 
         public string FileName { get; set; }
@@ -71,6 +74,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public bool IsHybrid { get; set; }
         public int AnswerNumber { get; set; }
+
+        public string  TopicAnswer { get; set; }
 
         public ICollection<QuestionJudge> QuestionJudges { get; set; }
                

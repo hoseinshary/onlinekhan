@@ -1,16 +1,18 @@
 <template>
   <section class="row gutter-sm">
-    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6 col-lg-4" suffix="ثانیه" />
+    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6 " suffix="ثانیه" />
+    <div class="col-md-6 ">
+    </div>
     <base-select
       :model="$v.questionJudge.LookupId_RepeatnessType"
       :options="lookupStore.repeatnessTypeDdl"
-      class="col-md-6 col-lg-4"
+      class="col-md-6 "
       clearable
     />
     <base-select
       :model="$v.questionJudge.LookupId_QuestionHardnessType"
       :options="lookupStore.questionHardnessTypeDdl"
-      class="col-md-6 col-lg-4"
+      class="col-md-6 "
       clearable
     />
     <base-select
@@ -59,6 +61,19 @@
         />
       </div>
     </q-field>
+    <base-select
+        :model="$v.questionJudge.LookupId_QuestionRank"
+        :options="lookupStore.questionRankDdl"
+        class="col-md-6"
+        filter
+      />
+
+      <base-select 
+          :model="$v.questionJudge.EducationGroup"
+            :options="educationGroupDdl"
+            class="col-md-6"
+            >
+        </base-select>
     <base-input :model="$v.questionJudge.Description" class="col-12" />
     <div class="col-12">
       <base-btn-create @click="questionJudgeStore.submitCreate()" />
@@ -67,11 +82,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { questionJudgeValidations } from "src/validations/questionJudgeValidation";
 
+
 @Component({
+  
   validations: questionJudgeValidations
 })
 export default class QuestionJudgeCreateVue extends Vue {
@@ -86,8 +103,53 @@ export default class QuestionJudgeCreateVue extends Vue {
   //#region ### hooks ###
   created() {
     this.questionJudgeStore.SET_CREATE_VUE(this);
+    
   }
   //#endregion
+
+//#region ### computed ###
+  get educationGroupDdl() {
+    return [
+      { value: "ریاضی", label: "ریاضی" },
+      { value: "تجربی", label: "تجربی" },
+      { value: "انسانی", label: "انسانی" }
+    
+    ];
+  }
+
+  
+
+  //#endregion
+
+
+  //#region ### watch ###
+  @Watch("questionJudge.IsDelete")
+  questionJudgeIsDeleteChanged(newVal) {
+    if(newVal)
+    {
+      this.questionJudge.IsUpdate = false;
+      this.questionJudge.IsActiveQuestion = false;
+    }
+  }
+    @Watch("questionJudge.IsUpdate")
+  questionJudgeIsUpdateChanged(newVal) {
+    if(newVal)
+    {
+      this.questionJudge.IsDelete = false;
+      this.questionJudge.IsActiveQuestion = false;
+    }
+  }
+    @Watch("questionJudge.IsActiveQuestion")
+  questionJudgeIsActiveQuestionChanged(newVal) {
+    if(newVal)
+    {
+      this.questionJudge.IsUpdate = false;
+      this.questionJudge.IsDelete = false;
+    }
+  }
+  //#endregion
+
 }
+
 </script>
 

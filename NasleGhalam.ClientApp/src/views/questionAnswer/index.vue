@@ -26,7 +26,9 @@
         <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create"/>
         <!-- tab-panes -->
         <q-tab-pane keep-alive name="tab-create">
-          <tab-create></tab-create>
+          <tab-create 
+          :lessonIdProp="lessonIdProp"
+          ></tab-create>
         </q-tab-pane>
         <q-tab-pane keep-alive name="tab-edit">
           <tab-edit></tab-edit>
@@ -94,7 +96,7 @@
 
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 
@@ -106,6 +108,11 @@ import util from "src/utilities";
   }
 })
 export default class QuestionAnswerVue extends Vue {
+
+//#region ### props ###
+@Prop({ type: Number, required: true }) lessonIdProp;
+//#endregion
+
   //#region ### data ###
   questionAnswerStore = vxm.questionAnswerStore;
   questionStore = vxm.questionStore;

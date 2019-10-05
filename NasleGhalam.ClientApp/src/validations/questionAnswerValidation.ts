@@ -23,6 +23,10 @@ const questionAnswerValidations: ValidationRuleset<TQuestionAnswer> = {
       displayName: displayName("توضیحات"),
       maxLength: maxLength(300)
     },
+    LessonName: {
+      displayName: displayName("درس"),
+      maxLength: maxLength(300)
+    },
     WriterId: {
       displayName: displayName("نویسنده"),
       requiredDdl: requiredDdl(0)

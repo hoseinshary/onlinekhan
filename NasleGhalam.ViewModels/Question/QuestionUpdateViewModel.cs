@@ -52,6 +52,11 @@ namespace NasleGhalam.ViewModels.Question
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_AreaType { get; set; }
 
+
+        [Display(Name = "امتیاز")]
+        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
+        public int LookupId_QuestionRank { get; set; }
+
         [Display(Name = "زمان پاسخ")]
         public short ResponseSecond { get; set; }
 
@@ -75,6 +80,9 @@ namespace NasleGhalam.ViewModels.Question
         public bool IsHybrid { get; set; }
 
         public int AnswerNumber { get; set; }
+
+        [Display(Name = "مبحث پاسخ صحیح")]
+        public string TopicAnswer { get; set; }
 
         public List<int> TopicIds { get; set; } = new List<int>();
 

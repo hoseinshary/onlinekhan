@@ -58,8 +58,15 @@ const questionJudgeValidations: ValidationRuleset<TQuestionJudge> = {
       displayName: displayName("علت مشکل"),
       requiredDdl: requiredDdl(0)
     },
+    LookupId_QuestionRank: {
+      displayName: displayName("امتیاز سوال"),
+      requiredDdl: requiredDdl(0)
+    },
     Description: {
       displayName: displayName("توضیحات")
+    },
+    EducationGroup: {
+      displayName: displayName("گروه آموزشی")
     }
   }
 };

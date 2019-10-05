@@ -268,7 +268,8 @@ export class QuestionStore extends VuexModule {
       LookupId_AuthorType: this.question.LookupId_AuthorType,
       LookupId_AreaType: this.question.LookupId_AreaType,
       TopicIds: this.question.TopicIds,
-      TagIds: this.question.TagIds
+      TagIds: this.question.TagIds,
+      LookupId_QuestionRank: this.question.LookupId_QuestionRank
     };
     var params = util.toParam(newData);
 

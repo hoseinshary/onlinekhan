@@ -91,8 +91,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 questionAnswer.Context += paragraph.Range.Text;
             }
 
-           
 
+            doc.SaveAs2(SitePath.GetQuestionAnswerAbsPath(FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
             doc.Close();
             app.Quit();
             questionAnswer.FilePath = FileName;
@@ -102,10 +102,11 @@ namespace NasleGhalam.ServiceLayer.Services
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(FileName) && !string.IsNullOrEmpty(FileName))
             {
-                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(FileName) + ".docx");
+
                 //crop and resize
                 //تبدیل به عکس
-                doc.SaveAs2(SitePath.GetQuestionAnswerAbsPath(FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
+                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(FileName) + ".docx");
+                
                 ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionAnswerAbsPath(FileName) + ".pdf", SitePath.GetQuestionAnswerAbsPath(FileName));
                 File.Delete(SitePath.GetQuestionAnswerAbsPath(FileName) + ".pdf");
                 File.Delete(wordFilename);

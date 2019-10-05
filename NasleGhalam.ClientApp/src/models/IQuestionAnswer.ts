@@ -7,6 +7,7 @@ export default interface IQuestionAnswer {
   Context: string;
   LookupId_AnswerType: number;
   Description: string;
+  LessonName: string;
   QuestionAnswerPicturePath: string;
   WriterId: number;
   IsMaster: boolean;
@@ -21,6 +22,7 @@ export const DefaultQuestionAnswer: IQuestionAnswer = {
   FilePath: "",
   Context: "",
   LookupId_AnswerType: 0,
+  LessonName: "",
   Description: "",
   QuestionAnswerPicturePath: "",
   WriterId: 0,

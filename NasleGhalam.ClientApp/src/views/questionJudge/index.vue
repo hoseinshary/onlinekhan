@@ -10,9 +10,9 @@
     <div class="col-md-5 col-lg-4">
       <section class="row s-border s-spacing">
         <p class="col-12 text-primary text-weight-bold q-pa-sm">مشخصه های سوال</p>
-        <div class="col-12 q-pa-sm">
+        <div class="col-12 q-pa-sm" style="color:red">
           جواب صحیح:
-          <span class="text-black">{{question.AnswerNumber}}</span>
+          <span class="text-red">{{question.AnswerNumber}}</span>
         </div>
         <div class="col-12 q-pa-sm">
           نویسنده:
@@ -65,6 +65,11 @@
             slot="Lookup_QuestionHardnessType.Value"
             slot-scope="data"
           >{{data.row.Lookup_QuestionHardnessType.Value}}</template>
+          <template slot="IsDelete" slot-scope="data">
+            <span v-if="data.row.IsDelete"> حذف </span>
+            <span v-else-if="data.row.IsUpdate"> ویرایش </span>
+            <span v-else> تایید </span>
+          </template>
           <template slot="Id" slot-scope="data">
             <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)" />
             <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
@@ -105,20 +110,12 @@ export default class QuestionJudgeVue extends Vue {
       data: "IsStandardName"
     },
     {
-      title: "حذف",
-      data: "IsDeleteName"
-    },
-    {
-      title: "ویرایش",
-      data: "IsUpdateName"
-    },
-    {
       title: "یادگیری",
       data: "IsLearningName"
     },
     {
-      title: "تایید",
-      data: "IsActiveQuestionName"
+      title: "وضعیت",
+      data: "IsDelete"
     },
     {
       title: "تایید جواب",
@@ -184,6 +181,7 @@ export default class QuestionJudgeVue extends Vue {
       this.lookupStore.fillRepeatnessType();
       this.lookupStore.fillReasonProblem();
       this.lookupStore.fillWhereProblem();
+      this.lookupStore.fillQuestionRank();
 
       this.questionJudgeStore.resetCreate();
       this.questionJudge.QuestionId = this.question.Id;

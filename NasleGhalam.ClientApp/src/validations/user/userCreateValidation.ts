@@ -77,7 +77,10 @@ const userCreateValidations: ValidationRuleset<TUser> = {
     CityId: {
       displayName: displayName("شهر"),
       requiredDdl: requiredDdl(0)
-    }
+    },
+    ProfilePic: {
+      displayName: displayName("عکس کاربری"),
+    },
   }
 };
 

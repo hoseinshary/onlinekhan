@@ -42,6 +42,10 @@
         public int LookupId_ReasonProblem { get; set; }
         public Lookup Lookup_ReasonProblem { get; set; }
 
+        public int LookupId_QuestionRank { get; set; }
+        public Lookup Lookup_QuestionRank { get; set; }
+
+        public string EducationGroup { get; set; }
 
         public string Description { get; set; }
 

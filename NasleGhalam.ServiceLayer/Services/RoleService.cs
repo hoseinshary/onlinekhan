@@ -169,5 +169,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var msgRes = _uow.CommitChanges(CrudType.Update, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
+
+
+        
     }
 }

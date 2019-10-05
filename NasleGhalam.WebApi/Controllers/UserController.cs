@@ -1,4 +1,7 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.IO;
+using System.Web;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.ViewModels.User;
@@ -45,9 +48,20 @@ namespace NasleGhalam.WebApi.Controllers
 
         [HttpPost]
         [CheckModelValidation]
-        public IHttpActionResult Register(UserCreateViewModel userViewModel)
+        [CheckImageValidationNotRequired("img", 1024)]
+        public IHttpActionResult Register([FromUri]UserCreateViewModel userViewModel)
         {
-            var msgRes = _userService.Register(userViewModel, Request.GetRoleLevel());
+            var postedFile = HttpContext.Current.Request.Files.Get("img");
+            if (postedFile != null && postedFile.ContentLength > 0)
+            {
+                userViewModel.ProfilePic = $"{Guid.NewGuid()}{Path.GetExtension(postedFile.FileName)}";
+            }
+
+            var msgRes = _userService.Register(userViewModel);
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(userViewModel.ProfilePic))
+            {
+                postedFile?.SaveAs($"{SitePath.UserProfileRelPath}{userViewModel.ProfilePic}".ToAbsolutePath());
+            }
             return Ok(msgRes);
         }
 

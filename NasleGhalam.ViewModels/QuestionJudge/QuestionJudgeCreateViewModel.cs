@@ -40,6 +40,13 @@ namespace NasleGhalam.ViewModels.QuestionJudge
         [Display(Name = "علت مشکل")]
         public int LookupId_ReasonProblem { get; set; }
 
+        [Display(Name = "امتیاز سوال")]
+        public int LookupId_QuestionRank { get; set; }
+        
+
+        [Display(Name = "رشته")]
+        public string EducationGroup { get; set; }
+
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 

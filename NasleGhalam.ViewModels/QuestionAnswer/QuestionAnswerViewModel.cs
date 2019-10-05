@@ -29,6 +29,10 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
         [Display(Name = "فعال")]
         public bool IsActive { get; set; }
 
+        [Display(Name = "درس")]
+        public string LessonName { get; set; }
+
+
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 

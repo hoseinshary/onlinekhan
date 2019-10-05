@@ -17,6 +17,13 @@
       :options="lookupStore.answerTypeDdl"
       class="col-md-6"
     />
+
+    <base-select
+      :model="$v.questionAnswer.LessonName"
+      :options="lessonNameDdl"
+      class="col-md-6"
+    />
+
     <base-field class="col-md-6" :model="$v.questionAnswer.IsMaster">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
@@ -45,11 +52,23 @@ import { questionAnswerValidations } from "src/validations/questionAnswerValidat
 export default class QuestionAnswerCreateVue extends Vue {
   $v: any;
 
+//#region ### props ###
+@Prop({ type: Number, required: true }) lessonIdProp;
+//#endregion
+
   //#region ### data ###
   questionAnswerStore = vxm.questionAnswerStore;
   questionAnswer = this.questionAnswerStore.questionAnswer;
   lookupStore = vxm.lookupStore;
   writerStore = vxm.writerStore;
+  lessonStore = vxm.lessonStore;
+  //#endregion
+
+  //#region ### computed ###
+  get lessonNameDdl() {
+    return this.lessonStore.relatedLessons(this.lessonIdProp)
+    .map(x=>({label:x.Name, value:x.Name}));
+  }
   //#endregion
 
   //#region ### hooks ###

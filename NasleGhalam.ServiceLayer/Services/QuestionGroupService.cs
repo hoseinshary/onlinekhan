@@ -175,6 +175,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     newQuestion.LookupId_AreaType = 1036;
                     newQuestion.LookupId_AuthorType = 1039;
                     newQuestion.LookupId_RepeatnessType = 21;
+                    newQuestion.LookupId_QuestionRank = 1063;
                     newQuestion.InsertDateTime = DateTime.Now;
                     newQuestion.IsStandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
                     newQuestion.WriterId = 1;

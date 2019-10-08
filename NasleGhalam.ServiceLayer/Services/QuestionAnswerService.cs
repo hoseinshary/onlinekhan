@@ -325,7 +325,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         i++;
                         while (i <= x && !IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
                         {
-                            if (doc.Paragraphs[i].Range.Text != "\f" && doc.Paragraphs[i].Range.Text != "\f\r")
+                            if ( doc.Paragraphs[i].Range.Text != "\r\a" )
                             {
                                 doc.Paragraphs[i].Range.Copy();
 

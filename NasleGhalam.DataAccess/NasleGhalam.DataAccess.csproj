@@ -52,101 +52,9 @@
   <ItemGroup>
     <Compile Include="Context\DBContext.cs" />
     <Compile Include="Context\IUnitOfWork.cs" />
-    <Compile Include="Migrations\201903021533302_initDb.cs" />
-    <Compile Include="Migrations\201903021533302_initDb.Designer.cs">
-      <DependentUpon>201903021533302_initDb.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903021600161_questionjudgeFix.cs" />
-    <Compile Include="Migrations\201903021600161_questionjudgeFix.Designer.cs">
-      <DependentUpon>201903021600161_questionjudgeFix.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903120759434_fixQuestionJudge.cs" />
-    <Compile Include="Migrations\201903120759434_fixQuestionJudge.Designer.cs">
-      <DependentUpon>201903120759434_fixQuestionJudge.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903120824406_fixQuestion.cs" />
-    <Compile Include="Migrations\201903120824406_fixQuestion.Designer.cs">
-      <DependentUpon>201903120824406_fixQuestion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903120929533_fixQuestionjudgeRel.cs" />
-    <Compile Include="Migrations\201903120929533_fixQuestionjudgeRel.Designer.cs">
-      <DependentUpon>201903120929533_fixQuestionjudgeRel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904240602407_lessonuserAdded.cs" />
-    <Compile Include="Migrations\201904240602407_lessonuserAdded.Designer.cs">
-      <DependentUpon>201904240602407_lessonuserAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905131244085_lessonField.cs" />
-    <Compile Include="Migrations\201905131244085_lessonField.Designer.cs">
-      <DependentUpon>201905131244085_lessonField.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905151119431_FieldQuestionJudge.cs" />
-    <Compile Include="Migrations\201905151119431_FieldQuestionJudge.Designer.cs">
-      <DependentUpon>201905151119431_FieldQuestionJudge.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905151135050_filedQuestionAnswer.cs" />
-    <Compile Include="Migrations\201905151135050_filedQuestionAnswer.Designer.cs">
-      <DependentUpon>201905151135050_filedQuestionAnswer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905151307226_writerTable.cs" />
-    <Compile Include="Migrations\201905151307226_writerTable.Designer.cs">
-      <DependentUpon>201905151307226_writerTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905190854320_fixLessonUser.cs" />
-    <Compile Include="Migrations\201905190854320_fixLessonUser.Designer.cs">
-      <DependentUpon>201905190854320_fixLessonUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905231429021_lessonDepartment.cs" />
-    <Compile Include="Migrations\201905231429021_lessonDepartment.Designer.cs">
-      <DependentUpon>201905231429021_lessonDepartment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201907251136053_questionWriter.cs" />
-    <Compile Include="Migrations\201907251136053_questionWriter.Designer.cs">
-      <DependentUpon>201907251136053_questionWriter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201907281507576_AddResume.cs" />
-    <Compile Include="Migrations\201907281507576_AddResume.Designer.cs">
-      <DependentUpon>201907281507576_AddResume.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908031734388_UpdateMobileNumberLen.cs" />
-    <Compile Include="Migrations\201908031734388_UpdateMobileNumberLen.Designer.cs">
-      <DependentUpon>201908031734388_UpdateMobileNumberLen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908091223241_fixresume.cs" />
-    <Compile Include="Migrations\201908091223241_fixresume.Designer.cs">
-      <DependentUpon>201908091223241_fixresume.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908091228594_prioritytopic.cs" />
-    <Compile Include="Migrations\201908091228594_prioritytopic.Designer.cs">
-      <DependentUpon>201908091228594_prioritytopic.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909022124465_addFieldToQuestionJudge.cs" />
-    <Compile Include="Migrations\201909022124465_addFieldToQuestionJudge.Designer.cs">
-      <DependentUpon>201909022124465_addFieldToQuestionJudge.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909022127042_fixbefore.cs" />
-    <Compile Include="Migrations\201909022127042_fixbefore.Designer.cs">
-      <DependentUpon>201909022127042_fixbefore.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909110941432_questionAddField.cs" />
-    <Compile Include="Migrations\201909110941432_questionAddField.Designer.cs">
-      <DependentUpon>201909110941432_questionAddField.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909252141122_questionrank.cs" />
-    <Compile Include="Migrations\201909252141122_questionrank.Designer.cs">
-      <DependentUpon>201909252141122_questionrank.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909270502382_profilepic.cs" />
-    <Compile Include="Migrations\201909270502382_profilepic.Designer.cs">
-      <DependentUpon>201909270502382_profilepic.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910010745518_dbchanges.cs" />
-    <Compile Include="Migrations\201910010745518_dbchanges.Designer.cs">
-      <DependentUpon>201910010745518_dbchanges.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910061310087_fix.cs" />
-    <Compile Include="Migrations\201910061310087_fix.Designer.cs">
-      <DependentUpon>201910061310087_fix.cs</DependentUpon>
+    <Compile Include="Migrations\201910061357444_initDB.cs" />
+    <Compile Include="Migrations\201910061357444_initDB.Designer.cs">
+      <DependentUpon>201910061357444_initDB.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -166,81 +74,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201903021533302_initDb.resx">
-      <DependentUpon>201903021533302_initDb.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903021600161_questionjudgeFix.resx">
-      <DependentUpon>201903021600161_questionjudgeFix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903120759434_fixQuestionJudge.resx">
-      <DependentUpon>201903120759434_fixQuestionJudge.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903120824406_fixQuestion.resx">
-      <DependentUpon>201903120824406_fixQuestion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903120929533_fixQuestionjudgeRel.resx">
-      <DependentUpon>201903120929533_fixQuestionjudgeRel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904240602407_lessonuserAdded.resx">
-      <DependentUpon>201904240602407_lessonuserAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905131244085_lessonField.resx">
-      <DependentUpon>201905131244085_lessonField.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905151119431_FieldQuestionJudge.resx">
-      <DependentUpon>201905151119431_FieldQuestionJudge.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905151135050_filedQuestionAnswer.resx">
-      <DependentUpon>201905151135050_filedQuestionAnswer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905151307226_writerTable.resx">
-      <DependentUpon>201905151307226_writerTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905190854320_fixLessonUser.resx">
-      <DependentUpon>201905190854320_fixLessonUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905231429021_lessonDepartment.resx">
-      <DependentUpon>201905231429021_lessonDepartment.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201907251136053_questionWriter.resx">
-      <DependentUpon>201907251136053_questionWriter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201907281507576_AddResume.resx">
-      <DependentUpon>201907281507576_AddResume.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908031734388_UpdateMobileNumberLen.resx">
-      <DependentUpon>201908031734388_UpdateMobileNumberLen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908091223241_fixresume.resx">
-      <DependentUpon>201908091223241_fixresume.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908091228594_prioritytopic.resx">
-      <DependentUpon>201908091228594_prioritytopic.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909022124465_addFieldToQuestionJudge.resx">
-      <DependentUpon>201909022124465_addFieldToQuestionJudge.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909022127042_fixbefore.resx">
-      <DependentUpon>201909022127042_fixbefore.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909110941432_questionAddField.resx">
-      <DependentUpon>201909110941432_questionAddField.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909252141122_questionrank.resx">
-      <DependentUpon>201909252141122_questionrank.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909270502382_profilepic.resx">
-      <DependentUpon>201909270502382_profilepic.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910010745518_dbchanges.resx">
-      <DependentUpon>201910010745518_dbchanges.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910061310087_fix.resx">
-      <DependentUpon>201910061310087_fix.cs</DependentUpon>
-    </EmbeddedResource>
+    <Content Include="App_Readme\Elmah.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Readme\Elmah.txt" />
+    <EmbeddedResource Include="Migrations\201910061357444_initDB.resx">
+      <DependentUpon>201910061357444_initDB.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -139,14 +139,14 @@ namespace NasleGhalam.ServiceLayer.Services
             // Open a doc file.
             var app = new Application();
             var wordFilename = SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx";
-            var doc = app.Documents.Open(wordFilename);
+            var source = app.Documents.Open(wordFilename);
 
             var missing = Type.Missing;
 
 
             //بررسی تعداد سوالات با تعداد جواب ها 
             var questoinAnswerCount = 0;
-            foreach (Paragraph paragraph in doc.Paragraphs)
+            foreach (Paragraph paragraph in source.Paragraphs)
             {
                 if (IsQuestionParagraph(paragraph.Range.Text))
                 {
@@ -168,79 +168,160 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
             //split question Answer
-            var x = doc.Paragraphs.Count;
+            var x = source.Paragraphs.Count;
             var i = 1;
             var numberOfQ = 0;
             while (i <= x)
             {
-                if (doc.Paragraphs[i].Range.Text == "\f" || doc.Paragraphs[i].Range.Text == "\f\r")
+                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                {
+                    var context = "";
+
+                    numberOfQ++;
+                    var target = app.Documents.Add();
+
+                    //تریک درست شدن گزینه ها 
+                    source.ActiveWindow.Selection.WholeStory();
+                    source.ActiveWindow.Selection.Copy();
+                    target.ActiveWindow.Selection.Paste();
+                    target.ActiveWindow.Selection.WholeStory();
+                    target.ActiveWindow.Selection.Delete();
+
+                    //حذف عدد اول سوال
+                    int k = 1;
+                    while (k < source.Paragraphs[i].Range.Characters.Count &&
+                           source.Paragraphs[i].Range.Characters[k].Text != "-")
+                    {
+                        source.Paragraphs[i].Range.Characters[k].Delete();
+                    }
+                    source.Paragraphs[i].Range.Characters[k].Delete();
+
+
+                    int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
+
+                    context += source.Paragraphs[i].Range.Text;
                     i++;
+                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    {
+                        context += source.Paragraphs[i].Range.Text;
+                        i++;
+                    }
+
+                    int endOfQuestionIndex = source.Paragraphs[i - 1].Range.Sentences.Parent.End;
+
+                    source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
+                    source.ActiveWindow.Selection.Copy();
+
+                    target.ActiveWindow.Selection.Paste();
+
+                    //create single question Answer
+                    var newQuestionAQuestion = new QuestionAnswer();
+                    var newGuid = Guid.NewGuid();
+                    newQuestionAQuestion.FilePath = newGuid.ToString();
+                    newQuestionAQuestion.Context = context;
+                    newQuestionAQuestion.UserId = questionAnswerViewModel.UserId;
+                    newQuestionAQuestion.QuestionId = questions[numberOfQ - 1].Id;
+                    newQuestionAQuestion.WriterId = questionAnswerViewModel.WriterId;
+                    newQuestionAQuestion.IsMaster = true;
+                    newQuestionAQuestion.Title = questionAnswerViewModel.Title;
+                    newQuestionAQuestion.LookupId_AnswerType = 1042;
+
+                    _questionAnswers.Add(newQuestionAQuestion);
+
+                    var filename2 = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString()) ;
+                    target.SaveAs(filename2 + ".docx", ref missing, ref missing,
+                        ref missing, ref missing, ref missing, ref missing,
+                        ref missing, ref missing, ref missing, ref missing,
+                        ref missing, ref missing, ref missing, ref missing,
+                        ref missing);
+
+
+                    //تبدیل به عکس
+                    var filename = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString());
+                    target.SaveAs2(filename + ".pdf", WdSaveFormat.wdFormatPDF);
+                    ImageUtility.SaveImageOfWordPdf(filename + ".pdf", filename);
+                    File.Delete(filename + ".pdf");
+
+
+                    
+
+                 
+                    target.Close();
+                }
                 else
                 {
-                    if (IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
-                    {
-                        var context = "";
-
-                        numberOfQ++;
-                        var newDoc2 = app.Documents.Add(
-                            ref missing, ref missing, ref missing, ref missing);
-
-                        doc.Paragraphs[i].Range.Copy();
-
-                        app.Selection.Paste();
-                        context += doc.Paragraphs[i].Range.Text;
-                        i++;
-                        while (i <= x && !IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
-                        {
-                            if (doc.Paragraphs[i].Range.Text != "\f" && doc.Paragraphs[i].Range.Text != "\f\r")
-                            {
-                                doc.Paragraphs[i].Range.Copy();
-
-                                app.Selection.Paste();
-                                context += doc.Paragraphs[i].Range.Text;
-                            }
-                            i++;
-                        }
-
-                        //create single question Answer
-                        var newQuestionAQuestion = new QuestionAnswer();
-                        var newGuid = Guid.NewGuid();
-                        newQuestionAQuestion.FilePath = newGuid.ToString();
-                        newQuestionAQuestion.Context = context;
-                        newQuestionAQuestion.UserId = questionAnswerViewModel.UserId;
-                        newQuestionAQuestion.QuestionId = questions[numberOfQ - 1].Id;
-                        newQuestionAQuestion.WriterId = questionAnswerViewModel.WriterId;
-                        newQuestionAQuestion.IsMaster = true;
-                        newQuestionAQuestion.Title = questionAnswerViewModel.Title;
-                        newQuestionAQuestion.LookupId_AnswerType = 1042;
-
-
-
-                        _questionAnswers.Add(newQuestionAQuestion);
-
-                        var filename2 = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString()) + ".docx";
-                        newDoc2.SaveAs(filename2, ref missing, ref missing,
-                            ref missing, ref missing, ref missing, ref missing,
-                            ref missing, ref missing, ref missing, ref missing,
-                            ref missing, ref missing, ref missing, ref missing,
-                            ref missing);
-
-
-                        //تبدیل به عکس
-                        var target = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString());
-                        newDoc2.SaveAs2(target + ".pdf", WdSaveFormat.wdFormatPDF);
-                        ImageUtility.SaveImageOfWordPdf(target + ".pdf", target);
-                        File.Delete(target + ".pdf");
-                        
-
-                        
-
-                        newDoc2.Close();
-                    }
+                    i++;
                 }
+
+                /////////////////////////////////////
+                //if (source.Paragraphs[i].Range.Text == "\f" || source.Paragraphs[i].Range.Text == "\f\r")
+                //    i++;
+                //else
+                //{
+                //    if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                //    {
+                //        var context = "";
+
+                //        numberOfQ++;
+                //        var newDoc2 = app.Documents.Add(
+                //            ref missing, ref missing, ref missing, ref missing);
+
+                //        source.Paragraphs[i].Range.Copy();
+
+                //        app.Selection.Paste();
+                //        context += source.Paragraphs[i].Range.Text;
+                //        i++;
+                //        while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                //        {
+                //            if (source.Paragraphs[i].Range.Text != "\f" && source.Paragraphs[i].Range.Text != "\f\r")
+                //            {
+                //                source.Paragraphs[i].Range.Copy();
+
+                //                app.Selection.Paste();
+                //                context += source.Paragraphs[i].Range.Text;
+                //            }
+                //            i++;
+                //        }
+
+                //        //create single question Answer
+                //        var newQuestionAQuestion = new QuestionAnswer();
+                //        var newGuid = Guid.NewGuid();
+                //        newQuestionAQuestion.FilePath = newGuid.ToString();
+                //        newQuestionAQuestion.Context = context;
+                //        newQuestionAQuestion.UserId = questionAnswerViewModel.UserId;
+                //        newQuestionAQuestion.QuestionId = questions[numberOfQ - 1].Id;
+                //        newQuestionAQuestion.WriterId = questionAnswerViewModel.WriterId;
+                //        newQuestionAQuestion.IsMaster = true;
+                //        newQuestionAQuestion.Title = questionAnswerViewModel.Title;
+                //        newQuestionAQuestion.LookupId_AnswerType = 1042;
+
+
+
+                //        _questionAnswers.Add(newQuestionAQuestion);
+
+                //var filename2 = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString()) + ".docx";
+                //newDoc2.SaveAs(filename2, ref missing, ref missing,
+                //    ref missing, ref missing, ref missing, ref missing,
+                //    ref missing, ref missing, ref missing, ref missing,
+                //    ref missing, ref missing, ref missing, ref missing,
+                //    ref missing);
+
+
+                ////تبدیل به عکس
+                //var target = SitePath.GetQuestionAnswerAbsPath(newGuid.ToString());
+                //newDoc2.SaveAs2(target + ".pdf", WdSaveFormat.wdFormatPDF);
+                //ImageUtility.SaveImageOfWordPdf(target + ".pdf", target);
+                //File.Delete(target + ".pdf");
+
+
+
+
+                //        newDoc2.Close();
+                //}
+                //}
             }
 
-            doc.Close();
+            source.Close();
             app.Quit();
             /////////////////////////////////
 
@@ -278,12 +359,12 @@ namespace NasleGhalam.ServiceLayer.Services
             var app = new Application();
             var wordFilename = SitePath.GetQuestionGroupTempAbsPath(wordFileName) + ".docx";
 
-            var doc = app.Documents.Open(wordFilename);
+            var source = app.Documents.Open(wordFilename);
             var missing = Type.Missing;
 
             //بررسی تعداد سوالات با تعداد جواب ها 
             var questoinAnswerCount = 0;
-            foreach (Paragraph paragraph in doc.Paragraphs)
+            foreach (Paragraph paragraph in source.Paragraphs)
             {
                 if (IsQuestionParagraph(paragraph.Range.Text))
                 {
@@ -306,61 +387,65 @@ namespace NasleGhalam.ServiceLayer.Services
             var returnGuidList = new List<Object>();
 
             //split question Answer
-            var x = doc.Paragraphs.Count;
+            var x = source.Paragraphs.Count;
             var i = 1;
             var numberOfQ = 0;
             while (i <= x)
             {
-                if (doc.Paragraphs[i].Range.Text == "\f" || doc.Paragraphs[i].Range.Text == "\f\r")
+                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                {
+                    numberOfQ++;
+
+                    var target = app.Documents.Add();
+                    //تریک درست شدن گزینه ها 
+                    source.ActiveWindow.Selection.WholeStory();
+                    source.ActiveWindow.Selection.Copy();
+                    target.ActiveWindow.Selection.Paste();
+                    target.ActiveWindow.Selection.WholeStory();
+                    target.ActiveWindow.Selection.Delete();
+
+                    int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
+
                     i++;
+                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    {
+                        i++;
+                    }
+
+                    int endOfQuestionIndex = source.Paragraphs[i - 1].Range.Sentences.Parent.End;
+
+                    source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
+                    source.ActiveWindow.Selection.Copy();
+                    target.ActiveWindow.Selection.Paste();
+
+                    var newGuid = Guid.NewGuid();
+                    var returnItem = new
+                    {
+                        questionPath = $"/content/question/{questions[numberOfQ - 1].FileName}.png".ToFullRelativePath(),
+                        answerPath = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath()
+                    };
+                    returnGuidList.Add(returnItem);
+                    var filename2 = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
+
+                    target.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);
+
+                    //while (target.Windows[1].Panes[1].Pages.Count < 0) ;
+
+                    //var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                    ImageUtility.SaveImageOfWordPdf(filename2 + ".pdf", filename2);
+                    target.Close(WdSaveOptions.wdDoNotSaveChanges);
+
+                    File.Delete(filename2 + ".pdf");
+                }
                 else
                 {
-                    if (IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
-                    {
-                        numberOfQ++;
-                        var newDoc2 = app.Documents.Add(ref missing, ref missing, ref missing, ref missing);
-                        doc.Paragraphs[i].Range.Copy();
-
-                        app.Selection.Paste();
-                        i++;
-                        while (i <= x && !IsQuestionParagraph(doc.Paragraphs[i].Range.Text))
-                        {
-                            if ( doc.Paragraphs[i].Range.Text != "\r\a" )
-                            {
-                                doc.Paragraphs[i].Range.Copy();
-
-                                app.Selection.Paste();
-                            }
-                            i++;
-                        }
-
-                        var newGuid = Guid.NewGuid();
-                        var returnItem = new
-                        {
-                            questionPath = $"/content/question/{questions[numberOfQ - 1].FileName}.png".ToFullRelativePath(),
-                            answerPath = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath()
-                        };
-                        returnGuidList.Add(returnItem);
-
-
-                        
-
-                        //تبدیل به عکس
-
-
-                        var target = SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString());
-                        newDoc2.SaveAs2(SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()) + ".pdf", WdSaveFormat.wdFormatPDF);
-                        ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()) + ".pdf", SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()));
-                        File.Delete(SitePath.GetQuestionGroupTempAbsPath(newGuid.ToString()) + ".pdf");
-
-                        
-
-                        newDoc2.Close(WdSaveOptions.wdDoNotSaveChanges, WdOriginalFormat.wdOriginalDocumentFormat, false);
-                    }
+                    i++;
                 }
+
+               
             }
 
-            doc.Close();
+            source.Close();
             app.Quit();
             /////////////////////////////////
             File.Delete(wordFilename);

@@ -610,7 +610,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 if (arrayTemp[i] == ' ' || arrayTemp[i] == '\n' || arrayTemp[i] == '\r')
                 {
-                    i++;
+                    
                 }
                 else if (char.IsDigit(arrayTemp[i]))
                 {
@@ -622,12 +622,12 @@ namespace NasleGhalam.ServiceLayer.Services
                     if (arrayTemp[i] == '-')
                     {
                         var j = 0;
-                        while (j < 3 && i < arrayTemp.Length)
+                        while (j < 10 && i < arrayTemp.Length)
                         {
                             i++;
                             j++;
                         }
-                        if (j == 3)
+                        if (j == 10)
                             return true;
                     }
                     return false;

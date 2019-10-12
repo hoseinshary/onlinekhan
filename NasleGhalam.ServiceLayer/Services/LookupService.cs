@@ -46,6 +46,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(x => x.Name == name)
                 .AsNoTracking()
                 .AsEnumerable()
+                .OrderBy(x => x.State)
                 .Select(Mapper.Map<LookupViewModel>)
                 .ToList();
         }

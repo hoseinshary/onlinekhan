@@ -3,7 +3,7 @@
     <template slot="header">
       <q-toolbar slot="header" color="cyan-9">
         <q-toolbar-title>مشاهده سوال ها</q-toolbar-title>
-        <q-btn dense icon="close" @click="questionStore.OPEN_MODAL_QUESTIONS(false)"/>
+        <q-btn dense icon="close" @click="questionStore.OPEN_MODAL_QUESTIONS(false)" />
       </q-toolbar>
     </template>
 
@@ -14,8 +14,9 @@
       class="col-12 q-mb-sm"
     >
       <q-card-media>
-        <img :src="questionPic.QuestionPicturePath" class="img-original-width">
+        <img :src="questionPic.QuestionPicturePath" class="img-original-width" />
       </q-card-media>
+      <router-link :to="'/question/'+ questionPic.Id">مشاهده سوال ({{questionPic.Id}})</router-link>
     </q-card>
 
     <template slot="footer">

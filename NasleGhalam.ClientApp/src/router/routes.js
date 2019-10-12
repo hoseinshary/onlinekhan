@@ -80,6 +80,10 @@ export default [
         component: () => import("src/views/question/index.vue")
       },
       {
+        path: "/question/:id",
+        component: () => import("src/views/question/index.vue")
+      },
+      {
         path: "/student",
         component: () => import("src/views/student/index.vue")
       },

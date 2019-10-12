@@ -67,7 +67,7 @@
           />
 
           <hr class="col-12 q-mb-sm" />
-          
+
           <base-btn-create
             v-if="canCreate"
             :label="`ایجاد (${questionStore.modelName}) جدید`"
@@ -77,6 +77,7 @@
 
           <div class="col-12">
             <base-table :grid-data="questionStore.gridData" :columns="questionGridColumn" hasIndex>
+              <template slot="FileName" slot-scope="data">{{data.row.Id}}</template>
               <template slot="Context" slot-scope="data">
                 <div v-if="data.row.Context && data.row.Context.length> 100">
                   {{(`${data.row.Context.substring(0,100)} ...`)}}
@@ -120,7 +121,7 @@
     </section>
 
     <!-- modals -->
-     <modal-create
+    <modal-create
       v-if="canCreate"
       :topicTreeDataProp="topicTreeData"
       :topicTickedIdsProp="topicTree.leafTicked"
@@ -136,9 +137,7 @@
     ></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
     <modal-question-judge v-if="canQuestionJudge"></modal-question-judge>
-    <modal-question-answer v-if="canQuestionAnswer"
-      :lessonIdProp="lessonId"
-    ></modal-question-answer>
+    <modal-question-answer v-if="canQuestionAnswer" :lessonIdProp="lessonId"></modal-question-answer>
   </section>
 </template>
 
@@ -167,6 +166,10 @@ export default class QuestionVue extends Vue {
   questionAnswerStore = vxm.questionAnswerStore;
   pageAccess = util.getAccess(this.questionStore.modelName);
   questionGridColumn = [
+    {
+      title: "کد",
+      data: "FileName"
+    },
     {
       title: "متن سوال",
       data: "Context"
@@ -272,7 +275,6 @@ export default class QuestionVue extends Vue {
 
   //#region ### methods ###
   showModalCreate() {
-    
     this.questionStore.resetCreate();
     this.questionStore.OPEN_MODAL_CREATE(true);
   }
@@ -295,7 +297,6 @@ export default class QuestionVue extends Vue {
     this.topicTree.setToFirstLevel = true;
     // clear topicTree leaf
     this.topicTree.leafTicked.splice(0, this.topicTree.leafTicked.length);
-
   }
 
   fillGrid() {
@@ -331,6 +332,13 @@ export default class QuestionVue extends Vue {
       this.topicStore.fillList();
       this.educationTree.expanded = this.educationTree.firstLevel;
     });
+  }
+
+  mounted() {
+    let route = this["$route"];
+    if (route && route.params.id) {
+      this.showModalEdit(route.params.id);
+    }
   }
   //#endregion
 }

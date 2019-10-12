@@ -5,7 +5,7 @@
     size="xl"
     @confirm="questionStore.submitEdit(activeAccess)"
     @reset="questionStore.resetEdit"
-    @close="questionStore.OPEN_MODAL_EDIT(false)"
+    @close="close"
     @open="open"
   >
     <q-card inline class="col-12" v-if="question.FileName">
@@ -15,7 +15,7 @@
     </q-card>
 
     <div class="col-12" v-if="showElement('TopicIds')">
-      <p v-for="elem in concatTopicArray" :key="elem">{{elem}}</p>
+      <p v-for="(elem, index) in concatTopicArray" :key="index">{{elem}}</p>
     </div>
     <div class="col-md-3 col-sm-6">
       <section v-if="showElement('TopicIds')" class="q-my-sm shadow-1">
@@ -102,7 +102,7 @@
           class="col-md-4"
           filter
         />
-         <base-select
+        <base-select
           v-if="showElement('LookupId_QuestionRank')"
           :model="$v.question.LookupId_QuestionRank"
           :options="lookupStore.questionRankTypeDdl"
@@ -155,12 +155,12 @@
           :model="$v.question.ResponseSecond"
           class="col-md-4"
         />
-              <base-field class="col-md-4" :model="$v.question.IsHybrid">
-        <template slot-scope="data">
-          <q-radio v-model="data.obj.$model" :val="false" label="خیر"/>
-          <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
-        </template>
-      </base-field>
+        <base-field class="col-md-4" :model="$v.question.IsHybrid">
+          <template slot-scope="data">
+            <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+            <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+          </template>
+        </base-field>
         <base-input
           v-if="showElement('Description')"
           :model="$v.question.Description"
@@ -338,6 +338,12 @@ export default class QuestionEditVue extends Vue {
     this.lookupStore.fillAuthorType();
     this.lookupStore.fillAreaType();
     this.writerStore.fillList();
+  }
+
+  close() {
+    this.questionStore.OPEN_MODAL_EDIT(false);
+    // var router = this["$router"];
+    // if (router && router.params.id) route.push("/question");
   }
   //#endregion
 

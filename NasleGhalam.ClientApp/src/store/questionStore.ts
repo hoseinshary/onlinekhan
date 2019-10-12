@@ -377,9 +377,10 @@ export class QuestionStore extends VuexModule {
 
   @action()
   async resetEdit() {
+    if (!this._editVue) return;
     this.RESET(this._editVue);
     var wordFile = this._editVue.$refs.wordFile;
-    wordFile["reset"]();
+    if (wordFile) wordFile["reset"]();
   }
 
   @action()

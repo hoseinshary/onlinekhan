@@ -224,6 +224,15 @@ export class EducationTreeStore extends VuexModule {
     }
   }
 
+  @action()
+  async GetAllByLessonId(lessonId: string) {
+    return axios
+      .get(`${baseUrl}/GetAllByLessonId/${lessonId}`)
+      .then((response: AxiosResponse<Array<number>>) => {
+        return response.data;
+      });
+  }
+
   @action({ mode: "raw" })
   async validateForm(vm: any) {
     return new Promise(resolve => {

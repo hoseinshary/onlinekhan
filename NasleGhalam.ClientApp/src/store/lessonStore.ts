@@ -101,18 +101,17 @@ export class LessonStore extends VuexModule {
           currentLesson.LessonDepartments.map(x => x.Id)) ||
         [];
 
-      return this._lessonList
-        .filter(
-          lesson =>
-            currentLesson &&
-            lesson.Id != currentLesson.Id &&
-            lesson.LessonDepartments &&
-            lesson.LessonDepartments.some(department =>
-              currentDepartmentIds.some(
-                currentDepartment => currentDepartment == department.Id
-              )
+      return this._lessonList.filter(
+        lesson =>
+          currentLesson &&
+          lesson.Id != currentLesson.Id &&
+          lesson.LessonDepartments &&
+          lesson.LessonDepartments.some(department =>
+            currentDepartmentIds.some(
+              currentDepartment => currentDepartment == department.Id
             )
-        );
+          )
+      );
     };
   }
 

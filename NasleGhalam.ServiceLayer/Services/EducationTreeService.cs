@@ -52,6 +52,20 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
+        /// گرفتن همه درخت آموزش ها با درس
+        /// </summary>
+        /// <returns></returns>
+        public IList<int> GetAllByLessonId(int lessonId)
+        {
+            return _educationTrees
+                .Where(current => current.Lessons.Any(lesson => lesson.Id == lessonId))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(current => current.Id)
+                .ToList();
+        }
+
+        /// <summary>
         /// ثبت درخت آموزش
         /// </summary>
         /// <param name="educationTreeViewModel"></param>

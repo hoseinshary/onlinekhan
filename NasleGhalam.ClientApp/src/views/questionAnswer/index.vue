@@ -3,32 +3,30 @@
     <template slot="header">
       <q-toolbar slot="header" color="purple-6">
         <q-toolbar-title>{{questionAnswerStore.modelName}}</q-toolbar-title>
-        <q-btn dense icon="close" @click="questionAnswerStore.OPEN_MODAL_INDEX(false)"/>
+        <q-btn dense icon="close" @click="questionAnswerStore.OPEN_MODAL_INDEX(false)" />
       </q-toolbar>
     </template>
 
     <q-card inline class="col-12 q-mb-sm" v-show="question.FileName">
       <q-card-media>
         سوال:
-        <img :src="question.QuestionPicturePath" class="img-original-width">
+        <img :src="question.QuestionPicturePath" class="img-original-width" />
       </q-card-media>
     </q-card>
     <q-card inline class="col-12 q-mb-sm" v-show="questionAnswer.FilePath">
       <q-card-media>
         جواب:
-        <img :src="questionAnswer.QuestionAnswerPicturePath" class="img-original-width">
+        <img :src="questionAnswer.QuestionAnswerPicturePath" class="img-original-width" />
       </q-card-media>
     </q-card>
     <div class="col-4">
       <q-tabs color="purple-6" v-model="selectedTab">
         <!-- tabs -->
-        <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add"/>
-        <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create"/>
+        <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add" />
+        <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create" />
         <!-- tab-panes -->
         <q-tab-pane keep-alive name="tab-create">
-          <tab-create 
-          :lessonIdProp="lessonIdProp"
-          ></tab-create>
+          <tab-create :lessonIdProp="lessonIdProp"></tab-create>
         </q-tab-pane>
         <q-tab-pane keep-alive name="tab-edit">
           <tab-edit></tab-edit>
@@ -44,8 +42,8 @@
     </div>
     <div class="col-8">
       <q-tabs inverted color="cyan-9">
-        <q-tab slot="title" name="detailTab" label="جزییات" default class="text-bold"/>
-        <q-tab slot="title" name="imageTab" label="تصاویر" class="text-bold"/>
+        <q-tab slot="title" name="detailTab" label="جزییات" default class="text-bold" />
+        <q-tab slot="title" name="imageTab" label="تصاویر" class="text-bold" />
 
         <q-tab-pane name="detailTab" keep-alive class="row">
           <base-table
@@ -64,7 +62,7 @@
               <div v-else>{{data.row.Context}}</div>
             </template>
             <template slot="Id" slot-scope="data">
-              <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)"/>
+              <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)" />
               <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
             </template>
           </base-table>
@@ -81,7 +79,7 @@
               <img
                 :src="img.QuestionAnswerPicturePath"
                 class="img-original-width"
-              >
+              />
             </q-card-media>
           </q-card>
         </q-tab-pane>
@@ -108,10 +106,9 @@ import util from "src/utilities";
   }
 })
 export default class QuestionAnswerVue extends Vue {
-
-//#region ### props ###
-@Prop({ type: Number, required: true }) lessonIdProp;
-//#endregion
+  //#region ### props ###
+  @Prop({ type: Number, required: true }) lessonIdProp;
+  //#endregion
 
   //#region ### data ###
   questionAnswerStore = vxm.questionAnswerStore;

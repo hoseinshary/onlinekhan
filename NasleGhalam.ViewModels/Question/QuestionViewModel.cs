@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.QuestionAnswer;
@@ -14,6 +13,8 @@ namespace NasleGhalam.ViewModels.Question
     public class QuestionViewModel 
     {
         public int Id { get; set; }
+
+        public int Code => Id;
 
         public string Context { get; set; }
 

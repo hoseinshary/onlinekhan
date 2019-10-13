@@ -64,7 +64,7 @@
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
-    <modal-questions></modal-questions>
+    <modal-questions :lessonIdProp="questionGroup.LessonId"></modal-questions>
     <modal-delete v-if="canDelete"></modal-delete>
     <modal-create-multi-answer></modal-create-multi-answer>
   </section>

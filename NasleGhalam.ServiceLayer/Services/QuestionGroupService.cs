@@ -223,7 +223,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
             }
 
-          
+
             source.Close();
             app.Quit();
 
@@ -299,7 +299,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     //while (target.Windows[1].Panes[1].Pages.Count < 0) ;
 
                     //var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
-                    ImageUtility.SaveImageOfWordPdf(filename2 + ".pdf", filename2 );
+                    ImageUtility.SaveImageOfWordPdf(filename2 + ".pdf", filename2);
                     target.Close(WdSaveOptions.wdDoNotSaveChanges);
 
                     File.Delete(filename2 + ".pdf");
@@ -356,6 +356,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var questionGroup = _questionGroups
                 .Include(current => current.Questions)
+                .Include(current => current.Questions.Select(x => x.QuestionAnswers))
                 .First(current => current.Id == id);
 
             if (questionGroup == null)
@@ -363,15 +364,31 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //remove questions relation
             var questions = questionGroup.Questions.ToList();
+            var questionAnswers = questionGroup.Questions.Select(x => x.QuestionAnswers.ToList()).ToList();
+
+
+            int i = 0;
             foreach (var item in questions)
             {
+                foreach (var answer in questionAnswers[i])
+                {
+                    questionGroup.Questions.Where(x => x.Id == item.Id).First().QuestionAnswers.Remove(answer);
+                    _uow.MarkAsDeleted(answer);
+                }
                 questionGroup.Questions.Remove(item);
                 _uow.MarkAsDeleted(item);
-                if (item.AnswerNumber != 0 )
+                if (item.AnswerNumber != 0)
                 {
                     QuestionService.DeleteOptionsOfQuestion(item.FileName);
                 }
+
+
+                i++;
             }
+
+
+
+
 
             _uow.MarkAsDeleted(questionGroup);
 
@@ -379,11 +396,29 @@ namespace NasleGhalam.ServiceLayer.Services
             if (msgRes.MessageType == MessageType.Success)
             {
                 //remove questions file
+                int j = 0;
                 foreach (var item in questions)
                 {
                     File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".docx");
                     File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".png");
+
+                    foreach (var answer in questionAnswers[j])
+                    {
+                        if (File.Exists(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".docx"))
+                        {
+                            File.Delete(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".docx");
+                        }
+
+                        if (File.Exists(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".png"))
+                        {
+                            File.Delete(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".png");
+                        }
+                    }
+                    j++;
                 }
+
+                
+
 
                 File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".docx");
                 File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".xlsx");

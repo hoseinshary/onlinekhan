@@ -565,6 +565,19 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(questionAnswer);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                if (File.Exists(SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".docx"))
+                {
+                    File.Delete(SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".docx");
+                }
+
+                if (File.Exists(SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".png"))
+                {
+                    File.Delete(SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".png");
+                }
+            }
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 

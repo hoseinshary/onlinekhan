@@ -7,6 +7,17 @@
       </q-toolbar>
     </template>
 
+    <q-tree
+      v-show="false"
+      :nodes="topicTreeDataProp"
+      :ticked.sync="question.TopicIds"
+      tick-strategy="leaf"
+      color="primary"
+      accordion
+      ref="topicTree"
+      node-key="Id"
+    />
+
     <div class="col-md-5 col-lg-4">
       <section class="row s-border s-spacing">
         <p class="col-12 text-primary text-weight-bold q-pa-sm">مشخصه های سوال</p>
@@ -51,6 +62,11 @@
         <img :src="question.QuestionPicturePath" class="img-original-width" />
       </section>
 
+      <section class="s-border s-spacing">
+        <p v-for="(elem, index) in concatTopicArray" :key="index">{{elem}}</p>
+        <div class="col-12"></div>
+      </section>
+
       <section class="row s-border s-spacing">
         <base-table
           :grid-data="questionJudgeStore.gridData"
@@ -66,9 +82,9 @@
             slot-scope="data"
           >{{data.row.Lookup_QuestionHardnessType.Value}}</template>
           <template slot="IsDelete" slot-scope="data">
-            <span v-if="data.row.IsDelete"> حذف </span>
-            <span v-else-if="data.row.IsUpdate"> ویرایش </span>
-            <span v-else> تایید </span>
+            <span v-if="data.row.IsDelete">حذف</span>
+            <span v-else-if="data.row.IsUpdate">ویرایش</span>
+            <span v-else>تایید</span>
           </template>
           <template slot="Id" slot-scope="data">
             <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)" />
@@ -85,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 
@@ -97,6 +113,10 @@ import util from "src/utilities";
   }
 })
 export default class QuestionJudgeVue extends Vue {
+  //#region ### props ###
+  @Prop({ type: Array, required: true }) topicTreeDataProp;
+  //#endregion
+
   //#region ### data ###
   questionJudgeStore = vxm.questionJudgeStore;
   questionStore = vxm.questionStore;
@@ -142,6 +162,7 @@ export default class QuestionJudgeVue extends Vue {
     }
   ];
   selectedTab = "tab-create";
+  concatTopicArray: Array<string> = [];
   //#endregion
 
   //#region ### computed ###
@@ -159,6 +180,24 @@ export default class QuestionJudgeVue extends Vue {
 
   get editMode() {
     return this.selectedTab == "tab-edit";
+  }
+  //#endregion
+
+  //#region ### watch ###
+  @Watch("question.TopicIds")
+  questionTopicIdsChanged(newVal) {
+    var getNodeByKey = this.$refs["topicTree"]["getNodeByKey"];
+    util.clearArray(this.concatTopicArray);
+    var strArr: Array<string> = [];
+    newVal.forEach(x => {
+      strArr = [];
+      var node = getNodeByKey(x);
+      while (node) {
+        strArr.unshift(node.label);
+        node = node.parent;
+      }
+      this.concatTopicArray.push(strArr.join(" => "));
+    });
   }
   //#endregion
 

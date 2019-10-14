@@ -170,9 +170,7 @@ export default class QuestionCreateVue extends Vue {
 
   get topicAnswerDdl() {
     return this.concatTopicArray.map(x => ({ value: x, label: x }));
-    //return [];
   }
-
   //#endregion
 
   //#region ### methods ###
@@ -186,12 +184,6 @@ export default class QuestionCreateVue extends Vue {
     this.lookupStore.fillAreaType();
     this.lookupStore.fillQuestionRank();
     this.writerStore.fillList();
-  }
-  //#endregion
-
-  //#region ### hooks ###
-  created() {
-    this.questionStore.SET_CREATE_VUE(this);
   }
   //#endregion
 
@@ -210,6 +202,12 @@ export default class QuestionCreateVue extends Vue {
       }
       this.concatTopicArray.push(strArr.join(" => "));
     });
+  }
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.questionStore.SET_CREATE_VUE(this);
   }
   //#endregion
 }

@@ -15,18 +15,7 @@
       class="col-md-6 "
       clearable
     />
-    <base-select
-      :model="$v.questionJudge.LookupId_WhereProblem"
-      :options="lookupStore.whereProblemDdl"
-      class="col-md-6"
-      clearable
-    />
-    <base-select
-      :model="$v.questionJudge.LookupId_ReasonProblem"
-      :options="lookupStore.reasonProblemDdl"
-      class="col-md-6"
-      clearable
-    />
+    
     <q-field class="col-12">
       <div class="s-border q-pa-sm">
         <q-toggle
@@ -36,6 +25,7 @@
         />
         <q-toggle
           v-model="$v.questionJudge.IsLearning.$model"
+          hidden
           :label="$v.questionJudge.IsLearning.$params.displayName.value"
           class="q-mx-md"
         />
@@ -74,6 +64,19 @@
             class="col-md-6"
             >
         </base-select>
+
+        <base-select
+      :model="$v.questionJudge.LookupId_WhereProblem"
+      :options="lookupStore.whereProblemDdl"
+      class="col-md-6"
+      clearable
+    />
+    <base-select
+      :model="$v.questionJudge.LookupId_ReasonProblem"
+      :options="lookupStore.reasonProblemDdl"
+      class="col-md-6"
+      clearable
+    />
     <base-input :model="$v.questionJudge.Description" class="col-12" />
     <div class="col-12">
       <base-btn-create @click="questionJudgeStore.submitCreate()" />

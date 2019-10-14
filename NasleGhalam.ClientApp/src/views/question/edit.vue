@@ -164,7 +164,7 @@
         <base-input
           v-if="showElement('Description')"
           :model="$v.question.Description"
-          class="col-12"
+          class="col-md-8"
         />
       </section>
     </div>
@@ -179,6 +179,7 @@
         color="primary"
         accordion
         node-key="Id"
+        ref="topicTree2"
       />
     </div>
   </base-modal-edit>
@@ -320,6 +321,18 @@ export default class QuestionEditVue extends Vue {
       }
       this.concatTopicArray.push(strArr.join(" => "));
     });
+
+    // topic 2
+    getNodeByKey = this.$refs["topicTree2"]["getNodeByKey"];
+    newVal.forEach(x => {
+      strArr = [];
+      var node = getNodeByKey(x);
+      while (node) {
+        strArr.unshift(node.label);
+        node = node.parent;
+      }
+      this.concatTopicArray.push(strArr.join(" => "));
+    });
   }
   //#endregion
 
@@ -342,8 +355,12 @@ export default class QuestionEditVue extends Vue {
 
   close() {
     this.questionStore.OPEN_MODAL_EDIT(false);
-    // var router = this["$router"];
-    // if (router && router.params.id) route.push("/question");
+
+    var route = this["$route"];
+    if (route && route.params.id) {
+      var router = this["$router"];
+      router.push("/question");
+    }
   }
   //#endregion
 

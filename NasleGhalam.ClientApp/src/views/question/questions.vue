@@ -16,7 +16,9 @@
       <q-card-media>
         <img :src="questionPic.QuestionPicturePath" class="img-original-width" />
       </q-card-media>
-      <router-link :to="'/question/'+ questionPic.Id">مشاهده سوال ({{questionPic.Id}})</router-link>
+      <router-link
+        :to="`/question/${questionPic.Id}/${lessonIdProp}`"
+      >مشاهده سوال ({{questionPic.Id}})</router-link>
     </q-card>
 
     <template slot="footer">
@@ -26,11 +28,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import { vxm } from "src/store";
 
 @Component
 export default class QuestionsVue extends Vue {
+  //#region ### props ###
+  @Prop({ type: Number, required: true }) lessonIdProp;
+  //#endregion
+
   //#region ### data ###
   questionStore = vxm.questionStore;
   //#endregion

@@ -2,7 +2,7 @@
   <base-modal-create
     :title="questionStore.modelName"
     :show="questionStore.openModal.create"
-    size="lg"
+    size="xl"
     @confirm="questionStore.submitCreate"
     @reset="questionStore.resetCreate"
     @close="questionStore.OPEN_MODAL_CREATE(false)"
@@ -48,6 +48,10 @@
     </div>
 
     <div class="col-sm-8 row gutter-md">
+      <div class="col-12">
+        <p v-for="(elem, index) in concatTopicArray" :key="index">{{elem}}</p>
+      </div>
+
       <q-field class="col-sm-4">
         <q-uploader
           url
@@ -122,10 +126,6 @@
         </template>
       </base-field>
       <base-input :model="$v.question.Description" class="col-12" />
-
-      <div class="col-12">
-        <p v-for="(elem, index) in concatTopicArray" :key="index">{{elem}}</p>
-      </div>
     </div>
   </base-modal-create>
 </template>

@@ -33,7 +33,6 @@
           color="blue"
           node-key="Id"
         />
-
         <q-select
           :value="lessonId"
           @change="lessonIdChanged"
@@ -77,7 +76,6 @@
 
           <div class="col-12">
             <base-table :grid-data="questionStore.gridData" :columns="questionGridColumn" hasIndex>
-              <template slot="FileName" slot-scope="data">{{data.row.Id}}</template>
               <template slot="Context" slot-scope="data">
                 <div v-if="data.row.Context && data.row.Context.length> 100">
                   {{(`${data.row.Context.substring(0,100)} ...`)}}
@@ -146,6 +144,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
+import utilities from "src/utilities";
 
 @Component({
   components: {
@@ -168,7 +167,7 @@ export default class QuestionVue extends Vue {
   questionGridColumn = [
     {
       title: "کد",
-      data: "FileName"
+      data: "Code"
     },
     {
       title: "متن سوال",
@@ -296,7 +295,7 @@ export default class QuestionVue extends Vue {
     this.lessonId = val;
     this.topicTree.setToFirstLevel = true;
     // clear topicTree leaf
-    this.topicTree.leafTicked.splice(0, this.topicTree.leafTicked.length);
+    utilities.clearArray(this.topicTree.leafTicked);
   }
 
   fillGrid() {
@@ -336,8 +335,31 @@ export default class QuestionVue extends Vue {
 
   mounted() {
     let route = this["$route"];
-    if (route && route.params.id) {
-      this.showModalEdit(route.params.id);
+    if (route && route.params.id && route.params.lessonId) {
+      // fill educationTree
+      this.educationTreeStore
+        .GetAllByLessonId(route.params.lessonId)
+        .then(tickedEducationTreeIds => {
+          utilities.clearArray(this.educationTree.leafTicked);
+          tickedEducationTreeIds.forEach(x => {
+            this.educationTree.leafTicked.push(x);
+          });
+        })
+        .then(() => {
+          this.lessonIdChanged(+route.params.lessonId);
+        })
+        .then(() => {
+          this.questionStore.getById(+route.params.id).then(() => {
+            // open edit modal
+            this.questionStore.OPEN_MODAL_EDIT(true);
+            // topic leaf and fill grid
+            if (this.questionStore.question.TopicIds) {
+              this.questionStore.question.TopicIds.forEach(x => {
+                this.topicTree.leafTicked.push(x);
+              });
+            }
+          });
+        });
     }
   }
   //#endregion

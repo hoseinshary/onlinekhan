@@ -178,7 +178,11 @@ export default class QuestionVue extends Vue {
       data: "Id",
       searchable: false,
       sortable: false,
-      visible: this.canEdit || this.canDelete
+      visible:
+        this.canEdit ||
+        this.canDelete ||
+        this.canQuestionAnswer ||
+        this.canQuestionJudge
     }
   ];
   lessonId = 0;

@@ -14,6 +14,8 @@ namespace NasleGhalam.ViewModels.User
 
         public string FullName { get; set; }
 
+        public string ProfilePic { get; set; }
+
         public string DefaultPage { get; set; }
 
         public IList<SubMenuViewModel> SubMenus { get; set; }

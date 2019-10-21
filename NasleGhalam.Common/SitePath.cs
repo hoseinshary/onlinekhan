@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 
 namespace NasleGhalam.Common
@@ -11,8 +12,8 @@ namespace NasleGhalam.Common
         public static string QuestionAnswerRelPath => "~/Content/QuestionAnswer/";
         public static string QuestionGroupRelPath => "~/Content/QuestionGroup/";
         public static string QuestionGroupTempRelPath => "~/Content/QuestionGroupTemp/";
-
         public static string UserProfileRelPath => "~/Content/UserProfile/";
+        public static string DefaultUserProfileRelPath => "~/Content/UserProfile/DefaultProfile.png";
         //-------------------------------------------------------------------------------------
 
         public static string GetQuestionAbsPath(string name) => ToAbsolutePath($"{QuestionRelPath}{name}");
@@ -25,7 +26,12 @@ namespace NasleGhalam.Common
 
         public static string GetQuestionGroupTempAbsPath(string name) => ToAbsolutePath($"{QuestionGroupTempRelPath}{name}");
 
-        
+        public static string GetUserAbsPath(string name)
+        {
+            var path = ToAbsolutePath($"{UserProfileRelPath}{name}");
+            return File.Exists(path) ? path : ToAbsolutePath(DefaultUserProfileRelPath);
+        }
+
 
         public static string ToAbsolutePath(this string relativePath)
         {

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 using NasleGhalam.Common;
@@ -96,6 +99,30 @@ namespace NasleGhalam.WebApi.Controllers
         {
 
             return Ok(_userService.Login(login));
+        }
+
+        [HttpGet]
+        public HttpResponseMessage GetPictureFile(string id=null)
+        {
+            var stream = new MemoryStream();
+            id += ".png";
+            var filestraem = File.OpenRead(SitePath.GetUserAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+            filestraem.Dispose();
+            stream.Dispose();
+            return result;
         }
     }
 }

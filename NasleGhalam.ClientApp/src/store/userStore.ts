@@ -298,6 +298,8 @@ export class UserStore extends VuexModule {
           axios.defaults.headers.common["Token"] = data.Token;
           LocalStorage.set("Token", data.Token);
           LocalStorage.set("FullName", data.FullName);
+          LocalStorage.set("ProfilePic", data.ProfilePic);
+          
           LocalStorage.set(
             "authList",
             data.SubMenus.map(x => x.EnName.toLowerCase())

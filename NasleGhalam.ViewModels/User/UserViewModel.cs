@@ -1,4 +1,6 @@
-﻿namespace NasleGhalam.ViewModels.User
+﻿using NasleGhalam.Common;
+
+namespace NasleGhalam.ViewModels.User
 {
     public class UserViewModel
     {
@@ -34,8 +36,9 @@
 
         public int ProvinceId { get; set; }
 
-        
         public string ProfilePic { get; set; }
+
+        public string UserPicturePath => $"/Api/User/GetPictureFile/{ProfilePic}".ToFullRelativePath();
     }
 }
 

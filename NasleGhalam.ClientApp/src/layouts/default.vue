@@ -16,11 +16,16 @@
       </q-toolbar>
 
       <q-toolbar class="toolbar-header2">
-        <img src="/assets/img/header/default.png" alt="header image" />
+        <img src="/assets/img/header/default.png" class="header-image" alt="header image" />
         <q-toolbar-title>{{$q.localStorage.get.item("title")}}</q-toolbar-title>
 
+        <img
+          :src="$q.localStorage.get.item('ProfilePic')"
+          class="profile-image"
+          alt="profile picture"
+        />
         <q-btn flat dense class="q-mr-sm">
-          <q-icon name="account_circle" />
+          <!-- <q-icon name="account_circle" /> -->
           {{$q.localStorage.get.item("FullName")}}
         </q-btn>
         <q-btn @click="logout" flat dense>
@@ -142,11 +147,16 @@ export default {
   margin-left: 210px;
 }
 
-.toolbar-header2 img {
+.toolbar-header2 img.header-image {
   position: fixed;
   left: 140px;
   top: 88px;
   width: 90px;
+}
+
+.toolbar-header2 img.profile-image {
+  width: 55px;
+  height: 55px;
 }
 
 .toolbar-header2 .q-btn,

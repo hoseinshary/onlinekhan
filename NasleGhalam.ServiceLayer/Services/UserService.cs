@@ -313,13 +313,15 @@ namespace NasleGhalam.ServiceLayer.Services
                             defaultPage = loginResult.SubMenus[0].EnName;
                         }
 
-                        loginResult.Message = "در حال انتقال...";
+                        loginResult.Message = "ورود موفقیت آمیز";
                         loginResult.MessageType = MessageType.Success;
 
                         loginResult.Menus = _actionService.Value.GetMenu(usr.Role.SumOfActionBit);
                         loginResult.DefaultPage = defaultPage;
 
                         loginResult.FullName = usr.Name + " " + usr.Family;
+                        loginResult.ProfilePic = $"/Api/User/GetPictureFile/{usr.ProfilePic}".ToFullRelativePath();
+
                         loginResult.Token = JsonWebToken.CreateToken(usr.Role.Level,
                             usr.IsAdmin, usr.Id, usr.Role.SumOfActionBit, usr.Role.UserType);
                     }

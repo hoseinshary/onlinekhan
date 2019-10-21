@@ -67,7 +67,7 @@
         <div class="col-12"></div>
       </section>
 
-      <section class="row s-border s-spacing">
+      <section class="s-border s-spacing">
         <base-table
           :grid-data="questionJudgeStore.gridData"
           :columns="questionJudgeGridColumn"

@@ -45,7 +45,7 @@
         <q-tab slot="title" name="detailTab" label="جزییات" default class="text-bold" />
         <q-tab slot="title" name="imageTab" label="تصاویر" class="text-bold" />
 
-        <q-tab-pane name="detailTab" keep-alive class="row">
+        <q-tab-pane name="detailTab" keep-alive>
           <base-table
             :grid-data="questionAnswerStore.gridData"
             :columns="questionAnswerGridColumn"

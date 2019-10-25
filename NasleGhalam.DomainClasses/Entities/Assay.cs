@@ -10,6 +10,7 @@ namespace NasleGhalam.DomainClasses.Entities
         {
             AssayQuestions = new HashSet<AssayQuestion>();
             AssaySchedules = new HashSet<AssaySchedule>();
+            Packages = new HashSet<Package>();
         }
         public int Id { get; set; }
 
@@ -41,6 +42,8 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<AssayQuestion> AssayQuestions { get; set; }
 
         public ICollection<AssaySchedule> AssaySchedules { get; set; }
+
+        public ICollection<Package> Packages { get; set; }
 
 
 

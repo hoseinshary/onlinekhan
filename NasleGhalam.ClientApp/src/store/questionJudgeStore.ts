@@ -174,6 +174,26 @@ export class QuestionJudgeStore extends VuexModule {
       });
   }
 
+
+  @action()
+  async submitCreateWithoutReset() {
+    let vm = this._createVue;
+    if (!(await this.validateForm(vm))) return;
+
+    return axios
+      .post(`${baseUrl}/Create`, this.questionJudge)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+          this.CREATE(data.Obj);
+          
+        }
+      });
+  }
+
+
   @action()
   async resetCreate() {
     this.questionJudge.Id = 0;

@@ -27,8 +27,9 @@
           v-model="$v.questionJudge.IsLearning.$model"
           hidden
           :label="$v.questionJudge.IsLearning.$params.displayName.value"
-          class="q-mx-md"
+          class="q-mx-md hidden"
         />
+        <div class="col-12">
         <q-toggle
           v-model="$v.questionJudge.IsUpdate.$model"
           :label="$v.questionJudge.IsUpdate.$params.displayName.value"
@@ -44,6 +45,7 @@
           :label="$v.questionJudge.IsActiveQuestion.$params.displayName.value"
           class="q-mx-md"
         />
+        </div>
         <q-toggle
           v-model="$v.questionJudge.IsActiveQuestionAnswer.$model"
           :label="$v.questionJudge.IsActiveQuestionAnswer.$params.displayName.value"
@@ -79,7 +81,10 @@
     />
     <base-input :model="$v.questionJudge.Description" class="col-12" />
     <div class="col-12">
-      <base-btn-create @click="questionJudgeStore.submitCreate()" />
+      <base-btn-create @click="questionJudgeStore.submitCreate()" 
+      :label="`ایجاد و پاک سازی`"/>
+      <base-btn-create @click="questionJudgeStore.submitCreateWithoutReset()" 
+      :label="`ایجاد`"/>
     </div>
   </section>
 </template>

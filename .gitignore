@@ -67,7 +67,7 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
-#Content/
+Content/
 Content/QuestionGroupTemp
 App_Data/
 

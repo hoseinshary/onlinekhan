@@ -36,8 +36,8 @@ export const DefaultQuestionJudge: IQuestionJudge = {
   QuestionId: 0,
   LookupId_QuestionHardnessType: 0,
   LookupId_RepeatnessType: 0,
-  LookupId_WhereProblem: 0,
-  LookupId_ReasonProblem: 0,
+  LookupId_WhereProblem: 1066,
+  LookupId_ReasonProblem: 1067,
   LookupId_QuestionRank: 1063,
   Description: ""
 };

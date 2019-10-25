@@ -115,6 +115,7 @@
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\ProvinceService.cs" />
     <Compile Include="Services\PublisherService.cs" />
+    <Compile Include="Services\QuestionAnswerJudgeService.cs" />
     <Compile Include="Services\QuestionAnswerService.cs" />
     <Compile Include="Services\QuestionGroupService.cs" />
     <Compile Include="Services\QuestionJudgeService.cs" />

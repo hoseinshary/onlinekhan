@@ -7,6 +7,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public QuestionAnswer()
         {
             QuestionAnswerViews = new HashSet<QuestionAnswerView>();
+            QuestionAnswerJudges = new HashSet<QuestionAnswerJudge>();
         }
 
         public int Id { get; set; }
@@ -42,5 +43,6 @@ namespace NasleGhalam.DomainClasses.Entities
         public Question Question { get; set; }
 
         public ICollection<QuestionAnswerView> QuestionAnswerViews { get; set; }
+        public ICollection<QuestionAnswerJudge> QuestionAnswerJudges { get; set; }
     }
 }

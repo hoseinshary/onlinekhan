@@ -6,103 +6,103 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.Resume;
+using NasleGhalam.ViewModels.QuestionAnswerJudge;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class ResumeService
+	public class QuestionAnswerJudgeService
 	{
-		private const string Title = "رزومه";
+		private const string Title = "کارشناسی جواب سوال";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Resume> _resumes;
+        private readonly IDbSet<QuestionAnswerJudge> _questionAnswerJudges;
        
-	    public ResumeService(IUnitOfWork uow)
+	    public QuestionAnswerJudgeService(IUnitOfWork uow)
         {
             _uow = uow;
-            _resumes = uow.Set<Resume>();
+            _questionAnswerJudges = uow.Set<QuestionAnswerJudge>();
         }
 
 		/// <summary>
-        /// گرفتن  رزومه با آی دی
+        /// گرفتن  کارشناسی جواب سوال با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ResumeViewModel GetById(int id)
+        public QuestionAnswerJudgeViewModel GetById(int id)
         {
-            return _resumes
+            return _questionAnswerJudges
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<ResumeViewModel>)
+                .Select(Mapper.Map<QuestionAnswerJudgeViewModel>)
                 .FirstOrDefault();
         }
 
 		/// <summary>
-        /// گرفتن همه رزومه ها
+        /// گرفتن همه کارشناسی جواب سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<ResumeViewModel> GetAll()
+        public IList<QuestionAnswerJudgeViewModel> GetAll()
         {
-            return _resumes
+            return _questionAnswerJudges
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<ResumeViewModel>)
+                .Select(Mapper.Map<QuestionAnswerJudgeViewModel>)
                 .ToList();
         }
 
 		/// <summary>
-        /// ثبت رزومه
+        /// ثبت کارشناسی جواب سوال
         /// </summary>
-        /// <param name="resumeViewModel"></param>
+        /// <param name="questionAnswerJudgeViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(ResumeCreateViewModel resumeViewModel)
+        public ClientMessageResult Create(QuestionAnswerJudgeCreateViewModel questionAnswerJudgeViewModel)
         {
-            var resume = Mapper.Map<Resume>(resumeViewModel);
-            _resumes.Add(resume);
+            var questionAnswerJudge = Mapper.Map<QuestionAnswerJudge>(questionAnswerJudgeViewModel);
+            _questionAnswerJudges.Add(questionAnswerJudge);
 
 			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(resume.Id);
+                clientResult.Obj = GetById(questionAnswerJudge.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// ویرایش رزومه
+        /// ویرایش کارشناسی جواب سوال
         /// </summary>
-        /// <param name="resumeViewModel"></param>
+        /// <param name="questionAnswerJudgeViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(ResumeUpdateViewModel resumeViewModel)
+        public ClientMessageResult Update(QuestionAnswerJudgeUpdateViewModel questionAnswerJudgeViewModel)
         {
-            var resume = Mapper.Map<Resume>(resumeViewModel);
-            _uow.MarkAsChanged(resume);
+            var questionAnswerJudge = Mapper.Map<QuestionAnswerJudge>(questionAnswerJudgeViewModel);
+            _uow.MarkAsChanged(questionAnswerJudge);
 			
 			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(resume.Id);
+                clientResult.Obj = GetById(questionAnswerJudge.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// حذف رزومه
+        /// حذف کارشناسی جواب سوال
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  resumeViewModel = GetById(id);
-            if (resumeViewModel == null)
+			var  questionAnswerJudgeViewModel = GetById(id);
+            if (questionAnswerJudgeViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var resume = Mapper.Map<Resume>(resumeViewModel);
-            _uow.MarkAsDeleted(resume);
+            var questionAnswerJudge = Mapper.Map<QuestionAnswerJudge>(questionAnswerJudgeViewModel);
+            _uow.MarkAsDeleted(questionAnswerJudge);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);

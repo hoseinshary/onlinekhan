@@ -135,5 +135,10 @@
         ResumeDeleteAccess = 104,
         ResumeUpdateAccess = 105,
 
+        QuestionAnswerJudgeReadAccess = 106,
+        QuestionAnswerJudgeCreateAccess = 107,
+        QuestionAnswerJudgeDeleteAccess = 108,
+        QuestionAnswerJudgeUpdateAccess = 109,
+
     }
 }

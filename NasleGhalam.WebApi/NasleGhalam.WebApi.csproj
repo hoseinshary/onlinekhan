@@ -130,6 +130,7 @@
     <Compile Include="Controllers\ProvinceController.cs" />
     <Compile Include="Controllers\PublisherController.cs" />
     <Compile Include="Controllers\QuestionAnswerController.cs" />
+    <Compile Include="Controllers\QuestionAnswerJudgeController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionGroupController.cs" />
     <Compile Include="Controllers\QuestionJudgeController.cs" />

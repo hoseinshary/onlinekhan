@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Resume;
+using NasleGhalam.ViewModels.QuestionAnswerJudge;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,51 +12,51 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class ResumeController : ApiController
+	public class QuestionAnswerJudgeController : ApiController
 	{
-        private readonly ResumeService _resumeService;
-		public ResumeController(ResumeService resumeService)
+        private readonly QuestionAnswerJudgeService _questionAnswerJudgeService;
+		public QuestionAnswerJudgeController(QuestionAnswerJudgeService questionAnswerJudgeService)
         {
-            _resumeService = resumeService;
+            _questionAnswerJudgeService = questionAnswerJudgeService;
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.ResumeReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_resumeService.GetAll());
+            return Ok(_questionAnswerJudgeService.GetAll());
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.ResumeReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var resume = _resumeService.GetById(id);
-            if (resume == null)
+            var questionAnswerJudge = _questionAnswerJudgeService.GetById(id);
+            if (questionAnswerJudge == null)
             {
                 return NotFound();
             }
-            return Ok(resume);
+            return Ok(questionAnswerJudge);
         }
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.ResumeCreateAccess)]
+        [CheckUserAccess(ActionBits.QuestionAnswerJudgeCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(ResumeCreateViewModel resumeViewModel)
+        public IHttpActionResult Create(QuestionAnswerJudgeCreateViewModel questionAnswerJudgeViewModel)
         {
-            return Ok(_resumeService.Create(resumeViewModel));
+            return Ok(_questionAnswerJudgeService.Create(questionAnswerJudgeViewModel));
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.ResumeUpdateAccess)]
+        [CheckUserAccess(ActionBits.QuestionAnswerJudgeUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(ResumeUpdateViewModel resumeViewModel)
+        public IHttpActionResult Update(QuestionAnswerJudgeUpdateViewModel questionAnswerJudgeViewModel)
         {
-            return Ok(_resumeService.Update(resumeViewModel));
+            return Ok(_questionAnswerJudgeService.Update(questionAnswerJudgeViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.ResumeDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.QuestionAnswerJudgeDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_resumeService.Delete(id));
+            return Ok(_questionAnswerJudgeService.Delete(id));
         }
 	}
 }

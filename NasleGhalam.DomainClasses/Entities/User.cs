@@ -11,6 +11,7 @@ namespace NasleGhalam.DomainClasses.Entities
             Questions = new HashSet<Question>();
             QuestionJudges = new HashSet<QuestionJudge>();
             QuestionAnswers = new HashSet<QuestionAnswer>();
+            QuestionAnswerJudges = new HashSet<QuestionAnswerJudge>();
             Lessons = new HashSet<Lesson>();
             AssayAnswerSheets = new HashSet<AssayAnswerSheet>();
             Assays = new HashSet<Assay>();
@@ -61,6 +62,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<QuestionGroup> QuestionGroups { get; set; }
 
         public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
+        public ICollection<QuestionAnswerJudge> QuestionAnswerJudges { get; set; }
         public ICollection<Lesson> Lessons { get; set; }
 
         public ICollection<AssayAnswerSheet> AssayAnswerSheets { get; set; }

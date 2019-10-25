@@ -80,6 +80,9 @@
     <Compile Include="Log\BrowserInfoViewModel.cs" />
     <Compile Include="Log\LogViewModel.cs" />
     <Compile Include="Publisher\PublisherViewModel.cs" />
+    <Compile Include="QuestionAnswerJudge\QuestionAnswerJudgeCreateViewModel.cs" />
+    <Compile Include="QuestionAnswerJudge\QuestionAnswerJudgeUpdateViewModel.cs" />
+    <Compile Include="QuestionAnswerJudge\QuestionAnswerJudgeViewModel.cs" />
     <Compile Include="QuestionAnswer\QuestionAnswerUpdateViewModel.cs" />
     <Compile Include="QuestionAnswer\QuestionAnswerCreateViewModel.cs" />
     <Compile Include="QuestionAnswer\QuestionAnswerCreateMultiViewModel.cs" />

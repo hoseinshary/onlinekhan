@@ -1,11 +1,11 @@
 import Vue from "Vue";
-import IQuestionJudge, {
-  DefaultQuestionJudge
-} from "src/models/IQuestionJudge";
+import IQuestionAnswerJudge, {
+  DefaultQuestionAnswerJudge
+} from "src/models/IQuestionAnswerJudge";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
-import { QUESTION_JUDGE_URL as baseUrl } from "src/utilities/site-config";
+import { QUESTION_ANSWER_JUDGE_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
@@ -15,12 +15,10 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 
-@Module({ namespacedPath: "questionJudgeStore/" })
-export class QuestionJudgeStore extends VuexModule {
-  openModal: { index: boolean };
-  questionJudge: IQuestionJudge;
-  private _questionJudgeList: Array<IQuestionJudge>;
-  private _indexVue: Vue;
+@Module({ namespacedPath: "questionAnswerJudgeStore/" })
+export class QuestionAnswerJudgeStore extends VuexModule {
+  questionAnswerJudge: IQuestionAnswerJudge;
+  private _questionAnswerJudgeList: Array<IQuestionAnswerJudge>;
   private _createVue: Vue;
   private _editVue: Vue;
 
@@ -30,73 +28,55 @@ export class QuestionJudgeStore extends VuexModule {
   constructor() {
     super();
 
-    this.questionJudge = util.cloneObject(DefaultQuestionJudge);
-    this._questionJudgeList = [];
-    this.openModal = {
-      index: false
-    };
+    this.questionAnswerJudge = util.cloneObject(DefaultQuestionAnswerJudge);
+    this._questionAnswerJudgeList = [];
   }
 
   //#region ### getters ###
   get modelName() {
-    return "ارزیابی سوال";
+    return "کارشناسی جواب";
   }
 
   get gridData() {
-    return this._questionJudgeList;
+    return this._questionAnswerJudgeList;
   }
   //#endregion
 
   //#region ### mutations ###
   @mutation
-  private CREATE(questionJudge: IQuestionJudge) {
-    this._questionJudgeList.push(questionJudge);
+  private CREATE(questionAnswerJudge: IQuestionAnswerJudge) {
+    this._questionAnswerJudgeList.push(questionAnswerJudge);
   }
 
   @mutation
-  private UPDATE(questionJudge: IQuestionJudge) {
-    let index = this._questionJudgeList.findIndex(
-      x => x.Id == this.questionJudge.Id
+  private UPDATE(questionAnswerJudge: IQuestionAnswerJudge) {
+    let index = this._questionAnswerJudgeList.findIndex(
+      x => x.Id == this.questionAnswerJudge.Id
     );
     if (index < 0) return;
-    util.mapObject(questionJudge, this._questionJudgeList[index]);
+    util.mapObject(questionAnswerJudge, this._questionAnswerJudgeList[index]);
   }
 
   @mutation
   private DELETE() {
-    let index = this._questionJudgeList.findIndex(
-      x => x.Id == this.questionJudge.Id
+    let index = this._questionAnswerJudgeList.findIndex(
+      x => x.Id == this.questionAnswerJudge.Id
     );
     if (index < 0) return;
-    this._questionJudgeList.splice(index, 1);
+    this._questionAnswerJudgeList.splice(index, 1);
   }
 
   @mutation
-  private RESET(vm?: any) {
-    util.mapObject(
-      DefaultQuestionJudge,
-      this.questionJudge,
-      "Id",
-      "QuestionId"
-    );
-    if (vm && vm.$v) {
+  private RESET(vm: any) {
+    util.mapObject(DefaultQuestionAnswerJudge, this.questionAnswerJudge, "Id");
+    if (vm.$v) {
       vm.$v.$reset();
     }
   }
 
   @mutation
-  private SET_LIST(list: Array<IQuestionJudge>) {
-    this._questionJudgeList = list;
-  }
-
-  @mutation
-  OPEN_MODAL_INDEX(open: boolean) {
-    this.openModal.index = open;
-  }
-
-  @mutation
-  SET_INDEX_VUE(vm: Vue) {
-    this._indexVue = vm;
+  private SET_LIST(list: Array<IQuestionAnswerJudge>) {
+    this._questionAnswerJudgeList = list;
   }
 
   @mutation
@@ -115,16 +95,16 @@ export class QuestionJudgeStore extends VuexModule {
   async getById(id: number) {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
-      .then((response: AxiosResponse<IQuestionJudge>) => {
-        util.mapObject(response.data, this.questionJudge);
+      .then((response: AxiosResponse<IQuestionAnswerJudge>) => {
+        util.mapObject(response.data, this.questionAnswerJudge);
       });
   }
 
   @action()
-  async fillListByQuestionId(questionId: number) {
+  async fillListByQuestionAnswerId(questionAnswerId: number) {
     return axios
-      .get(`${baseUrl}/GetAllByQuestionId/${questionId}`)
-      .then((response: AxiosResponse<Array<IQuestionJudge>>) => {
+      .get(`${baseUrl}/GetAllByQuestionAnswerId/${questionAnswerId}`)
+      .then((response: AxiosResponse<Array<IQuestionAnswerJudge>>) => {
         this.SET_LIST(response.data);
       });
   }
@@ -132,8 +112,8 @@ export class QuestionJudgeStore extends VuexModule {
   @action({ mode: "raw" })
   async validateForm(vm: any) {
     return new Promise(resolve => {
-      vm.$v.questionJudge.$touch();
-      if (vm.$v.questionJudge.$error) {
+      vm.$v.questionAnswerJudge.$touch();
+      if (vm.$v.questionAnswerJudge.$error) {
         const context = getRawActionContext(this);
         context.dispatch("notifyInvalidForm", vm, { root: true });
         resolve(false);
@@ -162,7 +142,7 @@ export class QuestionJudgeStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     return axios
-      .post(`${baseUrl}/Create`, this.questionJudge)
+      .post(`${baseUrl}/Create`, this.questionAnswerJudge)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -175,25 +155,8 @@ export class QuestionJudgeStore extends VuexModule {
   }
 
   @action()
-  async submitCreateWithoutReset() {
-    let vm = this._createVue;
-    if (!(await this.validateForm(vm))) return;
-
-    return axios
-      .post(`${baseUrl}/Create`, this.questionJudge)
-      .then((response: AxiosResponse<IMessageResult>) => {
-        let data = response.data;
-        this.notify({ vm, data });
-
-        if (data.MessageType == MessageType.Success) {
-          this.CREATE(data.Obj);
-        }
-      });
-  }
-
-  @action()
   async resetCreate() {
-    this.questionJudge.Id = 0;
+    this.questionAnswerJudge.Id = 0;
     this.RESET(this._createVue);
   }
 
@@ -203,7 +166,7 @@ export class QuestionJudgeStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     return axios
-      .post(`${baseUrl}/Update`, this.questionJudge)
+      .post(`${baseUrl}/Update`, this.questionAnswerJudge)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -221,23 +184,20 @@ export class QuestionJudgeStore extends VuexModule {
   }
 
   @action()
-  async submitDelete() {
-    var vm = this._indexVue;
+  async submitDelete(vm: Vue) {
     return axios
-      .post(`${baseUrl}/Delete/${this.questionJudge.Id}`)
+      .post(`${baseUrl}/Delete/${this.questionAnswerJudge.Id}`)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
         if (data.MessageType == MessageType.Success) {
           this.DELETE();
-          vm["selectedTab"] = "tab-create";
-          this.RESET();
         }
       });
   }
   //#endregion
 }
 
-export const questionJudgeStore = QuestionJudgeStore.ExtractVuexModule(
-  QuestionJudgeStore
+export const questionAnswerJudgeStore = QuestionAnswerJudgeStore.ExtractVuexModule(
+  QuestionAnswerJudgeStore
 );

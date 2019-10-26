@@ -30,6 +30,8 @@ namespace NasleGhalam.ServiceLayer.Services
         public QuestionAnswerJudgeViewModel GetById(int id)
         {
             return _questionAnswerJudges
+                .Include(current => current.User)
+                .Include(current => current.Lookup_ReasonProblem)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -41,9 +43,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کارشناسی جواب سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionAnswerJudgeViewModel> GetAll()
+        public IList<QuestionAnswerJudgeViewModel> GetAllByQuestionAnswerId(int questionAnswerId)
         {
             return _questionAnswerJudges
+                .Include(current => current.User)
+                .Include(current => current.Lookup_ReasonProblem)
+                .Where(current => current.QuestionAnswerId == questionAnswerId)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionAnswerJudgeViewModel>)

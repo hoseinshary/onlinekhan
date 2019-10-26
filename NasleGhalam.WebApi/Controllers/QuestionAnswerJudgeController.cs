@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.QuestionAnswerJudge;
+using NasleGhalam.WebApi.Extensions;
 
 
 namespace NasleGhalam.WebApi.Controllers
@@ -21,9 +22,9 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllByQuestionAnswerId(int id)
         {
-            return Ok(_questionAnswerJudgeService.GetAll());
+            return Ok(_questionAnswerJudgeService.GetAllByQuestionAnswerId(id));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]
@@ -42,6 +43,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(QuestionAnswerJudgeCreateViewModel questionAnswerJudgeViewModel)
         {
+            questionAnswerJudgeViewModel.UserId = Request.GetUserId();
             return Ok(_questionAnswerJudgeService.Create(questionAnswerJudgeViewModel));
         }
 
@@ -50,6 +52,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(QuestionAnswerJudgeUpdateViewModel questionAnswerJudgeViewModel)
         {
+            questionAnswerJudgeViewModel.UserId = Request.GetUserId();
             return Ok(_questionAnswerJudgeService.Update(questionAnswerJudgeViewModel));
         }
 

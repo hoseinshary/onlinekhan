@@ -20,32 +20,54 @@
       </q-card-media>
     </q-card>
     <div class="col-4">
-      <q-tabs color="purple-6" v-model="selectedTab">
-        <!-- tabs -->
-        <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add" />
-        <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create" />
-        <!-- tab-panes -->
-        <q-tab-pane keep-alive name="tab-create">
-          <tab-create :lessonIdProp="lessonIdProp"></tab-create>
-        </q-tab-pane>
-        <q-tab-pane keep-alive name="tab-edit">
-          <tab-edit></tab-edit>
-        </q-tab-pane>
-        <q-tab
-          slot="title"
-          name="showQuestionJudge"
-          label="نمایش ارزیابی"
-          class="text-bold"
-          @click="showQuestionJudge"
-        />
-      </q-tabs>
+      <q-slide-transition>
+        <q-tabs color="purple-6" v-model="selectedTab" v-show="!visibleQuestionAnswerJudge">
+          <!-- tabs -->
+          <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add" />
+          <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create" />
+          <!-- tab-panes -->
+          <q-tab-pane keep-alive name="tab-create">
+            <tab-create :lessonIdProp="lessonIdProp"></tab-create>
+          </q-tab-pane>
+          <q-tab-pane keep-alive name="tab-edit">
+            <tab-edit></tab-edit>
+          </q-tab-pane>
+          <q-tab
+            slot="title"
+            name="showQuestionJudge"
+            label="نمایش ارزیابی"
+            class="text-bold"
+            @click="showQuestionJudge"
+          />
+        </q-tabs>
+      </q-slide-transition>
+      <q-slide-transition>
+        <q-tabs
+          color="blue-6"
+          v-model="questionAnswerJudgeSelectedTab"
+          v-show="visibleQuestionAnswerJudge"
+        >
+          <!-- tabs -->
+          <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add" />
+          <!-- tab-panes -->
+          <q-tab-pane keep-alive name="tab-create">
+            <tab-create-question-answer-judge :lessonIdProp="lessonIdProp"></tab-create-question-answer-judge>
+          </q-tab-pane>
+        </q-tabs>
+      </q-slide-transition>
     </div>
     <div class="col-8">
-      <q-tabs inverted color="cyan-9">
-        <q-tab slot="title" name="detailTab" label="جزییات" default class="text-bold" />
-        <q-tab slot="title" name="imageTab" label="تصاویر" class="text-bold" />
+      <q-tabs inverted color="cyan-9" v-model="detailSelectedTab">
+        <q-tab slot="title" name="detail-tab" label="جزییات" default class="text-bold" />
+        <q-tab slot="title" name="image-tab" label="تصاویر" class="text-bold" />
+        <q-tab
+          slot="title"
+          name="question-answer-judge-tab"
+          label="ارزیابی جواب"
+          class="text-bold"
+        />
 
-        <q-tab-pane name="detailTab" keep-alive>
+        <q-tab-pane name="detail-tab" keep-alive>
           <base-table
             :grid-data="questionAnswerStore.gridData"
             :columns="questionAnswerGridColumn"
@@ -62,12 +84,24 @@
               <div v-else>{{data.row.Context}}</div>
             </template>
             <template slot="Id" slot-scope="data">
+              <q-btn
+                v-if="true"
+                outline
+                round
+                icon="list"
+                color="cyan"
+                size="sm"
+                class="shadow-1 bg-white q-mr-sm"
+                @click="showQuestionAnswerJudgeTab(data.row.Id)"
+              >
+                <q-tooltip>ارزیابی سوال</q-tooltip>
+              </q-btn>
               <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)" />
               <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
             </template>
           </base-table>
         </q-tab-pane>
-        <q-tab-pane name="imageTab" keep-alive class="row">
+        <q-tab-pane name="image-tab" keep-alive class="row">
           <q-card
             inline
             v-for="(img, index) in questionAnswerStore.gridData"
@@ -82,6 +116,10 @@
               />
             </q-card-media>
           </q-card>
+        </q-tab-pane>
+
+        <q-tab-pane name="question-answer-judge-tab" keep-alive class="row">
+          <tab-list-question-answer-judge></tab-list-question-answer-judge>
         </q-tab-pane>
       </q-tabs>
     </div>
@@ -102,7 +140,11 @@ import util from "src/utilities";
   components: {
     TabCreate: () => import("./create.vue"),
     TabEdit: () => import("./edit.vue"),
-    BtnDelete: () => import("./delete.vue")
+    BtnDelete: () => import("./delete.vue"),
+    TabListQuestionAnswerJudge: () =>
+      import("../questionAnswerJudge/index.vue"),
+    TabCreateQuestionAnswerJudge: () =>
+      import("../questionAnswerJudge/create.vue")
   }
 })
 export default class QuestionAnswerVue extends Vue {
@@ -114,6 +156,7 @@ export default class QuestionAnswerVue extends Vue {
   questionAnswerStore = vxm.questionAnswerStore;
   questionStore = vxm.questionStore;
   lookupStore = vxm.lookupStore;
+  questionAnswerJudgeStore = vxm.questionAnswerJudgeStore;
   questionAnswer = this.questionAnswerStore.questionAnswer;
   writerStore = vxm.writerStore;
   question = this.questionStore.question;
@@ -148,6 +191,8 @@ export default class QuestionAnswerVue extends Vue {
     }
   ];
   selectedTab = "tab-create";
+  detailSelectedTab = "detail-tab";
+  questionAnswerJudgeSelectedTab = "tab-create";
   //#endregion
 
   //#region ### computed ###
@@ -163,8 +208,16 @@ export default class QuestionAnswerVue extends Vue {
     return this.pageAccess.indexOf("حذف جواب سوال") > -1;
   }
 
+  get questionAnswerJudgeAccess() {
+    return this.pageAccess.indexOf("مشاهده کارشناسی جواب سوال") > -1;
+  }
+
   get editMode() {
     return this.selectedTab == "tab-edit";
+  }
+
+  get visibleQuestionAnswerJudge() {
+    return this.detailSelectedTab == "question-answer-judge-tab";
   }
   //#endregion
 
@@ -184,6 +237,8 @@ export default class QuestionAnswerVue extends Vue {
       this.questionAnswerStore.resetCreate();
       this.questionAnswer.QuestionId = this.question.Id;
     }
+    ///////
+    this.lookupStore.fillReasonProblem();
   }
 
   showQuestionJudge() {
@@ -191,6 +246,12 @@ export default class QuestionAnswerVue extends Vue {
     vxm.questionJudgeStore.fillListByQuestionId(this.question.Id).then(() => {
       vxm.questionJudgeStore.OPEN_MODAL_INDEX(true);
     });
+  }
+
+  showQuestionAnswerJudgeTab(id) {
+    this.detailSelectedTab = "question-answer-judge-tab";
+    this.questionAnswerJudgeStore.questionAnswerJudge.QuestionAnswerId = id;
+    this.questionAnswerJudgeStore.fillListByQuestionAnswerId(id);
   }
   //#endregion
 

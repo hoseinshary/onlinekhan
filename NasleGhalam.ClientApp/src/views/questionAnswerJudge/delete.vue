@@ -12,7 +12,7 @@
     <q-popover class="q-pa-sm">
       <p class="text-bold">این رکورد حذف شود؟</p>
       <q-btn
-        @click="questionJudgeStore.submitDelete()"
+        @click="questionAnswerJudgeStore.submitDelete()"
         outline
         color="red"
         class="shadow-1 bg-white q-mr-sm"
@@ -27,7 +27,7 @@ import { vxm } from "src/store";
 @Component
 export default class QuestionJudgeDeleteVue extends Vue {
   //#region ### data ###
-  questionJudgeStore = vxm.questionJudgeStore;
+  questionAnswerJudgeStore = vxm.questionAnswerJudgeStore;
   //#endregion
 
   //#region ### props ###
@@ -36,7 +36,7 @@ export default class QuestionJudgeDeleteVue extends Vue {
 
   //#region ### methods ###
   showPopoverDelete(id) {
-    this.questionJudgeStore.questionJudge.Id = id;
+    this.questionAnswerJudgeStore.questionAnswerJudge.Id = id;
   }
   //#endregion
 }

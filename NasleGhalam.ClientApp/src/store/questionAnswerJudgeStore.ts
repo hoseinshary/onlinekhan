@@ -68,8 +68,13 @@ export class QuestionAnswerJudgeStore extends VuexModule {
 
   @mutation
   private RESET(vm: any) {
-    util.mapObject(DefaultQuestionAnswerJudge, this.questionAnswerJudge, "Id");
-    if (vm.$v) {
+    util.mapObject(
+      DefaultQuestionAnswerJudge,
+      this.questionAnswerJudge,
+      "Id",
+      "QuestionAnswerId"
+    );
+    if (vm && vm.$v) {
       vm.$v.$reset();
     }
   }

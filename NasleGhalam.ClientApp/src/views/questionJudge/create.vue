@@ -1,21 +1,20 @@
 <template>
   <section class="row gutter-sm">
-    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6 " suffix="ثانیه" />
-    <div class="col-md-6 ">
-    </div>
+    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6" suffix="ثانیه" />
+    <div class="col-md-6"></div>
     <base-select
       :model="$v.questionJudge.LookupId_RepeatnessType"
       :options="lookupStore.repeatnessTypeDdl"
-      class="col-md-6 "
+      class="col-md-6"
       clearable
     />
     <base-select
       :model="$v.questionJudge.LookupId_QuestionHardnessType"
       :options="lookupStore.questionHardnessTypeDdl"
-      class="col-md-6 "
+      class="col-md-6"
       clearable
     />
-    
+
     <q-field class="col-12">
       <div class="s-border q-pa-sm">
         <q-toggle
@@ -30,21 +29,21 @@
           class="q-mx-md hidden"
         />
         <div class="col-12">
-        <q-toggle
-          v-model="$v.questionJudge.IsUpdate.$model"
-          :label="$v.questionJudge.IsUpdate.$params.displayName.value"
-          class="q-mx-md"
-        />
-        <q-toggle
-          v-model="$v.questionJudge.IsDelete.$model"
-          :label="$v.questionJudge.IsDelete.$params.displayName.value"
-          class="q-mx-md"
-        />
-        <q-toggle
-          v-model="$v.questionJudge.IsActiveQuestion.$model"
-          :label="$v.questionJudge.IsActiveQuestion.$params.displayName.value"
-          class="q-mx-md"
-        />
+          <q-toggle
+            v-model="$v.questionJudge.IsUpdate.$model"
+            :label="$v.questionJudge.IsUpdate.$params.displayName.value"
+            class="q-mx-md"
+          />
+          <q-toggle
+            v-model="$v.questionJudge.IsDelete.$model"
+            :label="$v.questionJudge.IsDelete.$params.displayName.value"
+            class="q-mx-md"
+          />
+          <q-toggle
+            v-model="$v.questionJudge.IsActiveQuestion.$model"
+            :label="$v.questionJudge.IsActiveQuestion.$params.displayName.value"
+            class="q-mx-md"
+          />
         </div>
         <q-toggle
           v-model="$v.questionJudge.IsActiveQuestionAnswer.$model"
@@ -54,20 +53,19 @@
       </div>
     </q-field>
     <base-select
-        :model="$v.questionJudge.LookupId_QuestionRank"
-        :options="lookupStore.questionRankDdl"
-        class="col-md-6"
-        filter
-      />
+      :model="$v.questionJudge.LookupId_QuestionRank"
+      :options="lookupStore.questionRankDdl"
+      class="col-md-6"
+      filter
+    />
 
-      <base-select 
-          :model="$v.questionJudge.EducationGroup"
-            :options="educationGroupDdl"
-            class="col-md-6"
-            >
-        </base-select>
+    <base-select
+      :model="$v.questionJudge.EducationGroup"
+      :options="educationGroupDdl"
+      class="col-md-6"
+    ></base-select>
 
-        <base-select
+    <base-select
       :model="$v.questionJudge.LookupId_WhereProblem"
       :options="lookupStore.whereProblemDdl"
       class="col-md-6"
@@ -81,10 +79,8 @@
     />
     <base-input :model="$v.questionJudge.Description" class="col-12" />
     <div class="col-12">
-      <base-btn-create @click="questionJudgeStore.submitCreate()" 
-      :label="`ایجاد و پاک سازی`"/>
-      <base-btn-create @click="questionJudgeStore.submitCreateWithoutReset()" 
-      :label="`ایجاد`"/>
+      <base-btn-create @click="questionJudgeStore.submitCreate()" :label="`ایجاد و پاک سازی`" />
+      <base-btn-create @click="questionJudgeStore.submitCreateWithoutReset()" :label="`ایجاد`" />
     </div>
   </section>
 </template>
@@ -94,9 +90,7 @@ import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { questionJudgeValidations } from "src/validations/questionJudgeValidation";
 
-
 @Component({
-  
   validations: questionJudgeValidations
 })
 export default class QuestionJudgeCreateVue extends Vue {
@@ -111,53 +105,43 @@ export default class QuestionJudgeCreateVue extends Vue {
   //#region ### hooks ###
   created() {
     this.questionJudgeStore.SET_CREATE_VUE(this);
-    
   }
   //#endregion
 
-//#region ### computed ###
+  //#region ### computed ###
   get educationGroupDdl() {
     return [
       { value: "ریاضی", label: "ریاضی" },
       { value: "تجربی", label: "تجربی" },
       { value: "انسانی", label: "انسانی" }
-    
     ];
   }
 
-  
-
   //#endregion
-
 
   //#region ### watch ###
   @Watch("questionJudge.IsDelete")
   questionJudgeIsDeleteChanged(newVal) {
-    if(newVal)
-    {
+    if (newVal) {
       this.questionJudge.IsUpdate = false;
       this.questionJudge.IsActiveQuestion = false;
     }
   }
-    @Watch("questionJudge.IsUpdate")
+  @Watch("questionJudge.IsUpdate")
   questionJudgeIsUpdateChanged(newVal) {
-    if(newVal)
-    {
+    if (newVal) {
       this.questionJudge.IsDelete = false;
       this.questionJudge.IsActiveQuestion = false;
     }
   }
-    @Watch("questionJudge.IsActiveQuestion")
+  @Watch("questionJudge.IsActiveQuestion")
   questionJudgeIsActiveQuestionChanged(newVal) {
-    if(newVal)
-    {
+    if (newVal) {
       this.questionJudge.IsUpdate = false;
       this.questionJudge.IsDelete = false;
     }
   }
   //#endregion
-
 }
-
 </script>
 

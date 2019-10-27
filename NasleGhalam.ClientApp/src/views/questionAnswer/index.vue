@@ -21,46 +21,33 @@
     </q-card>
     <div class="col-4">
       <q-slide-transition>
-        <q-tabs color="purple-6" v-model="selectedTab" v-show="!visibleQuestionAnswerJudge">
-          <!-- tabs -->
-          <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add" />
-          <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create" />
-          <!-- tab-panes -->
-          <q-tab-pane keep-alive name="tab-create">
-            <tab-create :lessonIdProp="lessonIdProp"></tab-create>
-          </q-tab-pane>
-          <q-tab-pane keep-alive name="tab-edit">
-            <tab-edit></tab-edit>
-          </q-tab-pane>
-          <q-tab
-            slot="title"
-            name="showQuestionJudge"
-            label="نمایش ارزیابی"
-            class="text-bold"
-            @click="showQuestionJudge"
-          />
-        </q-tabs>
+        <create-edit-tab
+          v-show="!visibleQuestionAnswerJudge"
+          :canCreateProp="canCreate"
+          :canEditProp="canEdit"
+          :lessonIdProp="lessonIdProp"
+          :questionIdProp="question.Id"
+          ref="createEditTab"
+        ></create-edit-tab>
       </q-slide-transition>
       <q-slide-transition>
-        <q-tabs
-          color="blue-6"
-          v-model="questionAnswerJudgeSelectedTab"
+        <question-answer-judge-create-edit-tab
           v-show="visibleQuestionAnswerJudge"
-        >
-          <!-- tabs -->
-          <q-tab slot="title" name="tab-create" label="ایجاد" icon="library_add" />
-          <!-- tab-panes -->
-          <q-tab-pane keep-alive name="tab-create">
-            <tab-create-question-answer-judge :lessonIdProp="lessonIdProp"></tab-create-question-answer-judge>
-          </q-tab-pane>
-        </q-tabs>
+          v-if="questionAnswerJudgeAccess"
+          :canCreateProp="questionAnswerJudgeCreateAccess"
+          :canEditProp="questionAnswerJudgeEditAccess"
+          :lessonIdProp="lessonIdProp"
+          ref="QuestionAnswerJudgeCreateEditTab"
+        ></question-answer-judge-create-edit-tab>
       </q-slide-transition>
     </div>
     <div class="col-8">
       <q-tabs inverted color="cyan-9" v-model="detailSelectedTab">
-        <q-tab slot="title" name="detail-tab" label="جزییات" default class="text-bold" />
-        <q-tab slot="title" name="image-tab" label="تصاویر" class="text-bold" />
+        <q-tab slot="title" name="detail-tab" label="جزییات جواب ها" default class="text-bold" />
+        <q-tab slot="title" name="image-tab" label="تصاویر جواب ها" class="text-bold" />
         <q-tab
+          v-if="questionAnswerJudgeAccess"
+          :disable="!visibleQuestionAnswerJudge"
           slot="title"
           name="question-answer-judge-tab"
           label="ارزیابی جواب"
@@ -85,7 +72,7 @@
             </template>
             <template slot="Id" slot-scope="data">
               <q-btn
-                v-if="true"
+                v-if="questionAnswerJudgeAccess"
                 outline
                 round
                 icon="list"
@@ -94,9 +81,13 @@
                 class="shadow-1 bg-white q-mr-sm"
                 @click="showQuestionAnswerJudgeTab(data.row.Id)"
               >
-                <q-tooltip>ارزیابی سوال</q-tooltip>
+                <q-tooltip>ارزیابی جواب</q-tooltip>
               </q-btn>
-              <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)" />
+              <base-btn-edit
+                v-if="canEdit"
+                round
+                @click="$refs.createEditTab.showTabEdit(data.row.Id)"
+              />
               <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
             </template>
           </base-table>
@@ -118,8 +109,13 @@
           </q-card>
         </q-tab-pane>
 
-        <q-tab-pane name="question-answer-judge-tab" keep-alive class="row">
-          <tab-list-question-answer-judge></tab-list-question-answer-judge>
+        <q-tab-pane name="question-answer-judge-tab" keep-alive>
+          <tab-list-question-answer-judge
+            v-if="questionAnswerJudgeAccess"
+            :canEditProp="questionAnswerJudgeEditAccess"
+            :canDeleteProp="questionAnswerJudgeAccess"
+            @showTabEdit="showQuestionAnswerJudgeEditTab"
+          ></tab-list-question-answer-judge>
         </q-tab-pane>
       </q-tabs>
     </div>
@@ -138,13 +134,14 @@ import util from "src/utilities";
 
 @Component({
   components: {
-    TabCreate: () => import("./create.vue"),
-    TabEdit: () => import("./edit.vue"),
+    CreateEditTab: () => import("./createEditTab.vue"),
     BtnDelete: () => import("./delete.vue"),
-    TabListQuestionAnswerJudge: () =>
-      import("../questionAnswerJudge/index.vue"),
+    QuestionAnswerJudgeCreateEditTab: () =>
+      import("../questionAnswerJudge/createEditTab.vue"),
+    TabListQuestionAnswerJudge: () => import("../questionAnswerJudge/list.vue"),
     TabCreateQuestionAnswerJudge: () =>
-      import("../questionAnswerJudge/create.vue")
+      import("../questionAnswerJudge/create.vue"),
+    TabEditQuestionAnswerJudge: () => import("../questionAnswerJudge/edit.vue")
   }
 })
 export default class QuestionAnswerVue extends Vue {
@@ -187,10 +184,9 @@ export default class QuestionAnswerVue extends Vue {
       data: "Id",
       searchable: false,
       sortable: false,
-      visible: this.canEdit || this.canDelete
+      visible: this.canEdit || this.canDelete || this.questionAnswerJudgeAccess
     }
   ];
-  selectedTab = "tab-create";
   detailSelectedTab = "detail-tab";
   questionAnswerJudgeSelectedTab = "tab-create";
   //#endregion
@@ -212,8 +208,16 @@ export default class QuestionAnswerVue extends Vue {
     return this.pageAccess.indexOf("مشاهده کارشناسی جواب سوال") > -1;
   }
 
-  get editMode() {
-    return this.selectedTab == "tab-edit";
+  get questionAnswerJudgeCreateAccess() {
+    return this.pageAccess.indexOf("ایجاد کارشناسی جواب سوال") > -1;
+  }
+
+  get questionAnswerJudgeEditAccess() {
+    return this.pageAccess.indexOf("ویرایش کارشناسی جواب سوال") > -1;
+  }
+
+  get questionAnswerJudgeDeleteAccess() {
+    return this.pageAccess.indexOf("حذف کارشناسی جواب سوال") > -1;
   }
 
   get visibleQuestionAnswerJudge() {
@@ -222,36 +226,31 @@ export default class QuestionAnswerVue extends Vue {
   //#endregion
 
   //#region ### methods ###
-  showTabEdit(id) {
-    this.questionAnswerStore.resetEdit();
-    this.questionAnswerStore.getById(id).then(() => {
-      this.selectedTab = "tab-edit";
-    });
-  }
-
   open() {
+    this.questionAnswer.QuestionId = this.question.Id;
+    this.detailSelectedTab = "detail-tab";
+
     if (this.canCreate || this.canEdit) {
       this.lookupStore.fillAnswerType();
       this.writerStore.fillList();
 
       this.questionAnswerStore.resetCreate();
-      this.questionAnswer.QuestionId = this.question.Id;
     }
-    ///////
-    this.lookupStore.fillReasonProblem();
-  }
 
-  showQuestionJudge() {
-    this.questionAnswerStore.OPEN_MODAL_INDEX(false);
-    vxm.questionJudgeStore.fillListByQuestionId(this.question.Id).then(() => {
-      vxm.questionJudgeStore.OPEN_MODAL_INDEX(true);
-    });
+    if (this.questionAnswerJudgeAccess) {
+      this.lookupStore.fillReasonProblem();
+    }
   }
 
   showQuestionAnswerJudgeTab(id) {
     this.detailSelectedTab = "question-answer-judge-tab";
-    this.questionAnswerJudgeStore.questionAnswerJudge.QuestionAnswerId = id;
-    this.questionAnswerJudgeStore.fillListByQuestionAnswerId(id);
+    var createEditTab = this.$refs["QuestionAnswerJudgeCreateEditTab"];
+    createEditTab["showTabCreate"](id);
+  }
+
+  showQuestionAnswerJudgeEditTab(id) {
+    var createEditTab = this.$refs["QuestionAnswerJudgeCreateEditTab"];
+    createEditTab["showTabEdit"](id);
   }
   //#endregion
 

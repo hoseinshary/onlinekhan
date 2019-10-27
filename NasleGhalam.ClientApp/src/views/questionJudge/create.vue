@@ -1,6 +1,6 @@
 <template>
   <section class="row gutter-sm">
-    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6 " suffix="ثانیه" />
+    <base-input :model="$v.questionJudge.ResponseSecond" class="col-md-6 " suffix="ثانیه"  />
     <div class="col-md-6 ">
     </div>
     <base-select
@@ -49,7 +49,7 @@
         <q-toggle
           v-model="$v.questionJudge.IsActiveQuestionAnswer.$model"
           :label="$v.questionJudge.IsActiveQuestionAnswer.$params.displayName.value"
-          class="q-mx-md"
+          class="q-mx-md hidden"
         />
       </div>
     </q-field>
@@ -114,6 +114,8 @@ export default class QuestionJudgeCreateVue extends Vue {
     
   }
   //#endregion
+
+
 
 //#region ### computed ###
   get educationGroupDdl() {

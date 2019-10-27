@@ -154,6 +154,10 @@ export default class QuestionJudgeVue extends Vue {
       data: "Lookup_QuestionHardnessType.Value"
     },
     {
+      title: "گروه آموزشی",
+      data: "EducationGroup"
+    },
+    {
       title: "عملیات",
       data: "Id",
       searchable: false,

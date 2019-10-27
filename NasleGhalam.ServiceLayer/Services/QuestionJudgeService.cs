@@ -61,6 +61,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<QuestionJudgeViewModel> GetAllByQuestionId(int questionId)
         {
+           
             return _questionJudges
                 .Include(current => current.Lookup_QuestionHardnessType)
                 .Include(current => current.Lookup_RepeatnessType)

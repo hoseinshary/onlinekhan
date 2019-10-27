@@ -8,7 +8,7 @@ export default interface IQuestionJudge {
   IsLearning: boolean;
   IsActiveQuestion: boolean;
   IsActiveQuestionAnswer: boolean;
-  ResponseSecond: number;
+  ResponseSecond: number | string;
   QuestionId: number;
   LookupId_QuestionHardnessType: number;
   LookupId_RepeatnessType: number;
@@ -20,6 +20,7 @@ export default interface IQuestionJudge {
   Lookup_WhereProblem?: ILookup;
   Lookup_ReasonProblem?: ILookup;
   Lookup_QuestionRank?: ILookup;
+  EducationGroup: string;
   Description: string;
   
 }
@@ -32,12 +33,13 @@ export const DefaultQuestionJudge: IQuestionJudge = {
   IsLearning: false,
   IsActiveQuestion: false,
   IsActiveQuestionAnswer: false,
-  ResponseSecond: 0,
+  ResponseSecond: "",
   QuestionId: 0,
   LookupId_QuestionHardnessType: 0,
   LookupId_RepeatnessType: 0,
   LookupId_WhereProblem: 1066,
   LookupId_ReasonProblem: 1067,
   LookupId_QuestionRank: 1063,
-  Description: ""
+  Description: "",
+  EducationGroup: ""
 };

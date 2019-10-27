@@ -48,7 +48,7 @@
         <q-toggle
           v-model="$v.questionJudge.IsActiveQuestionAnswer.$model"
           :label="$v.questionJudge.IsActiveQuestionAnswer.$params.displayName.value"
-          class="q-mx-md"
+          class="q-mx-md hidden"
         />
       </div>
     </q-field>

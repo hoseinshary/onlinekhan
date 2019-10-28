@@ -14,7 +14,6 @@ namespace NasleGhalam.ViewModels.QuestionAnswerJudge
         public int UserId { get; set; }
 
         [Display(Name = "درس")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
         public string LessonName { get; set; }
 

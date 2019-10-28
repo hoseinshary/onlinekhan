@@ -26,7 +26,7 @@ const questionAnswerJudgeValidations: ValidationRuleset<
     LessonName: {
       displayName: displayName("درس"),
       maxLength: maxLength(50),
-      required
+      // required
     },
     LookupId_ReasonProblem: {
       displayName: displayName("دلیل مشکل"),

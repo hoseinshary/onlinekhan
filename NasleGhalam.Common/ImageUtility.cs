@@ -155,7 +155,13 @@ namespace NasleGhalam.Common
 
         {
 
-            return srcImage.Clone(cropArea, srcImage.PixelFormat);
+            Bitmap bmp = new Bitmap(cropArea.Width, cropArea.Height);
+            using (Graphics gph = Graphics.FromImage(bmp))
+            {
+                gph.DrawImage(srcImage, new Rectangle(0, 0, bmp.Width, bmp.Height), cropArea, GraphicsUnit.Pixel);
+            }
+            return bmp;
+            // return srcImage.Clone(cropArea, srcImage.PixelFormat);
 
         }
 

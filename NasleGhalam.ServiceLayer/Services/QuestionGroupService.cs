@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -11,8 +10,6 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.QuestionGroup;
-using System.Drawing.Imaging;
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.Office.Interop.Excel;
 
 namespace NasleGhalam.ServiceLayer.Services

@@ -1,5 +1,4 @@
-﻿using System.Data.Entity.Infrastructure;
-using System.Web.Http;
+﻿using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;

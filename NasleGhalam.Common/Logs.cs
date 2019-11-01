@@ -1,5 +1,4 @@
-﻿using System.Web;
-using Serilog;
+﻿using Serilog;
 using Serilog.Core;
 
 namespace NasleGhalam.Common

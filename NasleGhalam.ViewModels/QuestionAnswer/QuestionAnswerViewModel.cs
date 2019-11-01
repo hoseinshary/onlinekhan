@@ -20,6 +20,7 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
         [Display(Name = "آدرس فایل")]
         public string FilePath { get; set; }
 
+        public string QuestionWordPath => $"/Api/QuestionAnswer/GetWordFile/{FilePath}".ToFullRelativePath();
 
         public string QuestionAnswerPicturePath => $"/Api/QuestionAnswer/GetPictureFile/{FilePath}".ToFullRelativePath();
 

@@ -84,8 +84,19 @@
               >
                 <q-tooltip>ارزیابی جواب</q-tooltip>
               </q-btn>
+              <q-btn
+                v-if="!canEdit"
+                round
+                @click="$refs.createEditTab.showQuestionAnswerImage(data.row.Id)"
+                outline
+                icon="image"
+                size="sm"
+                class="shadow-1 bg-white q-mr-sm"
+              >
+                <q-tooltip>عکس جواب</q-tooltip>
+              </q-btn>
               <base-btn-edit
-                v-if="canEdit"
+                v-else-if="canEdit"
                 round
                 @click="$refs.createEditTab.showTabEdit(data.row.Id)"
               />

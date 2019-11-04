@@ -6,103 +6,103 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.QuestionAnswerJudge;
+using NasleGhalam.ViewModels.Package;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class QuestionAnswerJudgeService
+	public class PackageService
 	{
-		private const string Title = "کارشناسی جواب سوال";
+		private const string Title = "بسته";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<QuestionAnswerJudge> _questionAnswerJudges;
+        private readonly IDbSet<Package> _packages;
        
-	    public QuestionAnswerJudgeService(IUnitOfWork uow)
+	    public PackageService(IUnitOfWork uow)
         {
             _uow = uow;
-            _questionAnswerJudges = uow.Set<QuestionAnswerJudge>();
+            _packages = uow.Set<Package>();
         }
 
 		/// <summary>
-        /// گرفتن  کارشناسی جواب سوال با آی دی
+        /// گرفتن  بسته با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public QuestionAnswerJudgeViewModel GetById(int id)
+        public PackageViewModel GetById(int id)
         {
-            return _questionAnswerJudges
+            return _packages
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<QuestionAnswerJudgeViewModel>)
+                .Select(Mapper.Map<PackageViewModel>)
                 .FirstOrDefault();
         }
 
 		/// <summary>
-        /// گرفتن همه کارشناسی جواب سوال ها
+        /// گرفتن همه بسته ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionAnswerJudgeViewModel> GetAll()
+        public IList<PackageViewModel> GetAll()
         {
-            return _questionAnswerJudges
+            return _packages
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<QuestionAnswerJudgeViewModel>)
+                .Select(Mapper.Map<PackageViewModel>)
                 .ToList();
         }
 
 		/// <summary>
-        /// ثبت کارشناسی جواب سوال
+        /// ثبت بسته
         /// </summary>
-        /// <param name="questionAnswerJudgeViewModel"></param>
+        /// <param name="packageViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(QuestionAnswerJudgeCreateViewModel questionAnswerJudgeViewModel)
+        public ClientMessageResult Create(PackageCreateViewModel packageViewModel)
         {
-            var questionAnswerJudge = Mapper.Map<QuestionAnswerJudge>(questionAnswerJudgeViewModel);
-            _questionAnswerJudges.Add(questionAnswerJudge);
+            var package = Mapper.Map<Package>(packageViewModel);
+            _packages.Add(package);
 
 			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(questionAnswerJudge.Id);
+                clientResult.Obj = GetById(package.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// ویرایش کارشناسی جواب سوال
+        /// ویرایش بسته
         /// </summary>
-        /// <param name="questionAnswerJudgeViewModel"></param>
+        /// <param name="packageViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(QuestionAnswerJudgeUpdateViewModel questionAnswerJudgeViewModel)
+        public ClientMessageResult Update(PackageUpdateViewModel packageViewModel)
         {
-            var questionAnswerJudge = Mapper.Map<QuestionAnswerJudge>(questionAnswerJudgeViewModel);
-            _uow.MarkAsChanged(questionAnswerJudge);
+            var package = Mapper.Map<Package>(packageViewModel);
+            _uow.MarkAsChanged(package);
 			
 			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(questionAnswerJudge.Id);
+                clientResult.Obj = GetById(package.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// حذف کارشناسی جواب سوال
+        /// حذف بسته
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  questionAnswerJudgeViewModel = GetById(id);
-            if (questionAnswerJudgeViewModel == null)
+			var  packageViewModel = GetById(id);
+            if (packageViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var questionAnswerJudge = Mapper.Map<QuestionAnswerJudge>(questionAnswerJudgeViewModel);
-            _uow.MarkAsDeleted(questionAnswerJudge);
+            var package = Mapper.Map<Package>(packageViewModel);
+            _uow.MarkAsDeleted(package);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);

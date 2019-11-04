@@ -2,61 +2,61 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.QuestionAnswerJudge;
+using NasleGhalam.ViewModels.Package;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: 
-	///     date: 
+	///     name: hoseinshary   
+	///     date: 13/8/98
 	/// </author>
-	public class QuestionAnswerJudgeController : ApiController
+	public class PackageController : ApiController
 	{
-        private readonly QuestionAnswerJudgeService _questionAnswerJudgeService;
-		public QuestionAnswerJudgeController(QuestionAnswerJudgeService questionAnswerJudgeService)
+        private readonly PackageService _packageService;
+		public PackageController(PackageService packageService)
         {
-            _questionAnswerJudgeService = questionAnswerJudgeService;
+            _packageService = packageService;
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.PackageReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_questionAnswerJudgeService.GetAll());
+            return Ok(_packageService.GetAll());
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.PackageReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var questionAnswerJudge = _questionAnswerJudgeService.GetById(id);
-            if (questionAnswerJudge == null)
+            var package = _packageService.GetById(id);
+            if (package == null)
             {
                 return NotFound();
             }
-            return Ok(questionAnswerJudge);
+            return Ok(package);
         }
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.QuestionAnswerJudgeCreateAccess)]
+        [CheckUserAccess(ActionBits.PackageCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(QuestionAnswerJudgeCreateViewModel questionAnswerJudgeViewModel)
+        public IHttpActionResult Create(PackageCreateViewModel packageViewModel)
         {
-            return Ok(_questionAnswerJudgeService.Create(questionAnswerJudgeViewModel));
+            return Ok(_packageService.Create(packageViewModel));
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.QuestionAnswerJudgeUpdateAccess)]
+        [CheckUserAccess(ActionBits.PackageUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(QuestionAnswerJudgeUpdateViewModel questionAnswerJudgeViewModel)
+        public IHttpActionResult Update(PackageUpdateViewModel packageViewModel)
         {
-            return Ok(_questionAnswerJudgeService.Update(questionAnswerJudgeViewModel));
+            return Ok(_packageService.Update(packageViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.QuestionAnswerJudgeDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.PackageDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_questionAnswerJudgeService.Delete(id));
+            return Ok(_packageService.Delete(id));
         }
 	}
 }

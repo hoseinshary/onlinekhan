@@ -140,5 +140,12 @@
         QuestionAnswerJudgeDeleteAccess = 108,
         QuestionAnswerJudgeUpdateAccess = 109,
 
+
+
+        PackageReadAccess = 110,
+        PackageCreateAccess = 111,
+        PackageDeleteAccess = 112,
+        PackageUpdateAccess = 113,
+
     }
 }

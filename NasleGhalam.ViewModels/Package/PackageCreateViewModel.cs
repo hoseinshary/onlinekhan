@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace NasleGhalam.ViewModels.Package
@@ -42,6 +43,10 @@ namespace NasleGhalam.ViewModels.Package
 
         [Display(Name = "توضیحات")]
         public string Discription { get; set; }
+
+
+        [Display(Name = "درس ها")]
+        public ICollection<int> LessonIds { get; set; }
 
 
     }

@@ -157,6 +157,7 @@ export default {
 .toolbar-header2 img.profile-image {
   width: 55px;
   height: 55px;
+  border-radius: 50px;
 }
 
 .toolbar-header2 .q-btn,

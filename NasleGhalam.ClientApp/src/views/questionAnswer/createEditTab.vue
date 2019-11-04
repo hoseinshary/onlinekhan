@@ -85,6 +85,10 @@ export default class QuestionAnswerJudgeVue extends Vue {
       this.selectedTab = "tab-edit";
     });
   }
+
+   showQuestionAnswerImage(id) {
+    this.questionAnswerStore.getById(id);
+  }
   //#endregion
 }
 </script>

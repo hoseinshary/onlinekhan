@@ -60,6 +60,13 @@ namespace NasleGhalam.ServiceLayer.Services
             var package = Mapper.Map<Package>(packageViewModel);
             _packages.Add(package);
 
+            foreach (var item in packageViewModel.LessonIds)
+            {
+                var lesson = new Lesson { Id = item };
+                _uow.MarkAsUnChanged(lesson);
+                package.Lessons.Add(lesson);
+            }
+
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 

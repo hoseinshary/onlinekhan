@@ -6,8 +6,6 @@ namespace NasleGhalam.ViewModels.Package
 {
     public class PackageCreateViewModel
     {
-        
-
         [Display(Name = "نام")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
@@ -34,16 +32,15 @@ namespace NasleGhalam.ViewModels.Package
 
 
         [Display(Name = "تاریخ ساخت")]
-        public DateTime CreateDateTime { get; set; }
+        public DateTime CreateDateTime => DateTime.Now;
 
 
         [Display(Name = "توضیحات")]
-        public string Discription { get; set; }
+        [MaxLength(300, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
+        public string Description { get; set; }
 
 
         [Display(Name = "درس ها")]
         public ICollection<int> LessonIds { get; set; }
-
-
     }
 }

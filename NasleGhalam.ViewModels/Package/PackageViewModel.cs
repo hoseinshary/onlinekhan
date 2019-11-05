@@ -30,7 +30,7 @@ namespace NasleGhalam.ViewModels.Package
 
 
         [Display(Name = "")]
-        public DateTime Expire { get; set; }
+        public int TimeDays { get; set; }
 
 
         [Display(Name = "")]

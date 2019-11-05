@@ -14,10 +14,6 @@ namespace NasleGhalam.ViewModels.Package
         public string Name { get; set; }
 
 
-        [Display(Name = "")]
-        public bool IsDelete { get; set; }
-
-
         [Display(Name = "تصویر")]
         public string ImageFile { get; set; }
 
@@ -32,9 +28,9 @@ namespace NasleGhalam.ViewModels.Package
         public int Price { get; set; }
 
 
-        [Display(Name = "تاریخ مصرف")]
+        [Display(Name = "مدت به روز")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-        public System.DateTime Expire { get; set; }
+        public int TimeDays { get; set; }
 
 
         [Display(Name = "تاریخ ساخت")]

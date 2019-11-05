@@ -3,7 +3,9 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Package;
-
+using System.Web;
+using System;
+using System.IO;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -40,9 +42,22 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.PackageCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(PackageCreateViewModel packageViewModel)
+        [CheckImageValidationNotRequired("img", 1024)]
+        public IHttpActionResult Create([FromUri]PackageCreateViewModel packageViewModel)
         {
-            return Ok(_packageService.Create(packageViewModel));
+            var postedFile = HttpContext.Current.Request.Files.Get("img");
+            if (postedFile != null && postedFile.ContentLength > 0)
+            {
+                packageViewModel.ImageFile = $"{Guid.NewGuid()}{Path.GetExtension(postedFile.FileName)}";
+            }
+
+            var msgRes = _packageService.Create(packageViewModel);
+
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(packageViewModel.ImageFile))
+            {
+                postedFile?.SaveAs($"{SitePath.PackageRelPath}{packageViewModel.ImageFile}".ToAbsolutePath());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]

@@ -25,7 +25,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int Price { get; set; }
 
-        public DateTime Expire { get; set; }
+        public int TimeDays { get; set; }
 
         public DateTime CreateDateTime { get; set; }
 

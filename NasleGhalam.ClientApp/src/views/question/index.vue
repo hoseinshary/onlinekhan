@@ -14,6 +14,16 @@
             label="نمایش سوال های بدون مبحث"
             @input="fillGrid()"
           />
+          <q-checkbox
+            v-model="showWithoutTopic"
+            label="سوال های کارشناسی شده"
+            @input="fillGrid()"
+          />
+          <q-checkbox
+            v-model="showWithoutTopic"
+            label="سوال های فعال سایت"
+            @input="fillGrid()"
+          />
         </section>
 
         <q-select

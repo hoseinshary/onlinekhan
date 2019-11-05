@@ -586,16 +586,17 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Tags)
                 .First(current => current.Id == questionViewModel.Id);
 
-            var previousFileName = questionViewModel.FileName;
+            var previousFileName = question.FileName;
             Application app = null;
             Document source = null;
             string wordFilename = null;
             var haveFileUpdate = false;
             if (word != null && word.ContentLength > 0)
             {
+                questionViewModel.FileName = Guid.NewGuid().ToString();
                 wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
                 haveFileUpdate = true;
-                questionViewModel.FileName = Guid.NewGuid().ToString();
+                
 
 
                 //save Doc file in temp memory
@@ -629,6 +630,7 @@ namespace NasleGhalam.ServiceLayer.Services
             question.LookupId_QuestionType = questionViewModel.LookupId_QuestionType;
             question.QuestionNumber = questionViewModel.QuestionNumber;
             question.AnswerNumber = questionViewModel.AnswerNumber;
+            question.FileName = questionViewModel.FileName;
 
             //delete tag
             var deleteTagList = question.Tags

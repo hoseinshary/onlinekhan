@@ -15,12 +15,12 @@
             @input="fillGrid()"
           />
           <q-checkbox
-            v-model="showWithoutTopic"
+            v-model="showJudged"
             label="سوال های کارشناسی شده"
             @input="fillGrid()"
           />
           <q-checkbox
-            v-model="showWithoutTopic"
+            v-model="showActived"
             label="سوال های فعال سایت"
             @input="fillGrid()"
           />
@@ -200,6 +200,8 @@ export default class QuestionVue extends Vue {
   topicTree = this.topicStore.qTreeData;
   showNoJudgement = false;
   showWithoutTopic = false;
+  showJudged = false;
+  showActived = false;
   //#endregion
 
   //#region ### computed ###
@@ -317,7 +319,10 @@ export default class QuestionVue extends Vue {
       lessonId: this.lessonId,
       topicIds: this.topicTree.leafTicked,
       showNoJudgement: this.showNoJudgement,
-      showWithoutTopic: this.showWithoutTopic
+      showWithoutTopic: this.showWithoutTopic,
+      showJudged : this.showJudged,
+      showActived: this.showActived
+
     });
   }
 

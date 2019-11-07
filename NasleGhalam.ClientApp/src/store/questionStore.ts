@@ -158,6 +158,8 @@ export class QuestionStore extends VuexModule {
     lessonId: number;
     showWithoutTopic: boolean;
     showNoJudgement: boolean;
+    showJudged : boolean;
+    showActived : boolean;
     topicIds: Array<number>;
   }) {
     var url = "";

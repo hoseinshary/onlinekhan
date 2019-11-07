@@ -536,6 +536,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 catch (Exception ex)
                 {
                     Elmah.ErrorSignal.FromCurrentContext().Raise(ex);
+                   // Logs.SeqLogger.Error(ex,"crop image error:{word}",word);
+
                 }
 
                 File.Delete(wordFilename);

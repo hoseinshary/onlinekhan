@@ -12,7 +12,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
 
 
             HasRequired(x => x.Package)
-          .WithMany(x => x.Sale_Packages)
+          .WithMany(x => x.Sales_Packages)
           .HasForeignKey(x => x.PackageId)
           .WillCascadeOnDelete(false);
 

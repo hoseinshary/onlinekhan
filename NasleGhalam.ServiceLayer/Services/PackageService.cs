@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -30,6 +29,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public PackageViewModel GetById(int id)
         {
             return _packages
+                .Include(current => current.Lessons)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -44,6 +44,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<PackageViewModel> GetAll()
         {
             return _packages
+                .Include(current => current.Lessons)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<PackageViewModel>)

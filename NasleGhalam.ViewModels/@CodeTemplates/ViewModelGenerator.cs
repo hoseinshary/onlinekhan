@@ -1,35 +1,43 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.QuestionAnswerJudge
+namespace NasleGhalam.ViewModels.Package
 {
-	public class QuestionAnswerJudgeViewModel
+	public class PackageViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public bool IsActiveQuestionAnswer { get; set; }
+		public string Name { get; set; }
 
 
 		[Display(Name = "")]
-		public int QuestionAnswerId { get; set; }
+		public bool IsDelete { get; set; }
 
 
 		[Display(Name = "")]
-		public int UserId { get; set; }
+		public string ImageFile { get; set; }
 
 
 		[Display(Name = "")]
-		public string LessonName { get; set; }
+		public bool IsActive { get; set; }
 
 
 		[Display(Name = "")]
-		public int LookupId_ReasonProblem { get; set; }
+		public int Price { get; set; }
 
 
 		[Display(Name = "")]
-		public string Description { get; set; }
+		public DateTime Expire { get; set; }
+
+
+		[Display(Name = "")]
+		public DateTime CreateDateTime { get; set; }
+
+
+		[Display(Name = "")]
+		public string Discription { get; set; }
 
 
 	}

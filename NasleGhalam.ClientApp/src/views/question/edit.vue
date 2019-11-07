@@ -103,9 +103,8 @@
           filter
         />
         <base-select
-          v-if="showElement('LookupId_QuestionRank')"
           :model="$v.question.LookupId_QuestionRank"
-          :options="lookupStore.questionRankTypeDdl"
+          :options="lookupStore.questionRankDdl"
           class="col-md-4"
           filter
         />
@@ -262,6 +261,11 @@ export default class QuestionEditVue extends Vue {
       canEditImportProp: false
     },
     LookupId_RepeatnessType: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: false
+    },
+     LookupId_QuestionRank: {
       canEditAdminProp: true,
       canEditTopicProp: false,
       canEditImportProp: false

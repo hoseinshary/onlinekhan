@@ -13,6 +13,7 @@ namespace NasleGhalam.Common
         public static string QuestionGroupRelPath => "~/Content/QuestionGroup/";
         public static string QuestionGroupTempRelPath => "~/Content/QuestionGroupTemp/";
         public static string UserProfileRelPath => "~/Content/UserProfile/";
+        public static string PackageRelPath => "~/Content/Package/";
         public static string DefaultUserProfileRelPath => "~/Content/UserProfile/DefaultProfile.png";
         //-------------------------------------------------------------------------------------
 

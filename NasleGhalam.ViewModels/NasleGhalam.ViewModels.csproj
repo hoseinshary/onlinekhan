@@ -79,6 +79,9 @@
     <Compile Include="Lesson\Lesson_UserViewModel.cs" />
     <Compile Include="Log\BrowserInfoViewModel.cs" />
     <Compile Include="Log\LogViewModel.cs" />
+    <Compile Include="Package\PackageCreateViewModel.cs" />
+    <Compile Include="Package\PackageUpdateViewModel.cs" />
+    <Compile Include="Package\PackageViewModel.cs" />
     <Compile Include="Publisher\PublisherViewModel.cs" />
     <Compile Include="QuestionAnswerJudge\QuestionAnswerJudgeCreateViewModel.cs" />
     <Compile Include="QuestionAnswerJudge\QuestionAnswerJudgeUpdateViewModel.cs" />

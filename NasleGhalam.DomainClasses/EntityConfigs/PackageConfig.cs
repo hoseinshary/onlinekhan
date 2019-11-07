@@ -10,7 +10,8 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             HasKey(x => x.Id);
 
-
+            Property(x => x.Name).HasMaxLength(50).IsRequired();
+            Property(x => x.Description).HasMaxLength(300);
 
             HasMany(x => x.Assays)
                 .WithMany(x => x.Packages)

@@ -158,6 +158,8 @@ export class QuestionStore extends VuexModule {
     lessonId: number;
     showWithoutTopic: boolean;
     showNoJudgement: boolean;
+    showJudged : boolean;
+    showActived : boolean;
     topicIds: Array<number>;
   }) {
     var url = "";
@@ -344,6 +346,7 @@ export class QuestionStore extends VuexModule {
       LookupId_RepeatnessType: this.question.LookupId_RepeatnessType,
       LookupId_AuthorType: this.question.LookupId_AuthorType,
       LookupId_AreaType: this.question.LookupId_AreaType,
+      LookupId_QuestionRank: this.question.LookupId_QuestionRank,
       TopicIds: this.question.TopicIds,
       TagIds: this.question.TagIds
     };

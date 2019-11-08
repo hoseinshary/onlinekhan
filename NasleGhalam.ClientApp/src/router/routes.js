@@ -115,7 +115,10 @@ export default [
         path: "/resume",
         component: () => import("src/views/resume/index.vue")
       },
-      ,
+      {
+        path: "/package",
+        component: () => import("src/views/package/index.vue")
+      },
       {
         path: "/user/register",
         component: () => import("src/views/user/register.vue")

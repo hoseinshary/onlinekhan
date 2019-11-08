@@ -31,7 +31,7 @@ namespace NasleGhalam.ViewModels.Package
         public int TimeDays { get; set; }
 
 
-        [Display(Name = "تاریخ ساخت")]
+        [Display(Name = "تاریخ ایجاد")]
         public DateTime CreateDateTime => DateTime.Now;
 
 

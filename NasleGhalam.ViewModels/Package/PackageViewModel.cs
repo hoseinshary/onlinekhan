@@ -13,9 +13,6 @@ namespace NasleGhalam.ViewModels.Package
         public string Name { get; set; }
 
 
-        public bool IsDelete { get; set; }
-
-
         public string ImageFile { get; set; }
 
 

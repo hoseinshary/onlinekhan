@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MapperProfile\AssayProfile.cs" />
+    <Compile Include="MapperProfile\PackageProfile.cs" />
     <Compile Include="MapperProfile\EducationTreeProfile.cs" />
     <Compile Include="MapperProfile\LessonDepartmentProfile.cs" />
     <Compile Include="MapperProfile\PublicProfile.cs" />

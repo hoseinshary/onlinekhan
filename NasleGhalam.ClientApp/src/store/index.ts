@@ -43,6 +43,7 @@ import {
 import { AxillaryBookStore, axillaryBookStore } from "./axillaryBookStore";
 import { AssayStore, assayStore } from "./assayStore";
 import { ResumeStore, resumeStore } from "./resumeStore";
+import { PackageStore, packageStore } from "./packageStore";
 
 Vue.use(Vuex);
 
@@ -115,7 +116,8 @@ const store = new Vuex.Store({
     lessonDepartmentStore,
     axillaryBookStore,
     assayStore,
-    resumeStore
+    resumeStore,
+    packageStore
   }
 });
 
@@ -193,5 +195,6 @@ export const vxm = {
     AxillaryBookStore
   ) as AxillaryBookStore,
   assayStore: AssayStore.CreateProxy(store, AssayStore) as AssayStore,
-  resumeStore: ResumeStore.CreateProxy(store, ResumeStore) as ResumeStore
+  resumeStore: ResumeStore.CreateProxy(store, ResumeStore) as ResumeStore,
+  packageStore: PackageStore.CreateProxy(store, PackageStore) as PackageStore
 };

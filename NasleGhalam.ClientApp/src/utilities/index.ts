@@ -71,8 +71,10 @@ const clearObject = function(obj: object) {
  * clear array
  * @param {Array} arr
  */
-const clearArray = function<T>(arr: Array<T>) {
-  arr.splice(0, arr.length);
+const clearArray = function<T>(arr?: Array<T>) {
+  if (arr) {
+    arr.splice(0, arr.length);
+  }
 };
 
 /**

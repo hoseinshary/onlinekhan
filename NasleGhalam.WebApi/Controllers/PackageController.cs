@@ -63,9 +63,30 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.PackageUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(PackageUpdateViewModel packageViewModel)
+        [CheckImageValidationNotRequired("img", 1024)]
+        public IHttpActionResult Update([FromUri]PackageUpdateViewModel packageViewModel)
         {
-            return Ok(_packageService.Update(packageViewModel));
+
+            var postedFile = HttpContext.Current.Request.Files.Get("img");
+            var oldFile = packageViewModel.ImageFile;
+
+            if (postedFile != null && postedFile.ContentLength > 0)
+            {
+                packageViewModel.ImageFile = $"{Guid.NewGuid()}{Path.GetExtension(postedFile.FileName)}";
+            }
+
+            var msgRes = _packageService.Update(packageViewModel);
+
+
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(packageViewModel.ImageFile))
+            {
+                if (File.Exists($"{SitePath.PackageRelPath}{oldFile}".ToAbsolutePath()))
+                {
+                    File.Delete($"{SitePath.PackageRelPath}{oldFile}".ToAbsolutePath());
+                }
+                postedFile?.SaveAs($"{SitePath.PackageRelPath}{packageViewModel.ImageFile}".ToAbsolutePath());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.PackageDeleteAccess)]

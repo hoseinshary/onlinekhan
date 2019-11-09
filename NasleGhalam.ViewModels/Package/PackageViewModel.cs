@@ -18,6 +18,8 @@ namespace NasleGhalam.ViewModels.Package
 
         public bool IsActive { get; set; }
 
+        public bool IsDelete { get; set; }
+
 
         public int Price { get; set; }
 

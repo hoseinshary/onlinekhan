@@ -122,6 +122,10 @@ export default [
       {
         path: "/user/register",
         component: () => import("src/views/user/register.vue")
+      },
+      {
+        path: "/panel/expertPanel",
+        component: () => import("src/views/panel/expertPanel.vue")
       }
     ]
   },

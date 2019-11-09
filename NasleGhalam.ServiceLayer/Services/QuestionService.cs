@@ -59,6 +59,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
+        
+
         /// <summary>
         /// گرفتن همه سوال های مباحث
         /// </summary>
@@ -72,6 +74,65 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<QuestionViewModel>)
                 .ToList();
         }
+
+
+        /// <summary>
+        /// تعداد همه سوالات کارشناسی شده توسط یک کاربر
+        /// </summary>
+        /// <returns></returns>
+        public int CountAllJudgedByUserId(int id)
+        {
+            return _questions
+                .Where(current => current.QuestionJudges.Any(x => x.UserId == id))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Count();
+        }
+
+
+        /// <summary>
+        /// تعداد همه سوالات کارشناسی شده توسط یک کاربر
+        /// </summary>
+        /// <returns></returns>
+        public int CountAllActive()
+        {
+            return _questions
+                .Where(current => current.IsActive )
+                .AsNoTracking()
+                .AsEnumerable()
+                .Count();
+        }
+
+
+        /// <summary>
+        /// تعداد همه سوالات 
+        /// </summary>
+        /// <returns></returns>
+        public int CountAll()
+        {
+            return _questions
+                .AsNoTracking()
+                .AsEnumerable()
+                .Count();
+        }
+
+
+
+        /// <summary>
+        /// گرفتن همه سوالات کارشناسی شده توسط یک کاربر
+        /// </summary>
+        /// <returns></returns>
+        public IList<QuestionViewModel> GetAllJudgedByUserId(int id)
+        {
+            return _questions
+                .Where(current => current.QuestionJudges.Any(x => x.UserId == id))
+                .OrderByDescending(x => x.Id)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
+
 
         /// <summary>
         /// گرفتن همه سوال های مباحث
@@ -89,6 +150,10 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
+        /// <summary>
+        /// گرفتن همه سوال های یک درس
+        /// </summary>
+        /// <returns></returns>
         public object GetAllByLessonId(int id)
         {
             return _questions
@@ -98,6 +163,22 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<QuestionViewModel>)
                 .ToList();
         }
+
+        /// <summary>
+        /// گرفتن همه سوال های یک درس کارشناسی شده کامل به اندازه تعداد کارشناسان آن درس
+        /// </summary>
+        /// <returns></returns>
+        public object GetAllJudgedByLessonId(int id )
+        {
+            return _questions
+                .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
+                .Where(x => x.QuestionJudges.Count >= x.Topics.First().Lesson.NumberOfJudges )
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
+
 
         /// <summary>
         /// گرفتن همه سوال های سوال گروهی

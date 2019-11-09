@@ -44,6 +44,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<PackageViewModel> GetAll()
         {
             return _packages
+                .Where(x => !x.IsDelete)   
                 .Include(current => current.Lessons)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -87,6 +88,29 @@ namespace NasleGhalam.ServiceLayer.Services
             var package = Mapper.Map<Package>(packageViewModel);
             _uow.MarkAsChanged(package);
 
+
+            //delete lessons
+            var deleteLessonsList = package.Lessons
+                .Where(oldLesson => packageViewModel.LessonIds.All(newLessonId => newLessonId != oldLesson.Id))
+                .ToList();
+            foreach (var lesson in deleteLessonsList)
+            {
+                package.Lessons.Remove(lesson);
+            }
+
+            //add topics
+            var addLessonList = packageViewModel.LessonIds
+                .Where(oldLessonId => package.Lessons.All(newLesson => newLesson.Id != oldLessonId))
+                .ToList();
+            foreach (var lessonId in addLessonList)
+            {
+                var lesson = new Lesson() { Id = lessonId };
+                _uow.MarkAsUnChanged(lesson);
+                package.Lessons.Add(lesson);
+            }
+
+
+
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
@@ -109,8 +133,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 return ClientMessageResult.NotFound();
             }
 
+            packageViewModel.IsDelete = true;
+          
             var package = Mapper.Map<Package>(packageViewModel);
-            _uow.MarkAsDeleted(package);
+            _uow.MarkAsChanged(package);
+
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);

@@ -99,6 +99,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Create(LessonCreateViewModel lessonViewModel)
         {
+            if (lessonViewModel.NumberOfJudges == 0)
+            {
+                lessonViewModel.NumberOfJudges = 1;
+            }
+
             var educationTrees = _educationTreeService.Value.GetAll()
                 .Where(x => x.LookupId_EducationTreeState == 1034)
                 .Select(x => x.Id);
@@ -127,6 +132,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.MarkAsUnChanged(department);
                 lesson.LessonDepartments.Add(department);
             }
+            
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);

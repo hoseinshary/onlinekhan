@@ -41,10 +41,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه بسته ها
         /// </summary>
         /// <returns></returns>
-        public IList<PackageViewModel> GetAll()
+        public IList<PackageViewModel> GetAllByEducationTreeId(IEnumerable<int> ids)
         {
             return _packages
-                .Where(x => !x.IsDelete)   
+                .Where(current => !current.IsDelete)
+                .Where(current => current.Lessons.Any(lesson => lesson.EducationTrees.Any(education => ids.Contains(education.Id))))
                 .Include(current => current.Lessons)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -85,9 +86,18 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Update(PackageUpdateViewModel packageViewModel)
         {
-            var package = Mapper.Map<Package>(packageViewModel);
-            _uow.MarkAsChanged(package);
+            var package = _packages
+                .Include(current => current.Lessons)
+                .FirstOrDefault(current => current.Id == packageViewModel.Id);
+            if (package == null)
+                return ClientMessageResult.NotFound();
 
+            package.Description = packageViewModel.Description;
+            package.ImageFile = packageViewModel.ImageFile;
+            package.IsActive = packageViewModel.IsActive;
+            package.Name = packageViewModel.Name;
+            package.Price = packageViewModel.Price;
+            package.TimeDays = packageViewModel.TimeDays;
 
             //delete lessons
             var deleteLessonsList = package.Lessons
@@ -98,19 +108,20 @@ namespace NasleGhalam.ServiceLayer.Services
                 package.Lessons.Remove(lesson);
             }
 
-            //add topics
+            //add lessons
             var addLessonList = packageViewModel.LessonIds
                 .Where(oldLessonId => package.Lessons.All(newLesson => newLesson.Id != oldLessonId))
                 .ToList();
             foreach (var lessonId in addLessonList)
             {
-                var lesson = new Lesson() { Id = lessonId };
+                var lesson = new Lesson { Id = lessonId };
                 _uow.MarkAsUnChanged(lesson);
                 package.Lessons.Add(lesson);
             }
 
-
-
+            _uow.ExcludeFieldsFromUpdate(package,
+                x => x.CreateDateTime,
+                x => x.IsDelete);
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
@@ -134,10 +145,8 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             packageViewModel.IsDelete = true;
-          
             var package = Mapper.Map<Package>(packageViewModel);
             _uow.MarkAsChanged(package);
-
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);

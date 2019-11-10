@@ -31,6 +31,9 @@ const packageValidations: ValidationRuleset<TPackage> = {
       required,
       numeric
     },
+    LessonIds: {
+      displayName: displayName("درس")
+    },
     Description: {
       displayName: displayName("توضیحات"),
       maxLength: maxLength(300)

@@ -5,6 +5,7 @@ using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Package;
 using System.Web;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -23,9 +24,9 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.PackageReadAccess)]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllByEducationTreeId([FromUri]IEnumerable<int> ids)
         {
-            return Ok(_packageService.GetAll());
+            return Ok(_packageService.GetAllByEducationTreeId(ids));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.PackageReadAccess)]
@@ -71,19 +72,14 @@ namespace NasleGhalam.WebApi.Controllers
             var oldFile = packageViewModel.ImageFile;
 
             if (postedFile != null && postedFile.ContentLength > 0)
-            {
                 packageViewModel.ImageFile = $"{Guid.NewGuid()}{Path.GetExtension(postedFile.FileName)}";
-            }
 
             var msgRes = _packageService.Update(packageViewModel);
-
-
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(packageViewModel.ImageFile))
             {
                 if (File.Exists($"{SitePath.PackageRelPath}{oldFile}".ToAbsolutePath()))
-                {
                     File.Delete($"{SitePath.PackageRelPath}{oldFile}".ToAbsolutePath());
-                }
+
                 postedFile?.SaveAs($"{SitePath.PackageRelPath}{packageViewModel.ImageFile}".ToAbsolutePath());
             }
             return Ok(msgRes);

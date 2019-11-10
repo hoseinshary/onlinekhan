@@ -18,7 +18,6 @@ export class PackageStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   thePackage: IPackage;
   private _packageList: Array<IPackage>;
-  private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
 
@@ -92,11 +91,6 @@ export class PackageStore extends VuexModule {
   }
 
   @mutation
-  private MODEL_CHANGED(changed: boolean) {
-    this._modelChanged = changed;
-  }
-
-  @mutation
   OPEN_MODAL_CREATE(open: boolean) {
     this.openModal.create = open;
   }
@@ -129,21 +123,22 @@ export class PackageStore extends VuexModule {
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IPackage>) => {
         util.mapObject(response.data, this.thePackage);
+        if (response.data.Lessons) {
+          this.thePackage.LessonIds = response.data.Lessons.map(x => x.Id);
+        }
       });
   }
 
   @action()
-  async fillList() {
-    if (this._modelChanged) {
-      return axios
-        .get(`${baseUrl}/GetAll`)
-        .then((response: AxiosResponse<Array<IPackage>>) => {
-          this.SET_LIST(response.data);
-          this.MODEL_CHANGED(false);
-        });
-    } else {
-      return Promise.resolve(this._packageList);
-    }
+  async fillByEducationTreeIdList(ids: Array<number>) {
+    var params = util.toParam({
+      Ids: ids
+    });
+    return axios
+      .get(`${baseUrl}/GetAllByEducationTreeId?${params}`)
+      .then((response: AxiosResponse<Array<IPackage>>) => {
+        this.SET_LIST(response.data);
+      });
   }
 
   @action({ mode: "raw" })
@@ -178,6 +173,18 @@ export class PackageStore extends VuexModule {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
+    if (this.thePackage.LessonIds && this.thePackage.LessonIds.length == 0) {
+      this.notify({
+        vm: vm,
+        data: {
+          Message: "درس انتخاب نشده است",
+          MessageType: MessageType.Error,
+          Obj: null
+        }
+      });
+      return;
+    }
+
     var formData = new FormData();
     var fileUpload = vm.$refs.fileUpload;
 
@@ -198,7 +205,6 @@ export class PackageStore extends VuexModule {
       if (data.MessageType == MessageType.Success) {
         this.CREATE(data.Obj);
         this.OPEN_MODAL_CREATE(!closeModal);
-        this.MODEL_CHANGED(true);
         this.resetCreate();
       }
     });
@@ -220,6 +226,17 @@ export class PackageStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
+    if (this.thePackage.LessonIds && this.thePackage.LessonIds.length == 0) {
+      this.notify({
+        vm: vm,
+        data: {
+          Message: "درس انتخاب نشده است",
+          MessageType: MessageType.Error,
+          Obj: null
+        }
+      });
+      return;
+    }
     var formData = new FormData();
     var fileUpload = vm.$refs.fileUpload;
 
@@ -240,7 +257,6 @@ export class PackageStore extends VuexModule {
       if (data.MessageType == MessageType.Success) {
         this.UPDATE(data.Obj);
         this.OPEN_MODAL_EDIT(false);
-        this.MODEL_CHANGED(true);
         this.resetEdit();
       }
     });
@@ -266,7 +282,6 @@ export class PackageStore extends VuexModule {
         if (data.MessageType == MessageType.Success) {
           this.DELETE();
           this.OPEN_MODAL_DELETE(false);
-          this.MODEL_CHANGED(true);
         }
       });
   }

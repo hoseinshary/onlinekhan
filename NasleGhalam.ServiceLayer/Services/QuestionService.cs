@@ -48,15 +48,29 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
-        public object GetAllByTopicIdsNoJudge(IEnumerable<int> ids, int userid)
+        public object GetAllByTopicIdsNoJudge(IEnumerable<int> ids, int userid, int rollLevel)
         {
-            return _questions
-                .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
-                .Where(current => current.QuestionJudges.Any(x => x.UserId != userid) || !current.QuestionJudges.Any())
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<QuestionViewModel>)
-                .ToList();
+            if (rollLevel < 3)
+            {
+                return _questions
+                    .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                    .Where(x => x.QuestionJudges.Count < x.Topics.FirstOrDefault().Lesson.NumberOfJudges)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionViewModel>)
+                    .ToList();
+            }
+            else
+            {
+                return _questions
+                    .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                    .Where(current =>
+                        current.QuestionJudges.Any(x => x.UserId != userid) || !current.QuestionJudges.Any())
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionViewModel>)
+                    .ToList();
+            }
         }
 
         
@@ -89,6 +103,55 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Count();
         }
 
+
+
+        /// <summary>
+        /// گرفتن همه سوالات کارشناسی شده توسط یک کاربر مربوط به درس
+        /// </summary>
+        /// <returns></returns>
+        public IList<QuestionViewModel> GetAllJudgedByUserIdByLessonId(int userId  , int rolllevel , int lessonId)
+        {
+            if (rolllevel < 3)
+            {
+                return _questions
+                    .Where(x => x.QuestionGroups.Any(y => y.LessonId == lessonId))
+                    .Where(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges)
+                    .OrderByDescending(x => x.Id)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionViewModel>)
+                    .ToList();
+
+            }
+            else
+            {
+                return _questions
+                    .Where(current => current.QuestionJudges.Any(x => x.UserId == userId))
+                    .Where(x => x.QuestionGroups.Any(y => y.LessonId == lessonId))
+                    .OrderByDescending(x => x.Id)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionViewModel>)
+                    .ToList();
+
+
+            }
+        }
+
+        /// <summary>
+        /// گرفتن همه سوالات کارشناسی شده توسط یک کاربر
+        /// </summary>
+        /// <returns></returns>
+        public IList<QuestionViewModel> GetAllActiveByLessonId(int id)
+        {
+            return _questions
+                .Where(current => current.IsActive)
+                .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
 
         /// <summary>
         /// تعداد همه سوالات کارشناسی شده توسط یک کاربر
@@ -151,6 +214,21 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
+        /// گرفتن همه سوال های یک درس که مبحث ندارند
+        /// </summary>
+        /// <returns></returns>
+        public object GetAllNoTopicByLessonId(int id)
+        {
+            return _questions
+                .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
+                .Where(x => !x.Topics.Any())
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
+
+        /// <summary>
         /// گرفتن همه سوال های یک درس
         /// </summary>
         /// <returns></returns>
@@ -172,7 +250,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _questions
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
-                .Where(x => x.QuestionJudges.Count >= x.Topics.First().Lesson.NumberOfJudges )
+                .Where(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges )
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)

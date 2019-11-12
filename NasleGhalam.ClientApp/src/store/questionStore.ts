@@ -163,8 +163,15 @@ export class QuestionStore extends VuexModule {
     topicIds: Array<number>;
   }) {
     var url = "";
+    
+    if (payload.showJudged) {
+      url = `${baseUrl}/GetAllJudgedByUserIdByLessonId/${payload.lessonId}`;
+    }else{
+    if (payload.showActived) {
+      url = `${baseUrl}/GetAllActiveByLessonId/${payload.lessonId}`;
+    }else{
     if (payload.showWithoutTopic) {
-      url = `${baseUrl}/GetAllByLessonId/${payload.lessonId}`;
+      url = `${baseUrl}/GetAllNoTopicByLessonId/${payload.lessonId}`;
     } else {
       var params = util.toParam({
         Ids: payload.topicIds
@@ -174,7 +181,8 @@ export class QuestionStore extends VuexModule {
       } else {
         url = `${baseUrl}/GetAllByTopicIds?${params}`;
       }
-    }
+    }}}
+
 
     return axios.get(url).then((response: AxiosResponse<Array<IQuestion>>) => {
       this.SET_LIST(response.data);

@@ -14,14 +14,16 @@
             label="نمایش سوال های بدون مبحث"
             @input="fillGrid()"
           />
+          <br />
           <q-checkbox
             v-model="showJudged"
-            label="سوال های کارشناسی شده"
+            label="نمایش سوال های کارشناسی شده"
             @input="fillGrid()"
           />
+          <br />
           <q-checkbox
             v-model="showActived"
-            label="سوال های فعال سایت"
+            label="نمایش سوال های فعال سایت"
             @input="fillGrid()"
           />
         </section>
@@ -276,6 +278,41 @@ export default class QuestionVue extends Vue {
       this.educationTree.expanded.push(newVal);
     }
   }
+
+  
+  @Watch("showWithoutTopic")
+  questionShowWithoutTopicChanged(newVal) {
+    if (newVal) {
+      this.showJudged = false;
+      this.showActived = false;
+      this.showNoJudgement = false;
+    }
+  }
+  @Watch("showNoJudgement")
+  questionShowNoJudgementChanged(newVal) {
+    if (newVal) {
+      this.showJudged = false;
+      this.showActived = false;
+      this.showWithoutTopic = false;
+    }
+  }
+  @Watch("showJudged")
+  questionShowJudgedChanged(newVal) {
+    if (newVal) {
+      this.showWithoutTopic = false;
+      this.showActived = false;
+      this.showNoJudgement = false;
+    }
+  }
+  @Watch("showActived")
+  questionShowActivedChanged(newVal) {
+    if (newVal) {
+      this.showJudged = false;
+      this.showWithoutTopic = false;
+      this.showNoJudgement = false;
+    }
+  }
+  
 
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {

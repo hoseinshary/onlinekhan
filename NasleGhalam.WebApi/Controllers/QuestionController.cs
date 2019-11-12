@@ -35,7 +35,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetAllByTopicIdsNoJudge([FromUri] IEnumerable<int> ids)
         {
-            return Ok(_questionService.GetAllByTopicIdsNoJudge(ids, Request.GetUserId()));
+            return Ok(_questionService.GetAllByTopicIdsNoJudge(ids, Request.GetUserId(), Request.GetRoleLevel()));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
@@ -45,9 +45,27 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
+        public IHttpActionResult GetAllJudgedByUserIdByLessonId( int id)
+        {
+            return Ok(_questionService.GetAllJudgedByUserIdByLessonId(Request.GetUserId() , Request.GetRoleLevel() ,id));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAllByLessonId(int id)
         {
             return Ok(_questionService.GetAllByLessonId(id));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
+        public IHttpActionResult GetAllNoTopicByLessonId(int id)
+        {
+            return Ok(_questionService.GetAllNoTopicByLessonId(id));
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
+        public IHttpActionResult GetAllActiveByLessonId(int id)
+        {
+            return Ok(_questionService.GetAllActiveByLessonId(id));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]

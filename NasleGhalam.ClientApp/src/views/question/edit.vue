@@ -102,8 +102,10 @@
           class="col-md-4"
           filter
         />
+        
         <base-select
           :model="$v.question.LookupId_QuestionRank"
+          v-if="showElement('LookupId_QuestionRank')"
           :options="lookupStore.questionRankDdl"
           class="col-md-4"
           filter

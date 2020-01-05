@@ -1,5 +1,5 @@
-// const API_URL = "http://onlinekhan.ir";
-export const API_URL = "http://localhost:63839";
+//export const API_URL = "http://onlinekhan.ir";
+ export const API_URL = "http://localhost:63839";
 export const CITY_URL = "/api/city";
 export const PROVINCE_URL = "/api/province";
 export const ROLE_URL = "/api/role";
@@ -27,5 +27,5 @@ export const AXILLARY_BOOK_URL = "/api/axillaryBook";
 export const ASSAY_URL = "/api/assay";
 export const RESUME_URL = "/api/resume";
 export const PACKAGE_URL = "/api/package";
-
+export const PANEL_URL = "/api/panel";
 export const UNIVERSITY_BRANCH_URL = "/api/universityBranch";

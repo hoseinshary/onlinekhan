@@ -54,6 +54,17 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// تعداد همه   کارشناسی سوالات 
+        /// </summary>
+        /// <returns></returns>
+        public int CountAll()
+        {
+            return _questionJudges
+                .AsNoTracking()
+                .AsEnumerable()
+                .Count();
+        }
 
         /// <summary>
         /// گرفتن همه کارشناسی سوال ها
@@ -61,7 +72,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<QuestionJudgeViewModel> GetAllByQuestionId(int questionId)
         {
-           
+
             return _questionJudges
                 .Include(current => current.Lookup_QuestionHardnessType)
                 .Include(current => current.Lookup_RepeatnessType)
@@ -81,6 +92,26 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Create(QuestionJudgeCreateViewModel questionJudgeViewModel, int userId)
         {
+            var question = _questions.Where(x => x.Id == questionJudgeViewModel.QuestionId)
+                .Include(x => x.QuestionJudges).FirstOrDefault();
+
+            if (question.QuestionJudges.Any(x => x.UserId == userId))
+            {
+                foreach (var questionQuestionJudge in question.QuestionJudges)
+                {
+                    if (questionQuestionJudge.EducationGroup == questionJudgeViewModel.EducationGroup)
+                    {
+                        return new ClientMessageResult()
+                        {
+                            Message = $"کارشناسان اجازه ثبت بیش از یک کارشناسی ندارند!",
+                            MessageType = MessageType.Error
+                        };
+                    }
+                }
+            }
+
+
+
             SetNumberOfjudges(questionJudgeViewModel.QuestionId);
             var questionJudge = Mapper.Map<QuestionJudge>(questionJudgeViewModel);
             questionJudge.UserId = userId;
@@ -89,7 +120,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             if (serverResult.MessageType == MessageType.Success)
             {
-                if (_questionJudges.Count(current => current.QuestionId == questionJudgeViewModel.QuestionId) >= NumberOfJudges)
+                if (_questionJudges.Count(current => current.QuestionId == questionJudgeViewModel.QuestionId) >=
+                    NumberOfJudges)
                 {
                     var questionJudges = _questionJudges
                         .Where(current => current.QuestionId == questionJudgeViewModel.QuestionId)
@@ -131,7 +163,8 @@ namespace NasleGhalam.ServiceLayer.Services
                         responseTime += judge.ResponseSecond;
                     }
 
-                    var updateQuestion = _questions.Include(x=>x.QuestionAnswers).First(x => x.Id == questionJudgeViewModel.QuestionId);
+                    var updateQuestion = _questions.Include(x => x.QuestionAnswers)
+                        .First(x => x.Id == questionJudgeViewModel.QuestionId);
                     updateQuestion.ResponseSecond = Convert.ToInt16(responseTime / NumberOfJudges);
                     if (count_isStandard > NumberOfJudges / 2)
                         updateQuestion.IsStandard = true;
@@ -163,16 +196,20 @@ namespace NasleGhalam.ServiceLayer.Services
                         else
                             updateQuestion.QuestionAnswers.FirstOrDefault(x => x.IsMaster == true).IsActive = false;
                     }
+
                     updateQuestion.LookupId_QuestionHardnessType = _lookups
-                        .First(x => x.Name == "QuestionHardnessType" && x.State == (int)Math.Round(lookup_questionhardness / NumberOfJudges))
+                        .First(x => x.Name == "QuestionHardnessType" &&
+                                    x.State == (int)Math.Round(lookup_questionhardness / NumberOfJudges))
                         .Id;
 
                     updateQuestion.LookupId_RepeatnessType = _lookups
-                        .First(x => x.Name == "RepeatnessType" && x.State == (int)Math.Round(lookup_repeatness / NumberOfJudges))
+                        .First(x => x.Name == "RepeatnessType" &&
+                                    x.State == (int)Math.Round(lookup_repeatness / NumberOfJudges))
                         .Id;
 
                     updateQuestion.LookupId_QuestionRank = _lookups
-                        .First(x => x.Name == "QuestionRank" && x.State == (int)Math.Round(lookup_questionRank / NumberOfJudges))
+                        .First(x => x.Name == "QuestionRank" &&
+                                    x.State == (int)Math.Round(lookup_questionRank / NumberOfJudges))
                         .Id;
 
                     _uow.MarkAsChanged(updateQuestion);
@@ -185,6 +222,7 @@ namespace NasleGhalam.ServiceLayer.Services
             if (clientResult.MessageType == MessageType.Success)
                 clientResult.Obj = GetById(questionJudge.Id);
             return clientResult;
+
         }
 
 

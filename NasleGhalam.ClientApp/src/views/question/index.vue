@@ -17,7 +17,7 @@
           <br />
           <q-checkbox
             v-model="showJudged"
-            label="نمایش سوال های کارشناسی شده"
+            label="نمایش سوال های ارزیابی شده"
             @input="fillGrid()"
           />
           <br />

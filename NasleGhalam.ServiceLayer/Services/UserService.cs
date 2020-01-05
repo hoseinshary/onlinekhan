@@ -299,18 +299,31 @@ namespace NasleGhalam.ServiceLayer.Services
                     else
                     {
                         var defaultPage = "";
-                        foreach (var item in loginResult.SubMenus)
-                        {
-                            if (item.EnName == "/User")
-                            {
-                                defaultPage = item.EnName;
-                                break;
-                            }
-                        }
 
-                        if (string.IsNullOrEmpty(defaultPage))
+                        if (lstUsr[0].Role.Level == 3)
                         {
-                            defaultPage = loginResult.SubMenus[0].EnName;
+                            defaultPage = "/panel/expertpanel";
+                        }
+                        else if (lstUsr[0].Role.Level < 3)
+                        {
+                            defaultPage = "/panel/adminpanel";
+                        }
+                        else
+                        {
+                            
+                            foreach (var item in loginResult.SubMenus)
+                            {
+                                if (item.EnName == "/User")
+                                {
+                                    defaultPage = item.EnName;
+                                    break;
+                                }
+                            }
+
+                            if (string.IsNullOrEmpty(defaultPage))
+                            {
+                                defaultPage = loginResult.SubMenus[0].EnName;
+                            }
                         }
 
                         loginResult.Message = "ورود موفقیت آمیز";

@@ -14,11 +14,13 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "کارشناسی جواب سوال";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<QuestionAnswerJudge> _questionAnswerJudges;
+        private readonly IDbSet<QuestionAnswer> _questionAnswer;
 
         public QuestionAnswerJudgeService(IUnitOfWork uow)
         {
             _uow = uow;
             _questionAnswerJudges = uow.Set<QuestionAnswerJudge>();
+            _questionAnswer = uow.Set<QuestionAnswer>();
         }
 
         /// <summary>
@@ -61,6 +63,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Create(QuestionAnswerJudgeCreateViewModel questionAnswerJudgeViewModel)
         {
+            var questionAnswer = _questionAnswer.Where(x => x.Id == questionAnswerJudgeViewModel.QuestionAnswerId)
+                .Include(x => x.QuestionAnswerJudges).FirstOrDefault();
+
+            if (questionAnswer.QuestionAnswerJudges.Any(x => x.UserId == questionAnswerJudgeViewModel.UserId))
+            {
+                return new ClientMessageResult()
+                {
+                    Message = $"کارشناسان اجازه ثبت بیش از یک کارشناسی ندارند!",
+                    MessageType = MessageType.Error
+                };
+            }
+            
+
             var questionAnswerJudge = Mapper.Map<QuestionAnswerJudge>(questionAnswerJudgeViewModel);
             _questionAnswerJudges.Add(questionAnswerJudge);
 

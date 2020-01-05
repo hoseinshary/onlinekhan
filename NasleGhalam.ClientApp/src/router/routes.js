@@ -126,6 +126,10 @@ export default [
       {
         path: "/panel/expertPanel",
         component: () => import("src/views/panel/expertPanel.vue")
+      },
+      {
+        path: "/panel/adminPanel",
+        component: () => import("src/views/panel/adminPanel.vue")
       }
     ]
   },

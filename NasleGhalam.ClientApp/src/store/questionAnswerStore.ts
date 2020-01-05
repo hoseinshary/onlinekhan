@@ -227,7 +227,20 @@ export class QuestionAnswerStore extends VuexModule {
     var wordFile = vm.$refs.wordFile;
     var formData = new FormData();
     formData.append(wordFile["name"], wordFile["files"][0]);
-    var params = util.toParam(this.questionAnswer);
+    var newData = {
+      Id: this.questionAnswer.Id,
+      FilePath: this.questionAnswer.FilePath,
+      LookupId_AnswerType: this.questionAnswer.LookupId_AnswerType,
+      QuestionId: this.questionAnswer.QuestionId,
+      WriterId: this.questionAnswer.WriterId,
+      Title: this.questionAnswer.Title,
+      Description: this.questionAnswer.Description,
+      IsActive: this.questionAnswer.IsActive,
+      IsMaster: this.questionAnswer.IsMaster,
+      LessonName: this.questionAnswer.LessonName
+      
+    };
+    var params = util.toParam(newData);
 
     return axios({
       method: "post",

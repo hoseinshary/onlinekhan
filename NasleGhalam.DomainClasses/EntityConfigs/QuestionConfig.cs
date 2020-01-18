@@ -9,7 +9,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             HasKey(x => x.Id);
             Property(x => x.Context).IsRequired().HasColumnType("nvarchar(max)");
-            
+
             Property(x => x.Description).HasMaxLength(300);
             Property(x => x.FileName).IsRequired();
 
@@ -18,7 +18,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.UserId)
                 .WillCascadeOnDelete(false);
 
-         
+
 
             HasRequired(x => x.Lookup_QuestionType)
                 .WithMany(x => x.Question_QuestionTypes)
@@ -77,6 +77,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .WithMany(x => x.Questions)
                 .HasForeignKey(x => x.WriterId)
                 .WillCascadeOnDelete(false);
+
+            HasMany(x => x.Users)
+         .WithMany(x => x.QuestionsUpdated)
+         .Map(config =>
+         {
+             config.MapLeftKey("QuestionId");
+             config.MapRightKey("UserId");
+             config.ToTable("Questions_Users");
+         });
         }
     }
 }

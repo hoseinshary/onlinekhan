@@ -72,6 +72,10 @@
     <Compile Include="Migrations\201911051551431_UpdatePackageField.Designer.cs">
       <DependentUpon>201911051551431_UpdatePackageField.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001171357433_questionupdateuser.cs" />
+    <Compile Include="Migrations\202001171357433_questionupdateuser.Designer.cs">
+      <DependentUpon>202001171357433_questionupdateuser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -107,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911051551431_UpdatePackageField.resx">
       <DependentUpon>201911051551431_UpdatePackageField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001171357433_questionupdateuser.resx">
+      <DependentUpon>202001171357433_questionupdateuser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

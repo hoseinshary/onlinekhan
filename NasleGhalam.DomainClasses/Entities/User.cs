@@ -72,5 +72,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public ICollection<Sale> Sales { get; set; }
 
+
+        public ICollection<Question> QuestionsUpdated { get; set; }
+
     }
 }

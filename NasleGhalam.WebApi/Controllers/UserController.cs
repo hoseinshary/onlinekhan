@@ -57,13 +57,14 @@ namespace NasleGhalam.WebApi.Controllers
             var postedFile = HttpContext.Current.Request.Files.Get("img");
             if (postedFile != null && postedFile.ContentLength > 0)
             {
-                userViewModel.ProfilePic = $"{Guid.NewGuid()}{Path.GetExtension(postedFile.FileName)}";
+                /*{Path.GetExtension(postedFile.FileName)}*/
+                userViewModel.ProfilePic = $"{Guid.NewGuid()}";
             }
 
             var msgRes = _userService.Register(userViewModel);
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(userViewModel.ProfilePic))
             {
-                postedFile?.SaveAs($"{SitePath.UserProfileRelPath}{userViewModel.ProfilePic}".ToAbsolutePath());
+                postedFile?.SaveAs($"{SitePath.UserProfileRelPath}{userViewModel.ProfilePic}{Path.GetExtension(postedFile.FileName)}".ToAbsolutePath());
             }
             return Ok(msgRes);
         }
@@ -102,7 +103,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet]
-        public HttpResponseMessage GetPictureFile(string id=null)
+        public HttpResponseMessage GetPictureFile(string id = null)
         {
             var stream = new MemoryStream();
             id += ".png";

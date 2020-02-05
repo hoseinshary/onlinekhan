@@ -88,6 +88,10 @@ export default [
         component: () => import("src/views/student/index.vue")
       },
       {
+        path: "/teacher",
+        component: () => import("src/views/teacher/index.vue")
+      },
+      {
         path: "/educationTree",
         component: () => import("src/views/educationTree/index.vue")
       },
@@ -130,6 +134,10 @@ export default [
       {
         path: "/panel/adminPanel",
         component: () => import("src/views/panel/adminPanel.vue")
+      },
+      {
+        path: "/panel/teacherPanel",
+        component: () => import("src/views/panel/teacherPanel.vue")
       }
     ]
   },

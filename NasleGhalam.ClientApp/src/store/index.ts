@@ -34,6 +34,7 @@ import {
 import { PublisherStore, publisherStore } from "./publisherStore";
 import { EducationBookStore, educationBookStore } from "./educationBookStore";
 import { StudentStore, studentStore } from "./studentStore";
+import { TeacherStore, teacherStore } from "./teacherStore";
 import { WriterStore, writerStore } from "./writerStore";
 import { Lesson_UserStore, lesson_UserStore } from "./lesson_UserStore";
 import {
@@ -45,6 +46,7 @@ import { AssayStore, assayStore } from "./assayStore";
 import { ResumeStore, resumeStore } from "./resumeStore";
 import { PackageStore, packageStore } from "./packageStore";
 import { PanelStore, panelStore } from "./panelStore";
+import { ReportStore, reportStore } from "./reportStore";
 
 Vue.use(Vuex);
 
@@ -112,6 +114,7 @@ const store = new Vuex.Store({
     publisherStore,
     educationBookStore,
     studentStore,
+    teacherStore,
     writerStore,
     lesson_UserStore,
     lessonDepartmentStore,
@@ -119,7 +122,8 @@ const store = new Vuex.Store({
     assayStore,
     resumeStore,
     packageStore,
-    panelStore
+    panelStore,
+    reportStore
   }
 });
 
@@ -183,6 +187,7 @@ export const vxm = {
     EducationBookStore
   ) as EducationBookStore,
   studentStore: StudentStore.CreateProxy(store, StudentStore) as StudentStore,
+  teacherStore: TeacherStore.CreateProxy(store, TeacherStore) as TeacherStore,
   writerStore: WriterStore.CreateProxy(store, WriterStore) as WriterStore,
   lesson_UserStore: Lesson_UserStore.CreateProxy(
     store,
@@ -199,5 +204,6 @@ export const vxm = {
   assayStore: AssayStore.CreateProxy(store, AssayStore) as AssayStore,
   resumeStore: ResumeStore.CreateProxy(store, ResumeStore) as ResumeStore,
   packageStore: PackageStore.CreateProxy(store, PackageStore) as PackageStore,
-  panelStore: PanelStore.CreateProxy(store, PanelStore) as PanelStore
+  panelStore: PanelStore.CreateProxy(store, PanelStore) as PanelStore,
+  reportStore: ReportStore.CreateProxy(store, ReportStore) as ReportStore
 };

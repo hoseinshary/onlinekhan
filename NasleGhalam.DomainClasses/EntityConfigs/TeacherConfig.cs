@@ -8,14 +8,9 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         public TeacherConfig()
         {
             HasKey(x => x.Id);
-            Property(x => x.FatherName).HasMaxLength(50).IsRequired();
-            Property(x => x.Address).HasMaxLength(300).IsRequired();
-            HasIndex(x => x.UserId).IsUnique();
+            Property(x => x.FatherName).HasMaxLength(50);
+            Property(x => x.Address).HasMaxLength(300);
 
-            HasRequired(x => x.User)
-                .WithMany(x => x.Teachers)
-                .HasForeignKey(x => x.UserId)
-                .WillCascadeOnDelete(false);
         }
     }
 }

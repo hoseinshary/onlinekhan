@@ -163,7 +163,7 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
 
-            var msgRes = _questionService.UpdateImport(questionViewModel, wordFile);
+            var msgRes = _questionService.UpdateImport(questionViewModel, wordFile );
             return Ok(msgRes);
         }
 
@@ -175,7 +175,7 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
 
-            var msgRes = _questionService.UpdateTopic(questionViewModel, wordFile);
+            var msgRes = _questionService.UpdateTopic(questionViewModel, Request.GetUserId());
             return Ok(msgRes);
         }
 

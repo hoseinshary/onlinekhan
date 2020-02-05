@@ -147,5 +147,12 @@
         PackageDeleteAccess = 112,
         PackageUpdateAccess = 113,
 
+        PanelReadAccess = 114,
+
+        TeacherReadAccess = 115,
+        TeacherCreateAccess = 116,
+        TeacherDeleteAccess = 117,
+        TeacherUpdateAccess = 118,
+
     }
 }

@@ -7,6 +7,7 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Lesson;
+using NasleGhalam.ViewModels.Report;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -15,6 +16,7 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "درس";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Lesson> _lessons;
+        private readonly IDbSet<Question> _questions;
 
         private readonly Lazy<EducationTreeService> _educationTreeService;
 
@@ -22,6 +24,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             _uow = uow;
             _lessons = uow.Set<Lesson>();
+            _questions = uow.Set<Question>();
 
             _educationTreeService = educationTreeService;
         }
@@ -44,6 +47,69 @@ namespace NasleGhalam.ServiceLayer.Services
                 .FirstOrDefault();
         }
 
+
+        /// <summary>
+        /// اطلاعات آماری در مورد سوالات در درس
+        /// </summary>
+        /// <returns></returns>
+        public IList<AllQuestionOfEachLessonViewModel> GetAllQuestionOfEachLesson()
+        {
+           var lessons = _lessons
+                .Where(current =>  current.QuestionGroups.Any(x => x.Questions.Any()))
+                .Include(x=> x.Topics)
+                .AsNoTracking()
+                .AsEnumerable()
+                .ToList();
+
+           IList<AllQuestionOfEachLessonViewModel> returnVal = new List<AllQuestionOfEachLessonViewModel>();
+
+           foreach (var lesson in lessons)
+           {
+               var questions1 =_questions
+                   .Where(x => x.QuestionGroups.Any(y => y.LessonId == lesson.Id))
+                   .Include(x=>x.Topics)
+                   .Include(x => x.QuestionJudges)
+                   .AsNoTracking()
+                   .AsEnumerable()
+                   .ToList();
+
+               var ids = lesson.Topics.Select(x => x.Id);
+               var questions2 = _questions
+                   .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                   .AsNoTracking()
+                   .AsEnumerable()
+                   .ToList();
+
+               var allQuestionNum = questions1.Count;
+
+               var allQuestionTopiced = questions1
+                   .Count(x => x.Topics.Any<Topic>());
+
+               var allQuestionJudged = questions1
+                   .Count(x => x.QuestionJudges.Any<QuestionJudge>());
+
+               var allQuestionJudgedFull = _questions
+                   .Count(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges);
+                   
+
+               var allQuestionActived = questions1.Concat(questions2).Where(x => x.IsActive == true).Select(x=>x.Id).Distinct().Count();
+               var allQuestionHybrid = questions1.Concat(questions2).Where(x => x.IsHybrid == true).Select(x => x.Id).Distinct().Count();
+
+               returnVal.Add( new AllQuestionOfEachLessonViewModel
+               {
+                   Name = lesson.Name,
+                   AllQuestionActived = allQuestionActived,
+                   AllQuestionHybrid = allQuestionHybrid,
+                   AllQuestionJudged = allQuestionJudged,
+                   AllQuestionNum = allQuestionNum,
+                   AllQuestionTopiced = allQuestionTopiced,
+                   AllQuestionJudgedFull = allQuestionJudgedFull
+               });
+            }
+
+           return returnVal;
+
+        }
 
         /// <summary>
         /// گرفتن همه درس ها با آی دی بخش

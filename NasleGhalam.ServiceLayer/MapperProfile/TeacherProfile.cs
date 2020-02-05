@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.Student;
+using NasleGhalam.ViewModels.Teacher;
 using NasleGhalam.ViewModels.User;
 
 namespace NasleGhalam.ServiceLayer.MapperProfile
 {
-    public class StudentProfile : Profile
+    public class TeacherProfile : Profile
     {
-        public StudentProfile()
+        public TeacherProfile()
         {
-            CreateMap<StudentCreateViewModel, Student>();
-            CreateMap<StudentUpdateViewModel, Student>();
-            CreateMap<UserCreateViewModel, Student>();
-            CreateMap<StudentViewModel, Student>()
+            CreateMap<TeacherCreateViewModel, Teacher>();
+            CreateMap<TeacherUpdateViewModel, Teacher>();
+            CreateMap<UserCreateViewModel, Teacher>();
+
+            CreateMap<TeacherViewModel, Teacher>()
                 .ReverseMap()
                 .ForPath(dst => dst.User.ProvinceId, opt => opt.MapFrom(src => src.User.City.ProvinceId))
                 .ForMember(dst => dst.User, opt => opt.MapFrom(src => src.User));

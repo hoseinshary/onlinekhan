@@ -17,6 +17,9 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "کاربر";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<User> _users;
+        private readonly IDbSet<Student> _students;
+        private readonly IDbSet<Teacher> _teachers;
+
         private readonly Lazy<RoleService> _roleService;
         private readonly Lazy<ActionService> _actionService;
 
@@ -26,6 +29,8 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             _uow = uow;
             _users = _uow.Set<User>();
+            _students = _uow.Set<Student>();
+            _teachers = _uow.Set<Teacher>();
             _roleService = roleService;
             _actionService = actionService;
         }
@@ -101,17 +106,41 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Register(UserCreateViewModel userViewModel)
         {
             var user = Mapper.Map<User>(userViewModel);
-            if(userViewModel.RoleId == -1)
+            if (userViewModel.RoleId == -1)
             {
-                user.RoleId =2015;
+                //دبیر
+                //var teacher = Mapper.Map<Teacher>(userViewModel);
+                var teacher = new Teacher();
+                teacher.User = user;
+                teacher.User.LastLogin = DateTime.Now;
+                teacher.User.RoleId = 2015;
+                _teachers.Add(teacher);
+
+                // user.RoleId =2015;
             }
             else if(userViewModel.RoleId == -2)
             {
-                user.RoleId = 2005;
+              //دانش آموز
+
+                //var student = Mapper.Map<Student>(userViewModel);
+                var student = new Student();
+                student.User = user;
+                student.User.LastLogin = DateTime.Now;
+                
+                student.User.RoleId = 2005;
+                _students.Add(student);
+
+              
+
+                
+
+              
+                
             }
             else if(userViewModel.RoleId == -3)
             {
-                user.RoleId = 2010;
+                //مشاور
+                //user.RoleId = 2010;
             }
             else
             {
@@ -122,12 +151,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 };
             }
 
-            user.IsActive = true;
-            user.IsAdmin = false;
+            //user.IsActive = true;
+            //user.IsAdmin = false;
             
 
-            user.LastLogin = DateTime.Now;
-            _users.Add(user);
+            //user.LastLogin = DateTime.Now;
+            //_users.Add(user);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
@@ -307,6 +336,10 @@ namespace NasleGhalam.ServiceLayer.Services
                         else if (lstUsr[0].Role.Level < 3)
                         {
                             defaultPage = "/panel/adminpanel";
+                        }
+                        else if (lstUsr[0].Role.Id == 2015)
+                        {
+                            defaultPage = "/panel/teacherPanel";
                         }
                         else
                         {

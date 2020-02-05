@@ -73,7 +73,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
         }
 
-        
+
 
         /// <summary>
         /// گرفتن همه سوال های مباحث
@@ -109,7 +109,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه سوالات کارشناسی شده توسط یک کاربر مربوط به درس
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionViewModel> GetAllJudgedByUserIdByLessonId(int userId  , int rolllevel , int lessonId)
+        public IList<QuestionViewModel> GetAllJudgedByUserIdByLessonId(int userId, int rolllevel, int lessonId)
         {
             if (rolllevel < 3)
             {
@@ -160,7 +160,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public int CountAllActive()
         {
             return _questions
-                .Where(current => current.IsActive )
+                .Where(current => current.IsActive)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Count();
@@ -246,11 +246,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه سوال های یک درس کارشناسی شده کامل به اندازه تعداد کارشناسان آن درس
         /// </summary>
         /// <returns></returns>
-        public object GetAllJudgedByLessonId(int id )
+        public object GetAllJudgedByLessonId(int id)
         {
             return _questions
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
-                .Where(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges )
+                .Where(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)
@@ -363,10 +363,10 @@ namespace NasleGhalam.ServiceLayer.Services
             {
 
                 word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                source.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf" ,WdSaveFormat.wdFormatPDF);
+                source.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
                 //while (source.Windows[1].Panes[1].Pages.Count < 0) ;
                 //var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
-                ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", SitePath.GetQuestionAbsPath(questionViewModel.FileName) );
+                ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", SitePath.GetQuestionAbsPath(questionViewModel.FileName));
 
                 File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
                 var target = app.Documents.Add();
@@ -376,7 +376,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
 
-           // File.Delete(wordFilename);
+            // File.Delete(wordFilename);
             source.Close();
             app.Quit();
 
@@ -755,7 +755,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 questionViewModel.FileName = Guid.NewGuid().ToString();
                 wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
                 haveFileUpdate = true;
-                
+
 
 
                 //save Doc file in temp memory
@@ -877,53 +877,54 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="questionViewModel"></param>
         /// <param name="word"></param>
         /// <returns></returns>
-        public ClientMessageResult UpdateTopic(QuestionUpdateTopicViewModel questionViewModel, HttpPostedFile word)
+        public ClientMessageResult UpdateTopic(QuestionUpdateTopicViewModel questionViewModel ,  int userUpdateId)
         {
             var question = _questions
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
                 .Include(current => current.Tags)
+                .Include(x => x.Users)
                 .First(current => current.Id == questionViewModel.Id);
 
-            var previousFileName = questionViewModel.FileName;
-            Application app = null;
-            Document source = null;
-            string wordFilename = null;
-            var haveFileUpdate = false;
-            if (word != null && word.ContentLength > 0)
-            {
-                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
-                haveFileUpdate = true;
-                questionViewModel.FileName = Guid.NewGuid().ToString();
+
+            //Application app = null;
+            //Document source = null;
+            //string wordFilename = null;
+            //var haveFileUpdate = false;
+            //if (word != null && word.ContentLength > 0)
+            //{
+            //    wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
+            //    haveFileUpdate = true;
+            //    questionViewModel.FileName = Guid.NewGuid().ToString();
 
 
-                //save Doc file in temp memory
-                word.SaveAs(wordFilename);
+            //    //save Doc file in temp memory
+            //    word.SaveAs(wordFilename);
 
-                // Open a doc file.
-                app = new Application();
-                source = app.Documents.Open(wordFilename);
+            //    // Open a doc file.
+            //    app = new Application();
+            //    source = app.Documents.Open(wordFilename);
 
-                //حذف عدد اول سوال
-                if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
-                {
-                    int i = 1;
-                    while (i < source.Paragraphs[1].Range.Characters.Count &&
-                           source.Paragraphs[1].Range.Characters[i].Text != "-")
-                    {
-                        source.Paragraphs[1].Range.Characters[i].Delete();
-                    }
-                    source.Paragraphs[1].Range.Characters[i].Delete();
-                }
-                foreach (Paragraph paragraph in source.Paragraphs)
-                {
-                    question.Context += paragraph.Range.Text;
-                }
+            //    //حذف عدد اول سوال
+            //    if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+            //    {
+            //        int i = 1;
+            //        while (i < source.Paragraphs[1].Range.Characters.Count &&
+            //               source.Paragraphs[1].Range.Characters[i].Text != "-")
+            //        {
+            //            source.Paragraphs[1].Range.Characters[i].Delete();
+            //        }
+            //        source.Paragraphs[1].Range.Characters[i].Delete();
+            //    }
+            //    foreach (Paragraph paragraph in source.Paragraphs)
+            //    {
+            //        question.Context += paragraph.Range.Text;
+            //    }
 
-            }
+            //}
 
             question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
-            question.AnswerNumber = questionViewModel.AnswerNumber;
+
 
             //delete topics
             var deleteTopicList = question.Topics
@@ -945,78 +946,85 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Topics.Add(topic);
             }
 
-            //delete tag
-            var deleteTagList = question.Tags
-                .Where(oldTag => questionViewModel.TagIds.All(newTagId => newTagId != oldTag.Id))
-                .ToList();
-            foreach (var tag in deleteTagList)
-            {
-                question.Tags.Remove(tag);
-            }
+            ////delete tag
+            //var deleteTagList = question.Tags
+            //    .Where(oldTag => questionViewModel.TagIds.All(newTagId => newTagId != oldTag.Id))
+            //    .ToList();
+            //foreach (var tag in deleteTagList)
+            //{
+            //    question.Tags.Remove(tag);
+            //}
 
-            //add tag
-            var addTagList = questionViewModel.TagIds
-                .Where(oldTagId => question.Tags.All(newTag => newTag.Id != oldTagId))
-                .ToList();
-            foreach (var tagId in addTagList)
-            {
-                var tag = new Tag { Id = tagId };
-                _uow.MarkAsUnChanged(tag);
-                question.Tags.Add(tag);
-            }
+            ////add tag
+            //var addTagList = questionViewModel.TagIds
+            //    .Where(oldTagId => question.Tags.All(newTag => newTag.Id != oldTagId))
+            //    .ToList();
+            //foreach (var tagId in addTagList)
+            //{
+            //    var tag = new Tag { Id = tagId };
+            //    _uow.MarkAsUnChanged(tag);
+            //    question.Tags.Add(tag);
+            //}
 
             _uow.MarkAsChanged(question);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
-            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
+            //if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
+            //{
+            //    if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".docx"))
+            //    {
+            //        File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".docx");
+            //    }
+
+            //    if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".png"))
+            //    {
+            //        File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".png");
+            //    }
+
+            //    DeleteOptionsOfQuestion(previousFileName);
+
+            //    word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
+            //    while (source.Windows[1].Panes[1].Pages.Count < 0) ;
+            //    source.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
+            //    //while (source.Windows[1].Panes[1].Pages.Count < 0) ;
+            //    //var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+            //    ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", SitePath.GetQuestionAbsPath(questionViewModel.FileName));
+
+            //    File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
+
+            //    var target = app.Documents.Add();
+            //    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);
+
+            //    target.Close();
+            //    File.Delete(wordFilename);
+            //    source.Close();
+            //    app.Quit();
+            //}
+            //else if (question.AnswerNumber != questionViewModel.AnswerNumber)
+            //{
+            //    //save Doc file in temp memory
+            //    word.SaveAs(wordFilename);
+
+            //    // Open a doc file.
+            //    app = new Application();
+            //    source = app.Documents.Open(wordFilename);
+
+            //    DeleteOptionsOfQuestion(previousFileName);
+
+            //    var target = app.Documents.Add();
+            //    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+
+            //    target.Close();
+            //    File.Delete(wordFilename);
+            //    source.Close();
+            //    app.Quit();
+            //}
+
+            if (!question.Users.Any())
             {
-                if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".docx"))
-                {
-                    File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".docx");
-                }
-
-                if (File.Exists(SitePath.GetQuestionAbsPath(previousFileName) + ".png"))
-                {
-                    File.Delete(SitePath.GetQuestionAbsPath(previousFileName) + ".png");
-                }
-
-                DeleteOptionsOfQuestion(previousFileName);
-
-                word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                while (source.Windows[1].Panes[1].Pages.Count < 0) ;
-                source.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
-                //while (source.Windows[1].Panes[1].Pages.Count < 0) ;
-                //var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
-                ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", SitePath.GetQuestionAbsPath(questionViewModel.FileName));
-
-                File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
-
-                var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, question.AnswerNumber);
-
-                target.Close();
-                File.Delete(wordFilename);
-                source.Close();
-                app.Quit();
-            }
-            else if (question.AnswerNumber != questionViewModel.AnswerNumber)
-            {
-                //save Doc file in temp memory
-                word.SaveAs(wordFilename);
-
-                // Open a doc file.
-                app = new Application();
-                source = app.Documents.Open(wordFilename);
-
-                DeleteOptionsOfQuestion(previousFileName);
-
-                var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
-
-                target.Close();
-                File.Delete(wordFilename);
-                source.Close();
-                app.Quit();
+                var user = new User() {Id = userUpdateId};
+                _uow.MarkAsUnChanged(user);
+                question.Users.Add(user);
             }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);

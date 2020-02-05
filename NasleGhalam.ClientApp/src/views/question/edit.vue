@@ -37,6 +37,7 @@
           filter
           chips
           multiple
+          readonly
           v-model="question.TagIds"
           :options="tagStore.ddl"
           float-label="تگ ها"
@@ -50,6 +51,7 @@
         >
           گزینه صحیح
           <base-select
+          readonly
             :model="$v.question.AnswerNumber"
             :options="answersDdl"
             class="col-md-4"
@@ -61,7 +63,7 @@
 
     <div class="col-md-6 col-sm-12">
       <section class="row gutter-md">
-        <q-field class="col-sm-4">
+        <!-- <q-field class="col-sm-4">
           <q-uploader
             url
             float-label="فایل سوال"
@@ -70,7 +72,7 @@
             ref="wordFile"
             extensions=".doc,.docx"
           />
-        </q-field>
+        </q-field> -->
         <base-input
           v-if="showElement('QuestionNumber')"
           :model="$v.question.QuestionNumber"

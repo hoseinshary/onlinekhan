@@ -8,8 +8,8 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         public StudentConfig()
         {
             HasKey(x => x.Id);
-            Property(x => x.FatherName).HasMaxLength(50).IsRequired();
-            Property(x => x.Address).HasMaxLength(300).IsRequired();
+            Property(x => x.FatherName).HasMaxLength(50);
+            Property(x => x.Address).HasMaxLength(300);
         }
     }
 }

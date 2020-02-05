@@ -7,7 +7,7 @@ namespace NasleGhalam.DomainClasses.Entities
     {
         public User()
         {
-            Teachers = new HashSet<Teacher>();
+            
             Questions = new HashSet<Question>();
             QuestionJudges = new HashSet<QuestionJudge>();
             QuestionAnswers = new HashSet<QuestionAnswer>();
@@ -54,7 +54,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string ProfilePic { get; set; }
 
-        public ICollection<Teacher> Teachers { get; set; }
+        public Teacher Teacher { get; set; }
 
         public  Writer  Writer { get; set; }
 

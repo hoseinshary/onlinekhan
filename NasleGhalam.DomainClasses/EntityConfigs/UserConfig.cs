@@ -28,6 +28,10 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.CityId)
                 .WillCascadeOnDelete(false);
 
+
+            HasOptional(x => x.Teacher)
+                .WithRequired(x => x.User);
+
             HasOptional(x => x.Student)
                 .WithRequired(x => x.User);
 

@@ -12,13 +12,10 @@ namespace NasleGhalam.ViewModels.Question
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
         public int LookupId_AreaType { get; set; }
 
-        [Display(Name = "نام فایل")]
-        public string FileName { get; set; }
-
         [Display(Name = "سوال ترکیبی")]
         public bool IsHybrid { get; set; }
 
-        public int AnswerNumber { get; set; }
+  
 
 
         [Display(Name = "مبحث پاسخ صحیح")]
@@ -26,6 +23,5 @@ namespace NasleGhalam.ViewModels.Question
 
         public List<int> TopicIds { get; set; } = new List<int>();
 
-        public List<int> TagIds { get; set; } = new List<int>();
     }
 }

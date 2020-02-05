@@ -76,6 +76,18 @@
     <Compile Include="Migrations\202001171357433_questionupdateuser.Designer.cs">
       <DependentUpon>202001171357433_questionupdateuser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002020534435_teacherfix.cs" />
+    <Compile Include="Migrations\202002020534435_teacherfix.Designer.cs">
+      <DependentUpon>202002020534435_teacherfix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002020535461_teacherfix2.cs" />
+    <Compile Include="Migrations\202002020535461_teacherfix2.Designer.cs">
+      <DependentUpon>202002020535461_teacherfix2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002021120085_requerdfieldinteacher.cs" />
+    <Compile Include="Migrations\202002021120085_requerdfieldinteacher.Designer.cs">
+      <DependentUpon>202002021120085_requerdfieldinteacher.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -114,6 +126,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001171357433_questionupdateuser.resx">
       <DependentUpon>202001171357433_questionupdateuser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002020534435_teacherfix.resx">
+      <DependentUpon>202002020534435_teacherfix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002020535461_teacherfix2.resx">
+      <DependentUpon>202002020535461_teacherfix2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002021120085_requerdfieldinteacher.resx">
+      <DependentUpon>202002021120085_requerdfieldinteacher.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

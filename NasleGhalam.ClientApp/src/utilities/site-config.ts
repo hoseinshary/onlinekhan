@@ -20,6 +20,7 @@ export const QUESTION_ANSWER_JUDGE_URL = "/api/questionAnswerJudge";
 export const PUBLISHER_URL = "/api/publisher";
 export const EDUCATION_BOOK_URL = "/api/educationBook";
 export const STUDENT_URL = "/api/student";
+export const TEACHER_URL = "/api/teacher";
 export const WRITER_URL = "/api/writer";
 export const LESSON_USER_URL = "/api/lesson_User";
 export const LESSON_DEPARTMENT_URL = "/api/lessonDepartment";

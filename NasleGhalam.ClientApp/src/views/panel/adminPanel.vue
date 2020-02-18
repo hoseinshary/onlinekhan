@@ -35,7 +35,6 @@
             </q-card-actions>
           </q-card>
         </div>
-        
       </div>
       <div class="col-md-5">
         <q-card inline class>
@@ -56,20 +55,26 @@
           </q-card-media>
           <q-card-actions>
             <div class="q-pa-sm">
-
-            <br/>
-            <div>
-              <q-btn color="primary" label="ویرایش اطلاعات فردی" />
-            </div>
-            <br/>
-            <div>
-              <q-btn color="secondary" label="تعییر رمز عبور" />
-            </div>
-            <br/>
-            <div>
-              <q-btn color="warning" label="بارگذاری عکس پروفایل" />
-            </div>
-            <br/>
+              <br />
+              <div>
+                
+                <q-btn
+                  color="primary"
+                  v-if="canEdit"
+                  :label="`ویرایش اطلاعات فردی`"
+                  @click="showModalEdit"
+                />
+                <br />
+              </div>
+              <br />
+              <div>
+                <q-btn color="secondary" label="تعییر رمز عبور" />
+              </div>
+              <br />
+              <div>
+                <q-btn color="warning" label="بارگذاری عکس پروفایل" />
+              </div>
+              <br />
             </div>
           </q-card-actions>
         </q-card>
@@ -86,15 +91,21 @@ import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
-  components: {}
+  components: {
+     ModalEdit: () => import("./updateUser.vue")
+  }
 })
 export default class QuestionVue extends Vue {
   //#region ### data ###
   panelStore = vxm.panelStore;
-
+  userStore = vxm.userStore;
+  pageAccess = util.getAccess(this.userStore.modelName);
   //#endregion
 
   //#region ### computed ###
+    get canEdit() {
+    return this.pageAccess.indexOf("ویرایش") > -1;
+  }
 
   //#endregion
 
@@ -104,6 +115,12 @@ export default class QuestionVue extends Vue {
 
   //#region ### methods ###
 
+  showModalEdit(id) {
+    this.userStore.resetEdit();
+    this.userStore.getById(id).then(() => {
+      this.userStore.OPEN_MODAL_EDIT(true);
+    });
+  }
   //#endregion
 
   //#region ### hooks ###

@@ -37,7 +37,6 @@
           filter
           chips
           multiple
-          readonly
           v-model="question.TagIds"
           :options="tagStore.ddl"
           float-label="تگ ها"
@@ -51,7 +50,6 @@
         >
           گزینه صحیح
           <base-select
-          readonly
             :model="$v.question.AnswerNumber"
             :options="answersDdl"
             class="col-md-4"
@@ -63,7 +61,7 @@
 
     <div class="col-md-6 col-sm-12">
       <section class="row gutter-md">
-        <!-- <q-field class="col-sm-4">
+        <q-field class="col-sm-4" v-if="showElement('wordFile')">
           <q-uploader
             url
             float-label="فایل سوال"
@@ -72,7 +70,7 @@
             ref="wordFile"
             extensions=".doc,.docx"
           />
-        </q-field> -->
+        </q-field>
         <base-input
           v-if="showElement('QuestionNumber')"
           :model="$v.question.QuestionNumber"
@@ -104,7 +102,7 @@
           class="col-md-4"
           filter
         />
-        
+
         <base-select
           :model="$v.question.LookupId_QuestionRank"
           v-if="showElement('LookupId_QuestionRank')"
@@ -164,6 +162,7 @@
             <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
           </template>
         </base-field>
+
         <base-input
           v-if="showElement('Description')"
           :model="$v.question.Description"
@@ -269,7 +268,7 @@ export default class QuestionEditVue extends Vue {
       canEditTopicProp: false,
       canEditImportProp: false
     },
-     LookupId_QuestionRank: {
+    LookupId_QuestionRank: {
       canEditAdminProp: true,
       canEditTopicProp: false,
       canEditImportProp: false
@@ -288,6 +287,11 @@ export default class QuestionEditVue extends Vue {
       canEditAdminProp: true,
       canEditTopicProp: true,
       canEditImportProp: false
+    },
+    wordFile: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: true
     }
   };
   concatTopicArray: Array<string> = [];
@@ -359,6 +363,7 @@ export default class QuestionEditVue extends Vue {
     this.lookupStore.fillAuthorType();
     this.lookupStore.fillAreaType();
     this.writerStore.fillList();
+    
   }
 
   close() {

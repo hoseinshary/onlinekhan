@@ -313,6 +313,7 @@ export class QuestionStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
+    
     var wordFile = vm.$refs.wordFile;
     //var msg = "";
     // if (this.question.TopicIds && this.question.TopicIds.length == 0) {
@@ -337,7 +338,8 @@ export class QuestionStore extends VuexModule {
     //   return;
     // }
     var formData = new FormData();
-    formData.append(wordFile["name"], wordFile["files"][0]);
+    if(wordFile)
+      formData.append(wordFile["name"], wordFile["files"][0]);
     var newData = {
       Id: this.question.Id,
       QuestionNumber: this.question.QuestionNumber,

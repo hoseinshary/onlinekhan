@@ -18,6 +18,7 @@ export class TopicStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   topic: ITopic;
   private _topicList: Array<ITopic>;
+  private _topicListByLessonID: Array<ITopic>;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -39,6 +40,7 @@ export class TopicStore extends VuexModule {
     super();
 
     this.topic = util.cloneObject(DefaultTopic);
+    this._topicListByLessonID = [];
     this._topicList = [];
     this.qTreeData = {
       id: 0,
@@ -100,6 +102,27 @@ export class TopicStore extends VuexModule {
     };
   }
 
+  get treeDataByLessonId2() {
+    var list = this._topicListByLessonID
+        .map(x => ({
+          Id: x.Id,
+          label: x.Title,
+          ParentTopicId: x.ParentTopicId,
+          header: "custom",
+          displayPriority: x.DisplayPriority
+        }));
+      var tree = util.listToTree(
+        list,
+        "Id",
+        "ParentTopicId",
+        "displayPriority"
+      );
+      // set expanded list to show first level of tree
+      this.qTreeData.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
+
+      return tree;
+  }
+
   get treeDataByLessonIds() {
     return (lessonIds: Array<number>) => {
       var list = this._topicList
@@ -157,6 +180,11 @@ export class TopicStore extends VuexModule {
   }
 
   @mutation
+  private SET_LIST_BY_LESSON_ID(list: Array<ITopic>) {
+    this._topicListByLessonID = list;
+  }
+
+  @mutation
   private MODEL_CHANGED(changed: boolean) {
     this._modelChanged = changed;
   }
@@ -209,6 +237,16 @@ export class TopicStore extends VuexModule {
     } else {
       return Promise.resolve(this._topicList);
     }
+  }
+
+  @action()
+  async fillListByLessonId(id : number) {
+    return axios
+        .get(`${baseUrl}/GetAllByLessonId/${id}`)
+        .then((response: AxiosResponse<Array<ITopic>>) => {
+          this.SET_LIST_BY_LESSON_ID(response.data);
+          this.MODEL_CHANGED(false);
+        });
   }
 
   @action({ mode: "raw" })

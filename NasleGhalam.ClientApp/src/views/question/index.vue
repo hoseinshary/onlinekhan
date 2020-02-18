@@ -15,17 +15,9 @@
             @input="fillGrid()"
           />
           <br />
-          <q-checkbox
-            v-model="showJudged"
-            label="نمایش سوال های ارزیابی شده"
-            @input="fillGrid()"
-          />
+          <q-checkbox v-model="showJudged" label="نمایش سوال های ارزیابی شده" @input="fillGrid()" />
           <br />
-          <q-checkbox
-            v-model="showActived"
-            label="نمایش سوال های فعال سایت"
-            @input="fillGrid()"
-          />
+          <q-checkbox v-model="showActived" label="نمایش سوال های فعال سایت" @input="fillGrid()" />
         </section>
 
         <q-select
@@ -65,7 +57,7 @@
 
           <q-tree
             v-show="!showWithoutTopic"
-            :nodes="topicTreeData"
+            :nodes="topicStore.treeDataByLessonId2"
             :expanded.sync="topicTree.expanded"
             :selected.sync="topicTree.selected"
             :ticked.sync="topicTree.leafTicked"
@@ -250,12 +242,13 @@ export default class QuestionVue extends Vue {
   }
 
   get topicTreeData() {
-    var treeData = this.topicStore.treeDataByLessonId(this.lessonId);
-    if (this.topicTree.setToFirstLevel) {
-      this.topicTree.expanded = this.topicTree.firstLevel;
-      this.topicTree.setToFirstLevel = false;
-    }
-    return treeData;
+    // var treeData = this.topicStore.treeDataByLessonId(this.lessonId);
+    // if (this.topicTree.setToFirstLevel) {
+    //   this.topicTree.expanded = this.topicTree.firstLevel;
+    //   this.topicTree.setToFirstLevel = false;
+    // }
+    // return treeData;
+    return this.topicStore.treeDataByLessonId2;
   }
   //#endregion
 
@@ -279,7 +272,6 @@ export default class QuestionVue extends Vue {
     }
   }
 
-  
   @Watch("showWithoutTopic")
   questionShowWithoutTopicChanged(newVal) {
     if (newVal) {
@@ -312,7 +304,6 @@ export default class QuestionVue extends Vue {
       this.showNoJudgement = false;
     }
   }
-  
 
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
@@ -346,9 +337,12 @@ export default class QuestionVue extends Vue {
 
   lessonIdChanged(val) {
     this.lessonId = val;
-    this.topicTree.setToFirstLevel = true;
-    // clear topicTree leaf
-    utilities.clearArray(this.topicTree.leafTicked);
+
+    this.topicStore.fillListByLessonId(val).then(() => {
+      this.topicTree.setToFirstLevel = true;
+      // clear topicTree leaf
+      utilities.clearArray(this.topicTree.leafTicked);
+    });
   }
 
   fillGrid() {
@@ -357,9 +351,8 @@ export default class QuestionVue extends Vue {
       topicIds: this.topicTree.leafTicked,
       showNoJudgement: this.showNoJudgement,
       showWithoutTopic: this.showWithoutTopic,
-      showJudged : this.showJudged,
+      showJudged: this.showJudged,
       showActived: this.showActived
-
     });
   }
 
@@ -384,7 +377,7 @@ export default class QuestionVue extends Vue {
   created() {
     this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
-      this.topicStore.fillList();
+      //this.topicStore.fillList();
       this.educationTree.expanded = this.educationTree.firstLevel;
     });
   }

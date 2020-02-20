@@ -4,20 +4,32 @@
       <div class="col-md-4 col-lg-3">
         <section class="s-border s-spacing">
           <q-checkbox
+            v-if="showElement('showNoJudgement')"
             v-model="showNoJudgement"
             label="نمایش سوال های بدون ارزیابی"
             @input="fillGrid()"
           />
           <br />
           <q-checkbox
+            v-if="showElement('showWithoutTopic')"
             v-model="showWithoutTopic"
             label="نمایش سوال های بدون مبحث"
             @input="fillGrid()"
           />
           <br />
-          <q-checkbox v-model="showJudged" label="نمایش سوال های ارزیابی شده" @input="fillGrid()" />
+          <q-checkbox
+            v-model="showJudged"
+            v-if="showElement('showJudged')"
+            label="نمایش سوال های ارزیابی شده"
+            @input="fillGrid()"
+          />
           <br />
-          <q-checkbox v-model="showActived" label="نمایش سوال های فعال سایت" @input="fillGrid()" />
+          <q-checkbox
+            v-model="showActived"
+            v-if="showElement('showActived')"
+            label="نمایش سوال های فعال سایت"
+            @input="fillGrid()"
+          />
         </section>
 
         <q-select
@@ -132,7 +144,7 @@
     <modal-edit
       v-if="canEdit"
       :canEditAdminProp="canEditAdmin"
-      :canEditTopicProp="canEditTopic"
+      :canEditExpertProp="canEditTopic"
       :canEditImportProp="canEditImport"
       :topicTreeDataProp="topicTreeData"
       :lessonIdProp="lessonId"
@@ -144,7 +156,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
@@ -161,6 +173,8 @@ import utilities from "src/utilities";
 })
 export default class QuestionVue extends Vue {
   //#region ### data ###
+ 
+
   questionStore = vxm.questionStore;
   topicStore = vxm.topicStore;
   educationTreeStore = vxm.educationTreeStore;
@@ -196,6 +210,30 @@ export default class QuestionVue extends Vue {
   showWithoutTopic = false;
   showJudged = false;
   showActived = false;
+
+  questionFilterAccessElement = {
+    showNoJudgement: {
+      canEditAdminProp: true,
+      canEditExpertProp: true,
+      canEditImportProp: true
+    },
+    showWithoutTopic: {
+      canEditAdminProp: true,
+      canEditExpertProp: false,
+      canEditImportProp: true
+    },
+    showJudged: {
+      canEditAdminProp: true,
+      canEditExpertProp: false,
+      canEditImportProp: false
+    },
+    showActived: {
+      canEditAdminProp: true,
+      canEditExpertProp: false,
+      canEditImportProp: false
+    }
+  };
+
   //#endregion
 
   //#region ### computed ###
@@ -249,6 +287,33 @@ export default class QuestionVue extends Vue {
     // }
     // return treeData;
     return this.topicStore.treeDataByLessonId2;
+
+    
+  }
+
+  
+  get canShowAdminFilter() {
+    debugger;
+    return this.pageAccess.indexOf("مشاهده فیلتر ادمین") > -1;
+  }
+
+  get canShowImportFilter() {
+    return this.pageAccess.indexOf("مشاهده فیلتر ورود") > -1;
+  }
+
+
+  get canShowExpertFilter() {
+    return this.pageAccess.indexOf("مشاهده فیلتر کارشناس") > -1;
+  }
+
+  get activeAccess() {
+    if (this.canShowAdminFilter) {
+      return "canEditAdminProp";
+    } else if (this.canShowImportFilter) {
+      return "canEditImportProp";
+    } else {
+      return "canEditExpertProp";
+    }
   }
   //#endregion
 
@@ -317,6 +382,12 @@ export default class QuestionVue extends Vue {
   //#endregion
 
   //#region ### methods ###
+
+  showElement(elementName) {
+    var elem = this.questionFilterAccessElement[elementName];
+    return elem && elem[this.activeAccess];
+  }
+
   showModalCreate() {
     this.questionStore.resetCreate();
     this.questionStore.OPEN_MODAL_CREATE(true);

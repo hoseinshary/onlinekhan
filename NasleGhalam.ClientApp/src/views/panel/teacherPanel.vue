@@ -55,13 +55,16 @@
             </div>
             <br/>
             <div>
-              <q-btn color="warning" label="بارگذاری عکس پروفایل" />
+              <q-btn color="warning" label="بارگذاری عکس پروفایل" 
+               @click="showModalUpdateUserImage"/>
             </div>
             <br/>
             </div>
           </q-card-actions>
         </q-card>
       </div>
+
+        <modal-user-update-image ></modal-user-update-image>
     </section>
   </section>
 </template>
@@ -74,12 +77,15 @@ import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
-  components: {}
+  components: {
+
+    ModalUserUpdateImage: () => import("./updateUserImage.vue")
+  }
 })
 export default class QuestionVue extends Vue {
   //#region ### data ###
+  userStore = vxm.userStore;
   panelStore = vxm.panelStore;
-
   //#endregion
 
   //#region ### computed ###
@@ -91,6 +97,10 @@ export default class QuestionVue extends Vue {
   //#endregion
 
   //#region ### methods ###
+ showModalUpdateUserImage() {
+    //this.userStore.resetCreate();
+    this.userStore.OPEN_MODAL_UPDATE_USER_IMAGE(true);
+  }
 
   //#endregion
 

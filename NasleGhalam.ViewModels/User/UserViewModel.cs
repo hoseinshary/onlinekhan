@@ -39,6 +39,8 @@ namespace NasleGhalam.ViewModels.User
         public string ProfilePic { get; set; }
 
         public string UserPicturePath => $"/Api/User/GetPictureFile/{ProfilePic}".ToFullRelativePath();
+
+        
     }
 }
 

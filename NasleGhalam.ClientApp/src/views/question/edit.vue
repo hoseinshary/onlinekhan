@@ -364,6 +364,7 @@ export default class QuestionEditVue extends Vue {
     this.lookupStore.fillAreaType();
     this.writerStore.fillList();
     
+    
   }
 
   close() {

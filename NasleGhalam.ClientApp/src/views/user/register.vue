@@ -13,7 +13,7 @@
                   hide-upload-button
                   auto-expand
                   ref="fileUpload"
-                  extensions=".jpg,.jpeg,.png"
+                  extensions=".jpg"
                 />
               </q-field>
               <div class="col-12"></div>

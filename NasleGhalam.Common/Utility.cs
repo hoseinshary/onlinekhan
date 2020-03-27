@@ -254,6 +254,12 @@ namespace NasleGhalam.Common
                     || extension == ".png" || extension == ".bmp" || extension == ".icn");
         }
 
+        public static bool CheckImageProfileExtension(string extension)
+        {
+            extension = extension.ToLower();
+            return (extension == ".jpg");
+        }
+
         public static bool CheckWordFileExtension(string extension)
         {
             extension = extension.ToLower();

@@ -8,6 +8,7 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 import IMessageResult from "src/models/IMessageResult";
+//import IAssay ,{DefaultAssayCreate} from "src/models/IAssay";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
 import { ASSAY_URL as baseUrl } from "src/utilities/site-config";
@@ -19,6 +20,7 @@ export class AssayStore extends VuexModule {
   assayCreate: AssayCreate;
   private _indexVue: Vue;
   private _assayVue: Vue;
+  private _assayList : Vue;
 
   /**
    * initialize data

@@ -34,6 +34,7 @@
 
         <q-select
           v-model="educationTree.id"
+          v-if="showElementTree('educationTree_GradeDdl')"
           :options="educationTree_GradeDdl"
           float-label="فیلتر درخت آموزش با مقطع"
           clearable
@@ -41,6 +42,7 @@
         />
 
         <q-tree
+          v-if="showElementTree('educationTreeData')"
           :nodes="educationTreeData"
           :expanded.sync="educationTree.expanded"
           :ticked.sync="educationTree.leafTicked"
@@ -173,7 +175,6 @@ import utilities from "src/utilities";
 })
 export default class QuestionVue extends Vue {
   //#region ### data ###
- 
 
   questionStore = vxm.questionStore;
   topicStore = vxm.topicStore;
@@ -234,6 +235,15 @@ export default class QuestionVue extends Vue {
     }
   };
 
+  treeAccessElement = {
+    educationTreeData: {
+      canEditAdminProp: true
+    },
+    educationTree_GradeDdl: {
+      canEditAdminProp: true
+    }
+  };
+
   //#endregion
 
   //#region ### computed ###
@@ -287,13 +297,9 @@ export default class QuestionVue extends Vue {
     // }
     // return treeData;
     return this.topicStore.treeDataByLessonId2;
-
-    
   }
 
-  
   get canShowAdminFilter() {
-    debugger;
     return this.pageAccess.indexOf("مشاهده فیلتر ادمین") > -1;
   }
 
@@ -301,9 +307,13 @@ export default class QuestionVue extends Vue {
     return this.pageAccess.indexOf("مشاهده فیلتر ورود") > -1;
   }
 
-
   get canShowExpertFilter() {
     return this.pageAccess.indexOf("مشاهده فیلتر کارشناس") > -1;
+  }
+
+  get canShowTree() {
+    debugger;
+    return this.pageAccess.indexOf("مشاهده درخت پایه") > -1;
   }
 
   get activeAccess() {
@@ -311,6 +321,14 @@ export default class QuestionVue extends Vue {
       return "canEditAdminProp";
     } else if (this.canShowImportFilter) {
       return "canEditImportProp";
+    } else {
+      return "canEditExpertProp";
+    }
+  }
+
+    get activeAccessTree() {
+    if (this.canShowTree) {
+      return "canEditAdminProp";
     } else {
       return "canEditExpertProp";
     }
@@ -388,6 +406,10 @@ export default class QuestionVue extends Vue {
     return elem && elem[this.activeAccess];
   }
 
+  showElementTree(elementName) {
+    var elem = this.treeAccessElement[elementName];
+    return elem && elem[this.activeAccessTree];
+  }
   showModalCreate() {
     this.questionStore.resetCreate();
     this.questionStore.OPEN_MODAL_CREATE(true);
@@ -448,7 +470,7 @@ export default class QuestionVue extends Vue {
   created() {
     this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
-      //this.topicStore.fillList();
+      this.topicStore.fillList();
       this.educationTree.expanded = this.educationTree.firstLevel;
     });
   }

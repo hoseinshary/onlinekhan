@@ -56,6 +56,23 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
+        /// گرفتن  کاربر با آی دی
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userRoleLevel"></param>
+        /// <returns></returns>
+        public UserUpdateViewModel GetByIdPrivate(int id, byte userRoleLevel)
+        {
+            return _users
+                .Where(current => current.Id == id)
+                .Where(current => current.Role.Level > userRoleLevel)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<UserUpdateViewModel>)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
         /// گرفتن همه کاربر ها
         /// </summary>
         /// <param name="userRoleLevel"></param>
@@ -380,5 +397,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             return loginResult;
         }
+
+
+      
     }
 }

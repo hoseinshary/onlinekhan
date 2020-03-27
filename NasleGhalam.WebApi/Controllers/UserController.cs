@@ -51,7 +51,7 @@ namespace NasleGhalam.WebApi.Controllers
 
         [HttpPost]
         [CheckModelValidation]
-        [CheckImageValidationNotRequired("img", 1024)]
+        [CheckImageValidationProfileNotRequired("img", 1024)]
         public IHttpActionResult Register([FromUri]UserCreateViewModel userViewModel)
         {
             var postedFile = HttpContext.Current.Request.Files.Get("img");
@@ -106,7 +106,7 @@ namespace NasleGhalam.WebApi.Controllers
         public HttpResponseMessage GetPictureFile(string id = null)
         {
             var stream = new MemoryStream();
-            id += ".png";
+            id += ".jpg";
             var filestraem = File.OpenRead(SitePath.GetUserAbsPath(id));
             filestraem.CopyTo(stream);
 
@@ -124,6 +124,33 @@ namespace NasleGhalam.WebApi.Controllers
             filestraem.Dispose();
             stream.Dispose();
             return result;
+        }
+
+
+        [HttpPost]
+        [CheckModelValidation]
+        [CheckImageValidationProfileNotRequired("img", 1024)]
+        public IHttpActionResult UpdateUserImage()
+        {
+            var postedFile = HttpContext.Current.Request.Files.Get("img");
+            if (postedFile != null && postedFile.ContentLength > 0)
+            {
+                /*{Path.GetExtension(postedFile.FileName)}*/
+                UserUpdateViewModel userViewModel = _userService.GetByIdPrivate(Request.GetUserId(), Request.GetRoleLevel());
+                var previusFile = userViewModel.ProfilePic;
+                userViewModel.ProfilePic = $"{Guid.NewGuid()}";
+
+                var msgRes = _userService.Update(userViewModel,Request.GetRoleLevel());
+
+                if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(userViewModel.ProfilePic))
+                {
+                    postedFile?.SaveAs($"{SitePath.UserProfileRelPath}{userViewModel.ProfilePic}{Path.GetExtension(postedFile.FileName)}".ToAbsolutePath());
+                    if()
+                }
+                return Ok(msgRes);
+            }
+
+            return NotFound();
         }
     }
 }

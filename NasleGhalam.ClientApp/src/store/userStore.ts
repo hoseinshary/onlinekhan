@@ -18,7 +18,7 @@ import router from "src/router";
 
 @Module({ namespacedPath: "userStore/" })
 export class UserStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean };
+  openModal: { create: boolean; edit: boolean; delete: boolean ; update_user_image : boolean ; update_user : boolean };
   user: IUser;
   loginUser: ILogin;
   private _userList: Array<IUser>;
@@ -27,6 +27,7 @@ export class UserStore extends VuexModule {
   private _createVue: Vue;
   private _registerVue: Vue;
   private _editVue: Vue;
+  private _updateUserImage : Vue;
 
   /**
    * initialize data
@@ -41,7 +42,9 @@ export class UserStore extends VuexModule {
     this.openModal = {
       create: false,
       edit: false,
-      delete: false
+      delete: false,
+      update_user_image : false ,
+      update_user : false
     };
   }
 
@@ -146,7 +149,15 @@ export class UserStore extends VuexModule {
     this._editVue = vm;
   }
 
-  
+  @mutation
+  SET_UPDATE_USER_IMAGE_VUE(vm: Vue) {
+    this._updateUserImage = vm;
+  }
+
+  @mutation
+  OPEN_MODAL_UPDATE_USER_IMAGE(open: boolean) {
+    this.openModal.update_user_image = open;
+  }
 
   //#endregion
 

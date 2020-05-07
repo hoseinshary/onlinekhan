@@ -20,7 +20,7 @@
             <q-card-main>{{panelStore.panel.CountAllActiveQuestions}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="جزییرات" />
+              <q-btn flat color="primary" label="جزییات" />
             </q-card-actions>
           </q-card>
         </div>
@@ -31,7 +31,7 @@
             <q-card-main>{{panelStore.panel.CountAllJudges}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="جزییرات" />
+              <q-btn flat color="primary" label="جزییات" />
             </q-card-actions>
           </q-card>
         </div>
@@ -57,28 +57,33 @@
             <div class="q-pa-sm">
               <br />
               <div>
-                
+                <q-btn color="primary" label="ویرایش اطلاعات فردی" @click="showModalUpdateUser" />
+              </div>
+              <br />
+              <div>
                 <q-btn
-                  color="primary"
-                  v-if="canEdit"
-                  :label="`ویرایش اطلاعات فردی`"
-                  @click="showModalEdit"
+                  color="secondary"
+                  label="تعییر رمز عبور"
+                  @click="showModalUpdateUserPassword"
                 />
-                <br />
               </div>
               <br />
               <div>
-                <q-btn color="secondary" label="تعییر رمز عبور" />
-              </div>
-              <br />
-              <div>
-                <q-btn color="warning" label="بارگذاری عکس پروفایل" />
+                <q-btn
+                  color="warning"
+                  label="بارگذاری عکس پروفایل"
+                  @click="showModalUpdateUserImage"
+                />
               </div>
               <br />
             </div>
           </q-card-actions>
         </q-card>
       </div>
+
+      <modal-user-update-image></modal-user-update-image>
+      <modal-user-update-password></modal-user-update-password>
+      <modal-user-update></modal-user-update>
     </section>
   </section>
 </template>
@@ -91,21 +96,20 @@ import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
-  components: {
-     ModalEdit: () => import("./updateUser.vue")
+ components: {
+    ModalUserUpdateImage: () => import("./updateUserImage.vue"),
+    ModalUserUpdate: () => import("./updateUser.vue"),
+    ModalUserUpdatePassword: () => import("./updateUserPassword.vue")
   }
 })
 export default class QuestionVue extends Vue {
   //#region ### data ###
+ userStore = vxm.userStore;
   panelStore = vxm.panelStore;
-  userStore = vxm.userStore;
-  pageAccess = util.getAccess(this.userStore.modelName);
   //#endregion
 
   //#region ### computed ###
-    get canEdit() {
-    return this.pageAccess.indexOf("ویرایش") > -1;
-  }
+
 
   //#endregion
 
@@ -115,11 +119,23 @@ export default class QuestionVue extends Vue {
 
   //#region ### methods ###
 
-  showModalEdit(id) {
-    this.userStore.resetEdit();
-    this.userStore.getById(id).then(() => {
-      this.userStore.OPEN_MODAL_EDIT(true);
+ showModalUpdateUserImage() {
+    //this.userStore.resetCreate();
+
+    this.userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(true);
+  }
+
+  showModalUpdateUser() {
+    //this.userStore.resetCreate();
+    this.userStore.getUserData().then(() => {
+      this.userStore.OPEN_MODAL_UPDATE_USER_VUE(true);
     });
+  }
+
+  showModalUpdateUserPassword() {
+    //this.userStore.resetCreate();
+
+    this.userStore.OPEN_MODAL_UPDATE_USER_PASSWORD_VUE(true);
   }
   //#endregion
 

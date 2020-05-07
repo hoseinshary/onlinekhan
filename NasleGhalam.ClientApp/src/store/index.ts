@@ -46,7 +46,7 @@ import { AssayStore, assayStore } from "./assayStore";
 import { ResumeStore, resumeStore } from "./resumeStore";
 import { PackageStore, packageStore } from "./packageStore";
 import { PanelStore, panelStore } from "./panelStore";
-import { ReportStore, reportStore } from "./reportStore";
+import { ReportStore, reportStore } from "./Report/Report_QuestionOfEachLessonStore";
 
 Vue.use(Vuex);
 

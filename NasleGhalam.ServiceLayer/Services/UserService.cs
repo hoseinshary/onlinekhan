@@ -61,16 +61,35 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="id"></param>
         /// <param name="userRoleLevel"></param>
         /// <returns></returns>
-        public UserUpdateViewModel GetByIdPrivate(int id, byte userRoleLevel)
+        public UserViewModel GetByIdPrivate(int id, byte userRoleLevel)
         {
             return _users
+                .Include(current => current.City)
+                .Include(current => current.Role)
                 .Where(current => current.Id == id)
-                .Where(current => current.Role.Level > userRoleLevel)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<UserUpdateViewModel>)
+                .Select(Mapper.Map<UserViewModel>)
                 .FirstOrDefault();
         }
+
+
+        /// <summary>
+        /// گرفتن همه کاربر های ناظر
+        /// </summary>
+        /// <param name="userRoleLevel"></param>
+        /// <param name="userType"></param>
+        /// <returns></returns>
+        public IList<UserViewModel> GetAllSupervisors()
+        {
+            return _users
+                .Where(current => current.Role.Level == 3)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<UserViewModel>)
+                .ToList();
+        }
+
 
         /// <summary>
         /// گرفتن همه کاربر ها
@@ -135,26 +154,26 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 // user.RoleId =2015;
             }
-            else if(userViewModel.RoleId == -2)
+            else if (userViewModel.RoleId == -2)
             {
-              //دانش آموز
+                //دانش آموز
 
                 //var student = Mapper.Map<Student>(userViewModel);
                 var student = new Student();
                 student.User = user;
                 student.User.LastLogin = DateTime.Now;
-                
+
                 student.User.RoleId = 2005;
                 _students.Add(student);
 
-              
 
-                
 
-              
-                
+
+
+
+
             }
-            else if(userViewModel.RoleId == -3)
+            else if (userViewModel.RoleId == -3)
             {
                 //مشاور
                 //user.RoleId = 2010;
@@ -170,7 +189,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //user.IsActive = true;
             //user.IsAdmin = false;
-            
+
 
             //user.LastLogin = DateTime.Now;
             //_users.Add(user);
@@ -291,6 +310,170 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
+        /// ویرایش کاربر
+        /// </summary>
+        /// <param name="userViewModel"></param>
+        /// <param name="userRoleLevel"></param>
+        /// <returns></returns>
+        public ClientMessageResult UpdateUser(UserUpdateViewModel userViewModel, byte userRoleLevel)
+        {
+            // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
+            var role = _roleService.Value.GetByIdPrivate(userViewModel.RoleId, userRoleLevel);
+            if (role == null)
+            {
+                return new ClientMessageResult()
+                {
+                    Message = "نقش یافت نگردید",
+                    MessageType = MessageType.Error
+                };
+            }
+
+            if (role.Level < userRoleLevel)
+            {
+                return new ClientMessageResult()
+                {
+                    Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
+                    MessageType = MessageType.Error
+                };
+            }
+
+            var user = Mapper.Map<UserUpdateViewModel, User>(userViewModel);
+            if (string.IsNullOrEmpty(user.Password))
+            {
+                _uow.ExcludeFieldsFromUpdate(user, x => x.Password, x => x.LastLogin);
+                _uow.ValidateOnSaveEnabled(false);
+            }
+            else
+            {
+                _uow.ExcludeFieldsFromUpdate(user, x => x.LastLogin);
+            }
+
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Obj = GetById(user.Id, userRoleLevel);
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_NationalNo"))
+            {
+                clientResult.Message = "کد ملی تکراری می باشد";
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_Username"))
+            {
+                clientResult.Message = "نام کاربری تکراری می باشد";
+            }
+
+            return clientResult;
+        }
+
+
+
+        /// <summary>
+        /// تغییر رمز عبور
+        /// </summary>
+        /// <param name="userViewModel"></param>
+        /// <param name="userRoleLevel"></param>
+        /// <returns></returns>
+        public ClientMessageResult UpdateUserPassword(UserChangePasswordViewModel userViewModel, byte userRoleLevel, int userID)
+        {
+
+            var user = _users
+                .FirstOrDefault(current => current.Id == userID);
+
+            if (user != null && userViewModel.OldPassword != user.Password)
+            {
+                return new ClientMessageResult()
+                {
+                    Message = "رمز عبور اشتباه است.",
+                    MessageType = MessageType.Error
+                };
+            }
+
+            if (userViewModel.NewPassword == userViewModel.ReNewPassword)
+            {
+                user.Password = userViewModel.NewPassword;
+            }
+            else
+            {
+                return new ClientMessageResult()
+                {
+                    Message = "تکرار رمز عبور برابر نیست.",
+                    MessageType = MessageType.Error
+                };
+            }
+            _uow.MarkAsChanged(user);
+            _uow.ExcludeFieldsFromUpdate(user, x => x.LastLogin);
+            _uow.UpdateFields(user, x => x.Password);
+           
+
+
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                if (user != null) clientResult.Obj = GetById(user.Id, userRoleLevel);
+            }
+          
+
+            return clientResult;
+        }
+
+        /// <summary>
+        /// ویرایش کاربر
+        /// </summary>
+        /// <param name="userViewModel"></param>
+        /// <param name="userRoleLevel"></param>
+        /// <returns></returns>
+        public ClientMessageResult UpdateImage(UserViewModel userViewModel, byte userRoleLevel)
+        {
+            // سطح نقش باید بزرگتر از سطح نقش کاربر ویرایش کننده باشد
+            var role = _roleService.Value.GetByIdPrivate(userViewModel.RoleId, userRoleLevel);
+            if (role == null)
+            {
+                return new ClientMessageResult()
+                {
+                    Message = "نقش یافت نگردید",
+                    MessageType = MessageType.Error
+                };
+            }
+
+            if (role.Level < userRoleLevel)
+            {
+                return new ClientMessageResult()
+                {
+                    Message = $"سطح نقش باید بزرگتر از ({userRoleLevel}) باشد",
+                    MessageType = MessageType.Error
+                };
+            }
+
+            var user = Mapper.Map<UserViewModel, User>(userViewModel);
+            _uow.MarkAsChanged(user);
+            _uow.UpdateFields(user, x => x.ProfilePic);
+            _uow.ExcludeFieldsFromUpdate(user, x => x.Password, x => x.LastLogin);
+            _uow.ValidateOnSaveEnabled(false);
+
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Obj = GetById(user.Id, userRoleLevel);
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_NationalNo"))
+            {
+                clientResult.Message = "کد ملی تکراری می باشد";
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_Username"))
+            {
+                clientResult.Message = "نام کاربری تکراری می باشد";
+            }
+
+            return clientResult;
+        }
+
+        /// <summary>
         /// حذف کاربر
         /// </summary>
         /// <param name="id"></param>
@@ -360,7 +543,7 @@ namespace NasleGhalam.ServiceLayer.Services
                         }
                         else
                         {
-                            
+
                             foreach (var item in loginResult.SubMenus)
                             {
                                 if (item.EnName == "/User")
@@ -399,6 +582,6 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
-      
+
     }
 }

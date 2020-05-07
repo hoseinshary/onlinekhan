@@ -107,6 +107,13 @@
         filter
       />
       <base-select
+        :model="$v.question.SupervisorUserId"
+        :options="userStore.ddl"
+        class="col-md-4"
+        filter
+      />
+
+      <base-select
         :model="$v.question.LookupId_AreaType"
         :options="lookupStore.areaTypeDdl"
         class="col-md-4"
@@ -154,6 +161,7 @@ export default class QuestionCreateVue extends Vue {
   topicStore = vxm.topicStore;
   question = vxm.questionStore.question;
   writerStore = vxm.writerStore;
+  userStore = vxm.userStore;
   topicFilter = "";
   concatTopicArray: Array<string> = [];
   //#endregion
@@ -184,6 +192,7 @@ export default class QuestionCreateVue extends Vue {
     this.lookupStore.fillAreaType();
     this.lookupStore.fillQuestionRank();
     this.writerStore.fillList();
+    this.userStore.fillListSupervisor();
   }
   //#endregion
 

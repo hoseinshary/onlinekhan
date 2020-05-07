@@ -3,6 +3,7 @@ import ITopic from "./ITopic";
 import IQuestionAnswer from "./IQuestionAnswer";
 import ILookup, { DefaultLookup } from "./ILookup";
 import IWriter, { DefaultWriter } from "./IWriter";
+import IUser, { DefaultUser } from "./IUser";
 
 export default interface IQuestion {
   Id: number;
@@ -12,6 +13,7 @@ export default interface IQuestion {
   UseEvaluation: boolean;
   IsStandard: boolean;
   WriterId: number;
+  SupervisorUserId : number;
   ResponseSecond: number;
   Description: string;
   FileName: string;
@@ -29,12 +31,14 @@ export default interface IQuestion {
   LookupId_QuestionRank: number;
   Lookup_AreaType?: ILookup;
   Writer?: IWriter;
+  SupervisorUser?: IUser;
   QuestionOptions?: Array<IQuestionOption>;
   QuestionAnswers?: Array<IQuestionAnswer>;
   Topics?: Array<ITopic>;
   Tags?: Array<ITopic>;
   TopicIds?: Array<number>;
   TagIds?: Array<number>;
+  IsDelete : boolean;
 }
 
 export const DefaultQuestion: IQuestion = {
@@ -45,6 +49,7 @@ export const DefaultQuestion: IQuestion = {
   UseEvaluation: false,
   IsStandard: false,
   WriterId: 0,
+  SupervisorUserId: 0,
   ResponseSecond: 0,
   Description: "",
   FileName: "",
@@ -62,10 +67,13 @@ export const DefaultQuestion: IQuestion = {
   LookupId_QuestionRank: 1063,
   Lookup_AreaType: DefaultLookup,
   Writer: DefaultWriter,
+  SupervisorUser : DefaultUser,
   QuestionOptions: [],
   QuestionAnswers: [],
   Topics: [],
   Tags: [],
   TopicIds: [],
-  TagIds: []
+  TagIds: [],
+  IsDelete : false,
+
 };

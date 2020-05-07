@@ -312,7 +312,7 @@ export default class QuestionVue extends Vue {
   }
 
   get canShowTree() {
-    debugger;
+    
     return this.pageAccess.indexOf("مشاهده درخت پایه") > -1;
   }
 

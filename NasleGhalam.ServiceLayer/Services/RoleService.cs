@@ -42,6 +42,22 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
+        /// گرفتن  نقش با آی دی
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userRoleLevel"></param>
+        /// <returns></returns>
+        public RoleViewModel GetByIdPrivate(int id, byte userRoleLevel)
+        {
+            return _roles
+                .Where(current => current.Id == id)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<RoleViewModel>)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
         /// گرفتن همه نقش ها
         /// </summary>
         /// <param name="userRoleLevel"></param>

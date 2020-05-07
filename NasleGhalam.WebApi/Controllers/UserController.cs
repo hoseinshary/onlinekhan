@@ -32,6 +32,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_userService.GetAll(Request.GetRoleLevel(), userType));
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
+        public IHttpActionResult GetAllSupervisors()
+        {
+            return Ok(_userService.GetAllSupervisors());
+        }
+
         [HttpGet, CheckUserAccess(ActionBits.WriterCreateAccess, ActionBits.WriterCreateAccess)]
         public IHttpActionResult Search(string nationalNo, string family, string name)
         {
@@ -42,6 +48,17 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult GetById(int id)
         {
             var user = _userService.GetById(id, Request.GetRoleLevel());
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.PanelAdminReadAccess , ActionBits.PanelTeacherReadAccess , ActionBits.PanelExpertReadAccess)]
+        public IHttpActionResult GetUserData()
+        {
+            var user = _userService.GetByIdPrivate(Request.GetUserId(), Request.GetRoleLevel());
             if (user == null)
             {
                 return NotFound();
@@ -88,6 +105,25 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(msgRes);
         }
 
+        [HttpPost]
+        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess)]
+        [CheckModelValidation]
+        public IHttpActionResult UpdateUser(UserUpdateViewModel userViewModel)
+        {
+            var msgRes = _userService.UpdateUser(userViewModel, Request.GetRoleLevel());
+            return Ok(msgRes);
+        }
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess)]
+        [CheckModelValidation]
+        public IHttpActionResult UpdateUserPassword(UserChangePasswordViewModel userViewModel)
+        {
+            var msgRes = _userService.UpdateUserPassword(userViewModel, Request.GetRoleLevel() , Request.GetUserId());
+            return Ok(msgRes);
+        }
+
+
         [HttpPost, CheckUserAccess(ActionBits.UserDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
@@ -129,23 +165,30 @@ namespace NasleGhalam.WebApi.Controllers
 
         [HttpPost]
         [CheckModelValidation]
-        [CheckImageValidationProfileNotRequired("img", 1024)]
+        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess)]
+        [CheckImageValidationProfileNotRequired("img", 2048)]
         public IHttpActionResult UpdateUserImage()
         {
             var postedFile = HttpContext.Current.Request.Files.Get("img");
             if (postedFile != null && postedFile.ContentLength > 0)
             {
                 /*{Path.GetExtension(postedFile.FileName)}*/
-                UserUpdateViewModel userViewModel = _userService.GetByIdPrivate(Request.GetUserId(), Request.GetRoleLevel());
+                UserViewModel userViewModel = _userService.GetByIdPrivate(Request.GetUserId(), Request.GetRoleLevel());
                 var previusFile = userViewModel.ProfilePic;
                 userViewModel.ProfilePic = $"{Guid.NewGuid()}";
 
-                var msgRes = _userService.Update(userViewModel,Request.GetRoleLevel());
+                var msgRes = _userService.UpdateImage(userViewModel,Request.GetRoleLevel());
 
                 if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(userViewModel.ProfilePic))
                 {
                     postedFile?.SaveAs($"{SitePath.UserProfileRelPath}{userViewModel.ProfilePic}{Path.GetExtension(postedFile.FileName)}".ToAbsolutePath());
-                    if()
+                    if (File.Exists(
+                        $"{SitePath.UserProfileRelPath}{previusFile}{Path.GetExtension(postedFile.FileName)}"
+                            .ToAbsolutePath()))
+                    {
+                        File.Delete($"{SitePath.UserProfileRelPath}{previusFile}{Path.GetExtension(postedFile.FileName)}"
+                            .ToAbsolutePath());
+                    }
                 }
                 return Ok(msgRes);
             }

@@ -12,11 +12,11 @@
         >
           <q-icon name="menu" />
         </q-btn>
-        <div class="logo"></div>
+        <router-link to ="/panel/adminpanel" class="logo" > </router-link>
       </q-toolbar>
 
       <q-toolbar class="toolbar-header2">
-        <img src="/assets/img/header/default.png" class="header-image" alt="header image" />
+        <router-link to ="/panel/adminpanel" ><img src="/assets/img/header/default.png" class="header-image" alt="header image" /></router-link>
         <q-toolbar-title>{{$q.localStorage.get.item("title")}}</q-toolbar-title>
 
         <img

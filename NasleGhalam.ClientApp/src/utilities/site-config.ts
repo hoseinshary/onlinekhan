@@ -30,3 +30,4 @@ export const RESUME_URL = "/api/resume";
 export const PACKAGE_URL = "/api/package";
 export const PANEL_URL = "/api/panel";
 export const UNIVERSITY_BRANCH_URL = "/api/universityBranch";
+export const REPORT_URL = "/api/report";

@@ -70,6 +70,10 @@ const questionValidations: ValidationRuleset<TQuestion> = {
       displayName: displayName("نام طراح"),
       requiredDdl: requiredDdl(0)
     },
+    SupervisorUserId: {
+      displayName: displayName("ناظر"),
+      requiredDdl: requiredDdl(0)
+    },
     LookupId_AreaType: {
       displayName: displayName("حیطه سوال"),
       numeric,
@@ -83,7 +87,10 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     Description: {
       displayName: displayName("توضیحات"),
       maxLength: maxLength(300)
-    }
+    },
+    IsDelete: {
+      displayName: displayName("حذف")
+    },
   }
 };
 

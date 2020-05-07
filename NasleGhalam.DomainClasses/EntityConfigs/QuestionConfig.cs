@@ -86,6 +86,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
              config.MapRightKey("UserId");
              config.ToTable("Questions_Users");
          });
+
+            HasMany(x => x.Supervisors)
+                .WithMany(x => x.SupervisorQuestions)
+                .Map(config =>
+                {
+                    config.MapLeftKey("QuestionId");
+                    config.MapRightKey("UserId");
+                    config.ToTable("Questions_Supervisors");
+                });
         }
     }
 }

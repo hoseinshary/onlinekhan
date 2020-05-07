@@ -41,6 +41,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Tags)
                 .Include(current => current.Lookup_AreaType)
                 .Include(current => current.Writer)
+                .Include(current => current.Supervisors)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -352,6 +353,10 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.QuestionOptions.Add(newOption);
             }
 
+            var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+            _uow.MarkAsUnChanged(supervisor);
+            question.Supervisors.Add(supervisor);
+
 
             _questions.Add(question);
             _uow.ValidateOnSaveEnabled(false);
@@ -573,6 +578,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
                 .Include(current => current.Tags)
+                .Include(current => current.Supervisors)
                 .First(current => current.Id == questionViewModel.Id);
 
             var previousFileName = questionViewModel.FileName;
@@ -628,6 +634,11 @@ namespace NasleGhalam.ServiceLayer.Services
             question.ResponseSecond = questionViewModel.ResponseSecond;
             question.UseEvaluation = questionViewModel.UseEvaluation;
             question.AnswerNumber = questionViewModel.AnswerNumber;
+            question.IsDelete = questionViewModel.IsDelete;
+            question.IsHybrid = questionViewModel.IsHybrid;
+            question.AnswerNumber = questionViewModel.AnswerNumber;
+            
+
 
             //delete topics
             var deleteTopicList = question.Topics
@@ -668,6 +679,18 @@ namespace NasleGhalam.ServiceLayer.Services
                 _uow.MarkAsUnChanged(tag);
                 question.Tags.Add(tag);
             }
+
+            //delete supervisor
+            foreach (var user in question.Supervisors)
+            {
+                question.Supervisors.Remove(user);
+            }
+
+            //add supervisor
+            var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+            _uow.MarkAsUnChanged(supervisor);
+            question.Supervisors.Add(supervisor);
+
 
             _uow.MarkAsChanged(question);
             _uow.ValidateOnSaveEnabled(false);
@@ -739,10 +762,12 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult UpdateImport(QuestionUpdateImportViewModel questionViewModel, HttpPostedFile word)
         {
+
             var question = _questions
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
                 .Include(current => current.Tags)
+                .Include(current => current.Supervisors)
                 .First(current => current.Id == questionViewModel.Id);
 
             var previousFileName = question.FileName;
@@ -783,6 +808,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
             }
+           
             question.WriterId = questionViewModel.WriterId;
             question.Description = questionViewModel.Description;
             question.LookupId_AuthorType = questionViewModel.LookupId_AuthorType;
@@ -790,6 +816,7 @@ namespace NasleGhalam.ServiceLayer.Services
             question.QuestionNumber = questionViewModel.QuestionNumber;
             question.AnswerNumber = questionViewModel.AnswerNumber;
             question.FileName = questionViewModel.FileName;
+            question.IsDelete = questionViewModel.IsDelete;
 
             //delete tag
             var deleteTagList = question.Tags
@@ -811,7 +838,22 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Tags.Add(tag);
             }
 
+            //delete supervisor
+            foreach (var user in question.Supervisors)
+            {
+                question.Supervisors.Remove(user);
+            }
+
+            //add supervisor
+            var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+            _uow.MarkAsUnChanged(supervisor);
+            question.Supervisors.Add(supervisor);
+
             _uow.MarkAsChanged(question);
+            if (question.FileName == null)
+            {
+                _uow.ExcludeFieldsFromUpdate(question, x => x.FileName);
+            }
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName) && haveFileUpdate)
@@ -1044,6 +1086,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Topics)
                 .Include(current => current.Tags)
                 .Include(current => current.QuestionOptions)
+                .Include(current => current.Supervisors)
                 .First(current => current.Id == id);
 
             if (question == null)
@@ -1063,6 +1106,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Tags.Remove(item);
             }
 
+            //delete supervisor
+            foreach (var user in question.Supervisors)
+            {
+                question.Supervisors.Remove(user);
+            }
+            
             //remove options
             var options = question.QuestionOptions.ToList();
             foreach (var item in options)

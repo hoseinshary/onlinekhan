@@ -1,22 +1,16 @@
 <template>
-  <section class="col-md-8 q-px-lg">
-    <section slot="body" class="row gutter-sm">
-      <div class>
-   
-  <base-table :grid-data="reportStore.getAllQuestionOfEachLesson" :columns="reportGridColumns" hasIndex>
-      <template slot="IsActive" slot-scope="data">
-        <q-checkbox v-model="data.row.IsActive" readonly />
-      </template>
-      <template slot="Id" slot-scope="data">
-        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
-        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
-      </template>
+  <section class="col-md-8">
+    <base-btn-create
+      v-if="canCreate"
+      :label="`ایجاد (${reportStore.modelName}) جدید`"
+      @click="showModalCreate"
+    />
+    <br />
+    <base-table :grid-data="reportStore.gridData" :columns="reportGridColumns" hasIndex>
+      
     </base-table>
 
 
-       
-      </div>
-    </section>
   </section>
 </template>
 
@@ -81,7 +75,7 @@ export default class QuestionVue extends Vue {
 
   //#region ### hooks ###
   created() {
-    this.reportStore.getAllQuestionOfEachLesson();
+    this.reportStore.fillList();
   }
 
   //#endregion

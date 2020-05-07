@@ -1,5 +1,6 @@
 import Vue from "Vue";
 import IUser, { DefaultUser } from "src/models/IUser";
+import IUserChangePassword, { DefaultUserChangePassword } from "src/models/IUserChangePassword";
 import ILogin, { DefaultLogin } from "src/models/ILogin";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
@@ -18,8 +19,9 @@ import router from "src/router";
 
 @Module({ namespacedPath: "userStore/" })
 export class UserStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean ; update_user_image : boolean ; update_user : boolean };
+  openModal: { create: boolean; edit: boolean; delete: boolean ; update_user_image : boolean ; update_user : boolean ; update_user_password : boolean};
   user: IUser;
+  userChangePassword : IUserChangePassword;
   loginUser: ILogin;
   private _userList: Array<IUser>;
   private _userListSearch: Array<IUser>;
@@ -27,7 +29,10 @@ export class UserStore extends VuexModule {
   private _createVue: Vue;
   private _registerVue: Vue;
   private _editVue: Vue;
-  private _updateUserImage : Vue;
+  private _updateUserImageVue : Vue;
+  private _updateUserPasswordVue : Vue;
+  private _updateUserVue : Vue;
+  
 
   /**
    * initialize data
@@ -36,6 +41,7 @@ export class UserStore extends VuexModule {
     super();
 
     this.user = util.cloneObject(DefaultUser);
+    this.userChangePassword = util.cloneObject(DefaultUserChangePassword);
     this.loginUser = util.cloneObject(DefaultLogin);
     this._userList = [];
     this._userListSearch = [];
@@ -44,7 +50,8 @@ export class UserStore extends VuexModule {
       edit: false,
       delete: false,
       update_user_image : false ,
-      update_user : false
+      update_user : false ,
+      update_user_password : false 
     };
   }
 
@@ -151,13 +158,34 @@ export class UserStore extends VuexModule {
 
   @mutation
   SET_UPDATE_USER_IMAGE_VUE(vm: Vue) {
-    this._updateUserImage = vm;
+    this._updateUserImageVue = vm;
   }
 
   @mutation
-  OPEN_MODAL_UPDATE_USER_IMAGE(open: boolean) {
+  SET_UPDATE_USER_PASSWORD_VUE(vm: Vue) {
+    this._updateUserPasswordVue = vm;
+  }
+
+  @mutation
+  SET_UPDATE_USER_VUE(vm: Vue) {
+    this._updateUserVue= vm;
+  }
+
+  @mutation
+  OPEN_MODAL_UPDATE_USER_IMAGE_VUE(open: boolean) {
     this.openModal.update_user_image = open;
   }
+
+  @mutation
+  OPEN_MODAL_UPDATE_USER_PASSWORD_VUE(open: boolean) {
+    this.openModal.update_user_password = open;
+  }
+
+  @mutation
+  OPEN_MODAL_UPDATE_USER_VUE(open: boolean) {
+    this.openModal.update_user = open;
+  }
+
 
   //#endregion
 
@@ -172,10 +200,33 @@ export class UserStore extends VuexModule {
   }
 
   @action()
+  async getUserData() {
+    return axios
+      .get(`${baseUrl}/GetUserData`)
+      .then((response: AxiosResponse<IUser>) => {
+        util.mapObject(response.data, this.user);
+      });
+  }
+
+  @action()
   async fillList() {
     if (this._modelChanged) {
       return axios
         .get(`${baseUrl}/GetAll`)
+        .then((response: AxiosResponse<Array<IUser>>) => {
+          this.SET_LIST(response.data);
+          this.MODEL_CHANGED(false);
+        });
+    } else {
+      return Promise.resolve(this._userList);
+    }
+  }
+
+  @action()
+  async fillListSupervisor() {
+    if (this._modelChanged) {
+      return axios
+        .get(`${baseUrl}/GetAllSupervisors`)
         .then((response: AxiosResponse<Array<IUser>>) => {
           this.SET_LIST(response.data);
           this.MODEL_CHANGED(false);
@@ -200,6 +251,21 @@ export class UserStore extends VuexModule {
     return new Promise(resolve => {
       vm.$v.user.$touch();
       if (vm.$v.user.$error) {
+        const context = getRawActionContext(this);
+        context.dispatch("notifyInvalidForm", vm, { root: true });
+        resolve(false);
+      }
+      resolve(true);
+    });
+  }
+
+  @action({ mode: "raw" })
+  async validateFormChangePassword(vm: any) {
+    
+    
+    return new Promise(resolve => {
+      vm.$v.userChangePassword.$touch();
+      if (vm.$v.userChangePassword.$error) {
         const context = getRawActionContext(this);
         context.dispatch("notifyInvalidForm", vm, { root: true });
         resolve(false);
@@ -254,6 +320,31 @@ export class UserStore extends VuexModule {
     this.RESET(this._registerVue);
   }
 
+
+  @action()
+  async resetUpdateUserImage() {
+    this.user.Id = 0;
+    var fileUpload = this._updateUserImageVue.$refs.fileUpload;
+    if (fileUpload) {
+      fileUpload["reset"]();
+    }
+  }
+
+  @action()
+  async resetUpdateUserPassword() {
+    this.user.Id = 0;
+    this.RESET(this._updateUserPasswordVue);
+   
+  }
+
+  @action()
+  async resetUpdateUser() {
+    this.user.Id = 0;
+    this.RESET(this._updateUserVue);
+   
+  }
+
+
   @action()
   async submitEdit() {
     let vm = this._editVue;
@@ -270,6 +361,79 @@ export class UserStore extends VuexModule {
           this.OPEN_MODAL_EDIT(false);
           this.MODEL_CHANGED(true);
           this.resetEdit();
+        }
+      });
+  }
+
+  @action()
+  async submitUpdateUser() {
+    let vm = this._updateUserVue;
+    if (!(await this.validateForm(vm))) return;
+
+    return axios
+      .post(`${baseUrl}/UpdateUser`, this.user)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+          this.UPDATE(data.Obj);
+          this.OPEN_MODAL_UPDATE_USER_VUE(false);
+          this.MODEL_CHANGED(true);
+          this.resetUpdateUser();
+        }
+      });
+  }
+
+  @action()
+  async submitUpdateUserPassword() {
+  
+    let vm = this._updateUserPasswordVue;
+   
+    if (!(await this.validateFormChangePassword(vm))) return;
+
+    return axios
+      .post(`${baseUrl}/UpdateUserPassword`, this.userChangePassword)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+          this.OPEN_MODAL_UPDATE_USER_PASSWORD_VUE(false);
+          this.resetUpdateUserPassword();
+        }
+      });
+  }
+
+
+  @action()
+  async submitUpdateUserImage() {
+    
+    let vm = this._updateUserImageVue;
+    var formData = new FormData();
+    var fileUpload = vm.$refs.fileUpload;
+
+    if (fileUpload && fileUpload["files"].length > 0) {
+      formData.append(fileUpload["name"], fileUpload["files"][0]);
+    }
+    else
+    {
+      await this.notify({vm , data : {Message : "فایل باید وارد شود." , MessageType : MessageType.Error ,Obj : null }})
+      return ;
+    }
+    return axios({
+      method: "post",
+      url: `${baseUrl}/UpdateUserImage`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+          this.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(false);
+          this.resetUpdateUserImage(); 
+
         }
       });
   }

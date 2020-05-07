@@ -1,20 +1,14 @@
 <template>
   <base-modal-edit
-    :title="userStore.modelName"
-    :show="userStore.openModal.edit"
+    title="اطلاعات کاربری"
+    :show="userStore.openModal.update_user"
     size="lg"
-    @confirm="userStore.submitEdit"
-    @reset="userStore.resetEdit"
+    @confirm="userStore.submitUpdateUser"
+    @reset="userStore.resetUpdateUser"
     @open="open"
-    @close="userStore.OPEN_MODAL_EDIT(false)"
+    @close="userStore.OPEN_MODAL_UPDATE_USER_VUE(false)"
   >
-    <base-select
-      :model="$v.user.RoleId"
-      :options="roleDdl"
-      class="col-sm-6 col-md-4"
-      filter
-      ref="roleId"
-    />
+    
     <base-select
       :model="$v.user.ProvinceId"
       :options="provinceStore.ddl"
@@ -28,6 +22,8 @@
       class="col-sm-6 col-md-4"
       filter
     />
+    <div class="col-sm-6 col-md-4" ></div>
+
     <!-- <base-hr/> -->
     <base-input :model="$v.user.Name" class="col-sm-6 col-md-4"/>
     <base-input :model="$v.user.Family" class="col-sm-6 col-md-4"/>
@@ -39,12 +35,8 @@
     </base-field>
     <base-input :model="$v.user.NationalNo" align="right" class="col-sm-6 col-md-4"/>
     <base-input :model="$v.user.Username" class="col-sm-6 col-md-4"/>
-    <base-input :model="$v.user.Password" type="password" class="col-sm-6 col-md-4"/>
-    <base-field class="col-sm-6 col-md-4" :model="$v.user.IsActive">
-      <template slot-scope="data">
-        <q-toggle v-model="data.obj.$model"/>
-      </template>
-    </base-field>
+    
+   
     <base-input :model="$v.user.Phone" align="right" class="col-sm-6 col-md-4"/>
     <base-input :model="$v.user.Mobile" align="right" class="col-sm-6 col-md-4"/>
   </base-modal-edit>
@@ -59,7 +51,7 @@ import { UserType } from "src/utilities/enumeration";
 @Component({
   validations: userEditValidations
 })
-export default class UserEditVue extends Vue {
+export default class UserUpdateVue extends Vue {
   $v: any;
 
   //#region ### data ###
@@ -78,15 +70,15 @@ export default class UserEditVue extends Vue {
 
   //### methods ###
   open() {
-    this.provinceStore.fillList();
-    this.cityStore.fillList();
-    this.roleStore.fillList();
+     this.provinceStore.fillList();
+     this.cityStore.fillList();
+    
   }
   //#endregion
 
   //#region ### hooks ###
   created() {
-    this.userStore.SET_EDIT_VUE(this);
+    this.userStore.SET_UPDATE_USER_VUE(this);
   }
   //#endregion
 }

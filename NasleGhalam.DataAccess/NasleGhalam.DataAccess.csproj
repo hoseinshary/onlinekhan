@@ -88,6 +88,10 @@
     <Compile Include="Migrations\202002021120085_requerdfieldinteacher.Designer.cs">
       <DependentUpon>202002021120085_requerdfieldinteacher.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004270737353_superviosorquestion.cs" />
+    <Compile Include="Migrations\202004270737353_superviosorquestion.Designer.cs">
+      <DependentUpon>202004270737353_superviosorquestion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -114,6 +118,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910250821142_questionanswerjudge.resx">
       <DependentUpon>201910250821142_questionanswerjudge.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910251719562_package.resx">
       <DependentUpon>201910251719562_package.cs</DependentUpon>
@@ -135,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002021120085_requerdfieldinteacher.resx">
       <DependentUpon>202002021120085_requerdfieldinteacher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004270737353_superviosorquestion.resx">
+      <DependentUpon>202004270737353_superviosorquestion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

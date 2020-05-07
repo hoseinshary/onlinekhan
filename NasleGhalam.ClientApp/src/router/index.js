@@ -69,11 +69,21 @@ Router.beforeEach((to, from, next) => {
   var authList = LocalStorage.get.item("authList");
   var subMenuList = LocalStorage.get.item("subMenuList");
 
+ debugger;
+
+  var pathForEvaluate = "";
+  var tempArray = path.split("/");
+  tempArray.forEach(element => {
+    if(isNaN(element))
+    {
+      pathForEvaluate += element;
+    }
+  });
   if (
     !authList ||
     !authList.filter(
       x =>
-        (x.startsWith("/") ? x.replace("/", "") : x).toLowerCase() == controller
+        x.replace( /\//g , "").toLowerCase() == pathForEvaluate.replace(/\//g, "")
     ).length
   ) {
     next("/user/login");

@@ -1,9 +1,9 @@
 <template>
   <section class="col-md-8 q-px-lg">
     <section slot="body" class="row gutter-sm">
-      <div  class="col-md-3">
+      <div class="col-md-3">
         <div>
-          <q-card >
+          <q-card>
             <q-card-title>تعداد سوال های من</q-card-title>
             <q-card-separator />
             <q-card-main>{{0}}</q-card-main>
@@ -20,7 +20,7 @@
             <q-card-main>{{0}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="جزییرات" />
+              <q-btn flat color="primary" label="جزییات" />
             </q-card-actions>
           </q-card>
         </div>
@@ -44,27 +44,36 @@
           </q-card-media>
           <q-card-actions>
             <div class="q-pa-sm">
-
-            <br/>
-            <div>
-              <q-btn color="primary" label="ویرایش اطلاعات فردی" />
-            </div>
-            <br/>
-            <div>
-              <q-btn color="secondary" label="تعییر رمز عبور" />
-            </div>
-            <br/>
-            <div>
-              <q-btn color="warning" label="بارگذاری عکس پروفایل" 
-               @click="showModalUpdateUserImage"/>
-            </div>
-            <br/>
+              <br />
+              <div>
+                <q-btn color="primary" label="ویرایش اطلاعات فردی"
+                 @click="showModalUpdateUser" />
+              </div>
+              <br />
+              <div>
+                <q-btn
+                  color="secondary"
+                  label="تعییر رمز عبور"
+                  @click="showModalUpdateUserPassword"
+                />
+              </div>
+              <br />
+              <div>
+                <q-btn
+                  color="warning"
+                  label="بارگذاری عکس پروفایل"
+                  @click="showModalUpdateUserImage"
+                />
+              </div>
+              <br />
             </div>
           </q-card-actions>
         </q-card>
       </div>
 
-        <modal-user-update-image ></modal-user-update-image>
+      <modal-user-update-image></modal-user-update-image>
+      <modal-user-update-password></modal-user-update-password>
+      <modal-user-update></modal-user-update>
     </section>
   </section>
 </template>
@@ -78,11 +87,12 @@ import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
   components: {
-
-    ModalUserUpdateImage: () => import("./updateUserImage.vue")
+    ModalUserUpdateImage: () => import("./updateUserImage.vue"),
+    ModalUserUpdate: () => import("./updateUser.vue"),
+    ModalUserUpdatePassword: () => import("./updateUserPassword.vue")
   }
 })
-export default class QuestionVue extends Vue {
+export default class TeacherPanelVue extends Vue {
   //#region ### data ###
   userStore = vxm.userStore;
   panelStore = vxm.panelStore;
@@ -97,9 +107,23 @@ export default class QuestionVue extends Vue {
   //#endregion
 
   //#region ### methods ###
- showModalUpdateUserImage() {
+  showModalUpdateUserImage() {
     //this.userStore.resetCreate();
-    this.userStore.OPEN_MODAL_UPDATE_USER_IMAGE(true);
+
+    this.userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(true);
+  }
+
+  showModalUpdateUser() {
+    //this.userStore.resetCreate();
+    this.userStore.getUserData().then(() => {
+      this.userStore.OPEN_MODAL_UPDATE_USER_VUE(true);
+    });
+  }
+
+  showModalUpdateUserPassword() {
+    //this.userStore.resetCreate();
+
+    this.userStore.OPEN_MODAL_UPDATE_USER_PASSWORD_VUE(true);
   }
 
   //#endregion

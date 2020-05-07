@@ -183,7 +183,13 @@ namespace NasleGhalam.ServiceLayer.Services
                     newQuestion.UseEvaluation = false;
                     newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] : 0);
 
-                    questionGroup.Questions.Add(newQuestion);
+                    //add supervisor
+                    var supervisor = new User() { Id = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره ناظر"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره ناظر"] : 0)};
+                    _uow.MarkAsUnChanged(supervisor);
+                    newQuestion.Supervisors.Add(supervisor);
+
+
+                questionGroup.Questions.Add(newQuestion);
 
                     var filename2 = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".docx";
                     var filename3 = SitePath.GetQuestionAbsPath(newGuid.ToString());
@@ -354,6 +360,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var questionGroup = _questionGroups
                 .Include(current => current.Questions)
                 .Include(current => current.Questions.Select(x => x.QuestionAnswers))
+                .Include(current => current.Questions.Select(x => x.Supervisors))
                 .First(current => current.Id == id);
 
             if (questionGroup == null)
@@ -362,6 +369,7 @@ namespace NasleGhalam.ServiceLayer.Services
             //remove questions relation
             var questions = questionGroup.Questions.ToList();
             var questionAnswers = questionGroup.Questions.Select(x => x.QuestionAnswers.ToList()).ToList();
+            var supervisors = questionGroup.Questions.Select(x => x.Supervisors.ToList()).ToList();
 
 
             int i = 0;
@@ -372,6 +380,13 @@ namespace NasleGhalam.ServiceLayer.Services
                     questionGroup.Questions.Where(x => x.Id == item.Id).First().QuestionAnswers.Remove(answer);
                     _uow.MarkAsDeleted(answer);
                 }
+
+                foreach (var supervisor in supervisors[i])
+                {
+                    questionGroup.Questions.Where(x => x.Id == item.Id).First().Supervisors.Remove(supervisor);
+                    _uow.MarkAsDeleted(supervisor);
+                }
+
                 questionGroup.Questions.Remove(item);
                 _uow.MarkAsDeleted(item);
                 if (item.AnswerNumber != 0)

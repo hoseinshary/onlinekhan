@@ -16,7 +16,8 @@ namespace NasleGhalam.DomainClasses.Entities
             AssayAnswerSheets = new HashSet<AssayAnswerSheet>();
             Assays = new HashSet<Assay>();
             Sales = new HashSet<Sale>();
-
+            SupervisorQuestions = new HashSet<Question>();
+            QuestionsUpdated = new HashSet<Question>();
         }
         public int Id { get; set; }
 
@@ -59,6 +60,8 @@ namespace NasleGhalam.DomainClasses.Entities
         public  Writer  Writer { get; set; }
 
         public ICollection<Question> Questions { get; set; }
+
+        public ICollection<Question> SupervisorQuestions { get; set; }
         public ICollection<QuestionJudge> QuestionJudges { get; set; }
         public ICollection<QuestionGroup> QuestionGroups { get; set; }
 

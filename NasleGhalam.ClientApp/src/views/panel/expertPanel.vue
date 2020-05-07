@@ -44,24 +44,35 @@
           </q-card-media>
           <q-card-actions>
             <div class="q-pa-sm">
-
-            <br/>
-            <div>
-              <q-btn color="primary" label="ویرایش اطلاعات فردی" />
-            </div>
-            <br/>
-            <div>
-              <q-btn color="secondary" label="تعییر رمز عبور" />
-            </div>
-            <br/>
-            <div>
-              <q-btn color="warning" label="بارگذاری عکس پروفایل" />
-            </div>
-            <br/>
+              <br />
+              <div>
+                <q-btn color="primary" label="ویرایش اطلاعات فردی"
+                 @click="showModalUpdateUser" />
+              </div>
+              <br />
+              <div>
+                <q-btn
+                  color="secondary"
+                  label="تعییر رمز عبور"
+                  @click="showModalUpdateUserPassword"
+                />
+              </div>
+              <br />
+              <div>
+                <q-btn
+                  color="warning"
+                  label="بارگذاری عکس پروفایل"
+                  @click="showModalUpdateUserImage"
+                />
+              </div>
+              <br />
             </div>
           </q-card-actions>
         </q-card>
       </div>
+      <modal-user-update-image></modal-user-update-image>
+      <modal-user-update-password></modal-user-update-password>
+      <modal-user-update></modal-user-update>
     </section>
   </section>
 </template>
@@ -74,12 +85,16 @@ import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
 
 @Component({
-  components: {}
+  components: {
+    ModalUserUpdateImage: () => import("./updateUserImage.vue"),
+    ModalUserUpdate: () => import("./updateUser.vue"),
+    ModalUserUpdatePassword: () => import("./updateUserPassword.vue")
+  }
 })
 export default class QuestionVue extends Vue {
   //#region ### data ###
   panelStore = vxm.panelStore;
-
+userStore = vxm.userStore;
   //#endregion
 
   //#region ### computed ###
@@ -91,6 +106,24 @@ export default class QuestionVue extends Vue {
   //#endregion
 
   //#region ### methods ###
+ showModalUpdateUserImage() {
+    //this.userStore.resetCreate();
+
+    this.userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(true);
+  }
+
+  showModalUpdateUser() {
+    //this.userStore.resetCreate();
+    this.userStore.getUserData().then(() => {
+      this.userStore.OPEN_MODAL_UPDATE_USER_VUE(true);
+    });
+  }
+
+  showModalUpdateUserPassword() {
+    //this.userStore.resetCreate();
+
+    this.userStore.OPEN_MODAL_UPDATE_USER_PASSWORD_VUE(true);
+  }
 
   //#endregion
 

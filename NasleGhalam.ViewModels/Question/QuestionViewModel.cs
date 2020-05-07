@@ -6,6 +6,7 @@ using NasleGhalam.ViewModels.QuestionAnswer;
 using NasleGhalam.ViewModels.QuestionOption;
 using NasleGhalam.ViewModels.Tag;
 using NasleGhalam.ViewModels.Topic;
+using NasleGhalam.ViewModels.User;
 using NasleGhalam.ViewModels.Writer;
 
 namespace NasleGhalam.ViewModels.Question
@@ -25,6 +26,7 @@ namespace NasleGhalam.ViewModels.Question
         public bool UseEvaluation { get; set; }
 
         public bool IsStandard { get; set; }
+        public bool IsDelete { get; set; }
 
         public short ResponseSecond { get; set; }
 
@@ -66,6 +68,7 @@ namespace NasleGhalam.ViewModels.Question
         public WriterViewModel Writer { get; set; }
 
 
+
         public  LookupViewModel Lookup_AreaType { get; set; }
 
         public List<QuestionOptionViewModel> QuestionOptions { get; set; } = new List<QuestionOptionViewModel>();
@@ -75,5 +78,8 @@ namespace NasleGhalam.ViewModels.Question
         public List<TopicViewModel> Topics { get; set; } = new List<TopicViewModel>();
 
         public List<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
+
+        public List<UserViewModel> Supervisors { get; set; } = new List<UserViewModel>();
+
     }
 }

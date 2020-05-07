@@ -163,6 +163,13 @@
           </template>
         </base-field>
 
+        <base-field v-if="showElement('IsDelete')" class="col-md-4" :model="$v.question.IsDelete">
+          <template slot-scope="data">
+            <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+            <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+          </template>
+        </base-field>
+
         <base-input
           v-if="showElement('Description')"
           :model="$v.question.Description"
@@ -292,6 +299,11 @@ export default class QuestionEditVue extends Vue {
       canEditAdminProp: true,
       canEditTopicProp: false,
       canEditImportProp: true
+    },
+    IsDelete: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: true
     }
   };
   concatTopicArray: Array<string> = [];
@@ -363,8 +375,6 @@ export default class QuestionEditVue extends Vue {
     this.lookupStore.fillAuthorType();
     this.lookupStore.fillAreaType();
     this.writerStore.fillList();
-    
-    
   }
 
   close() {

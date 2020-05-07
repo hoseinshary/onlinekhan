@@ -79,7 +79,14 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "سوال ترکیبی")]
         public bool IsHybrid { get; set; }
 
+
+        [Display(Name = "حذف")]
+        public bool IsDelete { get; set; }
+
         public int AnswerNumber { get; set; }
+
+        [Display(Name = "ناظر")]
+        public int SupervisorUserId { get; set; }
 
         [Display(Name = "مبحث پاسخ صحیح")]
         public string TopicAnswer { get; set; }

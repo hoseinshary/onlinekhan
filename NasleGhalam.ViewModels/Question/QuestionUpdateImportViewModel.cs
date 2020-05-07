@@ -23,7 +23,8 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "نویسنده")]
         public int WriterId { get; set; }
 
-
+        [Display(Name = "حذف")]
+        public bool IsDelete { get; set; }
 
 
         [Display(Name = "توضیحات")]
@@ -33,6 +34,9 @@ namespace NasleGhalam.ViewModels.Question
         public string FileName { get; set; }
 
         public int AnswerNumber { get; set; }
+
+        [Display(Name = "ناظر")]
+        public int SupervisorUserId { get; set; }
 
         public List<int> TagIds { get; set; } = new List<int>();
     }

@@ -1107,7 +1107,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             //delete supervisor
-            foreach (var user in question.Supervisors)
+            foreach (var user in question.Supervisors.ToList())
             {
                 question.Supervisors.Remove(user);
             }

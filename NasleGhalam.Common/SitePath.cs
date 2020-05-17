@@ -15,6 +15,8 @@ namespace NasleGhalam.Common
         public static string UserProfileRelPath => "~/Content/UserProfile/";
         public static string PackageRelPath => "~/Content/Package/";
         public static string DefaultUserProfileRelPath => "~/Content/UserProfile/DefaultProfile.png";
+
+        public static string PDFtoPNGRelPath => "~/";
         //-------------------------------------------------------------------------------------
 
         public static string GetQuestionAbsPath(string name) => ToAbsolutePath($"{QuestionRelPath}{name}");
@@ -26,6 +28,9 @@ namespace NasleGhalam.Common
         public static string GetQuestionGroupAbsPath(string name) => ToAbsolutePath($"{QuestionGroupRelPath}{name}");
 
         public static string GetQuestionGroupTempAbsPath(string name) => ToAbsolutePath($"{QuestionGroupTempRelPath}{name}");
+
+
+        public static string GetPDFtoPNGAbsPath(string name) => ToAbsolutePath($"{PDFtoPNGRelPath}{name}");
 
         public static string GetUserAbsPath(string name)
         {

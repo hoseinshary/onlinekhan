@@ -18,7 +18,7 @@ namespace NasleGhalam.Common
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
-            startInfo.FileName = System.Web.Configuration.WebConfigurationManager.AppSettings["PDFConverterPath"].ToString(); ;
+            startInfo.FileName = SitePath.GetPDFtoPNGAbsPath(System.Web.Configuration.WebConfigurationManager.AppSettings["PDFConverterPath"].ToString()) ;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.Arguments = "-f 1 -r 600 \"" + path + "\" \"" + distnation + "\"";
 

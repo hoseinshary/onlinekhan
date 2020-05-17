@@ -72,7 +72,7 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     },
     SupervisorUserId: {
       displayName: displayName("ناظر"),
-      requiredDdl: requiredDdl(0)
+      
     },
     LookupId_AreaType: {
       displayName: displayName("حیطه سوال"),

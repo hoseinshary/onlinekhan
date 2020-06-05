@@ -291,6 +291,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
                     source.ActiveWindow.Selection.Copy();
                     target.ActiveWindow.Selection.Paste();
+                    //target.ActiveWindow.Selection.WholeStory();
+                    //target.ActiveWindow.Selection.Paragraphs.ReadingOrder = WdReadingOrder.wdReadingOrderLtr;
 
                     var newGuid = Guid.NewGuid();
                     var newEntry = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();
@@ -460,12 +462,12 @@ namespace NasleGhalam.ServiceLayer.Services
                     if (arrayTemp[i] == '-')
                     {
                         var j = 0;
-                        while (j < 20 && i < arrayTemp.Length)
+                        while (j < 10 && i < arrayTemp.Length)
                         {
                             i++;
                             j++;
                         }
-                        if (j == 20)
+                        if (j == 10)
                             return true;
                     }
                     return false;

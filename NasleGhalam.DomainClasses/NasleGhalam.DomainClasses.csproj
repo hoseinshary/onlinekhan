@@ -56,6 +56,8 @@
     <Compile Include="Entities\Lookup.cs" />
     <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\Package.cs" />
+    <Compile Include="Entities\Program.cs" />
+    <Compile Include="Entities\ProgramItem.cs" />
     <Compile Include="Entities\QuestionAnswerJudge.cs" />
     <Compile Include="Entities\QuestionAnswerView.cs" />
     <Compile Include="Entities\QuestionAnswer.cs" />
@@ -100,6 +102,8 @@
     <Compile Include="EntityConfigs\LookupConfig.cs" />
     <Compile Include="EntityConfigs\ModuleConfig.cs" />
     <Compile Include="EntityConfigs\PackageConfig.cs" />
+    <Compile Include="EntityConfigs\ProgramConfig.cs" />
+    <Compile Include="EntityConfigs\ProgramItemConfig.cs" />
     <Compile Include="EntityConfigs\QuestionAnswerJudgeConfig.cs" />
     <Compile Include="EntityConfigs\QuestionAnswerViewConfig.cs" />
     <Compile Include="EntityConfigs\EducationSubGroupConfig.cs" />

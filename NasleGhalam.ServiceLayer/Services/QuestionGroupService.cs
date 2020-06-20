@@ -11,6 +11,7 @@ using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.QuestionGroup;
 using Microsoft.Office.Interop.Excel;
+using System.Threading;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -260,6 +261,7 @@ namespace NasleGhalam.ServiceLayer.Services
             word.SaveAs(wordFilename);
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
+            //app.Visible = true;
             var source = app.Documents.Open(wordFilename);
             var missing = Type.Missing;
 
@@ -268,6 +270,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var i = 1;
             while (i <= x)
             {
+                
                 if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                 {
                     var target = app.Documents.Add();
@@ -275,12 +278,14 @@ namespace NasleGhalam.ServiceLayer.Services
                     source.ActiveWindow.Selection.WholeStory();
                     source.ActiveWindow.Selection.Copy();
                     target.ActiveWindow.Selection.Paste();
+                    //target.ActiveWindow.Selection.PasteSpecial(Microsoft.Office.Interop.Word.WdPasteOptions.wdKeepTextOnly);
                     target.ActiveWindow.Selection.WholeStory();
                     target.ActiveWindow.Selection.Delete();
 
                     int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
 
                     i++;
+                
                     while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                     {
                         i++;
@@ -291,6 +296,9 @@ namespace NasleGhalam.ServiceLayer.Services
                     source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
                     source.ActiveWindow.Selection.Copy();
                     target.ActiveWindow.Selection.Paste();
+                    target.ActiveWindow.Selection.WholeStory();
+                    target.ActiveWindow.Selection.Paragraphs.ReadingOrder = WdReadingOrder.wdReadingOrderLtr;
+                    //target.ActiveWindow.Selection.Paste();
 
                     var newGuid = Guid.NewGuid();
                     var newEntry = $"/content/questionGroupTemp/{newGuid}.png".ToFullRelativePath();

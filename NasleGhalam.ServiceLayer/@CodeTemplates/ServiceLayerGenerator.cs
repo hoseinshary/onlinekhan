@@ -6,103 +6,103 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.Package;
+using NasleGhalam.ViewModels.ProgramItem;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class PackageService
+	public class ProgramItemService
 	{
-		private const string Title = "بسته";
+		private const string Title = "آیتم برنامه هفتگی";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Package> _packages;
+        private readonly IDbSet<ProgramItem> _programItems;
        
-	    public PackageService(IUnitOfWork uow)
+	    public ProgramItemService(IUnitOfWork uow)
         {
             _uow = uow;
-            _packages = uow.Set<Package>();
+            _programItems = uow.Set<ProgramItem>();
         }
 
 		/// <summary>
-        /// گرفتن  بسته با آی دی
+        /// گرفتن  آیتم برنامه هفتگی با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public PackageViewModel GetById(int id)
+        public ProgramItemViewModel GetById(int id)
         {
-            return _packages
+            return _programItems
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<PackageViewModel>)
+                .Select(Mapper.Map<ProgramItemViewModel>)
                 .FirstOrDefault();
         }
 
 		/// <summary>
-        /// گرفتن همه بسته ها
+        /// گرفتن همه آیتم برنامه هفتگی ها
         /// </summary>
         /// <returns></returns>
-        public IList<PackageViewModel> GetAll()
+        public IList<ProgramItemViewModel> GetAll()
         {
-            return _packages
+            return _programItems
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<PackageViewModel>)
+                .Select(Mapper.Map<ProgramItemViewModel>)
                 .ToList();
         }
 
 		/// <summary>
-        /// ثبت بسته
+        /// ثبت آیتم برنامه هفتگی
         /// </summary>
-        /// <param name="packageViewModel"></param>
+        /// <param name="programItemViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(PackageCreateViewModel packageViewModel)
+        public ClientMessageResult Create(ProgramItemCreateViewModel programItemViewModel)
         {
-            var package = Mapper.Map<Package>(packageViewModel);
-            _packages.Add(package);
+            var programItem = Mapper.Map<ProgramItem>(programItemViewModel);
+            _programItems.Add(programItem);
 
 			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(package.Id);
+                clientResult.Obj = GetById(programItem.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// ویرایش بسته
+        /// ویرایش آیتم برنامه هفتگی
         /// </summary>
-        /// <param name="packageViewModel"></param>
+        /// <param name="programItemViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(PackageUpdateViewModel packageViewModel)
+        public ClientMessageResult Update(ProgramItemUpdateViewModel programItemViewModel)
         {
-            var package = Mapper.Map<Package>(packageViewModel);
-            _uow.MarkAsChanged(package);
+            var programItem = Mapper.Map<ProgramItem>(programItemViewModel);
+            _uow.MarkAsChanged(programItem);
 			
 			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(package.Id);
+                clientResult.Obj = GetById(programItem.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// حذف بسته
+        /// حذف آیتم برنامه هفتگی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  packageViewModel = GetById(id);
-            if (packageViewModel == null)
+			var  programItemViewModel = GetById(id);
+            if (programItemViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var package = Mapper.Map<Package>(packageViewModel);
-            _uow.MarkAsDeleted(package);
+            var programItem = Mapper.Map<ProgramItem>(programItemViewModel);
+            _uow.MarkAsDeleted(programItem);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);

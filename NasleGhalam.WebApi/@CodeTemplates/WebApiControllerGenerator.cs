@@ -2,61 +2,61 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Package;
+using NasleGhalam.ViewModels.Program;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
 	/// <author>
-	///     name: hoseinshary   
-	///     date: 13/8/98
+	///     name: 
+	///     date: 
 	/// </author>
-	public class PackageController : ApiController
+	public class ProgramController : ApiController
 	{
-        private readonly PackageService _packageService;
-		public PackageController(PackageService packageService)
+        private readonly ProgramService _programService;
+		public ProgramController(ProgramService programService)
         {
-            _packageService = packageService;
+            _programService = programService;
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.PackageReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.ProgramReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_packageService.GetAll());
+            return Ok(_programService.GetAll());
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.PackageReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.ProgramReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var package = _packageService.GetById(id);
-            if (package == null)
+            var program = _programService.GetById(id);
+            if (program == null)
             {
                 return NotFound();
             }
-            return Ok(package);
+            return Ok(program);
         }
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.PackageCreateAccess)]
+        [CheckUserAccess(ActionBits.ProgramCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(PackageCreateViewModel packageViewModel)
+        public IHttpActionResult Create(ProgramCreateViewModel programViewModel)
         {
-            return Ok(_packageService.Create(packageViewModel));
+            return Ok(_programService.Create(programViewModel));
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.PackageUpdateAccess)]
+        [CheckUserAccess(ActionBits.ProgramUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(PackageUpdateViewModel packageViewModel)
+        public IHttpActionResult Update(ProgramUpdateViewModel programViewModel)
         {
-            return Ok(_packageService.Update(packageViewModel));
+            return Ok(_programService.Update(programViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.PackageDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.ProgramDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_packageService.Delete(id));
+            return Ok(_programService.Delete(id));
         }
 	}
 }

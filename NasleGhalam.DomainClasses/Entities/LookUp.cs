@@ -35,6 +35,8 @@ namespace NasleGhalam.DomainClasses.Entities
             Assay_Importance = new HashSet<Assay>();
             Assay_QuestionType = new HashSet<Assay>();
             Assay_Type = new HashSet<Assay>();
+
+            ProgramItem_Name = new HashSet<ProgramItem>();
         }
 
         public int Id { get; set; }
@@ -82,5 +84,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<Assay> Assay_Type { get; set; }
 
         public ICollection<Assay> Assay_QuestionType { get; set; }
+
+        public ICollection<ProgramItem> ProgramItem_Name { get; set; }
     }
 }

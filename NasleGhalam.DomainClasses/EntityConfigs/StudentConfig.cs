@@ -10,6 +10,8 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             HasKey(x => x.Id);
             Property(x => x.FatherName).HasMaxLength(50);
             Property(x => x.Address).HasMaxLength(300);
+
+
         }
     }
 }

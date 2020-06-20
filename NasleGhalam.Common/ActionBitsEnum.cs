@@ -158,5 +158,12 @@
 
         ReportReadAccess = 122,
 
+
+        ProgramReadAccess = 125,
+        ProgramCreateAccess = 126,
+        ProgramDeleteAccess = 127,
+        ProgramUpdateAccess = 128,
+
+
     }
 }

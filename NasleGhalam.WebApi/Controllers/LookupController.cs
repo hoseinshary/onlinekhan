@@ -124,5 +124,11 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_lookupService.GetAllByName("AssayType"));
         }
+
+        [HttpGet, CheckUserAccess(ActionBits.AssayCreateAccess)]
+        public IHttpActionResult GetAllProgramName()
+        {
+            return Ok(_lookupService.GetAllByName("ProgramName"));
+        }
     }
 }

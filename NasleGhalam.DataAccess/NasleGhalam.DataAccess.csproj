@@ -96,6 +96,10 @@
     <Compile Include="Migrations\202006191825520_program.Designer.cs">
       <DependentUpon>202006191825520_program.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202006201349316_fix_programitem.cs" />
+    <Compile Include="Migrations\202006201349316_fix_programitem.Designer.cs">
+      <DependentUpon>202006201349316_fix_programitem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -150,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202006191825520_program.resx">
       <DependentUpon>202006191825520_program.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006201349316_fix_programitem.resx">
+      <DependentUpon>202006201349316_fix_programitem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

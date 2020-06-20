@@ -82,7 +82,9 @@
     <Compile Include="Package\PackageCreateViewModel.cs" />
     <Compile Include="Package\PackageUpdateViewModel.cs" />
     <Compile Include="Package\PackageViewModel.cs" />
-    <Compile Include="Program\ProgramItem.cs" />
+    <Compile Include="Program\ProgramItemCreateViewModel.cs" />
+    <Compile Include="Program\ProgramItemViewModel.cs" />
+    <Compile Include="Program\ProgramCreateViewModel.cs" />
     <Compile Include="Program\ProgramViewModel.cs" />
     <Compile Include="Publisher\PublisherViewModel.cs" />
     <Compile Include="QuestionAnswerJudge\QuestionAnswerJudgeCreateViewModel.cs" />

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace NasleGhalam.ViewModels.Program
 {
@@ -22,6 +23,8 @@ namespace NasleGhalam.ViewModels.Program
 
         [Display(Name = "")]
         public DateTime CreatedTime { get; set; }
+
+
 
 
     }

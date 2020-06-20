@@ -40,7 +40,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.ProgramCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(ProgramViewModel programViewModel)
+        public IHttpActionResult Create(ProgramCreateViewModel programViewModel)
         {
             return Ok(_programService.Create(programViewModel));
         }
@@ -48,7 +48,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.ProgramUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(ProgramViewModel programViewModel)
+        public IHttpActionResult Update(ProgramCreateViewModel programViewModel)
         {
             return Ok(_programService.Update(programViewModel));
         }

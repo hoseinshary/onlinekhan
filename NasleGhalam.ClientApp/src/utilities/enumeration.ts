@@ -4,6 +4,18 @@ export enum UserType {
   Teacher = 2
 }
 
+export enum DayOfWeek {
+  "شنبه"=1,
+  "یکشنبه"=2,
+  "دوشنبه"=3,
+  "سه شنبه"=4,
+  "چهار شنبه"=5,
+  "پنجشنبه"=6,
+  "جمعه"=7
+
+
+}
+
 export enum MessageType {
   Error = 0,
   Success = 1,

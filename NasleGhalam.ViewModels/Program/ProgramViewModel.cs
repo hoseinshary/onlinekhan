@@ -24,7 +24,7 @@ namespace NasleGhalam.ViewModels.Program
         [Display(Name = "")]
         public DateTime CreatedTime { get; set; }
 
-
+        public string Description { get; set; }
 
 
     }

@@ -138,11 +138,14 @@ export default [
       {
         path: "/panel/teacherPanel",
         component: () => import("src/views/panel/teacherPanel.vue")
-      }
-      ,
+      },
       {
         path: "/report/questionOfEachLesson",
         component: () => import("src/views/report/questionOfEachLesson.vue")
+      },
+      {
+        path: "/program",
+        component: () => import("src/views/program/index.vue")
       }
     ]
   },

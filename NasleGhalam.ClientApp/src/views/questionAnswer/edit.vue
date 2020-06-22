@@ -29,6 +29,11 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
     </base-field>
+     <base-select
+      :model="$v.questionAnswer.LessonName"
+      :options="lessonNameDdl"
+      class="col-md-6"
+    />
     <base-input :model="$v.questionAnswer.Description" class="col-12"/>
     <base-btn-edit @click="questionAnswerStore.submitEdit()"/>
   </section>
@@ -45,12 +50,20 @@ import { questionAnswerValidations } from "src/validations/questionAnswerValidat
 export default class QuestionAnswerEditVue extends Vue {
   $v: any;
 
+  @Prop({ type: Number, required: true }) lessonIdProp;
+  
   //#region ### data ###
   questionAnswerStore = vxm.questionAnswerStore;
   questionAnswer = this.questionAnswerStore.questionAnswer;
   lookupStore = vxm.lookupStore;
   writerStore = vxm.writerStore;
+  lessonStore = vxm.lessonStore;
   //#endregion
+
+ get lessonNameDdl() {
+    return this.lessonStore.relatedLessons(this.lessonIdProp)
+    .map(x=>({label:x.Name, value:x.Name}));
+  }
 
   //#region ### hooks ###
   created() {

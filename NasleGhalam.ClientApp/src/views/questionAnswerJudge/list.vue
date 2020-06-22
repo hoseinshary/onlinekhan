@@ -7,6 +7,9 @@
     <template slot="IsActiveQuestionAnswer" slot-scope="data">
       <q-checkbox v-model="data.row.IsActiveQuestionAnswer" />
     </template>
+    <template slot="IsMaster" slot-scope="data">
+      <q-checkbox v-model="data.row.IsMaster" />
+    </template>
     <template
       slot="Lookup_ReasonProblem.Value"
       slot-scope="data"
@@ -44,8 +47,8 @@ export default class QuestionAnswerJudgeVue extends Vue {
       data: "IsActiveQuestionAnswer"
     },
     {
-      title: "درس",
-      data: "LessonName"
+      title: "آنلاین خوان",
+      data: "IsMaster"
     },
     {
       title: "دلیل مشکل",

@@ -4,8 +4,9 @@ import IUser from "./IUser";
 export default interface IQuestionAnswerJudge {
   Id: number;
   IsActiveQuestionAnswer: boolean;
+  IsMaster : boolean;
   QuestionAnswerId: number;
-  LessonName: string;
+  
   LookupId_ReasonProblem: number;
   Description: string;
   Lookup_ReasonProblem?: ILookup;
@@ -16,7 +17,7 @@ export const DefaultQuestionAnswerJudge: IQuestionAnswerJudge = {
   Id: 0,
   IsActiveQuestionAnswer: false,
   QuestionAnswerId: 0,
-  LessonName: "",
+  IsMaster : false,
   LookupId_ReasonProblem: 0,
   Description: ""
 };

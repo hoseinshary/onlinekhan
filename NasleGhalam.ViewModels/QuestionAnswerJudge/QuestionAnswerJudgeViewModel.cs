@@ -11,7 +11,8 @@ namespace NasleGhalam.ViewModels.QuestionAnswerJudge
 
         public int QuestionAnswerId { get; set; }
 
-        public string LessonName { get; set; }
+        
+        public bool IsMaster { get; set; }
 
         public string Description { get; set; }
 

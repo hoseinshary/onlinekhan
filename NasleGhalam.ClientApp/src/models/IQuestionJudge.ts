@@ -1,4 +1,5 @@
 import ILookup from "./ILookup";
+import IUser from "./IUser";
 
 export default interface IQuestionJudge {
   Id: number;
@@ -22,12 +23,14 @@ export default interface IQuestionJudge {
   Lookup_QuestionRank?: ILookup;
   EducationGroup: string;
   Description: string;
+  UserId : number;
+  User ?: IUser;
   
 }
 
 export const DefaultQuestionJudge: IQuestionJudge = {
   Id: 0,
-  IsStandard: false,
+  IsStandard: true,
   IsDelete: false,
   IsUpdate: false,
   IsLearning: false,
@@ -41,5 +44,6 @@ export const DefaultQuestionJudge: IQuestionJudge = {
   LookupId_ReasonProblem: 1067,
   LookupId_QuestionRank: 1063,
   Description: "",
-  EducationGroup: ""
+  EducationGroup: "",
+  UserId :0
 };

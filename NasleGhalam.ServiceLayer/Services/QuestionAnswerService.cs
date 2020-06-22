@@ -496,10 +496,12 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             
+
             _uow.MarkAsChanged(questionAnswer);
-            if(questionAnswer.FilePath =="" || questionAnswer.FilePath is null)
-                _uow.ExcludeFieldsFromUpdate(questionAnswer ,x=>x.FilePath);
+            if(word == null || word.ContentLength <= 0)
+                _uow.ExcludeFieldsFromUpdate(questionAnswer ,x=>x.FilePath , x => x.Context);
             _uow.ValidateOnSaveEnabled(false);
+            
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
 
             if (serverResult.MessageType == MessageType.Success  && haveFileUpdate)

@@ -16,7 +16,7 @@
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public string LessonName { get; set; }
+        public bool IsMaster { get; set; }
 
         public int LookupId_ReasonProblem { get; set; }
         public Lookup Lookup_ReasonProblem { get; set; }

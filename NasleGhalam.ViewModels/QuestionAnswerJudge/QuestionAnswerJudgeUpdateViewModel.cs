@@ -15,10 +15,8 @@ namespace NasleGhalam.ViewModels.QuestionAnswerJudge
 
         public int UserId { get; set; }
 
-        [Display(Name = "درس")]
-        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        public string LessonName { get; set; }
+        [Display(Name = "آنلاین خوان")]
+        public bool IsMaster { get; set; }
 
         [Display(Name = "دلیل مشکل")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]

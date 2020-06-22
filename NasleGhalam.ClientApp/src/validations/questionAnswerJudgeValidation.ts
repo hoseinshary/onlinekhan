@@ -23,10 +23,9 @@ const questionAnswerJudgeValidations: ValidationRuleset<
       displayName: displayName("جواب سوال"),
       required
     },
-    LessonName: {
-      displayName: displayName("درس"),
-      maxLength: maxLength(50),
-      // required
+    IsMaster: {
+      displayName: displayName("آنلاین خوان"),
+      required
     },
     LookupId_ReasonProblem: {
       displayName: displayName("دلیل مشکل"),

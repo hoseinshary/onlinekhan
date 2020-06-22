@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="home">
-    <q-layout-header >
+    <q-layout-header reveal>
       <ul>
         <li>
           <a href="#" class="logo"></a>
@@ -18,35 +18,27 @@
           <a href="#">لیست قیمت</a>
         </li>
         <li>
-          <a href="#">کلاس های آنلاین</a>
-        </li>
-         <li class="border-needed">
-          <router-link to="/resume/registration">همکاری با ما</router-link>
+          <a href="#">کلاس های آموزشی</a>
         </li>
       </ul>
       <ul>
-        <li class="border-needed">
-         
-          <router-link to="/user/login">
-           <q-icon name="person"></q-icon>
-           ورود</router-link>
-
+        <li>
+          <router-link to="/user/login">ورود</router-link>
         </li>
-        <li>&nbsp;</li>
-        <li class="border-needed">
-          <router-link to="/user/register">
-           <q-icon name="person_add"></q-icon>
-          ثبت نام</router-link>
+        <li>
+          <router-link to="/user/register">ثبت نام</router-link>
         </li>
-       
+        <li>
+          <router-link to="/resume/registration">همکاری با ما</router-link>
+        </li>
       </ul>
-
-
-
     </q-layout-header>
     <q-page-container class="col-12">
       <section class="row">
-    
+        <div class="col-12 main-image-section">
+          <img src="assets/img/home-main-img.png" alt="img" />
+        </div>
+
         <div class="col-12 introduce-section">
           <h3>سامانه آموزشی چگونه به شما کمک می کند؟</h3>
           <section class="row justify-center">
@@ -228,27 +220,22 @@ export default class HomeVue extends Vue {
 
 <style>
 .home {
-  /* background-color: white; */
-  
+  background-color: white;
 }
 .home .q-layout-header {
-  /* background-color: #fff; */
-  background-image: url("../../assets/img2/header-background.png");
-  background-size: contain;
+  background-color: #fff;
   box-shadow: none;
-  height: 800px;
 }
 .home .q-layout-header ul {
   display: inline-block;
   list-style-type: none;
-  margin-top: 50px;
+  margin-top: 90px;
   padding: 0;
   overflow: hidden;
-  /* background-color: white; */
+  background-color: white;
   height: 60px;
-  font-size:18px;
+  font-size: 24px;
   font-weight: bold;
-  
 }
 
 .home .q-layout-header ul:first-child {
@@ -262,49 +249,35 @@ export default class HomeVue extends Vue {
 
 .home .q-layout-header ul li {
   float: left;
-  
 }
-
-.border-needed {
-
-border: 2px solid white;
-  border-radius: 25px;
-
-}
-
 
 .home .q-layout-header ul li a {
   display: block;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  color: #faf3f3;
-  
+  color: #464646;
 }
 
 .home .q-layout-header li .logo {
-  background-image: url("../../assets/img2/logo2.png");
+  background-image: url("../../assets/img/logo1.png");
   background-repeat: no-repeat;
   background-size: contain;
-  /* height: 70px;
+  height: 70px;
   max-width: 100%;
   width: 180px;
-  margin-left: 10px !important;
-  margin-right: 20px; */
-  
+  margin-left: 50px !important;
 }
 /* --- */
 
 /* main-image */
 .home .main-image-section {
   margin-bottom: 70px;
-  margin-left:200px ;
-  
 }
 
 .home .main-image-section img {
-  height: 500px;
-  /* width: 100%; */
+  height: auto;
+  width: 100%;
   max-height: 800px;
   max-width: 100%;
 }

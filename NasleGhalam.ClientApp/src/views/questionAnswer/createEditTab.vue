@@ -29,7 +29,7 @@
       <tab-create :lessonIdProp="lessonIdProp"></tab-create>
     </q-tab-pane>
     <q-tab-pane keep-alive name="tab-edit">
-      <tab-edit></tab-edit>
+      <tab-edit :lessonIdProp="lessonIdProp" ></tab-edit>
     </q-tab-pane>
     <q-tab-pane keep-alive name="tab-show-question-judge">
       <tab-edit></tab-edit>

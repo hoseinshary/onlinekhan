@@ -636,7 +636,7 @@ namespace NasleGhalam.ServiceLayer.Services
             question.AnswerNumber = questionViewModel.AnswerNumber;
             question.IsDelete = questionViewModel.IsDelete;
             question.IsHybrid = questionViewModel.IsHybrid;
-            question.AnswerNumber = questionViewModel.AnswerNumber;
+            question.TopicAnswer = questionViewModel.TopicAnswer;
             
 
 
@@ -687,10 +687,12 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             //add supervisor
-            var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
-            _uow.MarkAsUnChanged(supervisor);
-            question.Supervisors.Add(supervisor);
-
+            if (questionViewModel.SupervisorUserId != 0)
+            {
+                var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+                _uow.MarkAsUnChanged(supervisor);
+                question.Supervisors.Add(supervisor);
+            }
 
             _uow.MarkAsChanged(question);
             _uow.ValidateOnSaveEnabled(false);

@@ -1,17 +1,6 @@
 <template>
   <section class="row gutter-sm">
-    <base-select
-      :model="$v.questionAnswerJudge.LessonName"
-      :options="lessonNameDdl"
-      class="col-md-6"
-    />
-
-    <base-select
-      :model="$v.questionAnswerJudge.LookupId_ReasonProblem"
-      :options="lookupStore.reasonProblemDdl"
-      class="col-md-6"
-      clearable
-    />
+    
 
     <q-field class="col-md-6">
       <div class="s-border q-pa-sm">
@@ -22,6 +11,24 @@
         />
       </div>
     </q-field>
+
+    <q-field class="col-md-6">
+      <div class="s-border q-pa-sm">
+        <q-toggle
+          v-model="$v.questionAnswerJudge.IsMaster.$model"
+          :label="$v.questionAnswerJudge.IsMaster.$params.displayName.value"
+          class="q-mx-md"
+        />
+      </div>
+    </q-field>
+
+
+    <base-select
+      :model="$v.questionAnswerJudge.LookupId_ReasonProblem"
+      :options="lookupStore.reasonProblemDdl"
+      class="col-md-6"
+      clearable
+    />
 
     <base-input :model="$v.questionAnswerJudge.Description" class="col-12" />
     <div class="col-12">

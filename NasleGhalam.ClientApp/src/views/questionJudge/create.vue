@@ -19,6 +19,7 @@
       <div class="s-border q-pa-sm">
         <q-toggle
           v-model="$v.questionJudge.IsStandard.$model"
+          
           :label="$v.questionJudge.IsStandard.$params.displayName.value"
           class="q-mx-md"
         />
@@ -52,18 +53,6 @@
         />
       </div>
     </q-field>
-    <base-select
-      :model="$v.questionJudge.LookupId_QuestionRank"
-      :options="lookupStore.questionRankDdl"
-      class="col-md-6"
-      filter
-    />
-
-    <base-select
-      :model="$v.questionJudge.EducationGroup"
-      :options="educationGroupDdl"
-      class="col-md-6"
-    ></base-select>
 
     <base-select
       :model="$v.questionJudge.LookupId_WhereProblem"
@@ -78,6 +67,21 @@
       clearable
     />
     <base-input :model="$v.questionJudge.Description" class="col-12" />
+
+    <base-select
+      :model="$v.questionJudge.LookupId_QuestionRank"
+      :options="lookupStore.questionRankDdl"
+      class="col-md-6"
+      filter
+    />
+
+    <base-select
+      :model="$v.questionJudge.EducationGroup"
+      :options="educationGroupDdl"
+      class="col-md-6"
+    ></base-select>
+
+
     <div class="col-12">
       <base-btn-create @click="questionJudgeStore.submitCreate()" :label="`ایجاد و پاک سازی`" />
       <base-btn-create @click="questionJudgeStore.submitCreateWithoutReset()" :label="`ایجاد`" />

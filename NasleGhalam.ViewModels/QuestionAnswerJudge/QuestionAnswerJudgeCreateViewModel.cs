@@ -7,15 +7,15 @@ namespace NasleGhalam.ViewModels.QuestionAnswerJudge
     {
         [Display(Name = "فعال")]
         public bool IsActiveQuestionAnswer { get; set; }
-
+        
         [Display(Name = "جواب سوال")]
         public int QuestionAnswerId { get; set; }
 
         public int UserId { get; set; }
 
-        [Display(Name = "درس")]
-        [MaxLength(50, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "MaxLen")]
-        public string LessonName { get; set; }
+        [Display(Name = "آنلاین خوان")]
+        public bool IsMaster { get; set; }
+
 
         [Display(Name = "دلیل مشکل")]
         [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]

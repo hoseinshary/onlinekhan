@@ -55,6 +55,11 @@
             class="col-md-4"
             filter
           />
+
+
+          <base-select 
+          
+          :model="$v.question.TopicAnswer" :options="topicAnswerDdl" class="col-md-4"></base-select>
         </section>
       </q-slide-transition>
     </div>
@@ -304,7 +309,13 @@ export default class QuestionEditVue extends Vue {
       canEditAdminProp: true,
       canEditTopicProp: false,
       canEditImportProp: true
+    },
+    TopicAnswer: {
+      canEditAdminProp: true,
+      canEditTopicProp: true,
+      canEditImportProp: false
     }
+
   };
   concatTopicArray: Array<string> = [];
   //#endregion
@@ -327,6 +338,10 @@ export default class QuestionEditVue extends Vue {
     } else {
       return "canEditTopicProp";
     }
+  }
+
+  get topicAnswerDdl() {
+    return this.concatTopicArray.map(x => ({ value: x, label: x }));
   }
   //#endregion
 

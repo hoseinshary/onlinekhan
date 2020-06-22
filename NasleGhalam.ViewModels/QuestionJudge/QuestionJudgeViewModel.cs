@@ -1,4 +1,5 @@
 ﻿using NasleGhalam.ViewModels.Lookup;
+using NasleGhalam.ViewModels.User;
 
 namespace NasleGhalam.ViewModels.QuestionJudge
 {
@@ -47,6 +48,8 @@ namespace NasleGhalam.ViewModels.QuestionJudge
 
         public LookupViewModel Lookup_WhereProblem { get; set; }
         public LookupViewModel Lookup_ReasonProblem { get; set; }
+
+        public UserViewModel User { get; set; }
 
         public int LookupId_WhereProblem { get; set; }
 

@@ -96,6 +96,14 @@
     <Compile Include="Migrations\202006191825520_program.Designer.cs">
       <DependentUpon>202006191825520_program.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202006220539458_fix_topianswer_leght.cs" />
+    <Compile Include="Migrations\202006220539458_fix_topianswer_leght.Designer.cs">
+      <DependentUpon>202006220539458_fix_topianswer_leght.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006220609443_fix_questionasnwer_judge_field.cs" />
+    <Compile Include="Migrations\202006220609443_fix_questionasnwer_judge_field.Designer.cs">
+      <DependentUpon>202006220609443_fix_questionasnwer_judge_field.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -150,6 +158,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202006191825520_program.resx">
       <DependentUpon>202006191825520_program.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006220539458_fix_topianswer_leght.resx">
+      <DependentUpon>202006220539458_fix_topianswer_leght.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006220609443_fix_questionasnwer_judge_field.resx">
+      <DependentUpon>202006220609443_fix_questionasnwer_judge_field.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -18,12 +18,27 @@
       node-key="Id"
     />
 
+    <q-tree
+      v-show="false"
+      :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
+      :ticked.sync="question.TopicIds"
+      tick-strategy="leaf"
+      color="primary"
+      accordion
+      ref="topicTree2"
+      node-key="Id"
+    />
+
     <div class="col-md-5 col-lg-4">
       <section class="row s-border s-spacing">
         <p class="col-12 text-primary text-weight-bold q-pa-sm">مشخصه های سوال</p>
         <div class="col-12 q-pa-sm" style="color:red">
           جواب صحیح:
           <span class="text-red">{{question.AnswerNumber}}</span>
+        </div>
+        <div class="col-12 q-pa-sm">
+          مبحث پاسخ صحیح:
+          <span class="text-black">{{question.TopicAnswer}}</span>
         </div>
         <div class="col-12 q-pa-sm">
           نویسنده:
@@ -33,6 +48,7 @@
           حیطه سوال:
           <span class="text-black">{{question.Lookup_AreaType.Value}}</span>
         </div>
+        
       </section>
 
       <section class="row s-border s-spacing">
@@ -73,6 +89,8 @@
           :columns="questionJudgeGridColumn"
           hasIndex
         >
+          <template slot="User.Name" slot-scope="data">{{data.row.User.Name}}</template>
+          <template slot="User.Family" slot-scope="data">{{data.row.User.Family}}</template>
           <template
             slot="Lookup_RepeatnessType.Value"
             slot-scope="data"
@@ -115,48 +133,59 @@ import util from "src/utilities";
 export default class QuestionJudgeVue extends Vue {
   //#region ### props ###
   @Prop({ type: Array, required: true }) topicTreeDataProp;
+  @Prop({ type: Number, required: true }) lessonIdProp;
   //#endregion
 
   //#region ### data ###
   questionJudgeStore = vxm.questionJudgeStore;
   questionStore = vxm.questionStore;
   lookupStore = vxm.lookupStore;
+  topicStore = vxm.topicStore;
+  lessonStore = vxm.lessonStore;
   questionJudge = this.questionJudgeStore.questionJudge;
   question = this.questionStore.question;
   pageAccess = util.getAccess(this.questionStore.modelName);
   questionJudgeGridColumn = [
     {
-      title: "استاندارد",
-      data: "IsStandardName"
+      title: "نام",
+      data: "User.Name"
     },
     {
-      title: "یادگیری",
-      data: "IsLearningName"
+      title: "نام خانوادگی",
+      data: "User.Family"
     },
-    {
-      title: "وضعیت",
-      data: "IsDelete"
-    },
-    {
-      title: "تایید جواب",
-      data: "IsActiveQuestionAnswerName"
-    },
-    {
-      title: "مدت پاسخ",
-      data: "ResponseSecond"
-    },
-    {
-      title: "درجه تکرار",
-      data: "Lookup_RepeatnessType.Value"
-    },
-    {
-      title: "درجه سختی",
-      data: "Lookup_QuestionHardnessType.Value"
-    },
-    {
-      title: "گروه آموزشی",
-      data: "EducationGroup"
-    },
+    // {
+    //   title: "استاندارد",
+    //   data: "IsStandardName"
+    // },
+    // {
+    //   title: "یادگیری",
+    //   data: "IsLearningName"
+    // },
+    // {
+    //   title: "وضعیت",
+    //   data: "IsDelete"
+    // },
+    // {
+    //   title: "تایید جواب",
+    //   data: "IsActiveQuestionAnswerName"
+    // },
+    // {
+    //   title: "مدت پاسخ",
+    //   data: "ResponseSecond"
+    // },
+    // {
+    //   title: "درجه تکرار",
+    //   data: "Lookup_RepeatnessType.Value"
+    // },
+    // {
+    //   title: "درجه سختی",
+    //   data: "Lookup_QuestionHardnessType.Value"
+    // },
+    // {
+    //   title: "گروه آموزشی",
+    //   data: "EducationGroup"
+    // },
     {
       title: "عملیات",
       data: "Id",
@@ -193,6 +222,18 @@ export default class QuestionJudgeVue extends Vue {
     var getNodeByKey = this.$refs["topicTree"]["getNodeByKey"];
     util.clearArray(this.concatTopicArray);
     var strArr: Array<string> = [];
+    newVal.forEach(x => {
+      strArr = [];
+      var node = getNodeByKey(x);
+      while (node) {
+        strArr.unshift(node.label);
+        node = node.parent;
+      }
+      this.concatTopicArray.push(strArr.join(" => "));
+    });
+
+    // topic 2
+    getNodeByKey = this.$refs["topicTree2"]["getNodeByKey"];
     newVal.forEach(x => {
       strArr = [];
       var node = getNodeByKey(x);

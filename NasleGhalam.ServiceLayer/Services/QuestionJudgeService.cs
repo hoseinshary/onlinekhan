@@ -76,6 +76,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _questionJudges
                 .Include(current => current.Lookup_QuestionHardnessType)
                 .Include(current => current.Lookup_RepeatnessType)
+                .Include(current => current.User)
                 .Where(current => current.QuestionId == questionId)
                 .AsNoTracking()
                 .AsEnumerable()

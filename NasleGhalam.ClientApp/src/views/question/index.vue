@@ -152,7 +152,7 @@
       :lessonIdProp="lessonId"
     ></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
-    <modal-question-judge v-if="canQuestionJudge" :topicTreeDataProp="topicTreeData"></modal-question-judge>
+    <modal-question-judge v-if="canQuestionJudge" :topicTreeDataProp="topicTreeData" :lessonIdProp="lessonId"></modal-question-judge>
     <modal-question-answer v-if="canQuestionAnswer" :lessonIdProp="lessonId"></modal-question-answer>
   </section>
 </template>

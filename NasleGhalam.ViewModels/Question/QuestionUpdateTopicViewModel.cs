@@ -15,7 +15,7 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "سوال ترکیبی")]
         public bool IsHybrid { get; set; }
 
-  
+        public int AnswerNumber { get; set; }
 
 
         [Display(Name = "مبحث پاسخ صحیح")]

@@ -968,7 +968,9 @@ namespace NasleGhalam.ServiceLayer.Services
             //}
 
             question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
-
+            question.TopicAnswer = questionViewModel.TopicAnswer;
+            question.AnswerNumber = questionViewModel.AnswerNumber;
+            
 
             //delete topics
             var deleteTopicList = question.Topics

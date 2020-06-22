@@ -63,9 +63,9 @@
                 <q-tooltip>ارزیابی جواب</q-tooltip>
               </q-btn>
               <q-btn
-                v-if="!canEdit"
+                v-if="questionAnswerJudgeAccess"
                 round
-                @click="$refs.createEditTab.showQuestionAnswerImage(data.row.Id)"
+                @click="showQuestionAnswerImage(data.row.Id)"
                 outline
                 icon="image"
                 size="sm"
@@ -74,7 +74,7 @@
                 <q-tooltip>عکس جواب</q-tooltip>
               </q-btn>
               <base-btn-edit
-                v-else-if="canEdit"
+                v-if="canDelete"
                 round
                 @click="$refs.createEditTab.showTabEdit(data.row.Id)"
               />
@@ -243,6 +243,7 @@ export default class QuestionAnswerVue extends Vue {
   open() {
     this.questionAnswer.QuestionId = this.question.Id;
     this.detailSelectedTab = "detail-tab";
+    this.questionAnswer.QuestionAnswerPicturePath ="";
 
     if (this.canCreate || this.canEdit) {
       this.lookupStore.fillAnswerType();
@@ -266,6 +267,11 @@ export default class QuestionAnswerVue extends Vue {
     var createEditTab = this.$refs["QuestionAnswerJudgeCreateEditTab"];
     createEditTab["showTabEdit"](id);
   }
+
+   showQuestionAnswerImage(id) {
+    this.questionAnswerStore.getById(id);
+  }
+
   //#endregion
 
   //#region ### hooks ###

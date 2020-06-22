@@ -96,6 +96,10 @@
     <Compile Include="Migrations\202006191825520_program.Designer.cs">
       <DependentUpon>202006191825520_program.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202006201349316_fix_programitem.cs" />
+    <Compile Include="Migrations\202006201349316_fix_programitem.Designer.cs">
+      <DependentUpon>202006201349316_fix_programitem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\202006220539458_fix_topianswer_leght.cs" />
     <Compile Include="Migrations\202006220539458_fix_topianswer_leght.Designer.cs">
       <DependentUpon>202006220539458_fix_topianswer_leght.cs</DependentUpon>
@@ -158,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202006191825520_program.resx">
       <DependentUpon>202006191825520_program.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006201349316_fix_programitem.resx">
+      <DependentUpon>202006201349316_fix_programitem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202006220539458_fix_topianswer_leght.resx">
       <DependentUpon>202006220539458_fix_topianswer_leght.cs</DependentUpon>

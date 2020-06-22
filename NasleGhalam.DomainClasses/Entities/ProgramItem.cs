@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.AccessControl;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.DomainClasses.Entities
 {
@@ -21,10 +23,10 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public int Hour { get; set; }
 
-        
 
+        public DayOfWeak  DayOfWeak { get; set; }
 
-
+        public String Description { get; set; } 
 
 
     }

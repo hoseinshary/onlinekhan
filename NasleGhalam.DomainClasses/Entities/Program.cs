@@ -25,5 +25,8 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<ProgramItem> ProgramItems { get; set; }
 
 
+        public string Description { get; set; } 
+
+
     }
 }

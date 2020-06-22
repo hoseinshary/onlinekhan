@@ -138,6 +138,25 @@ namespace NasleGhalam.Common
         GradeLevel = 4,
     }
 
+    public enum DayOfWeak
+    {
+        [Display(Name = "شنبه")]
+        SHANBE,
+        [Display(Name = "یکشنبه")]
+        YEKSHANBE,
+        [Display(Name = "دوشنبه")]
+        DOSHANBE,
+        [Display(Name = "سه شنبه")]
+        SESHANBE,
+        [Display(Name = "چهارشنبه")]
+        CHARSHANBE,
+        [Display(Name = "پنجشنبه")]
+        PANJSHANBE,
+        [Display(Name = "جمعه")]
+        JOME
+
+    }
+
     //public enum AnswerType : byte
     //{
     //}

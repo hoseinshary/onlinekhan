@@ -55,10 +55,21 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="programViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(ProgramViewModel programViewModel)
+        public ClientMessageResult Create(ProgramCreateViewModel programViewModel)
         {
             var program = Mapper.Map<Program>(programViewModel);
             _programs.Add(program);
+
+            foreach (var programItem in programViewModel.ProgramItemViewModels)
+            {
+                program.ProgramItems.Add(new ProgramItem
+                {
+                    LookupId_PrgoramItemName = programItem.LookupId_PrgoramItemName, 
+                    Hour = programItem.Hour , 
+                    DayOfWeak = programItem.DayOfWeak ,
+                    Description = programItem.Description 
+                });
+            }
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
@@ -74,10 +85,13 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="programViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(ProgramViewModel programViewModel)
+        public ClientMessageResult Update(ProgramCreateViewModel programViewModel)
         {
             var program = Mapper.Map<Program>(programViewModel);
             _uow.MarkAsChanged(program);
+
+
+
 
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);

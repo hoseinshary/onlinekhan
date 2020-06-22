@@ -31,18 +31,18 @@
             @input="fillGrid()"
           />
         </section>
-
+<!-- v-if="showElementTree('educationTree_GradeDdl')" -->
         <q-select
           v-model="educationTree.id"
-          v-if="showElementTree('educationTree_GradeDdl')"
+          
           :options="educationTree_GradeDdl"
           float-label="فیلتر درخت آموزش با مقطع"
           clearable
           class="s-q-input-border s-spacing"
         />
-
+<!-- v-if="showElementTree('educationTreeData')" -->
         <q-tree
-          v-if="showElementTree('educationTreeData')"
+          
           :nodes="educationTreeData"
           :expanded.sync="educationTree.expanded"
           :ticked.sync="educationTree.leafTicked"
@@ -61,16 +61,17 @@
       </div>
       <div class="col-md-8 col-lg-9">
         <section class="s-border s-spacing row">
+          <!-- v-show="!showWithoutTopic" -->
           <q-input
-            v-show="!showWithoutTopic"
+            
             v-model="topicTree.filter"
             float-label="جستجوی مبحث"
             clearable
             class="col-md-5 s-q-input-border"
           />
-
+<!-- v-show="!showWithoutTopic" -->
           <q-tree
-            v-show="!showWithoutTopic"
+            
             :nodes="topicStore.treeDataByLessonId2"
             :expanded.sync="topicTree.expanded"
             :selected.sync="topicTree.selected"

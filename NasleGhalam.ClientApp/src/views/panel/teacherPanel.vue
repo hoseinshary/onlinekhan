@@ -1,5 +1,5 @@
 <template>
-  <section class="col-md-8 q-px-lg">
+  <section class="col-md-9 q-px-lg">
     <section slot="body" class="row gutter-sm">
       <div class="col-md-3">
         <div>

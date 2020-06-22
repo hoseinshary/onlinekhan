@@ -19,28 +19,6 @@
         <img :src="questionAnswer.QuestionAnswerPicturePath" class="img-original-width" />
       </q-card-media>
     </q-card>
-    <div class="col-4">
-      <q-slide-transition>
-        <create-edit-tab
-          v-show="!visibleQuestionAnswerJudge"
-          :canCreateProp="canCreate"
-          :canEditProp="canEdit"
-          :lessonIdProp="lessonIdProp"
-          :questionIdProp="question.Id"
-          ref="createEditTab"
-        ></create-edit-tab>
-      </q-slide-transition>
-      <q-slide-transition>
-        <question-answer-judge-create-edit-tab
-          v-show="visibleQuestionAnswerJudge"
-          v-if="questionAnswerJudgeAccess"
-          :canCreateProp="questionAnswerJudgeCreateAccess"
-          :canEditProp="questionAnswerJudgeEditAccess"
-          :lessonIdProp="lessonIdProp"
-          ref="QuestionAnswerJudgeCreateEditTab"
-        ></question-answer-judge-create-edit-tab>
-      </q-slide-transition>
-    </div>
     <div class="col-8">
       <q-tabs inverted color="cyan-9" v-model="detailSelectedTab">
         <q-tab slot="title" name="detail-tab" label="جزییات جواب ها" default class="text-bold" />
@@ -131,6 +109,30 @@
         </q-tab-pane>
       </q-tabs>
     </div>
+    <div class="col-4">
+      <q-slide-transition>
+         <create-edit-tab
+         v-if="canEdit"
+          v-show="!visibleQuestionAnswerJudge"
+          :canCreateProp="canCreate"
+          :canEditProp="canEdit"
+          :lessonIdProp="lessonIdProp"
+          :questionIdProp="question.Id"
+          ref="createEditTab"
+        ></create-edit-tab>
+      </q-slide-transition> 
+      <q-slide-transition>
+        <question-answer-judge-create-edit-tab
+          v-show="visibleQuestionAnswerJudge"
+          v-if="questionAnswerJudgeAccess"
+          :canCreateProp="questionAnswerJudgeCreateAccess"
+          :canEditProp="questionAnswerJudgeEditAccess"
+          :lessonIdProp="lessonIdProp"
+          ref="QuestionAnswerJudgeCreateEditTab"
+        ></question-answer-judge-create-edit-tab>
+      </q-slide-transition>
+    </div>
+    
 
     <template slot="footer">
       <base-btn-back @click="questionAnswerStore.OPEN_MODAL_INDEX(false)"></base-btn-back>
@@ -187,10 +189,10 @@ export default class QuestionAnswerVue extends Vue {
       title: "فعال",
       data: "IsActive"
     },
-    {
-      title: "متن جواب",
-      data: "Context"
-    },
+    // {
+    //   title: "متن جواب",
+    //   data: "Context"
+    // },
     {
       title: "عملیات",
       data: "Id",

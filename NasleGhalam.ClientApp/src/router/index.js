@@ -69,7 +69,6 @@ Router.beforeEach((to, from, next) => {
   var authList = LocalStorage.get.item("authList");
   var subMenuList = LocalStorage.get.item("subMenuList");
 
- debugger;
 
   var pathForEvaluate = "";
   var tempArray = path.split("/");

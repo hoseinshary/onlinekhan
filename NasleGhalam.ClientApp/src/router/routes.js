@@ -1,27 +1,32 @@
 export default [
+  // {
+  //   path: "/home/index",
+  //   component: () => import("src/views/home/index.vue")
+  // },
   {
     path: "/",
-    component: () => import("src/views/home/index.vue")
-  },
-  {
-    path: "/home/index",
-    component: () => import("src/views/home/index.vue")
+    name: "home",
+    component: () => import(/* webpackChunkName: "home" */"src/views/home/index.vue")
   },
   {
     path: "/user/login",
-    component: () => import("src/views/user/login.vue")
+    name: "login",
+    component: () => import(/* webpackChunkName: "login" */"src/views/user/login.vue")
   },
   {
     path: "/resume/registration",
-    component: () => import("src/views/resume/registration.vue")
+    name: "registration",
+    component: () => import(/* webpackChunkName: "registration" */"src/views/resume/registration.vue")
   },
   {
     path: "/topic/printTopic",
-    component: () => import("src/views/topic/printTopic.vue")
+    name: "printTopic",
+    component: () => import(/* webpackChunkName: "printTopic" */"src/views/topic/printTopic.vue")
   },
   {
-    path: "/",
-    component: () => import("layouts/default.vue"),
+    path: "",
+    name:"layouts",
+    component: () => import(/* webpackChunkName: "layouts" */"layouts/default.vue"),
     children: [
       // {
       //   path: "",
@@ -29,129 +34,160 @@ export default [
       // },
       {
         path: "/province",
-        component: () => import("src/views/province/index.vue")
+        name: "province",
+        component: () => import(/* webpackChunkName: "province" */"src/views/province/index.vue")
       },
       {
         path: "/city",
-        component: () => import("src/views/city/index.vue")
+        name: "city",
+        component: () => import(/* webpackChunkName: "city" */"src/views/city/index.vue")
       },
       {
         path: "/lesson",
-        component: () => import("src/views/lesson/index.vue")
+        name: "lesson",
+        component: () => import(/* webpackChunkName: "lesson" */"src/views/lesson/index.vue")
       },
       {
         path: "/role",
-        component: () => import("src/views/role/index.vue")
+        name: "role",
+        component: () => import(/* webpackChunkName: "role" */"src/views/role/index.vue")
       },
       {
         path: "/user",
-        component: () => import("src/views/user/index.vue")
+        name: "user",
+        component: () => import(/* webpackChunkName: "user" */"src/views/user/index.vue")
       },
       {
         path: "/educationSubGroup",
-        component: () => import("src/views/educationSubGroup/index.vue")
+        name: "educationSubGroup",
+        component: () => import(/* webpackChunkName: "educationSubGroup" */"src/views/educationSubGroup/index.vue")
       },
       {
         path: "/topic",
-        component: () => import("src/views/topic/index.vue")
+        name: "topic",
+        component: () => import(/* webpackChunkName: "topic" */"src/views/topic/index.vue")
       },
       {
         path: "/educationBook",
-        component: () => import("src/views/educationBook/index.vue")
+        name: "educationBook",
+        component: () => import(/* webpackChunkName: "educationBook" */"src/views/educationBook/index.vue")
       },
       {
         path: "/publisher",
-        component: () => import("src/views/publisher/index.vue")
+        name: "publisher",
+        component: () => import(/* webpackChunkName: "publisher" */"src/views/publisher/index.vue")
       },
       {
         path: "/tag",
-        component: () => import("src/views/tag/index.vue")
+        name: "tag",
+        component: () => import(/* webpackChunkName: "tag" */"src/views/tag/index.vue")
       },
       {
         path: "/educationYear",
-        component: () => import("src/views/educationYear/index.vue")
+        name: "educationYear",
+        component: () => import(/* webpackChunkName: "educationYear" */"src/views/educationYear/index.vue")
       },
       {
         path: "/axillaryBook",
-        component: () => import("src/views/axillaryBook/index.vue")
+        name: "axillaryBook",
+        component: () => import(/* webpackChunkName: "axillaryBook" */"src/views/axillaryBook/index.vue")
       },
       {
         path: "/question",
-        component: () => import("src/views/question/index.vue")
+        name: "question",
+        component: () => import(/* webpackChunkName: "question" */"src/views/question/index.vue")
       },
       {
         path: "/question/:id/:lessonId",
-        component: () => import("src/views/question/index.vue")
+        name: "question2",
+        component: () => import(/* webpackChunkName: "question2" */"src/views/question/index.vue")
       },
       {
         path: "/student",
-        component: () => import("src/views/student/index.vue")
+        name: "student",
+        component: () => import(/* webpackChunkName: "student" */"src/views/student/index.vue")
       },
       {
         path: "/teacher",
-        component: () => import("src/views/teacher/index.vue")
+        name: "teacher",
+        component: () => import(/* webpackChunkName: "teacher" */"src/views/teacher/index.vue")
       },
       {
         path: "/educationTree",
-        component: () => import("src/views/educationTree/index.vue")
+        name: "educationTree",
+        component: () => import(/* webpackChunkName: "educationTree" */"src/views/educationTree/index.vue")
       },
       {
         path: "/questionGroup",
-        component: () => import("src/views/questionGroup/index.vue")
+        name: "questionGroup",
+        component: () => import(/* webpackChunkName: "questionGroup" */"src/views/questionGroup/index.vue")
       },
       {
         path: "/writer",
-        component: () => import("src/views/writer/index.vue")
+        name: "writer",
+        component: () => import(/* webpackChunkName: "writer" */"src/views/writer/index.vue")
       },
       {
         path: "/lesson_User",
-        component: () => import("src/views/lesson_User/index.vue")
+        name: "lesson_User",
+        component: () => import(/* webpackChunkName: "lesson_User" */"src/views/lesson_User/index.vue")
       },
       {
         path: "/lessonDepartment",
-        component: () => import("src/views/lessonDepartment/index.vue")
+        name: "lessonDepartment",
+        component: () => import(/* webpackChunkName: "lessonDepartment" */"src/views/lessonDepartment/index.vue")
       },
       {
         path: "/assay",
-        component: () => import("src/views/assay/index.vue")
+        name: "assay",
+        component: () => import(/* webpackChunkName: "assay" */"src/views/assay/index.vue")
       },
       {
         path: "/resume",
-        component: () => import("src/views/resume/index.vue")
+        name: "resume",
+        component: () => import(/* webpackChunkName: "resume" */"src/views/resume/index.vue")
       },
       {
         path: "/package",
-        component: () => import("src/views/package/index.vue")
+        name: "package",
+        component: () => import(/* webpackChunkName: "package" */"src/views/package/index.vue")
       },
       {
         path: "/user/register",
-        component: () => import("src/views/user/register.vue")
+        name: "register",
+        component: () => import(/* webpackChunkName: "register" */"src/views/user/register.vue")
       },
       {
         path: "/panel/expertPanel",
-        component: () => import("src/views/panel/expertPanel.vue")
+        name: "expertPanel",
+        component: () => import(/* webpackChunkName: "expertPanel" */"src/views/panel/expertPanel.vue")
       },
       {
         path: "/panel/adminPanel",
-        component: () => import("src/views/panel/adminPanel.vue")
+        name: "adminPanel",
+        component: () => import(/* webpackChunkName: "adminPanel" */"src/views/panel/adminPanel.vue")
       },
       {
         path: "/panel/teacherPanel",
-        component: () => import("src/views/panel/teacherPanel.vue")
+        name: "teacherPanel",
+        component: () => import(/* webpackChunkName: "teacherPanel" */"src/views/panel/teacherPanel.vue")
       },
       {
         path: "/report/questionOfEachLesson",
-        component: () => import("src/views/report/questionOfEachLesson.vue")
+        name: "questionOfEachLesson",
+        component: () => import(/* webpackChunkName: "questionOfEachLesson" */"src/views/report/questionOfEachLesson.vue")
       },
       {
         path: "/program",
-        component: () => import("src/views/program/index.vue")
+        name: "program",
+        component: () => import(/* webpackChunkName: "program" */"src/views/program/index.vue")
       }
     ]
   },
   {
     // Always leave this as last one
     path: "*",
-    component: () => import("pages/404.vue")
+    name:"notFound",
+    component: () => import(/* webpackChunkName: "notFound" */"pages/404.vue")
   }
 ];

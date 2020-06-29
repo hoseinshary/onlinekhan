@@ -41,6 +41,7 @@
           :options="tagStore.ddl"
           float-label="تگ ها"
         />
+        
       </section>
 
       <q-slide-transition>
@@ -55,11 +56,21 @@
             class="col-md-4"
             filter
           />
-
-
-          <base-select 
+      
+          <!-- v-model="multipleSelect" -->
+          <q-select
+            v-model="$v.question.TopicAnswer.$model"
+            
+            float-label="انتخاب مبحث پاسخ صحیح"
+            clearable
+            multiple
+            :options="topicAnswerDdl"
+            class="col-md-4"
+          />
+      
+          <!-- <base-select 
           
-          :model="$v.question.TopicAnswer" :options="topicAnswerDdl" class="col-md-4"></base-select>
+          :model="$v.question.TopicAnswer" :options="topicAnswerDdl" class="col-md-4"></base-select> -->
         </section>
       </q-slide-transition>
     </div>
@@ -220,6 +231,7 @@ export default class QuestionEditVue extends Vue {
   //#endregion
 
   //#region ### data ###
+  stringArrya = [];
   questionStore = vxm.questionStore;
   lookupStore = vxm.lookupStore;
   tagStore = vxm.tagStore;
@@ -315,7 +327,6 @@ export default class QuestionEditVue extends Vue {
       canEditTopicProp: true,
       canEditImportProp: false
     }
-
   };
   concatTopicArray: Array<string> = [];
   //#endregion
@@ -341,7 +352,7 @@ export default class QuestionEditVue extends Vue {
   }
 
   get topicAnswerDdl() {
-    return this.concatTopicArray.map(x => ({ value: x, label: x }));
+    return this.concatTopicArray.map(x => ({ value: x, label: x })).filter(x => x.value != "");
   }
   //#endregion
 

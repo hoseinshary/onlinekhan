@@ -32,7 +32,9 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_userService.GetAll(Request.GetRoleLevel(), userType));
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
+        
+
+        [HttpGet, CheckUserAccess(ActionBits.UserReadAccess,ActionBits.WritersCodeReadAccess)]
         public IHttpActionResult GetAllSupervisors()
         {
             return Ok(_userService.GetAllSupervisors());

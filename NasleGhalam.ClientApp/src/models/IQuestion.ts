@@ -20,7 +20,7 @@ export default interface IQuestion {
   // IsActive: boolean;
   IsHybrid : boolean;
   AnswerNumber: number;
-  TopicAnswer : string;
+  TopicAnswer  : Array<string>;
   QuestionWordPath: string;
   QuestionPicturePath: string;
   LookupId_QuestionType: number;
@@ -56,7 +56,7 @@ export const DefaultQuestion: IQuestion = {
   // IsActive: true,
   IsHybrid : false,
   AnswerNumber: 0,
-  TopicAnswer : "",
+  TopicAnswer : [],
   QuestionWordPath: "",
   QuestionPicturePath: "",
   LookupId_QuestionType: 6,

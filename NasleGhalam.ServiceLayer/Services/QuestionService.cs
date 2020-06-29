@@ -35,6 +35,17 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public QuestionViewModel GetById(int id)
         {
+            //var question = _questions
+            //    .Include(current => current.QuestionOptions)
+            //    .Include(current => current.Topics)
+            //    .Include(current => current.Tags)
+            //    .Include(current => current.Lookup_AreaType)
+            //    .Include(current => current.Writer)
+            //    .Include(current => current.Supervisors)
+            //    .Where(current => current.Id == id)
+            //    .AsNoTracking()
+            //    .AsEnumerable()
+            //    .FirstOrDefault();
             return _questions
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
@@ -47,6 +58,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)
                 .FirstOrDefault();
+
+            //returnVal.TopicAnswer.Clear();
+            //var tempStringTopicAnswer = question.TopicAnswer.Split(',');
+            //foreach (var item in tempStringTopicAnswer)
+            //{
+            //    returnVal.TopicAnswer.Add(item);
+            //}
+
+            //return returnVal;
         }
 
         public object GetAllByTopicIdsNoJudge(IEnumerable<int> ids, int userid, int rollLevel)
@@ -968,6 +988,11 @@ namespace NasleGhalam.ServiceLayer.Services
             //}
 
             question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
+            //foreach (var item in questionViewModel.TopicAnswer)
+            //{
+            //    question.TopicAnswer += item;
+            //    question.TopicAnswer += "@";
+            //}
             question.TopicAnswer = questionViewModel.TopicAnswer;
             question.AnswerNumber = questionViewModel.AnswerNumber;
             

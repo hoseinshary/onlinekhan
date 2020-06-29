@@ -35,6 +35,8 @@ namespace NasleGhalam.ServiceLayer.Services
             _actionService = actionService;
         }
 
+    
+
         /// <summary>
         /// گرفتن  کاربر با آی دی
         /// </summary>

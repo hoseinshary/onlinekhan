@@ -164,6 +164,6 @@
         ProgramDeleteAccess = 127,
         ProgramUpdateAccess = 128,
 
-
+        WritersCodeReadAccess = 129,
     }
 }

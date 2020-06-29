@@ -44,8 +44,8 @@ namespace NasleGhalam.ViewModels.Question
 
         public int AnswerNumber { get; set; }
 
-        
-        public string TopicAnswer { get; set; }
+
+        public List<string> TopicAnswer { get; set; } = new List<string>();
 
         public string QuestionWordPath => $"/Api/Question/GetWordFile/{FileName}".ToFullRelativePath();
 

@@ -103,7 +103,7 @@
                 <div v-else>{{data.row.Context}}</div>
               </template>
               <template slot="Id" slot-scope="data">
-                <a :href="data.row.QuestionWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
+                <a v-if="showElementDownloadFile('showDownloadFile')" :href="data.row.QuestionWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
                 <q-btn
                   v-if="canQuestionJudge"
                   outline
@@ -147,7 +147,7 @@
     <modal-edit
       v-if="canEdit"
       :canEditAdminProp="canEditAdmin"
-      :canEditExpertProp="canEditTopic"
+      :canEditTopicProp="canEditTopic"
       :canEditImportProp="canEditImport"
       :topicTreeDataProp="topicTreeData"
       :lessonIdProp="lessonId"
@@ -233,6 +233,11 @@ export default class QuestionVue extends Vue {
       canEditAdminProp: true,
       canEditExpertProp: false,
       canEditImportProp: false
+    },
+    showDownloadFile: {
+      canEditAdminProp: true,
+      canEditExpertProp: false,
+      canEditImportProp: true
     }
   };
 
@@ -327,6 +332,16 @@ export default class QuestionVue extends Vue {
     }
   }
 
+   get activeAccessDownloadFile() {
+    if (this.canEditAdmin) {
+      return "canEditAdminProp";
+    } else if (this.canEditImport) {
+      return "canEditImportProp";
+    } else {
+      return "canEditExpertProp";
+    }
+  }
+
     get activeAccessTree() {
     if (this.canShowTree) {
       return "canEditAdminProp";
@@ -386,8 +401,9 @@ export default class QuestionVue extends Vue {
       this.showJudged = false;
       this.showWithoutTopic = false;
       this.showNoJudgement = false;
-    }
+    }  
   }
+  
 
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
@@ -405,6 +421,11 @@ export default class QuestionVue extends Vue {
   showElement(elementName) {
     var elem = this.questionFilterAccessElement[elementName];
     return elem && elem[this.activeAccess];
+  }
+
+  showElementDownloadFile(elementName) {
+    var elem = this.questionFilterAccessElement[elementName];
+    return elem && elem[this.activeAccessDownloadFile];
   }
 
   showElementTree(elementName) {

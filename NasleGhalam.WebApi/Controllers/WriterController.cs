@@ -20,7 +20,7 @@ namespace NasleGhalam.WebApi.Controllers
             _writerService = writerService;
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.WriterReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.WriterReadAccess,ActionBits.WritersCodeReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_writerService.GetAll());

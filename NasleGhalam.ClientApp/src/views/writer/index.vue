@@ -7,10 +7,15 @@
     />
     <br />
     <base-table :grid-data="writerStore.gridData" :columns="writerGridColumn" hasIndex>
-      <template slot="Id" slot-scope="data">
+      <template slot="Id2" slot-scope="data">
         <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
       </template>
+    </base-table>
+
+ <base-table :grid-data="userStore.gridData" :columns="userGridColumn" hasIndex>
+      
+      
     </base-table>
 
     <!-- modals -->
@@ -35,18 +40,37 @@ import util from "src/utilities";
 export default class WriterVue extends Vue {
   //#region ### data ###
   writerStore = vxm.writerStore;
+  userStore = vxm.userStore;
   pageAccess = util.getAccess(this.writerStore.modelName);
   writerGridColumn = [
+    {
+      title: "کد",
+      data: "Id"
+    },
     {
       title: "نام",
       data: "Name"
     },
     {
       title: "عملیات",
-      data: "Id",
+      data: "Id2",
       searchable: false,
       sortable: false,
       visible: this.canEdit || this.canDelete
+    }
+  ];
+   userGridColumn = [
+    {
+      title: "کد",
+      data: "Id"
+    },
+    {
+      title: "نام",
+      data: "Name"
+    },
+    {
+      title: "نام خانوادگی",
+      data: "Family"
     }
   ];
   //#endregion
@@ -88,6 +112,7 @@ export default class WriterVue extends Vue {
   //#region ### hooks ###
   created() {
     this.writerStore.fillList();
+    this.userStore.fillList();
   }
   //#endregion
 }

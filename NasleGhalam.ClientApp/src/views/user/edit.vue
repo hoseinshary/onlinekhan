@@ -8,6 +8,15 @@
     @open="open"
     @close="userStore.OPEN_MODAL_EDIT(false)"
   >
+  <q-card inline style class="col-sm-3 col-md-3">
+          <q-card-media>
+            <img
+              :src="$q.localStorage.get.item('ProfilePic')"
+              class="profile-image"
+              alt="profile picture"
+            />
+          </q-card-media>
+     </q-card>
     <base-select
       :model="$v.user.RoleId"
       :options="roleDdl"
@@ -28,6 +37,8 @@
       class="col-sm-6 col-md-4"
       filter
     />
+
+     
     <!-- <base-hr/> -->
     <base-input :model="$v.user.Name" class="col-sm-6 col-md-4"/>
     <base-input :model="$v.user.Family" class="col-sm-6 col-md-4"/>

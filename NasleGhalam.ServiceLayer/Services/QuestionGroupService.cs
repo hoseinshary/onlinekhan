@@ -175,22 +175,24 @@ namespace NasleGhalam.ServiceLayer.Services
                     newQuestion.LookupId_RepeatnessType = 21;
                     newQuestion.LookupId_QuestionRank = 1063;
                     newQuestion.InsertDateTime = DateTime.Now;
-                    newQuestion.IsStandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
-                    newQuestion.WriterId = 1;
+                    //newQuestion.Istandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
+                    newQuestion.WriterId = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره طراح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره طراح"] : 1);
                     newQuestion.UserId = questionGroupViewModel.UserId;
-                    newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
+                    //newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
                     newQuestion.IsActive = false;
-                    newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان پاسخگویی"] : 0);
+                    newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان سوال"] : 0);
                     newQuestion.UseEvaluation = false;
                     newQuestion.QuestionNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] : 0);
 
                     //add supervisor
-                    var supervisor = new User() { Id = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره ناظر"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره ناظر"] : 0)};
-                    _uow.MarkAsUnChanged(supervisor);
-                    newQuestion.Supervisors.Add(supervisor);
+                    var supervisor = new User() { Id = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره ناظر"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره ناظر"] : 0) };
+                    if (supervisor.Id != 0)
+                    {
+                        _uow.MarkAsUnChanged(supervisor);
+                        newQuestion.Supervisors.Add(supervisor);
+                    }
 
-
-                questionGroup.Questions.Add(newQuestion);
+                    questionGroup.Questions.Add(newQuestion);
 
                     var filename2 = SitePath.GetQuestionAbsPath(newGuid.ToString()) + ".docx";
                     var filename3 = SitePath.GetQuestionAbsPath(newGuid.ToString());
@@ -255,25 +257,25 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult PreCreate(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word)
         {
             var returnGuidList = new List<string>();
-
+            var missing = Type.Missing;
             var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionGroupViewModel.File);
             //save Doc and excel file in temp memory
             word.SaveAs(wordFilename);
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
             //app.Visible = true;
-            var source = app.Documents.Open(wordFilename);
-            var missing = Type.Missing;
+            var source = app.Documents.Open(wordFilename, Visible: true);
+
 
             //split question group
             var x = source.Paragraphs.Count;
             var i = 1;
             while (i <= x)
             {
-                
+
                 if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                 {
-                    var target = app.Documents.Add();
+                    var target = app.Documents.Add(Visible: true);
                     //تریک درست شدن گزینه ها 
                     source.ActiveWindow.Selection.WholeStory();
                     source.ActiveWindow.Selection.Copy();
@@ -285,7 +287,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
 
                     i++;
-                
+
                     while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                     {
                         i++;
@@ -296,8 +298,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
                     source.ActiveWindow.Selection.Copy();
                     target.ActiveWindow.Selection.Paste();
-                    target.ActiveWindow.Selection.WholeStory();
-                    target.ActiveWindow.Selection.Paragraphs.ReadingOrder = WdReadingOrder.wdReadingOrderLtr;
+                    //target.ActiveWindow.Selection.WholeStory();
+                    //target.ActiveWindow.Selection.Paragraphs.ReadingOrder = WdReadingOrder.wdReadingOrderRtl;
                     //target.ActiveWindow.Selection.Paste();
 
                     var newGuid = Guid.NewGuid();
@@ -437,7 +439,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     j++;
                 }
 
-                
+
 
 
                 File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".docx");

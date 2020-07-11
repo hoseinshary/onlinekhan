@@ -20,7 +20,7 @@
             <q-card-main>{{0}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="جزییات" />
+              <q-btn flat color="primary" label="جزئیات" />
             </q-card-actions>
           </q-card>
         </div>

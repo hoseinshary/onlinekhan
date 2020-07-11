@@ -20,7 +20,7 @@
             <q-card-main>{{panelStore.panel.CountAllActiveQuestions}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="جزییات" />
+              <q-btn flat color="primary" label="جزئیات" />
             </q-card-actions>
           </q-card>
         </div>
@@ -31,7 +31,7 @@
             <q-card-main>{{panelStore.panel.CountAllJudges}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="جزییات" />
+              <q-btn flat color="primary" label="جزئیات" />
             </q-card-actions>
           </q-card>
         </div>

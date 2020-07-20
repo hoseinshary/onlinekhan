@@ -160,10 +160,13 @@
           class="col-md-4"
           filter
         />
+
+  
         <base-select
           v-if="showElement('LookupId_AreaType')"
           :model="$v.question.LookupId_AreaType"
           :options="lookupStore.areaTypeDdl"
+          multiple
           class="col-md-4"
           filter
         />

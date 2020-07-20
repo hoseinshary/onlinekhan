@@ -1,9 +1,9 @@
 import Vue from "Vue";
-import IReport, { DefaultPanel } from "src/models/IReport";
+import IReport_QuestionOfEachLesson, { DefaultReport_QuestionOfEachLesson } from "src/models/Report/IReport_QuestionOfEachLesson";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
-import { PANEL_URL as baseUrl } from "src/utilities/site-config";
+import { REPORT_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
@@ -12,12 +12,17 @@ import {
   Module,
   getRawActionContext
 } from "vuex-class-component";
+import IReport_UserQuestionReport, { DefaultReport_UserQuestionReport } from "src/models/Report/IReport_UserQuestionReport";
 
 
-@Module({ namespacedPath: "ReportStore/" })
+@Module({ namespacedPath: "reportStore/" })
 export class ReportStore extends VuexModule {
   
-  report: IReport;
+  reportQuestionOfEachLesson: IReport_QuestionOfEachLesson;
+  reportUserQuestionReport: IReport_UserQuestionReport;
+  private _reportListQuestionOfEachLesson: Array<IReport_QuestionOfEachLesson>;
+  private _reportListUserQuestionReport: Array<IReport_UserQuestionReport>;
+  private _modelChanged: boolean = true;
   
   /**
    * initialize data
@@ -25,7 +30,11 @@ export class ReportStore extends VuexModule {
   constructor() {
     super();
 
-    this.report = util.cloneObject(DefaultPanel);
+    this.reportQuestionOfEachLesson = util.cloneObject(DefaultReport_QuestionOfEachLesson);
+    this._reportListQuestionOfEachLesson = [];
+
+    this.reportUserQuestionReport = util.cloneObject(DefaultReport_UserQuestionReport);
+    this._reportListUserQuestionReport = [];
   
   }
 
@@ -35,13 +44,49 @@ export class ReportStore extends VuexModule {
   }
 
   
+  get recordNameUserQuestionReport() {
+    return this.reportUserQuestionReport.Name || "";
+  }
 
+  get recordNameQuestionOfEachLesson() {
+    return this.reportQuestionOfEachLesson.Name || "";
+  }
+
+  get gridDataQuestionOfEachLesson() {
+    return this._reportListQuestionOfEachLesson;
+  }
+  
+  get gridDataUserQuestionReport() {
+    return this._reportListUserQuestionReport;
+  }
   
 
   //#endregion
 
   //#region ### mutations ###
 
+  @mutation
+  private RESET(vm: any) {
+    util.mapObject(DefaultReport_UserQuestionReport  , this.reportUserQuestionReport, "Id");
+    util.mapObject(DefaultReport_QuestionOfEachLesson  , this.reportQuestionOfEachLesson, "Id");
+    if (vm.$v) {
+      vm.$v.$reset();
+    }
+  }
+
+  @mutation
+  private SET_LISTQuestionOfEachLesson(list: Array<IReport_QuestionOfEachLesson>) {
+    this._reportListQuestionOfEachLesson = list;
+  }
+
+  @mutation
+  private SET_LISTUserQuestionReport(list: Array<IReport_UserQuestionReport>) {
+    this._reportListUserQuestionReport = list;
+  }
+  @mutation
+  private MODEL_CHANGED(changed: boolean) {
+    this._modelChanged = changed;
+  }
   // @mutation
   // private CREATE(panel: IPanel) {
   //   this._panelList.push(panel);
@@ -50,29 +95,33 @@ export class ReportStore extends VuexModule {
   //#endregion
 
   //#region ### actions ###
+
   @action()
   async getAllQuestionOfEachLesson() {
     return axios
-      .get(`${baseUrl}/GetAllQuestionOfEachLesson`)
-      .then((response: AxiosResponse<IReport>) => {
-        util.mapObject(response.data, this.report);
-      });
-  }
-
-  
-
-  @action({ mode: "raw" })
-  async validateForm(vm: any) {
-    return new Promise(resolve => {
-      vm.$v.report.$touch();
-      if (vm.$v.report.$error) {
-        const context = getRawActionContext(this);
-        context.dispatch("notifyInvalidForm", vm, { root: true });
-        resolve(false);
-      }
-      resolve(true);
+    .get(`${baseUrl}/GetAllQuestionOfEachLesson`)
+    .then((response: AxiosResponse<Array<IReport_QuestionOfEachLesson>>) => {
+      this.SET_LISTQuestionOfEachLesson(response.data);
+      this.MODEL_CHANGED(false);
+      this.RESET(this._reportListQuestionOfEachLesson);
     });
   }
+  
+  @action()
+  async GetAllUsersReport() {
+    return axios
+    .get(`${baseUrl}/GetAllUsersReport`)
+    .then((response: AxiosResponse<Array<IReport_UserQuestionReport>>) => {
+      this.SET_LISTUserQuestionReport(response.data);
+      this.MODEL_CHANGED(false);
+      this.RESET(this._reportListUserQuestionReport);
+    });
+    
+  }
+  
+  
+
+
 
   @action({ mode: "raw" })
   async notify(payload: { vm: Vue; data: IMessageResult }) {

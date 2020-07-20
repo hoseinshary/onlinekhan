@@ -178,6 +178,11 @@ export default [
         component: () => import(/* webpackChunkName: "questionOfEachLesson" */"src/views/report/questionOfEachLesson.vue")
       },
       {
+        path: "/report/userQuestionReport",
+        name: "userQuestionReport",
+        component: () => import(/* webpackChunkName: "userQuestionReport" */"src/views/report/userQuestionReport.vue")
+      },
+      {
         path: "/program",
         name: "program",
         component: () => import(/* webpackChunkName: "program" */"src/views/program/index.vue")

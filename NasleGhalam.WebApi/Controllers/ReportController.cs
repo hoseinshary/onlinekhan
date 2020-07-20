@@ -34,5 +34,15 @@ namespace NasleGhalam.WebApi.Controllers
             return _lessonService.GetAllQuestionOfEachLesson();
         }
 
+
+        [HttpGet, CheckUserAccess(ActionBits.ReportReadAccess)]
+        public IList<AllUsersReporQuestionViewModel> GetAllUsersReport()
+        {
+            return _questionService.GetAllUsersReport();
+        }
+
+
+
+
     }
 }

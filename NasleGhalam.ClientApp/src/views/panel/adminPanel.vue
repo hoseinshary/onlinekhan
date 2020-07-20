@@ -9,7 +9,8 @@
             <q-card-main>{{panelStore.panel.CountAllQuestions}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="نمایش سوالات" />
+              <q-btn flat color="primary" label="نمایش سوالات" @click="$router.push('/report/questionOfEachLesson')" />
+               
             </q-card-actions>
           </q-card>
         </div>
@@ -20,7 +21,7 @@
             <q-card-main>{{panelStore.panel.CountAllActiveQuestions}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="جزئیات" />
+              <q-btn flat color="primary" label="جزئیات"  @click="$router.push('/report/questionOfEachLesson')"/>
             </q-card-actions>
           </q-card>
         </div>
@@ -31,7 +32,7 @@
             <q-card-main>{{panelStore.panel.CountAllJudges}}</q-card-main>
 
             <q-card-actions>
-              <q-btn flat color="primary" label="جزئیات" />
+              <q-btn flat color="primary" label="جزئیات"  @click="$router.push('/report/userQuestionReport')"/>
             </q-card-actions>
           </q-card>
         </div>

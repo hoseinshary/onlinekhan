@@ -35,7 +35,7 @@ export class ReportStore extends VuexModule {
 
   //#region ### getters ###
   get modelName() {
-    return "استان";
+    return "گزارش";
   }
 
   get recordName() {

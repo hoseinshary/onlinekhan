@@ -73,8 +73,7 @@ Router.beforeEach((to, from, next) => {
   var pathForEvaluate = "";
   var tempArray = path.split("/");
   tempArray.forEach(element => {
-    if(isNaN(element))
-    {
+    if (isNaN(element)) {
       pathForEvaluate += element;
     }
   });
@@ -82,7 +81,7 @@ Router.beforeEach((to, from, next) => {
     !authList ||
     !authList.filter(
       x =>
-        x.replace( /\//g , "").toLowerCase() == pathForEvaluate.replace(/\//g, "")
+        x.replace(/\//g, "").toLowerCase() == pathForEvaluate.replace(/\//g, "")
     ).length
   ) {
     next("/user/login");
@@ -90,11 +89,19 @@ Router.beforeEach((to, from, next) => {
     title = document.title = "ورود";
   } else {
     next();
-    title = document.title = subMenuList.filter(x =>
-      x.EnName.toLowerCase().endsWith(controller)
-    )[0].FaName;
+    
+    var subMenu = subMenuList.find(x =>
+      x.EnName.toLowerCase().includes(action) && x.EnName.toLowerCase().includes(controller)
+    );
 
-    LocalStorage.set("title", title);
+    if (!subMenu) {
+      subMenu = subMenuList.find(x => x.EnName.toLowerCase().endsWith(controller));
+    }
+
+    if (subMenu) {
+      title = document.title = subMenu.FaName;
+      LocalStorage.set("title", title);
+    }
   }
 });
 

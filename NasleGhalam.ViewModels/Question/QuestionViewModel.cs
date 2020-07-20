@@ -59,7 +59,7 @@ namespace NasleGhalam.ViewModels.Question
 
         public int LookupId_AuthorType { get; set; }
 
-        public int LookupId_AreaType { get; set; }
+        public List<int> LookupId_AreaTypes { get; set; }
         public int LookupId_QuestionRank { get; set; }
         
 

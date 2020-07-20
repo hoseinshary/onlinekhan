@@ -1,8 +1,8 @@
 <template>
   <section class="col-md-8">
-   
+ 
     <br />
-    <base-table :grid-data="reportStore.gridDataQuestionOfEachLesson" :columns="reportGridColumns" hasIndex>
+    <base-table :grid-data="reportStore.gridDataUserQuestionReport" :columns="reportGridColumns" hasIndex>
       
     </base-table>
 
@@ -26,32 +26,29 @@ export default class QuestionVue extends Vue {
 
    reportGridColumns = [
     {
-      title: "درس",
+      title: "نام",
       data: "Name"
     },
     {
-      title: "سوالات وارد شده",
-      data: "AllQuestionNum"
+      title: "نام خانواده",
+      data: "Family"
     },
     {
-      title: "سوالات شاخه بندی شده",
-      data: "AllQuestionTopiced"
+      title: "سوالات کارشناسی شده",
+      data: "NumberOfQuestionJudged"
     },
     {
-      title: "سوالات دارای کارشناسی",
-      data: "AllQuestionJudged"
+      title: "جواب سوالات کارشناسی شده",
+      data: "NumberOfQuestionAnswerJudged"
+    },
+    
+    {
+      title: "سوالات تالیف",
+      data: "NumberOfWriteQuestion"
     },
     {
-      title: "سوالات تایید شده",
-      data: "AllQuestionActived"
-    },
-    {
-      title: "سوالات ترکیبی",
-      data: "AllQuestionHybrid"
-    },
-    {
-      title: "سوالات کارشناسی شده کامل",
-      data: "AllQuestionJudgedFull"
+      title: "سوالات ناظر",
+      data: "NumberOfSupervisorQuestion"
     }
   ];
 
@@ -71,8 +68,7 @@ export default class QuestionVue extends Vue {
 
   //#region ### hooks ###
   created() {
-    
-    this.reportStore.getAllQuestionOfEachLesson();
+    this.reportStore.GetAllUsersReport();
   }
 
   //#endregion

@@ -10,6 +10,7 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Question;
+using NasleGhalam.ViewModels.Report;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -18,6 +19,9 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "سوال";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Question> _questions;
+        private readonly IDbSet<User> _users;
+        private readonly IDbSet<QuestionJudge> _questionJudges;
+        private readonly IDbSet<QuestionAnswerJudge> _questionAnswerJudges;
 
         private readonly Lazy<QuestionGroupService> _questionGroupService;
 
@@ -25,6 +29,9 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             _uow = uow;
             _questions = uow.Set<Question>();
+            _questionJudges = uow.Set<QuestionJudge>();
+            _questionAnswerJudges = uow.Set<QuestionAnswerJudge>();
+            _users = uow.Set<User>();
             _questionGroupService = questionGroupService;
         }
 
@@ -50,7 +57,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
                 .Include(current => current.Tags)
-                .Include(current => current.Lookup_AreaType)
+                .Include(current => current.Lookup_AreaTypes)
                 .Include(current => current.Writer)
                 .Include(current => current.Supervisors)
                 .Where(current => current.Id == id)
@@ -67,6 +74,23 @@ namespace NasleGhalam.ServiceLayer.Services
             //}
 
             //return returnVal;
+        }
+
+        public IList<AllUsersReporQuestionViewModel> GetAllUsersReport()
+        {
+
+            
+            return _users.Where(x => x.Role.Level == 3)
+                .Select(x=>new AllUsersReporQuestionViewModel
+                {
+                    Name = x.Name,
+                    Family = x.Family,
+                    NumberOfQuestionAnswerJudged =x.QuestionAnswerJudges.Count,
+                    NumberOfQuestionJudged = x.QuestionJudges.Count,
+                    NumberOfSupervisorQuestion = x.SupervisorQuestions.Count,          
+                    NumberOfWriteQuestion = x.Questions.Count(question=> question.Writer.Id==x.Id)
+                }).ToList();
+          
         }
 
         public object GetAllByTopicIdsNoJudge(IEnumerable<int> ids, int userid, int rollLevel)
@@ -644,7 +668,7 @@ namespace NasleGhalam.ServiceLayer.Services
             question.InsertDateTime = DateTime.Now;
             question.IsActive = questionViewModel.IsActive;
             question.IsStandard = questionViewModel.IsStandard;
-            question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
+            //question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
             question.LookupId_AuthorType = questionViewModel.LookupId_AuthorType;
             question.LookupId_QuestionHardnessType = questionViewModel.LookupId_QuestionHardnessType;
             question.LookupId_QuestionType = questionViewModel.LookupId_QuestionType;
@@ -987,7 +1011,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             //}
 
-            question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
+            //question.LookupId_AreaType = questionViewModel.LookupId_AreaType;
             //foreach (var item in questionViewModel.TopicAnswer)
             //{
             //    question.TopicAnswer += item;

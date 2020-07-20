@@ -76,8 +76,8 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     },
     LookupId_AreaType: {
       displayName: displayName("حیطه سوال"),
-      numeric,
-      requiredDdl: requiredDdl(0)
+      // numeric,
+      // requiredDdl: requiredDdl(0)
     },
     ResponseSecond: {
       displayName: displayName("زمان پاسخ"),

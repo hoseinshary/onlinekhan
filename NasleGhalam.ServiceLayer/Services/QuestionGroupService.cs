@@ -170,7 +170,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     newQuestion.QuestionPoint = Convert.ToInt32(dt.Rows[numberOfQ - 1]["بارم سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["بارم سوال"] : 0);
                     newQuestion.AnswerNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["گزینه صحیح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["گزینه صحیح"] : 0);
                     newQuestion.LookupId_QuestionHardnessType = 1040;
-                    newQuestion.LookupId_AreaType = 1036;
+                    //newQuestion.LookupId_AreaType = 1036;
                     newQuestion.LookupId_AuthorType = 1039;
                     newQuestion.LookupId_RepeatnessType = 21;
                     newQuestion.LookupId_QuestionRank = 1063;

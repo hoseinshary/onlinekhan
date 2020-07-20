@@ -9,8 +9,7 @@ namespace NasleGhalam.ViewModels.Question
         public int Id { get; set; }
 
         [Display(Name = "حیطه")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
-        public int LookupId_AreaType { get; set; }
+        public List<int> LookupId_AreaTypes { get; set; }
 
         [Display(Name = "سوال ترکیبی")]
         public bool IsHybrid { get; set; }

@@ -108,6 +108,10 @@
     <Compile Include="Migrations\202006220609443_fix_questionasnwer_judge_field.Designer.cs">
       <DependentUpon>202006220609443_fix_questionasnwer_judge_field.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202007121055093_questionMultiAreaType.cs" />
+    <Compile Include="Migrations\202007121055093_questionMultiAreaType.Designer.cs">
+      <DependentUpon>202007121055093_questionMultiAreaType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -171,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202006220609443_fix_questionasnwer_judge_field.resx">
       <DependentUpon>202006220609443_fix_questionasnwer_judge_field.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007121055093_questionMultiAreaType.resx">
+      <DependentUpon>202007121055093_questionMultiAreaType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

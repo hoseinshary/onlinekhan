@@ -49,8 +49,7 @@ namespace NasleGhalam.ViewModels.Question
 
 
         [Display(Name = "نوع طراح")]
-        [RequiredDdlValidator(invalidValue: "0", ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "RequiredDll")]
-        public int LookupId_AreaType { get; set; }
+        public List<int> LookupId_AreaTypes { get; set; }
 
 
         [Display(Name = "امتیاز")]

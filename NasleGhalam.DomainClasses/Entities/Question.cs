@@ -18,6 +18,7 @@ namespace NasleGhalam.DomainClasses.Entities
             AssayQuestions =new HashSet<AssayQuestion>();
             Users = new HashSet<User>();
             Supervisors = new HashSet<User>();
+            Lookup_AreaTypes =  new HashSet<Lookup>();
 
         }
         public int Id { get; set; }
@@ -49,8 +50,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Writer Writer { get; set; }
         public short ResponseSecond { get; set; }
-        public int LookupId_AreaType { get; set; }
-        public Lookup Lookup_AreaType { get; set; }
+        
+        public ICollection<Lookup> Lookup_AreaTypes { get; set; }
 
         public int LookupId_QuestionRank { get; set; }
         public Lookup Lookup_QuestionRank { get; set; }
@@ -88,6 +89,7 @@ namespace NasleGhalam.DomainClasses.Entities
                
         public ICollection<Tag> Tags { get; set; }
 
+        //update users
         public ICollection<User> Users { get; set; }
 
         public ICollection<User> Supervisors { get; set; }

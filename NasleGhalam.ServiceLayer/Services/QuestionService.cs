@@ -79,18 +79,18 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<AllUsersReporQuestionViewModel> GetAllUsersReport()
         {
 
-            
+
             return _users.Where(x => x.Role.Level == 3)
-                .Select(x=>new AllUsersReporQuestionViewModel
+                .Select(x => new AllUsersReporQuestionViewModel
                 {
                     Name = x.Name,
                     Family = x.Family,
-                    NumberOfQuestionAnswerJudged =x.QuestionAnswerJudges.Count,
+                    NumberOfQuestionAnswerJudged = x.QuestionAnswerJudges.Count,
                     NumberOfQuestionJudged = x.QuestionJudges.Count,
-                    NumberOfSupervisorQuestion = x.SupervisorQuestions.Count,          
-                    NumberOfWriteQuestion = x.Questions.Count(question=> question.Writer.Id==x.Id)
+                    NumberOfSupervisorQuestion = x.SupervisorQuestions.Count,
+                    NumberOfWriteQuestion = x.Questions.Count(question => question.Writer.Id == x.Id)
                 }).ToList();
-          
+
         }
 
         public object GetAllByTopicIdsNoJudge(IEnumerable<int> ids, int userid, int rollLevel)
@@ -625,6 +625,17 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Supervisors)
                 .First(current => current.Id == questionViewModel.Id);
 
+            if (questionViewModel.FileBytes.Length > 0)
+            {
+                using (var ms = new MemoryStream(questionViewModel.FileBytes))
+                {
+                    using (var file = new FileStream("d:\\file.docx", FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
+            }
+
             var previousFileName = questionViewModel.FileName;
             Application app = null;
             Document source = null;
@@ -681,7 +692,7 @@ namespace NasleGhalam.ServiceLayer.Services
             question.IsDelete = questionViewModel.IsDelete;
             question.IsHybrid = questionViewModel.IsHybrid;
             question.TopicAnswer = questionViewModel.TopicAnswer;
-            
+
 
 
             //delete topics
@@ -854,10 +865,10 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
             }
-           
+
             question.WriterId = questionViewModel.WriterId;
             question.Description = questionViewModel.Description;
-            question.LookupId_AuthorType = questionViewModel.LookupId_AuthorType;
+            //question.LookupId_AuthorType = questionViewModel.LookupId_AuthorType;
             question.LookupId_QuestionType = questionViewModel.LookupId_QuestionType;
             question.QuestionNumber = questionViewModel.QuestionNumber;
             question.AnswerNumber = questionViewModel.AnswerNumber;
@@ -965,7 +976,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="questionViewModel"></param>
         /// <param name="word"></param>
         /// <returns></returns>
-        public ClientMessageResult UpdateTopic(QuestionUpdateTopicViewModel questionViewModel ,  int userUpdateId)
+        public ClientMessageResult UpdateTopic(QuestionUpdateTopicViewModel questionViewModel, int userUpdateId)
         {
             var question = _questions
                 .Include(current => current.QuestionOptions)
@@ -1019,7 +1030,7 @@ namespace NasleGhalam.ServiceLayer.Services
             //}
             question.TopicAnswer = questionViewModel.TopicAnswer;
             question.AnswerNumber = questionViewModel.AnswerNumber;
-            
+
 
             //delete topics
             var deleteTopicList = question.Topics
@@ -1117,7 +1128,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (!question.Users.Any())
             {
-                var user = new User() {Id = userUpdateId};
+                var user = new User() { Id = userUpdateId };
                 _uow.MarkAsUnChanged(user);
                 question.Users.Add(user);
             }
@@ -1164,7 +1175,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 question.Supervisors.Remove(user);
             }
-            
+
             //remove options
             var options = question.QuestionOptions.ToList();
             foreach (var item in options)

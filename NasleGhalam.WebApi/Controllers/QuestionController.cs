@@ -146,7 +146,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.QuestionUpdateAccess)]
         [CheckModelValidation]
         //[CheckWordFileUpdateValidation("word", 1024)]
-        public IHttpActionResult Update([FromUri]QuestionUpdateViewModel questionViewModel)
+        public IHttpActionResult Update(QuestionUpdateViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             questionViewModel.UserId = Request.GetUserId();

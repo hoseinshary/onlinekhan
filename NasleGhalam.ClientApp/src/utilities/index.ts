@@ -120,6 +120,15 @@ const getNested = function(theObject: object, path: string) {
   }
 };
 
+const convertFileToBase64 = function(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result || "");
+    reader.onerror = error => reject(error);
+  });
+};
+
 /**
  * check type value be string
  * @param {*} value
@@ -357,5 +366,6 @@ export default {
   listToTree,
   searchTreeArray,
   treeToList,
-  enumToDdl
+  enumToDdl,
+  convertFileToBase64
 };

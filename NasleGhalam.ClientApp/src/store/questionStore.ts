@@ -158,31 +158,32 @@ export class QuestionStore extends VuexModule {
     lessonId: number;
     showWithoutTopic: boolean;
     showNoJudgement: boolean;
-    showJudged : boolean;
-    showActived : boolean;
+    showJudged: boolean;
+    showActived: boolean;
     topicIds: Array<number>;
   }) {
     var url = "";
-    
+
     if (payload.showJudged) {
       url = `${baseUrl}/GetAllJudgedByUserIdByLessonId/${payload.lessonId}`;
-    }else{
-    if (payload.showActived) {
-      url = `${baseUrl}/GetAllActiveByLessonId/${payload.lessonId}`;
-    }else{
-    if (payload.showWithoutTopic) {
-      url = `${baseUrl}/GetAllNoTopicByLessonId/${payload.lessonId}`;
     } else {
-      var params = util.toParam({
-        Ids: payload.topicIds
-      });
-      if (payload.showNoJudgement) {
-        url = `${baseUrl}/GetAllByTopicIdsNoJudge?${params}`;
+      if (payload.showActived) {
+        url = `${baseUrl}/GetAllActiveByLessonId/${payload.lessonId}`;
       } else {
-        url = `${baseUrl}/GetAllByTopicIds?${params}`;
+        if (payload.showWithoutTopic) {
+          url = `${baseUrl}/GetAllNoTopicByLessonId/${payload.lessonId}`;
+        } else {
+          var params = util.toParam({
+            Ids: payload.topicIds
+          });
+          if (payload.showNoJudgement) {
+            url = `${baseUrl}/GetAllByTopicIdsNoJudge?${params}`;
+          } else {
+            url = `${baseUrl}/GetAllByTopicIds?${params}`;
+          }
+        }
       }
-    }}}
-
+    }
 
     return axios.get(url).then((response: AxiosResponse<Array<IQuestion>>) => {
       this.SET_LIST(response.data);
@@ -268,7 +269,7 @@ export class QuestionStore extends VuexModule {
       UseEvaluation: this.question.UseEvaluation,
       IsStandard: this.question.IsStandard,
       WriterId: this.question.WriterId,
-      SupervisorUserId : this.question.SupervisorUserId,
+      SupervisorUserId: this.question.SupervisorUserId,
       ResponseSecond: this.question.ResponseSecond,
       Description: this.question.Description,
       AnswerNumber: this.question.AnswerNumber,
@@ -314,7 +315,6 @@ export class QuestionStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    
     var wordFile = vm.$refs.wordFile;
     //var msg = "";
     // if (this.question.TopicIds && this.question.TopicIds.length == 0) {
@@ -338,16 +338,24 @@ export class QuestionStore extends VuexModule {
     //   });
     //   return;
     // }
-    var formData = new FormData();
-    if(wordFile)
-      formData.append(wordFile["name"], wordFile["files"][0]);
+    var base64File: any = "";
+    if (wordFile && wordFile["files"][0]) {
+      base64File = await util.convertFileToBase64(wordFile["files"][0]);
+    }
+
+    // var formData = new FormData();
+    // if (wordFile) {
+    //   formData.append(wordFile["name"], wordFile["files"][0]);
+    // }
+
     var newData = {
       Id: this.question.Id,
+      Base64File: base64File,
       QuestionNumber: this.question.QuestionNumber,
       QuestionPoint: this.question.QuestionPoint,
       UseEvaluation: this.question.UseEvaluation,
       IsStandard: this.question.IsStandard,
-      IsDelete : this.question.IsDelete,
+      IsDelete: this.question.IsDelete,
       WriterId: this.question.WriterId,
       ResponseSecond: this.question.ResponseSecond,
       Description: this.question.Description,
@@ -361,34 +369,46 @@ export class QuestionStore extends VuexModule {
       LookupId_QuestionRank: this.question.LookupId_QuestionRank,
       TopicIds: this.question.TopicIds,
       TagIds: this.question.TagIds,
-      TopicAnswer : this.question.TopicAnswer
+      TopicAnswer: this.question.TopicAnswer.join(",")
     };
-    var params = util.toParam(newData);
 
     var url = "";
     if (activeAccess == "canEditAdminProp") {
-      url = `${baseUrl}/Update?${params}`;
+      url = `${baseUrl}/Update`;
     } else if (activeAccess == "canEditImportProp") {
-      url = `${baseUrl}/UpdateImport?${params}`;
+      url = `${baseUrl}/UpdateImport`;
     } else if (activeAccess == "canEditTopicProp") {
-      url = `${baseUrl}/UpdateTopic?${params}`;
+      url = `${baseUrl}/UpdateTopic`;
     }
 
-    return axios({
-      method: "post",
-      url: url,
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" }
-    }).then((response: AxiosResponse<IMessageResult>) => {
-      let data = response.data;
-      this.notify({ vm, data });
+    return axios
+      .post(url, newData)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
 
-      if (data.MessageType == MessageType.Success) {
-        this.UPDATE(data.Obj);
-        this.OPEN_MODAL_EDIT(false);
-        this.resetEdit();
-      }
-    });
+        if (data.MessageType == MessageType.Success) {
+          this.UPDATE(data.Obj);
+          this.OPEN_MODAL_EDIT(false);
+          this.resetEdit();
+        }
+      });
+
+    // return axios({
+    //   method: "post",
+    //   url: url,
+    //   data: formData,
+    //   headers: { "Content-Type": "multipart/form-data" }
+    // }).then((response: AxiosResponse<IMessageResult>) => {
+    //   let data = response.data;
+    //   this.notify({ vm, data });
+
+    //   if (data.MessageType == MessageType.Success) {
+    //     this.UPDATE(data.Obj);
+    //     this.OPEN_MODAL_EDIT(false);
+    //     this.resetEdit();
+    //   }
+    // });
   }
 
   @action()

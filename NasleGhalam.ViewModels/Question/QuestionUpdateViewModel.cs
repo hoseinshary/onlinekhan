@@ -45,7 +45,29 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "نویسنده")]
         public int WriterId { get; set; }
 
+        [Display(Name = "فایل")]
+        public string Base64File { get; set; }
 
+        public byte[] FileBytes
+        {
+            get
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(Base64File))
+                    {
+                        return Convert.FromBase64String(Base64File.Replace(
+                            Base64File.Substring(0, Base64File.IndexOf("base64,", StringComparison.Ordinal) + 7), ""));
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                return new byte[] { };
+            }
+        }
 
 
         [Display(Name = "نوع طراح")]

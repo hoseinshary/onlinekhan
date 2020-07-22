@@ -11,7 +11,10 @@ namespace NasleGhalam.WebApi.FilterAttribute
     {
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            if (actionContext.ModelState.IsValid) return;
+            if (actionContext.ModelState.IsValid)
+            {
+                return;
+            }
 
             var sb = new StringBuilder();
             foreach (var modelState in actionContext.ModelState)

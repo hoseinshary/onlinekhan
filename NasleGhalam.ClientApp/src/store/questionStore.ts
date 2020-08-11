@@ -143,12 +143,16 @@ export class QuestionStore extends VuexModule {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IQuestion>) => {
-        util.mapObject(response.data, this.question);
+        util.mapObject (response.data,this.question);
         if (response.data.Topics) {
           this.question.TopicIds = response.data.Topics.map(x => x.Id);
         }
         if (response.data.Tags) {
           this.question.TagIds = response.data.Tags.map(x => x.Id);
+        }
+        if(response.data.Lookup_AreaTypes)
+        {
+          this.question.LookupId_AreaType = response.data.Lookup_AreaTypes.map(x => x.Id);
         }
       });
   }
@@ -365,9 +369,10 @@ export class QuestionStore extends VuexModule {
         .LookupId_QuestionHardnessType,
       LookupId_RepeatnessType: this.question.LookupId_RepeatnessType,
       LookupId_AuthorType: this.question.LookupId_AuthorType,
-      LookupId_AreaType: this.question.LookupId_AreaType,
+      LookupId_AreaTypes: this.question.LookupId_AreaType,
       LookupId_QuestionRank: this.question.LookupId_QuestionRank,
       TopicIds: this.question.TopicIds,
+      FileName : this.question.FileName,
       TagIds: this.question.TagIds,
       TopicAnswer: this.question.TopicAnswer.join(",")
     };

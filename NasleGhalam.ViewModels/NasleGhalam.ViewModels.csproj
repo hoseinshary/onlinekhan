@@ -103,6 +103,7 @@
     <Compile Include="QuestionOption\QuestionOptionViewModel.cs" />
     <Compile Include="Question\QuestionUpdateImportViewModel.cs" />
     <Compile Include="Question\QuestionUpdateTopicViewModel.cs" />
+    <Compile Include="Question\QuestionTopicViewModel.cs" />
     <Compile Include="Question\QuestionViewModel.cs" />
     <Compile Include="Question\QuestionUpdateViewModel.cs" />
     <Compile Include="Question\QuestionCreateViewModel.cs" />

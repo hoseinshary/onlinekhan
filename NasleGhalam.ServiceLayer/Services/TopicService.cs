@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
@@ -14,11 +16,13 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "مبحث";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Topic> _topics;
+        private readonly IDbSet<Question> _questions;
 
         public TopicService(IUnitOfWork uow)
         {
             _uow = uow;
             _topics = uow.Set<Topic>();
+            _questions = uow.Set<Question>();
         }
 
         /// <summary>
@@ -42,12 +46,46 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<TopicViewModel> GetAllByLessonId(int id)
         {
-            return _topics
+            var topics = _topics
                 .Where(current => current.LessonId == id)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<TopicViewModel>)
                 .ToList();
+            var questions = _questions.Select(x => new { x.Id , x.Topics})
+                .ToList();
+            var questions2 = _questions.Select(x => x.Topics.Select(y => y.Id) )
+                .ToList();
+            foreach (var topicViewModel in topics)
+            {
+               // topics.Find(x => x.Id == topicViewModel.Id).Title += " (" + getCountTopic(topicViewModel.Id,topics , questions) + ")";
+            }
+        
+
+             return topics;
+        }
+
+       
+
+        private int getCountTopic(int id , List<TopicViewModel> topics , List<object> questions)
+        {
+            //var count = _questions.Count(current => current.Topics.Any(x => x.Id == id));
+            //var count = questions.Count(current => current.Topics.Any(x => x.Id == id))
+
+            //if (count == 0 && topics.Any(x => x.ParentTopicId == id))
+            //{
+            //    foreach (var childTopic in topics.Where(x => x.ParentTopicId == id))
+            //    {
+            //        count += getCountTopic(childTopic.Id, topics , questions);
+            //    }
+
+            //    return count;
+            //}
+            //else
+            //{
+            //    return count;
+            //}
+            return 0;
         }
 
         /// <summary>

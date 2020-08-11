@@ -22,9 +22,9 @@ namespace NasleGhalam.DataAccess.Migrations
                 .Index(t => t.QuestionId)
                 .Index(t => t.AreaTypeId);
             
-            AddColumn("dbo.Programs", "Description", c => c.String(maxLength: 50));
-            AddColumn("dbo.ProgramItems", "DayOfWeak", c => c.Int(nullable: false));
-            AddColumn("dbo.ProgramItems", "Description", c => c.String(maxLength: 50));
+           // AddColumn("dbo.Programs", "Description", c => c.String(maxLength: 50));
+            //AddColumn("dbo.ProgramItems", "DayOfWeak", c => c.Int(nullable: false));
+            //AddColumn("dbo.ProgramItems", "Description", c => c.String(maxLength: 50));
             DropColumn("dbo.Questions", "LookupId_AreaType");
         }
         

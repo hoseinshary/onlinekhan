@@ -45,8 +45,8 @@
           <span class="text-black">{{question.Writer.Name}}</span>
         </div>
         <div class="col-12 q-pa-sm">
-          حیطه سوال:
-          <span class="text-black">{{question.Lookup_AreaType.Value}}</span>
+          حیطه :
+              {{question.Lookup_AreaTypes.map(x=> x.Value).join(", ")}}
         </div>
         
       </section>

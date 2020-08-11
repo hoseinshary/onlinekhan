@@ -42,7 +42,7 @@ export const DefaultQuestionJudge: IQuestionJudge = {
   LookupId_RepeatnessType: 0,
   LookupId_WhereProblem: 1066,
   LookupId_ReasonProblem: 1067,
-  LookupId_QuestionRank: 1063,
+  LookupId_QuestionRank: 0,
   Description: "",
   EducationGroup: "",
   UserId :0

@@ -29,7 +29,7 @@ export default interface IQuestion {
   LookupId_AuthorType: number;
   LookupId_AreaType: Array<number>;
   LookupId_QuestionRank: number;
-  Lookup_AreaType?: ILookup;
+  Lookup_AreaTypes?: Array<ILookup>;
   Writer?: IWriter;
   SupervisorUser?: IUser;
   QuestionOptions?: Array<IQuestionOption>;
@@ -65,7 +65,7 @@ export const DefaultQuestion: IQuestion = {
   LookupId_AuthorType: 1039,
   LookupId_AreaType: [],
   LookupId_QuestionRank: 1063,
-  Lookup_AreaType: DefaultLookup,
+  Lookup_AreaTypes: [],
   Writer: DefaultWriter,
   SupervisorUser : DefaultUser,
   QuestionOptions: [],

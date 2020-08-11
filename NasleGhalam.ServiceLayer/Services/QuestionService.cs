@@ -110,7 +110,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 return _questions
                     .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                     .Where(current =>
-                        current.QuestionJudges.Any(x => x.UserId != userid) || !current.QuestionJudges.Any())
+                        current.QuestionJudges.All(x => x.UserId != userid) /*|| !current.QuestionJudges.Any()*/)
                     .AsNoTracking()
                     .AsEnumerable()
                     .Select(Mapper.Map<QuestionViewModel>)
@@ -616,32 +616,24 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="questionViewModel"></param>
         /// <param name="word"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(QuestionUpdateViewModel questionViewModel, HttpPostedFile word)
+        public ClientMessageResult Update(QuestionUpdateViewModel questionViewModel)
         {
             var question = _questions
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
                 .Include(current => current.Tags)
+                .Include(current => current.Lookup_AreaTypes)
                 .Include(current => current.Supervisors)
                 .First(current => current.Id == questionViewModel.Id);
 
-            if (questionViewModel.FileBytes.Length > 0)
-            {
-                using (var ms = new MemoryStream(questionViewModel.FileBytes))
-                {
-                    using (var file = new FileStream("d:\\file.docx", FileMode.Create, FileAccess.Write))
-                    {
-                        ms.WriteTo(file);
-                    }
-                }
-            }
+          
 
             var previousFileName = questionViewModel.FileName;
             Application app = null;
             Document source = null;
             string wordFilename = null;
             var haveFileUpdate = false;
-            if (word != null && word.ContentLength > 0)
+            if (questionViewModel.FileBytes.Length > 0)
             {
                 wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
                 haveFileUpdate = true;
@@ -649,7 +641,13 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
                 //save Doc file in temp memory
-                word.SaveAs(wordFilename);
+                using (var ms = new MemoryStream(questionViewModel.FileBytes))
+                {
+                    using (var file = new FileStream(wordFilename, FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
 
                 // Open a doc file.
                 app = new Application();
@@ -692,7 +690,25 @@ namespace NasleGhalam.ServiceLayer.Services
             question.IsDelete = questionViewModel.IsDelete;
             question.IsHybrid = questionViewModel.IsHybrid;
             question.TopicAnswer = questionViewModel.TopicAnswer;
+            question.FileName = questionViewModel.FileName;
 
+
+            //delete areaTypes
+            var deleteAreaTypes = question.Lookup_AreaTypes.Where(oldArea => questionViewModel.LookupId_AreaTypes.All(newAreaId => newAreaId != oldArea.Id)).ToList();
+                
+            foreach (var area in deleteAreaTypes)
+            {
+                question.Lookup_AreaTypes.Remove(area);
+            }
+
+            //add areaTypes
+            
+            foreach (var area in questionViewModel.LookupId_AreaTypes)
+            {
+                var newArea = new Lookup() { Id = area};
+                _uow.MarkAsUnChanged(newArea);
+                question.Lookup_AreaTypes.Add(newArea);
+            }
 
 
             //delete topics
@@ -767,7 +783,14 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 DeleteOptionsOfQuestion(previousFileName);
 
-                word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
+                
+                using (var ms = new MemoryStream(questionViewModel.FileBytes))
+                {
+                    using (var file = new FileStream(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx", FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
                 while (source.Windows[1].Panes[1].Pages.Count < 0) ;
                 source.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
                 //while (source.Windows[1].Panes[1].Pages.Count < 0) ;
@@ -788,7 +811,14 @@ namespace NasleGhalam.ServiceLayer.Services
             else if (question.AnswerNumber != questionViewModel.AnswerNumber)
             {
                 //save Doc file in temp memory
-                word.SaveAs(wordFilename);
+                
+                using (var ms = new MemoryStream(questionViewModel.FileBytes))
+                {
+                    using (var file = new FileStream(wordFilename, FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
 
                 // Open a doc file.
                 app = new Application();

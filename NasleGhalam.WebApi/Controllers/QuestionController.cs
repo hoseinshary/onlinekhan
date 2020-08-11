@@ -150,8 +150,8 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             questionViewModel.UserId = Request.GetUserId();
-
-            var msgRes = _questionService.Update(questionViewModel, wordFile);
+            
+            var msgRes = _questionService.Update(questionViewModel);
             return Ok(msgRes);
         }
 
@@ -159,7 +159,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.QuestionUpdateImportAccess)]
         [CheckModelValidation]
         //[CheckWordFileUpdateValidation("word", 1024)]
-        public IHttpActionResult UpdateImport([FromUri]QuestionUpdateImportViewModel questionViewModel)
+        public IHttpActionResult UpdateImport(QuestionUpdateImportViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
 
@@ -171,7 +171,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.QuestionUpdateTopicAccess)]
         [CheckModelValidation]
         //[CheckWordFileUpdateValidation("word", 1024)]
-        public IHttpActionResult UpdateTopic([FromUri]QuestionUpdateTopicViewModel questionViewModel)
+        public IHttpActionResult UpdateTopic(QuestionUpdateTopicViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
 

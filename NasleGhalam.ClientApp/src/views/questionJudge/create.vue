@@ -72,6 +72,7 @@
       :model="$v.questionJudge.LookupId_QuestionRank"
       :options="lookupStore.questionRankDdl"
       class="col-md-6"
+      clearable
       filter
     />
 

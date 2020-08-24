@@ -285,6 +285,7 @@ export class QuestionStore extends VuexModule {
       LookupId_AreaType: this.question.LookupId_AreaType,
       TopicIds: this.question.TopicIds,
       TagIds: this.question.TagIds,
+      IsHybrid: this.question.IsHybrid,
       LookupId_QuestionRank: this.question.LookupId_QuestionRank
     };
     var params = util.toParam(newData);
@@ -374,6 +375,8 @@ export class QuestionStore extends VuexModule {
       TopicIds: this.question.TopicIds,
       FileName : this.question.FileName,
       TagIds: this.question.TagIds,
+      IsHybrid: this.question.IsHybrid,
+      SupervisorUserId: this.question.SupervisorUserId,
       TopicAnswer: this.question.TopicAnswer.join(",")
     };
 

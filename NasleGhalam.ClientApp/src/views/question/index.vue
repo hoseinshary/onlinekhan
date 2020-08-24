@@ -30,19 +30,25 @@
             label="نمایش سوال های فعال سایت"
             @input="fillGrid()"
           />
+
+            <q-checkbox
+            v-model="showNumberForTopic"
+            v-if="showElement('showNumberForTopic')"
+            label="نمایش تعداد سوالات برای هر مبحث"
+            @input="fillGrid()"
+          />
+        
         </section>
-<!-- v-if="showElementTree('educationTree_GradeDdl')" -->
+        <!-- v-if="showElementTree('educationTree_GradeDdl')" -->
         <q-select
           v-model="educationTree.id"
-          
           :options="educationTree_GradeDdl"
           float-label="فیلتر درخت آموزش با مقطع"
           clearable
           class="s-q-input-border s-spacing"
         />
-<!-- v-if="showElementTree('educationTreeData')" -->
+        <!-- v-if="showElementTree('educationTreeData')" -->
         <q-tree
-          
           :nodes="educationTreeData"
           :expanded.sync="educationTree.expanded"
           :ticked.sync="educationTree.leafTicked"
@@ -63,15 +69,13 @@
         <section class="s-border s-spacing row">
           <!-- v-show="!showWithoutTopic" -->
           <q-input
-            
             v-model="topicTree.filter"
             float-label="جستجوی مبحث"
             clearable
             class="col-md-5 s-q-input-border"
           />
-<!-- v-show="!showWithoutTopic" -->
+          <!-- v-show="!showWithoutTopic" -->
           <q-tree
-            
             :nodes="topicStore.treeDataByLessonId2"
             :expanded.sync="topicTree.expanded"
             :selected.sync="topicTree.selected"
@@ -103,7 +107,12 @@
                 <div v-else>{{data.row.Context}}</div>
               </template>
               <template slot="Id" slot-scope="data">
-                <a v-if="showElementDownloadFile('showDownloadFile')" :href="data.row.QuestionWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
+                <a
+                  v-if="showElementDownloadFile('showDownloadFile')"
+                  :href="data.row.QuestionWordPath"
+                  target="_blank"
+                  class="q-mr-sm"
+                >فایل ورد</a>
                 <q-btn
                   v-if="canQuestionJudge"
                   outline
@@ -153,7 +162,11 @@
       :lessonIdProp="lessonId"
     ></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
-    <modal-question-judge v-if="canQuestionJudge" :topicTreeDataProp="topicTreeData" :lessonIdProp="lessonId"></modal-question-judge>
+    <modal-question-judge
+      v-if="canQuestionJudge"
+      :topicTreeDataProp="topicTreeData"
+      :lessonIdProp="lessonId"
+    ></modal-question-judge>
     <modal-question-answer v-if="canQuestionAnswer" :lessonIdProp="lessonId"></modal-question-answer>
   </section>
 </template>
@@ -238,7 +251,14 @@ export default class QuestionVue extends Vue {
       canEditAdminProp: true,
       canEditExpertProp: false,
       canEditImportProp: true
+    },
+    
+  showNumberForTopic: {
+      canEditAdminProp: true,
+      canEditExpertProp: false,
+      canEditImportProp: true
     }
+  
   };
 
   treeAccessElement = {
@@ -318,7 +338,6 @@ export default class QuestionVue extends Vue {
   }
 
   get canShowTree() {
-    
     return this.pageAccess.indexOf("مشاهده درخت پایه") > -1;
   }
 
@@ -332,7 +351,7 @@ export default class QuestionVue extends Vue {
     }
   }
 
-   get activeAccessDownloadFile() {
+  get activeAccessDownloadFile() {
     if (this.canEditAdmin) {
       return "canEditAdminProp";
     } else if (this.canEditImport) {
@@ -342,7 +361,7 @@ export default class QuestionVue extends Vue {
     }
   }
 
-    get activeAccessTree() {
+  get activeAccessTree() {
     if (this.canShowTree) {
       return "canEditAdminProp";
     } else {
@@ -401,9 +420,8 @@ export default class QuestionVue extends Vue {
       this.showJudged = false;
       this.showWithoutTopic = false;
       this.showNoJudgement = false;
-    }  
+    }
   }
-  
 
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
@@ -491,7 +509,7 @@ export default class QuestionVue extends Vue {
   //#region ### hooks ###
   created() {
     this.lessonStore.fillList();
-    this.educationTreeStore.fillList().then(res => {
+    this.educationTreeStore.fillList().then((res) => {
       this.topicStore.fillList();
       this.educationTree.expanded = this.educationTree.firstLevel;
     });
@@ -503,9 +521,9 @@ export default class QuestionVue extends Vue {
       // fill educationTree
       this.educationTreeStore
         .GetAllByLessonId(route.params.lessonId)
-        .then(tickedEducationTreeIds => {
+        .then((tickedEducationTreeIds) => {
           utilities.clearArray(this.educationTree.leafTicked);
-          tickedEducationTreeIds.forEach(x => {
+          tickedEducationTreeIds.forEach((x) => {
             this.educationTree.leafTicked.push(x);
           });
         })
@@ -518,7 +536,7 @@ export default class QuestionVue extends Vue {
             this.questionStore.OPEN_MODAL_EDIT(true);
             // topic leaf and fill grid
             if (this.questionStore.question.TopicIds) {
-              this.questionStore.question.TopicIds.forEach(x => {
+              this.questionStore.question.TopicIds.forEach((x) => {
                 this.topicTree.leafTicked.push(x);
               });
             }

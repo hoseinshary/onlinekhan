@@ -49,7 +49,7 @@
               <div v-else>{{data.row.Context}}</div>
             </template>
             <template slot="Id" slot-scope="data">
-              <a :href="data.row.QuestionWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
+              <a v-if="canEdit" :href="data.row.QuestionWordPath" target="_blank" class="q-mr-sm">فایل ورد</a>
               <q-btn
                 v-if="questionAnswerJudgeAccess"
                 outline
@@ -74,7 +74,7 @@
                 <q-tooltip>عکس جواب</q-tooltip>
               </q-btn>
               <base-btn-edit
-                v-if="canDelete"
+                v-if="canEdit"
                 round
                 @click="$refs.createEditTab.showTabEdit(data.row.Id)"
               />
@@ -258,6 +258,7 @@ export default class QuestionAnswerVue extends Vue {
   }
 
   showQuestionAnswerJudgeTab(id) {
+    this.questionAnswerStore.getById(id);
     this.detailSelectedTab = "question-answer-judge-tab";
     var createEditTab = this.$refs["QuestionAnswerJudgeCreateEditTab"];
     createEditTab["showTabCreate"](id);

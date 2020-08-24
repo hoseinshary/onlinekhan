@@ -161,6 +161,14 @@
           filter
         />
 
+     <base-select
+        :model="$v.question.SupervisorUserId"
+        v-if="showElement('SupervisorUserId')"
+        :options="userStore.ddl"
+        class="col-md-4"
+        filter
+      />
+
   
         <base-select
           v-if="showElement('LookupId_AreaType')"
@@ -241,6 +249,7 @@ export default class QuestionEditVue extends Vue {
   topicStore = vxm.topicStore;
   lessonStore = vxm.lessonStore;
   question = vxm.questionStore.question;
+  userStore = vxm.userStore;
   writerStore = vxm.writerStore;
   topicFilter = "";
   topicFilter2 = "";
@@ -329,6 +338,11 @@ export default class QuestionEditVue extends Vue {
       canEditAdminProp: true,
       canEditTopicProp: true,
       canEditImportProp: false
+    },
+    SupervisorUserId: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: true
     }
   };
   concatTopicArray: Array<string> = [];

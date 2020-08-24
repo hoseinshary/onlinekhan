@@ -53,7 +53,7 @@ namespace NasleGhalam.DataAccess.Context
 
         public void MarkAsUnChanged<TEntity>(TEntity entity) where TEntity : class
         {
-            Entry(entity).State = EntityState.Unchanged;
+            Entry(entity).State = EntityState.Unchanged; 
         }
 
         public void DetachAll()

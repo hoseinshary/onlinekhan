@@ -47,6 +47,7 @@ export default class QuestionAnswerJudgeVue extends Vue {
 
   //#region ### data ###
   questionAnswerJudgeStore = vxm.questionAnswerJudgeStore;
+  questionAnswerStore =vxm.questionAnswerStore;
   questionStore = vxm.questionStore;
   lookupStore = vxm.lookupStore;
   questionAnswerJudge = this.questionAnswerJudgeStore.questionAnswerJudge;
@@ -63,12 +64,14 @@ export default class QuestionAnswerJudgeVue extends Vue {
   //#region ### methods ###
   showTabCreate(id) {
     this.selectedTab = "tab-create";
+    this.questionAnswerStore.getById(id);
     this.questionAnswerJudgeStore.resetCreate();
     this.questionAnswerJudgeStore.questionAnswerJudge.QuestionAnswerId = id;
     this.questionAnswerJudgeStore.fillListByQuestionAnswerId(id);
   }
 
   showTabEdit(id) {
+    
     this.questionAnswerJudgeStore.resetEdit();
     this.questionAnswerJudgeStore.getById(id).then(() => {
       this.selectedTab = "tab-edit";

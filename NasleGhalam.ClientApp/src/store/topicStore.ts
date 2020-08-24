@@ -242,7 +242,7 @@ export class TopicStore extends VuexModule {
 
   //گرفتن تمام مبحث های یک درس
   @action()
-  async fillListByLessonId(id : number) {
+  async fillListByLessonId(id : number ) {
     return axios
         .get(`${baseUrl}/GetAllByLessonId/${id}`)
         .then((response: AxiosResponse<Array<ITopic>>) => {

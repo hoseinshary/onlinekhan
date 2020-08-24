@@ -702,8 +702,10 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             //add areaTypes
-            
-            foreach (var area in questionViewModel.LookupId_AreaTypes)
+            var addAreaTypeList = questionViewModel.LookupId_AreaTypes
+                .Where(oldAreaId => question.Lookup_AreaTypes.All(newArea => newArea.Id != oldAreaId))
+                .ToList();
+            foreach (var area in addAreaTypeList)
             {
                 var newArea = new Lookup() { Id = area};
                 _uow.MarkAsUnChanged(newArea);
@@ -751,16 +753,19 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Tags.Add(tag);
             }
 
-            //delete supervisor
-            foreach (var user in question.Supervisors)
-            {
-                question.Supervisors.Remove(user);
-            }
+            ////delete supervisor
+            //var supervisorsList = question.Supervisors.ToList();
+            //foreach (var user in supervisorsList)
+            //{
+            //    question.Supervisors.Remove(user);
+            //}
 
             //add supervisor
-            if (questionViewModel.SupervisorUserId != 0)
+            if (questionViewModel.SupervisorUserId != 0 && questionViewModel.SupervisorUserId != question.Supervisors.FirstOrDefault().Id)
             {
+                question.Supervisors.Remove(question.Supervisors.FirstOrDefault());
                 var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+                
                 _uow.MarkAsUnChanged(supervisor);
                 question.Supervisors.Add(supervisor);
             }
@@ -904,6 +909,7 @@ namespace NasleGhalam.ServiceLayer.Services
             question.AnswerNumber = questionViewModel.AnswerNumber;
             question.FileName = questionViewModel.FileName;
             question.IsDelete = questionViewModel.IsDelete;
+            question.IsHybrid = questionViewModel.IsHybrid;
 
             //delete tag
             var deleteTagList = question.Tags
@@ -925,16 +931,16 @@ namespace NasleGhalam.ServiceLayer.Services
                 question.Tags.Add(tag);
             }
 
-            //delete supervisor
-            foreach (var user in question.Supervisors)
-            {
-                question.Supervisors.Remove(user);
-            }
 
             //add supervisor
-            var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
-            _uow.MarkAsUnChanged(supervisor);
-            question.Supervisors.Add(supervisor);
+            if (questionViewModel.SupervisorUserId != 0 && questionViewModel.SupervisorUserId != question.Supervisors.FirstOrDefault().Id)
+            {
+                question.Supervisors.Remove(question.Supervisors.FirstOrDefault());
+                var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+
+                _uow.MarkAsUnChanged(supervisor);
+                question.Supervisors.Add(supervisor);
+            }
 
             _uow.MarkAsChanged(question);
             if (question.FileName == null)
@@ -1060,10 +1066,11 @@ namespace NasleGhalam.ServiceLayer.Services
             //}
             question.TopicAnswer = questionViewModel.TopicAnswer;
             question.AnswerNumber = questionViewModel.AnswerNumber;
+            question.IsHybrid = questionViewModel.IsHybrid;
 
 
-            //delete topics
-            var deleteTopicList = question.Topics
+        //delete topics
+        var deleteTopicList = question.Topics
                 .Where(oldTopic => questionViewModel.TopicIds.All(newTopicId => newTopicId != oldTopic.Id))
                 .ToList();
             foreach (var topic in deleteTopicList)

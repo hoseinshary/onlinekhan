@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.QuestionAnswer;
@@ -67,6 +68,8 @@ namespace NasleGhalam.ViewModels.Question
 
         public WriterViewModel Writer { get; set; }
 
+
+        public int SupervisorUserId => Supervisors.FirstOrDefault()==null ? 0 : Supervisors.FirstOrDefault().Id;
 
 
         public List<LookupViewModel> Lookup_AreaTypes { get; set; } = new List<LookupViewModel>();

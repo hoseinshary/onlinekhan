@@ -15,13 +15,12 @@
  <fieldset class="col-12" >
             <legend>شنبه</legend>
             <section class="row">
-              <div
-                class="col-4"
-                v-for="group in educationGroupByTickedEducationTreeIds"
-                :key="group.Id"
-              >
-                <q-checkbox v-model="group.IsChecked" :label="group.Name"/>
-              </div>
+              
+              <base-select
+          :model="$v.lesson.LookupId_Nezam"
+          :options="lookupStore.topicNezamDdl"
+          class="col-md-6"
+        />
             </section>
           </fieldset>
 

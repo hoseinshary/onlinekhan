@@ -12,8 +12,8 @@
 <#@ import namespace="NasleGhalam.DomainClasses.Entities" #>
 <#@ assembly name="$(SolutionDir)\NasleGhalam.DomainClasses\bin\Debug\NasleGhalam.DomainClasses.dll" #>
 <#
-	string modelName = "ProgramItem";
-	var modelProps = typeof(ProgramItem).GetProperties();
+	string modelName = "Media";
+	var modelProps = typeof(Media).GetProperties();
 
 	Dictionary<Type, string> Aliases = new Dictionary<Type, string>()
     {

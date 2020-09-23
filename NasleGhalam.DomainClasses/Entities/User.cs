@@ -18,6 +18,7 @@ namespace NasleGhalam.DomainClasses.Entities
             Sales = new HashSet<Sale>();
             SupervisorQuestions = new HashSet<Question>();
             QuestionsUpdated = new HashSet<Question>();
+            Medias = new HashSet<Media>();
         }
         public int Id { get; set; }
 
@@ -77,6 +78,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
 
         public ICollection<Question> QuestionsUpdated { get; set; }
+
+        public ICollection<Media> Medias { get; set; }
 
     }
 }

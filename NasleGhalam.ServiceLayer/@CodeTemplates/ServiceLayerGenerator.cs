@@ -6,103 +6,103 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.ProgramItem;
+using NasleGhalam.ViewModels.Media;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class ProgramItemService
+	public class MediaService
 	{
-		private const string Title = "آیتم برنامه هفتگی";
+		private const string Title = "رسانه";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<ProgramItem> _programItems;
+        private readonly IDbSet<Media> _medias;
        
-	    public ProgramItemService(IUnitOfWork uow)
+	    public MediaService(IUnitOfWork uow)
         {
             _uow = uow;
-            _programItems = uow.Set<ProgramItem>();
+            _medias = uow.Set<Media>();
         }
 
 		/// <summary>
-        /// گرفتن  آیتم برنامه هفتگی با آی دی
+        /// گرفتن  رسانه با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ProgramItemViewModel GetById(int id)
+        public MediaViewModel GetById(int id)
         {
-            return _programItems
+            return _medias
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<ProgramItemViewModel>)
+                .Select(Mapper.Map<MediaViewModel>)
                 .FirstOrDefault();
         }
 
 		/// <summary>
-        /// گرفتن همه آیتم برنامه هفتگی ها
+        /// گرفتن همه رسانه ها
         /// </summary>
         /// <returns></returns>
-        public IList<ProgramItemViewModel> GetAll()
+        public IList<MediaViewModel> GetAll()
         {
-            return _programItems
+            return _medias
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<ProgramItemViewModel>)
+                .Select(Mapper.Map<MediaViewModel>)
                 .ToList();
         }
 
 		/// <summary>
-        /// ثبت آیتم برنامه هفتگی
+        /// ثبت رسانه
         /// </summary>
-        /// <param name="programItemViewModel"></param>
+        /// <param name="mediaViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(ProgramItemCreateViewModel programItemViewModel)
+        public ClientMessageResult Create(MediaCreateViewModel mediaViewModel)
         {
-            var programItem = Mapper.Map<ProgramItem>(programItemViewModel);
-            _programItems.Add(programItem);
+            var media = Mapper.Map<Media>(mediaViewModel);
+            _medias.Add(media);
 
 			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(programItem.Id);
+                clientResult.Obj = GetById(media.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// ویرایش آیتم برنامه هفتگی
+        /// ویرایش رسانه
         /// </summary>
-        /// <param name="programItemViewModel"></param>
+        /// <param name="mediaViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(ProgramItemUpdateViewModel programItemViewModel)
+        public ClientMessageResult Update(MediaUpdateViewModel mediaViewModel)
         {
-            var programItem = Mapper.Map<ProgramItem>(programItemViewModel);
-            _uow.MarkAsChanged(programItem);
+            var media = Mapper.Map<Media>(mediaViewModel);
+            _uow.MarkAsChanged(media);
 			
 			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(programItem.Id);
+                clientResult.Obj = GetById(media.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// حذف آیتم برنامه هفتگی
+        /// حذف رسانه
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  programItemViewModel = GetById(id);
-            if (programItemViewModel == null)
+			var  mediaViewModel = GetById(id);
+            if (mediaViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var programItem = Mapper.Map<ProgramItem>(programItemViewModel);
-            _uow.MarkAsDeleted(programItem);
+            var media = Mapper.Map<Media>(mediaViewModel);
+            _uow.MarkAsDeleted(media);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);

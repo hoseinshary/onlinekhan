@@ -14,12 +14,16 @@ namespace NasleGhalam.Common
         public static string QuestionGroupTempRelPath => "~/Content/QuestionGroupTemp/";
         public static string UserProfileRelPath => "~/Content/UserProfile/";
         public static string PackageRelPath => "~/Content/Package/";
+
+        public static string MediaRelPath => "~/Content/Media/";
         public static string DefaultUserProfileRelPath => "~/Content/UserProfile/DefaultProfile.png";
 
         public static string PDFtoPNGRelPath => "~/";
         //-------------------------------------------------------------------------------------
 
         public static string GetQuestionAbsPath(string name) => ToAbsolutePath($"{QuestionRelPath}{name}");
+
+        public static string GetMediaAbsPath(string name) => ToAbsolutePath($"{MediaRelPath}{name}");
 
         public static string GetQuestionOptionsAbsPath(string name) => ToAbsolutePath($"{QuestionOptionsRelPath}{name}");
 

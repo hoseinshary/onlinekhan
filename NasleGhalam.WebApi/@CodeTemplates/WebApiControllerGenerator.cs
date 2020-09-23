@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Program;
+using NasleGhalam.ViewModels.Media;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,51 +12,51 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class ProgramController : ApiController
+	public class MediaController : ApiController
 	{
-        private readonly ProgramService _programService;
-		public ProgramController(ProgramService programService)
+        private readonly MediaService _mediaService;
+		public MediaController(MediaService mediaService)
         {
-            _programService = programService;
+            _mediaService = mediaService;
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.ProgramReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.MediaReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_programService.GetAll());
+            return Ok(_mediaService.GetAll());
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.ProgramReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.MediaReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var program = _programService.GetById(id);
-            if (program == null)
+            var media = _mediaService.GetById(id);
+            if (media == null)
             {
                 return NotFound();
             }
-            return Ok(program);
+            return Ok(media);
         }
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.ProgramCreateAccess)]
+        [CheckUserAccess(ActionBits.MediaCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(ProgramCreateViewModel programViewModel)
+        public IHttpActionResult Create(MediaCreateViewModel mediaViewModel)
         {
-            return Ok(_programService.Create(programViewModel));
+            return Ok(_mediaService.Create(mediaViewModel));
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.ProgramUpdateAccess)]
+        [CheckUserAccess(ActionBits.MediaUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(ProgramUpdateViewModel programViewModel)
+        public IHttpActionResult Update(MediaUpdateViewModel mediaViewModel)
         {
-            return Ok(_programService.Update(programViewModel));
+            return Ok(_mediaService.Update(mediaViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.ProgramDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.MediaDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_programService.Delete(id));
+            return Ok(_mediaService.Delete(id));
         }
 	}
 }

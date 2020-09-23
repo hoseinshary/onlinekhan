@@ -1,23 +1,47 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.ProgramItem
+namespace NasleGhalam.ViewModels.Media
 {
-	public class ProgramItemViewModel
+	public class MediaViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
 
 
 		[Display(Name = "")]
-		public int LookupId_PrgoramItemName { get; set; }
+		public string Title { get; set; }
 
 
 		[Display(Name = "")]
-		public int ProgramId { get; set; }
+		public int LookupId_MediaType { get; set; }
 
 
 		[Display(Name = "")]
-		public int Hour { get; set; }
+		public int WriterId { get; set; }
+
+
+		[Display(Name = "")]
+		public string Description { get; set; }
+
+
+		[Display(Name = "")]
+		public string FileName { get; set; }
+
+
+		[Display(Name = "")]
+		public int Price { get; set; }
+
+
+		[Display(Name = "")]
+		public DateTime InsertDateTime { get; set; }
+
+
+		[Display(Name = "")]
+		public int UserId { get; set; }
+
+
+		[Display(Name = "")]
+		public bool IsActive { get; set; }
 
 
 	}

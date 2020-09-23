@@ -470,12 +470,12 @@ namespace NasleGhalam.ServiceLayer.Services
                     if (arrayTemp[i] == '-')
                     {
                         var j = 0;
-                        while (j < 20 && i < arrayTemp.Length)
+                        while (j < 14 && i < arrayTemp.Length)
                         {
                             i++;
                             j++;
                         }
-                        if (j == 20)
+                        if (j == 14)
                             return true;
                     }
                     return false;

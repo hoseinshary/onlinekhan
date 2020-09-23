@@ -63,6 +63,7 @@
           :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
           float-label="انتخاب درس"
           class="s-q-input-border s-spacing s-border"
+       
         />
       </div>
       <div class="col-md-8 col-lg-9">

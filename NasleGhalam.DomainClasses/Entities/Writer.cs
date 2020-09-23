@@ -4,6 +4,13 @@ namespace NasleGhalam.DomainClasses.Entities
 {
     public class Writer
     {
+        public Writer()
+        {
+            Questions = new HashSet<Question>();
+            QuestionAnswers = new HashSet<QuestionAnswer>();
+            Medias = new HashSet<Media>();
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -14,5 +21,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public ICollection<QuestionAnswer> QuestionAnswers { get; set; }
         public ICollection<Question> Questions { get; set; }
+
+        public ICollection<Media> Medias { get; set; }
     }
 }

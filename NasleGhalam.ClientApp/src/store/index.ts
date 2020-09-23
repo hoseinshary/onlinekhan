@@ -51,6 +51,7 @@ import { ReportStore, reportStore } from "./reportStore";
 
 //import { ReportStore2, reportStore2 } from "./Report/Report_UserQuestionReportStore";
 import { ProgramStore, programStore } from "./programStore";
+import { MediaStore, mediaStore } from "./mediaStore";
 
 Vue.use(Vuex);
 
@@ -130,6 +131,7 @@ const store = new Vuex.Store({
     reportStore,
    // reportStore2,
     programStore,
+    mediaStore,
   }
 });
 
@@ -213,5 +215,6 @@ export const vxm = {
   panelStore: PanelStore.CreateProxy(store, PanelStore) as PanelStore,
   reportStore: ReportStore.CreateProxy(store, ReportStore) as ReportStore,
   //reportStore2: ReportStore2.CreateProxy(store, ReportStore2) as ReportStore2,
-  programStore: ProgramStore.CreateProxy(store, ProgramStore) as ProgramStore
+  programStore: ProgramStore.CreateProxy(store, ProgramStore) as ProgramStore,
+  mediaStore: MediaStore.CreateProxy(store, MediaStore) as MediaStore
 };

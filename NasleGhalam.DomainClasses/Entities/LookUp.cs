@@ -37,6 +37,8 @@ namespace NasleGhalam.DomainClasses.Entities
             Assay_Type = new HashSet<Assay>();
 
             ProgramItem_Name = new HashSet<ProgramItem>();
+
+            Media_Type = new HashSet<Media>();
         }
 
         public int Id { get; set; }
@@ -86,5 +88,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<Assay> Assay_QuestionType { get; set; }
 
         public ICollection<ProgramItem> ProgramItem_Name { get; set; }
+
+        public ICollection<Media> Media_Type { get; set; }
     }
 }

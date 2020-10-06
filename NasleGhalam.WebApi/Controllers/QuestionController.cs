@@ -68,6 +68,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionService.GetAllActiveByLessonId(id));
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
+        public IHttpActionResult GetAllUnActiveByLessonId(int id)
+        {
+            return Ok(_questionService.GetAllUnActiveByLessonId(id));
+        }
+
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
         public IHttpActionResult GetById(int id)
         {

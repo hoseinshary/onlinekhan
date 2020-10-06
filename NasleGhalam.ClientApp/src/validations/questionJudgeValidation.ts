@@ -24,7 +24,6 @@ const questionJudgeValidations: ValidationRuleset<TQuestionJudge> = {
     IsUpdate: {
       displayName: displayName("ویرایش"),
       required 
-      
     },
     IsLearning: {
       displayName: displayName("یادگیری"),

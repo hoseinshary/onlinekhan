@@ -126,6 +126,13 @@
           class="col-md-4"
           filter
         />
+          <base-field v-if="showElement('IsActive')" class="col-md-4" :model="$v.question.IsActive">
+          <template slot-scope="data">
+            <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
+            <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
+          </template>
+        </base-field>
+
         <base-field
           v-if="showElement('UseEvaluation')"
           class="col-md-4"
@@ -265,6 +272,11 @@ export default class QuestionEditVue extends Vue {
       canEditImportProp: false
     },
     UseEvaluation: {
+      canEditAdminProp: true,
+      canEditTopicProp: false,
+      canEditImportProp: false
+    },
+      IsActive: {
       canEditAdminProp: true,
       canEditTopicProp: false,
       canEditImportProp: false

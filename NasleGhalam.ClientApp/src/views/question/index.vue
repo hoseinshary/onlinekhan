@@ -30,14 +30,18 @@
             label="نمایش سوال های فعال سایت"
             @input="fillGrid()"
           />
-
-            <q-checkbox
+          <q-checkbox
+            v-model="showUnActived"
+            v-if="showElement('showUnActived')"
+            label="نمایش سوال های غیر فعال سایت"
+            @input="fillGrid()"
+          />
+          <q-checkbox
             v-model="showNumberForTopic"
             v-if="showElement('showNumberForTopic')"
             label="نمایش تعداد سوالات برای هر مبحث"
             @input="fillGrid()"
           />
-        
         </section>
         <!-- v-if="showElementTree('educationTree_GradeDdl')" -->
         <q-select
@@ -63,7 +67,6 @@
           :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
           float-label="انتخاب درس"
           class="s-q-input-border s-spacing s-border"
-       
         />
       </div>
       <div class="col-md-8 col-lg-9">
@@ -99,13 +102,17 @@
           />
 
           <div class="col-12">
-            <base-table :grid-data="questionStore.gridData" :columns="questionGridColumn" hasIndex>
+            <base-table
+              :grid-data="questionStore.gridData"
+              :columns="questionGridColumn"
+              hasIndex
+            >
               <template slot="Context" slot-scope="data">
-                <div v-if="data.row.Context && data.row.Context.length> 100">
-                  {{(`${data.row.Context.substring(0,100)} ...`)}}
-                  <q-tooltip>{{data.row.Context}}</q-tooltip>
+                <div v-if="data.row.Context && data.row.Context.length > 100">
+                  {{ `${data.row.Context.substring(0, 100)} ...` }}
+                  <q-tooltip>{{ data.row.Context }}</q-tooltip>
                 </div>
-                <div v-else>{{data.row.Context}}</div>
+                <div v-else>{{ data.row.Context }}</div>
               </template>
               <template slot="Id" slot-scope="data">
                 <a
@@ -113,7 +120,8 @@
                   :href="data.row.QuestionWordPath"
                   target="_blank"
                   class="q-mr-sm"
-                >فایل ورد</a>
+                  >فایل ورد</a
+                >
                 <q-btn
                   v-if="canQuestionJudge"
                   outline
@@ -138,8 +146,16 @@
                 >
                   <q-tooltip>جواب سوال</q-tooltip>
                 </q-btn>
-                <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
-                <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+                <base-btn-edit
+                  v-if="canEdit"
+                  round
+                  @click="showModalEdit(data.row.Id)"
+                />
+                <base-btn-delete
+                  v-if="canDelete"
+                  round
+                  @click="showModalDelete(data.row.Id)"
+                />
               </template>
             </base-table>
           </div>
@@ -168,7 +184,10 @@
       :topicTreeDataProp="topicTreeData"
       :lessonIdProp="lessonId"
     ></modal-question-judge>
-    <modal-question-answer v-if="canQuestionAnswer" :lessonIdProp="lessonId"></modal-question-answer>
+    <modal-question-answer
+      v-if="canQuestionAnswer"
+      :lessonIdProp="lessonId"
+    ></modal-question-answer>
   </section>
 </template>
 
@@ -226,6 +245,7 @@ export default class QuestionVue extends Vue {
   showWithoutTopic = false;
   showJudged = false;
   showActived = false;
+  showUnActived = false;
 
   questionFilterAccessElement = {
     showNoJudgement: {
@@ -248,18 +268,22 @@ export default class QuestionVue extends Vue {
       canEditExpertProp: false,
       canEditImportProp: false
     },
+     showUnActived: {
+      canEditAdminProp: true,
+      canEditExpertProp: true,
+      canEditImportProp: false
+    },
     showDownloadFile: {
       canEditAdminProp: true,
       canEditExpertProp: false,
       canEditImportProp: true
     },
-    
-  showNumberForTopic: {
+
+    showNumberForTopic: {
       canEditAdminProp: true,
       canEditExpertProp: false,
       canEditImportProp: true
     }
-  
   };
 
   treeAccessElement = {
@@ -486,7 +510,8 @@ export default class QuestionVue extends Vue {
       showNoJudgement: this.showNoJudgement,
       showWithoutTopic: this.showWithoutTopic,
       showJudged: this.showJudged,
-      showActived: this.showActived
+      showActived: this.showActived,
+      showUnActived: this.showUnActived
     });
   }
 

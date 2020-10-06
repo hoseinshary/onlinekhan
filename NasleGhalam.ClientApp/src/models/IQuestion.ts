@@ -17,7 +17,7 @@ export default interface IQuestion {
   ResponseSecond: number;
   Description: string;
   FileName: string;
-  // IsActive: boolean;
+  IsActive: boolean;
   IsHybrid : boolean;
   AnswerNumber: number;
   TopicAnswer  : Array<string>;
@@ -53,7 +53,7 @@ export const DefaultQuestion: IQuestion = {
   ResponseSecond: 0,
   Description: "",
   FileName: "",
-  // IsActive: true,
+  IsActive: false,
   IsHybrid : false,
   AnswerNumber: 0,
   TopicAnswer : [],

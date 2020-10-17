@@ -1,11 +1,12 @@
 @font-face {
-  font-family: "Vazir";
-  src: url("./fonts/Vazir-persian-digits-overwrite.woff");
+  font-family: "IRANSansWeb";
+  src: url("./fonts/IRANSansWeb_LightJustPersianNum.woff");
+  /* src: url("./fonts/Vazir-persian-digits-overwrite.woff"); */
 }
 
 html,
 body {
-  font-family: "Vazir", tahoma;
+  font-family: "IRANSansWeb", tahoma;
   font-size: 15px;
   font-weight: 600;
   color: #95979a;
@@ -67,4 +68,30 @@ body {
 
 .s-grid-q-btn .q-icon {
   font-size: 32px;
+}
+
+div.topMenu {
+position: absolute;
+display: inline-flex;
+width: 100%;
+}
+  div.topMenu ul {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 200px;
+  padding-right: 100px;
+  padding-top: 50px;
+}
+div.topMenu ul.login{
+  position: absolute;
+  right: 0;
+}
+
+div.topMenu li {
+  display: inline-block;
+  padding: 10px;
+}
+div.topMenu li a{
+  color: white;
+  text-decoration: none;
 }

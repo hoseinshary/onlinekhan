@@ -186,6 +186,11 @@ export default [
         path: "/program",
         name: "program",
         component: () => import(/* webpackChunkName: "program" */"src/views/program/index.vue")
+      },
+      {
+        path: "/media",
+        name: "media",
+        component: () => import(/* webpackChunkName: "program" */"src/views/media/index.vue")
       }
     ]
   },

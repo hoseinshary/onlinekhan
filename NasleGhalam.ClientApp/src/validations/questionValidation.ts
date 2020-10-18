@@ -56,6 +56,9 @@ const questionValidations: ValidationRuleset<TQuestion> = {
     IsHybrid: {
       displayName: displayName("سوال ترکیبی")
     },
+    IsActive: {
+      displayName: displayName("فعال")
+    },
     LookupId_AuthorType: {
       displayName: displayName("نوع طراح"),
       numeric,

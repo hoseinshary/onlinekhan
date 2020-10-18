@@ -160,7 +160,17 @@ export class QuestionJudgeStore extends VuexModule {
   async submitCreate() {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
-
+    if(!this.questionJudge.IsDelete && !this.questionJudge.IsUpdate && !this.questionJudge.IsActiveQuestion){
+    this.notify({
+      vm: vm,
+      data: {
+        Message: "وضعیت سوال مشخص نشده است. باید تایید یا عدم تایید شود.",
+        MessageType: MessageType.Error,
+        Obj: null
+      }
+    });
+    return;
+  }
     return axios
       .post(`${baseUrl}/Create`, this.questionJudge)
       .then((response: AxiosResponse<IMessageResult>) => {
@@ -178,6 +188,18 @@ export class QuestionJudgeStore extends VuexModule {
   async submitCreateWithoutReset() {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
+
+    if(!this.questionJudge.IsDelete && !this.questionJudge.IsUpdate && !this.questionJudge.IsActiveQuestion){
+      this.notify({
+        vm: vm,
+        data: {
+          Message: "وضعیت سوال مشخص نشده است. باید تایید یا عدم تایید شود.",
+          MessageType: MessageType.Error,
+          Obj: null
+        }
+      });
+      return;
+    }
 
     return axios
       .post(`${baseUrl}/Create`, this.questionJudge)
@@ -201,6 +223,18 @@ export class QuestionJudgeStore extends VuexModule {
   async submitEdit() {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
+
+    if(!this.questionJudge.IsDelete && !this.questionJudge.IsUpdate && !this.questionJudge.IsActiveQuestion){
+      this.notify({
+        vm: vm,
+        data: {
+          Message: "وضعیت سوال مشخص نشده است. باید تایید یا عدم تایید شود.",
+          MessageType: MessageType.Error,
+          Obj: null
+        }
+      });
+      return;
+    }
 
     return axios
       .post(`${baseUrl}/Update`, this.questionJudge)

@@ -51,6 +51,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                     config.ToTable("Topics_Questions");
                 });
 
+
+            HasMany(x => x.Medias)
+                .WithMany(x => x.Topics)
+                .Map(config =>
+                {
+                    config.MapLeftKey("TopicId");
+                    config.MapRightKey("MediaId");
+                    config.ToTable("Topics_Medias");
+                });
         }
     }
 }

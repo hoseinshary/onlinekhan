@@ -58,7 +58,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
             foreach (var topicViewModel in topics)
             {
-               // topics.Find(x => x.Id == topicViewModel.Id).Title += " (" + getCountTopic(topicViewModel.Id,topics , questions) + ")";
+                topics.Find(x => x.Id == topicViewModel.Id).Title += " (" + getCountTopic(topicViewModel.Id,topics , questions) + ")";
             }
         
 
@@ -67,24 +67,24 @@ namespace NasleGhalam.ServiceLayer.Services
 
        
 
-        private int getCountTopic(int id , List<TopicViewModel> topics , List<object> questions)
+        private int getCountTopic(int id , List<TopicViewModel> topics , IEnumerable<object> questions)
         {
-            //var count = _questions.Count(current => current.Topics.Any(x => x.Id == id));
+            var count = _questions.Count(current => current.Topics.Any(x => x.Id == id));
             //var count = questions.Count(current => current.Topics.Any(x => x.Id == id))
 
-            //if (count == 0 && topics.Any(x => x.ParentTopicId == id))
-            //{
-            //    foreach (var childTopic in topics.Where(x => x.ParentTopicId == id))
-            //    {
-            //        count += getCountTopic(childTopic.Id, topics , questions);
-            //    }
+            if (count == 0 && topics.Any(x => x.ParentTopicId == id))
+            {
+                foreach (var childTopic in topics.Where(x => x.ParentTopicId == id))
+                {
+                    count += getCountTopic(childTopic.Id, topics, questions);
+                }
 
-            //    return count;
-            //}
-            //else
-            //{
-            //    return count;
-            //}
+                return count;
+            }
+            else
+            {
+                return count;
+            }
             return 0;
         }
 

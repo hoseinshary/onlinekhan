@@ -23,6 +23,7 @@ export class LookupStore extends VuexModule {
   private _whereProblem: Array<ILookup>;
   private _reasonProblem: Array<ILookup>;
   private _questionRank: Array<ILookup>;
+  private _mediaType: Array<ILookup>;
 
   /**
    * initialize data
@@ -47,6 +48,7 @@ export class LookupStore extends VuexModule {
     this._whereProblem = [];
     this._reasonProblem = [];
     this._questionRank = [];
+    this._mediaType = [];
   }
 
   //#region ### getters ###
@@ -177,6 +179,14 @@ export class LookupStore extends VuexModule {
       label: x.Value
     }));
   }
+
+
+  get mediaTypeDdl() {
+    return this._mediaType.map(x => ({
+      value: x.Id,
+      label: x.Value
+    }));
+  }
   //#endregion
 
   //#region ### mutations ###
@@ -268,6 +278,11 @@ export class LookupStore extends VuexModule {
   @mutation
   private SET_REASON_PROBLEM_LIST(list: Array<ILookup>) {
     this._reasonProblem = list;
+  }
+
+  @mutation
+  private SET_MEDIA_TYPE_LIST(list: Array<ILookup>) {
+    this._mediaType = list;
   }
   //#endregion
 
@@ -506,6 +521,21 @@ export class LookupStore extends VuexModule {
       return Promise.resolve(this._reasonProblem);
     }
   }
+
+  @action()
+  async fillMediaType() {
+    if (!this._mediaType.length) {
+      return axios
+        .get(`${baseUrl}/GetAllMediaType`)
+        .then((response: AxiosResponse<Array<ILookup>>) => {
+          this.SET_MEDIA_TYPE_LIST(response.data);
+        });
+    } else {
+      return Promise.resolve(this._mediaType);
+    }
+  }
+
+
   //#endregion
 }
 

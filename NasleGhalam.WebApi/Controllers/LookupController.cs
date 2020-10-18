@@ -130,5 +130,11 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_lookupService.GetAllByName("ProgramName"));
         }
+
+        [HttpGet, CheckUserAccess(ActionBits.AssayCreateAccess)]
+        public IHttpActionResult GetAllMediaType()
+        {
+            return Ok(_lookupService.GetAllByName("MediaType"));
+        }
     }
 }

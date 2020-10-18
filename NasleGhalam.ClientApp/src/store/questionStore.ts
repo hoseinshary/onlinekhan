@@ -143,15 +143,14 @@ export class QuestionStore extends VuexModule {
     return axios
       .get(`${baseUrl}/GetById/${id}`)
       .then((response: AxiosResponse<IQuestion>) => {
-        util.mapObject (response.data,this.question);
+        util.mapObject(response.data, this.question);
         if (response.data.Topics) {
           this.question.TopicIds = response.data.Topics.map(x => x.Id);
         }
         if (response.data.Tags) {
           this.question.TagIds = response.data.Tags.map(x => x.Id);
         }
-        if(response.data.Lookup_AreaTypes)
-        {
+        if (response.data.Lookup_AreaTypes) {
           this.question.LookupId_AreaType = response.data.Lookup_AreaTypes.map(x => x.Id);
         }
       });
@@ -164,6 +163,7 @@ export class QuestionStore extends VuexModule {
     showNoJudgement: boolean;
     showJudged: boolean;
     showActived: boolean;
+    showUnActived: boolean;
     topicIds: Array<number>;
   }) {
     var url = "";
@@ -177,13 +177,17 @@ export class QuestionStore extends VuexModule {
         if (payload.showWithoutTopic) {
           url = `${baseUrl}/GetAllNoTopicByLessonId/${payload.lessonId}`;
         } else {
-          var params = util.toParam({
-            Ids: payload.topicIds
-          });
-          if (payload.showNoJudgement) {
-            url = `${baseUrl}/GetAllByTopicIdsNoJudge?${params}`;
+          if (payload.showUnActived) {
+            url = `${baseUrl}/GetAllUnActiveByLessonId/${payload.lessonId}`;
           } else {
-            url = `${baseUrl}/GetAllByTopicIds?${params}`;
+            var params = util.toParam({
+              Ids: payload.topicIds
+            });
+            if (payload.showNoJudgement) {
+              url = `${baseUrl}/GetAllByTopicIdsNoJudge?${params}`;
+            } else {
+              url = `${baseUrl}/GetAllByTopicIds?${params}`;
+            }
           }
         }
       }
@@ -360,6 +364,7 @@ export class QuestionStore extends VuexModule {
       QuestionPoint: this.question.QuestionPoint,
       UseEvaluation: this.question.UseEvaluation,
       IsStandard: this.question.IsStandard,
+      IsActive: this.question.IsActive,
       IsDelete: this.question.IsDelete,
       WriterId: this.question.WriterId,
       ResponseSecond: this.question.ResponseSecond,
@@ -373,7 +378,7 @@ export class QuestionStore extends VuexModule {
       LookupId_AreaTypes: this.question.LookupId_AreaType,
       LookupId_QuestionRank: this.question.LookupId_QuestionRank,
       TopicIds: this.question.TopicIds,
-      FileName : this.question.FileName,
+      FileName: this.question.FileName,
       TagIds: this.question.TagIds,
       IsHybrid: this.question.IsHybrid,
       SupervisorUserId: this.question.SupervisorUserId,

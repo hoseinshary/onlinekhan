@@ -9,9 +9,9 @@
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#
-	string modelName =  "ProgramItem" ;
-	string instanceName = "programItem";
-	string faName = "آیتم برنامه هفتگی";
+	string modelName =  "Media" ;
+	string instanceName = "media";
+	string faName = "رسانه";
 #>
 using System;
 using System.Collections.Generic;

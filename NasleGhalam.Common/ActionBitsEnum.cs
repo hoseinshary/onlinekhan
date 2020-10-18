@@ -165,5 +165,12 @@
         ProgramUpdateAccess = 128,
 
         WritersCodeReadAccess = 129,
+
+        MediaReadAccess = 132,
+        MediaCreateAccess = 133,
+        MediaDeleteAccess = 134,
+        MediaUpdateAccess = 135,
+
+
     }
 }

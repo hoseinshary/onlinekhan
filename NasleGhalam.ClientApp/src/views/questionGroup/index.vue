@@ -24,6 +24,7 @@
             :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
             float-label="انتخاب درس"
             class="q-pt-lg"
+            filter
           />
         </section>
       </div>

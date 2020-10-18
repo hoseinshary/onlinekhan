@@ -198,6 +198,22 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
+
+        /// <summary>
+        /// گرفتن همه سوالات کارشناسی شده توسط یک کاربر
+        /// </summary>
+        /// <returns></returns>
+        public IList<QuestionViewModel> GetAllUnActiveByLessonId(int id)
+        {
+            return _questions
+                .Where(current => !current.IsActive)
+                .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+        }
+
         /// <summary>
         /// تعداد همه سوالات کارشناسی شده توسط یک کاربر
         /// </summary>
@@ -344,6 +360,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Create(QuestionCreateViewModel questionViewModel, HttpPostedFile word)
         {
             var question = Mapper.Map<Question>(questionViewModel);
+
 
             var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
 

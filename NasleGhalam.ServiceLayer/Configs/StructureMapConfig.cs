@@ -24,7 +24,7 @@ namespace NasleGhalam.ServiceLayer.Configs
                 //cfg.For<IUnitOfWork>().AlwaysUnique().Use<DBContext>();
                 //cfg.For<IUnitOfWork>().ThreadLocal().Use<DBContext>();
 
-                cfg.For<IUnitOfWork>().HttpContextScoped().Use<DBContext>();
+                cfg.For<IUnitOfWork>().HybridHttpOrThreadLocalScoped().Use<DBContext>();
 
                 cfg.Scan(scan =>
                 {

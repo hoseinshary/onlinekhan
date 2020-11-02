@@ -138,6 +138,28 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpPost]
+        [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
+        [CheckModelValidation]
+        [CheckWordFileValidation("word", 1024)]
+        [CheckExcelFileValidation("excel", 1024)]
+        public IHttpActionResult CreateForWindowsApp([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
+        {
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
+            var excelFile = HttpContext.Current.Request.Files.Get("excel");
+
+            if (wordFile != null && wordFile.ContentLength > 0 &&
+                excelFile != null && excelFile.ContentLength > 0)
+            {
+                questionGroupViewModel.File = $"{Guid.NewGuid()}";
+            }
+
+            questionGroupViewModel.UserId = Request.GetUserId();
+            
+            var msgRes = _questionGroupService.CreateForWindowsApp(questionGroupViewModel, wordFile, excelFile);
+            return Ok(msgRes);
+        }
+
+        [HttpPost]
         [CheckUserAccess(ActionBits.QuestionGroupUpdateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Update(QuestionGroupUpdateViewModel questionGroupViewModel)

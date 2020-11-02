@@ -59,13 +59,42 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
         /// <summary>
-        /// ثبت سوال گروهی
+        ///  ثبت سوال گروهی برای برنامه ویندوزی
         /// </summary>
         /// <param name="questionGroupViewModel"></param>
         /// <param name="word"></param>
         /// <param name="excel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
+        public ClientMessageResult CreateForWindowsApp(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
+        {
+            var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
+
+            _questionGroups.Add(questionGroup);
+
+            var msgRes = _uow.CommitChanges(CrudType.Create, Title);
+            msgRes.Id = questionGroup.Id;
+
+            if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.File) && !string.IsNullOrEmpty(questionGroupViewModel.File))
+            {
+                word.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".docx");
+                excel.SaveAs(SitePath.GetQuestionGroupAbsPath(questionGroupViewModel.File) + ".xlsx");
+            }
+
+            var returnVal = Mapper.Map<ClientMessageResult>(msgRes);
+            returnVal.Obj = Mapper.Map<QuestionGroupViewModel>(questionGroup);
+            return returnVal;
+        }
+
+
+
+            /// <summary>
+            /// ثبت سوال گروهی
+            /// </summary>
+            /// <param name="questionGroupViewModel"></param>
+            /// <param name="word"></param>
+            /// <param name="excel"></param>
+            /// <returns></returns>
+            public ClientMessageResult Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
 

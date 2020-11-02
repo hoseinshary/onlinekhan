@@ -29,6 +29,7 @@ namespace NasleGhalam.WindowsApp
 
         private readonly LessonService _lessonService;
         private readonly EducationTreeService _educationTreeService;
+        private readonly WebService _webService;
 
         private List<LessonViewModel> lessons;
         private List<EducationTreeViewModel> educationTrees;
@@ -36,10 +37,11 @@ namespace NasleGhalam.WindowsApp
         private List<string> questionsFileNames;
 
 
-        public QuestionGroup(LessonService lessonService, EducationTreeService educationTreeService)
+        public QuestionGroup(LessonService lessonService, EducationTreeService educationTreeService, WebService WebService)
         {
             _lessonService = lessonService;
             _educationTreeService = educationTreeService;
+            _webService = WebService;
             InitializeComponent();
         }
 
@@ -47,10 +49,10 @@ namespace NasleGhalam.WindowsApp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            DialogResult dr = openFileDialog1.ShowDialog();
+            DialogResult dr = openFileDialog2.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                textBox_word.Text = openFileDialog1.FileName;
+                textBox_excel.Text = openFileDialog2.FileName;
             }
         }
 
@@ -64,7 +66,7 @@ namespace NasleGhalam.WindowsApp
             DialogResult dr = openFileDialog1.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                textBox_excel.Text = openFileDialog1.FileName;
+                textBox_word.Text = openFileDialog1.FileName;
             }
         }
 
@@ -278,13 +280,16 @@ namespace NasleGhalam.WindowsApp
             return false;
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private async void button4_Click(object sender, EventArgs e)
         {
             var questionGroup = new QuestionGroupCreateViewModel();
             questionGroup.Title = textBox_title.Text;
             questionGroup.LessonId = Convert.ToInt32( comboBox1.SelectedValue);
-            
-                
+            questionGroup.QuestionGroupWordPath = textBox_word.Text;
+            questionGroup.QuestionGroupExcelPath = textBox_excel.Text;
+
+            var result = await _webService.QuestionGrounCreate(questionGroup);
+
 
             var missing = Type.Missing;
             if (textBox_title.Text != "" && textBox_word.Text!="" && textBox_excel.Text != ""&& comboBox1.Text != "")

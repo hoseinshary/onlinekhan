@@ -1,4 +1,5 @@
 ﻿using NasleGhalam.Common;
+using NasleGhalam.ViewModels.QuestionGroup;
 using NasleGhalam.ViewModels.User;
 using Newtonsoft.Json;
 using System;
@@ -7,69 +8,72 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace NasleGhalam.WindowsApp
 {
     public class WebService : IDisposable
     {
-        private readonly HttpClient _client;
+        private readonly RestClient _client;
 
         public WebService()
         {
-            _client = new HttpClient { BaseAddress = new Uri(ConstantSettings.ApiUrl) };
+            _client = new RestClient { BaseUrl = new Uri(ConstantSettings.ApiUrl) };
+            
         }
 
         #region ### User ###
-        public async Task<ResponseObject<string>> Login(LoginViewModel login)
+        public async Task<LoginResultViewModel> Login(LoginViewModel login)
         {
             try
             {
-                var strContent = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
-                var response = await _client.PostAsync("User/Login", strContent);
-                var result = await response.Content.ReadAsStringAsync();
+                _client.Timeout = -1;
+                var request = new RestRequest("User/Login", Method.POST);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddParameter("application/json", JsonConvert.SerializeObject(login), ParameterType.RequestBody);
+                IRestResponse response = _client.Execute(request);
 
-                var resultObject = JsonConvert.DeserializeObject<ResponseObject<string>>(result);
-                var resultObject1 = JsonConvert.DeserializeObject<LoginResultViewModel>(result);
-                SetToken(resultObject.Data); // set token
-                return resultObject;
+                var resultObject1 = JsonConvert.DeserializeObject<LoginResultViewModel>(response.Content);
+                SetToken(resultObject1.Token); // set token
+                return resultObject1;
             }
             catch (Exception e)
             {
                 LogWriter.LogException(e);
-                
             }
 
-            return new ResponseObject<string>();
+            return new LoginResultViewModel();
         }
 
         public void SetToken(string token)
         {
-            if (_client.DefaultRequestHeaders.Contains("Token"))
-            {
-                _client.DefaultRequestHeaders.Remove("Token");
-            }
-            _client.DefaultRequestHeaders.Add("Token", token);
+            _client.AddDefaultHeader("Token", token);
         }
         #endregion
 
 
-       // #region ### FavoriteProduct ###
-        //public async Task<ResponseObject<FavoriteProductViewModel>> FavoriteProductDetail(Guid id)
-        //{
-        //    try
-        //    {
-        //        var response = await _client.GetAsync($"FavoriteProduct/{id}");
-        //        var result = await response.Content.ReadAsStringAsync();
-
-        //        return JsonConvert.DeserializeObject<ResponseObject<FavoriteProductViewModel>>(result);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        LogWriter.LogException(e);
-        //    }
-
-        //    return new ResponseObject<FavoriteProductViewModel>();
-        //}
+     //   #region ### FavoriteProduct ###
+        public async Task<ResponseObject<string>> QuestionGrounCreate(QuestionGroupCreateViewModel questionGroup)
+        {
+            try
+            {
+                _client.Timeout = -1;
+                var request = new RestRequest("QuestionGroup/CreateForWindowsApp", Method.POST);
+                request.AddParameter("Title", questionGroup.Title);
+                request.AddParameter("LessonId", questionGroup.LessonId);
+                request.AddFile("word", questionGroup.QuestionGroupWordPath);
+                request.AddFile("excel", questionGroup.QuestionGroupExcelPath);
+                IRestResponse response = _client.Execute(request);
+                var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<string>>(response.Content);
+                return resultObject1;
+            }
+            catch (Exception e)
+            {
+                LogWriter.LogException(e);
+            }
+            return new ResponseObject<string>();
+        }
 
         //public async Task<List<FavoriteProductViewModel>> FavoriteProductList()
         //{
@@ -319,7 +323,7 @@ namespace NasleGhalam.WindowsApp
 
         public void Dispose()
         {
-            _client?.Dispose();
+         //   _client?.Dispose();
         }
     }
 }

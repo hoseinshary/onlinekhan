@@ -30,7 +30,7 @@ namespace NasleGhalam.WindowsApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            QuestionGroup form = new QuestionGroup(_lessonService,_educationTreeService);
+            QuestionGroup form = new QuestionGroup(_lessonService,_educationTreeService,_webService);
             form.ShowDialog();
 
         }

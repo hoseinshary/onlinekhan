@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -42,13 +43,13 @@
             this.textBox_word = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.button3 = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.button4 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label5 = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -90,6 +91,16 @@
             this.tabPage1.Text = "ورود فایل سوالات";
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(47, 219);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(140, 23);
+            this.button3.TabIndex = 11;
+            this.button3.Text = "پیش نمایش";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // comboBox1
             // 
@@ -198,28 +209,6 @@
             this.tabPage2.Text = "پیش نمایش";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(47, 219);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(140, 23);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "پیش نمایش";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Location = new System.Drawing.Point(6, 51);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(729, 360);
-            this.panel1.TabIndex = 0;
-            // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(16, 13);
@@ -229,6 +218,14 @@
             this.button4.Text = "تایید و ثبت نهایی";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Location = new System.Drawing.Point(6, 51);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(729, 360);
+            this.panel1.TabIndex = 0;
             // 
             // tabPage3
             // 
@@ -242,13 +239,6 @@
             this.tabPage3.Text = "ثبت نهایی و جواب گروهی";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(23, 18);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(692, 23);
-            this.progressBar1.TabIndex = 0;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -257,6 +247,21 @@
             this.label5.Size = new System.Drawing.Size(116, 13);
             this.label5.TabIndex = 1;
             this.label5.Text = "در حال ارسال سوالات ...";
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(23, 18);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(692, 23);
+            this.progressBar1.TabIndex = 0;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // openFileDialog2
+            // 
+            this.openFileDialog2.FileName = "openFileDialog2";
             // 
             // QuestionGroup
             // 
@@ -300,5 +305,6 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog2;
     }
 }

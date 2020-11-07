@@ -5,6 +5,7 @@ export default interface IReport_UserQuestionReport {
   NumberOfQuestionAnswerJudged: number;
   NumberOfWriteQuestion: number;
   NumberOfSupervisorQuestion: number;
+  Department: string;
   
 
 }
@@ -17,5 +18,5 @@ export const DefaultReport_UserQuestionReport: IReport_UserQuestionReport = {
   NumberOfQuestionAnswerJudged: 0,
   NumberOfWriteQuestion: 0,
   NumberOfSupervisorQuestion: 0,
-  
+  Department :""
 };

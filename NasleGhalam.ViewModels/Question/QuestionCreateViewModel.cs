@@ -49,7 +49,10 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "نویسنده")]
         public int WriterId { get; set; }
 
-        
+
+
+        public int QuestionGroupId { get; set; }
+
 
 
         [Display(Name = "نوع طراح")]
@@ -87,7 +90,7 @@ namespace NasleGhalam.ViewModels.Question
 
         [Display(Name = "گزینه صحیح")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
-        [Range(1, 4, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
+        [Range(0, 4, ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Range")]
         public int AnswerNumber { get; set; }
 
         [Display(Name = "مبحث پاسخ صحیح")]

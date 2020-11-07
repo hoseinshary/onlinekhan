@@ -80,7 +80,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
 
 
-            return _users.Where(x => x.Role.Level == 3)
+            return _users.Where(x => x.Role.Level == 3).Where(x => x.IsActive == true)
                 .Select(x => new AllUsersReporQuestionViewModel
                 {
                     Name = x.Name,
@@ -88,7 +88,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     NumberOfQuestionAnswerJudged = x.QuestionAnswerJudges.Count,
                     NumberOfQuestionJudged = x.QuestionJudges.Count,
                     NumberOfSupervisorQuestion = x.SupervisorQuestions.Count,
-                    NumberOfWriteQuestion = x.Questions.Count(question => question.Writer.Id == x.Id)
+                    NumberOfWriteQuestion = x.Questions.Count(question => question.Writer.Id == x.Id),
+                    Department = x.Lessons.FirstOrDefault().LessonDepartments.FirstOrDefault().Name
                 }).ToList();
 
         }
@@ -111,6 +112,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                     .Where(current =>
                         current.QuestionJudges.All(x => x.UserId != userid) /*|| !current.QuestionJudges.Any()*/)
+                    //اگه 3 کارشناسی داریم نفر 4ام دیگر نبیند سوال کارشناسی را 
+                    .Where(current => current.QuestionJudges.Count >= current.Topics.FirstOrDefault().Lesson.NumberOfJudges)
                     .AsNoTracking()
                     .AsEnumerable()
                     .Select(Mapper.Map<QuestionViewModel>)
@@ -445,6 +448,40 @@ namespace NasleGhalam.ServiceLayer.Services
             // File.Delete(wordFilename);
             source.Close();
             app.Quit();
+
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(question.Id);
+            return clientResult;
+        }
+
+        /// <summary>
+        /// ثبت سوال برای برنامه ویندوزی
+        /// </summary>
+        /// <param name="questionViewModel"></param>
+        /// <param name="word"></param>
+        /// /// <param name="png"></param>
+        /// <returns></returns>
+        public ClientMessageResult CreateForWindowsApp(QuestionCreateViewModel questionViewModel, HttpPostedFile word, HttpPostedFile png)
+        {
+            var question = Mapper.Map<Question>(questionViewModel);
+            
+            var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+            _uow.MarkAsUnChanged(supervisor);
+            question.Supervisors.Add(supervisor);
+
+
+            _questions.Add(question);
+            _uow.ValidateOnSaveEnabled(false);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+
+
+
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
+            {
+                word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
+                png.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
+            }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             if (clientResult.MessageType == MessageType.Success)
@@ -1205,6 +1242,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Tags)
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Supervisors)
+                .Include(current => current.QuestionGroups)
                 .First(current => current.Id == id);
 
             if (question == null)
@@ -1228,6 +1266,13 @@ namespace NasleGhalam.ServiceLayer.Services
             foreach (var user in question.Supervisors.ToList())
             {
                 question.Supervisors.Remove(user);
+            }
+
+
+            //delete questionGroup
+            foreach (var questiongroup in question.QuestionGroups.ToList())
+            {
+                question.QuestionGroups.Remove(questiongroup);
             }
 
             //remove options

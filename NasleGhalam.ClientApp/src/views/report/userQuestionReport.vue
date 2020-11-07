@@ -49,6 +49,10 @@ export default class QuestionVue extends Vue {
     {
       title: "سوالات ناظر",
       data: "NumberOfSupervisorQuestion"
+    },
+     {
+      title: "دپارتمان",
+      data: "Department"
     }
   ];
 

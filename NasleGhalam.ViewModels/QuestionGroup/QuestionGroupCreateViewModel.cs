@@ -25,5 +25,9 @@ namespace NasleGhalam.ViewModels.QuestionGroup
         public int UserId { get; set; }
 
         public List<QuestionViewModel> Questions { get; set; } = new List<QuestionViewModel>();
+
+        public string QuestionGroupWordPath { get; set; }
+
+        public string QuestionGroupExcelPath { get; set; }
     }
 }

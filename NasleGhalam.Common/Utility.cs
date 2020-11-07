@@ -260,6 +260,13 @@ namespace NasleGhalam.Common
             return (extension == ".jpg");
         }
 
+        public static bool CheckImageQuestionExtension(string extension)
+        {
+            extension = extension.ToLower();
+            return (extension == ".png");
+        }
+
+
         public static bool CheckWordFileExtension(string extension)
         {
             extension = extension.ToLower();

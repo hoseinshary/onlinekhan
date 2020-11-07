@@ -68,6 +68,7 @@ namespace NasleGhalam.ServiceLayer.Services
                var questions1 =_questions
                    .Where(x => x.QuestionGroups.Any(y => y.LessonId == lesson.Id))
                    .Include(x=>x.Topics)
+                   .Include(x => x.Topics.Select(y=> y.Lesson))
                    .Include(x => x.QuestionJudges)
                    .AsNoTracking()
                    .AsEnumerable()
@@ -88,7 +89,7 @@ namespace NasleGhalam.ServiceLayer.Services
                var allQuestionJudged = questions1
                    .Count(x => x.QuestionJudges.Any<QuestionJudge>());
 
-               var allQuestionJudgedFull = _questions
+               var allQuestionJudgedFull = questions1.Where(x => x.Topics.Any<Topic>())
                    .Count(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges);
                    
 

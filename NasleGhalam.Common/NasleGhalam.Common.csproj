@@ -64,10 +64,12 @@
   <ItemGroup>
     <Compile Include="ActionBitsEnum.cs" />
     <Compile Include="CheckFile.cs" />
+    <Compile Include="ConstantStrings.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Logs.cs" />
+    <Compile Include="LogWriter.cs" />
     <Compile Include="ServerMessageResult.cs" />
     <Compile Include="ClientMessageResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

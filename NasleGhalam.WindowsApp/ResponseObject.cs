@@ -23,7 +23,9 @@ namespace NasleGhalam.WindowsApp
 
         public string JoinedErrors => string.Join(",", Errors);
 
-        public T Data { get; set; }
+        public int Id { get; set; }
+
+        public T obj { get; set; }
 
         public static ResponseObject<T> NotFound()
         {

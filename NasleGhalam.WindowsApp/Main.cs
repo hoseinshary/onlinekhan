@@ -17,20 +17,22 @@ namespace NasleGhalam.WindowsApp
     public partial class Main : Form
     {
         private readonly LessonService _lessonService;
+        private readonly WriterService _writerService;
         private readonly EducationTreeService _educationTreeService;
         private readonly WebService _webService;
 
-        public Main(LessonService lessonService, EducationTreeService educationTreeService, WebService WebService)
+        public Main(LessonService lessonService, EducationTreeService educationTreeService, WebService WebService , WriterService writerService)
         {
             _lessonService = lessonService;
             _educationTreeService = educationTreeService;
             _webService = WebService;
+            _writerService = writerService;
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            QuestionGroup form = new QuestionGroup(_lessonService,_educationTreeService,_webService);
+            QuestionGroup form = new QuestionGroup(_lessonService,_educationTreeService,_webService , _writerService);
             form.ShowDialog();
 
         }
@@ -47,6 +49,7 @@ namespace NasleGhalam.WindowsApp
             if(result.MessageType == MessageType.Success)
             {
                 label_loginStatus.ForeColor = Color.Green;
+                button1.Enabled = true;
                 label_loginStatus.Text = "ورود با موفقیت انجام شده.";
             }
             else

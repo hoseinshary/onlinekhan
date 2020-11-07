@@ -6,6 +6,7 @@ using NasleGhalam.ViewModels.EducationTree;
 using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels.Question;
 using NasleGhalam.ViewModels.QuestionGroup;
+using NasleGhalam.ViewModels.Writer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,19 +30,22 @@ namespace NasleGhalam.WindowsApp
 
         private readonly LessonService _lessonService;
         private readonly EducationTreeService _educationTreeService;
+        private readonly WriterService _writerService;
         private readonly WebService _webService;
 
         private List<LessonViewModel> lessons;
         private List<EducationTreeViewModel> educationTrees;
+        private List<WriterViewModel> writers;
 
         private List<string> questionsFileNames;
 
 
-        public QuestionGroup(LessonService lessonService, EducationTreeService educationTreeService, WebService WebService)
+        public QuestionGroup(LessonService lessonService, EducationTreeService educationTreeService, WebService WebService ,WriterService writerService)
         {
             _lessonService = lessonService;
             _educationTreeService = educationTreeService;
             _webService = WebService;
+            _writerService = writerService;
             InitializeComponent();
         }
 
@@ -79,8 +83,19 @@ namespace NasleGhalam.WindowsApp
         {
             lessons = _lessonService.GetAll().ToList();
             educationTrees = _educationTreeService.GetAll().ToList();
-
+            
             PopulateTreeView();
+
+            
+            var bindingSource1 = new BindingSource();
+            writers = _writerService.GetAll().ToList();
+            bindingSource1.DataSource = writers;
+
+            comboBox2.DataSource = bindingSource1.DataSource;
+
+            comboBox2.DisplayMember = "Name";
+            comboBox2.ValueMember = "Id";
+
         }
 
         private void PopulateTreeView()
@@ -189,7 +204,7 @@ namespace NasleGhalam.WindowsApp
                     returnGuidList.Add(newEntry);
                     var filename2 = FilePath + $"/questionGroupTemp/{newGuid}";
 
-                    target.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);
+         target.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);           
                     target.SaveAs(filename2 + ".docx");
 
                     //while (target.Windows[1].Panes[1].Pages.Count < 0) ;
@@ -215,7 +230,7 @@ namespace NasleGhalam.WindowsApp
             /////////////////////////////////
 
             var msgRes = new ClientMessageResult { MessageType = MessageType.Success };
-            if(msgRes.MessageType != MessageType.Success)
+            if (msgRes.MessageType != MessageType.Success)
             {
                 MessageBox.Show(msgRes.Message);
             }
@@ -223,22 +238,33 @@ namespace NasleGhalam.WindowsApp
             {
                 questionsFileNames = returnGuidList;
                 tabControl1.SelectTab(1);
+
+                foreach (Control item in panel1.Controls)
+                {
+                    panel1.Controls.Remove(item);
+                }
+
+                var height = 0;
                 foreach (var item in returnGuidList)
                 {
                     PictureBox pb = new PictureBox();
                     pb.Image = Image.FromFile(item + ".png");
                     pb.Size = new Size(pb.Image.Width, pb.Image.Height);
-                    pb.Top = pb.Height * panel1.Controls.Count;
+
+                    pb.Top = height  + 30;
+                    pb.Left = 50 + 870- pb.Image.Width;
+                    height  += pb.Height;
                     pb.BorderStyle = BorderStyle.FixedSingle;
                     panel1.Controls.Add(pb);
+                    System.Threading.Tasks.Task.Delay(1000);
                 }
-                
+
             }
 
 
         }
 
-      
+
 
         public static bool IsQuestionParagraph(string s)
         {
@@ -282,102 +308,202 @@ namespace NasleGhalam.WindowsApp
 
         private async void button4_Click(object sender, EventArgs e)
         {
-            var questionGroup = new QuestionGroupCreateViewModel();
-            questionGroup.Title = textBox_title.Text;
-            questionGroup.LessonId = Convert.ToInt32( comboBox1.SelectedValue);
-            questionGroup.QuestionGroupWordPath = textBox_word.Text;
-            questionGroup.QuestionGroupExcelPath = textBox_excel.Text;
+            tabControl1.SelectTab(2);
+            progressBar1.Maximum = questionsFileNames.Count;
+            progressBar1.Step = 1;
+            progressBar1.Value = 0;
+            backgroundWorker1.RunWorkerAsync();
+        }
 
-            var result = await _webService.QuestionGrounCreate(questionGroup);
-
-
-            var missing = Type.Missing;
-            if (textBox_title.Text != "" && textBox_word.Text!="" && textBox_excel.Text != ""&& comboBox1.Text != "")
+        private async void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
             {
-                
-                var sourceExecleFilename = textBox_excel.Text;
-                var destExecleFilename = FilePath + Guid.NewGuid() + ".xlsx";
-                //read from excel file
-                var xlApp = new Microsoft.Office.Interop.Excel.Application();
-                var xlWorkbook = xlApp.Workbooks.Open(destExecleFilename, 0, true, 5, "", "", true, XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-                var xlWorksheet = (_Worksheet)xlWorkbook.Sheets[1];
-                var xlRange = xlWorksheet.UsedRange;
-
-                var rowCount = xlRange.Rows.Count;
-                var colCount = xlRange.Columns.Count;
-                var dt = new System.Data.DataTable();
-                for (var k = 1; k <= rowCount; k++)
+                if (textBox_title.Text != "" && textBox_word.Text != "" && textBox_excel.Text != "" && comboBox1.Text != "")
                 {
-                    var dr = dt.NewRow();
-                    for (var j = 1; j <= colCount; j++)
+
+                    var questionGroup = new QuestionGroupCreateViewModel();
+                    questionGroup.Title = textBox_title.Text;
+                    questionGroup.LessonId = Convert.ToInt32(comboBox1.SelectedValue);
+                    questionGroup.QuestionGroupWordPath = textBox_word.Text;
+                    questionGroup.QuestionGroupExcelPath = textBox_excel.Text;
+
+                    var result = await _webService.QuestionGrounCreate(questionGroup);
+
+                    if (result.MessageType != MessageType.Success)
                     {
-                        if (k == 1)
-                        {
-                            dt.Columns.Add(Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range)?.Value2));
-                        }
-                        else
-                        {
-                            dr[j - 1] = Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range)?.Value2);
-                        }
+                        MessageBox.Show(result.Message);
 
                     }
-                    if (k != 1)
-                        dt.Rows.Add(dr);
+                    else
+                    {
+                        var missing = Type.Missing;
+
+                        var sourceExecleFilename = textBox_excel.Text;
+                        var destExecleFilename = FilePath + Guid.NewGuid() + ".xlsx";
+                        File.Copy(sourceExecleFilename, destExecleFilename);
+                        //read from excel file
+                        var xlApp = new Microsoft.Office.Interop.Excel.Application();
+                        var xlWorkbook = xlApp.Workbooks.Open(destExecleFilename, 0, true, 5, "", "", true, XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+                        var xlWorksheet = (_Worksheet)xlWorkbook.Sheets[1];
+                        var xlRange = xlWorksheet.UsedRange;
+
+                        var rowCount = xlRange.Rows.Count;
+                        var colCount = xlRange.Columns.Count;
+                        var dt = new System.Data.DataTable();
+                        for (var k = 1; k <= rowCount; k++)
+                        {
+                            var dr = dt.NewRow();
+                            for (var j = 1; j <= colCount; j++)
+                            {
+                                if (k == 1)
+                                {
+                                    dt.Columns.Add(Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range)?.Value2));
+                                }
+                                else
+                                {
+                                    dr[j - 1] = Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range)?.Value2);
+                                }
+
+                            }
+                            if (k != 1)
+                                dt.Rows.Add(dr);
+                        }
+
+                        xlWorkbook.Close();
+                        xlApp.Quit();
+                        File.Delete(destExecleFilename);
+
+
+
+                        // Open a doc file.
+                        var app = new Microsoft.Office.Interop.Word.Application();
+
+                        var numberOfQ = 0;
+                        foreach (var questionName in questionsFileNames)
+                        {
+                            var newQuestionNameFile = Guid.NewGuid();
+                            numberOfQ++;
+                            var source = app.Documents.Open(questionName + ".docx");
+
+                            QuestionCreateViewModel question = new QuestionCreateViewModel();
+
+                            //حذف عدد اول سوال
+                            if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                            {
+                                int i = 1;
+                                while (i < source.Paragraphs[1].Range.Characters.Count &&
+                                       source.Paragraphs[1].Range.Characters[i].Text != "-")
+                                {
+                                    source.Paragraphs[1].Range.Characters[i].Delete();
+                                }
+                                source.Paragraphs[1].Range.Characters[i].Delete();
+                            }
+
+                            foreach (Paragraph paragraph in source.Paragraphs)
+                            {
+                                question.Context += paragraph.Range.Text;
+                            }
+
+                            string filename2 = FilePath + "questionGroupTemp//" + newQuestionNameFile;
+                            source.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);
+                            source.SaveAs(filename2 + ".docx");
+                            ImageTools.SaveImageOfWordPdf(filename2 + ".pdf", filename2);
+                            source.Close(WdSaveOptions.wdDoNotSaveChanges);
+
+                            File.Delete(filename2 + ".pdf");
+
+                            question.FilePath = FilePath + "questionGroupTemp//" + newQuestionNameFile;
+
+                            question.LookupId_QuestionType = dt.Rows[numberOfQ - 1]["نوع سوال"].ToString() == "تشریحی" ? 7 : 6;
+                            question.QuestionPoint = Convert.ToInt32(dt.Rows[numberOfQ - 1]["بارم سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["بارم سوال"] : 0);
+                            question.AnswerNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["گزینه صحیح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["گزینه صحیح"] : 0);
+                            question.LookupId_QuestionHardnessType = 1040;
+                            //newQuestion.LookupId_AreaType = 1036;
+                            question.LookupId_AuthorType = 1039;
+                            question.LookupId_RepeatnessType = 21;
+                            question.LookupId_QuestionRank = 1063;
+                            //newQuestion.Istandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
+                            question.WriterId = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره طراح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره طراح"] : 1);
+                            //newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
+                            question.IsActive = false;
+                            question.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان سوال"] : 0);
+                            question.UseEvaluation = false;
+                            question.QuestionNumber = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره سوال در منبع اصلی"] : 0);
+                            question.SupervisorUserId = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره ناظر"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره ناظر"] : 0);
+
+                            question.QuestionGroupId = result.Id;
+
+                            var result2 = await _webService.QuestionCreate(question);
+
+                            if (result2.MessageType != MessageType.Success)
+                            {
+                                MessageBox.Show(" مشکل در ثبت سوال : \n" + result2.Message);
+                                app.Quit();
+                                break;
+                            }
+
+                            backgroundWorker1.ReportProgress((numberOfQ * 100) / questionsFileNames.Count);
+
+
+
+
+                        }
+                        app.Quit();
+
+
+                    }
                 }
-
-                xlWorkbook.Close();
-                xlApp.Quit();
-                File.Delete(destExecleFilename);
-
-               
-
-                // Open a doc file.
-                var app = new Microsoft.Office.Interop.Word.Application();
-
-                foreach (var questionName in questionsFileNames)
+                else
                 {
-                    var source = app.Documents.Open(questionName);
-
-                    QuestionCreateViewModel question = new QuestionCreateViewModel();
-
-                    //حذف عدد اول سوال
-                    if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
-                    {
-                        int i = 1;
-                        while (i < source.Paragraphs[1].Range.Characters.Count &&
-                               source.Paragraphs[1].Range.Characters[i].Text != "-")
-                        {
-                            source.Paragraphs[1].Range.Characters[i].Delete();
-                        }
-                        source.Paragraphs[1].Range.Characters[i].Delete();
-                    }
-
-                    foreach (Paragraph paragraph in source.Paragraphs)
-                    {
-                        question.Context += paragraph.Range.Text;
-                    }
-
-
-                    string filename2 = FilePath + $"/questionGroupTemp/{questionName}";
-                    source.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);
-                    source.SaveAs(filename2 + ".docx");
-                    ImageTools.SaveImageOfWordPdf(filename2 + ".pdf", filename2);
-                    source.Close(WdSaveOptions.wdDoNotSaveChanges);
-
-                    File.Delete(filename2 + ".pdf");
-
-
-
+                    MessageBox.Show("مقادیر ورودی به صورت کامل وارد نشده اند!");
                 }
-                app.Quit();
-
-
-
             }
-            else
+            catch (Exception error)
             {
-                MessageBox.Show("مقادیر ورودی به صورت کامل وارد نشده اند!");
+                MessageBox.Show(error.Message);
             }
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBar1.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            label5.ForeColor = Color.Green;
+            label5.Text = "فایل با موفقیت وارد شد !";
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectTab(3);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = openFileDialog1.ShowDialog();
+            if(dr == DialogResult.OK)
+            {
+                textBox_wordfileAnswers.Text = openFileDialog1.FileName;
+            }
+        }
+
+        private void comboBox2_TextChanged(object sender, EventArgs e)
+        {
+            var bindingSource1 = new BindingSource();
+            bindingSource1.DataSource = writers.Where(x => x.Name.StartsWith(comboBox2.Text)).ToList();
+            if (bindingSource1.Count != 0)
+                comboBox2.DataSource = bindingSource1.DataSource;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var bindingSource1 = new BindingSource();
+            bindingSource1.DataSource = lessons.Where(x => x.Name.StartsWith(comboBox1.Text)).ToList();
+            if (bindingSource1.Count != 0)
+                comboBox1.DataSource = bindingSource1.DataSource;
         }
     }
 }

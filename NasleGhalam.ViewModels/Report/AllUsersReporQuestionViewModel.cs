@@ -17,7 +17,8 @@ namespace NasleGhalam.ViewModels.Report
 
         public int NumberOfSupervisorQuestion { get; set; }
 
-       
+
+        public string Department { get; set; }
 
 
     }

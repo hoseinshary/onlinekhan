@@ -41,17 +41,18 @@ export default class QuestionVue extends Vue {
       title: "سوالات دارای کارشناسی",
       data: "AllQuestionJudged"
     },
+    
     {
-      title: "سوالات تایید شده",
+      title: "سوالات کارشناسی شده کامل",
+      data: "AllQuestionJudgedFull"
+    },
+    {
+      title: "سوالات فعال",
       data: "AllQuestionActived"
     },
     {
       title: "سوالات ترکیبی",
       data: "AllQuestionHybrid"
-    },
-    {
-      title: "سوالات کارشناسی شده کامل",
-      data: "AllQuestionJudgedFull"
     }
   ];
 

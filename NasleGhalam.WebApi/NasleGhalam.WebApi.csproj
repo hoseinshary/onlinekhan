@@ -150,6 +150,7 @@
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WriterController.cs" />
+    <Compile Include="FilterAttribute\CheckImageQuestionValidation.cs" />
     <Compile Include="FilterAttribute\CheckImageValidationProfileNotRequired.cs" />
     <Compile Include="FilterAttribute\CheckWordFileUpdateValidation.cs" />
     <Compile Include="ModelBinderAndFormatter\CustomJsonFormatter.cs" />

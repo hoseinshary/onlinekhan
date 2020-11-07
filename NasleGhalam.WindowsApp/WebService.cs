@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
+using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.WindowsApp
 {
@@ -54,16 +55,57 @@ namespace NasleGhalam.WindowsApp
 
 
      //   #region ### FavoriteProduct ###
-        public async Task<ResponseObject<string>> QuestionGrounCreate(QuestionGroupCreateViewModel questionGroup)
+        public async Task<ResponseObject<QuestionGroupViewModel>> QuestionGrounCreate(QuestionGroupCreateViewModel questionGroup)
         {
             try
             {
                 _client.Timeout = -1;
                 var request = new RestRequest("QuestionGroup/CreateForWindowsApp", Method.POST);
-                request.AddParameter("Title", questionGroup.Title);
-                request.AddParameter("LessonId", questionGroup.LessonId);
+                request.AddParameter("Title", questionGroup.Title , ParameterType.QueryString);
+                request.AddParameter("LessonId", questionGroup.LessonId , ParameterType.QueryString);
+               
                 request.AddFile("word", questionGroup.QuestionGroupWordPath);
                 request.AddFile("excel", questionGroup.QuestionGroupExcelPath);
+                IRestResponse response = _client.Execute(request);
+                var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<QuestionGroupViewModel>>(response.Content);
+                return resultObject1;
+            }
+            catch (Exception e)
+            {
+                LogWriter.LogException(e);
+            }
+            return new ResponseObject<QuestionGroupViewModel>();
+        }
+
+
+        public async Task<ResponseObject<string>> QuestionCreate(QuestionCreateViewModel question)
+        {
+            try
+            {
+                _client.Timeout = -1;
+                var request = new RestRequest("Question/CreateForWindowsApp", Method.POST);
+
+                request.AddParameter("QuestionNumber", question.QuestionNumber, ParameterType.QueryString);
+                request.AddParameter("QuestionPoint", question.QuestionPoint, ParameterType.QueryString);
+                request.AddParameter("UseEvaluation", question.UseEvaluation, ParameterType.QueryString);
+                request.AddParameter("IsStandard", question.IsStandard, ParameterType.QueryString);
+                request.AddParameter("WriterId", question.WriterId, ParameterType.QueryString);
+                request.AddParameter("SupervisorUserId", question.SupervisorUserId, ParameterType.QueryString);
+                request.AddParameter("ResponseSecond", question.ResponseSecond, ParameterType.QueryString);
+                request.AddParameter("Description", question.Description, ParameterType.QueryString);
+                request.AddParameter("AnswerNumber", question.AnswerNumber, ParameterType.QueryString);
+                request.AddParameter("LookupId_QuestionType", question.LookupId_QuestionType, ParameterType.QueryString);
+                request.AddParameter("LookupId_QuestionHardnessType", question.LookupId_QuestionHardnessType, ParameterType.QueryString);
+                request.AddParameter("LookupId_RepeatnessType", question.LookupId_RepeatnessType, ParameterType.QueryString);
+                request.AddParameter("LookupId_AuthorType", question.LookupId_AuthorType, ParameterType.QueryString);
+                request.AddParameter("LookupId_AreaType", question.LookupId_AreaTypes, ParameterType.QueryString);
+                request.AddParameter("IsHybrid", question.IsHybrid, ParameterType.QueryString);
+                request.AddParameter("LookupId_QuestionRank", question.LookupId_QuestionRank, ParameterType.QueryString);
+                request.AddParameter("Context", question.Context, ParameterType.QueryString);
+
+
+                request.AddFile("word", question.FilePath+".docx");
+                request.AddFile("png", question.FilePath+".png");
                 IRestResponse response = _client.Execute(request);
                 var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<string>>(response.Content);
                 return resultObject1;
@@ -74,6 +116,7 @@ namespace NasleGhalam.WindowsApp
             }
             return new ResponseObject<string>();
         }
+
 
         //public async Task<List<FavoriteProductViewModel>> FavoriteProductList()
         //{

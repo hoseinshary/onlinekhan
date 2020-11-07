@@ -14,11 +14,14 @@
         <a href="#" class="animation">مشاوره</a>
         <a href="#" class="animation">لیست قیمت</a>
         <a href="#" class="animation">کلاس های آموزشی</a>
-        <a href="#" class="animation" style="float: left"
+        <a href="/user/register" class="animation" style="float: left"
           ><i class="fa fa-pencil-square q-mx-xs"></i>ثبت نام</a
         >
-        <a href="#" class="animation" style="float: left"
+        <a href="/user/login" class="animation" style="float: left"
           ><i class="fa fa-user q-mx-xs"></i>ورود</a
+        >
+           <a href="/resume/registration" class="animation" style="float: left"
+          ><i class="fa fa-handshake-o q-mx-xs"></i>همکاری با ما</a
         >
         <a href="javascript:void(0);" class="icon" @click="myFunction">
           <i id="menuIcon" class="fa fa-bars"></i>
@@ -256,8 +259,8 @@
               <div class="col-4 text-center">
                 <div class="box">
                   <img src="/assets/img/home/3/3-icons-2.png" alt="مشتری" />
-                  <span>4</span>
-                  <p>مشتری</p>
+                  <span>8877</span>
+                  <p>سوالات</p>
                 </div>
               </div>
               <div class="col-4 text-center">

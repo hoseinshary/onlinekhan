@@ -2,20 +2,49 @@
   <section class="col-md-8">
     <!-- v-if="canCreate"  -->
     <base-btn-create
-      
+
       :label="`ایجاد (${programStore.modelName}) جدید`"
       @click="showModalCreate"
     />
     <br />
-    <base-table :grid-data="programStore.gridData" :columns="programGridColumn" hasIndex>
+    <br />
+    <br />
+    <div class="col-md-3" >
+    <q-select
+                class="q-pt-lg"
+
+       :value="program.StudentId"
+      :options="studentDdl"
+      float-label="انتخاب دانش آموز"
+      clearable
+      filter
+      
+    />
+    </div>
+    <br />
+    <br />
+
+    <base-table
+      :grid-data="programStore.gridData"
+      :columns="programGridColumn"
+      hasIndex
+    >
       <template slot="Id" slot-scope="data">
-        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
-        <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
+        <base-btn-edit
+          v-if="canEdit"
+          round
+          @click="showModalEdit(data.row.Id)"
+        />
+        <base-btn-delete
+          v-if="canDelete"
+          round
+          @click="showModalDelete(data.row.Id)"
+        />
       </template>
     </base-table>
 
     <!-- modals v-if="canCreate" -->
-    <modal-create ></modal-create>
+    <modal-create></modal-create>
     <modal-edit v-if="canEdit"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
   </section>
@@ -36,6 +65,9 @@ import util from "src/utilities";
 export default class ProgramVue extends Vue {
   //#region ### data ###
   programStore = vxm.programStore;
+  studentStore = vxm.studentStore;
+    program = vxm.programStore.program;
+
   pageAccess = util.getAccess(this.programStore.modelName);
   programGridColumn = [
     {
@@ -68,6 +100,9 @@ export default class ProgramVue extends Vue {
   get canDelete() {
     return this.pageAccess.indexOf("حذف") > -1;
   }
+    get studentDdl() {
+    return this.studentStore.ddl;
+  }
   //#endregion
 
   //#region ### methods ###
@@ -93,6 +128,7 @@ export default class ProgramVue extends Vue {
   //#region ### hooks ###
   created() {
     this.programStore.fillList();
+    this.studentStore.fillList();
   }
   //#endregion
 }

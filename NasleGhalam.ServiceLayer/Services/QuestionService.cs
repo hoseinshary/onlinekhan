@@ -113,7 +113,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     .Where(current =>
                         current.QuestionJudges.All(x => x.UserId != userid) /*|| !current.QuestionJudges.Any()*/)
                     //اگه 3 کارشناسی داریم نفر 4ام دیگر نبیند سوال کارشناسی را 
-                    .Where(current => current.QuestionJudges.Count >= current.Topics.FirstOrDefault().Lesson.NumberOfJudges)
+                  //  .Where(current => current.QuestionJudges.Count >= current.Topics.FirstOrDefault().Lesson.NumberOfJudges)
                     .AsNoTracking()
                     .AsEnumerable()
                     .Select(Mapper.Map<QuestionViewModel>)
@@ -163,7 +163,6 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 return _questions
                     .Where(x => x.QuestionGroups.Any(y => y.LessonId == lessonId))
-                    .Where(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges)
                     .OrderByDescending(x => x.Id)
                     .AsNoTracking()
                     .AsEnumerable()
@@ -176,6 +175,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 return _questions
                     .Where(current => current.QuestionJudges.Any(x => x.UserId == userId))
                     .Where(x => x.QuestionGroups.Any(y => y.LessonId == lessonId))
+                    //.Where(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges)
                     .OrderByDescending(x => x.Id)
                     .AsNoTracking()
                     .AsEnumerable()

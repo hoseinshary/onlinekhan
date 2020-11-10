@@ -125,7 +125,7 @@ export default {
 }
 
 .toolbar-header1 .logo {
-  background-image: url("../assets/img/logo1.png");
+  background-image: url("../assets/img/logo1-old.png");
   background-repeat: no-repeat;
   background-size: contain;
   height: 90px;

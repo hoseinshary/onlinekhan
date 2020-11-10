@@ -69,6 +69,34 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="questionAnswerViewModel"></param>
         /// <param name="word"></param>
         /// <returns></returns>
+        public ClientMessageResult CreateForWindowsApp(QuestionAnswerCreateViewModel questionAnswerViewModel, HttpPostedFile word, HttpPostedFile png)
+        {
+            var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
+            questionAnswer.LookupId_AnswerType = 1042;
+
+            var FileName = Guid.NewGuid().ToString();
+
+            _questionAnswers.Add(questionAnswer);
+            _uow.ValidateOnSaveEnabled(false);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(FileName) && !string.IsNullOrEmpty(FileName))
+            {
+                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FileName) + ".docx");
+                png.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FileName) + ".png");
+            }
+
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = GetById(questionAnswer.Id);
+            return clientResult;
+        }
+
+        /// <summary>
+        /// ثبت جواب سوال
+        /// </summary>
+        /// <param name="questionAnswerViewModel"></param>
+        /// <param name="word"></param>
+        /// <returns></returns>
         public ClientMessageResult Create(QuestionAnswerCreateViewModel questionAnswerViewModel, HttpPostedFile word)
         {
 

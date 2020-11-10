@@ -17,7 +17,7 @@ namespace NasleGhalam.WindowsApp
 
         public MessageType MessageType { get; set; }
 
-        public string Message => MessageType.ToString();
+        public string Message { get; set; }
 
         public List<string> Errors { get; set; }
 

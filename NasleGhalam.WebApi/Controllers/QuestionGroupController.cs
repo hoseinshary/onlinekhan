@@ -140,8 +140,8 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
         [CheckModelValidation]
-        [CheckWordFileValidation("word", 1024)]
-        [CheckExcelFileValidation("excel", 1024)]
+        [CheckWordFileValidation("word", 2048)]
+        [CheckExcelFileValidation("excel", 2048)]
         public IHttpActionResult CreateForWindowsApp([FromUri]QuestionGroupCreateViewModel questionGroupViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");

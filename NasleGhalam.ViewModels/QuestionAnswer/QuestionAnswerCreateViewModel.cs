@@ -32,5 +32,10 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
 
         [Display(Name = "نوع جواب")]
         public int LookupId_AnswerType { get; set; }
+
+        public string FilePath { get; set; }
+        public string FileName { get; set; }
+
+
     }
 }

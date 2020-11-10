@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
 using NasleGhalam.ViewModels.Question;
+using NasleGhalam.ViewModels.QuestionAnswer;
 
 namespace NasleGhalam.WindowsApp
 {
@@ -78,7 +79,7 @@ namespace NasleGhalam.WindowsApp
         }
 
 
-        public async Task<ResponseObject<string>> QuestionCreate(QuestionCreateViewModel question)
+        public async Task<ResponseObject<QuestionViewModel>> QuestionCreate(QuestionCreateViewModel question)
         {
             try
             {
@@ -107,16 +108,46 @@ namespace NasleGhalam.WindowsApp
                 request.AddFile("word", question.FilePath+".docx");
                 request.AddFile("png", question.FilePath+".png");
                 IRestResponse response = _client.Execute(request);
-                var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<string>>(response.Content);
+                var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<QuestionViewModel>>(response.Content);
                 return resultObject1;
             }
             catch (Exception e)
             {
                 LogWriter.LogException(e);
             }
-            return new ResponseObject<string>();
+            return new ResponseObject<QuestionViewModel>();
         }
 
+        public async Task<ResponseObject<QuestionAnswerViewModel>> QuestionAnswerCreate(QuestionAnswerCreateViewModel question)
+        {
+            try
+            {
+                _client.Timeout = -1;
+                var request = new RestRequest("QuestionAnswer/CreateForWindowsApp", Method.POST);
+
+                request.AddParameter("Title", question.Title, ParameterType.QueryString);
+                request.AddParameter("LessonName", question.LessonName, ParameterType.QueryString);
+                request.AddParameter("Description", question.Description, ParameterType.QueryString);
+                request.AddParameter("WriterId", question.WriterId, ParameterType.QueryString);
+                request.AddParameter("IsMaster", question.IsMaster, ParameterType.QueryString);
+                request.AddParameter("IsActive", question.IsActive, ParameterType.QueryString);
+                request.AddParameter("QuestionId", question.QuestionId, ParameterType.QueryString);
+                request.AddParameter("FilePath", question.FilePath, ParameterType.QueryString);
+                request.AddParameter("FileName", question.FileName, ParameterType.QueryString);
+                
+
+                request.AddFile("word", question.FilePath + ".docx");
+                request.AddFile("png", question.FilePath + ".png");
+                IRestResponse response = _client.Execute(request);
+                var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<QuestionAnswerViewModel>>(response.Content);
+                return resultObject1;
+            }
+            catch (Exception e)
+            {
+                LogWriter.LogException(e);
+            }
+            return new ResponseObject<QuestionAnswerViewModel>();
+        }
 
         //public async Task<List<FavoriteProductViewModel>> FavoriteProductList()
         //{

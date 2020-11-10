@@ -30,6 +30,9 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.progressBar3 = new System.Windows.Forms.ProgressBar();
+            this.textBox_numberOfQuestions = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -46,26 +49,38 @@
             this.button4 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button5 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.button7 = new System.Windows.Forms.Button();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox_writer = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox_answerTitle = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
             this.textBox_wordfileAnswers = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.button8 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.progressBar2 = new System.Windows.Forms.ProgressBar();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -74,6 +89,8 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -84,6 +101,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.progressBar3);
+            this.tabPage1.Controls.Add(this.textBox_numberOfQuestions);
+            this.tabPage1.Controls.Add(this.label10);
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.label4);
@@ -105,9 +125,32 @@
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
+            // progressBar3
+            // 
+            this.progressBar3.Location = new System.Drawing.Point(34, 339);
+            this.progressBar3.Name = "progressBar3";
+            this.progressBar3.Size = new System.Drawing.Size(496, 23);
+            this.progressBar3.TabIndex = 14;
+            // 
+            // textBox_numberOfQuestions
+            // 
+            this.textBox_numberOfQuestions.Location = new System.Drawing.Point(251, 218);
+            this.textBox_numberOfQuestions.Name = "textBox_numberOfQuestions";
+            this.textBox_numberOfQuestions.Size = new System.Drawing.Size(110, 20);
+            this.textBox_numberOfQuestions.TabIndex = 13;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(384, 221);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(30, 13);
+            this.label10.TabIndex = 12;
+            this.label10.Text = "تعداد";
+            // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(156, 249);
+            this.button3.Location = new System.Drawing.Point(156, 278);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(140, 23);
             this.button3.TabIndex = 11;
@@ -138,7 +181,7 @@
             this.treeView1.Location = new System.Drawing.Point(543, 56);
             this.treeView1.Name = "treeView1";
             this.treeView1.RightToLeftLayout = true;
-            this.treeView1.Size = new System.Drawing.Size(288, 316);
+            this.treeView1.Size = new System.Drawing.Size(288, 385);
             this.treeView1.TabIndex = 8;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
@@ -243,6 +286,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.richTextBox1);
             this.tabPage3.Controls.Add(this.button5);
             this.tabPage3.Controls.Add(this.label5);
             this.tabPage3.Controls.Add(this.progressBar1);
@@ -254,9 +298,17 @@
             this.tabPage3.Text = "ثبت نهایی و جواب گروهی";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(381, 134);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(426, 212);
+            this.richTextBox1.TabIndex = 3;
+            this.richTextBox1.Text = "";
+            // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(667, 147);
+            this.button5.Location = new System.Drawing.Point(667, 370);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(140, 23);
             this.button5.TabIndex = 2;
@@ -283,9 +335,9 @@
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.button7);
-            this.tabPage4.Controls.Add(this.comboBox2);
+            this.tabPage4.Controls.Add(this.comboBox_writer);
             this.tabPage4.Controls.Add(this.label6);
-            this.tabPage4.Controls.Add(this.textBox1);
+            this.tabPage4.Controls.Add(this.textBox_answerTitle);
             this.tabPage4.Controls.Add(this.label7);
             this.tabPage4.Controls.Add(this.button6);
             this.tabPage4.Controls.Add(this.textBox_wordfileAnswers);
@@ -306,15 +358,16 @@
             this.button7.TabIndex = 18;
             this.button7.Text = "پیش نمایش جواب ها";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
-            // comboBox2
+            // comboBox_writer
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(496, 104);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(179, 21);
-            this.comboBox2.TabIndex = 17;
-            this.comboBox2.TextChanged += new System.EventHandler(this.comboBox2_TextChanged);
+            this.comboBox_writer.FormattingEnabled = true;
+            this.comboBox_writer.Location = new System.Drawing.Point(496, 104);
+            this.comboBox_writer.Name = "comboBox_writer";
+            this.comboBox_writer.Size = new System.Drawing.Size(179, 21);
+            this.comboBox_writer.TabIndex = 17;
+            this.comboBox_writer.TextChanged += new System.EventHandler(this.comboBox2_TextChanged);
             // 
             // label6
             // 
@@ -325,12 +378,12 @@
             this.label6.TabIndex = 16;
             this.label6.Text = "نویسنده";
             // 
-            // textBox1
+            // textBox_answerTitle
             // 
-            this.textBox1.Location = new System.Drawing.Point(470, 69);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(205, 20);
-            this.textBox1.TabIndex = 15;
+            this.textBox_answerTitle.Location = new System.Drawing.Point(470, 69);
+            this.textBox_answerTitle.Name = "textBox_answerTitle";
+            this.textBox_answerTitle.Size = new System.Drawing.Size(205, 20);
+            this.textBox_answerTitle.TabIndex = 15;
             // 
             // label7
             // 
@@ -367,6 +420,73 @@
             this.label8.TabIndex = 11;
             this.label8.Text = "فایل سوال ورد";
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.button8);
+            this.tabPage5.Controls.Add(this.panel2);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(942, 557);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "پیش نمایش جواب ها";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(35, 20);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(101, 23);
+            this.button8.TabIndex = 3;
+            this.button8.Text = "تایید و ثبت نهایی";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.AutoScroll = true;
+            this.panel2.Location = new System.Drawing.Point(21, 48);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(900, 489);
+            this.panel2.TabIndex = 2;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.richTextBox2);
+            this.tabPage6.Controls.Add(this.label9);
+            this.tabPage6.Controls.Add(this.progressBar2);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(942, 557);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "ثبت نهایی جواب";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Location = new System.Drawing.Point(394, 150);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(426, 212);
+            this.richTextBox2.TabIndex = 6;
+            this.richTextBox2.Text = "";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(707, 121);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(116, 13);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "در حال ارسال سوالات ...";
+            // 
+            // progressBar2
+            // 
+            this.progressBar2.Location = new System.Drawing.Point(128, 79);
+            this.progressBar2.Name = "progressBar2";
+            this.progressBar2.Size = new System.Drawing.Size(692, 23);
+            this.progressBar2.TabIndex = 4;
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -382,6 +502,17 @@
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
+            this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
+            // 
+            // backgroundWorker3
+            // 
+            this.backgroundWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker3_DoWork);
+            this.backgroundWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker3_ProgressChanged);
             // 
             // QuestionGroup
             // 
@@ -401,6 +532,9 @@
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -432,13 +566,26 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox_writer;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox_answerTitle;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.TextBox textBox_wordfileAnswers;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ProgressBar progressBar2;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.ProgressBar progressBar3;
+        private System.Windows.Forms.TextBox textBox_numberOfQuestions;
+        private System.Windows.Forms.Label label10;
+        private System.ComponentModel.BackgroundWorker backgroundWorker3;
     }
 }

@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NasleGhalam.Common.ForQuestionMaking;
 
 namespace NasleGhalam.WindowsApp
 {
@@ -170,45 +171,7 @@ namespace NasleGhalam.WindowsApp
 
 
 
-        public static bool IsQuestionParagraph(string s)
-        {
-            var arrayTemp = s.ToCharArray();
-
-            var i = 0;
-            while (i < arrayTemp.Length)
-            {
-                if (arrayTemp[i] == ' ' || arrayTemp[i] == '\n' || arrayTemp[i] == '\r')
-                {
-                    i++;
-                }
-                else if (char.IsDigit(arrayTemp[i]))
-                {
-                    i++;
-                    while (char.IsDigit(arrayTemp[i]) && i < arrayTemp.Length)
-                    {
-                        i++;
-                    }
-                    if (arrayTemp[i] == '-')
-                    {
-                        var j = 0;
-                        while (j < 14 && i < arrayTemp.Length)
-                        {
-                            i++;
-                            j++;
-                        }
-                        if (j == 14)
-                            return true;
-                    }
-                    return false;
-                }
-                else
-                {
-                    break;
-                }
-                i++;
-            }
-            return false;
-        }
+     
 
         private async void button4_Click(object sender, EventArgs e)
         {
@@ -313,7 +276,7 @@ namespace NasleGhalam.WindowsApp
                             QuestionCreateViewModel question = new QuestionCreateViewModel();
 
                             //حذف عدد اول سوال
-                            if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                            if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
                             {
                                 int i = 1;
                                 while (i < source.Paragraphs[1].Range.Characters.Count &&
@@ -370,7 +333,7 @@ namespace NasleGhalam.WindowsApp
 
                             this.Invoke(new MethodInvoker(delegate () { richTextBox1.Text += $"سوال {numberOfQ} با موفقیت وارد شد...\n"; }));
                             backgroundWorker1.ReportProgress((numberOfQ * 100) / questionsFileNames.Count);
-                            questionIds.Add(result2.Id);
+                            questionIds.Add(result2.obj.Id);
 
 
 
@@ -457,7 +420,7 @@ namespace NasleGhalam.WindowsApp
             var questoinAnswerCount = 0;
             foreach (Paragraph paragraph in source.Paragraphs)
             {
-                if (IsQuestionParagraph(paragraph.Range.Text))
+                if ( QuestionMaking.IsAnswerParagraph(paragraph.Range.Text))
                 {
                     questoinAnswerCount++;
                 }
@@ -476,7 +439,7 @@ namespace NasleGhalam.WindowsApp
             var numberOfQ = 0;
             while (i <= x)
             {
-                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                if (QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
                 {
                     numberOfQ++;
 
@@ -491,7 +454,7 @@ namespace NasleGhalam.WindowsApp
                     int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
 
                     i++;
-                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    while (i <= x && !QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
                     {
                         i++;
                     }
@@ -606,7 +569,7 @@ namespace NasleGhalam.WindowsApp
                         QuestionAnswerCreateViewModel question = new QuestionAnswerCreateViewModel();
 
                         //حذف عدد اول سوال
-                        if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                        if (QuestionMaking.IsAnswerParagraph(source.Paragraphs[1].Range.Text))
                         {
                             int i = 1;
                             while (i < source.Paragraphs[1].Range.Characters.Count &&
@@ -617,6 +580,11 @@ namespace NasleGhalam.WindowsApp
                             source.Paragraphs[1].Range.Characters[i].Delete();
                         }
 
+                        foreach (Paragraph paragraph in source.Paragraphs)
+                        {
+                            question.Context += paragraph.Range.Text;
+                        }
+
                         string filename2 = FilePath + "questionGroupTemp//" + newQuestionNameFile;
                         source.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);
                         source.SaveAs(filename2 + ".docx");
@@ -625,13 +593,13 @@ namespace NasleGhalam.WindowsApp
 
                         File.Delete(filename2 + ".pdf");
 
-                        question.FilePath = FilePath + "questionGroupTemp//" + newQuestionNameFile;
-                        question.FileName = newQuestionNameFile.ToString();
+                        question.FilePath = newQuestionNameFile.ToString();
+                        question.FileName = FilePath + "questionGroupTemp//" + newQuestionNameFile;
 
                         question.IsActive = false;
                         question.IsMaster = true;
-                        question.Title = textBox_answerTitle.Text;
-                        question.WriterId = Convert.ToInt32(comboBox_writer.SelectedValue);
+                        question.Title = title;
+                        question.WriterId = Convert.ToInt32(comboboxValue);
                         question.QuestionId = questionIds[numberOfQ -1];
 
                         
@@ -706,7 +674,7 @@ namespace NasleGhalam.WindowsApp
             while (i <= x)
             {
 
-                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                 {
                     var target = app.Documents.Add(Visible: true);
                     //تریک درست شدن گزینه ها 
@@ -721,7 +689,7 @@ namespace NasleGhalam.WindowsApp
 
                     i++;
 
-                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    while (i <= x && !QuestionMaking.IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                     {
                         i++;
                     }
@@ -807,6 +775,11 @@ namespace NasleGhalam.WindowsApp
         {
             if(e.ProgressPercentage >= progressBar3.Minimum && e.ProgressPercentage <= progressBar3.Maximum )
                 progressBar3.Value = e.ProgressPercentage;
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

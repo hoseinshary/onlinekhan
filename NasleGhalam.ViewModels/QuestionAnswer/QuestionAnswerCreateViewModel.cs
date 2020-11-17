@@ -7,6 +7,11 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
         [Display(Name = "عنوان")]
         public string Title { get; set; }
 
+
+        [Display(Name = "متن")]
+        public string Context { get; set; }
+
+
         [Display(Name = "درس")]
         public string LessonName { get; set; }
 

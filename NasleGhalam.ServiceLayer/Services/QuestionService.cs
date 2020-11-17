@@ -7,6 +7,7 @@ using System.Web;
 using AutoMapper;
 using Microsoft.Office.Interop.Word;
 using NasleGhalam.Common;
+using NasleGhalam.Common.ForQuestionMaking;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Question;
@@ -375,7 +376,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var source = app.Documents.Open(wordFilename);
 
             //حذف عدد اول سوال
-            if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+            if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
             {
                 int i = 1;
                 while (i < source.Paragraphs[1].Range.Characters.Count &&
@@ -471,6 +472,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
                 _uow.MarkAsUnChanged(supervisor);
                 question.Supervisors.Add(supervisor);
+            }
+
+            //var questionGroup = _questionGroupService.Value.GetById(questionViewModel.QuestionGroupId);
+
+            if (questionViewModel.QuestionGroupId > 0)
+            {
+                var questionGroup = new QuestionGroup() { Id = questionViewModel.QuestionGroupId };
+                _uow.MarkAsUnChanged(questionGroup);
+                question.QuestionGroups.Add(questionGroup);
             }
 
             _questions.Add(question);
@@ -710,7 +720,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 source = app.Documents.Open(wordFilename);
 
                 //حذف عدد اول سوال
-                if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
                 {
                     int i = 1;
                     while (i < source.Paragraphs[1].Range.Characters.Count &&
@@ -940,7 +950,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
                 //حذف عدد اول سوال
-                if (QuestionGroupService.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
                 {
                     int i = 1;
                     while (i < source.Paragraphs[1].Range.Characters.Count &&

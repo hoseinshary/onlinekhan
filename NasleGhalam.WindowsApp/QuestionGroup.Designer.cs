@@ -74,6 +74,7 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
+            this.button9 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -452,6 +453,7 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.button9);
             this.tabPage6.Controls.Add(this.richTextBox2);
             this.tabPage6.Controls.Add(this.label9);
             this.tabPage6.Controls.Add(this.progressBar2);
@@ -513,6 +515,16 @@
             // 
             this.backgroundWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker3_DoWork);
             this.backgroundWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker3_ProgressChanged);
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(128, 402);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 7;
+            this.button9.Text = "پایان";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // QuestionGroup
             // 
@@ -587,5 +599,6 @@
         private System.Windows.Forms.TextBox textBox_numberOfQuestions;
         private System.Windows.Forms.Label label10;
         private System.ComponentModel.BackgroundWorker backgroundWorker3;
+        private System.Windows.Forms.Button button9;
     }
 }

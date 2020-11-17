@@ -103,6 +103,7 @@ namespace NasleGhalam.WindowsApp
                 request.AddParameter("IsHybrid", question.IsHybrid, ParameterType.QueryString);
                 request.AddParameter("LookupId_QuestionRank", question.LookupId_QuestionRank, ParameterType.QueryString);
                 request.AddParameter("Context", question.Context, ParameterType.QueryString);
+                request.AddParameter("QuestionGroupId", question.QuestionGroupId, ParameterType.QueryString);
 
 
                 request.AddFile("word", question.FilePath+".docx");
@@ -134,10 +135,11 @@ namespace NasleGhalam.WindowsApp
                 request.AddParameter("QuestionId", question.QuestionId, ParameterType.QueryString);
                 request.AddParameter("FilePath", question.FilePath, ParameterType.QueryString);
                 request.AddParameter("FileName", question.FileName, ParameterType.QueryString);
-                
+                request.AddParameter("Context", question.Context, ParameterType.QueryString);
 
-                request.AddFile("word", question.FilePath + ".docx");
-                request.AddFile("png", question.FilePath + ".png");
+
+                request.AddFile("word", question.FileName + ".docx");
+                request.AddFile("png", question.FileName + ".png");
                 IRestResponse response = _client.Execute(request);
                 var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<QuestionAnswerViewModel>>(response.Content);
                 return resultObject1;

@@ -9,6 +9,7 @@ using System.Web;
 using AutoMapper;
 using Microsoft.Office.Interop.Word;
 using NasleGhalam.Common;
+using NasleGhalam.Common.ForQuestionMaking;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.QuestionAnswer;
@@ -81,8 +82,8 @@ namespace NasleGhalam.ServiceLayer.Services
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(FileName) && !string.IsNullOrEmpty(FileName))
             {
-                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FileName) + ".docx");
-                png.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FileName) + ".png");
+                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".docx");
+                png.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".png");
             }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
@@ -175,7 +176,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var questoinAnswerCount = 0;
             foreach (Paragraph paragraph in source.Paragraphs)
             {
-                if (IsQuestionParagraph(paragraph.Range.Text))
+                if (QuestionMaking.IsAnswerParagraph(paragraph.Range.Text))
                 {
                     questoinAnswerCount++;
                 }
@@ -200,7 +201,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var numberOfQ = 0;
             while (i <= x)
             {
-                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                if (QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
                 {
                     var context = "";
 
@@ -228,7 +229,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                     context += source.Paragraphs[i].Range.Text;
                     i++;
-                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    while (i <= x && !QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
                     {
                         context += source.Paragraphs[i].Range.Text;
                         i++;
@@ -393,7 +394,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var questoinAnswerCount = 0;
             foreach (Paragraph paragraph in source.Paragraphs)
             {
-                if (IsQuestionParagraph(paragraph.Range.Text))
+                if (QuestionMaking.IsAnswerParagraph(paragraph.Range.Text))
                 {
                     questoinAnswerCount++;
                 }
@@ -419,7 +420,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var numberOfQ = 0;
             while (i <= x)
             {
-                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                if (QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
                 {
                     numberOfQ++;
 
@@ -434,7 +435,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
 
                     i++;
-                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    while (i <= x && !QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
                     {
                         i++;
                     }
@@ -645,44 +646,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-        public bool IsQuestionParagraph(string s)
-        {
-            var arrayTemp = s.ToCharArray();
-
-            var i = 0;
-            while (i < arrayTemp.Length)
-            {
-                if (arrayTemp[i] == ' ' || arrayTemp[i] == '\n' || arrayTemp[i] == '\r')
-                {
-                    
-                }
-                else if (char.IsDigit(arrayTemp[i]))
-                {
-                    i++;
-                    while (char.IsDigit(arrayTemp[i]) && i < arrayTemp.Length)
-                    {
-                        i++;
-                    }
-                    if (arrayTemp[i] == '-')
-                    {
-                        var j = 0;
-                        while (j < 10 && i < arrayTemp.Length)
-                        {
-                            i++;
-                            j++;
-                        }
-                        if (j == 10)
-                            return true;
-                    }
-                    return false;
-                }
-                else
-                {
-                    break;
-                }
-                i++;
-            }
-            return false;
-        }
+       
     }
 }

@@ -12,6 +12,7 @@ using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.QuestionGroup;
 using Microsoft.Office.Interop.Excel;
 using System.Threading;
+using NasleGhalam.Common.ForQuestionMaking;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -149,7 +150,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var numberOfQ = 0;
             while (i <= x)
             {
-                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                 {
                     var context = "";
 
@@ -177,7 +178,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                     context += source.Paragraphs[i].Range.Text;
                     i++;
-                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    while (i <= x && !QuestionMaking.IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                     {
                         context += source.Paragraphs[i].Range.Text;
                         i++;
@@ -302,7 +303,7 @@ namespace NasleGhalam.ServiceLayer.Services
             while (i <= x)
             {
 
-                if (IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                 {
                     var target = app.Documents.Add(Visible: true);
                     //تریک درست شدن گزینه ها 
@@ -317,7 +318,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                     i++;
 
-                    while (i <= x && !IsQuestionParagraph(source.Paragraphs[i].Range.Text))
+                    while (i <= x && !QuestionMaking.IsQuestionParagraph(source.Paragraphs[i].Range.Text))
                     {
                         i++;
                     }
@@ -478,45 +479,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
-        public static bool IsQuestionParagraph(string s)
-        {
-            var arrayTemp = s.ToCharArray();
-
-            var i = 0;
-            while (i < arrayTemp.Length)
-            {
-                if (arrayTemp[i] == ' ' || arrayTemp[i] == '\n' || arrayTemp[i] == '\r')
-                {
-                    i++;
-                }
-                else if (char.IsDigit(arrayTemp[i]))
-                {
-                    i++;
-                    while (char.IsDigit(arrayTemp[i]) && i < arrayTemp.Length)
-                    {
-                        i++;
-                    }
-                    if (arrayTemp[i] == '-')
-                    {
-                        var j = 0;
-                        while (j < 14 && i < arrayTemp.Length)
-                        {
-                            i++;
-                            j++;
-                        }
-                        if (j == 14)
-                            return true;
-                    }
-                    return false;
-                }
-                else
-                {
-                    break;
-                }
-                i++;
-            }
-            return false;
-        }
+      
 
 
 

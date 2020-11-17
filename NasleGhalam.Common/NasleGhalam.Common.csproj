@@ -67,6 +67,7 @@
     <Compile Include="ConstantStrings.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="ForQuestionMaking\QuestionMaking.cs" />
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Logs.cs" />
     <Compile Include="LogWriter.cs" />
@@ -83,5 +84,6 @@
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

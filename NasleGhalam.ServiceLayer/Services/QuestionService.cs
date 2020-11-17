@@ -465,11 +465,13 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult CreateForWindowsApp(QuestionCreateViewModel questionViewModel, HttpPostedFile word, HttpPostedFile png)
         {
             var question = Mapper.Map<Question>(questionViewModel);
-            
-            var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
-            _uow.MarkAsUnChanged(supervisor);
-            question.Supervisors.Add(supervisor);
 
+            if (questionViewModel.SupervisorUserId > 0)
+            {
+                var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+                _uow.MarkAsUnChanged(supervisor);
+                question.Supervisors.Add(supervisor);
+            }
 
             _questions.Add(question);
             _uow.ValidateOnSaveEnabled(false);

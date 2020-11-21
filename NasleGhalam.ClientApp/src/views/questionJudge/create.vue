@@ -84,8 +84,8 @@
 
 
     <div class="col-12">
-      <base-btn-create @click="questionJudgeStore.submitCreate()" :label="`ایجاد و پاک سازی`" />
-      <base-btn-create @click="questionJudgeStore.submitCreateWithoutReset()" :label="`ایجاد`" />
+      <base-btn-create @click="questionJudgeStore.submitCreate()" :label="`ذخیره و پاک سازی`" />
+      <base-btn-create @click="questionJudgeStore.submitCreateWithoutReset()" :label="`ذخیره`" />
     </div>
   </section>
 </template>

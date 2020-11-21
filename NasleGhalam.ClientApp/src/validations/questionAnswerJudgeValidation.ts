@@ -16,7 +16,7 @@ const questionAnswerJudgeValidations: ValidationRuleset<
 > = {
   questionAnswerJudge: {
     IsActiveQuestionAnswer: {
-      displayName: displayName("فعال"),
+      displayName: displayName("تایید"),
       required
     },
     QuestionAnswerId: {

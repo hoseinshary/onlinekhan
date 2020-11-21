@@ -164,6 +164,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 return _questions
                     .Where(x => x.QuestionGroups.Any(y => y.LessonId == lessonId))
+                    .Where(x => x.QuestionJudges.Count >= x.QuestionGroups.FirstOrDefault().Lesson.NumberOfJudges)
                     .OrderByDescending(x => x.Id)
                     .AsNoTracking()
                     .AsEnumerable()

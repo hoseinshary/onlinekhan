@@ -103,6 +103,13 @@ export default class QuestionJudgeEditVue extends Vue {
   lookupStore = vxm.lookupStore;
   //#endregion
 
+ get educationGroupDdl() {
+    return [
+      { value: "ریاضی", label: "ریاضی" },
+      { value: "تجربی", label: "تجربی" },
+      { value: "انسانی", label: "انسانی" }
+    ];
+  }
   //#region ### hooks ###
   created() {
     this.questionJudgeStore.SET_EDIT_VUE(this);

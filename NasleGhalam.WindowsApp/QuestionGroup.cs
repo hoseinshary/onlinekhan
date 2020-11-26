@@ -164,14 +164,14 @@ namespace NasleGhalam.WindowsApp
             backgroundWorker3.WorkerReportsProgress = true;
             backgroundWorker3.RunWorkerAsync();
 
-           
+
 
 
         }
 
 
 
-     
+
 
         private async void button4_Click(object sender, EventArgs e)
         {
@@ -238,7 +238,7 @@ namespace NasleGhalam.WindowsApp
                             for (var j = 1; j <= colCount; j++)
                             {
                                 var sTemp = xlRange.Cells[k, j].Value2;
-                                if ( sTemp != null)
+                                if (sTemp != null)
                                 {
                                     if (k == 1)
                                     {
@@ -403,128 +403,13 @@ namespace NasleGhalam.WindowsApp
 
         private void button7_Click(object sender, EventArgs e)
         {
-            var returnGuidList = new List<string>();
-            var missing = Type.Missing;
-            var sourceWordFilename = textBox_wordfileAnswers.Text;
-            var destWordFilename = FilePath + Guid.NewGuid() + ".docx";
-
-            //save Doc and excel file in temp memory
-            File.Copy(sourceWordFilename, destWordFilename);
-
-            // Open a doc file.
-            var app = new Microsoft.Office.Interop.Word.Application();
-            var source = app.Documents.Open(destWordFilename);
+            progressBar4.Maximum = 100;
+            progressBar4.Step = 1;
+            progressBar4.Value = 0;
+            backgroundWorker4.WorkerReportsProgress = true;
+            backgroundWorker4.RunWorkerAsync();
 
 
-            //بررسی تعداد سوالات با تعداد جواب ها 
-            var questoinAnswerCount = 0;
-            foreach (Paragraph paragraph in source.Paragraphs)
-            {
-                if ( QuestionMaking.IsAnswerParagraph(paragraph.Range.Text))
-                {
-                    questoinAnswerCount++;
-                }
-            }
-
-            if (questoinAnswerCount != questionsFileNames.Count)
-            {
-                MessageBox.Show($"تعداد سوالات با تعداد جواب سوالات برابر نیست!\nتعداد سوالات{questionsFileNames.Count} است.");
-                return;
-            }
-
-
-            //split question Answer
-            var x = source.Paragraphs.Count;
-            var i = 1;
-            var numberOfQ = 0;
-            while (i <= x)
-            {
-                if (QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
-                {
-                    numberOfQ++;
-
-                    var target = app.Documents.Add();
-                    //تریک درست شدن گزینه ها 
-                    source.ActiveWindow.Selection.WholeStory();
-                    source.ActiveWindow.Selection.Copy();
-                    target.ActiveWindow.Selection.Paste();
-                    target.ActiveWindow.Selection.WholeStory();
-                    target.ActiveWindow.Selection.Delete();
-
-                    int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
-
-                    i++;
-                    while (i <= x && !QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
-                    {
-                        i++;
-                    }
-
-                    int endOfQuestionIndex = source.Paragraphs[i - 1].Range.Sentences.Parent.End;
-
-                    source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
-                    source.ActiveWindow.Selection.Copy();
-                    target.ActiveWindow.Selection.Paste();
-
-                    var newGuid = Guid.NewGuid();
-                    var newEntry = FilePath + $"/questionGroupTemp/{newGuid}";
-                    returnGuidList.Add(newEntry);
-                    var filename2 = FilePath + $"/questionGroupTemp/{newGuid}";
-
-                    target.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);
-                    target.SaveAs(filename2 + ".docx");
-
-                    //while (target.Windows[1].Panes[1].Pages.Count < 0) ;
-
-                    //var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
-                    ImageTools.SaveImageOfWordPdf(filename2 + ".pdf", filename2);
-                    target.Close(WdSaveOptions.wdDoNotSaveChanges);
-
-                    File.Delete(filename2 + ".pdf");
-                }
-                else
-                {
-                    i++;
-                }
-
-
-            }
-
-            source.Close();
-            app.Quit();
-            /////////////////////////////////
-            File.Delete(destWordFilename);
-
-            var msgRes = new ClientMessageResult { MessageType = MessageType.Success };
-            if (msgRes.MessageType != MessageType.Success)
-            {
-                MessageBox.Show(msgRes.Message);
-            }
-            else
-            {
-                answersFileNames = returnGuidList;
-                tabControl1.SelectTab(4);
-
-                foreach (Control item in panel2.Controls)
-                {
-                    panel2.Controls.Remove(item);
-                }
-
-                var height = 0;
-                foreach (var item in returnGuidList)
-                {
-                    PictureBox pb = new PictureBox();
-                    pb.Image = Image.FromFile(item + ".png");
-                    pb.Size = new Size(pb.Image.Width, pb.Image.Height);
-
-                    pb.Top = height + 30;
-                    pb.Left = 50 + 870 - pb.Image.Width;
-                    height += pb.Height;
-                    pb.BorderStyle = BorderStyle.FixedSingle;
-                    panel2.Controls.Add(pb);
-                    System.Threading.Tasks.Task.Delay(1000);
-                }
-
-            }
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -600,9 +485,9 @@ namespace NasleGhalam.WindowsApp
                         question.IsMaster = true;
                         question.Title = title;
                         question.WriterId = Convert.ToInt32(comboboxValue);
-                        question.QuestionId = questionIds[numberOfQ -1];
+                        question.QuestionId = questionIds[numberOfQ - 1];
 
-                        
+
 
                         var result2 = await _webService.QuestionAnswerCreate(question);
 
@@ -719,7 +604,7 @@ namespace NasleGhalam.WindowsApp
 
                     File.Delete(filename2 + ".pdf");
 
-                    backgroundWorker3.ReportProgress(returnGuidList.Count*100 / Convert.ToInt32(textBox_numberOfQuestions.Text));
+                    backgroundWorker3.ReportProgress(returnGuidList.Count * 100 / Convert.ToInt32(textBox_numberOfQuestions.Text));
                 }
                 else
                 {
@@ -744,12 +629,166 @@ namespace NasleGhalam.WindowsApp
             {
                 questionsFileNames = returnGuidList;
                 this.Invoke(new MethodInvoker(delegate () { tabControl1.SelectTab(1); }));
-                
+
 
                 foreach (Control item in panel1.Controls)
                 {
                     this.Invoke(new MethodInvoker(delegate () { panel1.Controls.Remove(item); }));
+
+                }
+
+                var height = 0;
+                foreach (var item in returnGuidList)
+                {
+                    PictureBox pb = new PictureBox();
+                    pb.Image = Image.FromFile(item + ".png");
+                    pb.Size = new Size(pb.Image.Width, pb.Image.Height);
+
+                    pb.Top = height + 30;
+                    pb.Left = 50 + 870 - pb.Image.Width;
+                    height += pb.Height;
+                    pb.BorderStyle = BorderStyle.FixedSingle;
+
+                    this.Invoke(new MethodInvoker(delegate () { panel1.Controls.Add(pb); }));
+                    System.Threading.Tasks.Task.Delay(1000);
+                }
+
+            }
+        }
+
+        private void backgroundWorker3_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage >= progressBar3.Minimum && e.ProgressPercentage <= progressBar3.Maximum)
+                progressBar3.Value = e.ProgressPercentage;
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void backgroundWorker4_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            string title = "";
+            this.Invoke(new MethodInvoker(delegate () { title = textBox_title.Text; }));
+            string wordText = "";
+            this.Invoke(new MethodInvoker(delegate () { wordText = textBox_wordfileAnswers.Text; }));
+
+
+
+            var returnGuidList = new List<string>();
+            var missing = Type.Missing;
+            var sourceWordFilename = wordText;
+            var destWordFilename = FilePath + Guid.NewGuid() + ".docx";
+
+            //save Doc and excel file in temp memory
+            File.Copy(sourceWordFilename, destWordFilename);
+
+            // Open a doc file.
+            var app = new Microsoft.Office.Interop.Word.Application();
+            var source = app.Documents.Open(destWordFilename);
+
+
+            //بررسی تعداد سوالات با تعداد جواب ها 
+            var questoinAnswerCount = 0;
+            foreach (Paragraph paragraph in source.Paragraphs)
+            {
+                if (QuestionMaking.IsAnswerParagraph(paragraph.Range.Text))
+                {
+                    questoinAnswerCount++;
+                }
+            }
+
+            if (questoinAnswerCount != questionsFileNames.Count)
+            {
+                MessageBox.Show($"تعداد سوالات با تعداد جواب سوالات برابر نیست!\nتعداد سوالات{questionsFileNames.Count} است.");
+                return;
+            }
+
+
+            //split question Answer
+            var x = source.Paragraphs.Count;
+            var i = 1;
+            var numberOfQ = 0;
+            while (i <= x)
+            {
+                if (QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
+                {
+                    numberOfQ++;
+
+                    var target = app.Documents.Add();
+                    //تریک درست شدن گزینه ها 
+                    source.ActiveWindow.Selection.WholeStory();
+                    source.ActiveWindow.Selection.Copy();
+                    target.ActiveWindow.Selection.Paste();
+                    target.ActiveWindow.Selection.WholeStory();
+                    target.ActiveWindow.Selection.Delete();
+
+                    int startOfQuestionIndex = source.Paragraphs[i].Range.Sentences.Parent.Start;
+
+                    i++;
+                    while (i <= x && !QuestionMaking.IsAnswerParagraph(source.Paragraphs[i].Range.Text))
+                    {
+                        i++;
+                    }
+
+                    int endOfQuestionIndex = source.Paragraphs[i - 1].Range.Sentences.Parent.End;
+
+                    source.Range(startOfQuestionIndex, endOfQuestionIndex).Select();
+                    source.ActiveWindow.Selection.Copy();
+                    target.ActiveWindow.Selection.Paste();
+
+                    var newGuid = Guid.NewGuid();
+                    var newEntry = FilePath + $"/questionGroupTemp/{newGuid}";
+                    returnGuidList.Add(newEntry);
+                    var filename2 = FilePath + $"/questionGroupTemp/{newGuid}";
+
+                    target.SaveAs(filename2 + ".pdf", WdSaveFormat.wdFormatPDF);
+                    target.SaveAs(filename2 + ".docx");
+
+                    //while (target.Windows[1].Panes[1].Pages.Count < 0) ;
+
+                    //var bits = target.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                    ImageTools.SaveImageOfWordPdf(filename2 + ".pdf", filename2);
+                    target.Close(WdSaveOptions.wdDoNotSaveChanges);
+
+                    File.Delete(filename2 + ".pdf");
+
+                    backgroundWorker4.ReportProgress((numberOfQ * 100) / questionsFileNames.Count);
+                }
+                else
+                {
+                    i++;
+                }
+
+
+            }
+
+            source.Close();
+            app.Quit();
+            /////////////////////////////////
+            File.Delete(destWordFilename);
+
+            var msgRes = new ClientMessageResult { MessageType = MessageType.Success };
+            if (msgRes.MessageType != MessageType.Success)
+            {
+                MessageBox.Show(msgRes.Message);
+            }
+            else
+            {
+                answersFileNames = returnGuidList;
+
+                this.Invoke(new MethodInvoker(delegate () { tabControl1.SelectTab(4); }));
+
+
+
+                
+
+                foreach (Control item in panel2.Controls)
+                {
                     
+                    this.Invoke(new MethodInvoker(delegate () { panel2.Controls.Remove(item); }));
                 }
 
                 var height = 0;
@@ -764,22 +803,18 @@ namespace NasleGhalam.WindowsApp
                     height += pb.Height;
                     pb.BorderStyle = BorderStyle.FixedSingle;
                     
-                    this.Invoke(new MethodInvoker(delegate () { panel1.Controls.Add(pb); }));
+                    this.Invoke(new MethodInvoker(delegate () { panel2.Controls.Add(pb); }));
                     System.Threading.Tasks.Task.Delay(1000);
                 }
 
             }
+
         }
 
-        private void backgroundWorker3_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void backgroundWorker4_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if(e.ProgressPercentage >= progressBar3.Minimum && e.ProgressPercentage <= progressBar3.Maximum )
-                progressBar3.Value = e.ProgressPercentage;
-        }
-
-        private void button9_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            if (e.ProgressPercentage >= progressBar4.Minimum && e.ProgressPercentage <= progressBar4.Maximum)
+                progressBar4.Value = e.ProgressPercentage;
         }
     }
 }

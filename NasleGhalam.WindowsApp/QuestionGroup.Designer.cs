@@ -66,6 +66,7 @@
             this.button8 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.button9 = new System.Windows.Forms.Button();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.progressBar2 = new System.Windows.Forms.ProgressBar();
@@ -74,7 +75,8 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
-            this.button9 = new System.Windows.Forms.Button();
+            this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
+            this.progressBar4 = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -335,6 +337,7 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.progressBar4);
             this.tabPage4.Controls.Add(this.button7);
             this.tabPage4.Controls.Add(this.comboBox_writer);
             this.tabPage4.Controls.Add(this.label6);
@@ -465,6 +468,16 @@
             this.tabPage6.Text = "ثبت نهایی جواب";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(128, 402);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 7;
+            this.button9.Text = "پایان";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // richTextBox2
             // 
             this.richTextBox2.Location = new System.Drawing.Point(394, 150);
@@ -516,15 +529,17 @@
             this.backgroundWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker3_DoWork);
             this.backgroundWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker3_ProgressChanged);
             // 
-            // button9
+            // backgroundWorker4
             // 
-            this.button9.Location = new System.Drawing.Point(128, 402);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(75, 23);
-            this.button9.TabIndex = 7;
-            this.button9.Text = "پایان";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.backgroundWorker4.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker4_DoWork);
+            this.backgroundWorker4.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker4_ProgressChanged);
+            // 
+            // progressBar4
+            // 
+            this.progressBar4.Location = new System.Drawing.Point(85, 260);
+            this.progressBar4.Name = "progressBar4";
+            this.progressBar4.Size = new System.Drawing.Size(687, 23);
+            this.progressBar4.TabIndex = 19;
             // 
             // QuestionGroup
             // 
@@ -600,5 +615,7 @@
         private System.Windows.Forms.Label label10;
         private System.ComponentModel.BackgroundWorker backgroundWorker3;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.ProgressBar progressBar4;
+        private System.ComponentModel.BackgroundWorker backgroundWorker4;
     }
 }

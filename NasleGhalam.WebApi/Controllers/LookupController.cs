@@ -33,7 +33,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.QuestionJudgeCreateAccess, ActionBits.QuestionJudgeReadAccess, ActionBits.QuestionJudgeUpdateAccess)]
         public IHttpActionResult GetAllWhereProblem()
         {
-            return Ok(_lookupService.GetAllByName("WhereProblem"));
+            return Ok(_lookupService.GetAllByName("WhereProblem" , 0));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionJudgeCreateAccess, ActionBits.QuestionJudgeReadAccess, ActionBits.QuestionJudgeUpdateAccess)]

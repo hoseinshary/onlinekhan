@@ -96,7 +96,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var question = _questions.Where(x => x.Id == questionJudgeViewModel.QuestionId)
                 .Include(x => x.QuestionJudges).FirstOrDefault();
 
-            if (question.QuestionJudges.Any(x => x.UserId == userId))
+            if (question.QuestionJudges.Any(x => x.UserId == userId && x.EducationGroup == questionJudgeViewModel.EducationGroup))
             {
                 foreach (var questionQuestionJudge in question.QuestionJudges)
                 {

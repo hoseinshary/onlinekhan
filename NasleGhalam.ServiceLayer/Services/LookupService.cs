@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
+using Microsoft.Office.Interop.Excel;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Lookup;
@@ -40,15 +41,29 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IList<LookupViewModel> GetAllByName(string name)
+        public IList<LookupViewModel> GetAllByName(string name , int state =-1)
         {
-            return _lookups
-                .Where(x => x.Name == name)
-                .AsNoTracking()
-                .AsEnumerable()
-                .OrderBy(x => x.State)
-                .Select(Mapper.Map<LookupViewModel>)
-                .ToList();
+            if (state == -1)
+            {
+                return _lookups
+                    .Where(x => x.Name == name)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .OrderBy(x => x.State)
+                    .Select(Mapper.Map<LookupViewModel>)
+                    .ToList();
+            }
+            else
+            {
+                return _lookups
+                    .Where(x => x.Name == name)
+                    .Where(x => x.State == state)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .OrderBy(x => x.State)
+                    .Select(Mapper.Map<LookupViewModel>)
+                    .ToList();
+            }
         }
     }
 }

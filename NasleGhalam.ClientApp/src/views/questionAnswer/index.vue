@@ -186,7 +186,7 @@ export default class QuestionAnswerVue extends Vue {
       data: "IsMaster"
     },
     {
-      title: "فعال",
+      title: "تایید",
       data: "IsActive"
     },
     // {

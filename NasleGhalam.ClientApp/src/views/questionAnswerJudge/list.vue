@@ -43,7 +43,7 @@ export default class QuestionAnswerJudgeVue extends Vue {
   questionAnswerJudgeStore = vxm.questionAnswerJudgeStore;
   questionAnswerJudgeGridColumn = [
     {
-      title: "فعال",
+      title: "تایید",
       data: "IsActiveQuestionAnswer"
     },
     {

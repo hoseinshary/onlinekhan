@@ -30,18 +30,32 @@
             label="نمایش سوال های فعال سایت"
             @input="fillGrid()"
           />
+             <br />
           <q-checkbox
             v-model="showUnActived"
             v-if="showElement('showUnActived')"
             label="نمایش سوال های غیر فعال سایت"
             @input="fillGrid()"
           />
+      
+             <br />
+              <q-checkbox
+            v-model="showNoAnswer"
+            v-if="showElement('showNoAnswer')"
+            label="نمایش سوال های بدون پاسخ"
+            @input="fillGrid()"
+          />
+
+<hr style="width:100%;text-align:left;margin-left:0">
+
+       <br />
           <q-checkbox
             v-model="showNumberForTopic"
             v-if="showElement('showNumberForTopic')"
             label="نمایش تعداد سوالات برای هر مبحث"
             @input="fillGrid()"
           />
+
         </section>
         <!-- v-if="showElementTree('educationTree_GradeDdl')" -->
         <q-select
@@ -280,6 +294,11 @@ export default class QuestionVue extends Vue {
     },
 
     showNumberForTopic: {
+      canEditAdminProp: true,
+      canEditExpertProp: false,
+      canEditImportProp: true
+    },
+    showNoAnswer:{
       canEditAdminProp: true,
       canEditExpertProp: false,
       canEditImportProp: true

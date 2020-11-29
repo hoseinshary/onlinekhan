@@ -123,6 +123,20 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
+        public object GetAllByTopicIdsNoAnswer(IEnumerable<int> ids)
+        {
+            
+                return _questions
+                    .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                    .Where(x => !x.QuestionAnswers.Any())
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionViewModel>)
+                    .ToList();
+            
+        }
+
+
 
         /// <summary>
         /// گرفتن همه سوال های مباحث

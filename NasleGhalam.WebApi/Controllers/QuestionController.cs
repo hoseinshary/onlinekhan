@@ -38,6 +38,12 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_questionService.GetAllByTopicIdsNoJudge(ids, Request.GetUserId(), Request.GetRoleLevel()));
         }
 
+        [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public IHttpActionResult GetAllByTopicIdsNoAnswer([FromUri] IEnumerable<int> ids)
+        {
+            return Ok(_questionService.GetAllByTopicIdsNoAnswer(ids));
+        }
+
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]
         public IHttpActionResult GetAllByQuestionGroupId(int id)
         {

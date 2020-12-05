@@ -3,59 +3,72 @@
     <section class="row">
       <div class="col-md-4 col-lg-3">
         <section class="s-border s-spacing">
+          <div v-if="showElement('showNoJudgement')">
+            <q-checkbox
+              v-model="showNoJudgement"
+              label="نمایش سوال های بدون ارزیابی"
+              @input="fillGrid()"
+            />
+            <br />
+          </div>
+          <div v-if="showElement('showWithoutTopic')">
+            <q-checkbox
+              v-model="showWithoutTopic"
+              label="نمایش سوال های بدون مبحث"
+              @input="fillGrid()"
+            />
+            <br />
+          </div>
+          <div v-if="showElement('showJudged')">
+            <q-checkbox
+              v-model="showJudged"
+              label="نمایش سوال های ارزیابی شده"
+              @input="fillGrid()"
+            />
+            <br />
+          </div>
+          <div v-if="showElement('showActived')">
+            <q-checkbox
+              v-model="showActived"
+              label="نمایش سوال های فعال سایت"
+              @input="fillGrid()"
+            />
+            <br />
+          </div>
+          <div v-if="showElement('showUnActived')">
+            <q-checkbox
+              v-model="showUnActived"
+              label="نمایش سوال های غیر فعال سایت"
+              @input="fillGrid()"
+            />
+
+            <br />
+          </div>
+          <div v-if="showElement('showNoAnswer')">
           <q-checkbox
-            v-if="showElement('showNoJudgement')"
-            v-model="showNoJudgement"
-            label="نمایش سوال های بدون ارزیابی"
-            @input="fillGrid()"
-          />
-          <br />
-          <q-checkbox
-            v-if="showElement('showWithoutTopic')"
-            v-model="showWithoutTopic"
-            label="نمایش سوال های بدون مبحث"
-            @input="fillGrid()"
-          />
-          <br />
-          <q-checkbox
-            v-model="showJudged"
-            v-if="showElement('showJudged')"
-            label="نمایش سوال های ارزیابی شده"
-            @input="fillGrid()"
-          />
-          <br />
-          <q-checkbox
-            v-model="showActived"
-            v-if="showElement('showActived')"
-            label="نمایش سوال های فعال سایت"
-            @input="fillGrid()"
-          />
-             <br />
-          <q-checkbox
-            v-model="showUnActived"
-            v-if="showElement('showUnActived')"
-            label="نمایش سوال های غیر فعال سایت"
-            @input="fillGrid()"
-          />
-      
-             <br />
-              <q-checkbox
             v-model="showNoAnswer"
-            v-if="showElement('showNoAnswer')"
             label="نمایش سوال های بدون پاسخ"
             @input="fillGrid()"
           />
+          <br />
+          </div>
+          <div v-if="showElement('showNoAnswerJudge')" >
+          <q-checkbox
+            v-model="showNoAnswerJudge"
+            label="نمایش سوال های بدون پاسخ ارزیابی شده"
+            @input="fillGrid()"
+          />
 
-<hr style="width:100%;text-align:left;margin-left:0">
+          </div>
 
-       <br />
+          <hr style="width: 100%; text-align: left; margin-left: 0" />
+
           <q-checkbox
             v-model="showNumberForTopic"
             v-if="showElement('showNumberForTopic')"
             label="نمایش تعداد سوالات برای هر مبحث"
-            @input="fillGrid()"
+            @input="lessonIdChanged()"
           />
-
         </section>
         <!-- v-if="showElementTree('educationTree_GradeDdl')" -->
         <q-select
@@ -78,6 +91,7 @@
         <q-select
           :value="lessonId"
           @change="lessonIdChanged"
+          filter
           :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
           float-label="انتخاب درس"
           class="s-q-input-border s-spacing s-border"
@@ -260,6 +274,10 @@ export default class QuestionVue extends Vue {
   showJudged = false;
   showActived = false;
   showUnActived = false;
+  showNoAnswer = false;
+  showNoAnswerJudge = false;
+
+  showNumberForTopic = false;
 
   questionFilterAccessElement = {
     showNoJudgement: {
@@ -282,7 +300,7 @@ export default class QuestionVue extends Vue {
       canEditExpertProp: false,
       canEditImportProp: false
     },
-     showUnActived: {
+    showUnActived: {
       canEditAdminProp: true,
       canEditExpertProp: true,
       canEditImportProp: false
@@ -298,9 +316,14 @@ export default class QuestionVue extends Vue {
       canEditExpertProp: false,
       canEditImportProp: true
     },
-    showNoAnswer:{
+    showNoAnswer: {
       canEditAdminProp: true,
-      canEditExpertProp: false,
+      canEditExpertProp: true,
+      canEditImportProp: true
+    },
+    showNoAnswerJudge: {
+      canEditAdminProp: true,
+      canEditExpertProp: true,
       canEditImportProp: true
     }
   };
@@ -440,6 +463,9 @@ export default class QuestionVue extends Vue {
       this.showJudged = false;
       this.showActived = false;
       this.showNoJudgement = false;
+      this.showUnActived = false;
+      this.showNoAnswer = false;
+      this.showNoAnswerJudge = false;
     }
   }
   @Watch("showNoJudgement")
@@ -448,6 +474,9 @@ export default class QuestionVue extends Vue {
       this.showJudged = false;
       this.showActived = false;
       this.showWithoutTopic = false;
+      this.showUnActived = false;
+      this.showNoAnswer = false;
+      this.showNoAnswerJudge = false;
     }
   }
   @Watch("showJudged")
@@ -456,6 +485,9 @@ export default class QuestionVue extends Vue {
       this.showWithoutTopic = false;
       this.showActived = false;
       this.showNoJudgement = false;
+      this.showUnActived = false;
+      this.showNoAnswer = false;
+      this.showNoAnswerJudge = false;
     }
   }
   @Watch("showActived")
@@ -464,9 +496,46 @@ export default class QuestionVue extends Vue {
       this.showJudged = false;
       this.showWithoutTopic = false;
       this.showNoJudgement = false;
+      this.showUnActived = false;
+      this.showNoAnswer = false;
+      this.showNoAnswerJudge = false;
+    }
+  }
+  @Watch("showUnActived")
+  questionShowUnActivedChanged(newVal) {
+    if (newVal) {
+      this.showJudged = false;
+      this.showWithoutTopic = false;
+      this.showNoJudgement = false;
+      this.showNoAnswer = false;
+      this.showActived = false;
+      this.showNoAnswerJudge = false;
     }
   }
 
+  @Watch("showNoAnswer")
+  questionShowNoAnswerChanged(newVal) {
+    if (newVal) {
+      this.showJudged = false;
+      this.showWithoutTopic = false;
+      this.showNoJudgement = false;
+      this.showUnActived = false;
+      this.showActived = false;
+      this.showNoAnswerJudge = false;
+    }
+  }
+
+  @Watch("showNoAnswerJudge")
+  questionShowNoAnswerJudgeChanged(newVal) {
+    if (newVal) {
+      this.showJudged = false;
+      this.showWithoutTopic = false;
+      this.showNoJudgement = false;
+      this.showUnActived = false;
+      this.showActived = false;
+      this.showNoAnswer = false;
+    }
+  }
   @Watch("educationTree.leafTicked")
   educationTreeTickedIdsChanged(newVal) {
     this.lessonId = 0;
@@ -513,13 +582,19 @@ export default class QuestionVue extends Vue {
   }
 
   lessonIdChanged(val) {
-    this.lessonId = val;
-
-    this.topicStore.fillListByLessonId(val).then(() => {
-      this.topicTree.setToFirstLevel = true;
-      // clear topicTree leaf
-      utilities.clearArray(this.topicTree.leafTicked);
-    });
+    if (val != undefined) {
+      this.lessonId = val;
+    }
+    this.topicStore
+      .fillListByLessonId({
+        id: this.lessonId,
+        showNumberForTopic: this.showNumberForTopic
+      })
+      .then(() => {
+        this.topicTree.setToFirstLevel = true;
+        // clear topicTree leaf
+        utilities.clearArray(this.topicTree.leafTicked);
+      });
   }
 
   fillGrid() {
@@ -530,7 +605,9 @@ export default class QuestionVue extends Vue {
       showWithoutTopic: this.showWithoutTopic,
       showJudged: this.showJudged,
       showActived: this.showActived,
-      showUnActived: this.showUnActived
+      showUnActived: this.showUnActived,
+      showNoAnswer: this.showNoAnswer,
+      showNoAnswerJudge: this.showNoAnswerJudge
     });
   }
 
@@ -554,7 +631,7 @@ export default class QuestionVue extends Vue {
   //#region ### hooks ###
   created() {
     this.lessonStore.fillList();
-    this.educationTreeStore.fillList().then((res) => {
+    this.educationTreeStore.fillList().then(res => {
       this.topicStore.fillList();
       this.educationTree.expanded = this.educationTree.firstLevel;
     });
@@ -566,9 +643,9 @@ export default class QuestionVue extends Vue {
       // fill educationTree
       this.educationTreeStore
         .GetAllByLessonId(route.params.lessonId)
-        .then((tickedEducationTreeIds) => {
+        .then(tickedEducationTreeIds => {
           utilities.clearArray(this.educationTree.leafTicked);
-          tickedEducationTreeIds.forEach((x) => {
+          tickedEducationTreeIds.forEach(x => {
             this.educationTree.leafTicked.push(x);
           });
         })
@@ -581,7 +658,7 @@ export default class QuestionVue extends Vue {
             this.questionStore.OPEN_MODAL_EDIT(true);
             // topic leaf and fill grid
             if (this.questionStore.question.TopicIds) {
-              this.questionStore.question.TopicIds.forEach((x) => {
+              this.questionStore.question.TopicIds.forEach(x => {
                 this.topicTree.leafTicked.push(x);
               });
             }

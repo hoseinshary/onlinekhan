@@ -164,6 +164,8 @@ export class QuestionStore extends VuexModule {
     showJudged: boolean;
     showActived: boolean;
     showUnActived: boolean;
+    showNoAnswer: boolean;
+    showNoAnswerJudge: boolean;
     topicIds: Array<number>;
   }) {
     var url = "";
@@ -183,11 +185,17 @@ export class QuestionStore extends VuexModule {
             var params = util.toParam({
               Ids: payload.topicIds
             });
+            
             if (payload.showNoJudgement) {
               url = `${baseUrl}/GetAllByTopicIdsNoJudge?${params}`;
-            } else {
-              url = `${baseUrl}/GetAllByTopicIds?${params}`;
-            }
+            } else
+              if (payload.showNoAnswer) {
+                url = `${baseUrl}/GetAllByTopicIdsNoAnswer?${params}`;
+              }else if (payload.showNoAnswerJudge) {
+                url = `${baseUrl}/GetAllByTopicIdsNoAnswerJudge?${params}`;
+              } else {
+                url = `${baseUrl}/GetAllByTopicIds?${params}`;
+              }
           }
         }
       }

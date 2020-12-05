@@ -104,23 +104,23 @@ export class TopicStore extends VuexModule {
 
   get treeDataByLessonId2() {
     var list = this._topicListByLessonID
-        .map(x => ({
-          Id: x.Id,
-          label: x.Title,
-          ParentTopicId: x.ParentTopicId,
-          header: "custom",
-          displayPriority: x.DisplayPriority
-        }));
-      var tree = util.listToTree(
-        list,
-        "Id",
-        "ParentTopicId",
-        "displayPriority"
-      );
-      // set expanded list to show first level of tree
-      this.qTreeData.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
+      .map(x => ({
+        Id: x.Id,
+        label: x.Title,
+        ParentTopicId: x.ParentTopicId,
+        header: "custom",
+        displayPriority: x.DisplayPriority
+      }));
+    var tree = util.listToTree(
+      list,
+      "Id",
+      "ParentTopicId",
+      "displayPriority"
+    );
+    // set expanded list to show first level of tree
+    this.qTreeData.firstLevel = tree && tree[0] ? [tree[0].Id] : [];
 
-      return tree;
+    return tree;
   }
 
   get treeDataByLessonIds() {
@@ -242,13 +242,24 @@ export class TopicStore extends VuexModule {
 
   //گرفتن تمام مبحث های یک درس
   @action()
-  async fillListByLessonId(id : number ) {
-    return axios
-        .get(`${baseUrl}/GetAllByLessonId/${id}`)
+  async fillListByLessonId(payload: { id: number; showNumberForTopic: boolean; }) {
+
+    if (payload.showNumberForTopic) {
+      return axios
+        .get(`${baseUrl}/GetAllByLessonIdWithCountQuestion/${payload.id}`)
         .then((response: AxiosResponse<Array<ITopic>>) => {
           this.SET_LIST_BY_LESSON_ID(response.data);
           this.MODEL_CHANGED(false);
         });
+    }
+    else {
+      return axios
+        .get(`${baseUrl}/GetAllByLessonId/${payload.id}`)
+        .then((response: AxiosResponse<Array<ITopic>>) => {
+          this.SET_LIST_BY_LESSON_ID(response.data);
+          this.MODEL_CHANGED(false);
+        });
+    }
   }
 
   @action({ mode: "raw" })

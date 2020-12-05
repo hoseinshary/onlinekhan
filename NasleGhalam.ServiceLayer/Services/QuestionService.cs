@@ -137,6 +137,35 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
 
+        public object GetAllByTopicIdsNoAnswerJudge(IEnumerable<int> ids, int userid, int rollLevel)
+        {
+
+            if (rollLevel < 3)
+            {
+                return _questions
+                    .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                    //.Where(x => x.QuestionAnswers.All(y => y.QuestionAnswerJudges.Any()))
+                    .Where(x => x.QuestionAnswers.Any(y=>y.QuestionAnswerJudges.Count < x.Topics.FirstOrDefault().Lesson.NumberOfJudges))
+
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionViewModel>)
+                    .ToList();
+            }
+            else
+            {
+                return _questions
+                    .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                    .Where(x => x.QuestionAnswers.All(y => y.QuestionAnswerJudges.All(z =>z.UserId!=userid)))
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionViewModel>)
+                    .ToList();
+            }
+
+        }
+
+
 
         /// <summary>
         /// گرفتن همه سوال های مباحث

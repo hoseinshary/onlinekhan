@@ -25,6 +25,13 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_topicService.GetAllByLessonId(id));
         }
 
+
+        [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
+        public IHttpActionResult GetAllByLessonIdWithCountQuestion(int id)
+        {
+            return Ok(_topicService.GetAllByLessonIdWithCountQuestion(id));
+        }
+
         [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll()
         {

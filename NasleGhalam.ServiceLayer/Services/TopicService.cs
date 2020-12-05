@@ -46,6 +46,24 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<TopicViewModel> GetAllByLessonId(int id)
         {
+            return _topics
+                .Where(current => current.LessonId == id)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<TopicViewModel>)
+                .ToList();
+          
+        }
+
+
+
+
+        /// <summary>
+        /// گرفتن همه مبحث ها با آی دی درس
+        /// </summary>
+        /// <returns></returns>
+        public IList<TopicViewModel> GetAllByLessonIdWithCountQuestion(int id)
+        {
             var topics = _topics
                 .Where(current => current.LessonId == id)
                 .AsNoTracking()
@@ -60,9 +78,8 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 topics.Find(x => x.Id == topicViewModel.Id).Title += " (" + getCountTopic(topicViewModel.Id,topics , questions) + ")";
             }
-        
 
-             return topics;
+            return topics;
         }
 
        

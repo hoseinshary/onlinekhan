@@ -85,11 +85,13 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create([FromUri]MediaCreateViewModel mediaViewModel)
         {
             var file = HttpContext.Current.Request.Files.Get("file");
+            var coverImage = HttpContext.Current.Request.Files.Get("CoverImage");
+
             mediaViewModel.UserId = Request.GetUserId();
-            mediaViewModel.InsertDateTime = DateTime.Today;
+            
             
 
-            return Ok(_mediaService.Create(mediaViewModel,file));
+            return Ok(_mediaService.Create(mediaViewModel,file ,coverImage));
         }
 
         [HttpPost]

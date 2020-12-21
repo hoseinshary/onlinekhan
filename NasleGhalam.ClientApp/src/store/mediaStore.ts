@@ -184,6 +184,7 @@ export class MediaStore extends VuexModule {
 
 
     var file = vm.$refs.file;
+    var CoverImage = vm.$refs.CoverImage;
     var msg = "";
 
     if (file["files"].length == 0) {
@@ -204,6 +205,7 @@ export class MediaStore extends VuexModule {
     
     var formData = new FormData();
     formData.append(file["name"], file["files"][0]);
+    formData.append(CoverImage["name"],CoverImage["files"][0]);
 
     var newData = {
       Id: this.media.Id,
@@ -213,6 +215,9 @@ export class MediaStore extends VuexModule {
       Description: this.media.Description,
       LookupId_MediaType: this.media.LookupId_MediaType,
       TopicIds: this.media.TopicIds,
+      Length:this.media.Length,
+      YearOfBook : this.media.YearOfBook,
+      PagesOfBook : this.media.PagesOfBook
     };
     var params = util.toParam(newData);
 

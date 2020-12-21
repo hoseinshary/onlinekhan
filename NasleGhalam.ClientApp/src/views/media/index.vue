@@ -24,6 +24,7 @@
         <q-select
           :value="lessonId"
           @change="lessonIdChanged"
+          filter
           :options="lessonStore.ddlByEducationTreeIds(educationTree.leafTicked)"
           float-label="انتخاب درس"
           class="s-q-input-border s-spacing s-border"
@@ -310,7 +311,10 @@ export default class MediaVue extends Vue {
   lessonIdChanged(val) {
     this.lessonId = val;
 
-    this.topicStore.fillListByLessonId(val).then(() => {
+    this.topicStore.fillListByLessonId({
+        id: this.lessonId,
+        showNumberForTopic: false
+      }).then(() => {
       this.topicTree.setToFirstLevel = true;
       // clear topicTree leaf
       utilities.clearArray(this.topicTree.leafTicked);

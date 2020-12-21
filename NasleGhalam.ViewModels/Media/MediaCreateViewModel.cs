@@ -6,8 +6,13 @@ namespace NasleGhalam.ViewModels.Media
 {
     public class MediaCreateViewModel
     {
-        
 
+        public MediaCreateViewModel()
+        {
+            FileName = Guid.NewGuid().ToString();
+            CoverImage = Guid.NewGuid().ToString();
+            InsertDateTime = DateTime.Now;
+        }
 
         [Display(Name = "عنوان")]
         public string Title { get; set; }
@@ -43,6 +48,14 @@ namespace NasleGhalam.ViewModels.Media
 
         [Display(Name = "فعال")]
         public bool IsActive { get; set; }
+
+        public string CoverImage { get; set; }
+
+        public string Length { get; set; }
+
+        public int YearOfBook { get; set; }
+
+        public string PagesOfBook { get; set; }
 
 
         public List<int> TopicIds { get; set; } = new List<int>();

@@ -31,7 +31,26 @@ const mediaValidations: ValidationRuleset<TMedia> = {
       numeric
     },
     
+    FileName : {
+      displayName: displayName("فایل"),
+    },
+
+    CoverImage : {
+      displayName: displayName("عکس کاور")
+    },
+
+    Length : {
+      displayName: displayName("مدت رسانه / تعداد صفحات ")
+    },
     
+    YearOfBook : {
+      displayName: displayName("سال کتاب درسی")
+    },
+
+    PagesOfBook : {
+      displayName: displayName("صفحه کتاب درسی")
+    },
+
     Description: {
       displayName: displayName("توضیحات"),
       maxLength: maxLength(300)

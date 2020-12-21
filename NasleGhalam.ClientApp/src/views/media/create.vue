@@ -22,20 +22,11 @@
           node-key="Id"
         />
       </section>
-
- 
-
-
-      
     </div>
 
     <div class="col-sm-8 row gutter-md">
-      <div class="col-12">
-        <p v-for="(elem, index) in concatTopicArray" :key="index">{{elem}}</p>
-      </div>
+      <base-input :model="$v.media.Title" class="col-md-9" />
 
-      <base-input :model="$v.media.Title" class="col-md-9"/>
-      
       <q-field class="col-sm-4">
         <q-uploader
           url
@@ -43,28 +34,44 @@
           name="file"
           hide-upload-button
           ref="file"
-          
         />
       </q-field>
-      
+
       <base-select
         :model="$v.media.LookupId_MediaType"
         :options="lookupStore.mediaTypeDdl"
         class="col-md-4"
         filter
       />
-      
-      
+      <q-field class="col-sm-4">
+        <q-uploader
+          url
+          float-label="عکس کاور"
+          name="CoverImage"
+          auto-expand
+          ref="CoverImage"
+          extensions=".jpg"
+        />
+      </q-field>
+
+      <base-input :model="$v.media.Price" class="col-md-4" />
       <base-select
         :model="$v.media.WriterId"
         :options="writerStore.ddl"
         class="col-md-4"
         filter
+
       />
-      
-       <base-input :model="$v.media.Price" class="col-md-3"/>
 
+    <div class="col-md-4" ></div>
+      <base-input :model="$v.media.Length" class="col-md-4" />
+      <base-input :model="$v.media.YearOfBook" class="col-md-4" />
+      <base-input :model="$v.media.PagesOfBook" class="col-md-4" />
+    
 
+      <div class="col-12">
+        <p v-for="(elem, index) in concatTopicArray" :key="index">{{ elem }}</p>
+      </div>
       <base-input :model="$v.media.Description" class="col-12" />
     </div>
   </base-modal-create>
@@ -119,7 +126,7 @@ export default class MediaCreateVue extends Vue {
     this.media.TopicIds = this.topicTickedIdsProp;
     this.tagStore.fillList();
     this.lookupStore.fillMediaType();
-    
+
     this.writerStore.fillList();
     this.userStore.fillListSupervisor();
   }

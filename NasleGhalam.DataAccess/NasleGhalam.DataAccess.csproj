@@ -116,6 +116,10 @@
     <Compile Include="Migrations\202009070700093_mediaadded.Designer.cs">
       <DependentUpon>202009070700093_mediaadded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012210948236_updateMediatable.cs" />
+    <Compile Include="Migrations\202012210948236_updateMediatable.Designer.cs">
+      <DependentUpon>202012210948236_updateMediatable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -185,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009070700093_mediaadded.resx">
       <DependentUpon>202009070700093_mediaadded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012210948236_updateMediatable.resx">
+      <DependentUpon>202012210948236_updateMediatable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

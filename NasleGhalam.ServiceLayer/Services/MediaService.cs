@@ -72,10 +72,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="mediaViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(MediaCreateViewModel mediaViewModel, HttpPostedFile word)
+        public ClientMessageResult Create(MediaCreateViewModel mediaViewModel, HttpPostedFile word, HttpPostedFile CoverImage)
         {
-
-            mediaViewModel.FileName = word.FileName;
+            
+            mediaViewModel.FileName += Path.GetExtension(word.FileName);
+            mediaViewModel.CoverImage += Path.GetExtension( CoverImage.FileName);
             var media = Mapper.Map<Media>(mediaViewModel);
 
 
@@ -94,7 +95,11 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (serverResult.MessageType == MessageType.Success && word.FileName != null) 
             {
-                word.SaveAs(SitePath.GetMediaAbsPath(mediaViewModel.FileName));
+                word.SaveAs(SitePath.GetMediaAbsPath(mediaViewModel.FileName ) );
+                if (CoverImage.FileName != null && CoverImage.FileName != "")
+                {
+                    CoverImage.SaveAs(SitePath.GetMediaAbsPath(mediaViewModel.CoverImage));
+                }
             }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);

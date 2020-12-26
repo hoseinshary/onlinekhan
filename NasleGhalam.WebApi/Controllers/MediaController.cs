@@ -100,7 +100,12 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update([FromUri]MediaUpdateViewModel mediaViewModel)
         {
             var file = HttpContext.Current.Request.Files.Get("file");
-            return Ok(_mediaService.Update(mediaViewModel,file));
+
+            var coverImage = HttpContext.Current.Request.Files.Get("CoverImage");
+
+           // mediaViewModel.UserId = Request.GetUserId();
+
+            return Ok(_mediaService.Update(mediaViewModel,file,coverImage));
         }
 
         [HttpPost, CheckUserAccess(ActionBits.MediaDeleteAccess)]

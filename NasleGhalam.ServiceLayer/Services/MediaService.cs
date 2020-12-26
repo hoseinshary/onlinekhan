@@ -115,22 +115,34 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="mediaViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(MediaUpdateViewModel mediaViewModel, HttpPostedFile word)
+        public ClientMessageResult Update(MediaUpdateViewModel mediaViewModel, HttpPostedFile word, HttpPostedFile coverImage)
         {
             var mediaPrev = _medias
                 .Include(current => current.Topics)
                 .First(current => current.Id == mediaViewModel.Id);
 
             var previousFileName = mediaViewModel.FileName;
+            var previousCoverImage = mediaViewModel.CoverImage;
 
 
             mediaPrev.Title = mediaViewModel.Title;
             mediaPrev.LookupId_MediaType = mediaViewModel.LookupId_MediaType;
             mediaPrev.Description = mediaViewModel.Description;
-            mediaPrev.FileName = word.FileName;
+           
             mediaPrev.IsActive = mediaViewModel.IsActive;
             mediaPrev.WriterId = mediaViewModel.WriterId;
             mediaPrev.Price = mediaViewModel.Price;
+
+            if (word != null && word.ContentLength > 0)
+            {
+                mediaPrev.FileName = Guid.NewGuid().ToString() + Path.GetExtension(word.FileName);
+            }
+
+            if (coverImage != null && coverImage.ContentLength > 0)
+            {
+                mediaPrev.CoverImage = Guid.NewGuid().ToString() + Path.GetExtension(coverImage.FileName);
+            }
+            
 
 
             //delete topics
@@ -169,6 +181,17 @@ namespace NasleGhalam.ServiceLayer.Services
                 word.SaveAs(SitePath.GetMediaAbsPath(mediaPrev.FileName));
 
             }
+            if (serverResult.MessageType == MessageType.Success && coverImage != null && coverImage.ContentLength > 0)
+            {
+                if (File.Exists(SitePath.GetMediaAbsPath(previousCoverImage)))
+                {
+                    File.Delete(SitePath.GetMediaAbsPath(previousCoverImage));
+                }
+
+                coverImage.SaveAs(SitePath.GetMediaAbsPath(mediaPrev.CoverImage));
+
+            }
+
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
@@ -208,7 +231,13 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     File.Delete(SitePath.GetMediaAbsPath(media.FileName));
                 }
+
+                if (File.Exists(SitePath.GetMediaAbsPath(media.CoverImage)))
+                {
+                    File.Delete(SitePath.GetMediaAbsPath(media.CoverImage));
+                }
             }
+          
 
             return Mapper.Map<ClientMessageResult>(msgRes);
         }

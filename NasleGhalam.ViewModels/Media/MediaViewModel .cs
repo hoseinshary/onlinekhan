@@ -52,6 +52,9 @@ namespace NasleGhalam.ViewModels.Media
 
         public string CoverImage { get; set; }
 
+        public string CoverImagePath => $"/Api/Media/GetFile?id={CoverImage}".ToFullRelativePath();
+
+
         public string Length { get; set; }
 
         public int YearOfBook { get; set; }

@@ -10,10 +10,12 @@ export default interface IMedia {
   WriterId: number;
   Description: string;
   FileName: string;
+  MediaPath: string;
   IsActive: boolean;
   LookupId_MediaType: number;
   Price: number;
   CoverImage :string;
+  CoverImagePath :string;
   Length : string;
   YearOfBook : number;
   PagesOfBook : string;
@@ -30,11 +32,13 @@ export const DefaultMedia: IMedia = {
   WriterId: 0,
   Description: "",
   FileName: "",
+  MediaPath: "",
   IsActive: true,
   Price: 0,
   LookupId_MediaType: 0,
 
   CoverImage :"",
+  CoverImagePath :"",
   Length : "",
   YearOfBook : 0,
   PagesOfBook : "",

@@ -14,13 +14,17 @@ import { MessageType } from "src/utilities/enumeration";
 import { ASSAY_URL as baseUrl } from "src/utilities/site-config";
 import utilities from "src/utilities";
 import IQuestion from "src/models/IQuestion";
+import IAssay from "src/models/IAssay";
 
 @Module({ namespacedPath: "assayStore/" })
 export class AssayStore extends VuexModule {
+  openModal: { create: boolean; edit: boolean; delete: boolean };
   assayCreate: AssayCreate;
+  private _assayList: Array<IAssay>;
+
   private _indexVue: Vue;
   private _assayVue: Vue;
-  private _assayList : Vue;
+  
 
   /**
    * initialize data

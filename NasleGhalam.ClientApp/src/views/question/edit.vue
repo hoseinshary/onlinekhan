@@ -15,7 +15,7 @@
     </q-card>
 
     <div class="col-12" v-if="showElement('TopicIds')">
-      <p v-for="(elem, index) in concatTopicArray" :key="index">{{elem}}</p>
+      <p v-for="(elem, index) in concatTopicArray" :key="index">{{ elem }}</p>
     </div>
     <div class="col-md-3 col-sm-6">
       <section v-if="showElement('TopicIds')" class="q-my-sm shadow-1">
@@ -41,12 +41,14 @@
           :options="tagStore.ddl"
           float-label="تگ ها"
         />
-        
       </section>
 
       <q-slide-transition>
         <section
-          v-if="showElement('LookupId_QuestionType') && question.LookupId_QuestionType==6"
+          v-if="
+            showElement('LookupId_QuestionType') &&
+            question.LookupId_QuestionType == 6
+          "
           class="q-ma-sm q-pa-sm shadow-1"
         >
           گزینه صحیح
@@ -56,18 +58,17 @@
             class="col-md-4"
             filter
           />
-      
+
           <!-- v-model="multipleSelect" -->
           <q-select
-            v-model="$v.question.TopicAnswer.$model"
-            
-            float-label="انتخاب مبحث پاسخ صحیح"
-            clearable
-            multiple
-            :options="topicAnswerDdl"
             class="col-md-4"
+            v-model="$v.question.TopicAnswer.$model"
+            float-label="انتخاب مبحث پاسخ صحیح"
+            multiple
+            toggle
+            :options="topicAnswerDdl"
           />
-      
+
           <!-- <base-select 
           
           :model="$v.question.TopicAnswer" :options="topicAnswerDdl" class="col-md-4"></base-select> -->
@@ -126,7 +127,11 @@
           class="col-md-4"
           filter
         />
-          <base-field v-if="showElement('IsActive')" class="col-md-4" :model="$v.question.IsActive">
+        <base-field
+          v-if="showElement('IsActive')"
+          class="col-md-4"
+          :model="$v.question.IsActive"
+        >
           <template slot-scope="data">
             <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
             <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
@@ -168,15 +173,14 @@
           filter
         />
 
-     <base-select
-        :model="$v.question.SupervisorUserId"
-        v-if="showElement('SupervisorUserId')"
-        :options="userStore.ddl"
-        class="col-md-4"
-        filter
-      />
+        <base-select
+          :model="$v.question.SupervisorUserId"
+          v-if="showElement('SupervisorUserId')"
+          :options="userStore.ddl"
+          class="col-md-4"
+          filter
+        />
 
-  
         <base-select
           v-if="showElement('LookupId_AreaType')"
           :model="$v.question.LookupId_AreaType"
@@ -197,7 +201,11 @@
           </template>
         </base-field>
 
-        <base-field v-if="showElement('IsDelete')" class="col-md-4" :model="$v.question.IsDelete">
+        <base-field
+          v-if="showElement('IsDelete')"
+          class="col-md-4"
+          :model="$v.question.IsDelete"
+        >
           <template slot-scope="data">
             <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
             <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
@@ -215,7 +223,11 @@
     <div class="col-md-3 col-sm-6" v-if="showElement('TopicIds')">
       <q-input v-model="topicFilter2" float-label="جستجوی مبحث 2" clearable />
       <q-tree
-        :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
+        :nodes="
+          topicStore.treeDataByLessonIds(
+            lessonStore.relatedLessonIds(lessonIdProp)
+          )
+        "
         :ticked.sync="question.TopicIds"
         :filter="topicFilter2"
         tick-strategy="leaf"
@@ -276,7 +288,7 @@ export default class QuestionEditVue extends Vue {
       canEditTopicProp: false,
       canEditImportProp: false
     },
-      IsActive: {
+    IsActive: {
       canEditAdminProp: true,
       canEditTopicProp: false,
       canEditImportProp: false

@@ -89,7 +89,7 @@ export class EducationTreeStore extends VuexModule {
   }
 
   /**
-   * فیلتر درخت با مقطع
+   * جستجو درخت با مقطع
    */
   get treeDataByEducationTreeId() {
     var list = this._educationTreeList.map(x => ({

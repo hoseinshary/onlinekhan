@@ -189,10 +189,10 @@ export default class QuestionAnswerVue extends Vue {
       title: "تایید",
       data: "IsActive"
     },
-    // {
-    //   title: "متن جواب",
-    //   data: "Context"
-    // },
+    {
+      title: "مربوط به درس",
+      data: "LessonName"
+    },
     {
       title: "عملیات",
       data: "Id",

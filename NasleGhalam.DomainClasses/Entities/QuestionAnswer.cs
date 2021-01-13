@@ -33,6 +33,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public bool IsActive { get; set; }
 
+        //public bool IsDelete { get; set; }
+        //public bool IsUpdate { get; set; }
 
         public int UserId { get; set; }
 

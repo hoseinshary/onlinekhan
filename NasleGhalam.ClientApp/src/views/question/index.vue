@@ -74,7 +74,7 @@
         <q-select
           v-model="educationTree.id"
           :options="educationTree_GradeDdl"
-          float-label="فیلتر درخت آموزش با مقطع"
+          float-label="جستجو درخت آموزش با مقطع"
           clearable
           class="s-q-input-border s-spacing"
         />

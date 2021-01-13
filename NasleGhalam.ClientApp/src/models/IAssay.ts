@@ -82,8 +82,7 @@ export class AssayLesson {
     this.Questions = [];
   }
 }
-
-export default class AssayCreate {
+export  default class AssayCreate {
   Title: string;
   Time: number;
   LookupId_Importance: number;

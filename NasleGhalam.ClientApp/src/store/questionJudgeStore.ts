@@ -23,6 +23,8 @@ export class QuestionJudgeStore extends VuexModule {
   private _indexVue: Vue;
   private _createVue: Vue;
   private _editVue: Vue;
+  private _detailVue: Vue;
+
 
   /**
    * initialize data
@@ -107,6 +109,11 @@ export class QuestionJudgeStore extends VuexModule {
   @mutation
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
+  }
+
+  @mutation
+  SET_DEATIL_VUE(vm: Vue) {
+    this._detailVue = vm;
   }
   //#endregion
 

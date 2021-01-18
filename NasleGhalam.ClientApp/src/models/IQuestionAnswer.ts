@@ -12,6 +12,8 @@ export default interface IQuestionAnswer {
   WriterId: number;
   IsMaster: boolean;
   IsActive: boolean;
+  IsDelete: boolean;
+  IsUpdate: boolean;
   QuestionId: number;
   Writer?: IWriter;
 }
@@ -28,5 +30,7 @@ export const DefaultQuestionAnswer: IQuestionAnswer = {
   WriterId: 0,
   IsMaster: false,
   IsActive: false,
+  IsDelete: false,
+  IsUpdate: false,
   QuestionId: 0
 };

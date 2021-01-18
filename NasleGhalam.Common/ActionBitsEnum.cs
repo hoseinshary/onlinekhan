@@ -66,6 +66,7 @@
         QuestionDeleteAccess = 49,
         QuestionUpdateTopicAccess = 82,
         QuestionUpdateImportAccess = 83,
+        QuestionUpdateFinalImportAccess = 144,
 
         //AnswerReadAccess = 50,
         //AnswerCreateAccess = 51,

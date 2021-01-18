@@ -37,6 +37,12 @@ const questionAnswerValidations: ValidationRuleset<TQuestionAnswer> = {
     IsActive: {
       displayName: displayName("فعال")
     },
+    IsDelete: {
+      displayName: displayName("حذف")
+    },
+    IsUpdate: {
+      displayName: displayName("ویرایش")
+    },
     QuestionId: {
       displayName: displayName("سوال"),
       requiredDdl: requiredDdl(0)

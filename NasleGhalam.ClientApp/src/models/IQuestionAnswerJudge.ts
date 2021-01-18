@@ -4,6 +4,8 @@ import IUser from "./IUser";
 export default interface IQuestionAnswerJudge {
   Id: number;
   IsActiveQuestionAnswer: boolean;
+  IsDelete: boolean;
+  IsUpdate: boolean;
   IsMaster : boolean;
   QuestionAnswerId: number;
   
@@ -16,6 +18,8 @@ export default interface IQuestionAnswerJudge {
 export const DefaultQuestionAnswerJudge: IQuestionAnswerJudge = {
   Id: 0,
   IsActiveQuestionAnswer: false,
+  IsDelete: false,
+  IsUpdate: false,
   QuestionAnswerId: 0,
   IsMaster : false,
   LookupId_ReasonProblem: 0,

@@ -43,7 +43,34 @@
         />
       </section>
 
-      <q-slide-transition>
+      <section class="q-ma-sm q-pa-sm shadow-1">
+        گزینه صحیح
+        <base-select
+          :model="$v.question.AnswerNumber"
+          :options="answersDdl"
+          filter
+        />
+      </section>
+
+      <section class="q-ma-sm q-pa-sm shadow-1">
+        <base-select class="no-ellipsis"
+          :model="$v.question.TopicAnswer"
+          multiple
+          :options="topicAnswerDdl"
+        ></base-select>
+      </section>
+
+      <!-- v-model="multipleSelect" -->
+      <!-- <q-select
+            class="col-md-4"
+            v-model="$v.question.TopicAnswer.$model"
+            float-label="انتخاب مبحث پاسخ صحیح"
+            multiple
+            
+            :options="topicAnswerDdl"
+          /> -->
+
+      <!-- <q-slide-transition>
         <section
           v-if="
             showElement('LookupId_QuestionType') &&
@@ -51,29 +78,9 @@
           "
           class="q-ma-sm q-pa-sm shadow-1"
         >
-          گزینه صحیح
-          <base-select
-            :model="$v.question.AnswerNumber"
-            :options="answersDdl"
-            class="col-md-4"
-            filter
-          />
-
-          <!-- v-model="multipleSelect" -->
-          <q-select
-            class="col-md-4"
-            v-model="$v.question.TopicAnswer.$model"
-            float-label="انتخاب مبحث پاسخ صحیح"
-            multiple
-            toggle
-            :options="topicAnswerDdl"
-          />
-
-          <!-- <base-select 
-          
-          :model="$v.question.TopicAnswer" :options="topicAnswerDdl" class="col-md-4"></base-select> -->
+         
         </section>
-      </q-slide-transition>
+      </q-slide-transition> -->
     </div>
 
     <div class="col-md-6 col-sm-12">
@@ -194,7 +201,11 @@
           :model="$v.question.ResponseSecond"
           class="col-md-4"
         />
-        <base-field class="col-md-4" :model="$v.question.IsHybrid">
+        <base-field
+          class="col-md-4"
+          v-if="showElement('IsHybrid')"
+          :model="$v.question.IsHybrid"
+        >
           <template slot-scope="data">
             <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
             <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
@@ -240,6 +251,12 @@
   </base-modal-edit>
 </template>
 
+<style lang="stylus">
+.no-ellipsis .ellipsis {
+  white-space: unset;
+}
+</style>
+
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
@@ -247,7 +264,7 @@ import { questionValidations } from "src/validations/questionValidation";
 import util from "src/utilities";
 
 @Component({
-  validations: questionValidations
+  validations: questionValidations 
 })
 export default class QuestionEditVue extends Vue {
   $v: any;
@@ -257,6 +274,7 @@ export default class QuestionEditVue extends Vue {
   @Prop({ type: Boolean, required: true }) canEditAdminProp;
   @Prop({ type: Boolean, required: true }) canEditTopicProp;
   @Prop({ type: Boolean, required: true }) canEditImportProp;
+  @Prop({ type: Boolean, required: true }) canEditFinalImportProp;
   @Prop({ type: Number, required: true }) lessonIdProp;
   //#endregion
 
@@ -276,97 +294,122 @@ export default class QuestionEditVue extends Vue {
     QuestionNumber: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     QuestionPoint: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     UseEvaluation: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     IsActive: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: true
     },
     IsStandard: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     WriterId: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     ResponseSecond: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     Description: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     LookupId_QuestionType: {
       canEditAdminProp: true,
       canEditTopicProp: true,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     LookupId_QuestionHardnessType: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     LookupId_RepeatnessType: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     LookupId_QuestionRank: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     LookupId_AuthorType: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     LookupId_AreaType: {
       canEditAdminProp: true,
       canEditTopicProp: true,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     TopicIds: {
       canEditAdminProp: true,
       canEditTopicProp: true,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     wordFile: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: true
     },
     IsDelete: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     TopicAnswer: {
       canEditAdminProp: true,
       canEditTopicProp: true,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     SupervisorUserId: {
       canEditAdminProp: true,
       canEditTopicProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
+    },
+    IsHybrid: {
+      canEditAdminProp: true,
+      canEditTopicProp: true,
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     }
   };
   concatTopicArray: Array<string> = [];
@@ -387,8 +430,10 @@ export default class QuestionEditVue extends Vue {
       return "canEditAdminProp";
     } else if (this.canEditImportProp) {
       return "canEditImportProp";
-    } else {
+    } else if (this.canEditTopicProp) {
       return "canEditTopicProp";
+    } else {
+      return "canEditFinalImportProp"
     }
   }
 

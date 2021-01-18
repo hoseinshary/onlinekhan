@@ -120,6 +120,10 @@
     <Compile Include="Migrations\202012210948236_updateMediatable.Designer.cs">
       <DependentUpon>202012210948236_updateMediatable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101181256053_fixquestionAnswerJudge.cs" />
+    <Compile Include="Migrations\202101181256053_fixquestionAnswerJudge.Designer.cs">
+      <DependentUpon>202101181256053_fixquestionAnswerJudge.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -192,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012210948236_updateMediatable.resx">
       <DependentUpon>202012210948236_updateMediatable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101181256053_fixquestionAnswerJudge.resx">
+      <DependentUpon>202101181256053_fixquestionAnswerJudge.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

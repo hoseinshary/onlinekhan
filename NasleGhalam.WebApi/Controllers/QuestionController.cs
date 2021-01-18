@@ -191,7 +191,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.QuestionUpdateImportAccess)]
+        [CheckUserAccess(ActionBits.QuestionUpdateImportAccess , ActionBits.QuestionUpdateFinalImportAccess)]
         [CheckModelValidation]
         //[CheckWordFileUpdateValidation("word", 1024)]
         public IHttpActionResult UpdateImport(QuestionUpdateImportViewModel questionViewModel)

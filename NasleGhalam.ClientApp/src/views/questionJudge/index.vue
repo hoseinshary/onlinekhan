@@ -2,8 +2,12 @@
   <bs-modal :show="questionJudgeStore.openModal.index" size="xl" @open="open">
     <template slot="header">
       <q-toolbar slot="header" color="blue-8">
-        <q-toolbar-title>{{questionJudgeStore.modelName}}</q-toolbar-title>
-        <q-btn dense icon="close" @click="questionJudgeStore.OPEN_MODAL_INDEX(false)" />
+        <q-toolbar-title>{{ questionJudgeStore.modelName }}</q-toolbar-title>
+        <q-btn
+          dense
+          icon="close"
+          @click="questionJudgeStore.OPEN_MODAL_INDEX(false)"
+        />
       </q-toolbar>
     </template>
 
@@ -20,7 +24,11 @@
 
     <q-tree
       v-show="false"
-      :nodes="topicStore.treeDataByLessonIds(lessonStore.relatedLessonIds(lessonIdProp))"
+      :nodes="
+        topicStore.treeDataByLessonIds(
+          lessonStore.relatedLessonIds(lessonIdProp)
+        )
+      "
       :ticked.sync="question.TopicIds"
       tick-strategy="leaf"
       color="primary"
@@ -31,24 +39,25 @@
 
     <div class="col-md-5 col-lg-4">
       <section class="row s-border s-spacing">
-        <p class="col-12 text-primary text-weight-bold q-pa-sm">مشخصه های سوال</p>
-        <div class="col-12 q-pa-sm" style="color:red">
+        <p class="col-12 text-primary text-weight-bold q-pa-sm">
+          مشخصه های سوال
+        </p>
+        <div class="col-12 q-pa-sm" style="color: red">
           جواب صحیح:
-          <span class="text-red">{{question.AnswerNumber}}</span>
+          <span class="text-red">{{ question.AnswerNumber }}</span>
         </div>
         <div class="col-12 q-pa-sm">
           مبحث پاسخ صحیح:
-          <span class="text-black">{{question.TopicAnswer}}</span>
+          <span class="text-black">{{ question.TopicAnswer }}</span>
         </div>
         <div class="col-12 q-pa-sm">
           نویسنده:
-          <span class="text-black">{{question.Writer.Name}}</span>
+          <span class="text-black">{{ question.Writer.Name }}</span>
         </div>
         <div class="col-12 q-pa-sm">
           حیطه :
-              {{question.Lookup_AreaTypes.map(x=> x.Value).join(", ")}}
+          {{ question.Lookup_AreaTypes.map((x) => x.Value).join(", ") }}
         </div>
-        
       </section>
 
       <section class="row s-border s-spacing">
@@ -61,13 +70,29 @@
             icon="library_add"
             @select="showTabCreate()"
           />
-          <q-tab slot="title" :disable="!editMode" name="tab-edit" label="ویرایش" icon="create" />
+          <q-tab
+            slot="title"
+            :disable="!editMode"
+            name="tab-edit"
+            label="ویرایش"
+            icon="create"
+          />
+          <q-tab
+            slot="title"
+            :disable="!editMode"
+            name="tab-detail"
+            label="جزئیات"
+            icon="create"
+          />
           <!-- tab-panes -->
           <q-tab-pane keep-alive name="tab-create" class="no-border">
             <tab-create></tab-create>
           </q-tab-pane>
           <q-tab-pane keep-alive name="tab-edit" class="no-border">
             <tab-edit></tab-edit>
+          </q-tab-pane>
+          <q-tab-pane keep-alive name="tab-detail" class="no-border">
+            <tab-detail></tab-detail>
           </q-tab-pane>
         </q-tabs>
       </section>
@@ -79,7 +104,7 @@
       </section>
 
       <section class="s-border s-spacing">
-        <p v-for="(elem, index) in concatTopicArray" :key="index">{{elem}}</p>
+        <p v-for="(elem, index) in concatTopicArray" :key="index">{{ elem }}</p>
         <div class="col-12"></div>
       </section>
 
@@ -89,31 +114,57 @@
           :columns="questionJudgeGridColumn"
           hasIndex
         >
-          <template slot="User.Name" slot-scope="data">{{data.row.User.Name}}</template>
-          <template slot="User.Family" slot-scope="data">{{data.row.User.Family}}</template>
-          <template
-            slot="Lookup_RepeatnessType.Value"
-            slot-scope="data"
-          >{{data.row.Lookup_RepeatnessType.Value}}</template>
+          <template slot="User.Name" slot-scope="data">{{
+            data.row.User.Name
+          }}</template>
+          <template slot="User.Family" slot-scope="data">{{
+            data.row.User.Family
+          }}</template>
+          <template slot="Lookup_RepeatnessType.Value" slot-scope="data">{{
+            data.row.Lookup_RepeatnessType.Value
+          }}</template>
           <template
             slot="Lookup_QuestionHardnessType.Value"
             slot-scope="data"
-          >{{data.row.Lookup_QuestionHardnessType.Value}}</template>
+            >{{ data.row.Lookup_QuestionHardnessType.Value }}</template
+          >
           <template slot="IsDelete" slot-scope="data">
             <span v-if="data.row.IsDelete">حذف</span>
             <span v-else-if="data.row.IsUpdate">ویرایش</span>
             <span v-else>تایید</span>
           </template>
           <template slot="Id" slot-scope="data">
-            <base-btn-edit v-if="canEdit" round @click="showTabEdit(data.row.Id)" />
-            <btn-delete v-if="canDelete" :recordIdProp="data.row.Id"></btn-delete>
+            <base-btn-edit
+              v-if="canEdit"
+              round
+              @click="showTabEdit(data.row.Id)"
+            />
+            <btn-delete
+              v-if="canDelete"
+              :recordIdProp="data.row.Id"
+            ></btn-delete>
+            &nbsp;
+         
+
+            <q-btn
+              outline
+              v-if="!canEdit"
+              round
+              color="brown-14"
+              class="shadow-1 bg-white q-mr-sm"
+              @click="showTabDetail(data.row.Id)"
+            >
+              <q-icon name="search" />
+            </q-btn>
           </template>
         </base-table>
       </section>
     </div>
 
     <template slot="footer">
-      <base-btn-back @click="questionJudgeStore.OPEN_MODAL_INDEX(false)"></base-btn-back>
+      <base-btn-back
+        @click="questionJudgeStore.OPEN_MODAL_INDEX(false)"
+      ></base-btn-back>
     </template>
   </bs-modal>
 </template>
@@ -127,7 +178,8 @@ import util from "src/utilities";
   components: {
     TabCreate: () => import("./create.vue"),
     TabEdit: () => import("./edit.vue"),
-    BtnDelete: () => import("./delete.vue")
+    BtnDelete: () => import("./delete.vue"),
+    TabDetail: () => import("./detail.vue")
   }
 })
 export default class QuestionJudgeVue extends Vue {
@@ -190,8 +242,8 @@ export default class QuestionJudgeVue extends Vue {
       title: "عملیات",
       data: "Id",
       searchable: false,
-      sortable: false,
-      visible: this.canEdit || this.canDelete
+      sortable: false
+      
     }
   ];
   selectedTab = "tab-create";
@@ -256,6 +308,13 @@ export default class QuestionJudgeVue extends Vue {
     this.questionJudgeStore.resetEdit();
     this.questionJudgeStore.getById(id).then(() => {
       this.selectedTab = "tab-edit";
+    });
+  }
+
+  showTabDetail(id) {
+
+    this.questionJudgeStore.getById(id).then(() => {
+      this.selectedTab = "tab-detail";
     });
   }
 

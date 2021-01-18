@@ -80,9 +80,7 @@
       clearable
     />
     <base-input :model="$v.questionJudge.Description" class="col-12" />
-    <div class="col-12">
-      <base-btn-edit   @click="questionJudgeStore.submitEdit()" />
-    </div>
+    
   </section>
 </template>
 
@@ -112,7 +110,7 @@ export default class QuestionJudgeEditVue extends Vue {
   }
   //#region ### hooks ###
   created() {
-    this.questionJudgeStore.SET_EDIT_VUE(this);
+    this.questionJudgeStore.SET_DEATIL_VUE(this);
   }
   //#endregion
 }

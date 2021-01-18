@@ -74,7 +74,7 @@ const questionValidations: ValidationRuleset<TQuestion> = {
       requiredDdl: requiredDdl(0)
     },
     SupervisorUserId: {
-      displayName: displayName("ناظر"),
+      displayName: displayName("کارشناس اولیه تالیف"),
       
     },
     LookupId_AreaType: {

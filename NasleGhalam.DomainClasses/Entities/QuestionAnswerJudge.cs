@@ -8,7 +8,9 @@
         public int Id { get; set; }
 
         public bool IsActiveQuestionAnswer { get; set; }
-        
+        public bool IsUpdate { get; set; }
+        public bool IsDelete { get; set; }
+
         public int QuestionAnswerId { get; set; }
 
         public QuestionAnswer QuestionAnswer { get; set; }

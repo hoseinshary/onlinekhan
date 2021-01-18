@@ -45,20 +45,19 @@
             <br />
           </div>
           <div v-if="showElement('showNoAnswer')">
-          <q-checkbox
-            v-model="showNoAnswer"
-            label="نمایش سوال های بدون پاسخ"
-            @input="fillGrid()"
-          />
-          <br />
+            <q-checkbox
+              v-model="showNoAnswer"
+              label="نمایش سوال های بدون پاسخ"
+              @input="fillGrid()"
+            />
+            <br />
           </div>
-          <div v-if="showElement('showNoAnswerJudge')" >
-          <q-checkbox
-            v-model="showNoAnswerJudge"
-            label="نمایش سوال های بدون پاسخ ارزیابی شده"
-            @input="fillGrid()"
-          />
-
+          <div v-if="showElement('showNoAnswerJudge')">
+            <q-checkbox
+              v-model="showNoAnswerJudge"
+              label="نمایش سوال های بدون پاسخ ارزیابی شده"
+              @input="fillGrid()"
+            />
           </div>
 
           <hr style="width: 100%; text-align: left; margin-left: 0" />
@@ -203,6 +202,7 @@
       :canEditAdminProp="canEditAdmin"
       :canEditTopicProp="canEditTopic"
       :canEditImportProp="canEditImport"
+      :canEditFinalImportProp="canEditFinalImport"
       :topicTreeDataProp="topicTreeData"
       :lessonIdProp="lessonId"
     ></modal-edit>
@@ -283,48 +283,57 @@ export default class QuestionVue extends Vue {
     showNoJudgement: {
       canEditAdminProp: true,
       canEditExpertProp: true,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     showWithoutTopic: {
       canEditAdminProp: true,
       canEditExpertProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     showJudged: {
       canEditAdminProp: true,
       canEditExpertProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: false
     },
     showActived: {
       canEditAdminProp: true,
       canEditExpertProp: false,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: true
     },
     showUnActived: {
       canEditAdminProp: true,
       canEditExpertProp: true,
-      canEditImportProp: false
+      canEditImportProp: false,
+      canEditFinalImportProp: true
     },
     showDownloadFile: {
       canEditAdminProp: true,
       canEditExpertProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: true
     },
 
     showNumberForTopic: {
       canEditAdminProp: true,
       canEditExpertProp: false,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     },
     showNoAnswer: {
       canEditAdminProp: true,
       canEditExpertProp: true,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: true
     },
     showNoAnswerJudge: {
       canEditAdminProp: true,
       canEditExpertProp: true,
-      canEditImportProp: true
+      canEditImportProp: true,
+      canEditFinalImportProp: false
     }
   };
 
@@ -356,8 +365,11 @@ export default class QuestionVue extends Vue {
     return this.pageAccess.indexOf("ویرایش ورود سوال") > -1;
   }
 
+  get canEditFinalImport() {
+    return this.pageAccess.indexOf("ویرایش ویراستار نهایی") > -1;
+  }
   get canEdit() {
-    return this.canEditAdmin || this.canEditTopic || this.canEditImport;
+    return this.canEditAdmin || this.canEditTopic || this.canEditImport || this.canEditFinalImport;
   }
 
   get canDelete() {
@@ -399,6 +411,10 @@ export default class QuestionVue extends Vue {
   get canShowImportFilter() {
     return this.pageAccess.indexOf("مشاهده فیلتر ورود") > -1;
   }
+  
+  get canShowFinalImportFilter() {
+    return this.pageAccess.indexOf("مشاهده فیلتر ویراستار نهایی") > -1;
+  }
 
   get canShowExpertFilter() {
     return this.pageAccess.indexOf("مشاهده فیلتر کارشناس") > -1;
@@ -423,7 +439,9 @@ export default class QuestionVue extends Vue {
       return "canEditAdminProp";
     } else if (this.canEditImport) {
       return "canEditImportProp";
-    } else {
+    } else if (this.canEditFinalImport) {
+      return "canEditImportProp"
+    }else {
       return "canEditExpertProp";
     }
   }

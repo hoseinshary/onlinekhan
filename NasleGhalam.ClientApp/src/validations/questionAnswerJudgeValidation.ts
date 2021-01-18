@@ -19,6 +19,14 @@ const questionAnswerJudgeValidations: ValidationRuleset<
       displayName: displayName("تایید"),
       required
     },
+    IsDelete: {
+      displayName: displayName("حذف"),
+      required
+    },
+    IsUpdate: {
+      displayName: displayName("ویرایش"),
+      required
+    },
     QuestionAnswerId: {
       displayName: displayName("جواب سوال"),
       required

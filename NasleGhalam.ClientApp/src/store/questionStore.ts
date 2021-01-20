@@ -396,7 +396,7 @@ export class QuestionStore extends VuexModule {
     var url = "";
     if (activeAccess == "canEditAdminProp") {
       url = `${baseUrl}/Update`;
-    } else if (activeAccess == "canEditImportProp") {
+    } else if (activeAccess == "canEditImportProp" || activeAccess == "canEditFinalImportProp") {
       url = `${baseUrl}/UpdateImport`;
     } else if (activeAccess == "canEditTopicProp") {
       url = `${baseUrl}/UpdateTopic`;

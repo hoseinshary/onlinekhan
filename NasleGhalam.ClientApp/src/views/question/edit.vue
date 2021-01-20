@@ -53,7 +53,8 @@
       </section>
 
       <section class="q-ma-sm q-pa-sm shadow-1">
-        <base-select class="no-ellipsis"
+        <base-select
+          class="no-ellipsis"
           :model="$v.question.TopicAnswer"
           multiple
           :options="topicAnswerDdl"
@@ -264,7 +265,7 @@ import { questionValidations } from "src/validations/questionValidation";
 import util from "src/utilities";
 
 @Component({
-  validations: questionValidations 
+  validations: questionValidations
 })
 export default class QuestionEditVue extends Vue {
   $v: any;

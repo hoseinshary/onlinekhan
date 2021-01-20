@@ -112,8 +112,10 @@
     <Compile Include="Question\QuestionCreateViewModel.cs" />
     <Compile Include="Ratio\RatioUpdateViewModel.cs" />
     <Compile Include="Ratio\RatioCreateViewModel.cs" />
+    <Compile Include="Report\FilterQuestionReportViewModel.cs" />
     <Compile Include="Report\AllUsersReporQuestionViewModel.cs" />
     <Compile Include="Report\AllQuestionOfEachLessonViewModel.cs" />
+    <Compile Include="Report\QuestionReportViewModel.cs" />
     <Compile Include="Resume\EducationCertificateViewModel.cs" />
     <Compile Include="Resume\PublicationViewModel.cs" />
     <Compile Include="Resume\ResumeViewModel.cs" />

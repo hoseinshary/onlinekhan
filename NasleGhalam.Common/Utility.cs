@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+
 
 namespace NasleGhalam.Common
 {
@@ -32,7 +35,8 @@ namespace NasleGhalam.Common
             int month = pc.GetMonth(mDate);
             int year = pc.GetYear(mDate);
 
-            return string.Format("{0:0000}/{1:00}/{2:00} {3:00}:{4:00}:{5:00}", year, month, day, mDate.Hour, mDate.Minute, mDate.Second);
+            return string.Format("{0:0000}/{1:00}/{2:00} {3:00}:{4:00}:{5:00}", year, month, day, mDate.Hour,
+                mDate.Minute, mDate.Second);
         }
 
         public static DateTime? ToMiladiDateTime(this string pDateTime)
@@ -40,7 +44,7 @@ namespace NasleGhalam.Common
             PersianCalendar pc = new PersianCalendar();
             DateTime thisDate = DateTime.Now;
 
-            string[] arr_dateTime = pDateTime.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] arr_dateTime = pDateTime.Split(new char[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
 
             if (arr_dateTime.Length == 2) // date and time
             {
@@ -61,13 +65,17 @@ namespace NasleGhalam.Common
                         pDay = Convert.ToInt16(arr_date[2]);
                         pYear = Convert.ToInt16(arr_date[0]);
                     }
+
                     int pMonth = Convert.ToInt16(arr_date[1]);
 
                     thisDate = pc.ToDateTime(pYear, pMonth, pDay,
                         Convert.ToInt32(arr_time[0]), Convert.ToInt32(arr_time[1]), Convert.ToInt32(arr_time[2]), 0);
 
                 }
-                catch { return null; }
+                catch
+                {
+                    return null;
+                }
             }
             else if (arr_dateTime.Length == 1) // only date
             {
@@ -87,19 +95,26 @@ namespace NasleGhalam.Common
                         pDay = Convert.ToInt16(arr_date[2]);
                         pYear = Convert.ToInt16(arr_date[0]);
                     }
+
                     int pMonth = Convert.ToInt16(arr_date[1]);
 
                     thisDate = pc.ToDateTime(pYear, pMonth, pDay, 0, 0, 0, 0);
 
                 }
-                catch { return null; }
+                catch
+                {
+                    return null;
+                }
             }
+
             return thisDate;
         }
+
         #endregion
 
 
         #region ### Access ###
+
         public static string SumBinary(string a, string b)
         {
             int a_len = a.Length;
@@ -159,6 +174,7 @@ namespace NasleGhalam.Common
             {
                 strSumAction.Insert(0, "0");
             }
+
             strSumAction.Replace('1', '0', strSumAction.Length - actionBit - 1, 1);
 
             return strSumAction.ToString();
@@ -243,10 +259,12 @@ namespace NasleGhalam.Common
 
             return strBulderAction.ToString();
         }
+
         #endregion
 
 
         #region ### Extension ###
+
         public static bool CheckImageExtension(string extension)
         {
             extension = extension.ToLower();
@@ -278,9 +296,11 @@ namespace NasleGhalam.Common
             extension = extension.ToLower();
             return (extension == ".xls" || extension == ".xlsx");
         }
+
         #endregion
 
         #region ### Enum ###
+
         public static string GetDisplayName<TEnum>(this TEnum e)
         {
             var displayName = "";
@@ -292,7 +312,9 @@ namespace NasleGhalam.Common
 
                 var memInfo = e.GetType().GetMember(enumType);
                 var displayNameAttributes = memInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);
-                displayName = displayNameAttributes.Length > 0 ? ((DisplayAttribute)displayNameAttributes[0]).Name : e.ToString();
+                displayName = displayNameAttributes.Length > 0
+                    ? ((DisplayAttribute) displayNameAttributes[0]).Name
+                    : e.ToString();
             }
             catch
             {
@@ -307,8 +329,40 @@ namespace NasleGhalam.Common
             if (!typeof(T).IsEnum)
                 throw new ArgumentException("Type must be an enum");
 
-            return Enum.GetValues(typeof(T)).Cast<T>().ToDictionary(t => (int)(object)t, t => t.GetDisplayName());
+            return Enum.GetValues(typeof(T)).Cast<T>().ToDictionary(t => (int) (object) t, t => t.GetDisplayName());
         }
+
         #endregion
+
+        public static DataTable ConvertToDataTable<T>(List<T> models)
+        {
+            // creating a data table instance and typed it as our incoming model   
+            // as I make it generic, if you want, you can make it the model typed you want.  
+            DataTable dataTable = new DataTable(typeof(T).Name);
+
+            //Get all the properties of that model  
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            // Loop through all the properties              
+            // Adding Column name to our datatable  
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names    
+                dataTable.Columns.Add(prop.Name);
+            }
+            // Adding Row and its value to our dataTable  
+            foreach (T item in models)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows    
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                // Finally add value to datatable    
+                dataTable.Rows.Add(values);
+            }
+            return dataTable;
+        }
     }
 }

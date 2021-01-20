@@ -1,12 +1,16 @@
 <template>
   <section class="col-md-8">
- 
+  
+
+
+  
     <br />
-    <base-table :grid-data="reportStore.gridDataUserQuestionReport" :columns="reportGridColumns" hasIndex>
-      
+    <base-table
+      :grid-data="reportStore.gridDataUserQuestionReport"
+      :columns="reportGridColumns"
+      hasIndex
+    >
     </base-table>
-
-
   </section>
 </template>
 
@@ -17,6 +21,9 @@ import { vxm } from "src/store";
 import util from "src/utilities";
 import { EducationTreeState } from "../../utilities/enumeration";
 
+
+
+
 @Component({
   components: {}
 })
@@ -24,7 +31,7 @@ export default class QuestionVue extends Vue {
   //#region ### data ###
   reportStore = vxm.reportStore;
 
-   reportGridColumns = [
+  reportGridColumns = [
     {
       title: "نام",
       data: "Name"
@@ -41,7 +48,7 @@ export default class QuestionVue extends Vue {
       title: "جواب سوالات کارشناسی شده",
       data: "NumberOfQuestionAnswerJudged"
     },
-    
+
     {
       title: "سوالات تالیف",
       data: "NumberOfWriteQuestion"
@@ -50,7 +57,7 @@ export default class QuestionVue extends Vue {
       title: "سوالات ناظر",
       data: "NumberOfSupervisorQuestion"
     },
-     {
+    {
       title: "دپارتمان",
       data: "Department"
     }
@@ -78,3 +85,4 @@ export default class QuestionVue extends Vue {
   //#endregion
 }
 </script>
+

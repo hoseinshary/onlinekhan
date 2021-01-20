@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using NasleGhalam.ViewModels._Attributes;
 
@@ -26,11 +27,40 @@ namespace NasleGhalam.ViewModels.Question
         public bool IsDelete { get; set; }
 
 
+
+        [Display(Name = "فعال")]
+        public bool IsActive { get; set; }
+
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 
         [Display(Name = "نام فایل")]
         public string FileName { get; set; }
+
+        [Display(Name = "فایل")]
+        public string Base64File { get; set; }
+
+        public byte[] FileBytes
+        {
+            get
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(Base64File))
+                    {
+                        return Convert.FromBase64String(Base64File.Replace(
+                            Base64File.Substring(0, Base64File.IndexOf("base64,", StringComparison.Ordinal) + 7), ""));
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                return new byte[] { };
+            }
+        }
+
 
         [Display(Name = "سوال ترکیبی")]
         public bool IsHybrid { get; set; }

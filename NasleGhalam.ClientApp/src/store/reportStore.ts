@@ -13,6 +13,7 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 import IReport_UserQuestionReport, { DefaultReport_UserQuestionReport } from "src/models/Report/IReport_UserQuestionReport";
+import IReport_QuestionsReport, { DefaultReport_QuestionsReport } from "src/models/Report/IReport_QuestionsReport";
 
 
 @Module({ namespacedPath: "reportStore/" })
@@ -20,8 +21,12 @@ export class ReportStore extends VuexModule {
   
   reportQuestionOfEachLesson: IReport_QuestionOfEachLesson;
   reportUserQuestionReport: IReport_UserQuestionReport;
+  reportQuestionsReport: IReport_QuestionsReport;
   private _reportListQuestionOfEachLesson: Array<IReport_QuestionOfEachLesson>;
   private _reportListUserQuestionReport: Array<IReport_UserQuestionReport>;
+
+  private _reportListQuestionsReport: Array<IReport_QuestionsReport>;
+
   private _modelChanged: boolean = true;
   
   /**
@@ -35,6 +40,9 @@ export class ReportStore extends VuexModule {
 
     this.reportUserQuestionReport = util.cloneObject(DefaultReport_UserQuestionReport);
     this._reportListUserQuestionReport = [];
+
+    this.reportQuestionsReport = util.cloneObject(DefaultReport_QuestionsReport);
+    this._reportListQuestionsReport = [];
   
   }
 
@@ -51,7 +59,10 @@ export class ReportStore extends VuexModule {
   get recordNameQuestionOfEachLesson() {
     return this.reportQuestionOfEachLesson.Name || "";
   }
-
+  
+  get recordNameQuestionsReport() {
+    return this.reportQuestionsReport.Id || "";
+  }
   get gridDataQuestionOfEachLesson() {
     return this._reportListQuestionOfEachLesson;
   }
@@ -60,6 +71,9 @@ export class ReportStore extends VuexModule {
     return this._reportListUserQuestionReport;
   }
   
+  get gridDataQuestionsReport() {
+    return this._reportListQuestionsReport;
+  }
 
   //#endregion
 
@@ -69,6 +83,7 @@ export class ReportStore extends VuexModule {
   private RESET(vm: any) {
     util.mapObject(DefaultReport_UserQuestionReport  , this.reportUserQuestionReport, "Id");
     util.mapObject(DefaultReport_QuestionOfEachLesson  , this.reportQuestionOfEachLesson, "Id");
+    util.mapObject(DefaultReport_QuestionsReport  , this.reportQuestionsReport, "Id");
     if (vm.$v) {
       vm.$v.$reset();
     }
@@ -83,6 +98,12 @@ export class ReportStore extends VuexModule {
   private SET_LISTUserQuestionReport(list: Array<IReport_UserQuestionReport>) {
     this._reportListUserQuestionReport = list;
   }
+
+  @mutation
+  private SET_LISTQuestionsReport(list: Array<IReport_QuestionsReport>) {
+    this._reportListQuestionsReport = list;
+  }
+
   @mutation
   private MODEL_CHANGED(changed: boolean) {
     this._modelChanged = changed;
@@ -118,6 +139,45 @@ export class ReportStore extends VuexModule {
     });
     
   }
+  
+
+  @action()
+  async GetAllQuestionsReport(payload: {
+    lessonId: number;
+    
+  }) {
+    return axios
+    .get(`${baseUrl}/GetAllQuestionsReport/${payload.lessonId}`)
+    .then((response: AxiosResponse<Array<IReport_QuestionsReport>>) => {
+      this.SET_LISTQuestionsReport(response.data);
+      this.MODEL_CHANGED(false);
+      this.RESET(this._reportListQuestionsReport);
+    });
+    
+  }
+
+  @action()
+  async GetAllQuestionsReportExcel(payload: {
+    lessonId: number;
+    
+  }) {
+    return  axios({
+      url: `${baseUrl}/GetAllQuestionsReportExcel/${payload.lessonId}`,
+      method: 'GET',
+      responseType: 'blob',
+  }).then((response) => {
+       var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+       var fileLink = document.createElement('a');
+       fileLink.href = fileURL;
+       fileLink.setAttribute('download', 'report.xlsx');
+       document.body.appendChild(fileLink);
+       fileLink.click();
+  });
+   
+ 
+ }
+    
+    
   
   
 

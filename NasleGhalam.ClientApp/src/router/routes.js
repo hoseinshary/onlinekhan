@@ -183,6 +183,11 @@ export default [
         component: () => import(/* webpackChunkName: "userQuestionReport" */"src/views/report/userQuestionReport.vue")
       },
       {
+        path: "/report/QuestionsReport",
+        name: "QuestionsReport",
+        component: () => import(/* webpackChunkName: "QuestionsReport" */"src/views/report/questionsReport.vue")
+      },
+      {
         path: "/program",
         name: "program",
         component: () => import(/* webpackChunkName: "program" */"src/views/program/index.vue")

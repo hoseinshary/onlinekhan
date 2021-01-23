@@ -59,6 +59,7 @@
     <Compile Include="Entities\Program.cs" />
     <Compile Include="Entities\ProgramItem.cs" />
     <Compile Include="Entities\Media.cs" />
+    <Compile Include="Entities\QuestionUpdate.cs" />
     <Compile Include="Entities\QuestionAnswerJudge.cs" />
     <Compile Include="Entities\QuestionAnswerView.cs" />
     <Compile Include="Entities\QuestionAnswer.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="EntityConfigs\PackageConfig.cs" />
     <Compile Include="EntityConfigs\ProgramConfig.cs" />
     <Compile Include="EntityConfigs\ProgramItemConfig.cs" />
+    <Compile Include="EntityConfigs\QuestionUpdateConfig.cs" />
     <Compile Include="EntityConfigs\QuestionAnswerJudgeConfig.cs" />
     <Compile Include="EntityConfigs\QuestionAnswerViewConfig.cs" />
     <Compile Include="EntityConfigs\EducationSubGroupConfig.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 using NasleGhalam.Common;
 using NasleGhalam.ViewModels.Lookup;
 using NasleGhalam.ViewModels.QuestionAnswer;
+using NasleGhalam.ViewModels.QuestionJudge;
 using NasleGhalam.ViewModels.QuestionOption;
 using NasleGhalam.ViewModels.Tag;
 using NasleGhalam.ViewModels.Topic;
@@ -45,6 +46,24 @@ namespace NasleGhalam.ViewModels.Question
 
         public int AnswerNumber { get; set; }
 
+        public QuestionStatus QuestionStatus
+        {
+            get
+            {
+                if (Topics.Count == 0)
+                    return QuestionStatus.Imported;
+                else if (QuestionJudges.Count == 0)
+                    return QuestionStatus.Topiced;
+                else if (QuestionJudges.Count < Topics.First().Lesson.NumberOfJudges)
+                    return QuestionStatus.JudgedInComplete;
+                else if (IsActive)
+                    return QuestionStatus.JudgedActive;
+                else
+                    return QuestionStatus.JudgedInActive;
+            }
+        }
+
+        public string QuestionStatusDisplayName => QuestionStatus.GetDisplayName();
 
         public List<string> TopicAnswer { get; set; } = new List<string>();
 
@@ -78,11 +97,15 @@ namespace NasleGhalam.ViewModels.Question
 
         public List<QuestionAnswerViewModel> QuestionAnswers { get; set; } = new List<QuestionAnswerViewModel>();
 
+        public List<QuestionJudgeViewModel> QuestionJudges { get; set; } = new List<QuestionJudgeViewModel>();
+
         public List<TopicViewModel> Topics { get; set; } = new List<TopicViewModel>();
 
         public List<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
 
         public List<UserViewModel> Supervisors { get; set; } = new List<UserViewModel>();
 
+
+       
     }
 }

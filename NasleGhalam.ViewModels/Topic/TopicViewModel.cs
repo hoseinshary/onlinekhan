@@ -1,4 +1,6 @@
-﻿namespace NasleGhalam.ViewModels.Topic
+﻿using NasleGhalam.ViewModels.Lesson;
+
+namespace NasleGhalam.ViewModels.Topic
 {
     public class TopicViewModel
     {
@@ -25,5 +27,7 @@
         public int? ParentTopicId { get; set; }
 
         public int DisplayPriority { get; set; }
+
+        public LessonViewModel Lesson { get; set; }
     }
 }

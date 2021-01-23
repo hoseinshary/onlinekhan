@@ -30,6 +30,29 @@ namespace NasleGhalam.Common
         Konkoor = 3,
     }
 
+    public enum QuestionStatus
+    {
+        [Display(Name = "بدون مبحث")]
+        Imported,
+        [Display(Name = "بدون ارزیابی")]
+        Topiced,
+        [Display(Name = "ارزیابی شده ناقص")]
+        JudgedInComplete,
+        [Display(Name = "ارزیابی شده فعال")]
+        JudgedActive,
+        [Display(Name = "ارزیابی شده غیر فعال")]
+        JudgedInActive
+    }
+
+    public enum QuestionActivity
+    {
+        Import,
+        Topic,
+        UpdateAdmin,
+        UpdateImport,
+        UpdateEditor
+    }
+
     public enum TypeEducationCenter
     {
         [Display(Name = "دولتی")]

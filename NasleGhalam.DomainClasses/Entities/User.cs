@@ -8,7 +8,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public User()
         {
             
-            Questions = new HashSet<Question>();
+            
             QuestionJudges = new HashSet<QuestionJudge>();
             QuestionAnswers = new HashSet<QuestionAnswer>();
             QuestionAnswerJudges = new HashSet<QuestionAnswerJudge>();
@@ -17,7 +17,7 @@ namespace NasleGhalam.DomainClasses.Entities
             Assays = new HashSet<Assay>();
             Sales = new HashSet<Sale>();
             SupervisorQuestions = new HashSet<Question>();
-            QuestionsUpdated = new HashSet<Question>();
+            QuestionsUpdates = new HashSet<QuestionUpdate>();
             Medias = new HashSet<Media>();
         }
         public int Id { get; set; }
@@ -60,7 +60,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public  Writer  Writer { get; set; }
 
-        public ICollection<Question> Questions { get; set; }
+        
 
         public ICollection<Question> SupervisorQuestions { get; set; }
         public ICollection<QuestionJudge> QuestionJudges { get; set; }
@@ -77,7 +77,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<Sale> Sales { get; set; }
 
 
-        public ICollection<Question> QuestionsUpdated { get; set; }
+        public ICollection<QuestionUpdate> QuestionsUpdates { get; set; }
 
         public ICollection<Media> Medias { get; set; }
 

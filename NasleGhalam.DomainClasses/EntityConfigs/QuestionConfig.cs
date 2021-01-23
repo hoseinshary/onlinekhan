@@ -14,10 +14,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             Property(x => x.TopicAnswer).HasMaxLength(400);
             Property(x => x.FileName).IsRequired();
 
-            HasRequired(x => x.User)
-                .WithMany(x => x.Questions)
-                .HasForeignKey(x => x.UserId)
-                .WillCascadeOnDelete(false);
+            
 
 
 
@@ -85,14 +82,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.WriterId)
                 .WillCascadeOnDelete(false);
 
-            HasMany(x => x.Users)
-         .WithMany(x => x.QuestionsUpdated)
-         .Map(config =>
-         {
-             config.MapLeftKey("QuestionId");
-             config.MapRightKey("UserId");
-             config.ToTable("Questions_Users");
-         });
+            
 
             HasMany(x => x.Supervisors)
                 .WithMany(x => x.SupervisorQuestions)

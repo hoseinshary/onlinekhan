@@ -16,7 +16,7 @@ namespace NasleGhalam.DomainClasses.Entities
             QuestionAnswers = new HashSet<QuestionAnswer>();
             Topics = new HashSet<Topic>();
             AssayQuestions =new HashSet<AssayQuestion>();
-            Users = new HashSet<User>();
+            QuestionUpdates = new HashSet<QuestionUpdate>();
             Supervisors = new HashSet<User>();
             Lookup_AreaTypes =  new HashSet<Lookup>();
 
@@ -62,9 +62,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public DateTime InsertDateTime { get; set; }
 
-        public int UserId { get; set; }
-
-        public User User { get; set; }
+  
 
         public bool IsActive { get; set; }
 
@@ -90,7 +88,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<Tag> Tags { get; set; }
 
         //update users
-        public ICollection<User> Users { get; set; }
+        public ICollection<QuestionUpdate> QuestionUpdates { get; set; }
 
         public ICollection<User> Supervisors { get; set; }
 

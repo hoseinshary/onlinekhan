@@ -20,6 +20,8 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "مبحث پاسخ صحیح")]
         public string TopicAnswer { get; set; }
 
+        public int UserId { get; set; }
+
         public List<int> TopicIds { get; set; } = new List<int>();
 
     }

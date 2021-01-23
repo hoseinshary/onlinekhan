@@ -13,6 +13,7 @@ using NasleGhalam.ViewModels.QuestionGroup;
 using Microsoft.Office.Interop.Excel;
 using System.Threading;
 using NasleGhalam.Common.ForQuestionMaking;
+using Newtonsoft.Json;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -22,10 +23,14 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<QuestionGroup> _questionGroups;
 
-        public QuestionGroupService(IUnitOfWork uow)
+        private readonly Lazy<QuestionUpdateService> _questionUpdateService;
+
+        public QuestionGroupService(IUnitOfWork uow, Lazy<QuestionUpdateService> questionUpdate)
         {
             _uow = uow;
             _questionGroups = uow.Set<QuestionGroup>();
+
+            _questionUpdateService = questionUpdate;
         }
 
 
@@ -207,7 +212,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     newQuestion.InsertDateTime = DateTime.Now;
                     //newQuestion.Istandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
                     newQuestion.WriterId = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره طراح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره طراح"] : 1);
-                    newQuestion.UserId = questionGroupViewModel.UserId;
+                    
                     //newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
                     newQuestion.IsActive = false;
                     newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان سوال"] : 0);
@@ -272,6 +277,24 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
             msgRes.Id = questionGroup.Id;
+
+            if (msgRes.MessageType == MessageType.Success)
+            {
+
+                foreach (var item in questionGroup.Questions)
+                {
+                    _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
+                    {
+                        QuestionId = item.Id,
+                        UserId = questionGroupViewModel.UserId,
+                        DateTime = DateTime.Now,
+                        QuestionActivity = QuestionActivity.Import,
+                        Description = JsonConvert.SerializeObject(item, Formatting.Indented)
+                    });
+                }
+                
+            }
+
 
             if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionGroupViewModel.File) && !string.IsNullOrEmpty(questionGroupViewModel.File))
             {
@@ -410,6 +433,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var questions = questionGroup.Questions.ToList();
             var questionAnswers = questionGroup.Questions.Select(x => x.QuestionAnswers.ToList()).ToList();
             var supervisors = questionGroup.Questions.Select(x => x.Supervisors.ToList()).ToList();
+            var questionUpdates = questionGroup.Questions.Select(x => x.QuestionUpdates.ToList()).ToList();
 
 
             int i = 0;
@@ -419,6 +443,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     questionGroup.Questions.Where(x => x.Id == item.Id).First().QuestionAnswers.Remove(answer);
                     _uow.MarkAsDeleted(answer);
+                }
+
+                foreach (var update in questionUpdates[i])
+                {
+                    questionGroup.Questions.Where(x => x.Id == item.Id).First().QuestionUpdates.Remove(update);
+                    _uow.MarkAsDeleted(update);
                 }
 
                 foreach (var supervisor in supervisors[i])

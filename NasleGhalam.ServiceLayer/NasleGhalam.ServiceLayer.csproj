@@ -130,6 +130,7 @@
     <Compile Include="Services\QuestionGroupService.cs" />
     <Compile Include="Services\QuestionJudgeService.cs" />
     <Compile Include="Services\QuestionService.cs" />
+    <Compile Include="Services\QuestionUpdateService.cs" />
     <Compile Include="Services\ResumeService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\TeacherService.cs" />

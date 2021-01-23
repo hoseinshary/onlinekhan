@@ -198,7 +198,22 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
 
+            questionViewModel.UserId = Request.GetUserId();
             var msgRes = _questionService.UpdateImport(questionViewModel );
+            return Ok(msgRes);
+        }
+
+
+        [HttpPost]
+        [CheckUserAccess( ActionBits.QuestionUpdateFinalImportAccess)]
+        [CheckModelValidation]
+        //[CheckWordFileUpdateValidation("word", 1024)]
+        public IHttpActionResult UpdateFinalImport(QuestionUpdateImportViewModel questionViewModel)
+        {
+            var wordFile = HttpContext.Current.Request.Files.Get("word");
+
+            questionViewModel.UserId = Request.GetUserId();
+            var msgRes = _questionService.UpdateFinalImport(questionViewModel);
             return Ok(msgRes);
         }
 
@@ -210,6 +225,7 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
 
+            questionViewModel.UserId = Request.GetUserId();
             var msgRes = _questionService.UpdateTopic(questionViewModel, Request.GetUserId());
             return Ok(msgRes);
         }

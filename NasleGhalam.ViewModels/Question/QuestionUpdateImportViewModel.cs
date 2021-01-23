@@ -70,6 +70,13 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "ناظر")]
         public int SupervisorUserId { get; set; }
 
+        [Display(Name = "کاربر")]
+        public int UserId { get; set; }
+
+
+        [Display(Name = "مبحث پاسخ صحیح")]
+        public string TopicAnswer { get; set; }
+
         public List<int> TagIds { get; set; } = new List<int>();
     }
 }

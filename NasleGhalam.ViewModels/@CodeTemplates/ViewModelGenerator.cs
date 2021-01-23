@@ -1,39 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.Media
+namespace NasleGhalam.ViewModels.QuestionUpdate
 {
-	public class MediaViewModel
+	public class QuestionUpdateViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
-
-
-		[Display(Name = "")]
-		public string Title { get; set; }
-
-
-		[Display(Name = "")]
-		public int LookupId_MediaType { get; set; }
-
-
-		[Display(Name = "")]
-		public int WriterId { get; set; }
-
-
-		[Display(Name = "")]
-		public string Description { get; set; }
-
-
-		[Display(Name = "")]
-		public string FileName { get; set; }
-
-
-		[Display(Name = "")]
-		public int Price { get; set; }
-
-
-		[Display(Name = "")]
-		public DateTime InsertDateTime { get; set; }
 
 
 		[Display(Name = "")]
@@ -41,7 +13,19 @@ namespace NasleGhalam.ViewModels.Media
 
 
 		[Display(Name = "")]
-		public bool IsActive { get; set; }
+		public int QuestionId { get; set; }
+
+
+		[Display(Name = "")]
+		public DateTime DateTime { get; set; }
+
+
+		[Display(Name = "")]
+		public string Description { get; set; }
+
+
+		[Display(Name = "")]
+		public QuestionActivity QuestionActivity { get; set; }
 
 
 	}

@@ -102,7 +102,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 return count;
             }
-            return 0;
+           
         }
 
         /// <summary>

@@ -6,103 +6,103 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
-using NasleGhalam.ViewModels.Media;
+using NasleGhalam.ViewModels.QuestionUpdate;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class MediaService
+	public class QuestionUpdateService
 	{
-		private const string Title = "رسانه";
+		private const string Title = "تاریخچه سوال";
         private readonly IUnitOfWork _uow;
-        private readonly IDbSet<Media> _medias;
+        private readonly IDbSet<QuestionUpdate> _questionUpdates;
        
-	    public MediaService(IUnitOfWork uow)
+	    public QuestionUpdateService(IUnitOfWork uow)
         {
             _uow = uow;
-            _medias = uow.Set<Media>();
+            _questionUpdates = uow.Set<QuestionUpdate>();
         }
 
 		/// <summary>
-        /// گرفتن  رسانه با آی دی
+        /// گرفتن  تاریخچه سوال با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MediaViewModel GetById(int id)
+        public QuestionUpdateViewModel GetById(int id)
         {
-            return _medias
+            return _questionUpdates
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<MediaViewModel>)
+                .Select(Mapper.Map<QuestionUpdateViewModel>)
                 .FirstOrDefault();
         }
 
 		/// <summary>
-        /// گرفتن همه رسانه ها
+        /// گرفتن همه تاریخچه سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<MediaViewModel> GetAll()
+        public IList<QuestionUpdateViewModel> GetAll()
         {
-            return _medias
+            return _questionUpdates
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<MediaViewModel>)
+                .Select(Mapper.Map<QuestionUpdateViewModel>)
                 .ToList();
         }
 
 		/// <summary>
-        /// ثبت رسانه
+        /// ثبت تاریخچه سوال
         /// </summary>
-        /// <param name="mediaViewModel"></param>
+        /// <param name="questionUpdateViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(MediaCreateViewModel mediaViewModel)
+        public ClientMessageResult Create(QuestionUpdateCreateViewModel questionUpdateViewModel)
         {
-            var media = Mapper.Map<Media>(mediaViewModel);
-            _medias.Add(media);
+            var questionUpdate = Mapper.Map<QuestionUpdate>(questionUpdateViewModel);
+            _questionUpdates.Add(questionUpdate);
 
 			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(media.Id);
+                clientResult.Obj = GetById(questionUpdate.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// ویرایش رسانه
+        /// ویرایش تاریخچه سوال
         /// </summary>
-        /// <param name="mediaViewModel"></param>
+        /// <param name="questionUpdateViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Update(MediaUpdateViewModel mediaViewModel)
+        public ClientMessageResult Update(QuestionUpdateUpdateViewModel questionUpdateViewModel)
         {
-            var media = Mapper.Map<Media>(mediaViewModel);
-            _uow.MarkAsChanged(media);
+            var questionUpdate = Mapper.Map<QuestionUpdate>(questionUpdateViewModel);
+            _uow.MarkAsChanged(questionUpdate);
 			
 			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(media.Id);
+                clientResult.Obj = GetById(questionUpdate.Id);
 
             return clientResult;
         }
 
 		/// <summary>
-        /// حذف رسانه
+        /// حذف تاریخچه سوال
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  mediaViewModel = GetById(id);
-            if (mediaViewModel == null)
+			var  questionUpdateViewModel = GetById(id);
+            if (questionUpdateViewModel == null)
             {
                 return ClientMessageResult.NotFound();
             }
 
-            var media = Mapper.Map<Media>(mediaViewModel);
-            _uow.MarkAsDeleted(media);
+            var questionUpdate = Mapper.Map<QuestionUpdate>(questionUpdateViewModel);
+            _uow.MarkAsDeleted(questionUpdate);
             
 			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
 			return Mapper.Map<ClientMessageResult>(msgRes);

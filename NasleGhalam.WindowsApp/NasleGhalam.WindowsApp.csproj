@@ -199,9 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="login_main.ico" />
-    <Content Include="pdftopng.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

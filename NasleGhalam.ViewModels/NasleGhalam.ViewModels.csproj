@@ -104,6 +104,7 @@
     <Compile Include="QuestionJudge\QuestionJudgeCreateViewModel.cs" />
     <Compile Include="QuestionJudge\QuestionJudgeViewModel.cs" />
     <Compile Include="QuestionOption\QuestionOptionViewModel.cs" />
+    <Compile Include="QuestionUpdate\QuestionUpdateViewModel.cs" />
     <Compile Include="Question\QuestionUpdateImportViewModel.cs" />
     <Compile Include="Question\QuestionUpdateTopicViewModel.cs" />
     <Compile Include="Question\QuestionTopicViewModel.cs" />

@@ -173,7 +173,7 @@ namespace NasleGhalam.WindowsApp
 
 
 
-        private async void button4_Click(object sender, EventArgs e)
+        private  void button4_Click(object sender, EventArgs e)
         {
             tabControl1.SelectTab(2);
             progressBar1.Maximum = 100;

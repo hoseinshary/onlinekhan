@@ -29,8 +29,9 @@ namespace NasleGhalam.ViewModels.Question
         public bool IsUpdate { get; set; }
 
 
+        public int LookupId_QuestionType { get; set; }
 
-     
+        public string QuestionTypeName { get; set; }
 
         public int LookupId_AuthorType { get; set; }
 

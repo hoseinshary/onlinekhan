@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -16,11 +17,16 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<QuestionAnswerJudge> _questionAnswerJudges;
         private readonly IDbSet<QuestionAnswer> _questionAnswer;
 
-        public QuestionAnswerJudgeService(IUnitOfWork uow)
+        private readonly Lazy<QuestionService> _questionService;
+
+        private int NumberOfJudges = 1;
+
+        public QuestionAnswerJudgeService(IUnitOfWork uow, Lazy<QuestionService> questionService)
         {
             _uow = uow;
             _questionAnswerJudges = uow.Set<QuestionAnswerJudge>();
             _questionAnswer = uow.Set<QuestionAnswer>();
+            _questionService = questionService;
         }
 
         /// <summary>
@@ -74,12 +80,58 @@ namespace NasleGhalam.ServiceLayer.Services
                     MessageType = MessageType.Error
                 };
             }
-            
 
             var questionAnswerJudge = Mapper.Map<QuestionAnswerJudge>(questionAnswerJudgeViewModel);
             _questionAnswerJudges.Add(questionAnswerJudge);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+
+            if (serverResult.MessageType == MessageType.Success)
+            {
+                if (_questionAnswerJudges.Count(current => current.QuestionAnswerId == questionAnswerJudgeViewModel.QuestionAnswerId) >=
+                    NumberOfJudges)
+                {
+                    var questionAnswerJudges = _questionAnswerJudges
+                        .Where(current => current.QuestionAnswerId == questionAnswerJudgeViewModel.QuestionAnswerId)
+                        .OrderByDescending(current => current.Id).Take(NumberOfJudges).ToList();
+
+                    int count_isDelete = 0;
+                    int count_isUpdate = 0;
+                    int count_isActive = 0;
+
+                    foreach (var judge in questionAnswerJudges)
+                    {
+                        if (judge.IsDelete == true)
+                            count_isDelete++;
+                        if (judge.IsUpdate == true)
+                            count_isUpdate++;
+                        if (judge.IsActiveQuestionAnswer == true)
+                            count_isActive++;
+                    }
+
+                    var updateQuestionAnswer = _questionAnswer
+                        .First(x => x.Id == questionAnswerJudgeViewModel.QuestionAnswerId);
+
+                    if (count_isDelete > NumberOfJudges / 2)
+                        updateQuestionAnswer.IsDelete = true;
+                    else
+                        updateQuestionAnswer.IsDelete = false;
+
+                    if (count_isUpdate > NumberOfJudges / 2)
+                        updateQuestionAnswer.IsUpdate = true;
+                    else
+                        updateQuestionAnswer.IsUpdate = false;
+                    if (count_isActive > NumberOfJudges / 2)
+                        updateQuestionAnswer.IsActive = true;
+                    else
+                        updateQuestionAnswer.IsActive = false;
+
+                    _uow.MarkAsChanged(updateQuestionAnswer);
+                    _uow.ValidateOnSaveEnabled(false);
+                    var msgResUpdate = _uow.CommitChanges(CrudType.Update, Title);
+                }
+            }
+
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
@@ -99,6 +151,50 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsChanged(questionAnswerJudge);
 
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+
+            if (serverResult.MessageType == MessageType.Success)
+            {
+                if (_questionAnswerJudges.Count(current =>
+                        current.QuestionAnswerId == questionAnswerJudgeViewModel.QuestionAnswerId) >=
+                    NumberOfJudges)
+                {
+                    var questionAnswerJudges = _questionAnswerJudges
+                        .Where(current => current.QuestionAnswerId == questionAnswerJudgeViewModel.QuestionAnswerId)
+                        .OrderByDescending(current => current.Id).Take(NumberOfJudges).ToList();
+
+                    int count_isDelete = 0;
+                    int count_isUpdate = 0;
+                    int count_isActive = 0;
+
+                    foreach (var judge in questionAnswerJudges)
+                    {
+                        if (judge.IsDelete == true)
+                            count_isDelete++;
+                        if (judge.IsUpdate == true)
+                            count_isUpdate++;
+                        if (judge.IsActiveQuestionAnswer == true)
+                            count_isActive++;
+                    }
+
+                    var updateQuestionAnswer = _questionAnswer
+                        .First(x => x.Id == questionAnswerJudgeViewModel.QuestionAnswerId);
+
+                    if (count_isDelete > NumberOfJudges / 2)
+                        updateQuestionAnswer.IsDelete = true;
+                    else
+                        updateQuestionAnswer.IsDelete = false;
+
+                    if (count_isUpdate > NumberOfJudges / 2)
+                        updateQuestionAnswer.IsUpdate = true;
+                    else
+                        updateQuestionAnswer.IsUpdate = false;
+                    if (count_isActive > NumberOfJudges / 2)
+                        updateQuestionAnswer.IsActive = true;
+                    else
+                        updateQuestionAnswer.IsActive = false;
+                }
+            }
+
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
@@ -125,6 +221,16 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
             return Mapper.Map<ClientMessageResult>(msgRes);
+        }
+
+        /// <summary>
+        /// یافت تعدا کارشناس این درس
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public void SetNumberOfjudges(int questionId)
+        {
+            NumberOfJudges = _questionService.Value.GetNumberOfjudges(questionId);
         }
     }
 }

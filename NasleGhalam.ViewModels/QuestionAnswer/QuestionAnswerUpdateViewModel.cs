@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.ViewModels.QuestionAnswer
 {
@@ -51,6 +52,10 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
 
         [Display(Name = "کاربر")]
         public int UserId { get; set; }
+
+        public QuestionAnswerType QuestionAnswerType { get; set; }
+
+        public string QuestionAnswerTypeDisplay => QuestionAnswerType.GetDisplayName();
 
 
         [Display(Name = "سوال")]

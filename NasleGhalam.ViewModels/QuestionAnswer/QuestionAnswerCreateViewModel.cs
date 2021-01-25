@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.ViewModels.QuestionAnswer
 {
@@ -43,6 +44,10 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
 
         [Display(Name = "نوع جواب")]
         public int LookupId_AnswerType { get; set; }
+
+        public QuestionAnswerType QuestionAnswerType { get; set; }
+
+        public string QuestionAnswerTypeDisplay => QuestionAnswerType.GetDisplayName();
 
         public string FilePath { get; set; }
         public string FileName { get; set; }

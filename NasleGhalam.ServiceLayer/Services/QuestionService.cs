@@ -16,6 +16,8 @@ using NasleGhalam.ViewModels.Report;
 using NasleGhalam.ViewModels.QuestionUpdate;
 
 using Microsoft.Office.Interop.Excel;
+using NasleGhalam.ViewModels.QuestionJudge;
+using NasleGhalam.ViewModels.Topic;
 using Newtonsoft.Json;
 
 
@@ -66,7 +68,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _questions
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
-                .Include(current => current.Topics.FirstOrDefault().Lesson)
+                .Include(current => current.Topics.Select(x => x.Lesson))
                 .Include(current => current.Tags)
                 .Include(current => current.Lookup_AreaTypes)
                 .Include(current => current.Writer)
@@ -113,7 +115,22 @@ namespace NasleGhalam.ServiceLayer.Services
         {
 
 
-            return _questions.Where(x => x.QuestionGroups.Any(y => y.LessonId == filterQuestionReport.LessonId))
+            return _questions
+                .Include(x =>x.Topics)
+                .Include(x => x.Topics.Select(y=>y.Lesson))
+                .Include(x=>x.QuestionJudges)
+                .Include(x=>x.QuestionUpdates)
+                .Include(x => x.QuestionUpdates.Select(y=>y.User))
+                .Include(x=>x.QuestionAnswers)
+                .Include(x => x.QuestionAnswers.Select(y=>y.Writer))
+                .Include(x=>x.QuestionAnswers.Select(y=>y.QuestionAnswerJudges))
+                .Include(x=>x.Lookup_AuthorType)
+                .Include(x=>x.Lookup_QuestionType)
+                .Include(x=>x.Supervisors)
+                .Include(x=>x.Writer)
+                .Where(x => x.QuestionGroups.Any(y => y.LessonId == filterQuestionReport.LessonId))
+                .AsNoTracking()
+                .AsEnumerable()
                 .Select(z => new QuestionReportViewModel
                 {
                     Id = z.Id,
@@ -122,11 +139,41 @@ namespace NasleGhalam.ServiceLayer.Services
                     IsDelete = z.IsDelete,
                     IsUpdate = z.IsUpdate,
                     LookupId_AuthorType = z.LookupId_AuthorType,
-                    SupervisorUserId = z.Supervisors.FirstOrDefault() == null ? 0 : z.Supervisors.FirstOrDefault().Id,
-                    WriterId = z == null ? 0 : z.WriterId,
+                    WriterId =  z.WriterId,
                     AuthorTypeName = z.Lookup_AuthorType.Value,
-                    SupervisorName = z.Supervisors.FirstOrDefault().Name + z.Supervisors.FirstOrDefault().Family,
-                    WriterName = z.Writer.Name
+                    SupervisorUserId = z.Supervisors.Count==0 ? 0 : z.Supervisors.FirstOrDefault() == null ? 0 : z.Supervisors.FirstOrDefault().Id,
+                    SupervisorName = z.Supervisors.Count == 0 ? "" : z.Supervisors.FirstOrDefault().Name + z.Supervisors.FirstOrDefault().Family,
+                    WriterName = z.Writer.Name,
+                    QuestionJudges = z.QuestionJudges.Select(Mapper.Map<QuestionJudgeViewModel>).ToList(),
+                    Topics = z.Topics.Select(Mapper.Map<TopicViewModel>).ToList(),
+                    NumberOfAnswers = z.QuestionAnswers.Count,
+                    QuestionJudgedState1 = z.QuestionJudges.Count < 3 ? 0 :  z.QuestionJudges.OrderByDescending(p => p.Id).Skip(0).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
+                        z.QuestionJudges.OrderByDescending(p => p.Id).Skip(0).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    QuestionJudgedState2 = z.QuestionJudges.Count < 3 ? 0 : z.QuestionJudges.OrderByDescending(p => p.Id).Skip(1).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
+                        z.QuestionJudges.OrderByDescending(p => p.Id).Skip(1).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    QuestionJudgedState3 = z.QuestionJudges.Count < 3 ? 0 : z.QuestionJudges.OrderByDescending(p => p.Id).Skip(2).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
+                        z.QuestionJudges.OrderByDescending(p => p.Id).Skip(2).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    EditorUserId = z.QuestionUpdates.Count == 0 ? 0 : z.QuestionUpdates.OrderByDescending(p=>p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).UserId,
+                    EditorUserName = z.QuestionUpdates.Count == 0 ? "" : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).User.Name + z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).User.Family,
+                    LookupId_QuestionType = z.LookupId_QuestionType,
+                    QuestionTypeName = z.Lookup_QuestionType.Value,
+                    TopicUserId = z.QuestionUpdates.Count == 0 ? 0 : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.Topic).UserId,
+                    TopicUserName = z.QuestionUpdates.Count == 0 ? "" : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.Topic).User.Name + z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.Topic).User.Family,
+                    AnswerWriterId = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).WriterId,
+                    AnswerWriterName = z.QuestionAnswers.Count == 0 ? "" : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).Writer.Name,
+                    QuestionAnswerType = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).QuestionAnswerType,
+                    HaveOnlinekhanAnswer = z.QuestionAnswers.Count(p=>p.IsMaster) != 0,
+                    AnswerJudgedState1 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count <3 ?0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(0).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
+                        z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(0).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    AnswerJudgedState2 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count < 3 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(1).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
+                        z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(1).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    AnswerJudgedState3 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count < 3 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(2).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
+                        z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(2).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+
+
+
+
+
                 }
             ).ToList();
 
@@ -136,7 +183,22 @@ namespace NasleGhalam.ServiceLayer.Services
         {
 
 
-            var returnVal = _questions.Where(x => x.QuestionGroups.Any(y => y.LessonId == filterQuestionReport.LessonId))
+            var returnVal  = _questions
+                .Include(x => x.Topics)
+                .Include(x => x.Topics.Select(y => y.Lesson))
+                .Include(x => x.QuestionJudges)
+                .Include(x => x.QuestionUpdates)
+                .Include(x => x.QuestionUpdates.Select(y => y.User))
+                .Include(x => x.QuestionAnswers)
+                .Include(x => x.QuestionAnswers.Select(y => y.Writer))
+                .Include(x => x.QuestionAnswers.Select(y => y.QuestionAnswerJudges))
+                .Include(x => x.Lookup_AuthorType)
+                .Include(x => x.Lookup_QuestionType)
+                .Include(x => x.Supervisors)
+                .Include(x => x.Writer)
+                .Where(x => x.QuestionGroups.Any(y => y.LessonId == filterQuestionReport.LessonId))
+                .AsNoTracking()
+                .AsEnumerable()
                 .Select(z => new QuestionReportViewModel
                 {
                     Id = z.Id,
@@ -145,15 +207,46 @@ namespace NasleGhalam.ServiceLayer.Services
                     IsDelete = z.IsDelete,
                     IsUpdate = z.IsUpdate,
                     LookupId_AuthorType = z.LookupId_AuthorType,
-                    SupervisorUserId = z.Supervisors.FirstOrDefault() == null ? 0 : z.Supervisors.FirstOrDefault().Id,
-                    WriterId = z == null ? 0 : z.WriterId,
+                    WriterId = z.WriterId,
                     AuthorTypeName = z.Lookup_AuthorType.Value,
-                    SupervisorName = z.Supervisors.FirstOrDefault().Name + z.Supervisors.FirstOrDefault().Family,
-                    WriterName = z.Writer.Name
-                }
-                ).ToList();
+                    SupervisorUserId = z.Supervisors.Count == 0 ? 0 : z.Supervisors.FirstOrDefault() == null ? 0 : z.Supervisors.FirstOrDefault().Id,
+                    SupervisorName = z.Supervisors.Count == 0 ? "" : z.Supervisors.FirstOrDefault().Name + z.Supervisors.FirstOrDefault().Family,
+                    WriterName = z.Writer.Name,
+                    QuestionJudges = z.QuestionJudges.Select(Mapper.Map<QuestionJudgeViewModel>).ToList(),
+                    Topics = z.Topics.Select(Mapper.Map<TopicViewModel>).ToList(),
+                    NumberOfAnswers = z.QuestionAnswers.Count,
+                    QuestionJudgedState1 = z.QuestionJudges.Count < 3 ? 0 : z.QuestionJudges.OrderByDescending(p => p.Id).Skip(0).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
+                        z.QuestionJudges.OrderByDescending(p => p.Id).Skip(0).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    QuestionJudgedState2 = z.QuestionJudges.Count < 3 ? 0 : z.QuestionJudges.OrderByDescending(p => p.Id).Skip(1).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
+                        z.QuestionJudges.OrderByDescending(p => p.Id).Skip(1).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    QuestionJudgedState3 = z.QuestionJudges.Count < 3 ? 0 : z.QuestionJudges.OrderByDescending(p => p.Id).Skip(2).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
+                        z.QuestionJudges.OrderByDescending(p => p.Id).Skip(2).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    EditorUserId = z.QuestionUpdates.Count == 0 ? 0 : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).UserId,
+                    EditorUserName = z.QuestionUpdates.Count == 0 ? "" : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).User.Name + z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).User.Family,
+                    LookupId_QuestionType = z.LookupId_QuestionType,
+                    QuestionTypeName = z.Lookup_QuestionType.Value,
+                    TopicUserId = z.QuestionUpdates.Count == 0 ? 0 : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.Topic).UserId,
+                    TopicUserName = z.QuestionUpdates.Count == 0 ? "" : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.Topic).User.Name + z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.Topic).User.Family,
+                    AnswerWriterId = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).WriterId,
+                    AnswerWriterName = z.QuestionAnswers.Count == 0 ? "" : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).Writer.Name,
+                    QuestionAnswerType = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).QuestionAnswerType,
+                    HaveOnlinekhanAnswer = z.QuestionAnswers.Count(p => p.IsMaster) != 0,
+                    AnswerJudgedState1 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count < 3 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(0).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
+                        z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(0).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    AnswerJudgedState2 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count < 3 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(1).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
+                        z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(1).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
+                    AnswerJudgedState3 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count < 3 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(2).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
+                        z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(2).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
 
-            System.Data.DataTable dt = Utility.ConvertToDataTable<QuestionReportViewModel>(returnVal);
+
+
+
+
+                }
+            ).ToList();
+
+            var questionList = Mapper.Map<List<QuestionReportExcelViewModel>>(returnVal);
+            System.Data.DataTable dt = Utility.ConvertToDataTable<QuestionReportExcelViewModel>(questionList);
 
             DataSet dataSet = new DataSet();
             dataSet.Tables.Add(dt);

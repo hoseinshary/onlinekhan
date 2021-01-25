@@ -36,6 +36,14 @@ export enum Fonts {
   Arial = 1
 }
 
+
+export enum QuestionAnswerType {
+  "نا مشخص" = 0,
+
+  "کوتاه" = 1,
+  "توضیحی" = 2
+}
+
 export enum KindRequest {
   // Testi = 0,
   // Tashrihi = 1,

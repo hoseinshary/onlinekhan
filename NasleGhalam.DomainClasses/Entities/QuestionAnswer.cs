@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.DomainClasses.Entities
 {
@@ -43,6 +44,11 @@ namespace NasleGhalam.DomainClasses.Entities
         public int QuestionId { get; set; }
 
         public Question Question { get; set; }
+
+        public QuestionAnswerType QuestionAnswerType { get; set; }
+
+        public string QuestionAnswerTypeDisplay => QuestionAnswerType.GetDisplayName();
+
 
         public ICollection<QuestionAnswerView> QuestionAnswerViews { get; set; }
         public ICollection<QuestionAnswerJudge> QuestionAnswerJudges { get; set; }

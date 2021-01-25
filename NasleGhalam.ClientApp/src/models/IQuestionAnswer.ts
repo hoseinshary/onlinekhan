@@ -1,5 +1,9 @@
 import IWriter from "./IWriter";
 
+import {
+  QuestionAnswerType
+} from "src/utilities/enumeration";
+
 export default interface IQuestionAnswer {
   Id: number;
   Title: string;
@@ -16,6 +20,8 @@ export default interface IQuestionAnswer {
   IsUpdate: boolean;
   QuestionId: number;
   Writer?: IWriter;
+  QuestionAnswerType : QuestionAnswerType;
+  QuestionAnswerTypeDisplay : string;
 }
 
 export const DefaultQuestionAnswer: IQuestionAnswer = {
@@ -32,5 +38,8 @@ export const DefaultQuestionAnswer: IQuestionAnswer = {
   IsActive: false,
   IsDelete: false,
   IsUpdate: false,
-  QuestionId: 0
+  QuestionId: 0,
+  QuestionAnswerType: QuestionAnswerType["نا مشخص"],
+  QuestionAnswerTypeDisplay : ""
+
 };

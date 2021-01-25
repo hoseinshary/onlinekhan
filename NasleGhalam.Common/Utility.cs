@@ -348,7 +348,8 @@ namespace NasleGhalam.Common
             foreach (PropertyInfo prop in Props)
             {
                 //Setting column names as Property names    
-                dataTable.Columns.Add(prop.Name);
+                dataTable.Columns.Add(prop.CustomAttributes.First().NamedArguments[0].TypedValue.Value.ToString());
+
             }
             // Adding Row and its value to our dataTable  
             foreach (T item in models)

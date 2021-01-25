@@ -124,6 +124,10 @@
     <Compile Include="Migrations\202101181256053_fixquestionAnswerJudge.Designer.cs">
       <DependentUpon>202101181256053_fixquestionAnswerJudge.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101250830562_questionanswer_change.cs" />
+    <Compile Include="Migrations\202101250830562_questionanswer_change.Designer.cs">
+      <DependentUpon>202101250830562_questionanswer_change.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -199,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101181256053_fixquestionAnswerJudge.resx">
       <DependentUpon>202101181256053_fixquestionAnswerJudge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101250830562_questionanswer_change.resx">
+      <DependentUpon>202101250830562_questionanswer_change.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

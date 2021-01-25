@@ -17,7 +17,7 @@ const questionAnswerValidations: ValidationRuleset<TQuestionAnswer> = {
       displayName: displayName("متن")
     },
     LookupId_AnswerType: {
-      displayName: displayName("نوع پاسخ")
+      displayName: displayName("نوع فایل پاسخ")
     },
     Description: {
       displayName: displayName("توضیحات"),
@@ -46,6 +46,10 @@ const questionAnswerValidations: ValidationRuleset<TQuestionAnswer> = {
     QuestionId: {
       displayName: displayName("سوال"),
       requiredDdl: requiredDdl(0)
+    }
+    ,
+    QuestionAnswerType: {
+      displayName: displayName("نوع پاسخ")
     }
   }
 };

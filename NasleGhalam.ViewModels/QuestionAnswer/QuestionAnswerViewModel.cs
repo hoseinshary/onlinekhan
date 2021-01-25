@@ -49,7 +49,12 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
 
         public WriterViewModel Writer { get; set; }
 
-        
+
+
+
+        public QuestionAnswerType QuestionAnswerType { get; set; }
+
+        public string QuestionAnswerTypeDisplay => QuestionAnswerType.GetDisplayName();
 
         [Display(Name = "اصلی")]
         public bool IsMaster { get; set; }

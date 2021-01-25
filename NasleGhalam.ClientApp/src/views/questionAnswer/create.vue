@@ -30,6 +30,10 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی"/>
       </template>
     </base-field>
+
+        <base-select :model="$v.questionAnswer.QuestionAnswerType" :options="questionAnswerTypeDdl" class="col-md-6" />
+
+
      <div class="col-12">
           <q-toggle
             v-model="$v.questionAnswer.IsUpdate.$model"
@@ -56,6 +60,9 @@
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { questionAnswerValidations } from "src/validations/questionAnswerValidation";
+import util from "src/utilities";
+import { QuestionAnswerType } from "src/utilities/enumeration";
+
 
 @Component({
   validations: questionAnswerValidations
@@ -79,6 +86,10 @@ export default class QuestionAnswerCreateVue extends Vue {
   get lessonNameDdl() {
     return this.lessonStore.relatedLessons(this.lessonIdProp)
     .map(x=>({label:x.Name, value:x.Name}));
+  }
+
+   get questionAnswerTypeDdl() {
+    return util.enumToDdl(QuestionAnswerType);
   }
   //#endregion
 

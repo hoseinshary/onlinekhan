@@ -53,6 +53,28 @@ namespace NasleGhalam.Common
         UpdateEditor
     }
 
+    public enum QuestionJudgedState
+    {
+        [Display(Name = "نا مشخص")]
+        Nothing,
+        [Display(Name = "تایید")]
+        Active,
+        [Display(Name = "ویرایش")]
+        Update,
+        [Display(Name = "حذف")]
+        Delete,
+    }
+
+    public enum QuestionAnswerType
+    {
+        [Display(Name = "نا مشخص")]
+        Nothing,
+        [Display(Name = "کوتاه")]
+        Short,
+        [Display(Name = "توضیحی")]
+        Long
+    }
+
     public enum TypeEducationCenter
     {
         [Display(Name = "دولتی")]

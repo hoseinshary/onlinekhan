@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.ViewModels.QuestionAnswer
 {
@@ -16,5 +17,9 @@ namespace NasleGhalam.ViewModels.QuestionAnswer
 
         [Display(Name = "سوال گروهی")]
         public int QuestionGroupId { get; set; }
+
+
+       
+
     }
 }

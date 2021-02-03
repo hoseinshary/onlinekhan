@@ -7,6 +7,7 @@ using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Student;
+using NasleGhalam.ViewModels.User;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -16,13 +17,15 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Student> _students;
         private readonly Lazy<RoleService> _roleService;
+        private readonly Lazy<QuestionService> _questionService;
 
         public StudentService(IUnitOfWork uow,
-            Lazy<RoleService> roleService)
+            Lazy<RoleService> roleService , Lazy<QuestionService> questionService)
         {
             _uow = uow;
             _students = uow.Set<Student>();
             _roleService = roleService;
+            _questionService = questionService;
         }
 
         /// <summary>
@@ -63,13 +66,27 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public StudentQuestionAssayReportViewModel GetQuestionAssayReportByLessonId(int lessonId , int studentId)
         {
+            StudentQuestionAssayReportViewModel returnVal = new StudentQuestionAssayReportViewModel();
             var student = _students
                 .Include(x => x.User.Assays.Select(y => y.AssayQuestions))
                 .Where(x => x.Id == studentId)
                 .AsNoTracking()
                 .AsEnumerable()
                 .FirstOrDefault();
-            int num = student.User.Assays.Where(x=>x.ty)
+            returnVal.User = Mapper.Map<UserViewModel>(student.User);
+            returnVal.Id = student.Id;
+            
+            returnVal.NumberOfHomeworkQuestions = student.User.Assays.Where(x => x.LookupId_QuestionType == 1093).Select(y => y.AssayQuestions)
+                .Distinct().Count();
+
+            returnVal.NumberOfAssayQuestions = student.User.Assays.Select(y => y.AssayQuestions)
+                .Distinct().Count();
+
+            returnVal.NumberOfNewQuestions =
+                _questionService.Value.GetAllActiveByLessonId(lessonId).Distinct().Count() -
+                returnVal.NumberOfAssayQuestions;
+
+            return returnVal;
 
         }
 

@@ -146,6 +146,18 @@ export class StudentStore extends VuexModule {
     }
   }
 
+  @action()
+  async numberOfQuestionReport(payload:{lessonId :number , studentId : number}) {
+    return axios
+    .post(`${baseUrl}/GetQuestionAssayReportByLessonId`, payload)
+    .then((response: AxiosResponse<IMessageResult>) => {
+      let data = response.data;
+      
+
+      
+    });
+  }
+
   @action({ mode: "raw" })
   async validateForm(vm: any) {
     return new Promise(resolve => {

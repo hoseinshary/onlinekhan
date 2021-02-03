@@ -26,6 +26,15 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(_studentService.GetAll());
         }
 
+
+        [HttpGet, CheckUserAccess(ActionBits.StudentReadAccess)]
+        public IHttpActionResult GetQuestionAssayReportByLessonId(GetQuestionAssayReportViewModel assayReportViewModel)
+        {
+            return Ok(_studentService.GetQuestionAssayReportByLessonId(assayReportViewModel.LessonId,assayReportViewModel.LessonId));
+        }
+
+
+
         [HttpGet, CheckUserAccess(ActionBits.StudentReadAccess)]
         public IHttpActionResult GetById(int id)
         {

@@ -125,6 +125,7 @@
     <Compile Include="Role\RoleUpdateViewModel.cs" />
     <Compile Include="Role\RoleCreateViewModel.cs" />
     <Compile Include="Student\StudentQuestionAssayReportViewModel.cs" />
+    <Compile Include="Student\GetQuestionAssayReportViewModel.cs" />
     <Compile Include="Teacher\TeacherCreateViewModel .cs" />
     <Compile Include="Teacher\TeacherUpdateViewModel.cs" />
     <Compile Include="Teacher\TeacherViewModel.cs" />

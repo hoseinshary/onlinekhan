@@ -196,6 +196,11 @@ export default [
         path: "/media",
         name: "media",
         component: () => import(/* webpackChunkName: "program" */"src/views/media/index.vue")
+      },
+      {
+        path: "/AssayAdvisor",
+        name: "assayAdvisor",
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/assayadvisor/index.vue")
       }
     ]
   },

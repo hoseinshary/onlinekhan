@@ -56,6 +56,23 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
+
+        /// <summary>
+        /// گرفتن همه دانش آموز ها
+        /// </summary>
+        /// <returns></returns>
+        public StudentQuestionAssayReportViewModel GetQuestionAssayReportByLessonId(int lessonId , int studentId)
+        {
+            var student = _students
+                .Include(x => x.User.Assays.Select(y => y.AssayQuestions))
+                .Where(x => x.Id == studentId)
+                .AsNoTracking()
+                .AsEnumerable()
+                .FirstOrDefault();
+            int num = student.User.Assays.Where(x=>x.ty)
+
+        }
+
         /// <summary>
         /// ثبت دانش آموز
         /// </summary>

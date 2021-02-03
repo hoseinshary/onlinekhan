@@ -173,5 +173,8 @@
         MediaUpdateAccess = 135,
 
 
+        AssayAdvisorReadAccess = 147
+
+
     }
 }

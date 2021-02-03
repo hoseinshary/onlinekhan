@@ -6,10 +6,10 @@ namespace NasleGhalam.ViewModels.Student
     {
         public int Id { get; set; }
 
-        public string FatherName { get; set; }
-
-        public string Address { get; set; }
-
+        public int NumberOfNewQuestions { get; set; }
+        public int NumberOfAssayQuestions { get; set; }
+        public int NumberOfHomeworkQuestions { get; set; }
+        
         public UserViewModel User { get; set; }
     }
 }

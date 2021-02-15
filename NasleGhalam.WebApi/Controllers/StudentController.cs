@@ -27,10 +27,10 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpGet, CheckUserAccess(ActionBits.StudentReadAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.StudentReadAccess)]
         public IHttpActionResult GetQuestionAssayReportByLessonId(GetQuestionAssayReportViewModel assayReportViewModel)
         {
-            return Ok(_studentService.GetQuestionAssayReportByLessonId(assayReportViewModel.LessonId,assayReportViewModel.LessonId));
+            return Ok(_studentService.GetQuestionAssayReportByLessonId(assayReportViewModel.LessonId,assayReportViewModel.StudentId));
         }
 
 

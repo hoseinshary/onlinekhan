@@ -24,7 +24,10 @@
           class="row shadow-1 q-ma-sm q-pa-sm"
         >
           <div class="col-md-6">
-            <q-checkbox v-model="lesson.Checked" />
+            <q-checkbox v-model="lesson.Checked"
+            @input="getQuestionNumberReport(lesson.Id)" 
+            />
+            
             {{lesson.Name}}
           </div>
           <div v-if="lesson.Checked" class="col-md-12">
@@ -60,9 +63,10 @@
                 />
               </div>
               <div class="col">
+                <label> کل سوالات این درس : </label>
                 <q-input
                   v-model="lesson.CountOfQuestions"
-                  float-label=" کل سوالات این درس : {{}}"
+                 
                   class="col"
                   align="center"
                   readonly
@@ -94,9 +98,12 @@ import ILesson from "src/models/ILesson";
 export default class LessonTabVue extends Vue {
   //#region ### data ###
   lessonStore = vxm.lessonStore;
+  studentStore = vxm.studentStore;
   educationTreeStore = vxm.educationTreeStore;
   educationTree = this.educationTreeStore.qTreeData;
   assayCreate = vxm.assayStore.assayCreate;
+  numberOfQuestionReport : object;
+
   //#endregion
 
   //#region ### computed ###
@@ -109,6 +116,8 @@ export default class LessonTabVue extends Vue {
       this.educationTree.id
     );
   }
+
+  
   //#endregion
 
   //#region ### watch ###
@@ -128,6 +137,8 @@ export default class LessonTabVue extends Vue {
     }
   }
 
+ 
+
   @Watch("educationTree.leafTicked")
   tickedEducationTreeIdsChanged(newVal) {
     util.clearArray(this.assayCreate.Lessons);
@@ -140,6 +151,12 @@ export default class LessonTabVue extends Vue {
   //#region ### methods ###
   goToTopicTab() {
     this.$emit("changeTab", "topicTab");
+  }
+
+  getQuestionNumberReport (LessonId : number )
+  {
+    this.studentStore.numberOfQuestionReport({lessonId : LessonId , studentId : 9});
+    console.log(LessonId);
   }
   //#endregion
 

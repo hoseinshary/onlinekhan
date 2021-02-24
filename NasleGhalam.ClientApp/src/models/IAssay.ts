@@ -1,4 +1,5 @@
 import IQuestion from "./IQuestion";
+import IUser, { DefaultUser } from "./IUser";
 import { Fonts } from "src/utilities/enumeration";
 
 // interface IAssay {
@@ -123,6 +124,28 @@ export  default class AssayCreate {
     this.WhiteSpacePosition = false;
     this.Lessons = [];
   }
+}
+
+  export   class AssayNumberOfQuestionReport {
+    Id: number;
+    NumberOfNewQuestions : number;
+    NumberOfAssayQuestions : number;
+    NumberOfHomeworkQuestions : number;
+    User : IUser;
+  
+    /**
+     * constructor
+     */
+    constructor() {
+    this.Id= 0;
+    this.NumberOfAssayQuestions = 0;
+    this.NumberOfHomeworkQuestions = 0;
+    this.NumberOfNewQuestions = 0 ;
+    this.User = DefaultUser;
+    }
+
+
+
   // constructor(obj?: IAssay) {
   //   this.LessonId = (obj && obj.LessonId) || 0;
   //   this.LessonName = (obj && obj.LessonName) || "";

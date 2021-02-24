@@ -1106,7 +1106,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsChanged(question);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
-
+            serverResult.Id = question.Id;
             if (serverResult.MessageType == MessageType.Success)
             {
                 _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel

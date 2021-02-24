@@ -17,25 +17,26 @@
       />
     </div>
     <div class="col-md-8">
-      <ul style="max-height:500px; overflow-y:auto">
+      <ul style="max-height: 500px; overflow-y: auto">
         <li
           v-for="lesson in assayCreate.Lessons"
-          :key="lesson.Id"
+          :key="'lesson' + lesson.Id"
           class="row shadow-1 q-ma-sm q-pa-sm"
         >
           <div class="col-md-6">
-            <q-checkbox v-model="lesson.Checked"
-            @input="getQuestionNumberReport(lesson.Id)" 
+            <q-checkbox
+              v-model="lesson.Checked"
+              @input="getQuestionNumberReport(lesson.Id)"
             />
-            
-            {{lesson.Name}}
+
+            {{ lesson.Name }}
           </div>
           <div v-if="lesson.Checked" class="col-md-12">
             <section class="row gutter-sm">
               <div class="col">
+                <label> سوال جدید </label>
                 <q-input
                   v-model="lesson.CountOfEasy"
-                  float-label="سوال جدید "
                   @focus="$event.target.select()"
                   class="col"
                   align="center"
@@ -43,9 +44,10 @@
                 />
               </div>
               <div class="col">
+                <label> سوال تکلیف </label>
+
                 <q-input
                   v-model="lesson.CountOfMedium"
-                  float-label="سوال تکلیف"
                   @focus="$event.target.select()"
                   class="col"
                   align="center"
@@ -53,9 +55,10 @@
                 />
               </div>
               <div class="col">
+                <label> سوال آزمون قبلی </label>
+
                 <q-input
                   v-model="lesson.CountOfHard"
-                  float-label="سوال آزمون قبلی"
                   @focus="$event.target.select()"
                   class="col"
                   align="center"
@@ -66,7 +69,6 @@
                 <label> کل سوالات این درس : </label>
                 <q-input
                   v-model="lesson.CountOfQuestions"
-                 
                   class="col"
                   align="center"
                   readonly
@@ -91,7 +93,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { EducationTreeState } from "../../../utilities/enumeration";
-import AssayCreate, { AssayLesson } from "src/models/IAssay";
+import AssayCreate, { AssayLesson , AssayNumberOfQuestionReport} from "src/models/IAssay";
 import ILesson from "src/models/ILesson";
 
 @Component({})
@@ -102,7 +104,7 @@ export default class LessonTabVue extends Vue {
   educationTreeStore = vxm.educationTreeStore;
   educationTree = this.educationTreeStore.qTreeData;
   assayCreate = vxm.assayStore.assayCreate;
-  numberOfQuestionReport : object;
+  numberOfQuestionReport: AssayNumberOfQuestionReport;
 
   //#endregion
 
@@ -117,7 +119,7 @@ export default class LessonTabVue extends Vue {
     );
   }
 
-  
+
   //#endregion
 
   //#region ### watch ###
@@ -137,7 +139,7 @@ export default class LessonTabVue extends Vue {
     }
   }
 
- 
+
 
   @Watch("educationTree.leafTicked")
   tickedEducationTreeIdsChanged(newVal) {
@@ -153,9 +155,8 @@ export default class LessonTabVue extends Vue {
     this.$emit("changeTab", "topicTab");
   }
 
-  getQuestionNumberReport (LessonId : number )
-  {
-    this.studentStore.numberOfQuestionReport({lessonId : LessonId , studentId : 9});
+  getQuestionNumberReport(LessonId: number) {
+    this.studentStore.numberOfQuestionReport({ lessonId: LessonId, studentId: 9 });
     console.log(LessonId);
   }
   //#endregion

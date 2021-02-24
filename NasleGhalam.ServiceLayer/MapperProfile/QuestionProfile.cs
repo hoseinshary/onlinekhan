@@ -18,6 +18,9 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
                 .ForMember(dst => dst.TopicAnswer, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.TopicAnswer) ? new List<string>() : src.TopicAnswer.Split(',').ToList()));
                 
             CreateMap<QuestionOptionViewModel, QuestionOption>();
+
+
+            CreateMap<QuestionUpdateViewModel, QuestionUpdate>();
         }
     }
 }

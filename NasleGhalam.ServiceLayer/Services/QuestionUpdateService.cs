@@ -64,7 +64,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(questionUpdate.Id);
+                clientResult.Id = serverResult.Id;
 
             return clientResult;
         }

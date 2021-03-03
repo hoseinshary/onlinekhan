@@ -87,6 +87,7 @@
     <Compile Include="MapperProfile\QuestionAnswerProfile.cs" />
     <Compile Include="MapperProfile\QuestionGroupProfile.cs" />
     <Compile Include="MapperProfile\QuestionJudgeProfile.cs" />
+    <Compile Include="MapperProfile\QuestionUpdateProfile.cs" />
     <Compile Include="MapperProfile\ResumeProfile.cs" />
     <Compile Include="MapperProfile\TeacherProfile.cs" />
     <Compile Include="MapperProfile\UnivercityBranchProfile.cs" />

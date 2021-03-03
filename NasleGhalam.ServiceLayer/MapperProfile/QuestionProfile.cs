@@ -20,7 +20,6 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
             CreateMap<QuestionOptionViewModel, QuestionOption>();
 
 
-            CreateMap<QuestionUpdateViewModel, QuestionUpdate>();
         }
     }
 }

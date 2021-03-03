@@ -13,6 +13,7 @@ using NasleGhalam.ViewModels.QuestionGroup;
 using Microsoft.Office.Interop.Excel;
 using System.Threading;
 using NasleGhalam.Common.ForQuestionMaking;
+using NasleGhalam.ViewModels.Question;
 using Newtonsoft.Json;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -93,14 +94,14 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-            /// <summary>
-            /// ثبت سوال گروهی
-            /// </summary>
-            /// <param name="questionGroupViewModel"></param>
-            /// <param name="word"></param>
-            /// <param name="excel"></param>
-            /// <returns></returns>
-            public ClientMessageResult Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
+        /// <summary>
+        /// ثبت سوال گروهی
+        /// </summary>
+        /// <param name="questionGroupViewModel"></param>
+        /// <param name="word"></param>
+        /// <param name="excel"></param>
+        /// <returns></returns>
+        public ClientMessageResult Create(QuestionGroupCreateViewModel questionGroupViewModel, HttpPostedFile word, HttpPostedFile excel)
         {
             var questionGroup = Mapper.Map<QuestionGroup>(questionGroupViewModel);
 
@@ -212,7 +213,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     newQuestion.InsertDateTime = DateTime.Now;
                     //newQuestion.Istandard = dt.Rows[numberOfQ - 1]["درجه استاندارد"].ToString() == "استاندارد";
                     newQuestion.WriterId = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره طراح"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره طراح"] : 1);
-                    
+
                     //newQuestion.Description = dt.Rows[numberOfQ - 1]["توضیحات"].ToString();
                     newQuestion.IsActive = false;
                     newQuestion.ResponseSecond = Convert.ToInt16(dt.Rows[numberOfQ - 1]["زمان سوال"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["زمان سوال"] : 0);
@@ -289,10 +290,10 @@ namespace NasleGhalam.ServiceLayer.Services
                         UserId = questionGroupViewModel.UserId,
                         DateTime = DateTime.Now,
                         QuestionActivity = QuestionActivity.Import,
-                        Description = JsonConvert.SerializeObject(item, Formatting.Indented)
+                        Description = JsonConvert.SerializeObject(Mapper.Map<QuestionViewModel>(item), Formatting.Indented)
                     });
                 }
-                
+
             }
 
 
@@ -509,7 +510,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return Mapper.Map<ClientMessageResult>(msgRes);
         }
 
-      
+
 
 
 

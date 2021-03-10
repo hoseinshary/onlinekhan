@@ -134,6 +134,41 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
+        /// <summary>
+        /// ثبت نام اولیه کاربر
+        /// </summary>
+        /// <param name="UserPreRegisterViewModel"></param>
+        /// <param name="userRoleLevel"></param>
+        /// <returns></returns>
+        public ClientMessageResult PreRegister(UserPreRegisterViewModel userViewModel)
+        {
+            var user = Mapper.Map<User>(userViewModel);
+            //Required
+            user.LastLogin = DateTime.Now;
+            user.RoleId = 2014;
+            user.IsActive = true;
+            user.IsAdmin = false;
+            //Temp
+            user.CityId = 1;
+
+            _users.Add(user);
+
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+
+            
+            if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_Mobile"))
+            {
+                clientResult.Message = "شماره موبایل تکراری می باشد";
+            }
+            else if (serverResult.ErrorNumber == 2601 && serverResult.EnMessage.Contains("UK_User_Username"))
+            {
+                clientResult.Message = "نام کاربری تکراری می باشد";
+            }
+
+            return clientResult;
+        }
+
 
         /// <summary>
         /// ثبت نام کاربر
@@ -252,6 +287,8 @@ namespace NasleGhalam.ServiceLayer.Services
 
             return clientResult;
         }
+
+
 
         /// <summary>
         /// ویرایش کاربر

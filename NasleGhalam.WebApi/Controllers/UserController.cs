@@ -88,12 +88,33 @@ namespace NasleGhalam.WebApi.Controllers
         //    return Ok(result);
         //}
 
+        /// <summary>
+        /// فراموشی رمز عبور
+        /// </summary>
+        /// <param name="ForgotPasswordViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [CheckModelValidation]
+        public async Task<IHttpActionResult> ForgotPassword(ForgotPasswordViewModel forgotViewModel)
+        {
+            var result = await _phoneVerificationService.CheckVerificationCode(forgotViewModel.Mobile, forgotViewModel.VerificationCode);
+            if (result)
+            {
+                var msgRes = _userService.ForgotPassword(forgotViewModel);
+                return Ok(msgRes);
+            }
+            else
+            {
+                ClientMessageResult msgRes = new ClientMessageResult() { Message = "کد احراز هویت صحیح نمی باشد", MessageType = MessageType.Error };
+                return Ok(msgRes);
+            }
+
+        }
 
         /// <summary>
         /// ثبت نام توسط کاربر پس از دریافت کد احراز هویت
         /// </summary>
         /// <param name="UserPreRegisterViewModel"></param>
-        /// <param name="Code"></param>
         /// <returns></returns>
         [HttpPost]
         [CheckModelValidation]

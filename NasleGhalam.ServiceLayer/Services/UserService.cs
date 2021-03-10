@@ -348,6 +348,29 @@ namespace NasleGhalam.ServiceLayer.Services
             return clientResult;
         }
 
+
+        /// <summary>
+        /// فراموشی رمز عبور
+        /// </summary>
+        /// <param name="forgotViewModell"></param>
+        /// <returns></returns>
+        public ClientMessageResult ForgotPassword(ForgotPasswordViewModel forgotViewModel)
+        {
+            var user = _users.FirstOrDefault(x => x.Mobile == forgotViewModel.Mobile);
+            user.Password = forgotViewModel.Password;
+            _uow.MarkAsChanged(user);
+            _uow.ExcludeFieldsFromUpdate(user, x => x.LastLogin);
+            _uow.UpdateFields(user, x => x.Password);
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+            var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
+            if(clientResult.MessageType == MessageType.Success)
+            {
+                clientResult.Message = "رمز عبور با موفقیت تغییر کرد";
+            }
+            return clientResult;
+        }
+
+
         /// <summary>
         /// ویرایش کاربر
         /// </summary>

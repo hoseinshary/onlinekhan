@@ -79,7 +79,17 @@ namespace NasleGhalam.WebApi.Controllers
         public async Task<IHttpActionResult>SendVerificationCode([FromUri] string PhoneNumber)
         {
             var result = await _phoneVerificationService.SendVerificationCode(PhoneNumber);
-            return Ok(result);
+            if(result >= 2000)
+            {
+                ClientMessageResult msgRes = new ClientMessageResult() { Message = "کد احراز هویت با موفقیت ارسال شد", MessageType = MessageType.Error };
+                return Ok(msgRes);
+            }
+            else
+            {
+                ClientMessageResult msgRes = new ClientMessageResult() { Message = "خطایی در ارسال کد احراز هویت وجود امده است", MessageType = MessageType.Error };
+                return Ok(msgRes);
+            }
+            
         }
         //[HttpPost]
         //public async Task<IHttpActionResult> CheckVerificationCode([FromUri] string PhoneNumber,string Code)

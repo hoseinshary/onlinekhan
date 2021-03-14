@@ -28,8 +28,6 @@ namespace NasleGhalam.ViewModels.User
         [Display(Name = "رمز عبور")]
         public string Password { get; set; }
 
-       
-
         [Display(Name = "جنسیت")]
         public bool Gender { get; set; }
 
@@ -39,6 +37,7 @@ namespace NasleGhalam.ViewModels.User
         [Display(Name = "موبایل")]
         public string Mobile { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [Display(Name = "کد احراز هویت")]
         public string VerificationCode { get; set; }
 

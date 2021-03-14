@@ -695,8 +695,15 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, question.FileName, question.AnswerNumber);
-
+                try
+                {
+                    SaveOptionsOfQuestions(source, target, question.FileName, question.AnswerNumber);
+                }
+                catch
+                {
+                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
+                    return clientMessageResult;
+                }
                 target.Close();
 
 
@@ -1152,7 +1159,16 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                try
+                {
+                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                }
+                catch
+                {
+                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
+                    return clientMessageResult;
+                }
+                
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1178,7 +1194,16 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                try
+                {
+                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                }
+                catch
+                {
+                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
+                    return clientMessageResult;
+                }
+                
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1346,7 +1371,16 @@ namespace NasleGhalam.ServiceLayer.Services
                 File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                try
+                {
+                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                }
+                catch
+                {
+                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
+                    return clientMessageResult;
+                }
+                
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1371,7 +1405,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                try
+                {
+                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                }
+                catch
+                {
+                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
+                    return clientMessageResult;
+                }
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1527,7 +1569,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                try
+                {
+                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                }
+                catch
+                {
+                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
+                    return clientMessageResult;
+                }
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1552,7 +1602,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 var target = app.Documents.Add();
-                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                try
+                {
+                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
+                }
+                catch
+                {
+                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
+                    return clientMessageResult;
+                }
 
                 target.Close();
                 File.Delete(wordFilename);

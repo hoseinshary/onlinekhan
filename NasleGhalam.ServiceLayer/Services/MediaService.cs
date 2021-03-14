@@ -76,6 +76,12 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             
             mediaViewModel.FileName += Path.GetExtension(word.FileName);
+            if(CoverImage == null)
+            {
+                var clientMessageResult = new ClientMessageResult() { Message = "عکس کاور خالی میباشد",MessageType = MessageType.Error };
+                
+                return clientMessageResult;
+            }
             mediaViewModel.CoverImage += Path.GetExtension( CoverImage.FileName);
             var media = Mapper.Map<Media>(mediaViewModel);
 

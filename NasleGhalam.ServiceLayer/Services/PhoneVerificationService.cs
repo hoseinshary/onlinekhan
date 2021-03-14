@@ -30,7 +30,8 @@ namespace NasleGhalam.ServiceLayer.Services
                 return result.Body.AutoSendCodeResult;
                 
             }
-            catch (Exception exp) {
+            catch 
+            {
                 return -1;
             }
 

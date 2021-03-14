@@ -23,8 +23,8 @@ namespace NasleGhalam.ViewModels.User
         public string Password { get; set; }
 
 
-       
 
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
         [Display(Name = "کد احراز هویت")]
         public string VerificationCode { get; set; }
     }

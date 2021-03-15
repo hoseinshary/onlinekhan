@@ -24,7 +24,7 @@ namespace NasleGhalam.Common
 
         public static readonly string WinBaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-        //public static readonly string ApiUrl = "https://onlinekhan.ir/api/";
-        public static readonly string ApiUrl = "http://localhost:63839/api/";//local
+        public static readonly string ApiUrl = "https://onlinekhan.ir/api/";
+        //public static readonly string ApiUrl = "http://localhost:63839/api/";//local
     }
 }

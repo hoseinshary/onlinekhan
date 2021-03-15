@@ -273,7 +273,7 @@ namespace NasleGhalam.WindowsApp
                             numberOfQ++;
                             var source = app.Documents.Open(questionName + ".docx");
 
-                            QuestionCreateViewModel question = new QuestionCreateViewModel();
+                            QuestionCreateWindowsViewModel question = new QuestionCreateWindowsViewModel();
 
                             //حذف عدد اول سوال
                             if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
@@ -320,6 +320,12 @@ namespace NasleGhalam.WindowsApp
                             question.SupervisorUserId = Convert.ToInt32(dt.Rows[numberOfQ - 1]["شماره ناظر"] != DBNull.Value ? dt.Rows[numberOfQ - 1]["شماره ناظر"] : 0);
 
                             question.QuestionGroupId = result.Id;
+
+                            Byte[] bytes = File.ReadAllBytes("path");
+                            String file = Convert.ToBase64String(bytes);
+
+                            Byte[] bytes2 = File.ReadAllBytes("path");
+                            String file2 = Convert.ToBase64String(bytes2);
 
                             var result2 = await _webService.QuestionCreate(question);
 

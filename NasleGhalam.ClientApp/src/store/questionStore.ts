@@ -248,11 +248,11 @@ export class QuestionStore extends VuexModule {
     if (!(await this.validateForm(vm))) return;
 
     var wordFile = vm.$refs.wordFile;
-    var msg = "";
+    //var msg = "";
 
-    if (wordFile["files"].length == 0) {
-      msg = "فایل ورد انتخاب نشده است.<br/>";
-    }
+    // if (wordFile["files"].length == 0) {
+    //   msg = "فایل ورد انتخاب نشده است.<br/>";
+    // }
     // if (this.question.TopicIds && this.question.TopicIds.length == 0) {
     //   msg += "مبحثی انتخاب نکرده اید.<br/>";
     // }
@@ -263,16 +263,21 @@ export class QuestionStore extends VuexModule {
     //   msg += "گزینه صحیح انتخاب نشده است.";
     // }
 
-    if (msg) {
-      this.notify({
-        vm: vm,
-        data: {
-          Message: msg,
-          MessageType: MessageType.Error,
-          Obj: null
-        }
-      });
-      return;
+    // if (msg) {
+    //   this.notify({
+    //     vm: vm,
+    //     data: {
+    //       Message: msg,
+    //       MessageType: MessageType.Error,
+    //       Obj: null
+    //     }
+    //   });
+    //   return;
+    // }
+
+    var base64File: any = "";
+    if (wordFile && wordFile["files"][0]) {
+      base64File = await util.convertFileToBase64(wordFile["files"][0]);
     }
 
     var formData = new FormData();
@@ -280,6 +285,7 @@ export class QuestionStore extends VuexModule {
 
     var newData = {
       Id: this.question.Id,
+      Base64File: base64File,
       QuestionNumber: this.question.QuestionNumber,
       QuestionPoint: this.question.QuestionPoint,
       UseEvaluation: this.question.UseEvaluation,
@@ -300,23 +306,21 @@ export class QuestionStore extends VuexModule {
       IsHybrid: this.question.IsHybrid,
       LookupId_QuestionRank: this.question.LookupId_QuestionRank
     };
-    var params = util.toParam(newData);
+    
+   
+    return axios
+      .post(`${baseUrl}/Create`, newData)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
 
-    return axios({
-      method: "post",
-      url: `${baseUrl}/Create?${params}`,
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" }
-    }).then((response: AxiosResponse<IMessageResult>) => {
-      let data = response.data;
-      this.notify({ vm, data });
-
-      if (data.MessageType == MessageType.Success) {
-        this.CREATE(data.Obj);
-        this.OPEN_MODAL_CREATE(!closeModal);
-        this.resetCreate();
-      }
-    });
+        if (data.MessageType == MessageType.Success) {
+          this.UPDATE(data.Obj);
+          this.OPEN_MODAL_EDIT(false);
+          this.resetEdit();
+        }
+      });
+   
   }
 
   @action()

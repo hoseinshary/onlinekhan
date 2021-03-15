@@ -14,11 +14,10 @@ using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Question;
 using NasleGhalam.ViewModels.Report;
 using NasleGhalam.ViewModels.QuestionUpdate;
-
-using Microsoft.Office.Interop.Excel;
 using NasleGhalam.ViewModels.QuestionJudge;
 using NasleGhalam.ViewModels.Topic;
 using Newtonsoft.Json;
+
 
 
 
@@ -75,7 +74,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.QuestionAnswers)
                 .Include(current => current.Supervisors)
                 .Include(current => current.QuestionJudges)
-                
+
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -116,18 +115,18 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
             return _questions
-                .Include(x =>x.Topics)
-                .Include(x => x.Topics.Select(y=>y.Lesson))
-                .Include(x=>x.QuestionJudges)
-                .Include(x=>x.QuestionUpdates)
-                .Include(x => x.QuestionUpdates.Select(y=>y.User))
-                .Include(x=>x.QuestionAnswers)
-                .Include(x => x.QuestionAnswers.Select(y=>y.Writer))
-                .Include(x=>x.QuestionAnswers.Select(y=>y.QuestionAnswerJudges))
-                .Include(x=>x.Lookup_AuthorType)
-                .Include(x=>x.Lookup_QuestionType)
-                .Include(x=>x.Supervisors)
-                .Include(x=>x.Writer)
+                .Include(x => x.Topics)
+                .Include(x => x.Topics.Select(y => y.Lesson))
+                .Include(x => x.QuestionJudges)
+                .Include(x => x.QuestionUpdates)
+                .Include(x => x.QuestionUpdates.Select(y => y.User))
+                .Include(x => x.QuestionAnswers)
+                .Include(x => x.QuestionAnswers.Select(y => y.Writer))
+                .Include(x => x.QuestionAnswers.Select(y => y.QuestionAnswerJudges))
+                .Include(x => x.Lookup_AuthorType)
+                .Include(x => x.Lookup_QuestionType)
+                .Include(x => x.Supervisors)
+                .Include(x => x.Writer)
                 .Where(x => x.QuestionGroups.Any(y => y.LessonId == filterQuestionReport.LessonId))
                 .AsNoTracking()
                 .AsEnumerable()
@@ -139,21 +138,21 @@ namespace NasleGhalam.ServiceLayer.Services
                     IsDelete = z.IsDelete,
                     IsUpdate = z.IsUpdate,
                     LookupId_AuthorType = z.LookupId_AuthorType,
-                    WriterId =  z.WriterId,
+                    WriterId = z.WriterId,
                     AuthorTypeName = z.Lookup_AuthorType.Value,
-                    SupervisorUserId = z.Supervisors.Count==0 ? 0 : z.Supervisors.FirstOrDefault() == null ? 0 : z.Supervisors.FirstOrDefault().Id,
+                    SupervisorUserId = z.Supervisors.Count == 0 ? 0 : z.Supervisors.FirstOrDefault() == null ? 0 : z.Supervisors.FirstOrDefault().Id,
                     SupervisorName = z.Supervisors.Count == 0 ? "" : z.Supervisors.FirstOrDefault().Name + z.Supervisors.FirstOrDefault().Family,
                     WriterName = z.Writer.Name,
                     QuestionJudges = z.QuestionJudges.Select(Mapper.Map<QuestionJudgeViewModel>).ToList(),
                     Topics = z.Topics.Select(Mapper.Map<TopicViewModel>).ToList(),
                     NumberOfAnswers = z.QuestionAnswers.Count,
-                    QuestionJudgedState1 = z.QuestionJudges.Count < 3 ? 0 :  z.QuestionJudges.OrderByDescending(p => p.Id).Skip(0).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
+                    QuestionJudgedState1 = z.QuestionJudges.Count < 3 ? 0 : z.QuestionJudges.OrderByDescending(p => p.Id).Skip(0).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
                         z.QuestionJudges.OrderByDescending(p => p.Id).Skip(0).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
                     QuestionJudgedState2 = z.QuestionJudges.Count < 3 ? 0 : z.QuestionJudges.OrderByDescending(p => p.Id).Skip(1).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
                         z.QuestionJudges.OrderByDescending(p => p.Id).Skip(1).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
                     QuestionJudgedState3 = z.QuestionJudges.Count < 3 ? 0 : z.QuestionJudges.OrderByDescending(p => p.Id).Skip(2).Take(1).FirstOrDefault().IsActiveQuestion ? QuestionJudgedState.Active :
                         z.QuestionJudges.OrderByDescending(p => p.Id).Skip(2).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
-                    EditorUserId = z.QuestionUpdates.Count == 0 ? 0 : z.QuestionUpdates.OrderByDescending(p=>p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).UserId,
+                    EditorUserId = z.QuestionUpdates.Count == 0 ? 0 : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).UserId,
                     EditorUserName = z.QuestionUpdates.Count == 0 ? "" : z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).User.Name + z.QuestionUpdates.OrderByDescending(p => p.Id).FirstOrDefault(p => p.QuestionActivity == QuestionActivity.UpdateEditor).User.Family,
                     LookupId_QuestionType = z.LookupId_QuestionType,
                     QuestionTypeName = z.Lookup_QuestionType.Value,
@@ -162,8 +161,8 @@ namespace NasleGhalam.ServiceLayer.Services
                     AnswerWriterId = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).WriterId,
                     AnswerWriterName = z.QuestionAnswers.Count == 0 ? "" : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).Writer.Name,
                     QuestionAnswerType = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster == true).QuestionAnswerType,
-                    HaveOnlinekhanAnswer = z.QuestionAnswers.Count(p=>p.IsMaster) != 0,
-                    AnswerJudgedState1 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count <3 ?0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(0).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
+                    HaveOnlinekhanAnswer = z.QuestionAnswers.Count(p => p.IsMaster) != 0,
+                    AnswerJudgedState1 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count < 3 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(0).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
                         z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(0).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
                     AnswerJudgedState2 = z.QuestionAnswers.Count == 0 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.Count < 3 ? 0 : z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(1).Take(1).FirstOrDefault().IsActiveQuestionAnswer ? QuestionJudgedState.Active :
                         z.QuestionAnswers.FirstOrDefault(p => p.IsMaster).QuestionAnswerJudges.OrderByDescending(q => q.Id).Skip(1).Take(1).FirstOrDefault().IsUpdate ? QuestionJudgedState.Update : QuestionJudgedState.Delete,
@@ -183,7 +182,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
 
 
-            var returnVal  = _questions
+            var returnVal = _questions
                 .Include(x => x.Topics)
                 .Include(x => x.Topics.Select(y => y.Lesson))
                 .Include(x => x.QuestionJudges)
@@ -602,117 +601,137 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="questionViewModel"></param>
         /// <param name="word"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(QuestionCreateViewModel questionViewModel, HttpPostedFile word)
+        public ClientMessageResult Create(QuestionCreateViewModel questionViewModel)
         {
             var question = Mapper.Map<Question>(questionViewModel);
 
-
-            var wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
-
-            //save Doc file in temp memory
-            word.SaveAs(wordFilename);
-
-            // Open a doc file.
-            var app = new Microsoft.Office.Interop.Word.Application();
-            var source = app.Documents.Open(wordFilename);
-
-            //حذف عدد اول سوال
-            if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+            string wordFilename = null;
+            ServerMessageResult serverResult = null;
+            if (questionViewModel.FileBytes.Length > 0)
             {
-                int i = 1;
-                while (i < source.Paragraphs[1].Range.Characters.Count &&
-                       source.Paragraphs[1].Range.Characters[i].Text != "-")
+                wordFilename = SitePath.GetQuestionGroupTempAbsPath(questionViewModel.FileName) + ".docx";
+
+                //save Doc file in temp memory
+                using (var ms = new MemoryStream(questionViewModel.FileBytes))
                 {
+                    using (var file = new FileStream(wordFilename, FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
+                // Open a doc file.
+                Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
+                Document source = app.Documents.Open(wordFilename);
+
+                //حذف عدد اول سوال
+                if (QuestionMaking.IsQuestionParagraph(source.Paragraphs[1].Range.Text))
+                {
+                    int i = 1;
+                    while (i < source.Paragraphs[1].Range.Characters.Count &&
+                           source.Paragraphs[1].Range.Characters[i].Text != "-")
+                    {
+                        source.Paragraphs[1].Range.Characters[i].Delete();
+                    }
                     source.Paragraphs[1].Range.Characters[i].Delete();
                 }
-                source.Paragraphs[1].Range.Characters[i].Delete();
-            }
 
-            foreach (Paragraph paragraph in source.Paragraphs)
-            {
-                question.Context += paragraph.Range.Text;
-            }
-
-
-            foreach (var topicId in questionViewModel.TopicIds)
-            {
-                var topic = new Topic() { Id = topicId };
-                _uow.MarkAsUnChanged(topic);
-                question.Topics.Add(topic);
-            }
-
-            foreach (var tagId in questionViewModel.TagIds)
-            {
-                var tag = new Tag() { Id = tagId };
-                _uow.MarkAsUnChanged(tag);
-                question.Tags.Add(tag);
-            }
-
-            foreach (var option in questionViewModel.Options)
-            {
-                var newOption = new QuestionOption()
+                foreach (Paragraph paragraph in source.Paragraphs)
                 {
-                    Context = option.Context,
-                    IsAnswer = option.IsAnswer,
+                    question.Context += paragraph.Range.Text;
+                }
+
+                foreach (var topicId in questionViewModel.TopicIds)
+                {
+                    var topic = new Topic() { Id = topicId };
+                    _uow.MarkAsUnChanged(topic);
+                    question.Topics.Add(topic);
+                }
+
+                foreach (var tagId in questionViewModel.TagIds)
+                {
+                    var tag = new Tag() { Id = tagId };
+                    _uow.MarkAsUnChanged(tag);
+                    question.Tags.Add(tag);
+                }
+
+                foreach (var option in questionViewModel.Options)
+                {
+                    var newOption = new QuestionOption()
+                    {
+                        Context = option.Context,
+                        IsAnswer = option.IsAnswer,
+                    };
+
+                    question.QuestionOptions.Add(newOption);
+                }
+
+                if (questionViewModel.SupervisorUserId != 0)
+                {
+                    var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
+                    _uow.MarkAsUnChanged(supervisor);
+                    question.Supervisors.Add(supervisor);
+                }
+
+                
+
+                _questions.Add(question);
+                _uow.ValidateOnSaveEnabled(false);
+                serverResult = _uow.CommitChanges(CrudType.Create, Title);
+
+
+                if (serverResult.MessageType == MessageType.Success)
+                {
+                    _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
+                    {
+                        QuestionId = serverResult.Id,
+                        UserId = questionViewModel.UserId,
+                        DateTime = DateTime.Now,
+                        QuestionActivity = QuestionActivity.Import,
+                        Description = JsonConvert.SerializeObject(questionViewModel, Formatting.Indented)
+                    });
+                }
+
+
+                if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
+                {
+                    using (var ms = new MemoryStream(questionViewModel.FileBytes))
+                    {
+                        using (var file = new FileStream(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx", FileMode.Create, FileAccess.Write))
+                        {
+                            ms.WriteTo(file);
+                        }
+                    }
+                    source.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
+                    //while (source.Windows[1].Panes[1].Pages.Count < 0) ;
+                    //var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
+                    ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", SitePath.GetQuestionAbsPath(questionViewModel.FileName));
+
+                    File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
+
+
+                    ////save Options
+
+                    // var target = app.Documents.Add();
+                    //SaveOptionsOfQuestions(source, target, question.FileName, question.AnswerNumber);
+                    //target.Close();
+
+                }
+
+                source.Close();
+                app.Quit();
+                File.Delete(wordFilename);
+
+            }
+            else
+            {
+                serverResult = new ServerMessageResult()
+                {
+                    MessageType = MessageType.Error,
+                    FaMessage = "فایل وارد نشده است!"
                 };
-
-                question.QuestionOptions.Add(newOption);
-            }
-
-            if (questionViewModel.SupervisorUserId != 0)
-            {
-                var supervisor = new User() { Id = questionViewModel.SupervisorUserId };
-                _uow.MarkAsUnChanged(supervisor);
-                question.Supervisors.Add(supervisor);
-            }
-
-            _questions.Add(question);
-            _uow.ValidateOnSaveEnabled(false);
-            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
-
-
-            if (serverResult.MessageType == MessageType.Success)
-            {
-                _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
-                {
-                    QuestionId = serverResult.Id,
-                    UserId = questionViewModel.UserId,
-                    DateTime = DateTime.Now,
-                    QuestionActivity = QuestionActivity.Import,
-                    Description = JsonConvert.SerializeObject(questionViewModel, Formatting.Indented)
-                });
             }
 
 
-            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
-            {
-
-                word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                source.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", WdSaveFormat.wdFormatPDF);
-                //while (source.Windows[1].Panes[1].Pages.Count < 0) ;
-                //var bits = source.Windows[1].Panes[1].Pages[1].EnhMetaFileBits;
-                ImageUtility.SaveImageOfWordPdf(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf", SitePath.GetQuestionAbsPath(questionViewModel.FileName));
-
-                File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
-                var target = app.Documents.Add();
-                try
-                {
-                    SaveOptionsOfQuestions(source, target, question.FileName, question.AnswerNumber);
-                }
-                catch
-                {
-                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
-                    return clientMessageResult;
-                }
-                target.Close();
-
-
-            }
-
-
-            // File.Delete(wordFilename);
-            source.Close();
-            app.Quit();
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
             if (clientResult.MessageType == MessageType.Success)
@@ -727,7 +746,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="word"></param>
         /// /// <param name="png"></param>
         /// <returns></returns>
-        public ClientMessageResult CreateForWindowsApp(QuestionCreateViewModel questionViewModel, HttpPostedFile word, HttpPostedFile png)
+        public ClientMessageResult CreateForWindowsApp(QuestionCreateWindowsViewModel questionViewModel)
         {
             var question = Mapper.Map<Question>(questionViewModel);
 
@@ -763,10 +782,26 @@ namespace NasleGhalam.ServiceLayer.Services
                 });
             }
 
-            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName))
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName)
+            && questionViewModel.WordFileBytes.Length > 0 &&  questionViewModel.PngFileBytes.Length > 0)
             {
-                word.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx");
-                png.SaveAs(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png");
+                
+                using (var ms = new MemoryStream(questionViewModel.WordFileBytes))
+                {
+                    using (var file = new FileStream(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".docx", FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
+            
+                using (var ms = new MemoryStream(questionViewModel.PngFileBytes))
+                {
+                    using (var file = new FileStream(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".png", FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
+              
             }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
@@ -1159,16 +1194,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
                 var target = app.Documents.Add();
-                try
-                {
-                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
-                }
-                catch
-                {
-                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
-                    return clientMessageResult;
-                }
-                
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1194,16 +1220,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 var target = app.Documents.Add();
-                try
-                {
-                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
-                }
-                catch
-                {
-                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
-                    return clientMessageResult;
-                }
-                
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1371,16 +1388,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
 
                 var target = app.Documents.Add();
-                try
-                {
-                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
-                }
-                catch
-                {
-                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
-                    return clientMessageResult;
-                }
-                
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1405,15 +1413,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 var target = app.Documents.Add();
-                try
-                {
-                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
-                }
-                catch
-                {
-                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
-                    return clientMessageResult;
-                }
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1489,11 +1489,11 @@ namespace NasleGhalam.ServiceLayer.Services
 
             }
 
-            
-            
+
+
             question.AnswerNumber = questionViewModel.AnswerNumber;
             question.FileName = questionViewModel.FileName;
-            
+
 
             question.IsActive = questionViewModel.IsActive;
 
@@ -1569,15 +1569,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 File.Delete(SitePath.GetQuestionAbsPath(questionViewModel.FileName) + ".pdf");
 
                 var target = app.Documents.Add();
-                try
-                {
-                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
-                }
-                catch
-                {
-                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
-                    return clientMessageResult;
-                }
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1602,15 +1594,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(previousFileName);
 
                 var target = app.Documents.Add();
-                try
-                {
-                    SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
-                }
-                catch
-                {
-                    var clientMessageResult = new ClientMessageResult() { Message = " خطایی در اضافه کردن سوال پیش آمده است. با مدیر تماس بگیرید", MessageType = MessageType.Error };
-                    return clientMessageResult;
-                }
+                SaveOptionsOfQuestions(source, target, questionViewModel.FileName, questionViewModel.AnswerNumber);
 
                 target.Close();
                 File.Delete(wordFilename);
@@ -1915,7 +1899,7 @@ namespace NasleGhalam.ServiceLayer.Services
             }
         }
 
-        public  QuestionStatus GetQuestionStatus(int questionId)
+        public QuestionStatus GetQuestionStatus(int questionId)
         {
             var question = GetById(questionId);
 

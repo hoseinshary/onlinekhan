@@ -151,29 +151,29 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionCreateAccess)]
         [CheckModelValidation]
-        [CheckWordFileValidation("word", 1024)]
-        public IHttpActionResult Create([FromUri]QuestionCreateViewModel questionViewModel)
+        //[CheckWordFileValidation("word", 1024)]
+        public IHttpActionResult Create(QuestionCreateViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             questionViewModel.UserId = Request.GetUserId();
 
-            var msgRes = _questionService.Create(questionViewModel, wordFile);
+            var msgRes = _questionService.Create(questionViewModel);
             return Ok(msgRes);
         }
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionCreateAccess)]
         [CheckModelValidation]
-        [CheckWordFileValidation("word", 1024)]
-        [CheckImageQuestionValidation("png")]
-        public IHttpActionResult CreateForWindowsApp([FromUri]QuestionCreateViewModel questionViewModel)
+        //[CheckWordFileValidation("word", 1024)]
+        //[CheckImageQuestionValidation("png")]
+        public IHttpActionResult CreateForWindowsApp(QuestionCreateWindowsViewModel questionViewModel)
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             var pngFile = HttpContext.Current.Request.Files.Get("png");
             questionViewModel.UserId = Request.GetUserId();
             
 
-            var msgRes = _questionService.CreateForWindowsApp(questionViewModel, wordFile, pngFile);
+            var msgRes = _questionService.CreateForWindowsApp(questionViewModel);
             return Ok(msgRes);
         }
 

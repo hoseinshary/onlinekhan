@@ -72,8 +72,40 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 
+
+        //hatman por shavad 
         [Display(Name = "نام فایل")]
-        public string FileName { get; }
+        public string FileName { get; set; }
+
+
+        [Display(Name = "فایل")]
+        public string Base64File { get; set; }
+
+        public byte[] FileBytes
+        {
+            get
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(Base64File))
+                    {
+                        return Convert.FromBase64String(Base64File.Replace(
+                            Base64File.Substring(0, Base64File.IndexOf("base64,", StringComparison.Ordinal) + 7), ""));
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                return new byte[] { };
+            }
+        }
+
+
+        public string FilePath { get; set; }
+
+
 
         [Display(Name = "تاریخ ورود داده")]
         public DateTime InsertDateTime { get; }
@@ -87,7 +119,7 @@ namespace NasleGhalam.ViewModels.Question
         [Display(Name = "سوال ترکیبی")]
         public bool IsHybrid { get; set; }
 
-        public string FilePath { get; set; }
+   
 
         [Display(Name = "گزینه صحیح")]
         [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]

@@ -79,35 +79,36 @@ namespace NasleGhalam.WindowsApp
         }
 
 
-        public async Task<ResponseObject<QuestionViewModel>> QuestionCreate(QuestionCreateViewModel question)
+        public async Task<ResponseObject<QuestionViewModel>> QuestionCreate(QuestionCreateWindowsViewModel question)
         {
             try
             {
                 _client.Timeout = -1;
                 var request = new RestRequest("Question/CreateForWindowsApp", Method.POST);
 
-                request.AddParameter("QuestionNumber", question.QuestionNumber, ParameterType.QueryString);
-                request.AddParameter("QuestionPoint", question.QuestionPoint, ParameterType.QueryString);
-                request.AddParameter("UseEvaluation", question.UseEvaluation, ParameterType.QueryString);
-                request.AddParameter("IsStandard", question.IsStandard, ParameterType.QueryString);
-                request.AddParameter("WriterId", question.WriterId, ParameterType.QueryString);
-                request.AddParameter("SupervisorUserId", question.SupervisorUserId, ParameterType.QueryString);
-                request.AddParameter("ResponseSecond", question.ResponseSecond, ParameterType.QueryString);
-                request.AddParameter("Description", question.Description, ParameterType.QueryString);
-                request.AddParameter("AnswerNumber", question.AnswerNumber, ParameterType.QueryString);
-                request.AddParameter("LookupId_QuestionType", question.LookupId_QuestionType, ParameterType.QueryString);
-                request.AddParameter("LookupId_QuestionHardnessType", question.LookupId_QuestionHardnessType, ParameterType.QueryString);
-                request.AddParameter("LookupId_RepeatnessType", question.LookupId_RepeatnessType, ParameterType.QueryString);
-                request.AddParameter("LookupId_AuthorType", question.LookupId_AuthorType, ParameterType.QueryString);
-                request.AddParameter("LookupId_AreaType", question.LookupId_AreaTypes, ParameterType.QueryString);
-                request.AddParameter("IsHybrid", question.IsHybrid, ParameterType.QueryString);
-                request.AddParameter("LookupId_QuestionRank", question.LookupId_QuestionRank, ParameterType.QueryString);
-                request.AddParameter("Context", question.Context, ParameterType.QueryString);
-                request.AddParameter("QuestionGroupId", question.QuestionGroupId, ParameterType.QueryString);
+                request.AddParameter("QuestionNumber", question.QuestionNumber);
+                request.AddParameter("QuestionPoint", question.QuestionPoint);
+                request.AddParameter("UseEvaluation", question.UseEvaluation);
+                request.AddParameter("IsStandard", question.IsStandard);
+                request.AddParameter("WriterId", question.WriterId);
+                request.AddParameter("SupervisorUserId", question.SupervisorUserId);
+                request.AddParameter("ResponseSecond", question.ResponseSecond);
+                request.AddParameter("Description", question.Description);
+                request.AddParameter("AnswerNumber", question.AnswerNumber);
+                request.AddParameter("LookupId_QuestionType", question.LookupId_QuestionType);
+                request.AddParameter("LookupId_QuestionHardnessType", question.LookupId_QuestionHardnessType);
+                request.AddParameter("LookupId_RepeatnessType", question.LookupId_RepeatnessType);
+                request.AddParameter("LookupId_AuthorType", question.LookupId_AuthorType);
+                request.AddParameter("LookupId_AreaType", question.LookupId_AreaTypes);
+                request.AddParameter("IsHybrid", question.IsHybrid);
+                request.AddParameter("LookupId_QuestionRank", question.LookupId_QuestionRank);
+                request.AddParameter("Context", question.Context);
+                request.AddParameter("QuestionGroupId", question.QuestionGroupId);
+                request.AddParameter("WordBase64File", question.WordBase64File);
+                request.AddParameter("PngBase64File", question.PngBase64File);
 
-
-                request.AddFile("word", question.FilePath+".docx");
-                request.AddFile("png", question.FilePath+".png");
+                //request.AddFile("word", question.FilePath+".docx");
+                //request.AddFile("png", question.FilePath+".png");
                 IRestResponse response = _client.Execute(request);
                 var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<QuestionViewModel>>(response.Content);
                 return resultObject1;

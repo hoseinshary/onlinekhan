@@ -110,3 +110,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 /NasleGhalam.WebApi/Content/QuestionGroupTemp
+/NasleGhalam.WindowsApp/159.69.82.251
+/NasleGhalam.WindowsApp/ftp/159.69.82.251/WindowsApp

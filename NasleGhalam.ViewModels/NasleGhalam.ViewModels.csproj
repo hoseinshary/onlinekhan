@@ -155,9 +155,11 @@
     <Compile Include="Ratio\RatioViewModel.cs" />
     <Compile Include="Role\RoleAccessViewModel.cs" />
     <Compile Include="Role\RoleViewModel.cs" />
+    <Compile Include="User\ForgotPasswordViewModel.cs" />
     <Compile Include="User\LoginResultViewModel.cs" />
     <Compile Include="User\LoginViewModel.cs" />
     <Compile Include="User\UserChangePasswordViewModel.cs" />
+    <Compile Include="User\UserPreRegisterViewModel.cs" />
     <Compile Include="User\UserRegisterViewModel.cs" />
     <Compile Include="User\UserViewModel.cs" />
     <Compile Include="User\UserUpdateViewModel.cs" />

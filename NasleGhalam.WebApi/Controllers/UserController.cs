@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using NasleGhalam.Common;
@@ -21,9 +22,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class UserController : ApiController
     {
         private readonly UserService _userService;
-        public UserController(UserService userService)
+        private readonly PhoneVerificationService _phoneVerificationService;
+        public UserController(UserService userService,PhoneVerificationService phoneVerificationService)
         {
             _userService = userService;
+            _phoneVerificationService = phoneVerificationService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
@@ -67,7 +70,79 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(user);
         }
+        /// <summary>
+        /// ارسال کد احراز هویت
+        /// </summary>
+        /// <param name="UserPreRegisterViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IHttpActionResult>SendVerificationCode([FromUri] string PhoneNumber)
+        {
+            var result = await _phoneVerificationService.SendVerificationCode(PhoneNumber);
+            if(result >= 2000)
+            {
+                ClientMessageResult msgRes = new ClientMessageResult() { Message = "کد احراز هویت با موفقیت ارسال شد", MessageType = MessageType.Error };
+                return Ok(msgRes);
+            }
+            else
+            {
+                ClientMessageResult msgRes = new ClientMessageResult() { Message = "خطایی در ارسال کد احراز هویت وجود امده است", MessageType = MessageType.Error };
+                return Ok(msgRes);
+            }
+            
+        }
+        //[HttpPost]
+        //public async Task<IHttpActionResult> CheckVerificationCode([FromUri] string PhoneNumber,string Code)
+        //{
+        //    var result = await _phoneVerificationService.CheckVerificationCode(PhoneNumber,Code);
+        //    return Ok(result);
+        //}
 
+        /// <summary>
+        /// فراموشی رمز عبور
+        /// </summary>
+        /// <param name="ForgotPasswordViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [CheckModelValidation]
+        public async Task<IHttpActionResult> ForgotPassword(ForgotPasswordViewModel forgotViewModel)
+        {
+            var result = await _phoneVerificationService.CheckVerificationCode(forgotViewModel.Mobile, forgotViewModel.VerificationCode);
+            if (result)
+            {
+                var msgRes = _userService.ForgotPassword(forgotViewModel);
+                return Ok(msgRes);
+            }
+            else
+            {
+                ClientMessageResult msgRes = new ClientMessageResult() { Message = "کد احراز هویت صحیح نمی باشد", MessageType = MessageType.Error };
+                return Ok(msgRes);
+            }
+
+        }
+
+        /// <summary>
+        /// ثبت نام توسط کاربر پس از دریافت کد احراز هویت
+        /// </summary>
+        /// <param name="UserPreRegisterViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [CheckModelValidation]
+        public async Task<IHttpActionResult> PreRegister(UserPreRegisterViewModel userViewModel)
+        {
+            var result = await _phoneVerificationService.CheckVerificationCode(userViewModel.Mobile, userViewModel.VerificationCode);
+            if (result)
+            {
+                var msgRes = _userService.PreRegister(userViewModel);
+                return Ok(msgRes);
+            }
+            else
+            {
+                ClientMessageResult msgRes = new ClientMessageResult() {Message="کد احراز هویت صحیح نمی باشد" ,MessageType=MessageType.Error};
+                return Ok(msgRes);
+            }
+
+        }
         [HttpPost]
         [CheckModelValidation]
         [CheckImageValidationProfileNotRequired("img", 1024)]

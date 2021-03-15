@@ -48,7 +48,7 @@ namespace NasleGhalam.ViewModels.Media
 
         [Display(Name = "فعال")]
         public bool IsActive { get; set; }
-
+        
         public string CoverImage { get; set; }
 
         public string Length { get; set; }
@@ -57,7 +57,8 @@ namespace NasleGhalam.ViewModels.Media
 
         public string PagesOfBook { get; set; }
 
-
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [Display(Name = "مبحث")]
         public List<int> TopicIds { get; set; } = new List<int>();
 
     }

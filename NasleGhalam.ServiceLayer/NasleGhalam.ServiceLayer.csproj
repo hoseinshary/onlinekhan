@@ -42,6 +42,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Kavenegar.Core, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KavenegarDotNetCore.1.0.1\lib\netstandard2.0\Kavenegar.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IdentityModel.Logging, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.2.2\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
     </Reference>
@@ -65,6 +68,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -77,6 +81,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\SmsPanelService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="MapperProfile\AssayProfile.cs" />
     <Compile Include="MapperProfile\MediaProfile.cs" />
     <Compile Include="MapperProfile\PackageProfile.cs" />
@@ -123,6 +132,7 @@
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MediaService.cs" />
     <Compile Include="Services\PackageService.cs" />
+    <Compile Include="Services\PhoneVerificationService.cs" />
     <Compile Include="Services\ProgramService.cs" />
     <Compile Include="Services\ProvinceService.cs" />
     <Compile Include="Services\PublisherService.cs" />
@@ -150,9 +160,26 @@
     <Compile Include="Jwt\JsonWebToken.cs" />
     <Compile Include="Jwt\JwtPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Connected Services\SmsPanelService\NasleGhalam.ServiceLayer.SmsPanelService.AutoSendCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\SmsPanelService\NasleGhalam.ServiceLayer.SmsPanelService.CheckSendCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\SmsPanelService\NasleGhalam.ServiceLayer.SmsPanelService.SendMessageWithCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\SmsPanelService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\SmsPanelService\configuration.svcinfo" />
+    <None Include="Connected Services\SmsPanelService\configuration91.svcinfo" />
+    <None Include="Connected Services\SmsPanelService\FastSend.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Connected Services\SmsPanelService\FastSend.wsdl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +249,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Readme\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\SmsPanelService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

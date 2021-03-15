@@ -131,7 +131,8 @@ namespace NasleGhalam.ViewModels.Question
 
         [Display(Name = "ناظر")]
         public int SupervisorUserId { get; set; }
-
+        [Required(ErrorMessageResourceType = typeof(ErrorResources), ErrorMessageResourceName = "Required")]
+        [Display(Name = "مبحث")]
         public List<int> TopicIds { get; set; } = new List<int>();
 
         public List<int> TagIds { get; set; } = new List<int>();

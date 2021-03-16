@@ -782,7 +782,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 });
             }
 
-            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName) && !string.IsNullOrEmpty(questionViewModel.FileName)
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionViewModel.FileName)
             && questionViewModel.WordFileBytes.Length > 0 &&  questionViewModel.PngFileBytes.Length > 0)
             {
                 

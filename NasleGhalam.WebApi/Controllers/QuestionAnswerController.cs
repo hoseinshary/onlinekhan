@@ -107,14 +107,10 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionAnswerCreateAccess)]
         [CheckModelValidation]
-        [CheckWordFileValidation("word", 1024)]
-        [CheckImageQuestionValidation("png")]
-        public IHttpActionResult CreateForWindowsApp([FromUri]QuestionAnswerCreateViewModel questionAnswerViewModel)
+        public IHttpActionResult CreateForWindowsApp(QuestionAnswerCreateViewModel questionAnswerViewModel)
         {
-            var wordFile = HttpContext.Current.Request.Files.Get("word");
-            var pngFile = HttpContext.Current.Request.Files.Get("png");
             questionAnswerViewModel.UserId = Request.GetUserId();
-            return Ok(_questionAnswerService.CreateForWindowsApp(questionAnswerViewModel, wordFile , pngFile));
+            return Ok(_questionAnswerService.CreateForWindowsApp(questionAnswerViewModel));
         }
 
         [HttpPost]

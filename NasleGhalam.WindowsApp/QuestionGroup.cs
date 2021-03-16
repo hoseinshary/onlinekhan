@@ -321,12 +321,16 @@ namespace NasleGhalam.WindowsApp
 
                             question.QuestionGroupId = result.Id;
 
-                            Byte[] bytes = File.ReadAllBytes("path");
+                            Byte[] bytes = File.ReadAllBytes(filename2 + ".docx");
                             String file = Convert.ToBase64String(bytes);
 
-                            Byte[] bytes2 = File.ReadAllBytes("path");
+                            Byte[] bytes2 = File.ReadAllBytes(filename2 + ".png");
                             String file2 = Convert.ToBase64String(bytes2);
 
+
+
+                            question.WordBase64File = file;
+                            question.PngBase64File = file2;
                             var result2 = await _webService.QuestionCreate(question);
 
                             if (result2.MessageType != MessageType.Success)
@@ -485,7 +489,6 @@ namespace NasleGhalam.WindowsApp
                         File.Delete(filename2 + ".pdf");
 
                         question.FilePath = newQuestionNameFile.ToString();
-                        question.FileName = FilePath + "questionGroupTemp//" + newQuestionNameFile;
 
                         question.IsActive = false;
                         question.IsMaster = true;
@@ -493,7 +496,15 @@ namespace NasleGhalam.WindowsApp
                         question.WriterId = Convert.ToInt32(comboboxValue);
                         question.QuestionId = questionIds[numberOfQ - 1];
 
+                        Byte[] bytes = File.ReadAllBytes(filename2 + ".docx");
+                        String file = Convert.ToBase64String(bytes);
 
+                        Byte[] bytes2 = File.ReadAllBytes(filename2 + ".png");
+                        String file2 = Convert.ToBase64String(bytes2);
+
+
+                        question.WordBase64File = file;
+                        question.PngBase64File = file2;
 
                         var result2 = await _webService.QuestionAnswerCreate(question);
 

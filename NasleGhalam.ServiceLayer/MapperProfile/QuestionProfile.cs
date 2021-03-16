@@ -12,6 +12,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
         public QuestionProfile()
         {
             CreateMap<QuestionCreateViewModel, Question>();
+            CreateMap<QuestionCreateWindowsViewModel, Question>();
             CreateMap<QuestionViewModel, Question>()
                 .ForMember(dst => dst.TopicAnswer, opt => opt.MapFrom(src => string.Join(",", src.TopicAnswer)))
                 .ReverseMap()

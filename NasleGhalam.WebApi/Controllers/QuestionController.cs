@@ -168,8 +168,6 @@ namespace NasleGhalam.WebApi.Controllers
         //[CheckImageQuestionValidation("png")]
         public IHttpActionResult CreateForWindowsApp(QuestionCreateWindowsViewModel questionViewModel)
         {
-            var wordFile = HttpContext.Current.Request.Files.Get("word");
-            var pngFile = HttpContext.Current.Request.Files.Get("png");
             questionViewModel.UserId = Request.GetUserId();
             
 

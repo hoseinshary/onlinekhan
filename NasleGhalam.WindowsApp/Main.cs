@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Deployment.Application;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
@@ -58,6 +59,16 @@ namespace NasleGhalam.WindowsApp
                 label_loginStatus.Text = "ورود انجام نشده است لطفا اول به سامانه وارد شوید.";
             }
 
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+                string path = System.Windows.Forms.Application.StartupPath + "\\content\\";
+            if (!System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.CreateDirectory(path);
+                System.IO.Directory.CreateDirectory(System.IO.Path.Combine(path, "questionGroupTemp"));
+            }
         }
     }
 }

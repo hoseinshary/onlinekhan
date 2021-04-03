@@ -4,6 +4,8 @@ import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
 import { STUDENT_URL as baseUrl } from "src/utilities/site-config";
+import AssayCreate, { AssayLesson , AssayNumberOfQuestionReport} from "src/models/IAssay";
+
 import util from "src/utilities";
 import {
   VuexModule,
@@ -21,6 +23,7 @@ export class StudentStore extends VuexModule {
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
+  private _lessonAssayVue : Vue;
 
   /**
    * initialize data
@@ -117,6 +120,11 @@ export class StudentStore extends VuexModule {
   }
 
   @mutation
+  SET_LESSON_ASSAY_VUE(vm: Vue) {
+    this._lessonAssayVue = vm;
+  }
+
+  @mutation
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
   }
@@ -148,12 +156,16 @@ export class StudentStore extends VuexModule {
 
   @action()
   async numberOfQuestionReport(payload:{lessonId :number , studentId : number}) {
+    let vm = this._lessonAssayVue;
     return axios
     .post(`${baseUrl}/GetQuestionAssayReportByLessonId`, payload)
-    .then((response: AxiosResponse<IMessageResult>) => {
+    .then((response : AxiosResponse<AssayNumberOfQuestionReport>) => {
       let data = response.data;
-      
+      vm["numberOfQuestionReport.NumberOfNewQuestions"] = data.NumberOfNewQuestions;
+      vm["numberOfQuestionReport.NumberOfAssayQuestions"] = data.NumberOfAssayQuestions;
+      vm["numberOfQuestionReport.NumberOfHomeworkQuestions"] = data.NumberOfHomeworkQuestions;
 
+      // debugger;
       
     });
   }

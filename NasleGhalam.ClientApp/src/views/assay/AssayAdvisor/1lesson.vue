@@ -164,6 +164,8 @@ export default class LessonTabVue extends Vue {
   //#region ### hooks ###
   created() {
     this.lessonStore.fillList();
+    this.studentStore.SET_LESSON_ASSAY_VUE(this);
+
     this.educationTreeStore.fillList().then(res => {
       this.educationTree.expanded = this.educationTree.firstLevel;
     });

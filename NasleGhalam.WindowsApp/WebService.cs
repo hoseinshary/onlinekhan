@@ -127,20 +127,21 @@ namespace NasleGhalam.WindowsApp
                 _client.Timeout = -1;
                 var request = new RestRequest("QuestionAnswer/CreateForWindowsApp", Method.POST);
 
-                request.AddParameter("Title", question.Title, ParameterType.QueryString);
-                request.AddParameter("LessonName", question.LessonName, ParameterType.QueryString);
-                request.AddParameter("Description", question.Description, ParameterType.QueryString);
-                request.AddParameter("WriterId", question.WriterId, ParameterType.QueryString);
-                request.AddParameter("IsMaster", question.IsMaster, ParameterType.QueryString);
-                request.AddParameter("IsActive", question.IsActive, ParameterType.QueryString);
-                request.AddParameter("QuestionId", question.QuestionId, ParameterType.QueryString);
-                request.AddParameter("FilePath", question.FilePath, ParameterType.QueryString);
-                request.AddParameter("FileName", question.FileName, ParameterType.QueryString);
-                request.AddParameter("Context", question.Context, ParameterType.QueryString);
+                request.AddParameter("Title", question.Title);
+                request.AddParameter("LessonName", question.LessonName);
+                request.AddParameter("Description", question.Description);
+                request.AddParameter("WriterId", question.WriterId);
+                request.AddParameter("IsMaster", question.IsMaster);
+                request.AddParameter("IsActive", question.IsActive);
+                request.AddParameter("QuestionId", question.QuestionId);
+                request.AddParameter("FilePath", question.FilePath);
+                request.AddParameter("FileName", question.FileName);
+                request.AddParameter("Context", question.Context);
+                request.AddParameter("WordBase64File", question.WordBase64File);
+                request.AddParameter("PngBase64File", question.PngBase64File);
 
-
-                request.AddFile("word", question.FileName + ".docx");
-                request.AddFile("png", question.FileName + ".png");
+                //request.AddFile("word", question.FileName + ".docx");
+                //request.AddFile("png", question.FileName + ".png");
                 IRestResponse response = _client.Execute(request);
                 var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<QuestionAnswerViewModel>>(response.Content);
                 return resultObject1;

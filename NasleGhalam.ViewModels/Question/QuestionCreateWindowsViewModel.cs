@@ -89,11 +89,12 @@ namespace NasleGhalam.ViewModels.Question
                 {
                     if (!string.IsNullOrEmpty(WordBase64File))
                     {
-                        return Convert.FromBase64String(WordBase64File.Replace(
-                            WordBase64File.Substring(0, WordBase64File.IndexOf("base64,", StringComparison.Ordinal) + 7), ""));
+                        return Convert.FromBase64String(WordBase64File);
+                        //return Convert.FromBase64String(WordBase64File.Replace(
+                         //   WordBase64File.Substring(0, WordBase64File.IndexOf("base64,", StringComparison.Ordinal) + 7), ""));
                     }
                 }
-                catch
+                catch (Exception exp)
                 {
                     // ignored
                 }
@@ -115,8 +116,9 @@ namespace NasleGhalam.ViewModels.Question
                 {
                     if (!string.IsNullOrEmpty(PngBase64File))
                     {
-                        return Convert.FromBase64String(PngBase64File.Replace(
-                            PngBase64File.Substring(0, PngBase64File.IndexOf("base64,", StringComparison.Ordinal) + 7), ""));
+                        return Convert.FromBase64String(PngBase64File);
+                        //return Convert.FromBase64String(PngBase64File.Replace(
+                       //     PngBase64File.Substring(0, PngBase64File.IndexOf("base64,", StringComparison.Ordinal) + 7), ""));
                     }
                 }
                 catch

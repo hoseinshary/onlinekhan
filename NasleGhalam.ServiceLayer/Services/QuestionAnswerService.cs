@@ -70,7 +70,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <param name="questionAnswerViewModel"></param>
         /// <param name="word"></param>
         /// <returns></returns>
-        public ClientMessageResult CreateForWindowsApp(QuestionAnswerCreateViewModel questionAnswerViewModel, HttpPostedFile word, HttpPostedFile png)
+        public ClientMessageResult CreateForWindowsApp(QuestionAnswerCreateViewModel questionAnswerViewModel)
         {
             var questionAnswer = Mapper.Map<QuestionAnswer>(questionAnswerViewModel);
             questionAnswer.LookupId_AnswerType = 1042;
@@ -80,10 +80,26 @@ namespace NasleGhalam.ServiceLayer.Services
             _questionAnswers.Add(questionAnswer);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
-            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(FileName) && !string.IsNullOrEmpty(FileName))
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionAnswerViewModel.FileName)
+            && questionAnswerViewModel.WordFileBytes.Length > 0 && questionAnswerViewModel.PngFileBytes.Length > 0)
             {
-                word.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".docx");
-                png.SaveAs(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".png");
+
+                using (var ms = new MemoryStream(questionAnswerViewModel.WordFileBytes))
+                {
+                    using (var file = new FileStream(SitePath.GetQuestionAbsPath(questionAnswerViewModel.FileName) + ".docx", FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
+
+                using (var ms = new MemoryStream(questionAnswerViewModel.PngFileBytes))
+                {
+                    using (var file = new FileStream(SitePath.GetQuestionAbsPath(questionAnswerViewModel.FileName) + ".png", FileMode.Create, FileAccess.Write))
+                    {
+                        ms.WriteTo(file);
+                    }
+                }
+
             }
 
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);

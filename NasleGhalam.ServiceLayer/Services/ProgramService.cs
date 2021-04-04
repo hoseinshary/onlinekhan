@@ -45,13 +45,13 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<ProgramViewModel> GetAll(int userid)
         {
             User user = _users.Where(x => x.Id == userid).FirstOrDefault();
-            if (user.Role.Level >= 3)
+            if (user.RoleId >= 3)
             {
                 return _programs
+                    .Where(x => x.StudentId == userid)
                     .AsNoTracking()
                     .AsEnumerable()
                     .Select(Mapper.Map<ProgramViewModel>)
-                    .Where(x=>x.StudentId == userid)
                     .ToList();
             }
             else

@@ -123,19 +123,23 @@ export class LessonStore extends VuexModule {
   }
 
   get ddlByEducationTreeIds() {
+    
     return (ids: Array<number>) => {
-      return this._lessonList
-        .filter(
-          lesson =>
-            lesson.EducationTrees &&
-            lesson.EducationTrees.some(
-              educationTree => ids.indexOf(educationTree.Id) > -1
-            )
-        )
-        .map(x => ({
-          value: x.Id,
-          label: x.Name
-        }));
+      
+      var x  =this._lessonList
+      .filter(
+        lesson =>
+          lesson.EducationTrees &&
+          lesson.EducationTrees.some(
+            educationTree => ids.indexOf(educationTree.Id) > -1
+          )
+      )
+      .map(x => ({
+        value: x.Id,
+        label: x.Name
+      }));
+      //debugger;
+      return x;
     };
   }
   //#endregion

@@ -80,13 +80,13 @@ namespace NasleGhalam.ServiceLayer.Services
             _questionAnswers.Add(questionAnswer);
             _uow.ValidateOnSaveEnabled(false);
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
-            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionAnswerViewModel.FileName)
+            if (serverResult.MessageType == MessageType.Success && !string.IsNullOrEmpty(questionAnswerViewModel.FilePath)
             && questionAnswerViewModel.WordFileBytes.Length > 0 && questionAnswerViewModel.PngFileBytes.Length > 0)
             {
 
                 using (var ms = new MemoryStream(questionAnswerViewModel.WordFileBytes))
                 {
-                    using (var file = new FileStream(SitePath.GetQuestionAbsPath(questionAnswerViewModel.FileName) + ".docx", FileMode.Create, FileAccess.Write))
+                    using (var file = new FileStream(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".docx", FileMode.Create, FileAccess.Write))
                     {
                         ms.WriteTo(file);
                     }
@@ -94,7 +94,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 using (var ms = new MemoryStream(questionAnswerViewModel.PngFileBytes))
                 {
-                    using (var file = new FileStream(SitePath.GetQuestionAbsPath(questionAnswerViewModel.FileName) + ".png", FileMode.Create, FileAccess.Write))
+                    using (var file = new FileStream(SitePath.GetQuestionAnswerAbsPath(questionAnswerViewModel.FilePath) + ".png", FileMode.Create, FileAccess.Write))
                     {
                         ms.WriteTo(file);
                     }

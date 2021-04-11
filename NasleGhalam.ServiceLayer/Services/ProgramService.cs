@@ -15,11 +15,12 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "برنامه هفتگی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<Program> _programs;
-
+        private readonly IDbSet<User> _users;
         public ProgramService(IUnitOfWork uow)
         {
             _uow = uow;
             _programs = uow.Set<Program>();
+            _users = uow.Set<User>();
         }
 
         /// <summary>
@@ -41,13 +42,26 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه برنامه هفتگی ها
         /// </summary>
         /// <returns></returns>
-        public IList<ProgramViewModel> GetAll()
+        public IList<ProgramViewModel> GetAll(int userid)
         {
-            return _programs
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<ProgramViewModel>)
-                .ToList();
+            User user = _users.Where(x => x.Id == userid).FirstOrDefault();
+            if (user.RoleId >= 3)
+            {
+                return _programs
+                    .Where(x => x.StudentId == userid)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<ProgramViewModel>)
+                    .ToList();
+            }
+            else
+            {
+                return _programs
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<ProgramViewModel>)
+                    .ToList();
+            }
         }
 
         /// <summary>
@@ -58,6 +72,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Create(ProgramCreateViewModel programViewModel)
         {
             var program = Mapper.Map<Program>(programViewModel);
+            program.CreatedTime = DateTime.Now;
             _programs.Add(program);
 
             foreach (var programItem in programViewModel.ProgramItemViewModels)

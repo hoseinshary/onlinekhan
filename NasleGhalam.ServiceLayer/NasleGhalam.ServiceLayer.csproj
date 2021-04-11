@@ -91,6 +91,7 @@
     <Compile Include="MapperProfile\PackageProfile.cs" />
     <Compile Include="MapperProfile\EducationTreeProfile.cs" />
     <Compile Include="MapperProfile\LessonDepartmentProfile.cs" />
+    <Compile Include="MapperProfile\ProgramProfile.cs" />
     <Compile Include="MapperProfile\PublicProfile.cs" />
     <Compile Include="MapperProfile\QuestionAnswerJudgeProfile.cs" />
     <Compile Include="MapperProfile\QuestionAnswerProfile.cs" />

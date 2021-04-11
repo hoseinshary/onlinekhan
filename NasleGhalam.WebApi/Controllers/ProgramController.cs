@@ -3,7 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Program;
-
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -23,7 +23,8 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.ProgramReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_programService.GetAll());
+            int userid = Request.GetUserId();
+            return Ok(_programService.GetAll(userid));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.ProgramReadAccess)]

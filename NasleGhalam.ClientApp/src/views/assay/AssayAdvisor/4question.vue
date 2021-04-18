@@ -1,6 +1,9 @@
 <template>
   <section class="row gutter-sm">
     <q-card class="col-12" v-for="lesson in assayStore.checkedLessons" :key="lesson.Id">
+      <div class="col-md-2">
+      </div>
+      <div class="col-md-10">
       <q-card-title>{{lesson.Name}}</q-card-title>
       <q-card-separator />
       <q-card-main>
@@ -14,6 +17,7 @@
           </li>
         </ul>
       </q-card-main>
+      </div>
     </q-card>
 
     <div class="col-12">

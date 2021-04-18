@@ -2,6 +2,10 @@
   <section class="row">
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-checkbox label="سوال تصادفی" v-model="assayCreate.RandomQuestion" />
+
+      <!-- <div class="row">
+      <q-checkbox v-if="assayCreate.RandomQuestion == true" v-model="checked" label="Checkbox Label" />
+    </div> -->
     </div>
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-tree
@@ -14,19 +18,27 @@
         :ticked.sync="topicLeafTicked"
       >
         <template slot="header-custom" slot-scope="prop">
-          <template
-            v-if="prop.node.ParentTopicId== null"
-          >({{getLesson(prop.node.lessonId).CountOfQuestions}}) سوال از درس ({{getLesson(prop.node.lessonId).Name}})</template>
-          <template v-else>{{prop.node.label}}</template>
+          <template v-if="prop.node.ParentTopicId == null"
+            >({{ getLesson(prop.node.lessonId).CountOfQuestions }}) سوال از درس
+            ({{ getLesson(prop.node.lessonId).Name }})</template
+          >
+          <template v-else>{{ prop.node.label }}</template>
+
+          <!-- <q-checkbox v-model="checked" label="Checkbox Label" />
           <q-input
-            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
+            v-if="
+              prop.node.children.length == 0 &&
+              !assayCreate.RandomQuestion &&
+              getTopic(prop.node.lessonId, prop.node.Id).Checked
+            "
             v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfEasy"
             float-label="آسان"
             @focus="$event.target.select()"
             align="center"
             type="number"
             class="q-mx-sm"
-          />
+          /> -->
+          <!--
           <q-input
             v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
             v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfMedium"
@@ -51,7 +63,7 @@
             float-label="کل"
             align="center"
             readonly
-          />
+          /> -->
         </template>
       </q-tree>
     </div>
@@ -117,7 +129,7 @@
     </div>-->
     <div class="col-12">
       <q-btn color="primary" class="float-right" @click="goToTopicTab">
-        اطلاعات آزمون
+        سوالات آزمون 
         <q-icon name="arrow_back" />
       </q-btn>
     </div>
@@ -208,7 +220,8 @@ export default class TopicTabVue extends Vue {
 
   //#region ### methods ###
   goToTopicTab() {
-    this.$emit("changeTab", "assayTab");
+    this.assayStore.submitPreCreate().then(() => {
+      this.$emit("changeTab", "questionTab");})
   }
 
   expandTree(treeRef) {

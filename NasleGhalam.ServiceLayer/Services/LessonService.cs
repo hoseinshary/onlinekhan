@@ -93,8 +93,8 @@ namespace NasleGhalam.ServiceLayer.Services
                    .Count(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges);
                    
 
-               var allQuestionActived = questions1.Concat(questions2).Where(x => x.IsActive == true).Select(x=>x.Id).Distinct().Count();
-               var allQuestionHybrid = questions1.Concat(questions2).Where(x => x.IsHybrid == true).Select(x => x.Id).Distinct().Count();
+               var allQuestionActived = questions1.Concat(questions2).Distinct().Where(x => x.IsActive == true).Select(x=>x.Id).Count();
+               var allQuestionHybrid = questions1.Concat(questions2).Distinct().Where(x => x.IsHybrid == true).Select(x => x.Id).Count();
 
                returnVal.Add( new AllQuestionOfEachLessonViewModel
                {

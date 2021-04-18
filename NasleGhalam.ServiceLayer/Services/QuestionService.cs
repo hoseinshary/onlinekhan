@@ -511,7 +511,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _questions
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id) && current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType))
                 .OrderBy(x => Guid.NewGuid())
-                .Take(count)
+                //.Take(count)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)

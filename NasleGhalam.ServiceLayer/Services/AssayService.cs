@@ -85,22 +85,24 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     QuestionAssayViewModel lessonItem = new QuestionAssayViewModel();
                     lessonItem.LessonId = lesson.Id;
-                    foreach (var topic in lesson.Topics)
-                    {
+                    //foreach (var topic in lesson.Topics)
+                    //{
                         var qEasy = _questionService.Value.GetAllByTopicIdsForAssay(
-                            new List<int> { topic.Id }, 11,
+                            lesson.Topics.Select(x =>x.Id).ToList(), 11,
                             lesson.CountOfEasy);
                         var qMedium = _questionService.Value.GetAllByTopicIdsForAssay(
-                            new List<int> { topic.Id }, 12,
+                            lesson.Topics.Select(x => x.Id).ToList(), 12,
                             lesson.CountOfMedium);
                         var qHard = _questionService.Value.GetAllByTopicIdsForAssay(
-                            new List<int> { topic.Id }, 13,
+                            lesson.Topics.Select(x => x.Id).ToList(), 13,
                             lesson.CountOfHard);
-
-                        lessonItem.Questions.AddRange(qEasy);
-                        lessonItem.Questions.AddRange(qMedium);
-                        lessonItem.Questions.AddRange(qHard);
-                    }
+                        if(qEasy.Count >0)
+                            lessonItem.Questions.AddRange(qEasy);
+                        if (qMedium.Count > 0)
+                            lessonItem.Questions.AddRange(qMedium);
+                        if (qHard.Count > 0)
+                            lessonItem.Questions.AddRange(qHard);
+                    //}
                     questionsReturn.Add(lessonItem);
                 }
 

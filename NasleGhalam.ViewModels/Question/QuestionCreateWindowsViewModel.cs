@@ -94,7 +94,7 @@ namespace NasleGhalam.ViewModels.Question
                          //   WordBase64File.Substring(0, WordBase64File.IndexOf("base64,", StringComparison.Ordinal) + 7), ""));
                     }
                 }
-                catch (Exception exp)
+                catch
                 {
                     // ignored
                 }

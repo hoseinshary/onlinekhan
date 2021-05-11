@@ -246,7 +246,7 @@ namespace NasleGhalam.WindowsApp
             }
 
 
-
+            x2 = 911;
 
             x1 = data.Width - x2 - padding;
 

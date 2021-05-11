@@ -11,7 +11,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             Property(x => x.Context).IsRequired().HasColumnType("nvarchar(max)");
 
             Property(x => x.Description).HasMaxLength(300);
-            Property(x => x.TopicAnswer).HasMaxLength(400);
+            Property(x => x.TopicAnswer).HasMaxLength(1000);
             Property(x => x.FileName).IsRequired();
 
             

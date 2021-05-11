@@ -83,11 +83,12 @@ export class AssayStore extends VuexModule {
       { root: true }
     );
   }
+  
 
   @action()
   async submitPreCreate() {
     let vm = this._assayVue;
-    if (!(await this.validateForm(vm))) return;
+    //if (!(await this.validateForm(vm))) return;
 
     var data = {
       Title: this.assayCreate.Title,

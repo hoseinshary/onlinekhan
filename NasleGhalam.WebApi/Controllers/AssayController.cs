@@ -49,7 +49,7 @@ namespace NasleGhalam.WebApi.Controllers
 
         [HttpPost]
         [CheckUserAccess(ActionBits.AssayCreateAccess)]
-        [CheckModelValidation]
+        //[CheckModelValidation]
         public IHttpActionResult GetAllQuestion(AssayCreateViewModel assayViewModel)
         {
             assayViewModel.UserId = Request.GetUserId();

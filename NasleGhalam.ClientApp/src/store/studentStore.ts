@@ -155,18 +155,20 @@ export class StudentStore extends VuexModule {
   }
 
   @action()
-  async numberOfQuestionReport(payload:{lessonId :number , studentId : number}) {
+  async numberOfQuestionReport(payload:{lessonId :number , studentId : number}){
     let vm = this._lessonAssayVue;
     return axios
     .post(`${baseUrl}/GetQuestionAssayReportByLessonId`, payload)
     .then((response : AxiosResponse<AssayNumberOfQuestionReport>) => {
       let data = response.data;
-      vm["numberOfQuestionReport.NumberOfNewQuestions"] = data.NumberOfNewQuestions;
-      vm["numberOfQuestionReport.NumberOfAssayQuestions"] = data.NumberOfAssayQuestions;
-      vm["numberOfQuestionReport.NumberOfHomeworkQuestions"] = data.NumberOfHomeworkQuestions;
+      //debugger;
+      // vm["$data"].numberOfQuestionReport.NumberOfNewQuestions = data.NumberOfNewQuestions;
+      // vm["numberOfQuestionReport.NumberOfAssayQuestions"] = data.NumberOfAssayQuestions;
+      // vm["numberOfQuestionReport.NumberOfHomeworkQuestions"] = data.NumberOfHomeworkQuestions;
 
+      // console.log("store",vm["numberOfQuestionReport.NumberOfNewQuestions"]);
       // debugger;
-      
+      return data;
     });
   }
 

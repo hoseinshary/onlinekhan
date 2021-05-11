@@ -31,8 +31,9 @@
           <q-tab slot="title" name="studentTab" label="دانش آموز" />
           <q-tab slot="title" name="lessonTab" label="درس" />
           <q-tab slot="title" name="topicTab" label="مبحث" />
-          <q-tab slot="title" name="assayTab" label="آزمون" />
           <q-tab slot="title" name="questionTab" label="سوال" />
+          <q-tab slot="title" name="assayTab" label="آزمون" />
+          
            <q-tab-pane name="studentTab" keep-alive>
             <student-tab @changeTab="changeTab"></student-tab>
           </q-tab-pane>
@@ -66,8 +67,10 @@ import util from "src/utilities";
     studentTab: () => import("./0student.vue"),
     lessonTab: () => import("./1lesson.vue"),
     topicTab: () => import("./2topic.vue"),
+    
     assayTab: () => import("./3assay.vue"),
-    questionTab: () => import("./4question.vue")
+     questionTab: () => import("./4question.vue")
+   
   }
 })
 export default class AssayVue extends Vue {

@@ -566,7 +566,7 @@ namespace NasleGhalam.WindowsApp
 
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
-            app.Visible = true;
+          //  app.Visible = true;
             var source = app.Documents.Open(destWordFilename);
 
 

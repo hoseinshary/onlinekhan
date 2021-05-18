@@ -43,11 +43,12 @@
           <q-tab-pane name="topicTab" keep-alive>
             <topic-tab @changeTab="changeTab"></topic-tab>
           </q-tab-pane>
-          <q-tab-pane name="assayTab" keep-alive>
-            <assay-tab @changeTab="changeTab"></assay-tab>
-          </q-tab-pane>
+         
           <q-tab-pane name="questionTab" keep-alive>
             <question-tab @changeTab="changeTab"></question-tab>
+          </q-tab-pane>
+           <q-tab-pane name="assayTab" keep-alive>
+            <assay-tab @changeTab="changeTab"></assay-tab>
           </q-tab-pane>
         </q-tabs>
       </div>
@@ -67,9 +68,9 @@ import util from "src/utilities";
     studentTab: () => import("./0student.vue"),
     lessonTab: () => import("./1lesson.vue"),
     topicTab: () => import("./2topic.vue"),
+     questionTab: () => import("./4question.vue"),
+    assayTab: () => import("./3assay.vue")
     
-    assayTab: () => import("./3assay.vue"),
-     questionTab: () => import("./4question.vue")
    
   }
 })

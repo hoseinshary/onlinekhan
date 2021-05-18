@@ -1,25 +1,52 @@
 <template>
   <section class="row gutter-sm">
-    <q-card class="col-12" v-for="lesson in assayStore.checkedLessons" :key="lesson.Id">
-      <div class="col-md-2">
-      </div>
-      <div class="col-md-10">
-      <q-card-title>{{lesson.Name}}</q-card-title>
-      <q-card-separator />
-      <q-card-main>
-        <ul>
-          <li
-            v-for="question in lesson.Questions"
-            :key="question.Id"
-            class="row shadow-1 q-ma-sm q-pa-sm"
-          >
-            <img :src="question.QuestionPicturePath" class="img-original-width" />
-          </li>
-        </ul>
-      </q-card-main>
-      </div>
-    </q-card>
+    <div class="col-md-2">
+      <q-card>
+        <q-card-title> فیلتر ها </q-card-title>
+        <q-card-separator />
+        <q-card-main>
+          سختی سوال
+          <br />
+          <q-checkbox v-model="selection" val="one" label="آسان" /> <br />
+          <q-checkbox v-model="selection" val="two" label="متوسط" />
+          <br />
+          <q-checkbox v-model="selection" val="three" label="سخت" />
 
+          <q-card-separator />
+         <base-select
+          :model="filterModel.Lookup_AreaTypeID"
+          :options="lookupStore.areaTypeDdl"
+          multiple
+          class="col-md-4"
+          filter
+        />
+        </q-card-main>
+      </q-card>
+    </div>
+    <div class="col-md-10">
+      <q-card
+        class="col-md-12"
+        v-for="lesson in assayStore.checkedLessons"
+        :key="lesson.Id"
+      >
+        <q-card-title>{{ lesson.Name }}</q-card-title>
+        <q-card-separator />
+        <q-card-main>
+          <ul>
+            <li
+              v-for="question in lesson.Questions"
+              :key="question.Id"
+              class="row shadow-1 q-ma-sm q-pa-sm"
+            >
+              <img
+                :src="question.QuestionPicturePath"
+                class="img-original-width"
+              />
+            </li>
+          </ul>
+        </q-card-main>
+      </q-card>
+    </div>
     <div class="col-12">
       <q-btn color="primary" class="float-right" @click="goToTopicTab">
         ثبت سوال ها
@@ -41,7 +68,12 @@ import ILesson from "src/models/ILesson";
 export default class LessonTabVue extends Vue {
   //#region ### data ###
   assayStore = vxm.assayStore;
+  lookupStore = vxm.lookupStore;
   assayCreate = vxm.assayStore.assayCreate;
+
+  filterModel = {
+    Lookup_AreaTypeID : 0
+  };
   //#endregion
 
   //#region ### computed ###
@@ -54,7 +86,7 @@ export default class LessonTabVue extends Vue {
   //#endregion
 
   //#region ### hooks ###
-  created() {}
+  created() { }
   //#endregion
 }
 </script>

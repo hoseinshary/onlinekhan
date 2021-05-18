@@ -75,7 +75,7 @@ namespace NasleGhalam.ServiceLayer.Services
             program.CreatedTime = DateTime.Now;
             _programs.Add(program);
 
-            foreach (var programItem in programViewModel.ProgramItemViewModels)
+            foreach (var programItem in programViewModel.ProgramItems)
             {
                 program.ProgramItems.Add(new ProgramItem
                 {

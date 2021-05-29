@@ -75,13 +75,20 @@ namespace NasleGhalam.ViewModels.Question
 
         public int LookupId_QuestionHardnessType { get; set; }
 
+        public LookupViewModel Lookup_QuestionHardnessType { get; set; }
+
         public int LookupId_RepeatnessType { get; set; }
+        public LookupViewModel Lookup_RepeatnessType { get; set; }
+
 
         public int LookupId_AuthorType { get; set; }
 
         //public List<int> LookupId_AreaTypes { get; set; }
         public int LookupId_QuestionRank { get; set; }
-        
+
+        public LookupViewModel Lookup_QuestionRank { get; set; }
+
+
 
         public int WriterId { get; set; }
 

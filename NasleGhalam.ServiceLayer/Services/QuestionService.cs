@@ -509,6 +509,11 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllByTopicIdsForAssay(List<int> ids, int lookupId_QuestionHardnessType, int count)
         {
             return _questions
+                .Include(current => current.Writer)
+                .Include(current => current.Lookup_AreaTypes)
+                .Include(current => current.Lookup_QuestionRank)
+                .Include(current => current.Lookup_RepeatnessType)
+                .Include(current => current.Lookup_QuestionHardnessType)
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id) && current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType))
                 .OrderBy(x => Guid.NewGuid())
                 //.Take(count)

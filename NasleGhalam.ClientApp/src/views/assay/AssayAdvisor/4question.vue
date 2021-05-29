@@ -1,26 +1,34 @@
 <template>
   <section class="row gutter-sm">
+     <div class="col-12">
+      <q-btn color="primary" class="float-right" @click="goToTopicTab">
+        ثبت سوال ها
+        <q-icon name="arrow_back" />
+      </q-btn>
+    </div>
+    <br/>
     <div class="col-md-2">
       <q-card>
         <q-card-title> سختی سوال: </q-card-title>
         <!-- <q-card-separator /> -->
+        <ul>
+          <li v-for="x in filterHardness" :key="x">
+            {{x}}
+          </li>
+        </ul>
         <q-card-main>
-          <q-checkbox
-            v-model="filterHardness"
-            val="14"
-            label="بسیار سخت"
-          />
+          <q-checkbox v-model="filterHardness" :val="14" label="بسیار سخت" />
           <br />
-          <q-checkbox v-model="filterHardness" val="13" label="سخت" />
+          <q-checkbox v-model="filterHardness" :val="13" label="سخت" />
           <br />
-          <q-checkbox v-model="filterHardness" val="12" label="متوسط" />
+          <q-checkbox v-model="filterHardness" :val="12" label="متوسط" />
           <br />
-          <q-checkbox v-model="filterHardness" val="11" label="آسان" />
+          <q-checkbox v-model="filterHardness" :val="11" label="آسان" />
         </q-card-main>
 
-        <q-card-actions>
+        <!-- <q-card-actions>
           <q-btn @click="filterHadrnessAction" color="primary" label="اعمال" />
-        </q-card-actions>
+        </q-card-actions> -->
       </q-card>
 
       <q-card>
@@ -34,16 +42,28 @@
           <q-checkbox v-model="filterRepeatness" val="high" label="زیاد" />
         </q-card-main>
 
-        <q-card-actions>
-          <q-btn  color="primary" label="اعمال" />
-        </q-card-actions>
+        <!-- <q-card-actions>
+          <q-btn color="primary" label="اعمال" />
+        </q-card-actions> -->
+      </q-card>
+
+      <q-card>
+        <q-card-title> حیطه: </q-card-title>
+        <q-card-main>
+          <q-select
+            v-model="filterAreaType"
+            :options="lookupStore.areaTypeDdl"
+            multiple
+            filter
+          />
+        </q-card-main>
+
+        <!-- <q-card-actions>
+          <q-btn color="primary" label="اعمال" />
+        </q-card-actions> -->
       </q-card>
     </div>
-    <q-card
-      class="col-10"
-      v-for="lesson in lessonsCurrent"
-      :key="lesson.Id"
-    >
+    <q-card class="col-10" v-for="lesson in lessonsCurrent" :key="lesson.Id">
       <div class="col-md-10">
         <q-card-title
           >{{ lesson.Name }} ( تعداد سوال :
@@ -79,7 +99,11 @@
                   {{ question.Writer.Name }}<br />
                   سختی:{{ question.Lookup_QuestionHardnessType.Value }}<br />
                   تکرار:{{ question.Lookup_RepeatnessType.Value }}<br />
-                  امتیاز:{{ question.Lookup_QuestionRank.Value }}
+                  امتیاز:<q-rating
+                    disable
+                    v-model="question.Lookup_QuestionRank.State"
+                    :max="4"
+                  />
                 </div>
               </li>
             </ul>
@@ -88,12 +112,7 @@
       </div>
     </q-card>
 
-    <div class="col-12">
-      <q-btn color="primary" class="float-right" @click="goToTopicTab">
-        ثبت سوال ها
-        <q-icon name="arrow_back" />
-      </q-btn>
-    </div>
+   
   </section>
 </template>
 
@@ -105,6 +124,8 @@ import { EducationTreeState } from "../../../utilities/enumeration";
 import AssayCreate, { AssayLesson } from "src/models/IAssay";
 import ILesson from "src/models/ILesson";
 import { assayStore } from "src/store/assayStore";
+import { lookupStore } from "src/store/lookupStore";
+
 import { debug } from "util";
 
 @Component({})
@@ -112,27 +133,43 @@ export default class LessonTabVue extends Vue {
   //#region ### data ###
   assayStore = vxm.assayStore;
   assayCreate = vxm.assayStore.assayCreate;
+  lookupStore = vxm.lookupStore;
 
-  lessonsCurrent :Array<AssayLesson> = [];
+
+  //lessonsCurrent: Array<AssayLesson> = [];
 
   filterHardness: Array<number> = []; //['veryhard' ,'hard','mid' , 'easy'];
   filterRepeatness: Array<number> = []; //'high' ,'mid','low' ];
+  filterAreaType: Array<number> = [];
+
+  filterObject: any = [];
+
+
 
   //#endregion
 
   //#region ### computed ###
+  get lessonsCurrent(){
+
+return this.assayStore.checkedLessons.map((x)=>({
+  Id : x.Id,
+  Name :x.Name,
+  Questions : x.Questions.filter(x => !this.filterHardness.length || this.filterHardness.includes(x.LookupId_QuestionHardnessType) )
+}))
+  }
 
   filterHadrnessAction() {
 
 
-    this.assayStore.checkedLessons.forEach((element,index) => {
-       
 
-       this.lessonsCurrent[index].Questions = element.Questions.filter(x => this.filterHardness.includes( x.LookupId_QuestionHardnessType ));
-       console.log(this.filterHardness);
-       console.log(this.filterHardness.includes(11));
+    this.assayStore.checkedLessons.forEach((element, index) => {
 
-       
+      
+      // this.lessonsCurrent[index].Questions = element.Questions.filter(x => this.filterHardness.includes(x.LookupId_QuestionHardnessType));
+      console.log(this.filterHardness);
+      console.log(this.filterHardness.includes(11));
+
+
 
     });
   }
@@ -147,7 +184,7 @@ export default class LessonTabVue extends Vue {
   //#region ### hooks ###
   created() {
 
-    this.lessonsCurrent = this.assayStore.checkedLessons;
+  //  this.lessonsCurrent = util.cloneObject( this.assayStore.checkedLessons);
   }
   //#endregion
 }

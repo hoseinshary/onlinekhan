@@ -111,7 +111,8 @@ module.exports = function(ctx) {
         "QTabPane",
         "QRouteTab",
         "QAutocomplete",
-        "QCardActions"
+        "QCardActions",
+        "QRating"
       ],
       directives: ["Ripple", "CloseOverlay"],
       // Quasar plugins

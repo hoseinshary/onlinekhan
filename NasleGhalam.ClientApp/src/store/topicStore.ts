@@ -240,6 +240,21 @@ export class TopicStore extends VuexModule {
   }
 
 
+  @action()
+  async fillList3Level() {
+    if (this._modelChanged) {
+      return axios
+        .get(`${baseUrl}/GetAll3level`)
+        .then((response: AxiosResponse<Array<ITopic>>) => {
+          this.SET_LIST(response.data);
+          this.MODEL_CHANGED(false);
+        });
+    } else {
+      return Promise.resolve(this._topicList);
+    }
+  }
+
+
   //گرفتن تمام مبحث های یک درس
   @action()
   async fillListByLessonId(payload: { id: number; showNumberForTopic: boolean; }) {

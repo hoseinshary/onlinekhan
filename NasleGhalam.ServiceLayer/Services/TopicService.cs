@@ -119,6 +119,43 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
+        ///  گرفتن همه مبحث ها تا سطح 3
+        /// </summary>
+        /// <returns></returns>
+        public IList<TopicViewModel> GetAll3Level()
+        {
+            List<TopicViewModel> returnVal = new List<TopicViewModel>();
+
+            var allTopics = _topics
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<TopicViewModel>)
+                .ToList();
+
+            var level1 = allTopics
+                .Where(x => x.ParentTopicId == null).ToList();
+             
+
+            returnVal.AddRange(level1); 
+            
+            
+            var level2 = allTopics
+                .Where(x => level1.Select(y => y.Id).ToList().Contains(x.ParentTopicId == null ? 0 : Convert.ToInt32(x.ParentTopicId)))
+                .ToList();
+
+            returnVal.AddRange(level2);
+
+            var level3 = allTopics
+                .Where(x => level2.Select(y => y.Id).ToList().Contains(x.ParentTopicId == null ? 0 : Convert.ToInt32(x.ParentTopicId)))
+                .ToList();
+
+            returnVal.AddRange(level3);
+
+            return returnVal;
+        }
+
+
+        /// <summary>
         /// ثبت مبحث
         /// </summary>
         /// <param name="topicViewModel"></param>

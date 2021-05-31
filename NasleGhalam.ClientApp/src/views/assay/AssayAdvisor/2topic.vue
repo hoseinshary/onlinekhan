@@ -193,7 +193,7 @@ export default class TopicTabVue extends Vue {
   //#region ### watch ###
   @Watch("lessonIds")
   lessonIdsChanged(newVal) {
-    this.topicStore.fillList();
+    this.topicStore.fillList3Level();
   }
 
   @Watch("topicLeafTicked")

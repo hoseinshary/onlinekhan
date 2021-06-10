@@ -101,6 +101,7 @@ export  default class AssayCreate {
   HaveWhiteSpace: boolean;
   WhiteSpacePosition: boolean;
   Lessons: Array<AssayLesson>;
+  IsDetailTopic : boolean;
 
   /**
    * constructor
@@ -123,6 +124,7 @@ export  default class AssayCreate {
     this.HaveWhiteSpace = false;
     this.WhiteSpacePosition = false;
     this.Lessons = [];
+    this.IsDetailTopic = false;
   }
 }
 

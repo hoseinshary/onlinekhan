@@ -2,7 +2,9 @@
   <section class="row">
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-checkbox label="سوال تصادفی" v-model="assayCreate.RandomQuestion" />
-
+<br/>
+      <q-checkbox label="نمایش جزئیات تعداد سوالات در هر مبحث" v-model="assayCreate.IsDetailTopic" @input="topicWithDetail()"
+/>
       <!-- <div class="row">
       <q-checkbox v-if="assayCreate.RandomQuestion == true" v-model="checked" label="Checkbox Label" />
     </div> -->
@@ -37,8 +39,8 @@
             align="center"
             type="number"
             class="q-mx-sm"
-          /> -->
-          <!--
+          />
+          
           <q-input
             v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
             v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfMedium"
@@ -84,8 +86,8 @@
         node-key="Id"
         tick-strategy="leaf"
         :ticked.sync="topicLeafTicked[lesson.Id]"
-      >
-        <template slot="header-custom" slot-scope="prop">
+      > -->
+        <!-- <template slot="header-custom" slot-scope="prop">
           <template v-if="prop.node.children.length==0">
             <q-checkbox :label="prop.node.Name" v-model="prop.node.Checked" />
           </template>
@@ -126,7 +128,7 @@
           />
         </template>
       </q-tree>
-    </div>-->
+    </div> -->
     <div class="col-12">
       <q-btn color="primary" class="float-right" @click="goToTopicTab">
         سوالات آزمون 
@@ -230,6 +232,11 @@ export default class TopicTabVue extends Vue {
 
   collapseTree(treeRef) {
     this.$refs[treeRef][0]["collapseAll"]();
+  }
+
+  topicWithDetail()
+  {
+
   }
   //#endregion
 

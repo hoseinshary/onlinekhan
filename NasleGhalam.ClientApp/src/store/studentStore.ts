@@ -4,7 +4,7 @@ import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
 import { STUDENT_URL as baseUrl } from "src/utilities/site-config";
-import AssayCreate, { AssayLesson , AssayNumberOfQuestionReport} from "src/models/IAssay";
+import AssayCreate, { AssayLesson , AssayNumberOfQuestionReport ,AssayNumberOfQuestionReportForTopic} from "src/models/IAssay";
 
 import util from "src/utilities";
 import {
@@ -160,6 +160,24 @@ export class StudentStore extends VuexModule {
     return axios
     .post(`${baseUrl}/GetQuestionAssayReportByLessonId`, payload)
     .then((response : AxiosResponse<AssayNumberOfQuestionReport>) => {
+      let data = response.data;
+      //debugger;
+      // vm["$data"].numberOfQuestionReport.NumberOfNewQuestions = data.NumberOfNewQuestions;
+      // vm["numberOfQuestionReport.NumberOfAssayQuestions"] = data.NumberOfAssayQuestions;
+      // vm["numberOfQuestionReport.NumberOfHomeworkQuestions"] = data.NumberOfHomeworkQuestions;
+
+      // console.log("store",vm["numberOfQuestionReport.NumberOfNewQuestions"]);
+      // debugger;
+      return data;
+    });
+  }
+
+  @action()
+  async numberOfQuestionReportForTopic(payload:{lessonIds :Array<number> , studentId : number}){
+    let vm = this._lessonAssayVue;
+    return axios
+    .post(`${baseUrl}/GetQuestionAssayReportByLessonIds`, payload)
+    .then((response : AxiosResponse<AssayNumberOfQuestionReportForTopic>) => {
       let data = response.data;
       //debugger;
       // vm["$data"].numberOfQuestionReport.NumberOfNewQuestions = data.NumberOfNewQuestions;

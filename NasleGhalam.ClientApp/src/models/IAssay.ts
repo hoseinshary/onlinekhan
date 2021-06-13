@@ -128,6 +128,50 @@ export  default class AssayCreate {
   }
 }
 
+export   class AssayNumberOfQuestionReportForTopic {
+  LessonReports : Array<LessonReport>
+  User : IUser;
+
+  /**
+   * constructor
+   */
+  constructor() {
+  this.LessonReports = [];
+  this.User = DefaultUser;
+  }
+}
+export   class LessonReport {
+  Id: number;
+  TopicReport : Array<TopicReport>
+  
+
+  /**
+   * constructor
+   */
+  constructor() {
+  this.Id  = 0;
+  this.TopicReport = [];
+  }
+}
+
+export   class TopicReport {
+  Id: number;
+  NumberOfNewQuestions : number;
+  NumberOfAssayQuestions : number;
+  NumberOfHomeworkQuestions : number;
+  
+
+  /**
+   * constructor
+   */
+  constructor() {
+  this.Id  = 0;
+  this.NumberOfAssayQuestions = 0;
+    this.NumberOfHomeworkQuestions = 0;
+    this.NumberOfNewQuestions = 0 ;
+  }
+}
+
   export   class AssayNumberOfQuestionReport {
     Id: number;
     NumberOfNewQuestions : number;

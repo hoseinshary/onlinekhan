@@ -37,6 +37,13 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_topicService.GetAll());
         }
+        
+
+        [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
+        public IHttpActionResult GetAllChildren(int id)
+        {
+            return Ok(_topicService.GetAllChildren(id));
+        }
 
         [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
         public IHttpActionResult GetAll3Level()

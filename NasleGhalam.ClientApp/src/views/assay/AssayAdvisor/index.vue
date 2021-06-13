@@ -1,5 +1,5 @@
 <template>
-<div class="col-md-8">
+<div class="col-md-10">
  <q-card >
       <section class="row s-border s-spacing col-md-12 col-lg-12" >
         <!-- <p class="col-12 text-primary text-weight-bold q-pa-sm">

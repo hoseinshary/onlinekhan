@@ -52,7 +52,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<TopicViewModel>)
                 .ToList();
-          
+
         }
 
 
@@ -70,21 +70,21 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<TopicViewModel>)
                 .ToList();
-            var questions = _questions.Select(x => new { x.Id , x.Topics})
+            var questions = _questions.Select(x => new { x.Id, x.Topics })
                 .ToList();
-            var questions2 = _questions.Select(x => x.Topics.Select(y => y.Id) )
+            var questions2 = _questions.Select(x => x.Topics.Select(y => y.Id))
                 .ToList();
             foreach (var topicViewModel in topics)
             {
-                topics.Find(x => x.Id == topicViewModel.Id).Title += " (" + getCountTopic(topicViewModel.Id,topics , questions) + ")";
+                topics.Find(x => x.Id == topicViewModel.Id).Title += " (" + getCountTopic(topicViewModel.Id, topics, questions) + ")";
             }
 
             return topics;
         }
 
-       
 
-        private int getCountTopic(int id , List<TopicViewModel> topics , IEnumerable<object> questions)
+
+        private int getCountTopic(int id, List<TopicViewModel> topics, IEnumerable<object> questions)
         {
             var count = _questions.Count(current => current.Topics.Any(x => x.Id == id));
             //var count = questions.Count(current => current.Topics.Any(x => x.Id == id))
@@ -102,7 +102,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 return count;
             }
-           
+
         }
 
         /// <summary>
@@ -116,6 +116,56 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<TopicViewModel>)
                 .ToList();
+        }
+
+
+        /// <summary>
+        /// گرفتن همه مبحث ها
+        /// </summary>
+        /// <returns></returns>
+        public IList<TopicViewModel> GetAllChildren(int id)
+        {
+
+            var returnVal = new List<TopicViewModel>();
+            var allTopics = _topics.Where(x => x.LessonId == _topics.FirstOrDefault(y => y.Id == id).LessonId).AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<TopicViewModel>)
+                .ToList();
+
+            if (allTopics.Count(x => x.ParentTopicId == id) == 0)
+            {
+                returnVal.Add(allTopics.FirstOrDefault(x => x.Id == id));
+                return returnVal;
+            }
+            else
+            {
+                var topicsChildTemp = new List<TopicViewModel>();
+
+                topicsChildTemp.AddRange(allTopics.Where(x => x.ParentTopicId == id));
+                while (true)
+                {
+
+                    foreach (var topic in topicsChildTemp.ToList())
+                    {
+                        if (allTopics.Count(x => x.ParentTopicId == topic.Id) == 0)
+                        {
+                            returnVal.Add(allTopics.FirstOrDefault(x => x.Id == topic.Id));
+                            topicsChildTemp.Remove(topic);
+                        }
+                        else
+                        {
+                            topicsChildTemp.Remove(topic);
+                            topicsChildTemp.AddRange(allTopics.Where(x => x.ParentTopicId == topic.Id));
+                        }
+                    }
+                    if(topicsChildTemp.Count == 0)
+                        break;
+                }
+
+                return returnVal;
+
+            }
+
         }
 
         /// <summary>
@@ -134,11 +184,11 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var level1 = allTopics
                 .Where(x => x.ParentTopicId == null).ToList();
-             
 
-            returnVal.AddRange(level1); 
-            
-            
+
+            returnVal.AddRange(level1);
+
+
             var level2 = allTopics
                 .Where(x => level1.Select(y => y.Id).ToList().Contains(x.ParentTopicId == null ? 0 : Convert.ToInt32(x.ParentTopicId)))
                 .ToList();
@@ -150,6 +200,49 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
 
             returnVal.AddRange(level3);
+
+            return returnVal;
+        }
+
+
+        /// <summary>
+        ///  گرفتن همه مبحث ها تا سطح 3
+        /// </summary>
+        /// <returns></returns>
+        public IList<TopicViewModel> GetAll4LevelByLessonId(int id)
+        {
+            List<TopicViewModel> returnVal = new List<TopicViewModel>();
+
+            var allTopics = _topics.Where(x => x.LessonId == id)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<TopicViewModel>)
+                .ToList();
+
+            var level1 = allTopics
+                .Where(x => x.ParentTopicId == null).ToList();
+
+
+            returnVal.AddRange(level1);
+
+
+            var level2 = allTopics
+                .Where(x => level1.Select(y => y.Id).ToList().Contains(x.ParentTopicId == null ? 0 : Convert.ToInt32(x.ParentTopicId)))
+                .ToList();
+
+            returnVal.AddRange(level2);
+
+            var level3 = allTopics
+                .Where(x => level2.Select(y => y.Id).ToList().Contains(x.ParentTopicId == null ? 0 : Convert.ToInt32(x.ParentTopicId)))
+                .ToList();
+
+            returnVal.AddRange(level3);
+
+            var level4 = allTopics
+                .Where(x => level3.Select(y => y.Id).ToList().Contains(x.ParentTopicId == null ? 0 : Convert.ToInt32(x.ParentTopicId)))
+                .ToList();
+
+            returnVal.AddRange(level4);
 
             return returnVal;
         }

@@ -201,6 +201,11 @@ export default [
         path: "/AssayAdvisor",
         name: "assayAdvisor",
         component: () => import(/* webpackChunkName: "program" */"src/views/assay/assayadvisor/index.vue")
+      },
+      {
+        path: "/AssayTeacher",
+        name: "assayTeacher",
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/assayTeacher/index.vue")
       }
     ]
   },

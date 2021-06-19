@@ -41,7 +41,7 @@ namespace NasleGhalam.WebApi.FilterAttribute
             if (postedFile != null && postedFile.ContentLength > 0) // todo: hashem, posted file is not null
             {
                 var fileExt = Path.GetExtension(postedFile.FileName);
-                if (!Utility.CheckImageProfileExtension(fileExt))
+                if (!Utility.CheckImageExtension(fileExt))
                 {
                     actionContext.Response = actionContext
                         .ControllerContext.Request

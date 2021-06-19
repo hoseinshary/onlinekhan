@@ -17,6 +17,18 @@
         />
       </q-input>
     </base-field>
+     <slot>
+      <q-field class="col-sm-12">
+        <q-uploader
+          url="url"
+          float-label="تصویر"
+          name="img"
+          auto-expand
+          ref="fileUpload"
+          extensions=".jpg , .png"
+        />
+      </q-field>
+    </slot>
   </base-modal-edit>
 </template>
 

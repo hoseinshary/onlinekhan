@@ -10,5 +10,6 @@ namespace NasleGhalam.ViewModels.Writer
 
         [Display(Name = "کاربر")]
         public int? UserId { get; set; }
+        public string ProfilePic { get; set; }
     }
 }

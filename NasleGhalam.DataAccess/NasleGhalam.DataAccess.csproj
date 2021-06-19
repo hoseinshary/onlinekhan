@@ -128,6 +128,10 @@
     <Compile Include="Migrations\202101250830562_questionanswer_change.Designer.cs">
       <DependentUpon>202101250830562_questionanswer_change.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202106160903351_writerPic.cs" />
+    <Compile Include="Migrations\202106160903351_writerPic.Designer.cs">
+      <DependentUpon>202106160903351_writerPic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -206,6 +210,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101250830562_questionanswer_change.resx">
       <DependentUpon>202101250830562_questionanswer_change.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106160903351_writerPic.resx">
+      <DependentUpon>202106160903351_writerPic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

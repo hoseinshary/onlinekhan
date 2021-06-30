@@ -7,6 +7,7 @@ using System.Web;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -18,9 +19,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class PackageController : ApiController
     {
         private readonly PackageService _packageService;
-        public PackageController(PackageService packageService)
+        private readonly LogService _logService;
+        public PackageController(PackageService packageService, LogService logService)
         {
             _packageService = packageService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.PackageReadAccess)]
@@ -58,6 +61,10 @@ namespace NasleGhalam.WebApi.Controllers
             {
                 postedFile?.SaveAs($"{SitePath.PackageRelPath}{packageViewModel.ImageFile}".ToAbsolutePath());
             }
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Package", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -82,13 +89,22 @@ namespace NasleGhalam.WebApi.Controllers
 
                 postedFile?.SaveAs($"{SitePath.PackageRelPath}{packageViewModel.ImageFile}".ToAbsolutePath());
             }
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Package", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.PackageDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_packageService.Delete(id));
+            var msgRes = _packageService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Package", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

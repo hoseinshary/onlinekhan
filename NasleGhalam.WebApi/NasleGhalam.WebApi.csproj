@@ -151,6 +151,7 @@
     <Compile Include="Controllers\LessonController.cs" />
     <Compile Include="Controllers\LessonDepartmentController.cs" />
     <Compile Include="Controllers\Lesson_UserController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\LookupController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\PackageController.cs" />

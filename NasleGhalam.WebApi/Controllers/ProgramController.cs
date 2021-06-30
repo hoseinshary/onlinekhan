@@ -4,6 +4,11 @@ using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Program;
 using NasleGhalam.WebApi.Extensions;
+using System;
+using Newtonsoft.Json;
+using System.Text;
+using System.IO;
+using System.IO.Compression;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -15,9 +20,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class ProgramController : ApiController
     {
         private readonly ProgramService _programService;
-        public ProgramController(ProgramService programService)
+        private readonly LogService _logService;
+        public ProgramController(ProgramService programService,LogService logService)
         {
             _programService = programService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.ProgramReadAccess)]
@@ -43,7 +50,12 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(ProgramCreateViewModel programViewModel)
         {
-            return Ok(_programService.Create(programViewModel));
+            var result = _programService.Create(programViewModel);
+            if(result.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Program", result.Obj,Request.GetUserId());
+            }
+            return Ok(result);
         }
 
         [HttpPost]
@@ -51,13 +63,23 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(ProgramCreateViewModel programViewModel)
         {
-            return Ok(_programService.Update(programViewModel));
+            var msgRes = _programService.Update(programViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Program", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.ProgramDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_programService.Delete(id));
+            var msgRes = _programService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Program", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

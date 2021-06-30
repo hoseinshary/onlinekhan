@@ -6,6 +6,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.AxillaryBook;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -17,9 +18,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class AxillaryBookController : ApiController
     {
         private readonly AxillaryBookService _axillaryBookService;
-        public AxillaryBookController(AxillaryBookService axillaryBookService)
+        private readonly LogService _logService;
+        public AxillaryBookController(AxillaryBookService axillaryBookService, LogService logService)
         {
             _axillaryBookService = axillaryBookService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AxillaryBookReadAccess)]
@@ -56,7 +59,10 @@ namespace NasleGhalam.WebApi.Controllers
             {
                 postedFile?.SaveAs(axillaryBookViewModel.ImgAbsPath);
             }
-
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "AxillaryBook", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -85,6 +91,10 @@ namespace NasleGhalam.WebApi.Controllers
             {
                 postedFile?.SaveAs(axillaryBookViewModel.ImgAbsPath); // update image if exist
             }
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "AxillaryBook", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -92,6 +102,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _axillaryBookService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "AxillaryBook", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
     }

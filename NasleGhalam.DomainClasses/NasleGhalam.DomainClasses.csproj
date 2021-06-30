@@ -101,6 +101,7 @@
     <Compile Include="EntityConfigs\AssaySchaduleConfig.cs" />
     <Compile Include="EntityConfigs\EducationTreeConfig.cs" />
     <Compile Include="EntityConfigs\LessonDepartmentConfig.cs" />
+    <Compile Include="EntityConfigs\LogConfig.cs" />
     <Compile Include="EntityConfigs\LookupConfig.cs" />
     <Compile Include="EntityConfigs\ModuleConfig.cs" />
     <Compile Include="EntityConfigs\PackageConfig.cs" />

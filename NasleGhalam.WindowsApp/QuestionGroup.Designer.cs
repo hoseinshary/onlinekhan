@@ -54,6 +54,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.progressBar4 = new System.Windows.Forms.ProgressBar();
             this.button7 = new System.Windows.Forms.Button();
             this.comboBox_writer = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -76,7 +77,6 @@
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
-            this.progressBar4 = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -168,7 +168,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(179, 21);
             this.comboBox1.TabIndex = 10;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboBox1_KeyDown);
             // 
             // label4
             // 
@@ -354,6 +354,13 @@
             this.tabPage4.Text = "ورود فایل جواب ها";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // progressBar4
+            // 
+            this.progressBar4.Location = new System.Drawing.Point(85, 260);
+            this.progressBar4.Name = "progressBar4";
+            this.progressBar4.Size = new System.Drawing.Size(687, 23);
+            this.progressBar4.TabIndex = 19;
+            // 
             // button7
             // 
             this.button7.Location = new System.Drawing.Point(681, 193);
@@ -533,13 +540,6 @@
             // 
             this.backgroundWorker4.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker4_DoWork);
             this.backgroundWorker4.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker4_ProgressChanged);
-            // 
-            // progressBar4
-            // 
-            this.progressBar4.Location = new System.Drawing.Point(85, 260);
-            this.progressBar4.Name = "progressBar4";
-            this.progressBar4.Size = new System.Drawing.Size(687, 23);
-            this.progressBar4.TabIndex = 19;
             // 
             // QuestionGroup
             // 

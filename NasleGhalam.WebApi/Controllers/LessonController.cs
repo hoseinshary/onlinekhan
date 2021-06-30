@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Lesson;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class LessonController : ApiController
     {
         private readonly LessonService _lessonService;
-        public LessonController(LessonService lessonService)
+        private readonly LogService _logService;
+        public LessonController(LessonService lessonService, LogService logService)
         {
             _lessonService = lessonService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.LessonReadAccess, ActionBits.TopicReadAccess)]
@@ -54,7 +57,12 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(LessonCreateViewModel lessonViewModel)
         {
-            return Ok(_lessonService.Create(lessonViewModel));
+            var msgRes = _lessonService.Create(lessonViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Lesson", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -62,13 +70,23 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(LessonUpdateViewModel lessonViewModel)
         {
-            return Ok(_lessonService.Update(lessonViewModel));
+            var msgRes = _lessonService.Update(lessonViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Lesson", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.LessonDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_lessonService.Delete(id));
+            var msgRes = _lessonService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Lesson", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

@@ -78,6 +78,7 @@
     <Compile Include="Lesson\LessonUpdateViewModel.cs" />
     <Compile Include="Lesson\Lesson_UserViewModel.cs" />
     <Compile Include="Log\BrowserInfoViewModel.cs" />
+    <Compile Include="Log\LogGetAllViewModel.cs" />
     <Compile Include="Log\LogViewModel.cs" />
     <Compile Include="Media\MediaViewModel .cs" />
     <Compile Include="Media\MediaUpdateViewModel.cs" />

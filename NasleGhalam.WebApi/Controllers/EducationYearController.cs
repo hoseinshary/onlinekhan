@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.EducationYear;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class EducationYearController : ApiController
     {
         private readonly EducationYearService _educationYearService;
-        public EducationYearController(EducationYearService educationYearService)
+        private readonly LogService _logService;
+        public EducationYearController(EducationYearService educationYearService, LogService logService)
         {
             _educationYearService = educationYearService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.EducationYearReadAccess)]
@@ -42,6 +45,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(EducationYearCreateViewModel educationYearViewModel)
         {
             var msgRes = _educationYearService.Create(educationYearViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "EducationYear", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -51,6 +58,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(EducationYearUpdateViewModel educationYearViewModel)
         {
             var msgRes = _educationYearService.Update(educationYearViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "EducationYear", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -58,6 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _educationYearService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "EducationYear", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
     }

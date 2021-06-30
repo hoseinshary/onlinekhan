@@ -23,10 +23,12 @@ namespace NasleGhalam.WebApi.Controllers
     {
         private readonly UserService _userService;
         private readonly PhoneVerificationService _phoneVerificationService;
-        public UserController(UserService userService,PhoneVerificationService phoneVerificationService)
+        private readonly LogService _logService;
+        public UserController(UserService userService,PhoneVerificationService phoneVerificationService, LogService logService)
         {
             _userService = userService;
             _phoneVerificationService = phoneVerificationService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.UserReadAccess)]
@@ -134,6 +136,10 @@ namespace NasleGhalam.WebApi.Controllers
             if (result)
             {
                 var msgRes = _userService.PreRegister(userViewModel);
+                if (msgRes.MessageType == MessageType.Success)
+                {
+                    _logService.Create(CrudType.Create, "User-PreRegister", msgRes.Obj, Request.GetUserId());
+                }
                 return Ok(msgRes);
             }
             else
@@ -160,6 +166,10 @@ namespace NasleGhalam.WebApi.Controllers
             {
                 postedFile?.SaveAs($"{SitePath.UserProfileRelPath}{userViewModel.ProfilePic}{Path.GetExtension(postedFile.FileName)}".ToAbsolutePath());
             }
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "User-Register", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -170,6 +180,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(UserCreateViewModel userViewModel)
         {
             var msgRes = _userService.Create(userViewModel, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "User", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -179,6 +193,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(UserUpdateViewModel userViewModel)
         {
             var msgRes = _userService.Update(userViewModel, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "User", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -188,6 +206,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult UpdateUser(UserUpdateViewModel userViewModel)
         {
             var msgRes = _userService.UpdateUser(userViewModel, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "User-Update", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -197,6 +219,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult UpdateUserPassword(UserChangePasswordViewModel userViewModel)
         {
             var msgRes = _userService.UpdateUserPassword(userViewModel, Request.GetRoleLevel() , Request.GetUserId());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "User-Password", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -205,6 +231,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _userService.Delete(id, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "User", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -266,6 +296,10 @@ namespace NasleGhalam.WebApi.Controllers
                         File.Delete($"{SitePath.UserProfileRelPath}{previusFile}{Path.GetExtension(postedFile.FileName)}"
                             .ToAbsolutePath());
                     }
+                }
+                if (msgRes.MessageType == MessageType.Success)
+                {
+                    _logService.Create(CrudType.Update, "User-Image", msgRes.Obj, Request.GetUserId());
                 }
                 return Ok(msgRes);
             }

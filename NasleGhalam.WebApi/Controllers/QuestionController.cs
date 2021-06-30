@@ -21,9 +21,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class QuestionController : ApiController
     {
         private readonly QuestionService _questionService;
-        public QuestionController(QuestionService questionService)
+        private readonly LogService _logService;
+        public QuestionController(QuestionService questionService, LogService logService)
         {
             _questionService = questionService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionReadAccess)]
@@ -158,6 +160,10 @@ namespace NasleGhalam.WebApi.Controllers
             questionViewModel.UserId = Request.GetUserId();
 
             var msgRes = _questionService.Create(questionViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Question", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -172,6 +178,10 @@ namespace NasleGhalam.WebApi.Controllers
             
 
             var msgRes = _questionService.CreateForWindowsApp(questionViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Question-WindowsApp", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -185,6 +195,10 @@ namespace NasleGhalam.WebApi.Controllers
             questionViewModel.UserId = Request.GetUserId();
             
             var msgRes = _questionService.Update(questionViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Question", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -198,6 +212,10 @@ namespace NasleGhalam.WebApi.Controllers
 
             questionViewModel.UserId = Request.GetUserId();
             var msgRes = _questionService.UpdateImport(questionViewModel );
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Question-Import", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -212,6 +230,10 @@ namespace NasleGhalam.WebApi.Controllers
 
             questionViewModel.UserId = Request.GetUserId();
             var msgRes = _questionService.UpdateFinalImport(questionViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Question-FinalImport", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -225,6 +247,10 @@ namespace NasleGhalam.WebApi.Controllers
 
             questionViewModel.UserId = Request.GetUserId();
             var msgRes = _questionService.UpdateTopic(questionViewModel, Request.GetUserId());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Question-Topic", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -232,6 +258,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgResult = _questionService.Delete(id);
+            if (msgResult.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Question", msgResult.Obj, Request.GetUserId());
+            }
             return Ok(msgResult);
         }
     }

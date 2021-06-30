@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.EducationTree;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class EducationTreeController : ApiController
     {
         private readonly EducationTreeService _educationTreeService;
-        public EducationTreeController(EducationTreeService educationTreeService)
+        private readonly LogService _logService;
+        public EducationTreeController(EducationTreeService educationTreeService, LogService logService)
         {
             _educationTreeService = educationTreeService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.EducationTreeReadAccess, ActionBits.TopicReadAccess)]
@@ -47,7 +50,12 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(EducationTreeCreateViewModel educationTreeViewModel)
         {
-            return Ok(_educationTreeService.Create(educationTreeViewModel));
+            var msgRes = _educationTreeService.Create(educationTreeViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "EducationTree", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -55,13 +63,23 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(EducationTreeUpdateViewModel educationTreeViewModel)
         {
-            return Ok(_educationTreeService.Update(educationTreeViewModel));
+            var msgRes = _educationTreeService.Update(educationTreeViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "EducationTree", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.EducationTreeDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_educationTreeService.Delete(id));
+            var msgRes = _educationTreeService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "EducationTree", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

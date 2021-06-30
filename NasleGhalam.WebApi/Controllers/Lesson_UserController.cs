@@ -4,6 +4,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Lesson;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -15,9 +16,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class Lesson_UserController : ApiController
     {
         private readonly Lesson_UserService _lesson_UserService;
-        public Lesson_UserController(Lesson_UserService lesson_UserService)
+        private readonly LogService _logService;
+        public Lesson_UserController(Lesson_UserService lesson_UserService, LogService logService)
         {
             _lesson_UserService = lesson_UserService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.Lesson_UserReadAccess)]
@@ -37,7 +40,12 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult SubmitChanges(Lesson_UserViewModel lesson_UserViewModel)
         {
-            return Ok(_lesson_UserService.SubmitChanges(lesson_UserViewModel));
+            var msgRes = _lesson_UserService.SubmitChanges(lesson_UserViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Lesson_User", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

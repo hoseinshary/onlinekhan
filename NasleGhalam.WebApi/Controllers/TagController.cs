@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Tag;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class TagController : ApiController
     {
         private readonly TagService _tagService;
-        public TagController(TagService tagService)
+        private readonly LogService _logService;
+        public TagController(TagService tagService, LogService logService)
         {
             _tagService = tagService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.TagReadAccess)]
@@ -42,6 +45,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(TagViewModel tagViewModel)
         {
             var msgRes = _tagService.Create(tagViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Tag", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
 
         }
@@ -52,6 +59,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(TagViewModel tagViewModel)
         {
             var msgRes = _tagService.Update(tagViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Tag", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -59,6 +70,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _tagService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Tag", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
     }

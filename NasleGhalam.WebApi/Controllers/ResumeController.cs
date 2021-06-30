@@ -4,6 +4,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Resume;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -15,9 +16,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class ResumeController : ApiController
     {
         private readonly ResumeService _resumeService;
-        public ResumeController(ResumeService resumeService)
+        private readonly LogService _logService;
+        public ResumeController(ResumeService resumeService, LogService logService)
         {
             _resumeService = resumeService;
+            _logService = logService;
         }
 
         [HttpGet]
@@ -45,7 +48,12 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(ResumeViewModel resumeViewModel)
         {
             resumeViewModel.CreationDateTime=DateTime.Now;
-            return Ok(_resumeService.Create(resumeViewModel));
+            var msgRes = _resumeService.Create(resumeViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Resume", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
 
@@ -53,7 +61,12 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.ResumeDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_resumeService.Delete(id));
+            var msgRes = _resumeService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Resume", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

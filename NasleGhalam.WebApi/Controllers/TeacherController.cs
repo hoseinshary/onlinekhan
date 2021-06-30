@@ -15,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class TeacherController : ApiController
     {
         private readonly TeacherService _teacherService;
-        public TeacherController(TeacherService teacherService)
+        private readonly LogService _logService;
+        public TeacherController(TeacherService teacherService, LogService logService)
         {
             _teacherService = teacherService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.TeacherReadAccess)]
@@ -42,7 +44,12 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(TeacherCreateViewModel teacherViewModel)
         {
-            return Ok(_teacherService.Create(teacherViewModel, Request.GetRoleLevel()));
+            var msgRes = _teacherService.Create(teacherViewModel, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Teacher", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -50,13 +57,23 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(TeacherUpdateViewModel teacherViewModel)
         {
-            return Ok(_teacherService.Update(teacherViewModel, Request.GetRoleLevel()));
+            var msgRes = _teacherService.Update(teacherViewModel, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Teacher", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.TeacherDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_teacherService.Delete(id));
+            var msgRes = _teacherService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Teacher", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

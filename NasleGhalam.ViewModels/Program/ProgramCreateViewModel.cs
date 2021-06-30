@@ -22,7 +22,7 @@ namespace NasleGhalam.ViewModels.Program
         public string Description { get; set; }
 
 
-        public ICollection<ProgramItemCreateViewModel> ProgramItemViewModels { get; set; }
+        public ICollection<ProgramItemCreateViewModel> ProgramItems { get; set; }
 
 
 

@@ -2,11 +2,17 @@
   <section class="row">
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-checkbox label="سوال تصادفی" v-model="assayCreate.RandomQuestion" />
-
+      <br />
+      <q-checkbox
+        label="نمایش جزئیات تعداد سوالات در هر مبحث"
+        v-model="assayCreate.IsDetailTopic"
+        @input="topicWithDetail()"
+      />
       <!-- <div class="row">
       <q-checkbox v-if="assayCreate.RandomQuestion == true" v-model="checked" label="Checkbox Label" />
     </div> -->
     </div>
+
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-tree
         :nodes="topicStore.treeDataByLessonIds(lessonIds)"
@@ -17,119 +23,78 @@
         tick-strategy="leaf"
         :ticked.sync="topicLeafTicked"
       >
-        <template slot="header-custom" slot-scope="prop">
-          <template v-if="prop.node.ParentTopicId == null"
-            >({{ getLesson(prop.node.lessonId).CountOfQuestions }}) سوال از درس
-            ({{ getLesson(prop.node.lessonId).Name }})</template
-          >
-          <template v-else>{{ prop.node.label }}</template>
-
-          <!-- <q-checkbox v-model="checked" label="Checkbox Label" />
-          <q-input
-            v-if="
-              prop.node.children.length == 0 &&
-              !assayCreate.RandomQuestion &&
-              getTopic(prop.node.lessonId, prop.node.Id).Checked
-            "
-            v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfEasy"
-            float-label="آسان"
-            @focus="$event.target.select()"
-            align="center"
-            type="number"
-            class="q-mx-sm"
-          /> -->
-          <!--
-          <q-input
-            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
-            v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfMedium"
-            float-label="متوسط"
-            @focus="$event.target.select()"
-            align="center"
-            type="number"
-            class="q-mx-sm"
-          />
-          <q-input
-            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
-            v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfHard"
-            float-label="سخت"
-            @focus="$event.target.select()"
-            align="center"
-            type="number"
-            class="q-mx-sm"
-          />
-          <q-input
-            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && getTopic(prop.node.lessonId, prop.node.Id).Checked"
-            v-model="getTopic(prop.node.lessonId, prop.node.Id).CountOfQuestions"
-            float-label="کل"
-            align="center"
-            readonly
-          /> -->
-        </template>
+        <div slot="header-custom" slot-scope="prop">
+          <!-- <div class="col"> -->
+            <template v-if="prop.node.ParentTopicId == null"
+              >({{ getLesson(prop.node.lessonId).CountOfQuestions }}) سوال از
+              درس ({{ getLesson(prop.node.lessonId).Name }})</template
+            >
+            <template v-else>{{ prop.node.label }}</template>
+          <!-- </div> -->
+          <!-- <div class="col"> -->
+            <template>
+              <div
+                v-if="assayCreate.IsDetailTopic && numberOfQuestionReport.LessonReports.find(
+                        (x) => x.Id === prop.node.lessonId
+                      ).TopicReports.find(y=> y.ID === prop.node.Id) "
+                class="col-md-12 row"
+                style="color: #a9a9a9; font-size: 12px"
+              >
+                <!-- <section class="row gutter-sm"> -->
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <div class="border border-primary">
+                  <label>
+                    تعداد سوال جدید:
+                    {{
+                      numberOfQuestionReport.LessonReports.find(
+                        (x) => x.Id === prop.node.lessonId
+                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions
+                    }}</label
+                  >
+                </div>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <div class="">
+                  <label> تعداد سوال تکلیف:{{   numberOfQuestionReport.LessonReports.find(
+                        (x) => x.Id === prop.node.lessonId
+                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions }} </label>
+                </div>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <div class="">
+                  <label>
+                    تعداد سوال آزمون قبلی:
+                    {{   numberOfQuestionReport.LessonReports.find(
+                        (x) => x.Id === prop.node.lessonId
+                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }}</label
+                  >
+                </div>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <div class="">
+                  <label> تعداد کل سوالات :{{  numberOfQuestionReport.LessonReports.find(
+                        (x) => x.Id === prop.node.lessonId
+                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions+numberOfQuestionReport.LessonReports.find(
+                        (x) => x.Id === prop.node.lessonId
+                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions+numberOfQuestionReport.LessonReports.find(
+                        (x) => x.Id === prop.node.lessonId
+                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }} </label>
+                </div>
+                <!-- </section> -->
+              </div>
+            </template>
+          <!-- </div> -->
+        </div>
       </q-tree>
     </div>
-    <!-- <div class="col-12 shadow-1 q-ma-sm q-pa-sm" v-for="lesson in checkedLessons" :key="lesson.Id">
-      {{lesson.Name}} ({{lesson.CountOfQuestions}} سوال)
-      <q-btn color="primary" @click="expandTree('tree'+lesson.Id)" icon="unfold_more">
-        <q-tooltip>باز کردن درخت</q-tooltip>
-      </q-btn>
-      <q-btn color="primary" @click="collapseTree('tree'+lesson.Id)" icon="unfold_less">
-        <q-tooltip>بستن کردن درخت</q-tooltip>
-      </q-btn>
-
-      <q-tree
-        :nodes="lesson.TopicsTree"
-        :ref="'tree'+lesson.Id"
-        class="q-pt-lg"
-        color="primary"
-        node-key="Id"
-        tick-strategy="leaf"
-        :ticked.sync="topicLeafTicked[lesson.Id]"
-      >
-        <template slot="header-custom" slot-scope="prop">
-          <template v-if="prop.node.children.length==0">
-            <q-checkbox :label="prop.node.Name" v-model="prop.node.Checked" />
-          </template>
-          <template v-else>{{prop.node.Name}}</template>
-          <q-input
-            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && prop.node.Checked"
-            v-model="prop.node.CountOfEasy"
-            float-label="آسان"
-            @focus="$event.target.select()"
-            align="center"
-            type="number"
-            class="q-mx-sm"
-          />
-          <q-input
-            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && prop.node.Checked"
-            v-model="prop.node.CountOfMedium"
-            float-label="متوسط"
-            @focus="$event.target.select()"
-            align="center"
-            type="number"
-            class="q-mx-sm"
-          />
-          <q-input
-            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && prop.node.Checked"
-            v-model="prop.node.CountOfHard"
-            float-label="سخت"
-            @focus="$event.target.select()"
-            align="center"
-            type="number"
-            class="q-mx-sm"
-          />
-          <q-input
-            v-if="prop.node.children.length==0 && !assayCreate.RandomQuestion && prop.node.Checked"
-            v-model="prop.node.CountOfQuestions"
-            float-label="کل"
-            align="center"
-            readonly
-          />
-        </template>
-      </q-tree>
-    </div>-->
     <div class="col-12">
       <q-btn color="primary" class="float-right" @click="goToTopicTab">
-        سوالات آزمون 
+        سوالات آزمون
         <q-icon name="arrow_back" />
       </q-btn>
     </div>
@@ -140,7 +105,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
-import { AssayTopic } from "src/models/IAssay";
+import { AssayTopic, AssayNumberOfQuestionReportForTopic } from "src/models/IAssay";
 
 @Component({
   components: {}
@@ -149,9 +114,12 @@ export default class TopicTabVue extends Vue {
   //#region ### data ###
   assayStore = vxm.assayStore;
   topicStore = vxm.topicStore;
+  studentStore = vxm.studentStore;
   assayCreate = vxm.assayStore.assayCreate;
   topicLeafTicked: Array<number> = [];
   topicTreeData = [];
+  numberOfQuestionReport: AssayNumberOfQuestionReportForTopic = new AssayNumberOfQuestionReportForTopic();
+
   //#endregion
 
   //#region ### computed ###
@@ -221,7 +189,8 @@ export default class TopicTabVue extends Vue {
   //#region ### methods ###
   goToTopicTab() {
     this.assayStore.submitPreCreate().then(() => {
-      this.$emit("changeTab", "questionTab");})
+      this.$emit("changeTab", "questionTab");
+    })
   }
 
   expandTree(treeRef) {
@@ -230,6 +199,14 @@ export default class TopicTabVue extends Vue {
 
   collapseTree(treeRef) {
     this.$refs[treeRef][0]["collapseAll"]();
+  }
+
+  topicWithDetail() {
+    if (this.assayCreate.IsDetailTopic) {
+      this.studentStore.numberOfQuestionReportForTopic({ lessonIds: this.lessonIds, studentId: 9 }).then(d => {
+        this.numberOfQuestionReport = d;
+      });
+    }
   }
   //#endregion
 

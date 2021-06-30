@@ -174,14 +174,14 @@ export default class LessonTabVue extends Vue {
     this.studentStore.numberOfQuestionReport({ lessonId: LessonId, studentId: 9 }).then(d => {
       this.numberOfQuestionReport = d;
     });
-    debugger;
+    //debugger;
     //  this.numberOfQuestionReport.NumberOfNewQuestions = this["numberOfQuestionReport.NumberOfNewQuestions"];
     //  this.numberOfQuestionReport.NumberOfAssayQuestions = this["numberOfQuestionReport.NumberOfAssayQuestions"];
     //  this.numberOfQuestionReport.NumberOfHomeworkQuestions = this["numberOfQuestionReport.NumberOfHomeworkQuestions"];
 
 
-    console.log("vue :", this["numberOfQuestionReport.NumberOfNewQuestions"]);//255
-    console.log("vue :", this.numberOfQuestionReport.NumberOfNewQuestions);//0
+    // console.log("vue :", this["numberOfQuestionReport.NumberOfNewQuestions"]);//255
+    // console.log("vue :", this.numberOfQuestionReport.NumberOfNewQuestions);//0
 
 
   }

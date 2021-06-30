@@ -178,19 +178,32 @@ export class WriterStore extends VuexModule {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
-    return axios
-      .post(`${baseUrl}/Create`, this.writer)
-      .then((response: AxiosResponse<IMessageResult>) => {
+    var formData = new FormData();
+    var fileUpload = vm.$refs.fileUpload;
+
+    if (fileUpload && fileUpload["files"].length > 0) {
+      formData.append(fileUpload["name"], fileUpload["files"][0]);
+    }
+
+    var params = util.toParam(this.writer);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/Create?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
-          this.CREATE(data.Obj);
-          this.OPEN_MODAL_CREATE(!closeModal);
-          this.MODEL_CHANGED(true);
           this.resetCreate();
+          this.UPDATE(data.Obj);
+          this.OPEN_MODAL_CREATE(false);
         }
       });
+
+   
   }
 
   @action()
@@ -205,9 +218,21 @@ export class WriterStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
-    return axios
-      .post(`${baseUrl}/Update`, this.writer)
-      .then((response: AxiosResponse<IMessageResult>) => {
+    var formData = new FormData();
+    var fileUpload = vm.$refs.fileUpload;
+
+    if (fileUpload && fileUpload["files"].length > 0) {
+      formData.append(fileUpload["name"], fileUpload["files"][0]);
+    }
+
+    var params = util.toParam(this.writer);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/Update?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    }).then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
 
@@ -218,6 +243,9 @@ export class WriterStore extends VuexModule {
           this.resetEdit();
         }
       });
+
+
+ 
   }
 
   @action()

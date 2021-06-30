@@ -1,7 +1,7 @@
 <template>
-<div class="col-md-8">
+<div class="col-md-10">
  <q-card >
-      <section class="row s-border s-spacing col-md-12 col-lg-12" >
+      <div class="row s-border s-spacing col-md-12 col-lg-12 background-white" >
         <!-- <p class="col-12 text-primary text-weight-bold q-pa-sm">
           مشخصه های سوال
         </p> -->
@@ -20,9 +20,9 @@
         <div class="col-3 q-pa-sm" style="color: red">
           تعداد سوالات :
         </div>
-      </section>
+      </div>
  </q-card >
-  <section >
+  <section  class="shadow-13">
     <!-- panel -->
     <base-panel>
       <!-- <span slot="title">{{assayStore.modelName}}</span> -->
@@ -43,11 +43,12 @@
           <q-tab-pane name="topicTab" keep-alive>
             <topic-tab @changeTab="changeTab"></topic-tab>
           </q-tab-pane>
-          <q-tab-pane name="assayTab" keep-alive>
-            <assay-tab @changeTab="changeTab"></assay-tab>
-          </q-tab-pane>
+         
           <q-tab-pane name="questionTab" keep-alive>
             <question-tab @changeTab="changeTab"></question-tab>
+          </q-tab-pane>
+           <q-tab-pane name="assayTab" keep-alive>
+            <assay-tab @changeTab="changeTab"></assay-tab>
           </q-tab-pane>
         </q-tabs>
       </div>
@@ -60,6 +61,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
+import BasePanel from "src/Components/BasePanel.vue";
 
 @Component({
   components: {
@@ -67,9 +69,10 @@ import util from "src/utilities";
     studentTab: () => import("./0student.vue"),
     lessonTab: () => import("./1lesson.vue"),
     topicTab: () => import("./2topic.vue"),
+     questionTab: () => import("./4question.vue"),
+    assayTab: () => import("./3assay.vue")
     
-    assayTab: () => import("./3assay.vue"),
-     questionTab: () => import("./4question.vue")
+    
    
   }
 })

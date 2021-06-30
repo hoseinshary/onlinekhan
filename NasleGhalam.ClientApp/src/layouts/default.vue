@@ -1,4 +1,5 @@
-<template>
+<template >
+<div class="background" >
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
       <q-toolbar class="toolbar-header1">
@@ -80,6 +81,7 @@
       </div>
     </q-page-container>
   </q-layout>
+</div>
 </template>
 
 <script>

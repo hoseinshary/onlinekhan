@@ -34,8 +34,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
         private readonly Lazy<QuestionGroupService> _questionGroupService;
         private readonly Lazy<QuestionUpdateService> _questionUpdateService;
+        private readonly Lazy<TopicService> _topicService;
 
-        public QuestionService(IUnitOfWork uow, Lazy<QuestionGroupService> questionGroupService, Lazy<QuestionUpdateService> questionUpdate)
+        public QuestionService(IUnitOfWork uow, Lazy<QuestionGroupService> questionGroupService, Lazy<QuestionUpdateService> questionUpdate ,Lazy<TopicService> topicService)
         {
             _uow = uow;
             _questions = uow.Set<Question>();
@@ -44,6 +45,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _users = uow.Set<User>();
             _questionGroupService = questionGroupService;
             _questionUpdateService = questionUpdate;
+            _topicService = topicService;
         }
 
         /// <summary>
@@ -332,6 +334,19 @@ namespace NasleGhalam.ServiceLayer.Services
 
         }
 
+        public IList<QuestionViewModel> GetAllByTopicIdsActive(IEnumerable<int> ids)
+        {
+
+            return _questions
+                .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                .Where(x => x.IsActive)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
+
+        }
+
 
         public IList<QuestionViewModel> GetAllByTopicIdsNoAnswerJudge(IEnumerable<int> ids, int userid, int rollLevel)
         {
@@ -508,14 +523,33 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<QuestionViewModel> GetAllByTopicIdsForAssay(List<int> ids, int lookupId_QuestionHardnessType, int count)
         {
-            return _questions
-                .Where(current => current.Topics.Any(x => ids.Contains(x.Id) && current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType))
-                .OrderBy(x => Guid.NewGuid())
-                //.Take(count)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<QuestionViewModel>)
-                .ToList();
+            var returnVal = new List<QuestionViewModel>();
+            foreach (var id in ids)
+            {
+                var newIds = _topicService.Value.GetAllChildren(id).Select(x => x.Id);
+
+
+                var questions = _questions
+                    .Include(current => current.Writer)
+                    .Include(current => current.Lookup_AreaTypes)
+                    .Include(current => current.Lookup_QuestionRank)
+                    .Include(current => current.Lookup_RepeatnessType)
+                    .Include(current => current.Lookup_QuestionHardnessType)
+                    .Where(current => current.Topics.Any(x =>
+                        newIds.Contains(x.Id) &&
+                        current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType))
+                    .OrderBy(x => Guid.NewGuid())
+                    //.Take(count)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionViewModel>)
+                    .ToList();
+                returnVal.AddRange(questions);
+            }
+
+
+
+            return returnVal;
         }
 
         /// <summary>

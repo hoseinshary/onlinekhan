@@ -18,14 +18,16 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<Student> _students;
         private readonly Lazy<RoleService> _roleService;
         private readonly Lazy<QuestionService> _questionService;
+        private readonly Lazy<TopicService> _topicService;
 
         public StudentService(IUnitOfWork uow,
-            Lazy<RoleService> roleService , Lazy<QuestionService> questionService)
+            Lazy<RoleService> roleService , Lazy<QuestionService> questionService,Lazy<TopicService> topicService)
         {
             _uow = uow;
             _students = uow.Set<Student>();
             _roleService = roleService;
             _questionService = questionService;
+            _topicService = topicService;
         }
 
         /// <summary>
@@ -85,6 +87,69 @@ namespace NasleGhalam.ServiceLayer.Services
             returnVal.NumberOfNewQuestions =
                 _questionService.Value.GetAllActiveByLessonId(lessonId).Distinct().Count() -
                 returnVal.NumberOfAssayQuestions;
+
+            return returnVal;
+
+        }
+
+
+        /// <summary>
+        /// گرفتن همه دانش آموز ها
+        /// </summary>
+        /// <returns></returns>
+        public StudentQuestionAssayReportForTopicViewModel GetQuestionAssayReportByLessonIds(int [] lessonIds, int studentId)
+        {
+            StudentQuestionAssayReportForTopicViewModel returnVal = new StudentQuestionAssayReportForTopicViewModel();
+            var student = _students
+                .Include(x => x.User.Assays.Select(y => y.AssayQuestions))
+                .Where(x => x.Id == studentId)
+                .AsNoTracking()
+                .AsEnumerable()
+                .FirstOrDefault();
+            returnVal.User = Mapper.Map<UserViewModel>(student.User);
+
+            returnVal.LessonReports = new List<LessonReportViewModel>();
+
+            foreach (var lessonId in lessonIds)
+            {
+                var topicsList = _topicService.Value.GetAll4LevelByLessonId(lessonId);
+
+                List<TopicReportViewModel> temp = new List<TopicReportViewModel>();
+
+                foreach (var topicViewModel in topicsList)
+                {
+                    var childrentopic = _topicService.Value.GetAllChildren(topicViewModel.Id);
+
+                    var questions = _questionService.Value.GetAllByTopicIdsActive(childrentopic.Select(x => x.Id));
+
+                    var NumberOfHomeworkQuestions = student.User.Assays.Where(x => x.LookupId_QuestionType == 1093).Select(y =>
+                        y.AssayQuestions.Any(z => questions.Select(p => p.Id).Contains(z.QuestionId))).Distinct().Count();
+
+                    var NumberOfAssayQuestions = student.User.Assays
+                        .Select(y => y.AssayQuestions.Any(z => questions.Select(p => p.Id).Contains(z.QuestionId)))
+                        .Distinct().Count();
+
+                    var NumberOfNewQuestions = questions.Count - NumberOfAssayQuestions;
+
+                    temp.Add( new TopicReportViewModel()
+                    {
+                        ID = topicViewModel.Id,
+                        NumberOfAssayQuestions = NumberOfAssayQuestions,
+                        NumberOfHomeworkQuestions = NumberOfHomeworkQuestions,
+                        NumberOfNewQuestions = NumberOfNewQuestions
+                    });
+
+                }
+
+                returnVal.LessonReports.Add(new LessonReportViewModel()
+                {
+                    Id = lessonId,
+                    TopicReports = temp
+                });
+
+
+            }
+            
 
             return returnVal;
 

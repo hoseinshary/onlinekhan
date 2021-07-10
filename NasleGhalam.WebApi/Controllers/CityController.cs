@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.City;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class CityController : ApiController
     {
         private readonly CityService _cityService;
-        public CityController(CityService cityService)
+        private readonly LogService _logService;
+        public CityController(CityService cityService, LogService logService)
         {
             _cityService = cityService;
+            _logService = logService;
         }
 
         [HttpGet/*, CheckUserAccess(ActionBits.CityReadAccess,ActionBits.PublicAccess)*/]
@@ -42,6 +45,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(CityCreateViewModel cityViewModel)
         {
             var msgRes = _cityService.Create(cityViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "City", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -51,6 +58,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(CityUpdateViewModel cityViewModel)
         {
             var msgRes = _cityService.Update(cityViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "City", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -58,6 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _cityService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "City", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
     }

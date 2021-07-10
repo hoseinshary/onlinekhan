@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.EducationBook;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class EducationBookController : ApiController
     {
         private readonly EducationBookService _educationBookService;
-        public EducationBookController(EducationBookService educationBookService)
+        private readonly LogService _logService;
+        public EducationBookController(EducationBookService educationBookService, LogService logService)
         {
             _educationBookService = educationBookService;
+            _logService = logService;
         }
 
 
@@ -45,6 +48,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(EducationBookCreateViewModel educationBookViewModel)
         {
             var msgRes = _educationBookService.Create(educationBookViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "EducationBook", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -55,6 +62,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(EducationBookCreateViewModel educationBookViewModel)
         {
             var msgRes = _educationBookService.Update(educationBookViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "EducationBook", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -63,6 +74,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _educationBookService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "EducationBook", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
     }

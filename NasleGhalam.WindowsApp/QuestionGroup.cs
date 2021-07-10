@@ -133,7 +133,7 @@ namespace NasleGhalam.WindowsApp
             }
 
         }
-
+        List<LessonViewModel> lessonsList;
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             List<int> educationTreeIds = new List<int>();
@@ -143,7 +143,7 @@ namespace NasleGhalam.WindowsApp
                 educationTreeIds.Add(Convert.ToInt32(node.Text.Split('(')[2].Replace(')', '\0')));
             }
 
-            List<LessonViewModel> lessonsList = lessons.Where(x => x.EducationTrees.Any(y => educationTreeIds.Contains(y.Id))).ToList();
+             lessonsList = lessons.Where(x => x.EducationTrees.Any(y => educationTreeIds.Contains(y.Id))).ToList();
 
             var bindingSource1 = new BindingSource();
             bindingSource1.DataSource = lessonsList;
@@ -403,12 +403,9 @@ namespace NasleGhalam.WindowsApp
                 comboBox_writer.DataSource = bindingSource1.DataSource;
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBox1_TextChanged(object sender, EventArgs e)
         {
-            var bindingSource1 = new BindingSource();
-            bindingSource1.DataSource = lessons.Where(x => x.Name.StartsWith(comboBox1.Text)).ToList();
-            if (bindingSource1.Count != 0)
-                comboBox1.DataSource = bindingSource1.DataSource;
+
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -832,6 +829,17 @@ namespace NasleGhalam.WindowsApp
         {
             if (e.ProgressPercentage >= progressBar4.Minimum && e.ProgressPercentage <= progressBar4.Maximum)
                 progressBar4.Value = e.ProgressPercentage;
+        }
+
+        private void comboBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                var bindingSource1 = new BindingSource();
+                bindingSource1.DataSource = lessonsList.Where(x => x.Name.StartsWith(comboBox1.Text)).ToList();
+                if (bindingSource1.Count != 0)
+                    comboBox1.DataSource = bindingSource1.DataSource;
+            }
         }
     }
 }

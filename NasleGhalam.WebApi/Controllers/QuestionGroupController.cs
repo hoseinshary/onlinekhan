@@ -22,9 +22,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class QuestionGroupController : ApiController
     {
         private readonly QuestionGroupService _questionGroupService;
-        public QuestionGroupController(QuestionGroupService questionGroupService)
+        private readonly LogService _logService;
+        public QuestionGroupController(QuestionGroupService questionGroupService, LogService logService)
         {
             _questionGroupService = questionGroupService;
+            _logService = logService;
         }
 
 
@@ -134,6 +136,10 @@ namespace NasleGhalam.WebApi.Controllers
 
             questionGroupViewModel.UserId = Request.GetUserId();
             var msgRes = _questionGroupService.Create(questionGroupViewModel, wordFile, excelFile);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "QuestionGroup", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -156,6 +162,10 @@ namespace NasleGhalam.WebApi.Controllers
             questionGroupViewModel.UserId = Request.GetUserId();
             
             var msgRes = _questionGroupService.CreateForWindowsApp(questionGroupViewModel, wordFile, excelFile);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "QuestionGroup-WindowsApp", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -164,13 +174,23 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(QuestionGroupUpdateViewModel questionGroupViewModel)
         {
-            return Ok(_questionGroupService.Update(questionGroupViewModel));
+            var msgRes = _questionGroupService.Update(questionGroupViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "QuestionGroup", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.QuestionGroupDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_questionGroupService.Delete(id));
+            var msgRes = _questionGroupService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "QuestionGroup", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

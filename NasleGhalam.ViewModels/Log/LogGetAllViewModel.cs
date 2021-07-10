@@ -4,7 +4,7 @@ using NasleGhalam.Common;
 
 namespace NasleGhalam.ViewModels.Log
 {
-    public class LogViewModel
+    public class LogGetAllViewModel
     {
         [Display(Name = "")]
         public int Id { get; set; }
@@ -26,8 +26,7 @@ namespace NasleGhalam.ViewModels.Log
         public int ObjectId { get; set; }
 
 
-        [Display(Name = "")]
-        public string ObjectValue { get; set; }
+      
 
         [Display(Name = "")]
         public int UserId { get; set; }

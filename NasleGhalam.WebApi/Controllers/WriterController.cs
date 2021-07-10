@@ -12,7 +12,6 @@ using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Writer;
 using NasleGhalam.WebApi.Extensions;
 
-
 namespace NasleGhalam.WebApi.Controllers
 {
     /// <inheritdoc />
@@ -23,9 +22,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class WriterController : ApiController
     {
         private readonly WriterService _writerService;
-        public WriterController(WriterService writerService)
+        private readonly LogService _logService;
+        public WriterController(WriterService writerService, LogService logService)
         {
             _writerService = writerService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.WriterReadAccess, ActionBits.WritersCodeReadAccess)]
@@ -86,6 +87,10 @@ namespace NasleGhalam.WebApi.Controllers
                 {
                     postedFile?.SaveAs($"{SitePath.WriterPictureRelPath}{writerViewModel.ProfilePic}{Path.GetExtension(postedFile.FileName)}".ToAbsolutePath());
                 }
+                if (msgRes.MessageType == MessageType.Success)
+                {
+                    _logService.Create(CrudType.Create, "Writer", msgRes.Obj, Request.GetUserId());
+                }
                 return Ok(msgRes);
             }
 
@@ -120,6 +125,10 @@ namespace NasleGhalam.WebApi.Controllers
                             .ToAbsolutePath());
                     }
                 }
+                if (msgRes.MessageType == MessageType.Success)
+                {
+                    _logService.Create(CrudType.Update, "Writer", msgRes.Obj, Request.GetUserId());
+                }
                 return Ok(msgRes);
             }
 
@@ -129,7 +138,12 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.WriterDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_writerService.Delete(id));
+            var msgRes = _writerService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Writer", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

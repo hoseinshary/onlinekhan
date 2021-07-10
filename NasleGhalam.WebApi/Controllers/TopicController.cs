@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Topic;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class TopicController : ApiController
     {
         private readonly TopicService _topicService;
-        public TopicController(TopicService topicService)
+        private readonly LogService _logService;
+        public TopicController(TopicService topicService, LogService logService)
         {
             _topicService = topicService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
@@ -67,7 +70,12 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(TopicCreateViewModel topicViewModel)
         {
-            return Ok(_topicService.Create(topicViewModel));
+            var msgRes = _topicService.Create(topicViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Topic", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -75,19 +83,34 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(TopicUpdateViewModel topicViewModel)
         {
-            return Ok(_topicService.Update(topicViewModel));
+            var msgRes = _topicService.Update(topicViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Topic", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.TopicDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_topicService.Delete(id));
+            var msgRes = _topicService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Topic", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpGet ,CheckUserAccess(ActionBits.TopicCreateAccess)]
         public IHttpActionResult CopyTopicsToLesson(int sourceId , int targetID)
         {
-            return Ok(_topicService.CopyTopicsToLesson(sourceId,targetID));
+            var msgRes = _topicService.CopyTopicsToLesson(sourceId, targetID);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Topic-CopyToLesson", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

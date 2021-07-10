@@ -17,11 +17,13 @@ namespace NasleGhalam.WebApi.Controllers
     {
         private readonly Lazy<ActionService> _actionService;
         private readonly Lazy<RoleService> _roleService;
+        private readonly Lazy<LogService> _logService;
         public AccessController(Lazy<RoleService> roleService,
-            Lazy<ActionService> actionService)
+            Lazy<ActionService> actionService,Lazy<LogService> logService)
         {
             _roleService = roleService;
             _actionService = actionService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.RoleChangeAccess)]
@@ -45,8 +47,12 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost, CheckUserAccess(ActionBits.RoleChangeAccess)]
         public IHttpActionResult ChangeAccess(RoleAccessViewModel roleAccess)
         {
-            var msgRes = _roleService.Value.ChangeAccess(roleAccess, Request.GetAccess(), Request.GetRoleLevel());
-            return Ok(msgRes);
+            var result = _roleService.Value.ChangeAccess(roleAccess, Request.GetAccess(), Request.GetRoleLevel());
+            if (result.MessageType == MessageType.Success)
+            {
+                _logService.Value.Create(CrudType.Update, "Access", result.Obj, Request.GetUserId());
+            }
+            return Ok(result);
         }
     }
 }

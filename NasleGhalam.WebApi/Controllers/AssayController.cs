@@ -16,9 +16,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class AssayController : ApiController
     {
         private readonly AssayService _assayService;
-        public AssayController(AssayService assayService)
+        private readonly LogService _logService;
+        public AssayController(AssayService assayService, LogService logService)
         {
             _assayService = assayService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.AssayReadAccess)]
@@ -44,7 +46,13 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(AssayCreateViewModel assayViewModel)
         {
             assayViewModel.UserId = Request.GetUserId();
-            return Ok(_assayService.Create(assayViewModel));
+
+            var result = _assayService.Create(assayViewModel);
+            if (result.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Assay", result.Obj, Request.GetUserId());
+            }
+            return Ok(result);
         }
 
         [HttpPost]
@@ -62,13 +70,23 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(AssayCreateViewModel assayViewModel)
         {
             assayViewModel.UserId = Request.GetUserId();
-            return Ok(_assayService.Update(assayViewModel));
+            var result = _assayService.Update(assayViewModel);
+            if (result.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Assay", result.Obj, Request.GetUserId());
+            }
+            return Ok(result);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.AssayDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_assayService.Delete(id));
+            var result = _assayService.Delete(id);
+            if (result.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Assay", result.Obj, Request.GetUserId());
+            }
+            return Ok(result);
         }
     }
 }

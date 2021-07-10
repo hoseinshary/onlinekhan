@@ -3,6 +3,7 @@ using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.Publisher;
+using NasleGhalam.WebApi.Extensions;
 
 namespace NasleGhalam.WebApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class PublisherController : ApiController
     {
         private readonly PublisherService _publisherService;
-        public PublisherController(PublisherService publisherService)
+        private readonly LogService _logService;
+        public PublisherController(PublisherService publisherService, LogService logService)
         {
             _publisherService = publisherService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.PublisherReadAccess)]
@@ -42,6 +45,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(PublisherViewModel publisherViewModel)
         {
             var msgRes = _publisherService.Create(publisherViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Publisher", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -51,6 +58,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(PublisherViewModel publisherViewModel)
         {
             var msgRes = _publisherService.Update(publisherViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Publisher", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -58,6 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _publisherService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Publisher", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
     }

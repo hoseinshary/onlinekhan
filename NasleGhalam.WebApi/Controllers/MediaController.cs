@@ -23,9 +23,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class MediaController : ApiController
     {
         private readonly MediaService _mediaService;
-        public MediaController(MediaService mediaService)
+        private readonly LogService _logService;
+        public MediaController(MediaService mediaService, LogService logService)
         {
             _mediaService = mediaService;
+            _logService = logService;
         }
 
 
@@ -88,10 +90,14 @@ namespace NasleGhalam.WebApi.Controllers
             var coverImage = HttpContext.Current.Request.Files.Get("CoverImage");
 
             mediaViewModel.UserId = Request.GetUserId();
-            
-            
 
-            return Ok(_mediaService.Create(mediaViewModel,file ,coverImage));
+
+            var msgRes = _mediaService.Create(mediaViewModel, file, coverImage);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Media", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -103,15 +109,24 @@ namespace NasleGhalam.WebApi.Controllers
 
             var coverImage = HttpContext.Current.Request.Files.Get("CoverImage");
 
-           // mediaViewModel.UserId = Request.GetUserId();
-
-            return Ok(_mediaService.Update(mediaViewModel,file,coverImage));
+            // mediaViewModel.UserId = Request.GetUserId();
+            var msgRes = _mediaService.Update(mediaViewModel, file, coverImage);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Media", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.MediaDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_mediaService.Delete(id));
+            var msgRes = _mediaService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Media", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

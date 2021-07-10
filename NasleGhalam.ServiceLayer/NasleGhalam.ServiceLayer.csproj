@@ -87,6 +87,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="MapperProfile\AssayProfile.cs" />
+    <Compile Include="MapperProfile\LogProfile.cs" />
     <Compile Include="MapperProfile\MediaProfile.cs" />
     <Compile Include="MapperProfile\PackageProfile.cs" />
     <Compile Include="MapperProfile\EducationTreeProfile.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Services\EducationYearService.cs" />
     <Compile Include="Services\LessonService.cs" />
     <Compile Include="Services\Lesson_UserService.cs" />
+    <Compile Include="Services\LogService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MediaService.cs" />
     <Compile Include="Services\PackageService.cs" />

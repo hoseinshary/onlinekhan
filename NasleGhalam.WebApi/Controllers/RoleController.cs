@@ -15,9 +15,11 @@ namespace NasleGhalam.WebApi.Controllers
     public class RoleController : ApiController
     {
         private readonly RoleService _roleService;
-        public RoleController(RoleService roleService)
+        private readonly LogService _logService;
+        public RoleController(RoleService roleService, LogService logService)
         {
             _roleService = roleService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.RoleReadAccess)]
@@ -43,6 +45,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(RoleCreateViewModel roleViewModel)
         {
             var msgRes = _roleService.Create(roleViewModel, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "Role", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -52,6 +58,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(RoleUpdateViewModel roleViewModel)
         {
             var msgRes = _roleService.Update(roleViewModel, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "Role", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
 
@@ -59,6 +69,10 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             var msgRes = _roleService.Delete(id, Request.GetRoleLevel());
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "Role", msgRes.Obj, Request.GetUserId());
+            }
             return Ok(msgRes);
         }
     }

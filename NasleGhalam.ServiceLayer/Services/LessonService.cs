@@ -77,24 +77,27 @@ namespace NasleGhalam.ServiceLayer.Services
                var ids = lesson.Topics.Select(x => x.Id);
                var questions2 = _questions
                    .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
+                   .Include(x => x.Topics)
+                   .Include(x => x.Topics.Select(y=>y.Lesson))
+                   .Include(x => x.QuestionJudges)
                    .AsNoTracking()
                    .AsEnumerable()
                    .ToList();
 
-               var allQuestionNum = questions1.Count;
+               var allQuestionNum = questions1.Concat(questions2).Select(x=>x.Id).Distinct().Count();
 
-               var allQuestionTopiced = questions1
+               var allQuestionTopiced = questions2
                    .Count(x => x.Topics.Any<Topic>());
 
-               var allQuestionJudged = questions1
+               var allQuestionJudged = questions2
                    .Count(x => x.QuestionJudges.Any<QuestionJudge>());
 
-               var allQuestionJudgedFull = questions1.Where(x => x.Topics.Any<Topic>())
+               var allQuestionJudgedFull = questions2.Where(x => x.Topics.Any<Topic>())
                    .Count(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges);
                    
 
-               var allQuestionActived = questions1.Concat(questions2).Distinct().Where(x => x.IsActive == true).Select(x=>x.Id).Count();
-               var allQuestionHybrid = questions1.Concat(questions2).Distinct().Where(x => x.IsHybrid == true).Select(x => x.Id).Count();
+               var allQuestionActived = questions2.Concat(questions2).Where(x => x.IsActive == true).Select(x=>x.Id).Distinct().Count();
+               var allQuestionHybrid = questions1.Concat(questions2).Where(x => x.IsHybrid == true).Select(x => x.Id).Distinct().Count();
 
                returnVal.Add( new AllQuestionOfEachLessonViewModel
                {

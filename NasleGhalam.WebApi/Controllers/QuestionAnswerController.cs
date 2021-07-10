@@ -20,9 +20,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class QuestionAnswerController : ApiController
     {
         private readonly QuestionAnswerService _questionAnswerService;
-        public QuestionAnswerController(QuestionAnswerService questionAnswerService)
+        private readonly LogService _logService;
+        public QuestionAnswerController(QuestionAnswerService questionAnswerService, LogService logService)
         {
             _questionAnswerService = questionAnswerService;
+            _logService = logService;
         }
 
         [HttpGet]
@@ -101,7 +103,12 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             questionAnswerViewModel.UserId = Request.GetUserId();
-            return Ok(_questionAnswerService.Create(questionAnswerViewModel,wordFile));
+            var msgRes = _questionAnswerService.Create(questionAnswerViewModel, wordFile);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "QuestionAnswer", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -110,7 +117,12 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult CreateForWindowsApp(QuestionAnswerCreateViewModel questionAnswerViewModel)
         {
             questionAnswerViewModel.UserId = Request.GetUserId();
-            return Ok(_questionAnswerService.CreateForWindowsApp(questionAnswerViewModel));
+            var msgRes = _questionAnswerService.CreateForWindowsApp(questionAnswerViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "QuestionAnswer-WindowsApp", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -121,7 +133,12 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             questionAnswerViewModel.UserId = Request.GetUserId();
-            return Ok(_questionAnswerService.CreateMulti(questionAnswerViewModel,wordFile));
+            var msgRes = _questionAnswerService.CreateMulti(questionAnswerViewModel, wordFile);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "QuestionAnswer-Multi", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -142,13 +159,23 @@ namespace NasleGhalam.WebApi.Controllers
         {
             var wordFile = HttpContext.Current.Request.Files.Get("word");
             questionAnswerViewModel.UserId = Request.GetUserId();
-            return Ok(_questionAnswerService.Update(questionAnswerViewModel,wordFile));
+            var msgRes = _questionAnswerService.Update(questionAnswerViewModel, wordFile);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "QuestionAnswer", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.QuestionAnswerDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_questionAnswerService.Delete(id));
+            var msgRes = _questionAnswerService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "QuestionAnswer", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

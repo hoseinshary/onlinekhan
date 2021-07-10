@@ -16,9 +16,11 @@ namespace NasleGhalam.WebApi.Controllers
 	public class QuestionAnswerJudgeController : ApiController
     {
         private readonly QuestionAnswerJudgeService _questionAnswerJudgeService;
-        public QuestionAnswerJudgeController(QuestionAnswerJudgeService questionAnswerJudgeService)
+        private readonly LogService _logService;
+        public QuestionAnswerJudgeController(QuestionAnswerJudgeService questionAnswerJudgeService, LogService logService)
         {
             _questionAnswerJudgeService = questionAnswerJudgeService;
+            _logService = logService;
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]
@@ -44,7 +46,12 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(QuestionAnswerJudgeCreateViewModel questionAnswerJudgeViewModel)
         {
             questionAnswerJudgeViewModel.UserId = Request.GetUserId();
-            return Ok(_questionAnswerJudgeService.Create(questionAnswerJudgeViewModel));
+            var msgRes = _questionAnswerJudgeService.Create(questionAnswerJudgeViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "QuestionAnswerJudge", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost]
@@ -53,13 +60,23 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Update(QuestionAnswerJudgeUpdateViewModel questionAnswerJudgeViewModel)
         {
             questionAnswerJudgeViewModel.UserId = Request.GetUserId();
-            return Ok(_questionAnswerJudgeService.Update(questionAnswerJudgeViewModel));
+            var msgRes = _questionAnswerJudgeService.Update(questionAnswerJudgeViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Update, "QuestionAnswerJudge", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
 
         [HttpPost, CheckUserAccess(ActionBits.QuestionAnswerJudgeDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_questionAnswerJudgeService.Delete(id));
+            var msgRes = _questionAnswerJudgeService.Delete(id);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Delete, "QuestionAnswerJudge", msgRes.Obj, Request.GetUserId());
+            }
+            return Ok(msgRes);
         }
     }
 }

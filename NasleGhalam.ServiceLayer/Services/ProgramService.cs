@@ -85,7 +85,6 @@ namespace NasleGhalam.ServiceLayer.Services
                     Description = programItem.Description 
                 });
             }
-
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 

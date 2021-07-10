@@ -73,7 +73,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.WriterCreateAccess)]
         [CheckModelValidation]
         [CheckImageValidationProfileNotRequired("img", 2048)]
-        public IHttpActionResult Create(WriterCreateViewModel writerViewModel)
+        public IHttpActionResult Create([FromUri]WriterCreateViewModel writerViewModel)
         {
             var postedFile = HttpContext.Current.Request.Files.Get("img");
             if (postedFile != null && postedFile.ContentLength > 0)

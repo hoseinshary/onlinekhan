@@ -5,9 +5,8 @@
         <!-- <p class="col-12 text-primary text-weight-bold q-pa-sm">
           مشخصه های سوال
         </p> -->
-        <div class="col-3 q-pa-sm" style="color: red">
-          دانش آموز:
-          <span class="text-red"></span>
+        <div class="col-3 q-pa-sm" style="color: black">
+          <q-btn icon="person" label="دانش آموز" />
         </div>
         <div class="col-3 q-pa-sm" style="color: red">
           درس:

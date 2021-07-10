@@ -114,7 +114,8 @@ module.exports = function(ctx) {
         "QCardActions",
         "QRating"
       ],
-      directives: ["Ripple", "CloseOverlay"],
+      directives: ["Ripple", "CloseOverlay",
+      "BackToTop"],
       // Quasar plugins
       plugins: ["Notify", "LocalStorage", "Loading"],
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'

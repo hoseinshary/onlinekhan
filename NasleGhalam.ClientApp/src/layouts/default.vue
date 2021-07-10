@@ -1,87 +1,105 @@
 <template >
-<div class="background" >
-  <q-layout view="lHh Lpr lFf">
-    <q-layout-header>
-      <q-toolbar class="toolbar-header1">
-        <q-btn
-          flat
-          dense
-          round
-          @click="leftDrawerOpen = !leftDrawerOpen"
-          aria-label="Menu"
-          color="black"
-        >
-          <q-icon name="menu" />
-        </q-btn>
-        <router-link to ="/panel/adminpanel" class="logo" > </router-link>
-      </q-toolbar>
-
-      <q-toolbar class="toolbar-header2">
-        <router-link to ="/panel/adminpanel" ><img src="/assets/img/header/default.png" class="header-image" alt="header image" /></router-link>
-        <q-toolbar-title>{{$q.localStorage.get.item("title")}}</q-toolbar-title>
-
-        <img
-          :src="$q.localStorage.get.item('ProfilePic')"
-          class="profile-image"
-          alt="profile picture"
-        />
-        <q-btn flat dense class="q-mr-sm">
-          <!-- <q-icon name="account_circle" /> -->
-          {{$q.localStorage.get.item("FullName")}}
-        </q-btn>
-        <q-btn @click="logout" flat dense>
-          <q-icon name="exit_to_app" />خروج
-        </q-btn>
-      </q-toolbar>
-    </q-layout-header>
-
-    <q-layout-drawer
-      v-model="leftDrawerOpen"
-      :overlay="true"
-      side="left"
-      :mini="false"
-      behavior="mobile"
-      class="layout-drawer"
-      @click.capture="drawerClick"
-    >
-      <q-list no-border link inset-delimiter>
-        <q-list-header>{{siteName}}</q-list-header>
-        <q-collapsible
-          group="sideMenu"
-          v-for="menu in menuList"
-          :key="menu.ModuleId"
-          :label="menu.ModuleName"
-        >
-          <router-link
-            v-for="item in subMenuList.filter(x=>x.ModuleId == menu.ModuleId)"
-            :key="item.EnName"
-            :to="item.EnName"
+  <div class="background">
+    <q-layout view="lHh Lpr lFf">
+      <q-layout-header reveal>
+        <q-toolbar class="toolbar-header1">
+          <q-btn
+            flat
+            dense
+            round
+            @click="leftDrawerOpen = !leftDrawerOpen"
+            aria-label="Menu"
+            color="black"
           >
-            <q-item>
-              <!-- <q-item-side icon='map' /> -->
-              <!--"item.Icon" />-->
-              <q-item-main :label="item.FaName" sublabel color="white" />
-            </q-item>
-          </router-link>
-        </q-collapsible>
-      </q-list>
-    </q-layout-drawer>
+            <q-icon name="menu" />
+          </q-btn>
+          <router-link to="/panel/adminpanel" class="logo"> </router-link>
+        </q-toolbar>
 
-    <q-page-container class>
-      <br />
-      <div class="row justify-center q-mt-lg">
-        <transition
-          name="transitions"
-          enter-active-class="animated bounceInDown"
-          leave-active-class="animated bounceOutUp"
-          mode="out-in"
-        >
-          <router-view />
-        </transition>
-      </div>
-    </q-page-container>
-  </q-layout>
-</div>
+        <q-toolbar class="toolbar-header2">
+          <router-link to="/panel/adminpanel"
+            ><img
+              src="/assets/img/header/default.png"
+              class="header-image"
+              alt="header image"
+          /></router-link>
+          <q-toolbar-title>{{
+            $q.localStorage.get.item("title")
+          }}</q-toolbar-title>
+
+          <img
+            :src="$q.localStorage.get.item('ProfilePic')"
+            class="profile-image"
+            alt="profile picture"
+          />
+          <q-btn flat dense class="q-mr-sm">
+            <!-- <q-icon name="account_circle" /> -->
+            {{ $q.localStorage.get.item("FullName") }}
+          </q-btn>
+          <q-btn @click="logout" flat dense>
+            <q-icon name="exit_to_app" />خروج
+          </q-btn>
+        </q-toolbar>
+      </q-layout-header>
+
+      <q-layout-drawer
+        v-model="leftDrawerOpen"
+        :overlay="true"
+        side="left"
+        :mini="false"
+        behavior="mobile"
+        class="layout-drawer"
+        @click.capture="drawerClick"
+      >
+        <q-list no-border link inset-delimiter>
+          <q-list-header>{{ siteName }}</q-list-header>
+          <q-collapsible
+            group="sideMenu"
+            v-for="menu in menuList"
+            :key="menu.ModuleId"
+            :label="menu.ModuleName"
+          >
+            <router-link
+              v-for="item in subMenuList.filter(
+                (x) => x.ModuleId == menu.ModuleId
+              )"
+              :key="item.EnName"
+              :to="item.EnName"
+            >
+              <q-item>
+                <!-- <q-item-side icon='map' /> -->
+                <!--"item.Icon" />-->
+                <q-item-main :label="item.FaName" sublabel color="white" />
+              </q-item>
+            </router-link>
+          </q-collapsible>
+        </q-list>
+      </q-layout-drawer>
+
+      <q-page-container>
+        <br />
+        <div class="row justify-center q-mt-lg">
+          <transition
+            name="transitions"
+            enter-active-class="animated bounceInDown"
+            leave-active-class="animated bounceOutUp"
+            mode="out-in"
+          >
+            <router-view />
+          </transition>
+          <q-btn
+            v-back-to-top.animate="{ offset: 500, duration: 200 }"
+            round
+            color="primary"
+            class="fixed-bottom-left animate-pop"
+            style="margin: 15px 15px 15px 15px"
+          >
+            <q-icon name="keyboard_arrow_up" />
+          </q-btn>
+        </div>
+      </q-page-container>
+    </q-layout>
+  </div>
 </template>
 
 <script>
@@ -108,7 +126,7 @@ export default {
       util.logout();
     }
   },
-  created: function() {
+  created: function () {
     this.menuList = this.$q.localStorage.get.item("menuList");
     this.subMenuList = this.$q.localStorage.get.item("subMenuList");
   }

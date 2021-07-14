@@ -6,7 +6,10 @@
           مشخصه های سوال
         </p> -->
         <div class="col-3 q-pa-sm" style="color: black">
-          <q-btn icon="person" label="دانش آموز" />
+          <q-btn icon="person"
+           @click="showModal0student"
+
+           label="دانش آموز" />
         </div>
         <div class="col-3 q-pa-sm" style="color: red">
           درس:
@@ -86,11 +89,19 @@ export default class AssayVue extends Vue {
   // get canCreate() {
   //   return this.pageAccess.indexOf("ایجاد") > -1;
   // }
+
+  
   //#endregion
 
   //#region ### methods ###
   changeTab(tab) {
     this.selectedTab = tab;
+  }
+
+   showModal0student() {
+    //this.userStore.resetCreate();
+
+    this.assayStore.OPEN_MODAL_0STUDENT(true);
   }
   //#endregion
 

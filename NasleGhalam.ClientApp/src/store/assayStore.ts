@@ -18,13 +18,18 @@ import IAssay from "src/models/IAssay";
 
 @Module({ namespacedPath: "assayStore/" })
 export class AssayStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean };
+  openModal: { create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean };
   assayCreate: AssayCreate;
   private _assayList: Array<IAssay>;
 
   private _indexVue: Vue;
   private _assayVue: Vue;
-  
+  private _0studentVue: Vue;
+  private _1lessonVue: Vue;
+  private _2topicVue: Vue;
+
+
+
 
   /**
    * initialize data
@@ -32,8 +37,15 @@ export class AssayStore extends VuexModule {
   constructor() {
     super();
     this.assayCreate = new AssayCreate();
+    this.openModal = {
+      create: false,
+      edit: false,
+      delete: false,
+      _0student: false,
+      _1lesson: false,
+      _2topic: false
+    }
   }
-
   //#region ### getters ###
   get modelName() {
     return "آزمون";
@@ -54,6 +66,37 @@ export class AssayStore extends VuexModule {
   SET_ASSAY_VUE(vm: Vue) {
     this._assayVue = vm;
   }
+
+  
+  @mutation
+  SET_0STUDENT_VUE(vm: Vue) {
+    this._0studentVue = vm;
+  }
+  
+  @mutation
+  SET_1LESSON_VUE(vm: Vue) {
+    this._1lessonVue = vm;
+  }
+  
+  @mutation
+  SET_2TOPIC_VUE(vm: Vue) {
+    this._2topicVue = vm;
+  }
+
+  @mutation
+  OPEN_MODAL_0STUDENT(open: boolean) {
+    this.openModal._0student = open;
+  }
+  @mutation
+  OPEN_MODAL_1LESSON(open: boolean) {
+    this.openModal._1lesson = open;
+  }
+  @mutation
+  OPEN_MODAL_2TOPIC(open: boolean) {
+    this.openModal._2topic = open;
+  }
+
+
   //#endregion
 
   //#region ### actions ###
@@ -83,7 +126,7 @@ export class AssayStore extends VuexModule {
       { root: true }
     );
   }
-  
+
 
   @action()
   async submitPreCreate() {

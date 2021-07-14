@@ -1,5 +1,20 @@
 <template>
-  <section class="col-12 q-px-md">
+  <bs-modal
+    title="انتخاب دانش آموز"
+    :show="assayStore.openModal._0student"
+    @close="assayStore.OPEN_MODAL_0STUDENT(false)"
+  >
+
+
+    <template slot="header">
+      <q-toolbar slot="header" color="warning" text-color>
+        <q-toolbar-title>انتخاب دانش آموز</q-toolbar-title>
+        <q-btn dense icon="close" @click="assayStore.OPEN_MODAL_0STUDENT(false)" />
+      </q-toolbar>
+    </template>
+
+    <slot>
+       <section class="col-12 q-px-md">
     <br />
     <br />
 
@@ -33,6 +48,15 @@
       </q-btn>
     </div>
   </section>
+    </slot>
+
+    <template slot="footer">
+      <base-btn-save-back @click="userStore.submitUpdateUserImage()"></base-btn-save-back>
+      <base-btn-back @click="userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(false)"></base-btn-back>
+    </template>
+  </bs-modal>
+
+
 </template>
 
 <script lang="ts">
@@ -50,6 +74,7 @@ export default class StudentVue extends Vue {
   //#region ### data ###
   studentStore = vxm.studentStore;
   student = vxm.studentStore.student;
+  assayStore = vxm.assayStore;
 
   pageAccess = util.getAccess(this.studentStore.modelName);
 

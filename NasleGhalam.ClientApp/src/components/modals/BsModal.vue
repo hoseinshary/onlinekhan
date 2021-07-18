@@ -63,6 +63,7 @@ export default {
       modalSize: {
         "bs-modal-dialog-centered": this.center,
         "bs-modal-lg": this.size == "lg",
+        "bs-modal-md": this.size == "md",
         "bs-modal-sm": this.size == "sm",
         "bs-modal-xl": this.size == "xl"
       }
@@ -275,6 +276,12 @@ export default {
 
 @media (min-width: 992px) {
   .bs-modal-lg {
+    max-width: 1200px;
+  }
+}
+
+@media (min-width: 992px) {
+  .bs-modal-md {
     max-width: 800px;
   }
 }

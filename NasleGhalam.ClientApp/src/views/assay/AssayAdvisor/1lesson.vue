@@ -1,5 +1,21 @@
 <template>
-  <section class="row gutter-sm">
+<bs-modal
+    title="انتخاب درس"
+    :show="assayStore.openModal._1lesson"
+    size="lg"
+    @close="assayStore.OPEN_MODAL_1LESSON(false)"
+  >
+
+
+    <template slot="header">
+      <q-toolbar slot="header" color="warning" text-color>
+        <q-toolbar-title>انتخاب درس</q-toolbar-title>
+        <q-btn dense icon="close" @click="assayStore.OPEN_MODAL_1LESSON(false)" />
+      </q-toolbar>
+    </template>
+
+    <slot>
+      <section class="row gutter-lg col-md-12">
     <div class="col-md-3">
       <q-select
         v-model="educationTree.id"
@@ -48,9 +64,8 @@
               </div>
               <div class="col">
                 <label>
-                  تعداد سوال تکلیف:{{
-                    numberOfQuestionReport.NumberOfHomeworkQuestions
-                  }}
+                  تعداد سوال تکلیف:
+                  {{numberOfQuestionReport.NumberOfHomeworkQuestions}}
                 </label>
 
                 <q-input
@@ -77,9 +92,7 @@
               </div>
               <div class="col">
                 <label>
-                  تعداد کل سوالات   :{{
-                    numberOfQuestionReport.NumberOfNewQuestions + numberOfQuestionReport.NumberOfAssayQuestions +numberOfQuestionReport.NumberOfHomeworkQuestions
-                  }}
+                  تعداد کل سوالات   :{{numberOfQuestionReport.NumberOfNewQuestions + numberOfQuestionReport.NumberOfAssayQuestions +numberOfQuestionReport.NumberOfHomeworkQuestions}}
                 </label>
                 <q-input
                   v-model="lesson.CountOfQuestions"
@@ -100,6 +113,19 @@
       </q-btn>
     </div>
   </section>
+    </slot>
+
+    <template slot="footer">
+      <base-btn-save-back @click="userStore.submitUpdateUserImage()"></base-btn-save-back>
+      <base-btn-back @click="userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(false)"></base-btn-back>
+    </template>
+  </bs-modal>
+
+
+
+
+
+  
 </template>
 
 <script lang="ts">
@@ -116,6 +142,7 @@ export default class LessonTabVue extends Vue {
   //#region ### data ###
   lessonStore = vxm.lessonStore;
   studentStore = vxm.studentStore;
+  assayStore = vxm.assayStore;
   educationTreeStore = vxm.educationTreeStore;
   educationTree = this.educationTreeStore.qTreeData;
   assayCreate = vxm.assayStore.assayCreate;

@@ -12,12 +12,16 @@
            label="دانش آموز" />
         </div>
         <div class="col-3 q-pa-sm" style="color: red">
-          درس:
-          <span class="text-black"></span>
+           <q-btn icon="import_contacts"
+           @click="showModal1lesson"
+
+           label="درس" />
         </div>
         <div class="col-3 q-pa-sm " style="color: red">
-          مبحث:
-          <span class="text-black"></span>
+           <q-btn icon="format_list_numbered"
+           @click="showModal2topic"
+
+           label="مبحث" />
         </div>
         <div class="col-3 q-pa-sm" style="color: red">
           تعداد سوالات :
@@ -29,7 +33,7 @@
     <base-panel>
       <!-- <span slot="title">{{assayStore.modelName}}</span> -->
       <div slot="body">
-        <q-tabs v-model="selectedTab" class="col-12" inverted color="primary">
+        <!-- <q-tabs v-model="selectedTab" class="col-12" inverted color="primary">
           <q-tab slot="title" name="studentTab" label="دانش آموز" />
           <q-tab slot="title" name="lessonTab" label="درس" />
           <q-tab slot="title" name="topicTab" label="مبحث" />
@@ -52,9 +56,15 @@
            <q-tab-pane name="assayTab" keep-alive>
             <assay-tab @changeTab="changeTab"></assay-tab>
           </q-tab-pane>
-        </q-tabs>
+        </q-tabs> -->
       </div>
     </base-panel>
+
+
+
+        <modal-student></modal-student>
+    <modal-lesson ></modal-lesson>
+    <modal-topic ></modal-topic>
   </section>
 </div>
 </template>
@@ -68,12 +78,16 @@ import BasePanel from "src/Components/BasePanel.vue";
 @Component({
   components: {
 
-    studentTab: () => import("./0student.vue"),
-    lessonTab: () => import("./1lesson.vue"),
-    topicTab: () => import("./2topic.vue"),
-     questionTab: () => import("./4question.vue"),
-    assayTab: () => import("./3assay.vue")
+    // studentTab: () => import("./0student.vue"),
+    // lessonTab: () => import("./1lesson.vue"),
+    // topicTab: () => import("./2topic.vue"),
+    //  questionTab: () => import("./4question.vue"),
+    // assayTab: () => import("./3assay.vue")
     
+
+        ModalStudent: () => import("./0student.vue"),
+    ModalLesson: () => import("./1lesson.vue"),
+    ModalTopic: () => import("./2topic.vue")
     
    
   }
@@ -102,6 +116,19 @@ export default class AssayVue extends Vue {
     //this.userStore.resetCreate();
 
     this.assayStore.OPEN_MODAL_0STUDENT(true);
+  }
+
+  showModal1lesson() {
+    //this.userStore.resetCreate();
+
+    
+    this.assayStore.OPEN_MODAL_1LESSON(true);
+  }
+
+  showModal2topic() {
+    //this.userStore.resetCreate();
+
+    this.assayStore.OPEN_MODAL_2TOPIC(true);
   }
   //#endregion
 

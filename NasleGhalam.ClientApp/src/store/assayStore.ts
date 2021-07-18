@@ -89,6 +89,7 @@ export class AssayStore extends VuexModule {
   }
   @mutation
   OPEN_MODAL_1LESSON(open: boolean) {
+    
     this.openModal._1lesson = open;
   }
   @mutation

@@ -55,42 +55,41 @@
                         (x) => x.Id === prop.node.lessonId
                       ).TopicReports.find(y=> y.ID === prop.node.Id) "
                 class="col-md-12 row"
-                style="color: #ada8a7 ; font-size: 12px"
+                style="color: #ada8a7 ; font-size: 13px"
               >
-                <!-- <section class="row gutter-sm"> -->
+                <!-- <section class="row col-md-12"> -->
                 &nbsp;
                 &nbsp;
                 &nbsp;
-                &nbsp;
+                
                 <div class="">
-                  <label>
-                    تعداد سوال جدید:{{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions}}
-                    </label>
+                  <label> تعداد سوال جدید:</label>
+                    {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions}}
                 </div>
                 &nbsp;
                 &nbsp;
                 &nbsp;
-                &nbsp;
+                
                 <div class="">
-                  <label>
-                     تعداد سوال تکلیف:{{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions }} 
-                  </label>
+                  <label>تعداد سوال تکلیف:</label>
+                    {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions}} 
+
                 </div>
                 &nbsp;
                 &nbsp;
                 &nbsp;
-                &nbsp;
+               
                 <div class="">
-                  <label>
-                    تعداد سوال آزمون قبلی:{{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }}</label
-                  >
+                  <label>تعداد سوال آزمون قبلی:</label>
+                  {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions}}
                 </div>
                 &nbsp;
                 &nbsp;
                 &nbsp;
-                &nbsp;
+                
                 <div class="">
-                  <label> تعداد کل سوالات :{{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions+numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions+numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }} </label>
+                  <label> تعداد کل سوالات : </label>
+                  {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions+numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions+numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }}
                 </div>
                 <!-- </section> -->
               </div>

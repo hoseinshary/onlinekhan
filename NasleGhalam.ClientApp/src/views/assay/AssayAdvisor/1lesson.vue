@@ -107,17 +107,17 @@
       </ul>
     </div>
     <div class="col-12">
-      <q-btn color="primary" class="float-right" @click="goToTopicTab">
+      <!-- <q-btn color="primary" class="float-right" @click="goToTopicTab">
         انتخاب مبحث
         <q-icon name="arrow_back" />
-      </q-btn>
+      </q-btn> -->
     </div>
   </section>
     </slot>
 
     <template slot="footer">
-      <base-btn-save-back @click="userStore.submitUpdateUserImage()"></base-btn-save-back>
-      <base-btn-back @click="userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(false)"></base-btn-back>
+      <base-btn-save-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-save-back>
+      <base-btn-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-back>
     </template>
   </bs-modal>
 

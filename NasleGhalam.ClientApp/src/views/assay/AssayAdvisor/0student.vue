@@ -42,17 +42,17 @@
     <br />
     <br />
     <div class="col-12">
-      <q-btn color="primary" class="float-right" @click="goToLessonTab">
+      <!-- <q-btn color="primary" class="float-right" @click="goToLessonTab">
         انتخاب درس
         <q-icon name="arrow_back" />
-      </q-btn>
+      </q-btn> -->
     </div>
   </section>
     </slot>
 
     <template slot="footer">
-      <base-btn-save-back @click="userStore.submitUpdateUserImage()"></base-btn-save-back>
-      <base-btn-back @click="userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(false)"></base-btn-back>
+      <base-btn-save-back @click="assayStore.OPEN_MODAL_0STUDENT(false)"></base-btn-save-back>
+      <base-btn-back @click="assayStore.OPEN_MODAL_0STUDENT(false)"></base-btn-back>
     </template>
   </bs-modal>
 

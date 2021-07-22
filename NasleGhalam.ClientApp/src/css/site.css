@@ -138,3 +138,21 @@ div.topMenu li a{
 }
 
 
+.center{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+
+.panel{
+  border-radius: 25px;
+  background: #eee;
+  padding: 10px; 
+}
+
+.corner-around{
+  border-radius: 25px;
+  padding: 10px; 
+}

@@ -108,8 +108,8 @@
     </slot>
 
     <template slot="footer">
-      <base-btn-save-back @click="userStore.submitUpdateUserImage()"></base-btn-save-back>
-      <base-btn-back @click="userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(false)"></base-btn-back>
+      <!-- <base-btn-save-back @click="userStore.submitUpdateUserImage()"></base-btn-save-back>
+      <base-btn-back @click="userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(false)"></base-btn-back> -->
     </template>
   </bs-modal>
 

@@ -164,9 +164,9 @@
                               >
                                 
                                 <div class="col-md-10">
-                                  <div class="">
+                                  <!-- <div class="">
                                   <label class="bg-faded  text-white"> {{question.TopicAnswer}} </label>
-                                  </div>
+                                  </div> -->
                                   <img
                                     :src="question.QuestionPicturePath"
                                     class="img-original-width corner-around"
@@ -177,9 +177,9 @@
                                     <br/>
                                   <base-btn-create :label="`اضافه به آزمون`" />
                                   </div>
-                                  <div class="col-md-4 center q-pt-xl">
+                                  <div class="col-md-4 center ">
                                     <br/>
-                                    <q-btn rounded push color="secondary" icon="arrow_downward"/>
+                                    <q-btn  @click="showQuestionAnswer" rounded push color="secondary" icon="arrow_downward"/>
                                   </div>
                                   <div class="col-md-2 ">
                                     <br/>
@@ -192,7 +192,7 @@
                                   </div>
                                 </div>
                                 <div class="col-md-2">
-                                  <div class="center">
+                                  <div class="center q-mb-sm">
                                   <router-link class=""
                                     :to="`/question/${question.Id}/${lesson.Id}`"
                                   >
@@ -210,24 +210,43 @@
                                   <br/>
                                   {{ question.Writer.Name }}
                                   </div>
-                                  <br/>
-                                  سختی:<q-rating
+                                  <div style="font-size: 11px;" class=" q-mb-sm row" >
+                                    <div class="col-md-3">
+                                      سختی: 
+                                       <br />
+                                      تکرار:
+                                    </div>
+                                    <div class="col-md-6">
+                                      <q-rating
                                     disable
-                                    size="22px"
+                                    size="16px"
                                     color="green"
-                                    icon="gavel"
+                                    icon="stop"
                                     v-model="question.Lookup_QuestionHardnessType.State"
                                     :max="4"
                                   />
                                   <br />
-                                  تکرار:<q-rating
+                                   
+                                  <q-rating
                                     disable
-                                    size="22px"
+                                    size="16px"
                                     color="red"
-                                    icon="repeat"
+                                    icon="stop"
                                     v-model="question.Lookup_RepeatnessType.State"
                                     :max="3"
-                                  /><br />
+                                  />
+                                    </div>
+                                    <div class="col-md-3">
+                                      {{question.Lookup_QuestionHardnessType.Value}}
+                                       <br />
+                                      {{question.Lookup_RepeatnessType.Value}}
+                                    </div>
+                                  
+                                  
+                                  
+                                  </div>
+                                 
+                                  <div class="center" >
                                   امتیاز:<q-rating
                                     disable
                                     size="22px"
@@ -235,6 +254,7 @@
                                     v-model="question.Lookup_QuestionRank.State"
                                     :max="4"
                                   />
+                                  </div>
                                 </div>
                               </li>
                             </ul>
@@ -307,6 +327,8 @@ export default class AssayVue extends Vue {
 
   filterObject: any = [];
 
+  show
+
 
   //#endregion
 
@@ -358,6 +380,11 @@ export default class AssayVue extends Vue {
 
 
     this.assayStore.OPEN_MODAL_1LESSON(true);
+  }
+
+  showQuestionAnswer()
+  {
+
   }
 
   showModal2topic() {

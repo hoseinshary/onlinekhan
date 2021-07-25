@@ -54,6 +54,7 @@
     <Compile Include="Entities\LessonDepartment.cs" />
     <Compile Include="Entities\Log.cs" />
     <Compile Include="Entities\Lookup.cs" />
+    <Compile Include="Entities\Majors.cs" />
     <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\Package.cs" />
     <Compile Include="Entities\Program.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Entities\Resume.cs" />
     <Compile Include="Entities\Sale.cs" />
     <Compile Include="Entities\Sale_Package.cs" />
+    <Compile Include="Entities\StudentMajorlist.cs" />
     <Compile Include="Entities\Topic.cs" />
     <Compile Include="Entities\Publisher.cs" />
     <Compile Include="Entities\Lesson.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="EntityConfigs\LessonDepartmentConfig.cs" />
     <Compile Include="EntityConfigs\LogConfig.cs" />
     <Compile Include="EntityConfigs\LookupConfig.cs" />
+    <Compile Include="EntityConfigs\MajorsConfig.cs" />
     <Compile Include="EntityConfigs\ModuleConfig.cs" />
     <Compile Include="EntityConfigs\PackageConfig.cs" />
     <Compile Include="EntityConfigs\ProgramConfig.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="EntityConfigs\ResumeConfig.cs" />
     <Compile Include="EntityConfigs\SaleConfig.cs" />
     <Compile Include="EntityConfigs\Sale_PackageConfig.cs" />
+    <Compile Include="EntityConfigs\StudentMajorlistConfig.cs" />
     <Compile Include="EntityConfigs\TopicConfig.cs" />
     <Compile Include="EntityConfigs\PublisherConfig.cs" />
     <Compile Include="EntityConfigs\LessonConfig.cs" />

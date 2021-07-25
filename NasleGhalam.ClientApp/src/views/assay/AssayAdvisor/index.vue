@@ -144,7 +144,7 @@
                 </div>
                
                 <div class="col-10">
-                  <div  v-if="lessonsCurrent.length != 0" class="panel">
+                  <div  v-if="lessonsCurrent.length != 0 && lessonsCurrent[0].Questions.length != 0" class="panel">
                 
 
                       <q-card v-for="lesson in lessonsCurrent" :key="lesson.Id" class="bg-white corner-around">

@@ -209,6 +209,7 @@ export default class TopicTabVue extends Vue {
     this.assayStore.submitPreCreate().then(() => {
       this.$emit("changeTab", "questionTab");
     })
+    this.assayStore.OPEN_MODAL_2TOPIC(false);
   }
 
   expandTree(treeRef) {

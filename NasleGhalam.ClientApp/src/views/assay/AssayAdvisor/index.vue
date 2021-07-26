@@ -147,14 +147,16 @@
                   <div  v-if="lessonsCurrent.length != 0 && lessonsCurrent[0].Questions.length != 0" class="panel">
                 
 
-                      <q-card v-for="lesson in lessonsCurrent" :key="lesson.Id" class="bg-white corner-around">
-                      <div class="col-md-10">
-                        <q-card-title
+<q-tabs class="bg-white corner-around " inverted color="primary">
+
+<q-tab v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name" slot="title" :label="lesson.Name" icon="book"/>
+
+<q-tab-pane v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name"><div class="col-md-10">
+                        <label
                           >{{ lesson.Name }} ( تعداد سوال :
-                          {{ lesson.Questions.length }})</q-card-title
+                          {{ lesson.Questions.length }})</label
                         >
-                        <q-card-separator />
-                        <q-card-main>
+                        <q-pagination v-model="page" :min="minPages" :max="maxPages" />
                           <div>
                             <ul>
                               <li
@@ -259,9 +261,126 @@
                               </li>
                             </ul>
                           </div>
+                    
+                      </div></q-tab-pane>
+</q-tabs>
+
+
+                      <!-- <q-card v-for="lesson in lessonsCurrent" :key="lesson.Id" class="bg-white corner-around">
+                      <div class="col-md-10">
+                        <q-card-title
+                          >{{ lesson.Name }} ( تعداد سوال :
+                          {{ lesson.Questions.length }})</q-card-title
+                        >
+                        <q-card-separator />
+                        <q-card-main>
+                          <div>
+                            <ul>
+                              <li
+                                v-for="question in lesson.Questions"
+                                :key="question.Id"
+                                class="row shadow-1 q-ma-sm q-pa-sm bg-grey-2 corner-around"
+                              >
+                                
+                                <div class="col-md-10">
+                                   <div class="">
+                                  <label class="bg-faded  text-white"> {{question.TopicAnswer}} </label>
+                                  </div> 
+                                  <img
+                                    :src="question.QuestionPicturePath"
+                                    class="img-original-width corner-around"
+                                  />
+                                  <q-card-separator />
+                                  <div class="row col-md-10">
+                                  <div class="col-md-4">
+                                    <br/>
+                                  <base-btn-create :label="`اضافه به آزمون`" />
+                                  </div>
+                                  <div class="col-md-4 center ">
+                                    <br/>
+                                    <q-btn  @click="showQuestionAnswer" rounded push color="secondary" icon="arrow_downward"/>
+                                  </div>
+                                  <div class="col-md-2 ">
+                                    <br/>
+                                    <div class="float-right">
+                                    <q-icon  name="favorite_border" />180
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2">
+                                  </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-2">
+                                  <div class="center q-mb-sm">
+                                  <router-link class=""
+                                    :to="`/question/${question.Id}/${lesson.Id}`"
+                                  >
+                                    سوال ({{ question.Id }})</router-link
+                                  >
+                                  <br />
+                                  <img
+                                    :src="$q.localStorage.get.item('ProfilePic')"
+                                    class="profile-image "
+                                    alt="profile picture"
+                                    width="60px"
+                                    height="60px"
+                                  />
+                                  
+                                  <br/>
+                                  {{ question.Writer.Name }}
+                                  </div>
+                                  <div style="font-size: 11px;" class=" q-mb-sm row" >
+                                    <div class="col-md-3">
+                                      سختی: 
+                                       <br />
+                                      تکرار:
+                                    </div>
+                                    <div class="col-md-6">
+                                      <q-rating
+                                    disable
+                                    size="16px"
+                                    color="green"
+                                    icon="stop"
+                                    v-model="question.Lookup_QuestionHardnessType.State"
+                                    :max="4"
+                                  />
+                                  <br />
+                                   
+                                  <q-rating
+                                    disable
+                                    size="16px"
+                                    color="red"
+                                    icon="stop"
+                                    v-model="question.Lookup_RepeatnessType.State"
+                                    :max="3"
+                                  />
+                                    </div>
+                                    <div class="col-md-3">
+                                      {{question.Lookup_QuestionHardnessType.Value}}
+                                       <br />
+                                      {{question.Lookup_RepeatnessType.Value}}
+                                    </div>
+                                  
+                                  
+                                  
+                                  </div>
+                                 
+                                  <div class="center" >
+                                  امتیاز:<q-rating
+                                    disable
+                                    size="22px"
+                                    color="orange"
+                                    v-model="question.Lookup_QuestionRank.State"
+                                    :max="4"
+                                  />
+                                  </div>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
                         </q-card-main>
                       </div>
-                    </q-card>
+                    </q-card> -->
 
                   </div>  
                   <div v-else class="panel">

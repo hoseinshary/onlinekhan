@@ -126,6 +126,11 @@
     <Compile Include="Resume\TeachingResumeViewModel.cs" />
     <Compile Include="Role\RoleUpdateViewModel.cs" />
     <Compile Include="Role\RoleCreateViewModel.cs" />
+    <Compile Include="StudentMajorlist\MajorViewModel.cs" />
+    <Compile Include="StudentMajorlist\StudentMajorlistGetViewModel.cs" />
+    <Compile Include="StudentMajorlist\StudentMajorlistGetStudentViewModel.cs" />
+    <Compile Include="StudentMajorlist\StudentMajorlistUpdateViewModel.cs" />
+    <Compile Include="StudentMajorlist\StudentMajorlistViewModel.cs" />
     <Compile Include="Student\AssayAbout\GetQuestionAssayReportForTopicViewModel.cs" />
     <Compile Include="Student\AssayAbout\LessonReportViewModel.cs" />
     <Compile Include="Student\AssayAbout\TopicReportViewModel.cs" />
@@ -184,6 +189,10 @@
     <ProjectReference Include="..\NasleGhalam.Common\NasleGhalam.Common.csproj">
       <Project>{f383db37-6c98-4fc8-a8ae-5c3bbf62a998}</Project>
       <Name>NasleGhalam.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NasleGhalam.DomainClasses\NasleGhalam.DomainClasses.csproj">
+      <Project>{164402EF-47AF-4C7B-BD43-0D7D6558FF21}</Project>
+      <Name>NasleGhalam.DomainClasses</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

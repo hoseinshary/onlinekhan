@@ -9,6 +9,7 @@ namespace NasleGhalam.DomainClasses.Entities
             HistoryEducations = new HashSet<HistoryEducation>();
             QuestionAnswerViews = new HashSet<QuestionAnswerView>();
             Programs = new HashSet<Program>();
+           
         }
         public int Id { get; set; }
 
@@ -21,7 +22,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public ICollection<HistoryEducation> HistoryEducations { get; set; }
 
         public ICollection<QuestionAnswerView> QuestionAnswerViews { get; set; }
-
+        
         public ICollection<Program> Programs { get; set; }
     }
 }

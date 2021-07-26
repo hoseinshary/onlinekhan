@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.Media;
+using NasleGhalam.ViewModels.StudentMajorlist;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,51 +12,51 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class MediaController : ApiController
+	public class StudentMajorlistController : ApiController
 	{
-        private readonly MediaService _mediaService;
-		public MediaController(MediaService mediaService)
+        private readonly StudentMajorlistService _studentMajorlistService;
+		public StudentMajorlistController(StudentMajorlistService studentMajorlistService)
         {
-            _mediaService = mediaService;
+            _studentMajorlistService = studentMajorlistService;
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.MediaReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.StudentMajorlistReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_mediaService.GetAll());
+            return Ok(_studentMajorlistService.GetAll());
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.MediaReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.StudentMajorlistReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var media = _mediaService.GetById(id);
-            if (media == null)
+            var studentMajorlist = _studentMajorlistService.GetById(id);
+            if (studentMajorlist == null)
             {
                 return NotFound();
             }
-            return Ok(media);
+            return Ok(studentMajorlist);
         }
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.MediaCreateAccess)]
+        [CheckUserAccess(ActionBits.StudentMajorlistCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(MediaCreateViewModel mediaViewModel)
+        public IHttpActionResult Create(StudentMajorlistCreateViewModel studentMajorlistViewModel)
         {
-            return Ok(_mediaService.Create(mediaViewModel));
+            return Ok(_studentMajorlistService.Create(studentMajorlistViewModel));
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.MediaUpdateAccess)]
+        [CheckUserAccess(ActionBits.StudentMajorlistUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(MediaUpdateViewModel mediaViewModel)
+        public IHttpActionResult Update(StudentMajorlistUpdateViewModel studentMajorlistViewModel)
         {
-            return Ok(_mediaService.Update(mediaViewModel));
+            return Ok(_studentMajorlistService.Update(studentMajorlistViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.MediaDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.StudentMajorlistDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_mediaService.Delete(id));
+            return Ok(_studentMajorlistService.Delete(id));
         }
 	}
 }

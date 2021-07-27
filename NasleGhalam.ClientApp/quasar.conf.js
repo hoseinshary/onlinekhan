@@ -112,7 +112,8 @@ module.exports = function(ctx) {
         "QRouteTab",
         "QAutocomplete",
         "QCardActions",
-        "QRating"
+        "QRating",
+        "QRange"
       ],
       directives: ["Ripple", "CloseOverlay",
       "BackToTop"],

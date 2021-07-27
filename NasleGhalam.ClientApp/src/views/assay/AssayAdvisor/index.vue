@@ -49,6 +49,26 @@
                 <div class="col-2">
                   <div class="panel">
 
+                        <q-card class="bg-white corner-around q-mb-sm">
+                            <q-card-title> زمان سوال : </q-card-title>
+                            <q-card-main>
+                              <q-range
+                                    v-model="rangeValues"
+                                  :min="30" :max="180"
+                                    :step="10"
+                                       label
+                                       snap
+                                       label-always 
+                                  :left-label-value="`${rangeValues.min} ثانیه`"
+                                  :right-label-value="`${rangeValues.max} ثانیه`"
+                                />
+                            </q-card-main>
+
+                            <!-- <q-card-actions>
+              <q-btn color="primary" label="اعمال" />
+            </q-card-actions> -->
+                      </q-card>
+
                       <q-card class="bg-white corner-around q-mb-sm">
                         <q-card-title> سختی سوال: </q-card-title>
                         <!-- <q-card-separator /> -->
@@ -147,16 +167,17 @@
                   <div  v-if="lessonsCurrent.length != 0 && lessonsCurrent[0].Questions.length != 0" class="panel">
                 
 
-<q-tabs class="bg-white corner-around " inverted color="primary">
+                  <q-tabs class="bg-white corner-around " inverted animated color="indigo-8"  >
 
-<q-tab v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name" slot="title" :label="lesson.Name" icon="book"/>
-
-<q-tab-pane v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name"><div class="col-md-10">
+                  
+                  <q-tab default v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name" slot="title" :label="lesson.Name" class="bg-yellow-2"  />
+                  
+                  <q-tab-pane v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name"><div class="col-md-10">
                         <label
                           >{{ lesson.Name }} ( تعداد سوال :
                           {{ lesson.Questions.length }})</label
                         >
-                        <q-pagination v-model="page" :min="minPages" :max="maxPages" />
+                        <q-pagination v-model="page"   direction-links class="float-right q-ml-lg"  :min="1" :max="5" />
                           <div>
                             <ul>
                               <li
@@ -175,7 +196,7 @@
                                   />
                                   <q-card-separator />
                                   <div class="row col-md-10">
-                                  <div class="col-md-4">
+                                  <div class="col-md-3">
                                     <br/>
                                   <base-btn-create :label="`اضافه به آزمون`" />
                                   </div>
@@ -186,10 +207,18 @@
                                   <div class="col-md-2 ">
                                     <br/>
                                     <div class="float-right">
-                                    <q-icon  name="favorite_border" />180
+                                    <q-icon style="font-size:20px"  name="favorite_border" />180
                                     </div>
                                   </div>
-                                  <div class="col-md-2">
+                                  <div class="col-md-2 ">
+                                    <br/>
+                                    <div class="float-right">
+                                    <span class="material-icons" style="font-size:25px">
+timer
+</span>: {{question.ResponseSecond}} ثانیه 
+                                    </div>
+                                  </div>
+                                  <div class="col-md-1">
                                   </div>
                                   </div>
                                 </div>
@@ -202,12 +231,15 @@
                                   >
                                   <br />
                                   <img
-                                    :src="$q.localStorage.get.item('ProfilePic')"
+                                    :src="question.Writer.WriterPicturePath"
                                     class="profile-image "
                                     alt="profile picture"
                                     width="60px"
                                     height="60px"
                                   />
+
+                                             
+
                                   
                                   <br/>
                                   {{ question.Writer.Name }}
@@ -261,7 +293,7 @@
                               </li>
                             </ul>
                           </div>
-                    
+                    <q-pagination   direction-links class="float-right q-ml-lg"  :min="1" :max="5" />
                       </div></q-tab-pane>
 </q-tabs>
 
@@ -438,7 +470,12 @@ export default class AssayVue extends Vue {
   selectedTab = "studentTab";
   assayCreate = vxm.assayStore.assayCreate;
   lookupStore = vxm.lookupStore;
+rangeValues= {
+        min: 30,
+        max: 90
+      };
 
+  page = 1;
 
   filterHardness: Array<number> = []; //['veryhard' ,'hard','mid' , 'easy'];
   filterRepeatness: Array<number> = []; //'high' ,'mid','low' ];
@@ -446,7 +483,7 @@ export default class AssayVue extends Vue {
 
   filterObject: any = [];
 
-  show
+  
 
 
   //#endregion
@@ -512,6 +549,17 @@ export default class AssayVue extends Vue {
     this.assayStore.OPEN_MODAL_2TOPIC(true);
   }
   //#endregion
+
+  @Watch("rangeValues")
+  rangeValuesChanged(newVal) {
+    if (newVal) {
+
+
+      
+    }
+  }
+
+
 
   //#region ### hooks ###
   created() {

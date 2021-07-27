@@ -1,8 +1,25 @@
 <template>
-  <section class="row">
-    <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
-      <q-checkbox label="سوال تصادفی" v-model="assayCreate.RandomQuestion" />
-      <br />
+
+<bs-modal
+    title="انتخاب مبحث"
+    :show="assayStore.openModal._2topic"
+    size="lg"
+    @close="assayStore.OPEN_MODAL_2TOPIC(false)"
+  >
+
+
+    <template slot="header">
+      <q-toolbar slot="header" color="warning" text-color>
+        <q-toolbar-title>انتخاب مبحث</q-toolbar-title>
+        <q-btn dense icon="close" @click="assayStore.OPEN_MODAL_2TOPIC(false)" />
+      </q-toolbar>
+    </template>
+
+    <slot>
+     <section class="row col-md-12">
+    <div class="col-md-12 shadow-1 q-ma-sm q-pa-sm">
+      <!-- <q-checkbox label="سوال تصادفی" v-model="assayCreate.RandomQuestion" />
+      <br /> -->
       <q-checkbox
         label="نمایش جزئیات تعداد سوالات در هر مبحث"
         v-model="assayCreate.IsDetailTopic"
@@ -38,52 +55,41 @@
                         (x) => x.Id === prop.node.lessonId
                       ).TopicReports.find(y=> y.ID === prop.node.Id) "
                 class="col-md-12 row"
-                style="color: #a9a9a9; font-size: 12px"
+                style="color: #ada8a7 ; font-size: 13px"
               >
-                <!-- <section class="row gutter-sm"> -->
+                <!-- <section class="row col-md-12"> -->
                 &nbsp;
                 &nbsp;
                 &nbsp;
-                <div class="border border-primary">
-                  <label>
-                    تعداد سوال جدید:
-                    {{
-                      numberOfQuestionReport.LessonReports.find(
-                        (x) => x.Id === prop.node.lessonId
-                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions
-                    }}</label
-                  >
+                
+                <div class="">
+                  <label> تعداد سوال جدید:</label>
+                    {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions}}
                 </div>
                 &nbsp;
                 &nbsp;
                 &nbsp;
+                
                 <div class="">
-                  <label> تعداد سوال تکلیف:{{   numberOfQuestionReport.LessonReports.find(
-                        (x) => x.Id === prop.node.lessonId
-                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions }} </label>
+                  <label>تعداد سوال تکلیف:</label>
+                    {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions}} 
+
                 </div>
                 &nbsp;
                 &nbsp;
                 &nbsp;
+               
                 <div class="">
-                  <label>
-                    تعداد سوال آزمون قبلی:
-                    {{   numberOfQuestionReport.LessonReports.find(
-                        (x) => x.Id === prop.node.lessonId
-                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }}</label
-                  >
+                  <label>تعداد سوال آزمون قبلی:</label>
+                  {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions}}
                 </div>
                 &nbsp;
                 &nbsp;
                 &nbsp;
+                
                 <div class="">
-                  <label> تعداد کل سوالات :{{  numberOfQuestionReport.LessonReports.find(
-                        (x) => x.Id === prop.node.lessonId
-                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions+numberOfQuestionReport.LessonReports.find(
-                        (x) => x.Id === prop.node.lessonId
-                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions+numberOfQuestionReport.LessonReports.find(
-                        (x) => x.Id === prop.node.lessonId
-                      ).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }} </label>
+                  <label> تعداد کل سوالات : </label>
+                  {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions+numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions+numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }}
                 </div>
                 <!-- </section> -->
               </div>
@@ -99,6 +105,18 @@
       </q-btn>
     </div>
   </section>
+    </slot>
+
+    <template slot="footer">
+      <!-- <base-btn-save-back @click="userStore.submitUpdateUserImage()"></base-btn-save-back>
+      <base-btn-back @click="userStore.OPEN_MODAL_UPDATE_USER_IMAGE_VUE(false)"></base-btn-back> -->
+    </template>
+  </bs-modal>
+
+
+
+
+  
 </template>
 
 <script lang="ts">
@@ -191,6 +209,7 @@ export default class TopicTabVue extends Vue {
     this.assayStore.submitPreCreate().then(() => {
       this.$emit("changeTab", "questionTab");
     })
+    this.assayStore.OPEN_MODAL_2TOPIC(false);
   }
 
   expandTree(treeRef) {

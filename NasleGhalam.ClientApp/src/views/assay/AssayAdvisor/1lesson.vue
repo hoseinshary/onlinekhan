@@ -15,7 +15,14 @@
     </template>
 
     <slot>
-      <section class="row gutter-lg col-md-12">
+      <section class="row gutter-sm col-md-12">
+       <div class="col-12">
+      <q-btn color="primary" class="float-right" @click="assayStore.OPEN_MODAL_1LESSON(false)">
+        انتخاب مبحث
+        <q-icon name="arrow_back" />
+      </q-btn>
+    </div>
+        
     <div class="col-md-3">
       <q-select
         v-model="educationTree.id"
@@ -33,6 +40,7 @@
       />
     </div>
     <div class="col-md-9">
+      
       <ul style="max-height: 500px; overflow-y: auto">
         <li
           v-for="lesson in assayCreate.Lessons"
@@ -116,8 +124,8 @@
     </slot>
 
     <template slot="footer">
-      <base-btn-save-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-save-back>
-      <base-btn-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-back>
+      <!-- <base-btn-save-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-save-back>
+      <base-btn-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-back> -->
     </template>
   </bs-modal>
 

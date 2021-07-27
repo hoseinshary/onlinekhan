@@ -142,7 +142,7 @@ export   class AssayNumberOfQuestionReportForTopic {
 }
 export   class LessonReport {
   Id: number;
-  TopicReport : Array<TopicReport>
+  TopicReports : Array<TopicReport>
   
 
   /**
@@ -150,7 +150,7 @@ export   class LessonReport {
    */
   constructor() {
   this.Id  = 0;
-  this.TopicReport = [];
+  this.TopicReports = [];
   }
 }
 

@@ -123,49 +123,54 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه مبحث ها
         /// </summary>
         /// <returns></returns>
-        public IList<TopicViewModel> GetAllChildren(int id)
+        public IList<int> GetAllChildren(List<int> ids)
         {
 
-            var returnVal = new List<TopicViewModel>();
-            var allTopics = _topics.Where(x => x.LessonId == _topics.FirstOrDefault(y => y.Id == id).LessonId).AsNoTracking()
+           
+            var allTopics = _topics.Where(x => x.LessonId == _topics.FirstOrDefault(y => y.Id == ids.FirstOrDefault()).LessonId).AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<TopicViewModel>)
                 .ToList();
 
-            if (allTopics.Count(x => x.ParentTopicId == id) == 0)
-            {
-                returnVal.Add(allTopics.FirstOrDefault(x => x.Id == id));
-                return returnVal;
-            }
-            else
-            {
-                var topicsChildTemp = new List<TopicViewModel>();
+            var returnIds = new List<int>();
 
-                topicsChildTemp.AddRange(allTopics.Where(x => x.ParentTopicId == id));
-                while (true)
+            foreach (var id in ids)
+            {
+                if (allTopics.Count(x => x.ParentTopicId == id) == 0)
                 {
-
-                    foreach (var topic in topicsChildTemp.ToList())
-                    {
-                        if (allTopics.Count(x => x.ParentTopicId == topic.Id) == 0)
-                        {
-                            returnVal.Add(allTopics.FirstOrDefault(x => x.Id == topic.Id));
-                            topicsChildTemp.Remove(topic);
-                        }
-                        else
-                        {
-                            topicsChildTemp.Remove(topic);
-                            topicsChildTemp.AddRange(allTopics.Where(x => x.ParentTopicId == topic.Id));
-                        }
-                    }
-                    if(topicsChildTemp.Count == 0)
-                        break;
+                    returnIds.Add(allTopics.Where(x => x.Id == id).Select(y=>y.Id).FirstOrDefault());
+                    
                 }
+                else
+                {
+                    var topicsChildTemp = new List<TopicViewModel>();
 
-                return returnVal;
+                    topicsChildTemp.AddRange(allTopics.Where(x => x.ParentTopicId == id));
+                    while (true)
+                    {
 
+                        foreach (var topic in topicsChildTemp.ToList())
+                        {
+                            if (allTopics.Count(x => x.ParentTopicId == topic.Id) == 0)
+                            {
+                                returnIds.Add(allTopics.Where(x => x.Id == topic.Id).Select(y => y.Id).FirstOrDefault());
+                                topicsChildTemp.Remove(topic);
+                            }
+                            else
+                            {
+                                topicsChildTemp.Remove(topic);
+                                topicsChildTemp.AddRange(allTopics.Where(x => x.ParentTopicId == topic.Id));
+                            }
+                        }
+
+                        if (topicsChildTemp.Count == 0)
+                            break;
+                    }
+                    
+                }
             }
 
+            return returnIds;
         }
 
         /// <summary>

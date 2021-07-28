@@ -36,11 +36,11 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost, CheckUserAccess(ActionBits.StudentReadAccess)]
-        public IHttpActionResult GetQuestionAssayReportByLessonIds(GetQuestionAssayReportForTopicViewModel assayReportForTopicViewModel)
-        {
-            return Ok(_studentService.GetQuestionAssayReportByLessonIds(assayReportForTopicViewModel.LessonIds, assayReportForTopicViewModel.StudentId));
-        }
+        //[HttpPost, CheckUserAccess(ActionBits.StudentReadAccess)]
+        //public IHttpActionResult GetQuestionAssayReportByLessonIds(GetQuestionAssayReportForTopicViewModel assayReportForTopicViewModel)
+        //{
+        //    return Ok(_studentService.GetQuestionAssayReportByLessonIds(assayReportForTopicViewModel.LessonIds, assayReportForTopicViewModel.StudentId));
+        //}
 
 
         [HttpGet, CheckUserAccess(ActionBits.StudentReadAccess)]

@@ -46,7 +46,37 @@
           <!-- <span slot="title">{{assayStore.modelName}}</span> -->
           <div slot="body"> 
               <div class="row gutter-xs">
-                <div class="col-2">
+                <div class="col-2 ">
+                   <div class="panel">
+                     
+                       <q-list highlight class="bg-white corner-around text-orange">
+                                <q-list-header>سوالات انتخاب شده:</q-list-header>
+
+                                <q-item v-for="lesson in lesssonChoose" :key="lesson.Id" >
+                                    <q-item-side color="primary" icon="book" />  
+                                    <q-item-main  :label="lesson.Name" />
+                                    <q-item-side right>
+                                    <q-item-tile label color="primary" > {{lesson.Questions.length}} </q-item-tile>
+                                  </q-item-side>
+                                </q-item>
+                                
+                               
+                                <q-item-separator />
+                                <q-item class="bg-yellow-1 corner-around">
+                                   <q-item-main label="تعداد کل :" />
+                                    <q-item-side right>
+                                    <q-item-tile label color="primary" > {{lessonChooseAllQuestioncount}} </q-item-tile>
+                                  </q-item-side>
+                                </q-item>
+                                <q-item>
+                                  <q-btn class="center" color="primary" label="پیش نمایش" />
+                                </q-item>
+                                <q-item>
+                                  <q-btn class="center" color="light" label="از نو" />
+                                </q-item>
+                              </q-list>
+                   </div>
+                   <br/>
                   <div class="panel">
 
                         <q-card class="bg-white corner-around q-mb-sm">
@@ -177,7 +207,7 @@
                           >{{ lesson.Name }} ( تعداد سوال :
                           {{ lesson.Questions.length }})</label
                         >
-                        <q-pagination v-model="page"   direction-links class="float-right q-ml-lg"  :min="1" :max="5" />
+                        <q-pagination @input="goToNextPage()" v-model="assayCreate.Page"   direction-links class="float-right q-ml-lg"  :min="1" :max="5" />
                           <div>
                             <ul>
                               <li
@@ -198,7 +228,7 @@
                                   <div class="row col-md-10">
                                   <div class="col-md-3">
                                     <br/>
-                                  <base-btn-create :label="`اضافه به آزمون`" />
+                                  <base-btn-create :label="`اضافه به آزمون`" @click="AddQuestion(lesson.Id, question)" />
                                   </div>
                                   <div class="col-md-4 center ">
                                     <br/>
@@ -293,126 +323,12 @@ timer
                               </li>
                             </ul>
                           </div>
-                    <q-pagination   direction-links class="float-right q-ml-lg"  :min="1" :max="5" />
+                    <q-pagination @input="goToNextPage()" v-model="assayCreate.Page"   direction-links class="float-right q-ml-lg"  :min="1" :max="5" />
                       </div></q-tab-pane>
 </q-tabs>
 
 
-                      <!-- <q-card v-for="lesson in lessonsCurrent" :key="lesson.Id" class="bg-white corner-around">
-                      <div class="col-md-10">
-                        <q-card-title
-                          >{{ lesson.Name }} ( تعداد سوال :
-                          {{ lesson.Questions.length }})</q-card-title
-                        >
-                        <q-card-separator />
-                        <q-card-main>
-                          <div>
-                            <ul>
-                              <li
-                                v-for="question in lesson.Questions"
-                                :key="question.Id"
-                                class="row shadow-1 q-ma-sm q-pa-sm bg-grey-2 corner-around"
-                              >
-                                
-                                <div class="col-md-10">
-                                   <div class="">
-                                  <label class="bg-faded  text-white"> {{question.TopicAnswer}} </label>
-                                  </div> 
-                                  <img
-                                    :src="question.QuestionPicturePath"
-                                    class="img-original-width corner-around"
-                                  />
-                                  <q-card-separator />
-                                  <div class="row col-md-10">
-                                  <div class="col-md-4">
-                                    <br/>
-                                  <base-btn-create :label="`اضافه به آزمون`" />
-                                  </div>
-                                  <div class="col-md-4 center ">
-                                    <br/>
-                                    <q-btn  @click="showQuestionAnswer" rounded push color="secondary" icon="arrow_downward"/>
-                                  </div>
-                                  <div class="col-md-2 ">
-                                    <br/>
-                                    <div class="float-right">
-                                    <q-icon  name="favorite_border" />180
-                                    </div>
-                                  </div>
-                                  <div class="col-md-2">
-                                  </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-2">
-                                  <div class="center q-mb-sm">
-                                  <router-link class=""
-                                    :to="`/question/${question.Id}/${lesson.Id}`"
-                                  >
-                                    سوال ({{ question.Id }})</router-link
-                                  >
-                                  <br />
-                                  <img
-                                    :src="$q.localStorage.get.item('ProfilePic')"
-                                    class="profile-image "
-                                    alt="profile picture"
-                                    width="60px"
-                                    height="60px"
-                                  />
-                                  
-                                  <br/>
-                                  {{ question.Writer.Name }}
-                                  </div>
-                                  <div style="font-size: 11px;" class=" q-mb-sm row" >
-                                    <div class="col-md-3">
-                                      سختی: 
-                                       <br />
-                                      تکرار:
-                                    </div>
-                                    <div class="col-md-6">
-                                      <q-rating
-                                    disable
-                                    size="16px"
-                                    color="green"
-                                    icon="stop"
-                                    v-model="question.Lookup_QuestionHardnessType.State"
-                                    :max="4"
-                                  />
-                                  <br />
-                                   
-                                  <q-rating
-                                    disable
-                                    size="16px"
-                                    color="red"
-                                    icon="stop"
-                                    v-model="question.Lookup_RepeatnessType.State"
-                                    :max="3"
-                                  />
-                                    </div>
-                                    <div class="col-md-3">
-                                      {{question.Lookup_QuestionHardnessType.Value}}
-                                       <br />
-                                      {{question.Lookup_RepeatnessType.Value}}
-                                    </div>
-                                  
-                                  
-                                  
-                                  </div>
-                                 
-                                  <div class="center" >
-                                  امتیاز:<q-rating
-                                    disable
-                                    size="22px"
-                                    color="orange"
-                                    v-model="question.Lookup_QuestionRank.State"
-                                    :max="4"
-                                  />
-                                  </div>
-                                </div>
-                              </li>
-                            </ul>
-                          </div>
-                        </q-card-main>
-                      </div>
-                    </q-card> -->
+                   
 
                   </div>  
                   <div v-else class="panel">
@@ -445,6 +361,8 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import BasePanel from "src/Components/BasePanel.vue";
+import IQuestion from "src/models/IQuestion";
+
 
 @Component({
   components: {
@@ -465,12 +383,15 @@ import BasePanel from "src/Components/BasePanel.vue";
 })
 export default class AssayVue extends Vue {
   //#region ### data ###
+
+  $v:any;
+
   assayStore = vxm.assayStore;
   pageAccess = util.getAccess(this.assayStore.modelName);
   selectedTab = "studentTab";
   assayCreate = vxm.assayStore.assayCreate;
   lookupStore = vxm.lookupStore;
-rangeValues= {
+  rangeValues= {
         min: 30,
         max: 90
       };
@@ -492,6 +413,16 @@ rangeValues= {
   // get canCreate() {
   //   return this.pageAccess.indexOf("ایجاد") > -1;
   // }
+
+
+  get lesssonChoose(){
+  
+    return this.assayCreate.Lessons.map((x) => ({
+      Id: x.Id,
+      Name: x.Name,
+      Questions : x.Questions
+         }));
+  }
   get lessonsCurrent() {
 
     return this.assayStore.checkedLessons.map((x) => ({
@@ -499,6 +430,14 @@ rangeValues= {
       Name: x.Name,
       Questions: x.Questions.filter(x => !this.filterHardness.length || this.filterHardness.includes(x.LookupId_QuestionHardnessType))
     }))
+  }
+
+  get lessonChooseAllQuestioncount(){
+    var countall = 0 ;
+    this.lesssonChoose.forEach(element => {
+      countall += element.Questions.length
+    });
+    return countall;
   }
 
   //#endregion
@@ -515,6 +454,11 @@ rangeValues= {
 
   goToTopicTab() {
     this.$emit("changeTab", "topicTab");
+  }
+
+  goToNextPage()
+  {
+    this.assayStore.submitPreCreate();
   }
 
   getTopicAnswer(question) {
@@ -541,6 +485,16 @@ rangeValues= {
   showQuestionAnswer()
   {
 
+  }
+
+  AddQuestion(lessonId :number , question )
+  {
+    var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
+    if(x)
+      if(!x.Questions.find( y => y.Id === question.Id))
+        x.Questions.push(question);
+
+      console.log(this.assayCreate.Lessons);
   }
 
   showModal2topic() {

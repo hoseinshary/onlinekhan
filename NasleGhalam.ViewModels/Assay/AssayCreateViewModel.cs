@@ -63,13 +63,11 @@ namespace NasleGhalam.ViewModels.Assay
         [Display(Name = "دو صفحه در یک صفحه")]
         public bool TwoPageInOne { get; set; }
 
-        [Display(Name = "جای چرک نویس")]
-        public bool HaveWhiteSpace { get; set; }
+
 
         public Fonts Font { get; set; }
 
-        [Display(Name = "چرک نویس بغل / زیر")]
-        public bool WhiteSpacePosition { get; set; }
+    
 
         [Display(Name = "تاریخ ثبت")]
         public DateTime DateTimeCreate => DateTime.Now;
@@ -77,5 +75,8 @@ namespace NasleGhalam.ViewModels.Assay
 
         [Display(Name = "فایل")]
         public string File { get; set; }
+
+        public int Page { get; set; }
+
     }
 }

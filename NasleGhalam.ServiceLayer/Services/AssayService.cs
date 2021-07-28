@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
@@ -60,19 +61,13 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-                    var qEasy = _questionService.Value.GetAllByTopicIdsForAssay(
-                        lesson.Topics.Select(x => x.Id).ToList(), 11,
-                        lesson.CountOfEasy);
-                    var qMedium = _questionService.Value.GetAllByTopicIdsForAssay(
-                        lesson.Topics.Select(x => x.Id).ToList(), 12,
-                        lesson.CountOfMedium);
-                    var qHard = _questionService.Value.GetAllByTopicIdsForAssay(
-                        lesson.Topics.Select(x => x.Id).ToList(), 13,
-                        lesson.CountOfHard);
+                    var q = _questionService.Value.GetAllByTopicIdsForAssay(
+                        lesson.Topics.Select(x => x.Id).ToList(), assayGetQuestionsViewModel.Page,
+                        20);
+                    
 
-                    lessonItem.Questions.AddRange(qEasy);
-                    lessonItem.Questions.AddRange(qMedium);
-                    lessonItem.Questions.AddRange(qHard);
+                    lessonItem.Questions.AddRange(q);
+                
 
                     questionsReturn.Add(lessonItem);
                 }
@@ -87,22 +82,15 @@ namespace NasleGhalam.ServiceLayer.Services
                     lessonItem.LessonId = lesson.Id;
                     //foreach (var topic in lesson.Topics)
                     //{
-                        var qEasy = _questionService.Value.GetAllByTopicIdsForAssay(
-                            lesson.Topics.Select(x =>x.Id).ToList(), 11,
-                            lesson.CountOfEasy);
-                        var qMedium = _questionService.Value.GetAllByTopicIdsForAssay(
-                            lesson.Topics.Select(x => x.Id).ToList(), 12,
-                            lesson.CountOfMedium);
-                        var qHard = _questionService.Value.GetAllByTopicIdsForAssay(
-                            lesson.Topics.Select(x => x.Id).ToList(), 13,
-                            lesson.CountOfHard);
-                        if(qEasy.Count >0)
-                            lessonItem.Questions.AddRange(qEasy);
-                        if (qMedium.Count > 0)
-                            lessonItem.Questions.AddRange(qMedium);
-                        if (qHard.Count > 0)
-                            lessonItem.Questions.AddRange(qHard);
+                    var q = _questionService.Value.GetAllByTopicIdsForAssay(
+                        lesson.Topics.Select(x => x.Id).ToList(), assayGetQuestionsViewModel.Page,
+                        20);
+                    if (q.Count >0)
+                            lessonItem.Questions.AddRange(q);
+                      
                     //}
+                     lessonItem.Questions.Distinct();
+                        
                     questionsReturn.Add(lessonItem);
                 }
 

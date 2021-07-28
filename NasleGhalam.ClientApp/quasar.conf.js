@@ -113,7 +113,10 @@ module.exports = function(ctx) {
         "QAutocomplete",
         "QCardActions",
         "QRating",
-        "QRange"
+        "QRange",
+        "QChip",
+        "QItemTile",
+        "QItemSeparator"
       ],
       directives: ["Ripple", "CloseOverlay",
       "BackToTop"],

@@ -1,4 +1,4 @@
-import AssayCreate from "src/models/IAssay";
+import AssayCreate, { AssayLesson } from "src/models/IAssay";
 import Vue from "Vue";
 import {
   VuexModule,
@@ -22,6 +22,8 @@ export class AssayStore extends VuexModule {
   assayCreate: AssayCreate;
   private _assayList: Array<IAssay>;
 
+  _lessonList: Array<AssayLesson>;
+
   private _indexVue: Vue;
   private _assayVue: Vue;
   private _0studentVue: Vue;
@@ -37,6 +39,7 @@ export class AssayStore extends VuexModule {
   constructor() {
     super();
     this.assayCreate = new AssayCreate();
+    this._lessonList = [];
     this.openModal = {
       create: false,
       edit: false,
@@ -52,7 +55,7 @@ export class AssayStore extends VuexModule {
   }
 
   get checkedLessons() {
-    return this.assayCreate.Lessons.filter(x => x.Checked);
+    return this._lessonList.filter(x => x.Checked);
   }
   //#endregion
 
@@ -144,7 +147,8 @@ export class AssayStore extends VuexModule {
       IsOnline: this.assayCreate.IsOnline,
       RandomOptions: this.assayCreate.RandomOptions,
       RandomQuestion: this.assayCreate.RandomQuestion,
-      Lessons: this.assayCreate.Lessons.filter(x => x.Checked)
+      Lessons: this._lessonList.filter(x => x.Checked),
+      Page : this.assayCreate.Page
     };
     data.Lessons.forEach(x => {
       x.Topics = x.Topics.filter(x => x.Checked);

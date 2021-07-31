@@ -33,3 +33,5 @@ export const UNIVERSITY_BRANCH_URL = "/api/universityBranch";
 export const REPORT_URL = "/api/report";
 export const PROGRAM_URL = "/api/program";
 export const MEDIA_URL = "/api/media";
+export const STUDENTMAJORLIST_URL = "/api/studentMajorList";
+

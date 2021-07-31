@@ -206,8 +206,14 @@ export default [
         path: "/AssayTeacher",
         name: "assayTeacher",
         component: () => import(/* webpackChunkName: "program" */"src/views/assay/assayTeacher/index.vue")
+      },
+      {
+        path: "/ُstudentMajorList",
+        name: "studentMajorList",
+        component: () => import(/* webpackChunkName: "program" */"src/views/studentMajorList/index.vue")
       }
     ]
+
   },
   {
     // Always leave this as last one

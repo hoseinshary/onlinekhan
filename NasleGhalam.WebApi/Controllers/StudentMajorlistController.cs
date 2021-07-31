@@ -20,11 +20,13 @@ namespace NasleGhalam.WebApi.Controllers
             _studentMajorlistService = studentMajorlistService;
         }
 
+        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
         public IHttpActionResult GetAll()
         {
             return Ok(_studentMajorlistService.GetAll());
         }
-        
+
+        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var studentMajorlist = _studentMajorlistService.GetById(id);
@@ -34,6 +36,8 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(studentMajorlist);
         }
+
+        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
         public IHttpActionResult GetStudentById()
         {
             var studentMajorlist = _studentMajorlistService.GetStudentById(Request.GetUserId(), Request.GetRoleLevel());
@@ -43,6 +47,8 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(studentMajorlist);
         }
+
+        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
         public IHttpActionResult GetStudentMajorsById(int id)
         {
             var studentMajorlist = _studentMajorlistService.GetStudentMajorsById(id);
@@ -53,6 +59,8 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(studentMajorlist);
         }
 
+
+        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
         public IHttpActionResult GetStudentMajorsById()
         {
             var studentMajorlist = _studentMajorlistService.GetStudentMajorsById(Request.GetUserId());
@@ -62,7 +70,9 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(studentMajorlist);
         }
-        
+
+
+        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
         public IHttpActionResult GetAllMajors()
         {
             var studentMajorlist = _studentMajorlistService.GetAllMajors();
@@ -72,6 +82,9 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(studentMajorlist);
         }
+
+
+        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
         public IHttpActionResult GetMajorById(int id)
         {
             var studentMajorlist = _studentMajorlistService.GetMajorById(id);
@@ -81,6 +94,9 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(studentMajorlist);
         }
+
+
+        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
         public IHttpActionResult GetMajorsBySearch(string text)
         {
             var studentMajorlist = _studentMajorlistService.GetMajorsBySearch(text);
@@ -92,6 +108,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpPost]
+        [CheckUserAccess(ActionBits.StudentMajorListCreateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Create(StudentMajorlistViewModel studentMajorlistViewModel)
         {
@@ -100,12 +117,15 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpPost]
+        [CheckUserAccess(ActionBits.StudentMajorListUpdateAccess)]
         [CheckModelValidation]
         public IHttpActionResult Update(StudentMajorlistUpdateViewModel studentMajorlistViewModel)
         {
             return Ok(_studentMajorlistService.Update(studentMajorlistViewModel));
         }
         [HttpPost]
+        [CheckUserAccess(ActionBits.StudentMajorListDeleteAccess)]
+
         public IHttpActionResult Delete(int id)
         {
             return Ok(_studentMajorlistService.Delete(id));

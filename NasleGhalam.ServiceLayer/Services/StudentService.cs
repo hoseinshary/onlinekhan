@@ -97,63 +97,63 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه دانش آموز ها
         /// </summary>
         /// <returns></returns>
-        public StudentQuestionAssayReportForTopicViewModel GetQuestionAssayReportByLessonIds(int [] lessonIds, int studentId)
-        {
-            StudentQuestionAssayReportForTopicViewModel returnVal = new StudentQuestionAssayReportForTopicViewModel();
-            var student = _students
-                .Include(x => x.User.Assays.Select(y => y.AssayQuestions))
-                .Where(x => x.Id == studentId)
-                .AsNoTracking()
-                .AsEnumerable()
-                .FirstOrDefault();
-            returnVal.User = Mapper.Map<UserViewModel>(student.User);
+        //public StudentQuestionAssayReportForTopicViewModel GetQuestionAssayReportByLessonIds(int [] lessonIds, int studentId)
+        //{
+        //    StudentQuestionAssayReportForTopicViewModel returnVal = new StudentQuestionAssayReportForTopicViewModel();
+        //    var student = _students
+        //        .Include(x => x.User.Assays.Select(y => y.AssayQuestions))
+        //        .Where(x => x.Id == studentId)
+        //        .AsNoTracking()
+        //        .AsEnumerable()
+        //        .FirstOrDefault();
+        //    returnVal.User = Mapper.Map<UserViewModel>(student.User);
 
-            returnVal.LessonReports = new List<LessonReportViewModel>();
+        //    returnVal.LessonReports = new List<LessonReportViewModel>();
 
-            foreach (var lessonId in lessonIds)
-            {
-                var topicsList = _topicService.Value.GetAll4LevelByLessonId(lessonId);
+        //    foreach (var lessonId in lessonIds)
+        //    {
+        //        var topicsList = _topicService.Value.GetAll4LevelByLessonId(lessonId);
 
-                List<TopicReportViewModel> temp = new List<TopicReportViewModel>();
+        //        List<TopicReportViewModel> temp = new List<TopicReportViewModel>();
 
-                foreach (var topicViewModel in topicsList)
-                {
-                    var childrentopic = _topicService.Value.GetAllChildren(topicViewModel.Id);
+        //        foreach (var topicViewModel in topicsList)
+        //        {
+        //            //var childrentopic = _topicService.Value.GetAllChildren(topicViewModel.Id);
 
-                    var questions = _questionService.Value.GetAllByTopicIdsActive(childrentopic.Select(x => x.Id));
+        //            //var questions = _questionService.Value.GetAllByTopicIdsActive(childrentopic.Select(x => x.Id));
 
-                    var NumberOfHomeworkQuestions = student.User.Assays.Where(x => x.LookupId_QuestionType == 1093).Select(y =>
-                        y.AssayQuestions.Any(z => questions.Select(p => p.Id).Contains(z.QuestionId))).Distinct().Count();
+        //            var NumberOfHomeworkQuestions = student.User.Assays.Where(x => x.LookupId_QuestionType == 1093).Select(y =>
+        //                y.AssayQuestions.Any(z => questions.Select(p => p.Id).Contains(z.QuestionId))).Distinct().Count();
 
-                    var NumberOfAssayQuestions = student.User.Assays
-                        .Select(y => y.AssayQuestions.Any(z => questions.Select(p => p.Id).Contains(z.QuestionId)))
-                        .Distinct().Count();
+        //            var NumberOfAssayQuestions = student.User.Assays
+        //                .Select(y => y.AssayQuestions.Any(z => questions.Select(p => p.Id).Contains(z.QuestionId)))
+        //                .Distinct().Count();
 
-                    var NumberOfNewQuestions = questions.Count - NumberOfAssayQuestions;
+        //            var NumberOfNewQuestions = questions.Count - NumberOfAssayQuestions;
 
-                    temp.Add( new TopicReportViewModel()
-                    {
-                        ID = topicViewModel.Id,
-                        NumberOfAssayQuestions = NumberOfAssayQuestions,
-                        NumberOfHomeworkQuestions = NumberOfHomeworkQuestions,
-                        NumberOfNewQuestions = NumberOfNewQuestions
-                    });
+        //            temp.Add( new TopicReportViewModel()
+        //            {
+        //                ID = topicViewModel.Id,
+        //                NumberOfAssayQuestions = NumberOfAssayQuestions,
+        //                NumberOfHomeworkQuestions = NumberOfHomeworkQuestions,
+        //                NumberOfNewQuestions = NumberOfNewQuestions
+        //            });
 
-                }
+        //        }
 
-                returnVal.LessonReports.Add(new LessonReportViewModel()
-                {
-                    Id = lessonId,
-                    TopicReports = temp
-                });
+        //        returnVal.LessonReports.Add(new LessonReportViewModel()
+        //        {
+        //            Id = lessonId,
+        //            TopicReports = temp
+        //        });
 
 
-            }
+        //    }
             
 
-            return returnVal;
+        //    return returnVal;
 
-        }
+        //}
 
         /// <summary>
         /// ثبت دانش آموز

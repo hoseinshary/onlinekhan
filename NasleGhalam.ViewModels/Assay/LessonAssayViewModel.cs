@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using NasleGhalam.ViewModels.Question;
 
 namespace NasleGhalam.ViewModels.Assay
@@ -12,7 +13,13 @@ namespace NasleGhalam.ViewModels.Assay
         public IEnumerable<TopicAssayViewModel> Topics { get; set; }
 
         public IEnumerable<QuestionViewModel> Questions { get; set; }
-        
+
+        [Display(Name = "جای چرک نویس")]
+        public bool HaveWhiteSpace { get; set; }
+
+        [Display(Name = "چرک نویس بغل / زیر")]
+        public bool WhiteSpacePosition { get; set; }
+
         public int CountOfEasy { get; set; }
 
         public int CountOfMedium { get; set; }

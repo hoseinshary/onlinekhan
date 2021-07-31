@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
@@ -43,9 +44,9 @@ namespace NasleGhalam.WebApi.Controllers
         
 
         [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]
-        public IHttpActionResult GetAllChildren(int id)
+        public IHttpActionResult GetAllChildren(List<int> ids)
         {
-            return Ok(_topicService.GetAllChildren(id));
+            return Ok(_topicService.GetAllChildren(ids));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.TopicReadAccess)]

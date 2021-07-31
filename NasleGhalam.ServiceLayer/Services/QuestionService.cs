@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
 using AutoMapper;
 using Microsoft.Office.Interop.Word;
@@ -521,35 +522,55 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه سوال های مباحث
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionViewModel> GetAllByTopicIdsForAssay(List<int> ids, int lookupId_QuestionHardnessType, int count)
+        public IList<QuestionViewModel> GetAllByTopicIdsForAssay(List<int> ids, int Page, int count)
         {
-            var returnVal = new List<QuestionViewModel>();
-            foreach (var id in ids)
-            {
-                var newIds = _topicService.Value.GetAllChildren(id).Select(x => x.Id);
+            var newIds = _topicService.Value.GetAllChildren(ids);
+            
+
+            return _questions
+                .Include(current => current.Writer)
+                .Include(current => current.Lookup_AreaTypes)
+                .Include(current => current.Lookup_QuestionRank)
+                .Include(current => current.Lookup_RepeatnessType)
+                .Include(current => current.Lookup_QuestionHardnessType)
+                .Where(current => current.Topics.Any(x =>
+                    newIds.Contains(x.Id)))
+                .OrderBy(x => Guid.NewGuid())
+                .Skip(count * (Page - 1)).Take(count)
+                //.Take(count)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionViewModel>)
+                .ToList();
 
 
-                var questions = _questions
-                    .Include(current => current.Writer)
-                    .Include(current => current.Lookup_AreaTypes)
-                    .Include(current => current.Lookup_QuestionRank)
-                    .Include(current => current.Lookup_RepeatnessType)
-                    .Include(current => current.Lookup_QuestionHardnessType)
-                    .Where(current => current.Topics.Any(x =>
-                        newIds.Contains(x.Id) &&
-                        current.LookupId_QuestionHardnessType == lookupId_QuestionHardnessType))
-                    .OrderBy(x => Guid.NewGuid())
-                    //.Take(count)
-                    .AsNoTracking()
-                    .AsEnumerable()
-                    .Select(Mapper.Map<QuestionViewModel>)
-                    .ToList();
-                returnVal.AddRange(questions);
-            }
+            //var returnVal = new List<QuestionViewModel>();
+            //foreach (var id in ids)
+            //{
+            //    var newIds = _topicService.Value.GetAllChildren(id).Select(x => x.Id);
+
+
+            //    var questions = _questions
+            //        .Include(current => current.Writer)
+            //        .Include(current => current.Lookup_AreaTypes)
+            //        .Include(current => current.Lookup_QuestionRank)
+            //        .Include(current => current.Lookup_RepeatnessType)
+            //        .Include(current => current.Lookup_QuestionHardnessType)
+            //        .Where(current => current.Topics.Any(x =>
+            //            newIds.Contains(x.Id)))
+            //        .OrderBy(x => Guid.NewGuid())
+            //        .Skip(count * (Page - 1)).Take(count)
+            //        //.Take(count)
+            //        .AsNoTracking()
+            //        .AsEnumerable()
+            //        .Select(Mapper.Map<QuestionViewModel>)
+            //        .ToList();
+            //    returnVal.AddRange(questions);
+            //}
 
 
 
-            return returnVal;
+            //return returnVal;
         }
 
         /// <summary>

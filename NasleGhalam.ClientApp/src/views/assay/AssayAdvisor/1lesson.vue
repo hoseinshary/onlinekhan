@@ -15,7 +15,14 @@
     </template>
 
     <slot>
-      <section class="row gutter-lg col-md-12">
+      <section class="row gutter-sm col-md-12">
+       <div class="col-12">
+      <q-btn color="primary" class="float-right" @click="assayStore.OPEN_MODAL_1LESSON(false)">
+        انتخاب مبحث
+        <q-icon name="arrow_back" />
+      </q-btn>
+    </div>
+        
     <div class="col-md-3">
       <q-select
         v-model="educationTree.id"
@@ -33,16 +40,18 @@
       />
     </div>
     <div class="col-md-9">
+      
       <ul style="max-height: 500px; overflow-y: auto">
         <li
-          v-for="lesson in assayCreate.Lessons"
+          v-for="lesson in assayStore._lessonList"
           :key="'lesson' + lesson.Id"
           class="row shadow-1 q-ma-sm q-pa-sm"
         >
           <div class="col-md-5">
             <q-checkbox
               v-model="lesson.Checked"
-              @input="getQuestionNumberReport(lesson.Id)"
+              @input="getQuestionNumberReport(lesson)"
+              
             />
 
             {{ lesson.Name }}
@@ -116,8 +125,8 @@
     </slot>
 
     <template slot="footer">
-      <base-btn-save-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-save-back>
-      <base-btn-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-back>
+      <!-- <base-btn-save-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-save-back>
+      <base-btn-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-back> -->
     </template>
   </bs-modal>
 
@@ -185,9 +194,9 @@ export default class LessonTabVue extends Vue {
 
   @Watch("educationTree.leafTicked")
   tickedEducationTreeIdsChanged(newVal) {
-    util.clearArray(this.assayCreate.Lessons);
+    util.clearArray(this.assayStore._lessonList);
     this.lessonStore.gridDataByEducationTreeIds(newVal).forEach(x => {
-      this.assayCreate.Lessons.push(new AssayLesson(x.Id, x.Name));
+      this.assayStore._lessonList.push(new AssayLesson(x.Id, x.Name));
     });
   }
   //#endregion
@@ -197,21 +206,24 @@ export default class LessonTabVue extends Vue {
     this.$emit("changeTab", "topicTab");
   }
 
-  getQuestionNumberReport(LessonId: number) {
-    this.studentStore.numberOfQuestionReport({ lessonId: LessonId, studentId: 9 }).then(d => {
+  getQuestionNumberReport(Lesson: AssayLesson) {
+  
+    if(this.assayCreate.Lessons.find(x=> x.Id === Lesson.Id))
+    {
+        this.assayCreate.Lessons.splice(this.assayCreate.Lessons.findIndex(x=> x.Id === Lesson.Id),1)
+    }
+    else
+    {
+      Lesson.Questions = [];
+    this.assayCreate.Lessons.push(Lesson);
+    this.studentStore.numberOfQuestionReport({ lessonId: Lesson.Id, studentId: 9 }).then(d => {
       this.numberOfQuestionReport = d;
     });
-    //debugger;
-    //  this.numberOfQuestionReport.NumberOfNewQuestions = this["numberOfQuestionReport.NumberOfNewQuestions"];
-    //  this.numberOfQuestionReport.NumberOfAssayQuestions = this["numberOfQuestionReport.NumberOfAssayQuestions"];
-    //  this.numberOfQuestionReport.NumberOfHomeworkQuestions = this["numberOfQuestionReport.NumberOfHomeworkQuestions"];
-
-
-    // console.log("vue :", this["numberOfQuestionReport.NumberOfNewQuestions"]);//255
-    // console.log("vue :", this.numberOfQuestionReport.NumberOfNewQuestions);//0
-
-
+    }
+   
   }
+
+  
 
   //#endregion
 

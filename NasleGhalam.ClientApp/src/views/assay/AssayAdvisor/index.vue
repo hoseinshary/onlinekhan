@@ -46,8 +46,58 @@
           <!-- <span slot="title">{{assayStore.modelName}}</span> -->
           <div slot="body"> 
               <div class="row gutter-xs">
-                <div class="col-2">
+                <div class="col-2 ">
+                   <div class="panel">
+                     
+                       <q-list highlight class="bg-white corner-around text-orange">
+                                <q-list-header>سوالات انتخاب شده:</q-list-header>
+
+                                <q-item v-for="lesson in lesssonChoose" :key="lesson.Id" >
+                                    <q-item-side color="primary" icon="book" />  
+                                    <q-item-main  :label="lesson.Name" />
+                                    <q-item-side right>
+                                    <q-item-tile label color="primary" > {{lesson.Questions.length}} </q-item-tile>
+                                  </q-item-side>
+                                </q-item>
+                                
+                               
+                                <q-item-separator />
+                                <q-item class="bg-yellow-1 corner-around">
+                                   <q-item-main label="تعداد کل :" />
+                                    <q-item-side right>
+                                    <q-item-tile label color="primary" > {{lessonChooseAllQuestioncount}} </q-item-tile>
+                                  </q-item-side>
+                                </q-item>
+                                <q-item>
+                                  <q-btn class="center" color="primary" label="پیش نمایش" />
+                                </q-item>
+                                <q-item>
+                                  <q-btn class="center" color="light" label="از نو" />
+                                </q-item>
+                              </q-list>
+                   </div>
+                   <br/>
                   <div class="panel">
+
+                        <q-card class="bg-white corner-around q-mb-sm">
+                            <q-card-title> زمان سوال : </q-card-title>
+                            <q-card-main>
+                              <q-range
+                                    v-model="rangeValues"
+                                  :min="30" :max="180"
+                                    :step="10"
+                                       label
+                                       snap
+                                       label-always 
+                                  :left-label-value="`${rangeValues.min} ثانیه`"
+                                  :right-label-value="`${rangeValues.max} ثانیه`"
+                                />
+                            </q-card-main>
+
+                            <!-- <q-card-actions>
+              <q-btn color="primary" label="اعمال" />
+            </q-card-actions> -->
+                      </q-card>
 
                       <q-card class="bg-white corner-around q-mb-sm">
                         <q-card-title> سختی سوال: </q-card-title>
@@ -144,17 +194,20 @@
                 </div>
                
                 <div class="col-10">
-                  <div  v-if="lessonsCurrent.length != 0" class="panel">
+                  <div  v-if="lessonsCurrent.length != 0 && lessonsCurrent[0].Questions.length != 0" class="panel">
                 
 
-                      <q-card v-for="lesson in lessonsCurrent" :key="lesson.Id" class="bg-white corner-around">
-                      <div class="col-md-10">
-                        <q-card-title
+                  <q-tabs class="bg-white corner-around " inverted animated color="indigo-8"  >
+
+                  
+                  <q-tab default v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name" slot="title" :label="lesson.Name" class="bg-yellow-2"  />
+                  
+                  <q-tab-pane v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name"><div class="col-md-10">
+                        <label
                           >{{ lesson.Name }} ( تعداد سوال :
-                          {{ lesson.Questions.length }})</q-card-title
+                          {{ lesson.Questions.length }})</label
                         >
-                        <q-card-separator />
-                        <q-card-main>
+                        <q-pagination @input="goToNextPage()" v-model="assayCreate.Page"   direction-links class="float-right q-ml-lg"  :min="1" :max="5" />
                           <div>
                             <ul>
                               <li
@@ -173,9 +226,9 @@
                                   />
                                   <q-card-separator />
                                   <div class="row col-md-10">
-                                  <div class="col-md-4">
+                                  <div class="col-md-3">
                                     <br/>
-                                  <base-btn-create :label="`اضافه به آزمون`" />
+                                  <base-btn-create :label="`اضافه به آزمون`" @click="AddQuestion(lesson.Id, question)" />
                                   </div>
                                   <div class="col-md-4 center ">
                                     <br/>
@@ -184,10 +237,18 @@
                                   <div class="col-md-2 ">
                                     <br/>
                                     <div class="float-right">
-                                    <q-icon  name="favorite_border" />180
+                                    <q-icon style="font-size:20px"  name="favorite_border" />180
                                     </div>
                                   </div>
-                                  <div class="col-md-2">
+                                  <div class="col-md-2 ">
+                                    <br/>
+                                    <div class="float-right">
+                                    <span class="material-icons" style="font-size:25px">
+timer
+</span>: {{question.ResponseSecond}} ثانیه 
+                                    </div>
+                                  </div>
+                                  <div class="col-md-1">
                                   </div>
                                   </div>
                                 </div>
@@ -200,12 +261,15 @@
                                   >
                                   <br />
                                   <img
-                                    :src="$q.localStorage.get.item('ProfilePic')"
+                                    :src="question.Writer.WriterPicturePath"
                                     class="profile-image "
                                     alt="profile picture"
                                     width="60px"
                                     height="60px"
                                   />
+
+                                             
+
                                   
                                   <br/>
                                   {{ question.Writer.Name }}
@@ -259,9 +323,12 @@
                               </li>
                             </ul>
                           </div>
-                        </q-card-main>
-                      </div>
-                    </q-card>
+                    <q-pagination @input="goToNextPage()" v-model="assayCreate.Page"   direction-links class="float-right q-ml-lg"  :min="1" :max="5" />
+                      </div></q-tab-pane>
+</q-tabs>
+
+
+                   
 
                   </div>  
                   <div v-else class="panel">
@@ -294,6 +361,8 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import BasePanel from "src/Components/BasePanel.vue";
+import IQuestion from "src/models/IQuestion";
+
 
 @Component({
   components: {
@@ -314,12 +383,20 @@ import BasePanel from "src/Components/BasePanel.vue";
 })
 export default class AssayVue extends Vue {
   //#region ### data ###
+
+  $v:any;
+
   assayStore = vxm.assayStore;
   pageAccess = util.getAccess(this.assayStore.modelName);
   selectedTab = "studentTab";
   assayCreate = vxm.assayStore.assayCreate;
   lookupStore = vxm.lookupStore;
+  rangeValues= {
+        min: 30,
+        max: 90
+      };
 
+  page = 1;
 
   filterHardness: Array<number> = []; //['veryhard' ,'hard','mid' , 'easy'];
   filterRepeatness: Array<number> = []; //'high' ,'mid','low' ];
@@ -327,7 +404,7 @@ export default class AssayVue extends Vue {
 
   filterObject: any = [];
 
-  show
+  
 
 
   //#endregion
@@ -336,6 +413,16 @@ export default class AssayVue extends Vue {
   // get canCreate() {
   //   return this.pageAccess.indexOf("ایجاد") > -1;
   // }
+
+
+  get lesssonChoose(){
+  
+    return this.assayCreate.Lessons.map((x) => ({
+      Id: x.Id,
+      Name: x.Name,
+      Questions : x.Questions
+         }));
+  }
   get lessonsCurrent() {
 
     return this.assayStore.checkedLessons.map((x) => ({
@@ -343,6 +430,14 @@ export default class AssayVue extends Vue {
       Name: x.Name,
       Questions: x.Questions.filter(x => !this.filterHardness.length || this.filterHardness.includes(x.LookupId_QuestionHardnessType))
     }))
+  }
+
+  get lessonChooseAllQuestioncount(){
+    var countall = 0 ;
+    this.lesssonChoose.forEach(element => {
+      countall += element.Questions.length
+    });
+    return countall;
   }
 
   //#endregion
@@ -359,6 +454,11 @@ export default class AssayVue extends Vue {
 
   goToTopicTab() {
     this.$emit("changeTab", "topicTab");
+  }
+
+  goToNextPage()
+  {
+    this.assayStore.submitPreCreate();
   }
 
   getTopicAnswer(question) {
@@ -387,12 +487,33 @@ export default class AssayVue extends Vue {
 
   }
 
+  AddQuestion(lessonId :number , question )
+  {
+    var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
+    if(x)
+      if(!x.Questions.find( y => y.Id === question.Id))
+        x.Questions.push(question);
+
+      console.log(this.assayCreate.Lessons);
+  }
+
   showModal2topic() {
     //this.userStore.resetCreate();
 
     this.assayStore.OPEN_MODAL_2TOPIC(true);
   }
   //#endregion
+
+  @Watch("rangeValues")
+  rangeValuesChanged(newVal) {
+    if (newVal) {
+
+
+      
+    }
+  }
+
+
 
   //#region ### hooks ###
   created() {

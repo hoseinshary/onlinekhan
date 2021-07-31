@@ -63,6 +63,8 @@ export class AssayLesson {
   CountOfMedium: number;
   CountOfHard: number;
   LessonOrder: number;
+  HaveWhiteSpace: boolean;
+  WhiteSpacePosition: boolean;
   get CountOfQuestions(): number {
     return this.CountOfEasy + this.CountOfMedium + this.CountOfHard;
   }
@@ -81,6 +83,8 @@ export class AssayLesson {
     this.LessonOrder = 0;
     this.Topics = [];
     this.Questions = [];
+    this.HaveWhiteSpace = false;
+    this.WhiteSpacePosition = false;
   }
 }
 export  default class AssayCreate {
@@ -98,10 +102,10 @@ export  default class AssayCreate {
   FontSize: number;
   Font: Fonts;
   TwoPageInOne: boolean;
-  HaveWhiteSpace: boolean;
-  WhiteSpacePosition: boolean;
+
   Lessons: Array<AssayLesson>;
   IsDetailTopic : boolean;
+  Page : number;
 
   /**
    * constructor
@@ -121,10 +125,10 @@ export  default class AssayCreate {
     this.FontSize = 11;
     this.Font = Fonts.BNazanin;
     this.TwoPageInOne = false;
-    this.HaveWhiteSpace = false;
-    this.WhiteSpacePosition = false;
+  
     this.Lessons = [];
     this.IsDetailTopic = false;
+    this.Page = 1;
   }
 }
 
@@ -142,7 +146,7 @@ export   class AssayNumberOfQuestionReportForTopic {
 }
 export   class LessonReport {
   Id: number;
-  TopicReport : Array<TopicReport>
+  TopicReports : Array<TopicReport>
   
 
   /**
@@ -150,7 +154,7 @@ export   class LessonReport {
    */
   constructor() {
   this.Id  = 0;
-  this.TopicReport = [];
+  this.TopicReports = [];
   }
 }
 

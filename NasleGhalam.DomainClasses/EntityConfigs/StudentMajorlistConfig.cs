@@ -14,7 +14,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
             Property(x => x.CreationDate).IsRequired();
             HasRequired(x => x.Student)
             .WithMany(x => x.StudentMajorlists)
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(x => x.StudentId)
             .WillCascadeOnDelete(false);
             HasMany(x => x.Majors)
                .WithMany(x => x.StudentMajorlists)

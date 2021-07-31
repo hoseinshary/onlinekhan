@@ -128,9 +128,9 @@
     <Compile Include="Migrations\202101250830562_questionanswer_change.Designer.cs">
       <DependentUpon>202101250830562_questionanswer_change.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202107250723261_StudentMajors.cs" />
-    <Compile Include="Migrations\202107250723261_StudentMajors.Designer.cs">
-      <DependentUpon>202107250723261_StudentMajors.cs</DependentUpon>
+    <Compile Include="Migrations\202107310835164_Studentmajorlist.cs" />
+    <Compile Include="Migrations\202107310835164_Studentmajorlist.Designer.cs">
+      <DependentUpon>202107310835164_Studentmajorlist.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -211,8 +211,8 @@
     <EmbeddedResource Include="Migrations\202101250830562_questionanswer_change.resx">
       <DependentUpon>202101250830562_questionanswer_change.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202107250723261_StudentMajors.resx">
-      <DependentUpon>202107250723261_StudentMajors.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107310835164_Studentmajorlist.resx">
+      <DependentUpon>202107310835164_Studentmajorlist.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

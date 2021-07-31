@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using NasleGhalam.DomainClasses.Entities;
+
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +19,7 @@ namespace NasleGhalam.ViewModels.StudentMajorlist
 
         public int StudentId { get; set; }
         public DateTime CreationDate { get; set; }
-        public ICollection<MajorViewModel> Majors { get; set; }
+
+        public NasleGhalam.DomainClasses.Entities.Student Student { get; set; }
     }
 }

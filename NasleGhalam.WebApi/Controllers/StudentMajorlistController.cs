@@ -24,7 +24,7 @@ namespace NasleGhalam.WebApi.Controllers
         {
             return Ok(_studentMajorlistService.GetAll());
         }
-
+        
         public IHttpActionResult GetById(int id)
         {
             var studentMajorlist = _studentMajorlistService.GetById(id);
@@ -34,9 +34,28 @@ namespace NasleGhalam.WebApi.Controllers
             }
             return Ok(studentMajorlist);
         }
-        public IHttpActionResult GetByStudentId(int id)
+        public IHttpActionResult GetStudentById()
         {
-            var studentMajorlist = _studentMajorlistService.GetStudentById(id);
+            var studentMajorlist = _studentMajorlistService.GetStudentById(Request.GetUserId(), Request.GetRoleLevel());
+            if (studentMajorlist == null)
+            {
+                return NotFound();
+            }
+            return Ok(studentMajorlist);
+        }
+        public IHttpActionResult GetStudentMajorsById(int id)
+        {
+            var studentMajorlist = _studentMajorlistService.GetStudentMajorsById(id);
+            if (studentMajorlist == null)
+            {
+                return NotFound();
+            }
+            return Ok(studentMajorlist);
+        }
+
+        public IHttpActionResult GetStudentMajorsById()
+        {
+            var studentMajorlist = _studentMajorlistService.GetStudentMajorsById(Request.GetUserId());
             if (studentMajorlist == null)
             {
                 return NotFound();
@@ -44,6 +63,34 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(studentMajorlist);
         }
         
+        public IHttpActionResult GetAllMajors()
+        {
+            var studentMajorlist = _studentMajorlistService.GetAllMajors();
+            if (studentMajorlist == null)
+            {
+                return NotFound();
+            }
+            return Ok(studentMajorlist);
+        }
+        public IHttpActionResult GetMajorById(int id)
+        {
+            var studentMajorlist = _studentMajorlistService.GetMajorById(id);
+            if (studentMajorlist == null)
+            {
+                return NotFound();
+            }
+            return Ok(studentMajorlist);
+        }
+        public IHttpActionResult GetMajorsBySearch(string text)
+        {
+            var studentMajorlist = _studentMajorlistService.GetMajorsBySearch(text);
+            if (studentMajorlist == null)
+            {
+                return NotFound();
+            }
+            return Ok(studentMajorlist);
+        }
+
         [HttpPost]
         [CheckModelValidation]
         public IHttpActionResult Create(StudentMajorlistViewModel studentMajorlistViewModel)

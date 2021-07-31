@@ -3,11 +3,10 @@ namespace NasleGhalam.DataAccess.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class StudentMajors : DbMigration
+    public partial class Studentmajorlist : DbMigration
     {
         public override void Up()
         {
-           
             
             CreateTable(
                 "dbo.StudentMajorlists",
@@ -15,14 +14,14 @@ namespace NasleGhalam.DataAccess.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Title = c.String(nullable: false, maxLength: 200),
-                        UserId = c.Int(nullable: false),
+                        StudentId = c.Int(nullable: false),
                         CreationDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Users", t => t.UserId)
-                .Index(t => t.UserId);
+                .ForeignKey("dbo.Students", t => t.StudentId)
+                .Index(t => t.StudentId);
             
-           
+            
             
             CreateTable(
                 "dbo.StudentMajorlist_Majors",
@@ -37,17 +36,17 @@ namespace NasleGhalam.DataAccess.Migrations
                 .Index(t => t.StudentMajorlistId)
                 .Index(t => t.MajorsId);
             
-            
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.StudentMajorlists", "UserId", "dbo.Users");
+            DropForeignKey("dbo.StudentMajorlists", "StudentId", "dbo.Students");
             DropForeignKey("dbo.StudentMajorlist_Majors", "MajorsId", "dbo.Majors");
             DropForeignKey("dbo.StudentMajorlist_Majors", "StudentMajorlistId", "dbo.StudentMajorlists");
             DropIndex("dbo.StudentMajorlist_Majors", new[] { "MajorsId" });
             DropIndex("dbo.StudentMajorlist_Majors", new[] { "StudentMajorlistId" });
-            DropIndex("dbo.StudentMajorlists", new[] { "UserId" });
+            DropIndex("dbo.StudentMajorlists", new[] { "StudentId" });
+            
             DropTable("dbo.StudentMajorlist_Majors");
             DropTable("dbo.StudentMajorlists");
         }

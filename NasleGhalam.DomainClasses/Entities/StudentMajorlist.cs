@@ -15,9 +15,9 @@ namespace NasleGhalam.DomainClasses.Entities
         }
         public int Id { get; set; }
         public string Title { get; set; }
-        public int UserId { get; set; }
+        public int StudentId { get; set; }
         public DateTime CreationDate { get; set; }
-        public User Student { get; set; }
+        public Student Student { get; set; }
         public ICollection<Majors> Majors { get; set; }
     }
 }

@@ -12,6 +12,8 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
             CreateMap<StudentMajorlistGetStudentViewModel, StudentMajorlist>();
             CreateMap<StudentMajorlistGetViewModel, StudentMajorlist>();
             CreateMap<StudentMajorlistUpdateViewModel, StudentMajorlist>();
+            CreateMap<MajorViewModel, StudentMajorlist>();
+            CreateMap<MajorViewModel, Majors>();
         }
     }
 }

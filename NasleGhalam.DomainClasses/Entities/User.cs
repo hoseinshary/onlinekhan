@@ -20,7 +20,6 @@ namespace NasleGhalam.DomainClasses.Entities
             QuestionsUpdates = new HashSet<QuestionUpdate>();
             Medias = new HashSet<Media>();
             Logs = new HashSet<Log>();
-            StudentMajorlists = new HashSet<StudentMajorlist>();
         }
         public int Id { get; set; }
 
@@ -63,7 +62,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public  Writer  Writer { get; set; }
 
 
-        public ICollection<StudentMajorlist> StudentMajorlists { get; set; }
+        
         public ICollection<Question> SupervisorQuestions { get; set; }
         public ICollection<QuestionJudge> QuestionJudges { get; set; }
         public ICollection<QuestionGroup> QuestionGroups { get; set; }

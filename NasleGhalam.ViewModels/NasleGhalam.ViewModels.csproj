@@ -127,6 +127,7 @@
     <Compile Include="Role\RoleUpdateViewModel.cs" />
     <Compile Include="Role\RoleCreateViewModel.cs" />
     <Compile Include="StudentMajorlist\MajorViewModel.cs" />
+    <Compile Include="StudentMajorlist\StudentMajorlistGetStudentMajorsViewModel.cs" />
     <Compile Include="StudentMajorlist\StudentMajorlistGetViewModel.cs" />
     <Compile Include="StudentMajorlist\StudentMajorlistGetStudentViewModel.cs" />
     <Compile Include="StudentMajorlist\StudentMajorlistUpdateViewModel.cs" />

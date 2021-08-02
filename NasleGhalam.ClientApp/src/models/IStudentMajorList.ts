@@ -1,3 +1,4 @@
+import { Field } from "src/utilities/enumeration";
 import IStudent, { DefaultStudent } from "./IStudent";
 
 export default interface IStudentMajorList {
@@ -28,6 +29,8 @@ export class Major {
   Woman: string;
   Man: string;
   University: string;
+  Field:Field;
+
 
   constructor(){
     this.Id =0;
@@ -39,7 +42,7 @@ export class Major {
     this.Woman="";
     this.Man="";
     this.University="";
-
+    this.Field=Field["تجربی"];
   }
 
 }

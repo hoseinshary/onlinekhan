@@ -202,6 +202,21 @@ namespace NasleGhalam.Common
 
     }
 
+    public enum Field
+    {
+        [Display(Name = "ریاضی")]
+        riyazi = 1,
+        [Display(Name = "تجربی")]
+        tajrobi = 2,
+        [Display(Name = "انسانی")]
+        ensani = 3,
+        [Display(Name = "هنر")]
+        honar = 4,
+        [Display(Name = "زبان")]
+        zaban = 5
+
+    }
+
     //public enum AnswerType : byte
     //{
     //}

@@ -44,7 +44,7 @@ export enum QuestionAnswerType {
   "توضیحی" = 2
 }
 
-export enum KindRequest {
+export enum  KindRequest {
   // Testi = 0,
   // Tashrihi = 1,
   // Both = 2
@@ -77,6 +77,16 @@ export enum TypeEducationCenter {
   "پیام نور" = 3,
   "بین الملل" = 4,
   "دیگر" = 5
+}
+
+export enum Field {
+  
+  "ریاضی" = 1,
+  "تجربی" = 2,
+  "انسانی" = 3,
+  "هنر" = 4,
+  "زیان" = 5
+ 
 }
 
 export enum Degree {

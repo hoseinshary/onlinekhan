@@ -6,13 +6,8 @@ type TStudentMajorList = { studentMajorList: IStudentMajorList; validationGroup:
 const studentMajorListValidations: ValidationRuleset<TStudentMajorList> = {
   studentMajorList: {
     Title: {
-      displayName: displayName("نام"),
+      displayName: displayName("نام لیست"),
       maxLength: maxLength(50),
-      required
-    },
-    Code: {
-      displayName: displayName("کد"),
-      maxLength: maxLength(5),
       required
     }
   }

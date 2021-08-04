@@ -116,7 +116,8 @@ module.exports = function(ctx) {
         "QRange",
         "QChip",
         "QItemTile",
-        "QItemSeparator"
+        "QItemSeparator",
+        'QTable',
       ],
       directives: ["Ripple", "CloseOverlay",
       "BackToTop"],

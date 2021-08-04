@@ -1,5 +1,5 @@
 import Vue from "Vue";
-import IStudentMajorList, { DefaultStudentMajorList } from "src/models/IStudentMajorList";
+import IStudentMajorList, { DefaultStudentMajorList, Major  } from "src/models/IStudentMajorList";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -17,7 +17,10 @@ import {
 export class StudentMajorListStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
   studentMajorList: IStudentMajorList;
+  majorsList: Major;
+
   private _studentMajorListList: Array<IStudentMajorList>;
+  private _majorList : Array<Major>;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -29,6 +32,7 @@ export class StudentMajorListStore extends VuexModule {
     super();
 
     this.studentMajorList = util.cloneObject(DefaultStudentMajorList);
+    this._majorList = [];
     this._studentMajorListList = [];
     this.openModal = {
       create: false,
@@ -55,6 +59,10 @@ export class StudentMajorListStore extends VuexModule {
 
   get gridData() {
     return this._studentMajorListList;
+  }
+
+  get gridDataMajor() {
+    return this._majorList;
   }
   //#endregion
 
@@ -89,6 +97,13 @@ export class StudentMajorListStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<IStudentMajorList>) {
     this._studentMajorListList = list;
+  }
+
+  @mutation
+  private SET_LIST_Major(list: Array<Major>) {
+    //console.log(list);
+    this._majorList = list;
+    //console.log(this._majorList);
   }
 
   @mutation
@@ -130,6 +145,17 @@ export class StudentMajorListStore extends VuexModule {
       .then((response: AxiosResponse<IStudentMajorList>) => {
         util.mapObject(response.data, this.studentMajorList);
       });
+  }
+
+  @action()
+  async getMajorsBySearch(text : string) {
+    
+      return axios
+        .get(`${baseUrl}/GetMajorsBySearch/?text=${text}`)
+        .then((response: AxiosResponse<Array<Major>>) => {
+          this.SET_LIST_Major(response.data);
+        });
+    
   }
 
   @action()
@@ -178,8 +204,12 @@ export class StudentMajorListStore extends VuexModule {
     let vm = this._createVue;
     if (!(await this.validateForm(vm))) return;
 
+    var data = {
+      Title: this.studentMajorList.Title,
+      MajorsId: this.studentMajorList.Majors.map(x=>x.Id)
+    };
     return axios
-      .post(`${baseUrl}/Create`, this.studentMajorList)
+      .post(`${baseUrl}/Create`, data)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
@@ -196,6 +226,8 @@ export class StudentMajorListStore extends VuexModule {
   @action()
   async resetCreate() {
     this.studentMajorList.Id = 0;
+    this.studentMajorList.Majors =[];
+    this._majorList = [];
     this.RESET(this._createVue);
   }
 

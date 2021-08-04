@@ -97,8 +97,11 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
-        public IHttpActionResult GetMajorsBySearch(string text)
+        [HttpGet]
+        public IHttpActionResult GetMajorsBySearch([FromUri] string text)
         {
+            text =text.Replace("ی", "ي");
+            text =text.Replace("ک", "ك");
             var studentMajorlist = _studentMajorlistService.GetMajorsBySearch(text);
             if (studentMajorlist == null)
             {

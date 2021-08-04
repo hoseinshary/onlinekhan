@@ -30,6 +30,7 @@ export class Major {
   Man: string;
   University: string;
   Field:Field;
+  Description:string;
 
 
   constructor(){
@@ -43,6 +44,7 @@ export class Major {
     this.Man="";
     this.University="";
     this.Field=Field["تجربی"];
+    this.Description="";
   }
 
 }

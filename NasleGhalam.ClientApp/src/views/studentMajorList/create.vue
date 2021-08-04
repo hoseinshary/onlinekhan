@@ -144,6 +144,11 @@ export default class StudentMajorListCreateVue extends Vue {
             sortable:true
     },
     {
+      title: "توضیحات",
+      data: "Description"
+            
+    },
+    {
       title: "عملیات",
       data: "Id",
       searchable: false,

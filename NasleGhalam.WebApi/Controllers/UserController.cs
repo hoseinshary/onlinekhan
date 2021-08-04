@@ -299,7 +299,7 @@ namespace NasleGhalam.WebApi.Controllers
                 }
                 if (msgRes.MessageType == MessageType.Success)
                 {
-                    _logService.Create(CrudType.Update, "User-Image", msgRes.Obj, Request.GetUserId());
+                    //_logService.Create(CrudType.Update, "User-Image", msgRes.Obj, Request.GetUserId());
                 }
                 return Ok(msgRes);
             }

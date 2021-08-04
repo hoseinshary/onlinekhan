@@ -100,8 +100,6 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetMajorsBySearch([FromUri] string text)
         {
-            text =text.Replace("ی", "ي");
-            text =text.Replace("ک", "ك");
             var studentMajorlist = _studentMajorlistService.GetMajorsBySearch(text);
             if (studentMajorlist == null)
             {

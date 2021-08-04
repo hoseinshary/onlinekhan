@@ -38,7 +38,9 @@
   <div class="col-md-4">
     <div class=""><br/> </div>
     <div class=""> <br/></div>
-    <base-input :model="$v.studentMajorList.Title" class="col-md-6"/>
+    <base-input :model="$v.studentMajorList.Title" float-label="نام لیست" class="col-md-6"/>
+        <div class=""> <br/></div>
+<label class="text-red">تعداد رشته های انتخاب شده : {{selectedMajors.length}}</label>
         <div class=""> <br/></div>
 
 <q-list highlight >
@@ -50,7 +52,7 @@
     </q-item-side>
     <q-item-main :label="major.MajorTitle" />
     <q-item-main :label="major.University" />
-    <q-item-main :label="major.Code" />
+    <q-item-main :label="major.Code.toString()" />
     <q-item-side right>
       
     <q-btn round color="negative" icon="remove" @click="deleteFromTable(major.Id)"/>
@@ -108,11 +110,16 @@ export default class StudentMajorListCreateVue extends Vue {
     },
     {
       title: "کد",
-      data: "Code"
+      data: "Code",
+            searchable: true,
+            sortable:true
+
     },
     {
       title: "نام رشته",
-      data: "MajorTitle"
+      data: "MajorTitle",
+            searchable: true,
+            sortable:true
     },
     {
       title: "نیمسال اول",
@@ -132,7 +139,9 @@ export default class StudentMajorListCreateVue extends Vue {
     },
      {
       title: "دانشگاه",
-      data: "University"
+      data: "University",
+            searchable: true,
+            sortable:true
     },
     {
       title: "عملیات",

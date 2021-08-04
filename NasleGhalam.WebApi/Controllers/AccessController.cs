@@ -50,7 +50,7 @@ namespace NasleGhalam.WebApi.Controllers
             var result = _roleService.Value.ChangeAccess(roleAccess, Request.GetAccess(), Request.GetRoleLevel());
             if (result.MessageType == MessageType.Success)
             {
-                _logService.Value.Create(CrudType.Update, "Access", result.Obj, Request.GetUserId());
+                _logService.Value.Create(CrudType.Update, "Access", roleAccess, Request.GetUserId());
             }
             return Ok(result);
         }

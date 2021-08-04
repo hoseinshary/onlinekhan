@@ -11,6 +11,7 @@ using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
 using NasleGhalam.ViewModels.Log;
 using Newtonsoft.Json;
+using StructureMap.TypeRules;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
@@ -101,7 +102,11 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 var outputStr = Convert.ToBase64String(outputBytes);
                 System.Reflection.PropertyInfo pi = Value.GetType().GetProperty("Id");
-                int Id = (int)(pi.GetValue(Value, null));
+                int Id = 0;
+                if(pi!=null)
+                    Id = (int)(pi.GetValue(Value, null));
+                
+                    
                 Log log = new Log() { CrudType = Crud, DateTime = DateTime.Now, ObjectValue = outputStr, TableName = TableName, UserId = UserId, ObjectId = Id };
                 _logservices.Add(log);
 

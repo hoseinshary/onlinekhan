@@ -6,12 +6,20 @@
       @click="showModalCreate"
     />
     <br />
-    <base-table :grid-data="studentMajorListStore.gridData" :columns="studentMajorListGridColumn" hasIndex>
+    <base-table v-if="studentMajorListStore.gridData.length>0" :grid-data="studentMajorListStore.gridData" :columns="studentMajorListGridColumn" hasIndex>
+
+    <template slot="Student.User.Family" slot-scope="data">{{data.row.Student.User.Name + " " +data.row.Student.User.Family }}</template>
       <template slot="Id" slot-scope="data">
         <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
       </template>
     </base-table>
+
+    <div v-else class="">
+                    <img class="corner-around center"
+                      src="~assets/newData.png"
+                      style="width: 80%;"/>
+                  </div>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
@@ -38,12 +46,12 @@ export default class StudentMajorListVue extends Vue {
   pageAccess = util.getAccess(this.studentMajorListStore.modelName);
   studentMajorListGridColumn = [
     {
-      title: "نام",
-      data: "Name"
+      title: "نام لیست انتخاب رشته",
+      data: "Title"
     },
     {
-      title: "کد",
-      data: "Code"
+      title: "نام و نام خانوادگی",
+      data: "Student.User.Family"
     },
     {
       title: "عملیات",
@@ -83,6 +91,7 @@ export default class StudentMajorListVue extends Vue {
   }
 
   showModalDelete(id) {
+    console.log(id);
     this.studentMajorListStore.getById(id).then(() => {
       this.studentMajorListStore.OPEN_MODAL_DELETE(true);
     });

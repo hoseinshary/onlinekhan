@@ -128,9 +128,9 @@
     <Compile Include="Role\RoleCreateViewModel.cs" />
     <Compile Include="StudentMajorlist\MajorViewModel.cs" />
     <Compile Include="StudentMajorlist\StudentMajorlistGetStudentMajorsViewModel.cs" />
-    <Compile Include="StudentMajorlist\StudentMajorlistGetViewModel.cs" />
     <Compile Include="StudentMajorlist\StudentMajorlistGetStudentViewModel.cs" />
     <Compile Include="StudentMajorlist\StudentMajorlistUpdateViewModel.cs" />
+    <Compile Include="StudentMajorlist\StudentMajorlistCreateViewModel.cs" />
     <Compile Include="StudentMajorlist\StudentMajorlistViewModel.cs" />
     <Compile Include="Student\AssayAbout\GetQuestionAssayReportForTopicViewModel.cs" />
     <Compile Include="Student\AssayAbout\LessonReportViewModel.cs" />

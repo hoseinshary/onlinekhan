@@ -22,6 +22,9 @@ namespace NasleGhalam.DomainClasses.Entities
         public string Man { get; set; }
         public string University { get; set; }
         public int Field { get; set; }
+        public string Province { get; set; }
+        public string Description { get; set; }
+        public string Apply { get; set; }
         public ICollection<StudentMajorlist> StudentMajorlists { get; set; }
     }
 }

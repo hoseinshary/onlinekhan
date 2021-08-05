@@ -168,7 +168,7 @@ namespace NasleGhalam.WebApi.Controllers
             }
             if (msgRes.MessageType == MessageType.Success)
             {
-                _logService.Create(CrudType.Create, "User-Register", msgRes.Obj, Request.GetUserId());
+                _logService.Create(CrudType.Create, "User-Register", userViewModel,0);
             }
             return Ok(msgRes);
         }

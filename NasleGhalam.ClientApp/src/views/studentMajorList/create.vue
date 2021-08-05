@@ -12,16 +12,23 @@
   <div class="col-md-12" >
 
     <div class="col-md-5">
-       <!-- <q-select
-        v-model="fieldFilter"
+       <q-select
+        v-model="searchfilter.fieldFilter"
         :options="fieldDdl"
         class="col-md-3"
-      /> -->
-      
-      <q-input float-label="نام رشته/دانشگاه" v-model="nameFilter" />
+      />
+        
+    <q-select
+      v-model="searchfilter.history"
+      float-label="با آزمون / سوابق تحصیلی"
+      class="col-md-3"
+     :options="historyDdl"
+    />
+
+      <q-input float-label="نام رشته/دانشگاه" v-model="searchfilter.nameFilter" />
        </div>
       <br/>
-      <q-btn color="primary" icon="search" label="جستجو" @click="fillGrid(nameFilter)" />
+      <q-btn color="primary" icon="search" label="جستجو" @click="fillGrid(searchfilter)" />
  
   </div>
   <div class="col-md-12 row">
@@ -87,7 +94,7 @@ import { vxm } from "src/store";
 import util from "src/utilities";
 
 import { studentMajorListValidations } from "src/validations/StudentMajorListValidation";
-import { Field } from "src/utilities/enumeration";
+import { Field  ,HistoryAssay} from "src/utilities/enumeration";
 
 @Component({
   validations: studentMajorListValidations
@@ -99,11 +106,17 @@ export default class StudentMajorListCreateVue extends Vue {
   studentMajorListStore = vxm.studentMajorListStore;
   studentMajorList = vxm.studentMajorListStore.studentMajorList;
 
-  fieldFilter  = Field["تجربی"];
-  nameFilter  = "";
+  
+
+  searchfilter ={ fieldFilter : Field["تجربی"], nameFilter : "" , history:HistoryAssay["با آزمون"]};
+
 
 
   MajorListGridColumn = [
+     {
+      title: "نحوه پذیرش",
+      data: "Apply"
+    },
     {
       title: "دوره",
       data: "Course"
@@ -191,14 +204,18 @@ export default class StudentMajorListCreateVue extends Vue {
     return util.enumToDdl(Field);
   }
 
+   get historyDdl() {
+    return util.enumToDdl(HistoryAssay);
+  }
+
 get selectedMajors()
 {
   return this.studentMajorList.Majors;
 }
-  fillGrid(text:any)
+  fillGrid(searchfilter:any)
   {
     
-    this.studentMajorListStore.getMajorsBySearch(text);    
+    this.studentMajorListStore.getMajorsBySearch(searchfilter);    
         
 
   }

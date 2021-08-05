@@ -30,7 +30,7 @@ export const DefaultUser: IUser = {
   Gender: "",
   Phone: "",
   Mobile: "",
-  RoleId: 0,
+  RoleId: 2005,
   CityId: 0,
   ProvinceId: 0,
   Checked: false,

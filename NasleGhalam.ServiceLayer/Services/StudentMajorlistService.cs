@@ -94,11 +94,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<MajorViewModel>)
                 .ToList();
         }
-        public IList<MajorViewModel> GetMajorsBySearch(string text)
+        public IList<MajorViewModel> GetMajorsBySearch(MajorSearchViewModel majorSearch)
         {
-            var majo = _majors.ToList();
+            
             return _majors
-                .Where(x=> x.MajorTitle.Contains(text) || x.University.Contains(text))
+                .Where(x=> x.MajorTitle.Contains(majorSearch.MajorTitle) || x.University.Contains(majorSearch.MajorTitle))
+                .Where(x=> x.Apply == majorSearch.Apply && x.Field == majorSearch.Field)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<MajorViewModel>)

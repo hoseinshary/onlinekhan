@@ -86,7 +86,7 @@ namespace NasleGhalam.WebApi.Controllers
             var msgRes = _studentService.Delete(id);
             if (msgRes.MessageType == MessageType.Success)
             {
-                _logService.Create(CrudType.Delete, "Student", msgRes.Obj, Request.GetUserId());
+                _logService.Create(CrudType.Delete, "Student", id, Request.GetUserId());
             }
             return Ok(msgRes);
         }

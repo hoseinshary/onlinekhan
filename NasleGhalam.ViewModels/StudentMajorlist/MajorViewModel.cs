@@ -28,5 +28,7 @@ namespace NasleGhalam.ViewModels.StudentMajorlist
         public string FieldName => Field.GetDisplayName();
 
         public string Description { get; set; }
+
+        public string  Apply { get; set; }
     }
 }

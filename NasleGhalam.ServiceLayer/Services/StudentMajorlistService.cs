@@ -160,17 +160,12 @@ namespace NasleGhalam.ServiceLayer.Services
                .Include(current => current.Majors)
                .First(current => current.Id == stduentMajorlistViewModel.Id);
             studentmajorlist.Title = stduentMajorlistViewModel.Title;
-            var deletemajorList = studentmajorlist.Majors
-                 .Where(oldMaj => stduentMajorlistViewModel.MajorsId.All(newMajId => newMajId != oldMaj.Id))
-                 .ToList();
-            foreach (var item in deletemajorList)
+            var majorlist = studentmajorlist.Majors.ToList();
+            foreach (var item in majorlist)
             {
                 studentmajorlist.Majors.Remove(item);
             }
-            var addmajorList = stduentMajorlistViewModel.MajorsId
-               .Where(oldMajId => studentmajorlist.Majors.All(newMaj => newMaj.Id != oldMajId))
-               .ToList();
-            foreach (var item in addmajorList)
+            foreach (var item in stduentMajorlistViewModel.MajorsId)
             {
                 var Major = new Majors() { Id = item };
                 _uow.MarkAsUnChanged(Major);

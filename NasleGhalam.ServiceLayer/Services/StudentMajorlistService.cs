@@ -32,34 +32,38 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public StudentMajorlistGetViewModel GetById(int id)
+        public StudentMajorlistViewModel GetById(int id)
         {
             return _stduentMajorlists
                 .Where(current => current.Id == id)
+                .Include(current => current.Student.User)
                 .Include(current => current.Majors)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<StudentMajorlistGetViewModel>)
+                .Select(Mapper.Map<StudentMajorlistViewModel>)
                 .FirstOrDefault();
         }
-        public IList<StudentMajorlistGetStudentViewModel> GetStudentById(int id, byte roles)
+        public IList<StudentMajorlistViewModel> GetStudentById(int id, byte roles)
         {
             if (roles < 3)
             {
                 return _stduentMajorlists
-                .Include(current=> current.Student)
+                    .Include(current => current.Majors)
+                .Include(current=> current.Student.User)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<StudentMajorlistGetStudentViewModel>)
+                .Select(Mapper.Map<StudentMajorlistViewModel>)
                 .ToList();
             }
             else
             {
                 return _stduentMajorlists
+                    .Include(current => current.Majors)
+                    .Include(current => current.Student.User)
                     .Where(current => current.StudentId == id)
                     .AsNoTracking()
                     .AsEnumerable()
-                    .Select(Mapper.Map<StudentMajorlistGetStudentViewModel>)
+                    .Select(Mapper.Map<StudentMajorlistViewModel>)
                     .ToList();
             }
         }
@@ -90,11 +94,12 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Select(Mapper.Map<MajorViewModel>)
                 .ToList();
         }
-        public IList<MajorViewModel> GetMajorsBySearch(string text)
+        public IList<MajorViewModel> GetMajorsBySearch(MajorSearchViewModel majorSearch)
         {
-            var majo = _majors.ToList();
+            
             return _majors
-                .Where(x=> x.MajorTitle.Contains(text) || x.University.Contains(text))
+                .Where(x=> x.MajorTitle.Contains(majorSearch.MajorTitle) || x.University.Contains(majorSearch.MajorTitle))
+                .Where(x=> x.Apply == majorSearch.Apply && x.Field == majorSearch.Field)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<MajorViewModel>)
@@ -108,6 +113,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             return _stduentMajorlists
                 .Include(current => current.Majors)
+                .Include(x => x.Student.User)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<StudentMajorlistViewModel>)
@@ -119,7 +125,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="stduentMajorlistViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(StudentMajorlistViewModel stduentMajorlistViewModel)
+        public ClientMessageResult Create(StudentMajorlistCreateViewModel stduentMajorlistViewModel)
         {
             StudentMajorlist studentMajorlist = new StudentMajorlist();
             studentMajorlist.Title = stduentMajorlistViewModel.Title;

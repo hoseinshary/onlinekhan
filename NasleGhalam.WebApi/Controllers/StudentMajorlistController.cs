@@ -97,10 +97,10 @@ namespace NasleGhalam.WebApi.Controllers
 
 
         [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
-        [HttpGet]
-        public IHttpActionResult GetMajorsBySearch([FromUri] string text)
+        [HttpPost]
+        public IHttpActionResult GetMajorsBySearch(MajorSearchViewModel majorSearch)
         {
-            var studentMajorlist = _studentMajorlistService.GetMajorsBySearch(text);
+            var studentMajorlist = _studentMajorlistService.GetMajorsBySearch(majorSearch);
             if (studentMajorlist == null)
             {
                 return NotFound();
@@ -111,9 +111,12 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpPost]
         [CheckUserAccess(ActionBits.StudentMajorListCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(StudentMajorlistViewModel studentMajorlistViewModel)
+        public IHttpActionResult Create(StudentMajorlistCreateViewModel studentMajorlistViewModel)
         {
-            studentMajorlistViewModel.StudentId = Request.GetUserId();
+            if(Request.GetRoleLevel() != 5)
+                studentMajorlistViewModel.StudentId = 2006;
+            else
+                studentMajorlistViewModel.StudentId = Request.GetUserId();
             return Ok(_studentMajorlistService.Create(studentMajorlistViewModel));
         }
 

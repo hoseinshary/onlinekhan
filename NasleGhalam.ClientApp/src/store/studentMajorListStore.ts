@@ -2,7 +2,7 @@ import Vue from "Vue";
 import IStudentMajorList, { DefaultStudentMajorList, Major  } from "src/models/IStudentMajorList";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
-import { MessageType } from "src/utilities/enumeration";
+import { HistoryAssay, MessageType } from "src/utilities/enumeration";
 import { STUDENTMAJORLIST_URL as baseUrl } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
@@ -148,13 +148,28 @@ export class StudentMajorListStore extends VuexModule {
   }
 
   @action()
-  async getMajorsBySearch(text : string) {
+  async getMajorsBySearch(searchfilter : any) {
     
-      return axios
-        .get(`${baseUrl}/GetMajorsBySearch/?text=${text}`)
-        .then((response: AxiosResponse<Array<Major>>) => {
-          this.SET_LIST_Major(response.data);
-        });
+      // return axios
+      //   .get(`${baseUrl}/GetMajorsBySearch/?text=${text}`)
+      //   .then((response: AxiosResponse<Array<Major>>) => {
+      //     this.SET_LIST_Major(response.data);
+      //   });
+
+
+    
+    var data = {
+      Field: searchfilter.fieldFilter,
+      MajorTitle: searchfilter.nameFilter,
+      Apply: HistoryAssay[searchfilter.history]
+
+    
+    };
+    return axios
+      .post(`${baseUrl}/GetMajorsBySearch`, data)
+      .then((response: AxiosResponse<Array<Major>>) => {
+        this.SET_LIST_Major(response.data);
+      });
     
   }
 
@@ -162,7 +177,7 @@ export class StudentMajorListStore extends VuexModule {
   async fillList() {
     if (this._modelChanged) {
       return axios
-        .get(`${baseUrl}/GetAll`)
+        .get(`${baseUrl}/GetStudentById`)
         .then((response: AxiosResponse<Array<IStudentMajorList>>) => {
           this.SET_LIST(response.data);
           this.MODEL_CHANGED(false);
@@ -227,7 +242,7 @@ export class StudentMajorListStore extends VuexModule {
   async resetCreate() {
     this.studentMajorList.Id = 0;
     this.studentMajorList.Majors =[];
-    this._majorList = [];
+    this.SET_LIST_Major([]);
     this.RESET(this._createVue);
   }
 
@@ -235,9 +250,14 @@ export class StudentMajorListStore extends VuexModule {
   async submitEdit() {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
-
+    var data = {
+      Title: this.studentMajorList.Title,
+      MajorsId: this.studentMajorList.Majors.map(x=>x.Id),
+      Id:this.studentMajorList.Id,
+      StudentId:this.studentMajorList.StudentId
+    };
     return axios
-      .post(`${baseUrl}/Update`, this.studentMajorList)
+      .post(`${baseUrl}/Update`, data)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

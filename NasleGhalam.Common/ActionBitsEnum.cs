@@ -176,10 +176,10 @@
         AssayAdvisorReadAccess = 147,
 
 
-        StudentMajorListReadAccess = 148,
-        StudentMajorListCreateAccess = 149,
-        StudentMajorListDeleteAccess = 150,
-        StudentMajorListUpdateAccess = 151,
+        StudentMajorListReadAccess = 149,
+        StudentMajorListCreateAccess = 150,
+        StudentMajorListDeleteAccess = 151,
+        StudentMajorListUpdateAccess = 152,
 
 
     }

@@ -37,7 +37,17 @@
                 ورود
                 <q-icon name="keyboard_backspace"></q-icon>
               </button>
+
+              <button class="q-ma-sm btn btn-login bg-green" @click="openModalRegister">
+             
+              
+                <i class="fa fa-pencil-square q-mx-xs"></i>ثبت نام
+               </button>
+
+               <div class="row center">
               <router-link to="/resume/registration" class="q-ma-sm btn btn-contribute">همکاری با ما</router-link>
+               </div>
+
             </div>
           </section>
         </div>
@@ -55,7 +65,12 @@
         </div>
       </section>
     </q-page-container>
+
+        <modal-register></modal-register>
+
   </q-layout>
+
+  
 </template>
 
 <script lang="ts">
@@ -63,7 +78,12 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { userLoginValidations } from "src/validations/user/userLoginValidation";
 @Component({
-  validations: userLoginValidations
+  validations: userLoginValidations,
+
+  components: {
+    ModalRegister: () => import("./registerModal.vue")
+
+  }
 })
 export default class UserLoginVue extends Vue {
   $v: any;
@@ -76,6 +96,13 @@ export default class UserLoginVue extends Vue {
   //### methods ###
   login() {
     this.userStore.login(this);
+  }
+
+  openModalRegister()
+  {
+    console.log(1);
+    this.userStore.resetRegisterModal();
+    this.userStore.OPEN_MODAL_REGISTER(true);
   }
   //--------------------------------------------------
 }

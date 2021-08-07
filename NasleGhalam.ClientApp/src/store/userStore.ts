@@ -19,7 +19,7 @@ import router from "src/router";
 
 @Module({ namespacedPath: "userStore/" })
 export class UserStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean ; update_user_image : boolean ; update_user : boolean ; update_user_password : boolean};
+  openModal: { create: boolean; edit: boolean; delete: boolean ; update_user_image : boolean ; update_user : boolean ; update_user_password : boolean ; register : boolean};
   user: IUser;
   userChangePassword : IUserChangePassword;
   loginUser: ILogin;
@@ -32,6 +32,7 @@ export class UserStore extends VuexModule {
   private _updateUserImageVue : Vue;
   private _updateUserPasswordVue : Vue;
   private _updateUserVue : Vue;
+  private _registerModalVue : Vue;
   
 
   /**
@@ -51,7 +52,8 @@ export class UserStore extends VuexModule {
       delete: false,
       update_user_image : false ,
       update_user : false ,
-      update_user_password : false 
+      update_user_password : false ,
+      register : false
     };
   }
 
@@ -130,7 +132,11 @@ export class UserStore extends VuexModule {
   OPEN_MODAL_CREATE(open: boolean) {
     this.openModal.create = open;
   }
-
+  @mutation
+  OPEN_MODAL_REGISTER(open: boolean) {
+    this.openModal.register = open;
+  }
+  
   @mutation
   OPEN_MODAL_EDIT(open: boolean) {
     this.openModal.edit = open;
@@ -169,6 +175,11 @@ export class UserStore extends VuexModule {
   @mutation
   SET_UPDATE_USER_VUE(vm: Vue) {
     this._updateUserVue= vm;
+  }
+
+  @mutation
+  SET_REGISTER_MODAL_VUE(vm: Vue) {
+    this._registerModalVue= vm;
   }
 
   @mutation
@@ -315,6 +326,12 @@ export class UserStore extends VuexModule {
   }
 
   @action()
+  async resetRegisterModal() {
+    this.user.Id = 0;
+    this.RESET(this._registerModalVue);
+  }
+
+  @action()
   async resetRegister() {
     this.user.Id = 0;
     this.RESET(this._registerVue);
@@ -343,6 +360,9 @@ export class UserStore extends VuexModule {
     this.RESET(this._updateUserVue);
    
   }
+
+
+
 
 
   @action()
@@ -491,6 +511,38 @@ export class UserStore extends VuexModule {
   @action()
   async register() {
     let vm = this._registerVue;
+    if (!(await this.validateForm(vm))) return;
+
+    var formData = new FormData();
+    var fileUpload = vm.$refs.fileUpload;
+
+    if (fileUpload && fileUpload["files"].length > 0) {
+      formData.append(fileUpload["name"], fileUpload["files"][0]);
+    }
+    var params = util.toParam(this.user);
+
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/Register?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    })
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+  
+          this.resetRegister();
+          router.push("/user/login");
+        }
+      });
+  }
+
+  @action()
+  async registerModal() {
+    let vm = this._registerModalVue;
     if (!(await this.validateForm(vm))) return;
 
     var formData = new FormData();

@@ -165,6 +165,10 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 studentmajorlist.Majors.Remove(item);
             }
+
+            _uow.MarkAsChanged(studentmajorlist);
+            _uow.CommitChanges(CrudType.Update, Title);
+
             foreach (var item in stduentMajorlistViewModel.MajorsId)
             {
                 var Major = new Majors() { Id = item };

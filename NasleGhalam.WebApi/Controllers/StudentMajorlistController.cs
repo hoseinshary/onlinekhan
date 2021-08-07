@@ -113,7 +113,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(StudentMajorlistViewModel studentMajorlistViewModel)
         {
-            studentMajorlistViewModel.StudentId = 1;
+            studentMajorlistViewModel.StudentId = Request.GetUserId();
             return Ok(_studentMajorlistService.Create(studentMajorlistViewModel));
         }
 

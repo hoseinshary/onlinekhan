@@ -25,6 +25,7 @@ const Router = new VueRouter({
 Router.beforeEach((to, from, next) => {
   var path = (to.fullPath || "").toLowerCase();
   path = path.replace(/\//g, "/").replace(/\/\//g, "/");
+  
   if (path.startsWith("/")) {
     path = path.substr(1);
   }
@@ -36,6 +37,7 @@ Router.beforeEach((to, from, next) => {
   var controller = arr[0] || "";
   var action = arr[1] || "";
   var title = "";
+ 
 
   if (
     (controller == "" && action == "") ||
@@ -59,6 +61,10 @@ Router.beforeEach((to, from, next) => {
   if (controller == "topic" && action == "printTopic".toLowerCase()) {
     next();
     title = document.title = "چاپ مبحث";
+  }
+  if (controller == "studentmajorlist" && action == "printMajorList".toLowerCase()) {
+    next();
+    title = document.title = "چاپ لیست انتخاب رشته";
   }
 
   if (title) {

@@ -26,6 +26,11 @@ export default [
     component: () => import(/* webpackChunkName: "printTopic" */"src/views/topic/printTopic.vue")
   },
   {
+    path: "/studentMajorList/printMajorList",
+    name: "printMajorList",
+    component: () => import(/* webpackChunkName: "printMajorList" */"src/views/studentMajorList/printMajorList.vue")
+  },
+  {
     path: "",
     name:"layouts",
     component: () => import(/* webpackChunkName: "layouts" */"layouts/default.vue"),

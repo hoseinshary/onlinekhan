@@ -61,6 +61,11 @@
     <q-item-main :label="major.MajorTitle" />
     <q-item-main :label="major.University" />
     <q-item-main :label="major.Code.toString()" />
+        <q-item-side right>
+        
+              <q-btn size="sm" round dense color="secondary" icon="expand_less" @click="upList(major)" class="q-mr-xs" />
+              <q-btn size="sm" round dense color="tertiary" icon="expand_more" @click="downList(major)" class="q-mr-sm" />
+          </q-item-side>
     <q-item-side right>
       
     <q-btn round color="negative" icon="remove" @click="deleteFromTable(major.Id)"/>
@@ -93,6 +98,8 @@ import { vxm } from "src/store";
 import { studentMajorListValidations } from "src/validations/StudentMajorListValidation";
 import { Field ,HistoryAssay } from "src/utilities/enumeration";
 import util from "src/utilities";
+import { Major } from "src/models/IStudentMajorList";
+
 
 
 @Component({
@@ -216,6 +223,25 @@ get fieldDdl() {
       this.studentMajorList.Majors.push(tempMajor);    
     }
     
+  }
+  upList(major :Major)
+  {
+    var currentIndex = this.studentMajorList.Majors.findIndex(x => x.Id === major.Id);
+
+    if(currentIndex && currentIndex > 0)
+    {
+        this.studentMajorList.Majors.splice(currentIndex-1, 0, this.studentMajorList.Majors.splice(currentIndex, 1)[0]);
+    }
+  }
+
+  downList(major:any)
+  {
+    var currentIndex = this.studentMajorList.Majors.findIndex(x => x.Id === major.Id);
+
+    if((currentIndex || currentIndex ==0) && currentIndex < this.studentMajorList.Majors.length-1)
+    {
+        this.studentMajorList.Majors.splice(currentIndex+1, 0, this.studentMajorList.Majors.splice(currentIndex, 1)[0]);
+    }
   }
 
    deleteFromTable(Id:number)

@@ -47,7 +47,7 @@
     <div class=""> <br/></div>
     <base-input :model="$v.studentMajorList.Title" float-label="نام لیست" class="col-md-6"/>
         <div class=""> <br/></div>
-<label class="text-red">تعداد رشته های انتخاب شده : {{selectedMajors.length}}</label>
+            <label class="text-red">تعداد رشته های انتخاب شده : {{selectedMajors.length}}</label>
         <div class=""> <br/></div>
 
 <q-list highlight >
@@ -60,10 +60,17 @@
     <q-item-main :label="major.MajorTitle" />
     <q-item-main :label="major.University" />
     <q-item-main :label="major.Code.toString()" />
+
+          <q-item-side right>
+        
+              <q-btn size="sm" round dense color="secondary" icon="expand_less" @click="upList(major)" class="q-mr-xs" />
+              <q-btn size="sm" round dense color="tertiary" icon="expand_more" @click="downList(major)" class="q-mr-sm" />
+          </q-item-side>
     <q-item-side right>
       
     <q-btn round color="negative" icon="remove" @click="deleteFromTable(major.Id)"/>
     </q-item-side>
+    
   </q-item>
  
   
@@ -95,6 +102,7 @@ import util from "src/utilities";
 
 import { studentMajorListValidations } from "src/validations/StudentMajorListValidation";
 import { Field  ,HistoryAssay} from "src/utilities/enumeration";
+import { Major } from "src/models/IStudentMajorList";
 
 @Component({
   validations: studentMajorListValidations
@@ -208,10 +216,31 @@ export default class StudentMajorListCreateVue extends Vue {
     return util.enumToDdl(HistoryAssay);
   }
 
-get selectedMajors()
-{
-  return this.studentMajorList.Majors;
-}
+  get selectedMajors()
+  {
+    return this.studentMajorList.Majors;
+  }
+
+  upList(major :Major)
+  {
+    var currentIndex = this.studentMajorList.Majors.findIndex(x => x.Id === major.Id);
+
+    if(currentIndex && currentIndex > 0)
+    {
+        this.studentMajorList.Majors.splice(currentIndex-1, 0, this.studentMajorList.Majors.splice(currentIndex, 1)[0]);
+    }
+  }
+
+  downList(major:any)
+  {
+    var currentIndex = this.studentMajorList.Majors.findIndex(x => x.Id === major.Id);
+
+    if((currentIndex || currentIndex ==0) && currentIndex < this.studentMajorList.Majors.length-1)
+    {
+        this.studentMajorList.Majors.splice(currentIndex+1, 0, this.studentMajorList.Majors.splice(currentIndex, 1)[0]);
+    }
+  }
+
   fillGrid(searchfilter:any)
   {
     

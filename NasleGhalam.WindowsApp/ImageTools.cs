@@ -35,7 +35,7 @@ namespace NasleGhalam.WindowsApp
                 var image = new Bitmap(distnation + "-000001.png");
 
                 var resizedImage = GetImageWithRatioSize(image, 1 / 5d, 1 / 5d);
-                // resizedImage.Save(pngTarget, ImageFormat.Png);
+                //resizedImage.Save(distnation+"123.png", ImageFormat.Png);
                 var rectangle = GetCropArea(resizedImage, 20);
                 var croppedImage = CropImage(resizedImage, rectangle);
                 croppedImage.Save(distnation + ".png", ImageFormat.Png);

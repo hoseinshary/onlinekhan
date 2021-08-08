@@ -48,28 +48,7 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(studentMajorlist);
         }
 
-        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
-        public IHttpActionResult GetStudentMajorsById(int id)
-        {
-            var studentMajorlist = _studentMajorlistService.GetStudentMajorsById(id);
-            if (studentMajorlist == null)
-            {
-                return NotFound();
-            }
-            return Ok(studentMajorlist);
-        }
 
-
-        [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
-        public IHttpActionResult GetStudentMajorsById()
-        {
-            var studentMajorlist = _studentMajorlistService.GetStudentMajorsById(Request.GetUserId());
-            if (studentMajorlist == null)
-            {
-                return NotFound();
-            }
-            return Ok(studentMajorlist);
-        }
 
 
         [CheckUserAccess(ActionBits.StudentMajorListReadAccess)]
@@ -114,7 +93,7 @@ namespace NasleGhalam.WebApi.Controllers
         public IHttpActionResult Create(StudentMajorlistCreateViewModel studentMajorlistViewModel)
         {
             if(Request.GetRoleLevel() != 5)
-                studentMajorlistViewModel.StudentId = 2006;
+                studentMajorlistViewModel.StudentId = 1;
             else
                 studentMajorlistViewModel.StudentId = Request.GetUserId();
             return Ok(_studentMajorlistService.Create(studentMajorlistViewModel));

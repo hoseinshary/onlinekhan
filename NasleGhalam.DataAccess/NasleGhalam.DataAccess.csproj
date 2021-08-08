@@ -132,6 +132,10 @@
     <Compile Include="Migrations\202107310835164_Studentmajorlist.Designer.cs">
       <DependentUpon>202107310835164_Studentmajorlist.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202108071103112_Majorlists.cs" />
+    <Compile Include="Migrations\202108071103112_Majorlists.Designer.cs">
+      <DependentUpon>202108071103112_Majorlists.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -213,6 +217,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202107310835164_Studentmajorlist.resx">
       <DependentUpon>202107310835164_Studentmajorlist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108071103112_Majorlists.resx">
+      <DependentUpon>202108071103112_Majorlists.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -17,6 +17,7 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<StudentMajorlist> _stduentMajorlists;
         private readonly IDbSet<Student> _students;
         private readonly IDbSet<Majors> _majors;
+        private readonly IDbSet<StudentMajorList_Major> _studentmajorlist_major;
 
 
         public StudentMajorlistService(IUnitOfWork uow)
@@ -24,6 +25,7 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow = uow;
             _stduentMajorlists = uow.Set<StudentMajorlist>();
             _students = uow.Set<Student>();
+            _studentmajorlist_major = uow.Set<StudentMajorList_Major>();
             _majors = uow.Set<Majors>();
         }
 
@@ -34,7 +36,7 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public StudentMajorlistViewModel GetById(int id)
         {
-            return _stduentMajorlists
+            var stdn = _stduentMajorlists
                 .Where(current => current.Id == id)
                 .Include(current => current.Student.User)
                 .Include(current => current.Majors)
@@ -42,40 +44,42 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<StudentMajorlistViewModel>)
                 .FirstOrDefault();
+            stdn.Majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == id).Include(x => x.Major).AsNoTracking().AsEnumerable().OrderBy(x=>x.Priority).Select(x => x.Major).ToList().Select(Mapper.Map<MajorViewModel>).ToList();
+            return stdn;
         }
         public IList<StudentMajorlistViewModel> GetStudentById(int id, byte roles)
         {
             if (roles < 3)
             {
-                return _stduentMajorlists
-                    .Include(current => current.Majors)
-                .Include(current=> current.Student.User)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<StudentMajorlistViewModel>)
-                .ToList();
+                var std = _stduentMajorlists
+                    .Include(current => current.Student.User)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<StudentMajorlistViewModel>)
+                    .ToList();
+                foreach (var item in std)
+                {
+                    item.Majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == item.Id).Include(x => x.Major).AsNoTracking().AsEnumerable().OrderBy(x => x.Priority).Select(x => x.Major).ToList().Select(Mapper.Map<MajorViewModel>).ToList();
+                }
+                return std;
             }
             else
             {
-                return _stduentMajorlists
-                    .Include(current => current.Majors)
+                var std = _stduentMajorlists
                     .Include(current => current.Student.User)
                     .Where(current => current.StudentId == id)
                     .AsNoTracking()
                     .AsEnumerable()
                     .Select(Mapper.Map<StudentMajorlistViewModel>)
                     .ToList();
+                foreach (var item in std)
+                {
+                    item.Majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == item.Id).Include(x => x.Major).AsNoTracking().AsEnumerable().OrderBy(x => x.Priority).Select(x => x.Major).ToList().Select(Mapper.Map<MajorViewModel>).ToList();
+                }
+                return std;
             }
         }
-        public IList<MajorViewModel> GetStudentMajorsById(int id)
-        {
-            return Mapper.Map<IList<MajorViewModel>>(_stduentMajorlists
-                .Where(current => current.StudentId == id)
-                .Include(current => current.Majors)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(x=>x.Majors).FirstOrDefault());
-        }
+      
 
         public IList<MajorViewModel> GetAllMajors()
         {
@@ -111,13 +115,17 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public IList<StudentMajorlistViewModel> GetAll()
         {
-            return _stduentMajorlists
-                .Include(current => current.Majors)
-                .Include(x => x.Student.User)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<StudentMajorlistViewModel>)
-                .ToList();
+            var std = _stduentMajorlists
+                    .Include(current => current.Student.User)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<StudentMajorlistViewModel>)
+                    .ToList();
+            foreach (var item in std)
+            {
+                item.Majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == item.Id).Include(x => x.Major).AsNoTracking().AsEnumerable().OrderBy(x => x.Priority).Select(x => x.Major).ToList().Select(Mapper.Map<MajorViewModel>).ToList();
+            }
+            return std;
         }
 
         /// <summary>
@@ -131,15 +139,17 @@ namespace NasleGhalam.ServiceLayer.Services
             studentMajorlist.Title = stduentMajorlistViewModel.Title;
             studentMajorlist.StudentId = stduentMajorlistViewModel.StudentId;
             studentMajorlist.CreationDate = DateTime.Now;
+           
+            
+             
+            int priority = 1;
             foreach (var item in stduentMajorlistViewModel.MajorsId)
             {
-                var Major = new Majors() { Id = item };
-                _uow.MarkAsUnChanged(Major);
-                studentMajorlist.Majors.Add(Major);
+                var StudentMajorList_Major = new StudentMajorList_Major() {MajorsId = item, Priority = priority };
+                studentMajorlist.StudentMajorList_Major.Add(StudentMajorList_Major);
+                priority += 1;
             }
-            
             _stduentMajorlists.Add(studentMajorlist);
-
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
@@ -156,21 +166,41 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Update(StudentMajorlistUpdateViewModel stduentMajorlistViewModel)
         {
+            
             var studentmajorlist = _stduentMajorlists
                .Include(current => current.Majors)
+               .Include(current =>current.StudentMajorList_Major)
                .First(current => current.Id == stduentMajorlistViewModel.Id);
+
             studentmajorlist.Title = stduentMajorlistViewModel.Title;
-            var majorlist = studentmajorlist.Majors.ToList();
-            foreach (var item in majorlist)
+
+            var majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == stduentMajorlistViewModel.Id).Include(x => x.Major).ToList();
+            var deletemajorList = studentmajorlist.StudentMajorList_Major
+                 .Where(oldMaj => stduentMajorlistViewModel.MajorsId.All(newMajId => newMajId != oldMaj.Major.Id))
+                 .ToList();
+            foreach (var item in deletemajorList)
             {
-                studentmajorlist.Majors.Remove(item);
+                studentmajorlist.StudentMajorList_Major.Remove(item);
+                _uow.MarkAsDeleted(item);
             }
+            var addmajorList = stduentMajorlistViewModel.MajorsId
+               .Where(oldMajId => studentmajorlist.StudentMajorList_Major.All(newMaj => newMaj.Major.Id != oldMajId))
+               .ToList();
+            foreach (var item in addmajorList)
+            {
+                
+                var studentmajor = new StudentMajorList_Major() { MajorsId = item,StudentMajorListId = stduentMajorlistViewModel.StudentId,Priority = 1 };
+                studentmajorlist.StudentMajorList_Major.Add(studentmajor);
+            }
+
+            int priority = 1;
             foreach (var item in stduentMajorlistViewModel.MajorsId)
             {
-                var Major = new Majors() { Id = item };
-                _uow.MarkAsUnChanged(Major);
-                studentmajorlist.Majors.Add(Major);
+                var majo = studentmajorlist.StudentMajorList_Major.Where(x => x.MajorsId == item).FirstOrDefault();
+                majo.Priority = priority;
+                priority += 1;
             }
+
             _uow.MarkAsChanged(studentmajorlist);
 
             var serverResult = _uow.CommitChanges(CrudType.Update, Title);
@@ -190,17 +220,18 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Delete(int id)
         {
             var studentmajorlist = _stduentMajorlists
-               .Include(current => current.Majors)
+               .Include(current => current.StudentMajorList_Major)
                .First(current => current.Id == id);
             if (studentmajorlist == null)
             {
                 return ClientMessageResult.NotFound();
             }
             var stduentMajorlist = Mapper.Map<StudentMajorlist>(studentmajorlist);
-            var majors = stduentMajorlist.Majors.ToList();
+            var majors = stduentMajorlist.StudentMajorList_Major.ToList();
             foreach (var item in majors)
             {
-                stduentMajorlist.Majors.Remove(item);
+                stduentMajorlist.StudentMajorList_Major.Remove(item);
+                _uow.MarkAsDeleted(item);
 
             }
             _uow.MarkAsDeleted(stduentMajorlist);

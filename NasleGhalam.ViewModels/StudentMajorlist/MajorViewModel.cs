@@ -30,5 +30,6 @@ namespace NasleGhalam.ViewModels.StudentMajorlist
         public string Description { get; set; }
 
         public string  Apply { get; set; }
+
     }
 }

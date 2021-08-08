@@ -11,6 +11,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public Majors()
         {
             StudentMajorlists = new HashSet<StudentMajorlist>();
+            StudentMajorList_Major = new HashSet<StudentMajorList_Major>();
         }
         public int Id { get; set; }
         public string Course { get; set; }
@@ -25,6 +26,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public string Province { get; set; }
         public string Description { get; set; }
         public string Apply { get; set; }
+        public ICollection<StudentMajorList_Major> StudentMajorList_Major { get; set; }
         public ICollection<StudentMajorlist> StudentMajorlists { get; set; }
     }
 }

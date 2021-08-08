@@ -78,6 +78,7 @@
     <Compile Include="Entities\Sale.cs" />
     <Compile Include="Entities\Sale_Package.cs" />
     <Compile Include="Entities\StudentMajorlist.cs" />
+    <Compile Include="Entities\StudentMajorList_Major.cs" />
     <Compile Include="Entities\Topic.cs" />
     <Compile Include="Entities\Publisher.cs" />
     <Compile Include="Entities\Lesson.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="EntityConfigs\SaleConfig.cs" />
     <Compile Include="EntityConfigs\Sale_PackageConfig.cs" />
     <Compile Include="EntityConfigs\StudentMajorlistConfig.cs" />
+    <Compile Include="EntityConfigs\StudentMajorList_MajorConfig.cs" />
     <Compile Include="EntityConfigs\TopicConfig.cs" />
     <Compile Include="EntityConfigs\PublisherConfig.cs" />
     <Compile Include="EntityConfigs\LessonConfig.cs" />

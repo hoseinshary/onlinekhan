@@ -603,7 +603,6 @@ export default class QuestionVue extends Vue {
     if (val != undefined) {
       this.lessonId = val;
     }
-    debugger;
     this.topicStore
       .fillListByLessonId({
         id: this.lessonId,
@@ -651,7 +650,7 @@ export default class QuestionVue extends Vue {
   created() {
     this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
-      this.topicStore.fillList();
+     // this.topicStore.fillList();
       this.educationTree.expanded = this.educationTree.firstLevel;
     });
   }

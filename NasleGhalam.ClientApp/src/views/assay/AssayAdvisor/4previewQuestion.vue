@@ -2,7 +2,7 @@
 
 <bs-modal
     title="پیش نمایش سوالات "
-    :show="assayStore.openModal._4previewQuestionVue"
+    :show="assayStore.openModal._4previewQuestion"
     size="lg"
     @close="assayStore.OPEN_MODAL_4PREVIEWQUESTION(false)"
   >
@@ -50,6 +50,21 @@
                                   
                                 
                                 </div>
+                                 <div class="col-md-2">
+                                  <div class="center q-mb-sm">
+                                 <br/>
+                                 <br/>
+                                 <div class="row">
+                                 <div class="q-mx-md">
+                                  <q-btn  @click="DeleteQuestion(lesson.Id, question)" rounded push color="negative" icon="remove"/>
+                                 </div>
+                                 <div>
+                                  <q-btn size="sm" round dense color="secondary" icon="expand_less" @click="upList(lesson,question)" class="q-mr-xs" />
+                                  <q-btn size="sm" round dense color="tertiary" icon="expand_more" @click="downList(lesson,question)" class="q-mr-sm" />
+                                 </div>
+                                 </div>
+                                  </div>
+                                </div>
                               </li>
                             </ul>
                           </div>
@@ -79,7 +94,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
-import { AssayTopic, AssayNumberOfQuestionReportForTopic } from "src/models/IAssay";
+import { AssayTopic, AssayNumberOfQuestionReportForTopic, AssayLesson } from "src/models/IAssay";
 
 @Component({
   components: {}
@@ -101,7 +116,6 @@ export default class TopicTabVue extends Vue {
   //#region ### computed ###
 get lessonsCurrent()
 {
-  console.log(123);
   return this.assayCreate.Lessons;     
 }
   //#endregion
@@ -111,12 +125,49 @@ get lessonsCurrent()
   //#endregion
 
   //#region ### methods ###
- 
+ DeleteQuestion(lessonId :number , question )
+  {
+    var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
+    if(x)
+      if(x.Questions.find( y => y.Id === question.Id))
+        x.Questions.splice(x.Questions.findIndex( y => y.Id === question.Id),1);
+
+  }
+
+   upList(lesson : AssayLesson ,question :any)
+  {
+
+    var currentLesson = this.assayCreate.Lessons.find(x => x.Id === lesson.Id);
+    if(currentLesson)
+    {
+      var currentIndex = currentLesson.Questions.findIndex(x => x.Id === question.Id);
+
+          if(currentIndex && currentIndex > 0)
+          {
+              currentLesson.Questions.splice(currentIndex-1, 0, currentLesson.Questions.splice(currentIndex, 1)[0]);
+          }
+    }
+
+  }
+downList(lesson : AssayLesson ,question:any)
+  {
+    var currentLesson = this.assayCreate.Lessons.find(x => x.Id === lesson.Id);
+    if(currentLesson)
+    {
+      var currentIndex = currentLesson.Questions.findIndex(x => x.Id === question.Id);
+
+      if((currentIndex || currentIndex ==0) && currentIndex < currentLesson.Questions.length-1)
+      {
+          currentLesson.Questions.splice(currentIndex+1, 0, currentLesson.Questions.splice(currentIndex, 1)[0]);
+      }
+    }
+    
+  }
   //#endregion
 
   //#region ### hooks ###
   created() {
-    
+    this.assayStore.SET_4OREVIEWQUESTION_VUE(this);
   }
   //#endregion
 }

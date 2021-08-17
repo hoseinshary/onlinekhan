@@ -207,12 +207,12 @@ export default [
       {
         path: "/AssayAdvisor",
         name: "assayAdvisor",
-        component: () => import(/* webpackChunkName: "program" */"src/views/assay/assayadvisor/index.vue")
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/AssayAdvisor/index.vue")
       },
       {
         path: "/AssayTeacher",
         name: "assayTeacher",
-        component: () => import(/* webpackChunkName: "program" */"src/views/assay/assayTeacher/index.vue")
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/AssayTeacher/index.vue")
       },
       {
         path: "/StudentMajorList",

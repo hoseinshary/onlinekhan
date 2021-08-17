@@ -69,10 +69,10 @@
                                   </q-item-side>
                                 </q-item>
                                 <q-item>
-                                  <q-btn class="center" color="primary" label="پیش نمایش" />
+                                  <q-btn class="center" color="primary" label="پیش نمایش" @click="showModal4preview" />
                                 </q-item>
                                 <q-item>
-                                  <q-btn class="center" color="light" label="از نو" />
+                                  <q-btn class="center" color="light" label="از نو" @click="startNew" />
                                 </q-item>
                               </q-list>
                    </div>
@@ -235,6 +235,7 @@
                                   <div class="col-md-4 center ">
                                     <br/>
                                     <q-btn  @click="showQuestionAnswer(question)" rounded push color="secondary" icon="arrow_downward"/>
+                                    
                                   </div>
                                   <div class="col-md-2 ">
                                     <br/>
@@ -253,8 +254,8 @@ timer
                                   <div class="col-md-1">
                                   </div>
                                   </div>
-                                  
-                                     <img v-if="question.IsShowAnswer"
+                                    {{IsShowAnswer(question)}}
+                                     <img v-show="IsShowAnswer(question)"
                                     :src="question.QuestionAnswerPath"
                                     class="img-original-width corner-around"
                                   />
@@ -361,6 +362,8 @@ timer
         <modal-student></modal-student>
         <modal-lesson></modal-lesson>
         <modal-topic></modal-topic>
+                <modal-previewQuestion></modal-previewQuestion>
+
   </div>
 </template>
 
@@ -386,7 +389,8 @@ import BaseBtnDelete from "src/Components/Buttons/BaseBtnDelete.vue";
  
    ModalStudent: () => import("./0student.vue"),
     ModalLesson: () => import("./1lesson.vue"),
-    ModalTopic: () => import("./2topic.vue")
+    ModalTopic: () => import("./2topic.vue"),
+    ModalPreviewQuestion: () => import("./4previewQuestion.vue")
  
   }
 })
@@ -469,7 +473,6 @@ export default class AssayVue extends Vue {
 
   goToNextPage()
   {
-     console.log(this.assayCreate.Lessons);
 
     this.assayStore.submitPreCreate();
   }
@@ -484,7 +487,6 @@ export default class AssayVue extends Vue {
 
   showModal0student() {
     //this.userStore.resetCreate();
-
     this.assayStore.OPEN_MODAL_0STUDENT(true);
   }
 
@@ -497,19 +499,31 @@ export default class AssayVue extends Vue {
 
   showQuestionAnswer(question : any)
   {
-    console.log(question);
-      this.questionAnswerStore.getByQuestionId(question.Id);
-      if(question.IsShowAnswer)
-      {
-          question.IsShowAnswer=false;
-          
-      }
-      else{
-          question.IsShowAnswer=true;
+    debugger;
+      this.questionAnswerStore.getByQuestionId(question.Id).then(
+      () => {
+          if(question.IsShowAnswer)
+          {
+              question.IsShowAnswer=false;
+              
+          }
+          else{
+              question.IsShowAnswer=true;
 
-        question.QuestionAnswerPath = this.questionAnswerStore.questionAnswer.QuestionAnswerPicturePath;
+            question.QuestionAnswerPath = this.questionAnswerStore.questionAnswer.QuestionAnswerPicturePath;
+          }
       }
+
+      );
+     
   }
+get IsShowAnswer()
+{
+  return(question :any) => {
+    return question.IsShowAnswer;
+  }
+}
+
   get showGreen()
   {
     return (lessonId :number , questionId: number ): boolean =>{
@@ -547,6 +561,19 @@ export default class AssayVue extends Vue {
     //this.userStore.resetCreate();
 
     this.assayStore.OPEN_MODAL_2TOPIC(true);
+  }
+
+   showModal4preview() {
+    //this.userStore.resetCreate();
+
+    this.assayStore.OPEN_MODAL_4PREVIEWQUESTION(true);
+  }
+
+  startNew()
+  {
+    this.assayCreate.Lessons = [];
+    this.assayStore._lessonList =[];
+
   }
   //#endregion
 

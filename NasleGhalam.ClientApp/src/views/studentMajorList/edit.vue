@@ -343,16 +343,7 @@ get fieldDdl() {
         this.studentMajorList.Majors.splice(currentIndex-1, 0, this.studentMajorList.Majors.splice(currentIndex, 1)[0]);
     }
   }
-
-  changeLargList()
-  {
-    if(this.largeList)
-     this.largeList = false;
-     else
-     this.largeList= true;
-  }
-
-  downList(major:any)
+downList(major:any)
   {
     var currentIndex = this.studentMajorList.Majors.findIndex(x => x.Id === major.Id);
 
@@ -361,6 +352,15 @@ get fieldDdl() {
         this.studentMajorList.Majors.splice(currentIndex+1, 0, this.studentMajorList.Majors.splice(currentIndex, 1)[0]);
     }
   }
+  changeLargList()
+  {
+    if(this.largeList)
+     this.largeList = false;
+     else
+     this.largeList= true;
+  }
+
+  
 
    deleteFromTable(Id:number)
   {

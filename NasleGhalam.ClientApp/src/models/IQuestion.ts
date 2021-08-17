@@ -23,6 +23,8 @@ export default interface IQuestion {
   TopicAnswer  : Array<string>;
   QuestionWordPath: string;
   QuestionPicturePath: string;
+  QuestionAnswerPath:string;
+  IsShowAnswer:boolean;
   LookupId_QuestionType: number;
   LookupId_QuestionHardnessType: number;
   LookupId_RepeatnessType: number;
@@ -59,6 +61,8 @@ export const DefaultQuestion: IQuestion = {
   TopicAnswer : [],
   QuestionWordPath: "",
   QuestionPicturePath: "",
+  QuestionAnswerPath: "",
+  IsShowAnswer:false,
   LookupId_QuestionType: 6,
   LookupId_QuestionHardnessType: 12,
   LookupId_RepeatnessType: 22,

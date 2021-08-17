@@ -131,6 +131,15 @@ export class QuestionAnswerStore extends VuexModule {
   }
 
   @action()
+  async getByQuestionId(id: number) {
+    return axios
+      .get(`${baseUrl}/GetByQuestionId/${id}`)
+      .then((response: AxiosResponse<IQuestionAnswer>) => {
+        util.mapObject(response.data, this.questionAnswer);
+      });
+  }
+
+  @action()
   async fillListByQuestionId(questionId: number) {
     return axios
       .get(`${baseUrl}/GetAllByQuestionId/${questionId}`)

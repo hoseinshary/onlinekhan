@@ -18,17 +18,20 @@ import IAssay from "src/models/IAssay";
 
 @Module({ namespacedPath: "assayStore/" })
 export class AssayStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean };
+  openModal: { create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean ; _4previewQuestion : boolean };
   assayCreate: AssayCreate;
   private _assayList: Array<IAssay>;
 
   _lessonList: Array<AssayLesson>;
+  IsDetailTopic : boolean;
 
   private _indexVue: Vue;
   private _assayVue: Vue;
   private _0studentVue: Vue;
   private _1lessonVue: Vue;
   private _2topicVue: Vue;
+  private _4previewQuestionVue: Vue;
+
 
 
 
@@ -40,13 +43,15 @@ export class AssayStore extends VuexModule {
     super();
     this.assayCreate = new AssayCreate();
     this._lessonList = [];
+    this.IsDetailTopic = false;
     this.openModal = {
       create: false,
       edit: false,
       delete: false,
       _0student: false,
       _1lesson: false,
-      _2topic: false
+      _2topic: false,
+      _4previewQuestion : false
     }
   }
   //#region ### getters ###
@@ -87,6 +92,11 @@ export class AssayStore extends VuexModule {
   }
 
   @mutation
+  SET_4OREVIEWQUESTION_VUE(vm: Vue) {
+    this._4previewQuestionVue = vm;
+  }
+
+  @mutation
   OPEN_MODAL_0STUDENT(open: boolean) {
     this.openModal._0student = open;
   }
@@ -99,6 +109,12 @@ export class AssayStore extends VuexModule {
   OPEN_MODAL_2TOPIC(open: boolean) {
     this.openModal._2topic = open;
   }
+
+  @mutation
+  OPEN_MODAL_4PREVIEWQUESTION(open: boolean) {
+    this.openModal._4previewQuestion = open;
+  }
+
 
 
   //#endregion
@@ -134,6 +150,9 @@ export class AssayStore extends VuexModule {
 
   @action()
   async submitPreCreate() {
+
+    
+
     let vm = this._assayVue;
     //if (!(await this.validateForm(vm))) return;
 
@@ -155,6 +174,8 @@ export class AssayStore extends VuexModule {
     });
 
     type TQuestionAssay = { LessonId: number; Questions: Array<IQuestion> };
+    
+
     return axios
       .post(`${baseUrl}/GetAllQuestion`, data)
       .then((response: AxiosResponse<Array<TQuestionAssay>>) => {

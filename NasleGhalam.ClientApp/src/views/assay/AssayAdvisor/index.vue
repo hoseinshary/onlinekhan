@@ -228,11 +228,13 @@
                                   <div class="row col-md-10">
                                   <div class="col-md-3">
                                     <br/>
-                                  <base-btn-create :label="`اضافه به آزمون`" @click="AddQuestion(lesson.Id, question)" />
+                                  <base-btn-create v-if="showGreen(lesson.Id, question.Id)"  :label="`اضافه به آزمون`" @click="AddQuestion(lesson.Id, question)" />
+                                  <q-btn v-else :label="'حذف از آزمون'" @click="DeleteQuestion(lesson.Id, question)" rounded push color="negative" icon="remove"/>
+
                                   </div>
                                   <div class="col-md-4 center ">
                                     <br/>
-                                    <q-btn  @click="showQuestionAnswer" rounded push color="secondary" icon="arrow_downward"/>
+                                    <q-btn  @click="showQuestionAnswer(question)" rounded push color="secondary" icon="arrow_downward"/>
                                   </div>
                                   <div class="col-md-2 ">
                                     <br/>
@@ -251,6 +253,12 @@ timer
                                   <div class="col-md-1">
                                   </div>
                                   </div>
+                                  
+                                     <img v-if="question.IsShowAnswer"
+                                    :src="question.QuestionAnswerPath"
+                                    class="img-original-width corner-around"
+                                  />
+                                       
                                 </div>
                                 <div class="col-md-2">
                                   <div class="center q-mb-sm">
@@ -362,6 +370,7 @@ import { vxm } from "src/store";
 import util from "src/utilities";
 import BasePanel from "src/Components/BasePanel.vue";
 import IQuestion from "src/models/IQuestion";
+import BaseBtnDelete from "src/Components/Buttons/BaseBtnDelete.vue";
 
 
 @Component({
@@ -382,6 +391,7 @@ import IQuestion from "src/models/IQuestion";
   }
 })
 export default class AssayVue extends Vue {
+
   //#region ### data ###
 
   $v:any;
@@ -390,6 +400,7 @@ export default class AssayVue extends Vue {
   pageAccess = util.getAccess(this.assayStore.modelName);
   selectedTab = "studentTab";
   assayCreate = vxm.assayStore.assayCreate;
+  questionAnswerStore = vxm.questionAnswerStore;
   lookupStore = vxm.lookupStore;
   rangeValues= {
         min: 30,
@@ -458,6 +469,8 @@ export default class AssayVue extends Vue {
 
   goToNextPage()
   {
+     console.log(this.assayCreate.Lessons);
+
     this.assayStore.submitPreCreate();
   }
 
@@ -482,11 +495,36 @@ export default class AssayVue extends Vue {
     this.assayStore.OPEN_MODAL_1LESSON(true);
   }
 
-  showQuestionAnswer()
+  showQuestionAnswer(question : any)
   {
+    console.log(question);
+      this.questionAnswerStore.getByQuestionId(question.Id);
+      if(question.IsShowAnswer)
+      {
+          question.IsShowAnswer=false;
+          
+      }
+      else{
+          question.IsShowAnswer=true;
 
+        question.QuestionAnswerPath = this.questionAnswerStore.questionAnswer.QuestionAnswerPicturePath;
+      }
   }
-
+  get showGreen()
+  {
+    return (lessonId :number , questionId: number ): boolean =>{
+           var x = this.assayCreate.Lessons.find(x => x.Id === lessonId) 
+          if(x)
+          {
+            var y = x.Questions.find(z => z.Id === questionId)
+            if(y)
+              return false;
+            
+          }
+          return true;
+    }
+    
+  }
   AddQuestion(lessonId :number , question )
   {
     var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
@@ -494,7 +532,15 @@ export default class AssayVue extends Vue {
       if(!x.Questions.find( y => y.Id === question.Id))
         x.Questions.push(question);
 
-      console.log(this.assayCreate.Lessons);
+  }
+
+    DeleteQuestion(lessonId :number , question )
+  {
+    var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
+    if(x)
+      if(x.Questions.find( y => y.Id === question.Id))
+        x.Questions.splice(x.Questions.findIndex( y => y.Id === question.Id),1);
+
   }
 
   showModal2topic() {

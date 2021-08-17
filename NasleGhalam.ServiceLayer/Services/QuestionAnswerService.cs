@@ -50,6 +50,22 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
+        /// گرفتن  جواب سوال با آی دی
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public QuestionAnswerViewModel GetByQuestionId(int id)
+        {
+            return _questionAnswers
+                .Include(current => current.Writer)
+                .Where(current => current.QuestionId == id  && current.IsMaster)
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<QuestionAnswerViewModel>)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
         /// گرفتن همه جواب سوال ها
         /// </summary>
         /// <returns></returns>

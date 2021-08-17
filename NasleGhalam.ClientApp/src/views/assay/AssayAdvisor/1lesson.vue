@@ -154,7 +154,7 @@ export default class LessonTabVue extends Vue {
   assayStore = vxm.assayStore;
   educationTreeStore = vxm.educationTreeStore;
   educationTree = this.educationTreeStore.qTreeData;
-  assayCreate = vxm.assayStore.assayCreate;
+  //assayCreate = vxm.assayStore.assayCreate;
   numberOfQuestionReport: AssayNumberOfQuestionReport = new AssayNumberOfQuestionReport();
 
   //#endregion
@@ -194,10 +194,14 @@ export default class LessonTabVue extends Vue {
 
   @Watch("educationTree.leafTicked")
   tickedEducationTreeIdsChanged(newVal) {
+
     util.clearArray(this.assayStore._lessonList);
     this.lessonStore.gridDataByEducationTreeIds(newVal).forEach(x => {
       this.assayStore._lessonList.push(new AssayLesson(x.Id, x.Name));
     });
+
+     
+
   }
   //#endregion
 
@@ -207,15 +211,19 @@ export default class LessonTabVue extends Vue {
   }
 
   getQuestionNumberReport(Lesson: AssayLesson) {
-  
-    if(this.assayCreate.Lessons.find(x=> x.Id === Lesson.Id))
+    if(this.assayStore.assayCreate.Lessons.find(x=> x.Id === Lesson.Id))
     {
-        this.assayCreate.Lessons.splice(this.assayCreate.Lessons.findIndex(x=> x.Id === Lesson.Id),1)
+
+        this.assayStore.assayCreate.Lessons.splice(this.assayStore.assayCreate.Lessons.findIndex(x=> x.Id === Lesson.Id),1)
+
     }
     else
     {
       Lesson.Questions = [];
-    this.assayCreate.Lessons.push(Lesson);
+      var tempLesson = util.cloneObject(Lesson);
+   
+      
+    this.assayStore.assayCreate.Lessons.push(tempLesson);
     this.studentStore.numberOfQuestionReport({ lessonId: Lesson.Id, studentId: 9 }).then(d => {
       this.numberOfQuestionReport = d;
     });

@@ -221,7 +221,7 @@ export default class TopicTabVue extends Vue {
   }
 
   topicWithDetail() {
-    if (this.assayCreate.IsDetailTopic) {
+    if (this.assayStore.IsDetailTopic) {
       this.studentStore.numberOfQuestionReportForTopic({ lessonIds: this.lessonIds, studentId: 9 }).then(d => {
         this.numberOfQuestionReport = d;
       });

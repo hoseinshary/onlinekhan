@@ -22,7 +22,7 @@
       <br /> -->
       <q-checkbox
         label="نمایش جزئیات تعداد سوالات در هر مبحث"
-        v-model="assayCreate.IsDetailTopic"
+        v-model="assayStore.IsDetailTopic"
         @input="topicWithDetail()"
       />
       <!-- <div class="row">
@@ -51,7 +51,7 @@
           <!-- <div class="col"> -->
             <template>
               <div
-                v-if="assayCreate.IsDetailTopic && numberOfQuestionReport.LessonReports.find(
+                v-if="assayStore.IsDetailTopic && numberOfQuestionReport.LessonReports.find(
                         (x) => x.Id === prop.node.lessonId
                       ).TopicReports.find(y=> y.ID === prop.node.Id) "
                 class="col-md-12 row"
@@ -133,7 +133,7 @@ export default class TopicTabVue extends Vue {
   assayStore = vxm.assayStore;
   topicStore = vxm.topicStore;
   studentStore = vxm.studentStore;
-  assayCreate = vxm.assayStore.assayCreate;
+  //assayCreate = vxm.assayStore.assayCreate;
   topicLeafTicked: Array<number> = [];
   topicTreeData = [];
   numberOfQuestionReport: AssayNumberOfQuestionReportForTopic = new AssayNumberOfQuestionReportForTopic();
@@ -142,7 +142,7 @@ export default class TopicTabVue extends Vue {
 
   //#region ### computed ###
   get checkedLessons() {
-    return this.assayCreate.Lessons.filter(x => x.Checked == true);
+    return this.assayStore._lessonList.filter(x => x.Checked == true);
   }
   get lessonIds() {
     return this.checkedLessons.map(x => x.Id);
@@ -206,6 +206,7 @@ export default class TopicTabVue extends Vue {
 
   //#region ### methods ###
   goToTopicTab() {
+
     this.assayStore.submitPreCreate().then(() => {
       this.$emit("changeTab", "questionTab");
     })
@@ -221,7 +222,7 @@ export default class TopicTabVue extends Vue {
   }
 
   topicWithDetail() {
-    if (this.assayCreate.IsDetailTopic) {
+    if (this.assayStore.IsDetailTopic) {
       this.studentStore.numberOfQuestionReportForTopic({ lessonIds: this.lessonIds, studentId: 9 }).then(d => {
         this.numberOfQuestionReport = d;
       });

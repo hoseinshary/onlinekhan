@@ -52,7 +52,7 @@
                        <q-list highlight class="bg-white corner-around text-orange">
                                 <q-list-header>سوالات انتخاب شده:</q-list-header>
 
-                                <q-item v-for="lesson in lesssonChoose" :key="lesson.Id" >
+                                <q-item v-for="lesson in assayStore.lesssonChoose" :key="lesson.Id" >
                                     <q-item-side color="primary" icon="book" />  
                                     <q-item-main  :label="lesson.Name" />
                                     <q-item-side right>
@@ -65,7 +65,7 @@
                                 <q-item class="bg-yellow-1 corner-around">
                                    <q-item-main label="تعداد کل :" />
                                     <q-item-side right>
-                                    <q-item-tile label color="primary" > {{lessonChooseAllQuestioncount}} </q-item-tile>
+                                    <q-item-tile label color="primary" > {{assayStore.lessonChooseAllQuestioncount}} </q-item-tile>
                                   </q-item-side>
                                 </q-item>
                                 <q-item>
@@ -217,9 +217,7 @@
                               >
                                 
                                 <div class="col-md-10">
-                                  <!-- <div class="">
-                                  <label class="bg-faded  text-white"> {{question.TopicAnswer}} </label>
-                                  </div> -->
+                                 
                                   <img
                                     :src="question.QuestionPicturePath"
                                     class="img-original-width corner-around"
@@ -253,15 +251,19 @@ timer
                                   </div>
                                   <div class="col-md-1">
                                   </div>
-                                  </div>
-                                    {{IsShowAnswer(question)}}
-                                     <img v-show="IsShowAnswer(question)"
+                                  </div >
+                                 
+                                        <div v-if="assayStore.IsShowAnswer(question)" class="q-mt-sm"> 
+                                  <label class="bg-faded  text-white"> {{question.TopicAnswer}} </label>
+                                     <!-- {{IsShowAnswer(question)}} -->
+                                     <img 
                                     :src="question.QuestionAnswerPath"
                                     class="img-original-width corner-around"
                                   />
-                                       
+                                  </div>
                                 </div>
-                                <div class="col-md-2">
+
+                                <div class="col-md-2 ">
                                   <div class="center q-mb-sm">
                                   <router-link class=""
                                     :to="`/question/${question.Id}/${lesson.Id}`"
@@ -374,6 +376,7 @@ import util from "src/utilities";
 import BasePanel from "src/Components/BasePanel.vue";
 import IQuestion from "src/models/IQuestion";
 import BaseBtnDelete from "src/Components/Buttons/BaseBtnDelete.vue";
+import IMessageResult from "src/models/IMessageResult";
 
 
 @Component({
@@ -430,41 +433,25 @@ export default class AssayVue extends Vue {
   // }
 
 
-  get lesssonChoose(){
-  
-    return this.assayCreate.Lessons.map((x) => ({
-      Id: x.Id,
-      Name: x.Name,
-      Questions : x.Questions
-         }));
-  }
-  get lessonsCurrent() {
+ get lessonsCurrent() {
 
-    return this.assayStore.checkedLessons.map((x) => ({
-      Id: x.Id,
-      Name: x.Name,
-      Questions: x.Questions.filter(x => !this.filterHardness.length || this.filterHardness.includes(x.LookupId_QuestionHardnessType))
-    }))
-  }
-
-  get lessonChooseAllQuestioncount(){
-    var countall = 0 ;
-    this.lesssonChoose.forEach(element => {
-      countall += element.Questions.length
-    });
-    return countall;
-  }
+  return this.assayStore.checkedLessons.map((x) => ({
+    Id: x.Id,
+    Name: x.Name,
+    Questions: x.Questions.filter(x => !this.filterHardness.length || this.filterHardness.includes(x.LookupId_QuestionHardnessType))
+  }))
+}
 
   //#endregion
 
   //#region ### methods ###
 
   filterHadrnessAction() {
-    this.assayStore.checkedLessons.forEach((element, index) => {
-      // this.lessonsCurrent[index].Questions = element.Questions.filter(x => this.filterHardness.includes(x.LookupId_QuestionHardnessType));
-      console.log(this.filterHardness);
-      console.log(this.filterHardness.includes(11));
-    });
+    // this.assayStore.checkedLessons.forEach((element, index) => {
+    //   // this.lessonsCurrent[index].Questions = element.Questions.filter(x => this.filterHardness.includes(x.LookupId_QuestionHardnessType));
+    //   console.log(this.filterHardness);
+    //   console.log(this.filterHardness.includes(11));
+    // });
   }
 
   goToTopicTab() {
@@ -499,7 +486,6 @@ export default class AssayVue extends Vue {
 
   showQuestionAnswer(question : any)
   {
-    debugger;
       this.questionAnswerStore.getByQuestionId(question.Id).then(
       () => {
           if(question.IsShowAnswer)
@@ -517,12 +503,7 @@ export default class AssayVue extends Vue {
       );
      
   }
-get IsShowAnswer()
-{
-  return(question :any) => {
-    return question.IsShowAnswer;
-  }
-}
+
 
   get showGreen()
   {
@@ -544,7 +525,16 @@ get IsShowAnswer()
     var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
     if(x)
       if(!x.Questions.find( y => y.Id === question.Id))
+      {
         x.Questions.push(question);
+
+         var data : IMessageResult = {
+        MessageType : 1 ,
+        Message : "سوال  "+ question.Id + "  اضافه شد "
+
+      }
+      this.assayStore.notify( {vm:this,data:data});
+      }
 
   }
 
@@ -553,7 +543,16 @@ get IsShowAnswer()
     var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
     if(x)
       if(x.Questions.find( y => y.Id === question.Id))
+      {
         x.Questions.splice(x.Questions.findIndex( y => y.Id === question.Id),1);
+
+         var data : IMessageResult = {
+        MessageType : 2 ,
+        Message : "سوال  "+ question.Id + "  حذف شد "
+
+      }
+      this.assayStore.notify( {vm:this,data:data});
+      }
 
   }
 

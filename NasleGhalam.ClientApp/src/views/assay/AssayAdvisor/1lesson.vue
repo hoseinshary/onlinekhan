@@ -196,6 +196,7 @@ export default class LessonTabVue extends Vue {
   tickedEducationTreeIdsChanged(newVal) {
 
     util.clearArray(this.assayStore._lessonList);
+   
     this.lessonStore.gridDataByEducationTreeIds(newVal).forEach(x => {
       this.assayStore._lessonList.push(new AssayLesson(x.Id, x.Name));
     });
@@ -228,7 +229,7 @@ export default class LessonTabVue extends Vue {
       this.numberOfQuestionReport = d;
     });
     }
-   
+      
   }
 
   

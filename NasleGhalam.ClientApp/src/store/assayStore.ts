@@ -62,6 +62,37 @@ export class AssayStore extends VuexModule {
   get checkedLessons() {
     return this._lessonList.filter(x => x.Checked);
   }
+
+
+  get lessonIds() {
+    return this._lessonList.filter(x => x.Checked).map(x => x.Id);
+}
+
+get IsShowAnswer()
+{
+  
+  return(question :any) => {
+    return question.IsShowAnswer;
+  }
+}
+
+get lesssonChoose(){
+  //console.log(this.assayCreate.Lessons);
+  return this.assayCreate.Lessons.map((x) => ({
+    Id: x.Id,
+    Name: x.Name,
+    Questions : x.Questions
+       }));
+}
+
+
+get lessonChooseAllQuestioncount(){
+  var countall = 0 ;
+  this.assayCreate.Lessons.forEach(element => {
+    countall += element.Questions.length
+  });
+  return countall;
+}
   //#endregion
 
   //#region ### mutations ###

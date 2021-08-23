@@ -32,7 +32,7 @@
 
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-tree
-        :nodes="topicStore.treeDataByLessonIds(lessonIds)"
+        :nodes="topicStore.treeDataByLessonIds(assayStore.lessonIds)"
         ref="tree"
         class="q-pt-lg"
         color="primary"
@@ -141,20 +141,15 @@ export default class TopicTabVue extends Vue {
   //#endregion
 
   //#region ### computed ###
-  get checkedLessons() {
-    return this.assayStore._lessonList.filter(x => x.Checked == true);
-  }
-  get lessonIds() {
-    return this.checkedLessons.map(x => x.Id);
-  }
+
   get getLesson() {
     return lessonId => {
-      return this.checkedLessons.find(x => x.Id == lessonId);
+      return this.assayStore.checkedLessons.find(x => x.Id == lessonId);
     };
   }
   get getTopic() {
     return (lessonId, topicId): AssayTopic | null => {
-      var lesson = this.checkedLessons.find(x => x.Id == lessonId);
+      var lesson = this.assayStore.checkedLessons.find(x => x.Id == lessonId);
       if (!lesson) return null;
       var assayTopic = lesson.Topics.find(x => x.Id == topicId);
       if (assayTopic) return assayTopic;
@@ -179,7 +174,8 @@ export default class TopicTabVue extends Vue {
   //#region ### watch ###
   @Watch("lessonIds")
   lessonIdsChanged(newVal) {
-    this.topicStore.fillList();
+    console.log("lesson ids change");
+    this.topicStore.fillList();  
   }
 
   @Watch("topicLeafTicked")
@@ -223,7 +219,7 @@ export default class TopicTabVue extends Vue {
 
   topicWithDetail() {
     if (this.assayStore.IsDetailTopic) {
-      this.studentStore.numberOfQuestionReportForTopic({ lessonIds: this.lessonIds, studentId: 9 }).then(d => {
+      this.studentStore.numberOfQuestionReportForTopic({ lessonIds: this.assayStore.lessonIds, studentId: 9 }).then(d => {
         this.numberOfQuestionReport = d;
       });
     }
@@ -232,7 +228,9 @@ export default class TopicTabVue extends Vue {
 
   //#region ### hooks ###
   created() {
-    this.lessonIdsChanged(this.lessonIds);
+    
+        this.topicStore.fillList();
+
   }
   //#endregion
 }

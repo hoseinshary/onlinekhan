@@ -18,11 +18,16 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IDbSet<Topic> _topics;
         private readonly IDbSet<Question> _questions;
 
-        public TopicService(IUnitOfWork uow)
+        private readonly Lazy<LessonDepartmentService> _lessonDepartmentService;
+
+
+        public TopicService(IUnitOfWork uow ,Lazy<LessonDepartmentService> lessonDepartmentService)
         {
             _uow = uow;
             _topics = uow.Set<Topic>();
             _questions = uow.Set<Question>();
+
+            _lessonDepartmentService = lessonDepartmentService;
         }
 
         /// <summary>
@@ -52,6 +57,22 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<TopicViewModel>)
                 .ToList();
+            //var lessons = _lessonDepartmentService.Value.GetAllLessonOfDepartment(id);
+
+            //List<TopicViewModel> returnList = new List<TopicViewModel>();
+
+            //foreach (var item in lessons)
+            //{
+            //    var topics = _topics
+            //    .Where(current => current.LessonId == item.Id)
+            //    .AsNoTracking()
+            //    .AsEnumerable()
+            //    .Select(Mapper.Map<TopicViewModel>)
+            //    .ToList();
+
+            //    returnList.AddRange(topics);
+            //}
+            //return returnList;
 
         }
 

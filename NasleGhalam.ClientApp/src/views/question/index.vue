@@ -650,7 +650,7 @@ export default class QuestionVue extends Vue {
   created() {
     this.lessonStore.fillList();
     this.educationTreeStore.fillList().then(res => {
-     // this.topicStore.fillList();
+      this.topicStore.fillList();
       this.educationTree.expanded = this.educationTree.firstLevel;
     });
   }

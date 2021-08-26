@@ -5,6 +5,7 @@ using AutoMapper;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
+using NasleGhalam.ViewModels.Lesson;
 using NasleGhalam.ViewModels.LessonDepartment;
 
 namespace NasleGhalam.ServiceLayer.Services
@@ -28,12 +29,24 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public LessonDepartmentViewModel GetById(int id)
         {
+            
             return _lessonDepartments
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<LessonDepartmentViewModel>)
                 .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// برگشت همه درس های مثل یک درس در بخش
+        /// </summary>
+        /// <returns></returns>
+        public IList<LessonViewModel> GetAllLessonOfDepartment(int id)
+        {
+            var department = _lessonDepartments.Include(x => x.Lessons).Where(x => x.Lessons.Any(y => y.Id == id)).FirstOrDefault();
+            return _lessonDepartments.Where(x => x.Id == department.Id).FirstOrDefault().Lessons.Select(Mapper.Map<LessonViewModel>).ToList();
+
         }
 
         /// <summary>

@@ -55,7 +55,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<AllQuestionOfEachLessonViewModel> GetAllQuestionOfEachLesson()
         {
            var lessons = _lessons
-                .Where(current =>  current.Topics.Any(x => x.Questions.Any()))
+                .Where(current =>  current.Topics.Any(x => x.Questions.Any()) || current.QuestionGroups.Any(x => x.Questions.Any()) )
                 .Include(x=> x.Topics)
                 .AsNoTracking()
                 .AsEnumerable()

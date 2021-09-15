@@ -149,6 +149,7 @@ get lessonsCurrent()
     }
 
   }
+  
 downList(lesson : AssayLesson ,question:any)
   {
     var currentLesson = this.assayCreate.Lessons.find(x => x.Id === lesson.Id);

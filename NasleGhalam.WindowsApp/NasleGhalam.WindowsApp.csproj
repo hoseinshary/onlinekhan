@@ -28,7 +28,7 @@
     <UpdateUrl>http://159.69.82.251/App/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>13</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -109,6 +109,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionAnswerGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuestionAnswerGroup.Designer.cs">
+      <DependentUpon>QuestionAnswerGroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="QuestionGroup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +136,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="QuestionAnswerGroup.resx">
+      <DependentUpon>QuestionAnswerGroup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="QuestionGroup.resx">
       <DependentUpon>QuestionGroup.cs</DependentUpon>
     </EmbeddedResource>
@@ -152,6 +161,10 @@
     <ProjectReference Include="..\NasleGhalam.Common\NasleGhalam.Common.csproj">
       <Project>{f383db37-6c98-4fc8-a8ae-5c3bbf62a998}</Project>
       <Name>NasleGhalam.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NasleGhalam.DomainClasses\NasleGhalam.DomainClasses.csproj">
+      <Project>{164402EF-47AF-4C7B-BD43-0D7D6558FF21}</Project>
+      <Name>NasleGhalam.DomainClasses</Name>
     </ProjectReference>
     <ProjectReference Include="..\NasleGhalam.ServiceLayer\NasleGhalam.ServiceLayer.csproj">
       <Project>{6f8076b6-2202-47ee-9380-38daa0666d88}</Project>

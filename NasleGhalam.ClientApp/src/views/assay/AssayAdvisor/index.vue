@@ -52,7 +52,7 @@
                        <q-list highlight class="bg-white corner-around text-orange">
                                 <q-list-header>سوالات انتخاب شده:</q-list-header>
 
-                                <q-item v-for="lesson in lesssonChoose" :key="lesson.Id" >
+                                <q-item v-for="lesson in assayStore.lesssonChoose" :key="lesson.Id" >
                                     <q-item-side color="primary" icon="book" />  
                                     <q-item-main  :label="lesson.Name" />
                                     <q-item-side right>
@@ -65,14 +65,14 @@
                                 <q-item class="bg-yellow-1 corner-around">
                                    <q-item-main label="تعداد کل :" />
                                     <q-item-side right>
-                                    <q-item-tile label color="primary" > {{lessonChooseAllQuestioncount}} </q-item-tile>
+                                    <q-item-tile label color="primary" > {{assayStore.lessonChooseAllQuestioncount}} </q-item-tile>
                                   </q-item-side>
                                 </q-item>
                                 <q-item>
-                                  <q-btn class="center" color="primary" label="پیش نمایش" />
+                                  <q-btn class="center" color="primary" label="پیش نمایش" @click="showModal4preview" />
                                 </q-item>
                                 <q-item>
-                                  <q-btn class="center" color="light" label="از نو" />
+                                  <q-btn class="center" color="light" label="از نو" @click="startNew" />
                                 </q-item>
                               </q-list>
                    </div>
@@ -217,9 +217,7 @@
                               >
                                 
                                 <div class="col-md-10">
-                                  <!-- <div class="">
-                                  <label class="bg-faded  text-white"> {{question.TopicAnswer}} </label>
-                                  </div> -->
+                                 
                                   <img
                                     :src="question.QuestionPicturePath"
                                     class="img-original-width corner-around"
@@ -228,11 +226,14 @@
                                   <div class="row col-md-10">
                                   <div class="col-md-3">
                                     <br/>
-                                  <base-btn-create :label="`اضافه به آزمون`" @click="AddQuestion(lesson.Id, question)" />
+                                  <base-btn-create v-if="showGreen(lesson.Id, question.Id)"  :label="`اضافه به آزمون`" @click="AddQuestion(lesson.Id, question)" />
+                                  <q-btn v-else :label="'حذف از آزمون'" @click="DeleteQuestion(lesson.Id, question)" rounded push color="negative" icon="remove"/>
+
                                   </div>
                                   <div class="col-md-4 center ">
                                     <br/>
-                                    <q-btn  @click="showQuestionAnswer" rounded push color="secondary" icon="arrow_downward"/>
+                                    <q-btn  @click="showQuestionAnswer(question)" rounded push color="secondary" icon="arrow_downward"/>
+                                    
                                   </div>
                                   <div class="col-md-2 ">
                                     <br/>
@@ -250,9 +251,19 @@ timer
                                   </div>
                                   <div class="col-md-1">
                                   </div>
+                                  </div >
+                                 
+                                        <div v-if="assayStore.IsShowAnswer(question)" class="q-mt-sm"> 
+                                  <label class="bg-faded  text-white"> {{question.TopicAnswer}} </label>
+                                     <!-- {{IsShowAnswer(question)}} -->
+                                     <img 
+                                    :src="question.QuestionAnswerPath"
+                                    class="img-original-width corner-around"
+                                  />
                                   </div>
                                 </div>
-                                <div class="col-md-2">
+
+                                <div class="col-md-2 ">
                                   <div class="center q-mb-sm">
                                   <router-link class=""
                                     :to="`/question/${question.Id}/${lesson.Id}`"
@@ -353,6 +364,8 @@ timer
         <modal-student></modal-student>
         <modal-lesson></modal-lesson>
         <modal-topic></modal-topic>
+                <modal-previewQuestion></modal-previewQuestion>
+
   </div>
 </template>
 
@@ -362,6 +375,8 @@ import { vxm } from "src/store";
 import util from "src/utilities";
 import BasePanel from "src/Components/BasePanel.vue";
 import IQuestion from "src/models/IQuestion";
+import BaseBtnDelete from "src/Components/Buttons/BaseBtnDelete.vue";
+import IMessageResult from "src/models/IMessageResult";
 
 
 @Component({
@@ -377,11 +392,13 @@ import IQuestion from "src/models/IQuestion";
  
    ModalStudent: () => import("./0student.vue"),
     ModalLesson: () => import("./1lesson.vue"),
-    ModalTopic: () => import("./2topic.vue")
+    ModalTopic: () => import("./2topic.vue"),
+    ModalPreviewQuestion: () => import("./4previewQuestion.vue")
  
   }
 })
 export default class AssayVue extends Vue {
+
   //#region ### data ###
 
   $v:any;
@@ -390,6 +407,7 @@ export default class AssayVue extends Vue {
   pageAccess = util.getAccess(this.assayStore.modelName);
   selectedTab = "studentTab";
   assayCreate = vxm.assayStore.assayCreate;
+  questionAnswerStore = vxm.questionAnswerStore;
   lookupStore = vxm.lookupStore;
   rangeValues= {
         min: 30,
@@ -415,41 +433,25 @@ export default class AssayVue extends Vue {
   // }
 
 
-  get lesssonChoose(){
-  
-    return this.assayCreate.Lessons.map((x) => ({
-      Id: x.Id,
-      Name: x.Name,
-      Questions : x.Questions
-         }));
-  }
-  get lessonsCurrent() {
+ get lessonsCurrent() {
 
-    return this.assayStore.checkedLessons.map((x) => ({
-      Id: x.Id,
-      Name: x.Name,
-      Questions: x.Questions.filter(x => !this.filterHardness.length || this.filterHardness.includes(x.LookupId_QuestionHardnessType))
-    }))
-  }
-
-  get lessonChooseAllQuestioncount(){
-    var countall = 0 ;
-    this.lesssonChoose.forEach(element => {
-      countall += element.Questions.length
-    });
-    return countall;
-  }
+  return this.assayStore.checkedLessons.map((x) => ({
+    Id: x.Id,
+    Name: x.Name,
+    Questions: x.Questions.filter(x => !this.filterHardness.length || this.filterHardness.includes(x.LookupId_QuestionHardnessType))
+  }))
+}
 
   //#endregion
 
   //#region ### methods ###
 
   filterHadrnessAction() {
-    this.assayStore.checkedLessons.forEach((element, index) => {
-      // this.lessonsCurrent[index].Questions = element.Questions.filter(x => this.filterHardness.includes(x.LookupId_QuestionHardnessType));
-      console.log(this.filterHardness);
-      console.log(this.filterHardness.includes(11));
-    });
+    // this.assayStore.checkedLessons.forEach((element, index) => {
+    //   // this.lessonsCurrent[index].Questions = element.Questions.filter(x => this.filterHardness.includes(x.LookupId_QuestionHardnessType));
+    //   console.log(this.filterHardness);
+    //   console.log(this.filterHardness.includes(11));
+    // });
   }
 
   goToTopicTab() {
@@ -458,6 +460,7 @@ export default class AssayVue extends Vue {
 
   goToNextPage()
   {
+
     this.assayStore.submitPreCreate();
   }
 
@@ -471,7 +474,6 @@ export default class AssayVue extends Vue {
 
   showModal0student() {
     //this.userStore.resetCreate();
-
     this.assayStore.OPEN_MODAL_0STUDENT(true);
   }
 
@@ -482,25 +484,95 @@ export default class AssayVue extends Vue {
     this.assayStore.OPEN_MODAL_1LESSON(true);
   }
 
-  showQuestionAnswer()
+  showQuestionAnswer(question : any)
   {
+      this.questionAnswerStore.getByQuestionId(question.Id).then(
+      () => {
+          if(question.IsShowAnswer)
+          {
+              question.IsShowAnswer=false;
+              
+          }
+          else{
+              question.IsShowAnswer=true;
 
+            question.QuestionAnswerPath = this.questionAnswerStore.questionAnswer.QuestionAnswerPicturePath;
+          }
+      }
+
+      );
+     
   }
 
+
+  get showGreen()
+  {
+    return (lessonId :number , questionId: number ): boolean =>{
+           var x = this.assayCreate.Lessons.find(x => x.Id === lessonId) 
+          if(x)
+          {
+            var y = x.Questions.find(z => z.Id === questionId)
+            if(y)
+              return false;
+            
+          }
+          return true;
+    }
+    
+  }
   AddQuestion(lessonId :number , question )
   {
     var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
     if(x)
       if(!x.Questions.find( y => y.Id === question.Id))
+      {
         x.Questions.push(question);
 
-      console.log(this.assayCreate.Lessons);
+         var data : IMessageResult = {
+        MessageType : 1 ,
+        Message : "سوال  "+ question.Id + "  اضافه شد "
+
+      }
+      this.assayStore.notify( {vm:this,data:data});
+      }
+
+  }
+
+    DeleteQuestion(lessonId :number , question )
+  {
+    var x = this.assayCreate.Lessons.find(x => x.Id === lessonId)
+    if(x)
+      if(x.Questions.find( y => y.Id === question.Id))
+      {
+        x.Questions.splice(x.Questions.findIndex( y => y.Id === question.Id),1);
+
+         var data : IMessageResult = {
+        MessageType : 2 ,
+        Message : "سوال  "+ question.Id + "  حذف شد "
+
+      }
+      this.assayStore.notify( {vm:this,data:data});
+      }
+
   }
 
   showModal2topic() {
     //this.userStore.resetCreate();
 
     this.assayStore.OPEN_MODAL_2TOPIC(true);
+  }
+
+   showModal4preview() {
+    //this.userStore.resetCreate();
+
+    this.assayStore.OPEN_MODAL_4PREVIEWQUESTION(true);
+  }
+
+  startNew()
+  {
+    this.assayCreate.Lessons = [];
+    this.assayStore._lessonList =[];
+
   }
   //#endregion
 

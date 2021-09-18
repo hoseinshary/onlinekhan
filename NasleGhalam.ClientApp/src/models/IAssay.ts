@@ -104,7 +104,6 @@ export  default class AssayCreate {
   TwoPageInOne: boolean;
 
   Lessons: Array<AssayLesson>;
-  IsDetailTopic : boolean;
   Page : number;
 
   /**
@@ -127,7 +126,6 @@ export  default class AssayCreate {
     this.TwoPageInOne = false;
   
     this.Lessons = [];
-    this.IsDetailTopic = false;
     this.Page = 1;
   }
 }

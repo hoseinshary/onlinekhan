@@ -41,7 +41,7 @@ namespace NasleGhalam.ViewModels.Question
         public int UserId { get; set; }
 
         public bool IsActive { get; set; }
-        
+        public bool IsShowAnswer { get; set; }
         public bool IsHybrid { get; set; }
 
         public int AnswerNumber { get; set; }

@@ -16,13 +16,32 @@
     </template>
 
     <slot>
-     <section class="row col-md-12">
-    <div class="col-md-12 shadow-1 q-ma-sm q-pa-sm">
+    <div class="col-12 ">
+     
+      
+      <q-btn color="primary" class="float-right" @click="goToTopicTab">
+        سوالات آزمون
+        <q-icon name="arrow_back" />
+      </q-btn>
+    </div>
+       <q-tabs v-model="selectedTab" class="bg-white corner-around col-md-12 " inverted animated color="indigo-8"  >
+
+                  
+        <q-tab default v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name" slot="title" :label="lesson.Name" class="bg-yellow-2"  />
+                  
+        <q-tab-pane v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name">
+          <section class="row col-md-12">
+      <div class="col-md-12 shadow-1 q-ma-sm q-pa-sm">
+         جابجایی ترتیب دروس 
+         <q-btn size="md" round dense color="secondary" icon="arrow_forward_ios" @click="upList(lesson)" class="q-mr-xs" />
+         <q-btn size="md" round dense color="tertiary" icon="arrow_back_ios" @click="downList(lesson)" class="q-mr-sm" />
+         <br/>
+         <br/>
       <!-- <q-checkbox label="سوال تصادفی" v-model="assayCreate.RandomQuestion" />
       <br /> -->
       <q-checkbox
         label="نمایش جزئیات تعداد سوالات در هر مبحث"
-        v-model="assayCreate.IsDetailTopic"
+        v-model="assayStore.IsDetailTopic"
         @input="topicWithDetail()"
       />
       <!-- <div class="row">
@@ -32,7 +51,7 @@
 
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-tree
-        :nodes="topicStore.treeDataByLessonIds(lessonIds)"
+        :nodes="topicStore.treeDataByLessonId(lesson.Id)"
         ref="tree"
         class="q-pt-lg"
         color="primary"
@@ -42,18 +61,18 @@
       >
         <div slot="header-custom" slot-scope="prop">
           <!-- <div class="col"> -->
+          
             <template v-if="prop.node.ParentTopicId == null"
-              >({{ getLesson(prop.node.lessonId).CountOfQuestions }}) سوال از
-              درس ({{ getLesson(prop.node.lessonId).Name }})</template
+              >({{ getLesson(lesson.Id).CountOfQuestions }}) سوال از
+              درس ({{ getLesson(lesson.Id).Name }})</template
             >
             <template v-else>{{ prop.node.label }}</template>
           <!-- </div> -->
           <!-- <div class="col"> -->
             <template>
+              
               <div
-                v-if="assayCreate.IsDetailTopic && numberOfQuestionReport.LessonReports.find(
-                        (x) => x.Id === prop.node.lessonId
-                      ).TopicReports.find(y=> y.ID === prop.node.Id) "
+                v-if="assayStore.IsDetailTopic  "
                 class="col-md-12 row"
                 style="color: #ada8a7 ; font-size: 13px"
               >
@@ -64,7 +83,7 @@
                 
                 <div class="">
                   <label> تعداد سوال جدید:</label>
-                    {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions}}
+                    {{getTopicDetailForTree(lesson.Id , prop.node.Id).NumberOfNewQuestions}}
                 </div>
                 &nbsp;
                 &nbsp;
@@ -72,7 +91,7 @@
                 
                 <div class="">
                   <label>تعداد سوال تکلیف:</label>
-                    {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions}} 
+                    {{getTopicDetailForTree(lesson.Id , prop.node.Id).NumberOfHomeworkQuestions}} 
 
                 </div>
                 &nbsp;
@@ -81,7 +100,7 @@
                
                 <div class="">
                   <label>تعداد سوال آزمون قبلی:</label>
-                  {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions}}
+                  {{getTopicDetailForTree(lesson.Id , prop.node.Id).NumberOfAssayQuestions}}
                 </div>
                 &nbsp;
                 &nbsp;
@@ -89,7 +108,7 @@
                 
                 <div class="">
                   <label> تعداد کل سوالات : </label>
-                  {{numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfNewQuestions+numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfHomeworkQuestions+numberOfQuestionReport.LessonReports.find((x) => x.Id === prop.node.lessonId).TopicReports.find(y=> y.ID === prop.node.Id).NumberOfAssayQuestions }}
+                  {{getTopicDetailForTree(lesson.Id , prop.node.Id).NumberOfNewQuestions+getTopicDetailForTree(lesson.Id , prop.node.Id).NumberOfHomeworkQuestions+getTopicDetailForTree(lesson.Id , prop.node.Id).NumberOfAssayQuestions }}
                 </div>
                 <!-- </section> -->
               </div>
@@ -97,14 +116,14 @@
           <!-- </div> -->
         </div>
       </q-tree>
+
     </div>
-    <div class="col-12">
-      <q-btn color="primary" class="float-right" @click="goToTopicTab">
-        سوالات آزمون
-        <q-icon name="arrow_back" />
-      </q-btn>
-    </div>
+    
   </section>
+        </q-tab-pane>
+       </q-tabs>
+
+     
     </slot>
 
     <template slot="footer">
@@ -123,7 +142,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
-import { AssayTopic, AssayNumberOfQuestionReportForTopic } from "src/models/IAssay";
+import { AssayTopic, AssayNumberOfQuestionReportForTopic, AssayLesson } from "src/models/IAssay";
 
 @Component({
   components: {}
@@ -131,6 +150,7 @@ import { AssayTopic, AssayNumberOfQuestionReportForTopic } from "src/models/IAss
 export default class TopicTabVue extends Vue {
   //#region ### data ###
   assayStore = vxm.assayStore;
+  
   topicStore = vxm.topicStore;
   studentStore = vxm.studentStore;
   assayCreate = vxm.assayStore.assayCreate;
@@ -138,23 +158,27 @@ export default class TopicTabVue extends Vue {
   topicTreeData = [];
   numberOfQuestionReport: AssayNumberOfQuestionReportForTopic = new AssayNumberOfQuestionReportForTopic();
 
+  selectedTab="";
   //#endregion
 
   //#region ### computed ###
-  get checkedLessons() {
-    return this.assayCreate.Lessons.filter(x => x.Checked == true);
-  }
-  get lessonIds() {
-    return this.checkedLessons.map(x => x.Id);
-  }
+
+ get lessonsCurrent() {
+
+  return this.assayCreate.Lessons.map((x) => ({
+    Id: x.Id,
+    Name: x.Name
+    
+  }))
+}
   get getLesson() {
     return lessonId => {
-      return this.checkedLessons.find(x => x.Id == lessonId);
+      return this.assayStore.checkedLessons.find(x => x.Id == lessonId);
     };
   }
   get getTopic() {
     return (lessonId, topicId): AssayTopic | null => {
-      var lesson = this.checkedLessons.find(x => x.Id == lessonId);
+      var lesson = this.assayStore.checkedLessons.find(x => x.Id == lessonId);
       if (!lesson) return null;
       var assayTopic = lesson.Topics.find(x => x.Id == topicId);
       if (assayTopic) return assayTopic;
@@ -174,12 +198,43 @@ export default class TopicTabVue extends Vue {
       }
     };
   }
+
+
+  upList(lesson : AssayLesson )
+  {
+    console.log(lesson);  
+
+console.log(this.assayCreate.Lessons);
+    var currentLesson = this.assayCreate.Lessons.findIndex(x => x.Id === lesson.Id);
+    if(currentLesson)
+    {
+      this.assayCreate.Lessons.splice(currentLesson-1,0,this.assayCreate.Lessons.splice(currentLesson,1)[0]);
+      
+    }
+console.log(this.assayCreate.Lessons);
+  }
+downList(lesson : AssayLesson )
+  {
+    console.log( lesson);
+    console.log(this.assayCreate.Lessons);
+    //
+    var currentLesson = this.assayCreate.Lessons.findIndex(x => x.Id === lesson.Id);
+    if(currentLesson >= 0)
+    {
+      
+       //   console.log(this.assayCreate.Lessons.splice(currentLesson,1)[0]);
+
+      this.assayCreate.Lessons.splice(currentLesson+1,0,this.assayCreate.Lessons.splice(currentLesson,1)[0]);
+    }
+    console.log(this.assayCreate.Lessons);
+  }
   //#endregion
 
   //#region ### watch ###
   @Watch("lessonIds")
   lessonIdsChanged(newVal) {
-    this.topicStore.fillList();
+    console.log("lesson ids change");
+    this.topicStore.fillList();  
   }
 
   @Watch("topicLeafTicked")
@@ -206,6 +261,7 @@ export default class TopicTabVue extends Vue {
 
   //#region ### methods ###
   goToTopicTab() {
+
     this.assayStore.submitPreCreate().then(() => {
       this.$emit("changeTab", "questionTab");
     })
@@ -221,8 +277,8 @@ export default class TopicTabVue extends Vue {
   }
 
   topicWithDetail() {
-    if (this.assayCreate.IsDetailTopic) {
-      this.studentStore.numberOfQuestionReportForTopic({ lessonIds: this.lessonIds, studentId: 9 }).then(d => {
+    if (this.assayStore.IsDetailTopic) {
+      this.studentStore.numberOfQuestionReportForTopic({ lessonIds: this.assayStore.lessonIds, studentId: 9 }).then(d => {
         this.numberOfQuestionReport = d;
       });
     }
@@ -231,7 +287,9 @@ export default class TopicTabVue extends Vue {
 
   //#region ### hooks ###
   created() {
-    this.lessonIdsChanged(this.lessonIds);
+    
+        this.topicStore.fillList();
+
   }
   //#endregion
 }

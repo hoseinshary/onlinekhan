@@ -72,7 +72,7 @@ export default class QuestionVue extends Vue {
 
   //#region ### hooks ###
   created() {
-    
+        
     this.reportStore.getAllQuestionOfEachLesson();
   }
 

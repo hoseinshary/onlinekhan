@@ -57,10 +57,10 @@ namespace NasleGhalam.ServiceLayer.Services
                     .AsEnumerable()
                     .Select(Mapper.Map<StudentMajorlistViewModel>)
                     .ToList();
-                foreach (var item in std)
-                {
-                    item.Majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == item.Id).Include(x => x.Major).AsNoTracking().AsEnumerable().OrderBy(x => x.Priority).Select(x => x.Major).ToList().Select(Mapper.Map<MajorViewModel>).ToList();
-                }
+                //foreach (var item in std)
+                //{
+                //    item.Majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == item.Id).Include(x => x.Major).AsNoTracking().AsEnumerable().OrderBy(x => x.Priority).Select(x => x.Major).ToList().Select(Mapper.Map<MajorViewModel>).ToList();
+                //}
                 return std;
             }
             else
@@ -72,10 +72,10 @@ namespace NasleGhalam.ServiceLayer.Services
                     .AsEnumerable()
                     .Select(Mapper.Map<StudentMajorlistViewModel>)
                     .ToList();
-                foreach (var item in std)
-                {
-                    item.Majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == item.Id).Include(x => x.Major).AsNoTracking().AsEnumerable().OrderBy(x => x.Priority).Select(x => x.Major).ToList().Select(Mapper.Map<MajorViewModel>).ToList();
-                }
+                //foreach (var item in std)
+                //{
+                //    item.Majors = _studentmajorlist_major.Where(x => x.StudentMajorListId == item.Id).Include(x => x.Major).AsNoTracking().AsEnumerable().OrderBy(x => x.Priority).Select(x => x.Major).ToList().Select(Mapper.Map<MajorViewModel>).ToList();
+                //}
                 return std;
             }
         }

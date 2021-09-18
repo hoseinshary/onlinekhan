@@ -33,7 +33,7 @@
       <q-btn color="primary" icon="search" label="جستجو" @click="fillGrid(searchfilter)" />
  
   </div>
-  <div class="col-md-12 row">
+  <div class="col-md-12 row" v-if="!getLargList">
 <div class="col-md-7 q-ml-sm">
    
     <base-table :grid-data="studentMajorListStore.gridDataMajor" :columns="MajorListGridColumn" hasIndex>
@@ -44,15 +44,23 @@
     </base-table>
   </div>
   <div class="com-md-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
-  <div class="col-md-4">
+  <div class="col-md-4" >
     <div class=""><br/> </div>
     <div class=""> <br/></div>
     <base-input :model="$v.studentMajorList.Title" class="col-md-6"/>
         <div class=""> <br/></div>
 <label class="text-red">تعداد رشته های انتخاب شده : {{selectedMajors.length}}</label>
+
+<q-btn class="q-ma-sm btn float-right" @click="changeLargList">
+          بزرگ نمایی              
+
+  </q-btn>
         <div class=""> <br/></div>
-<q-list highlight >
-  <q-list-header>لیست رشته های انتخاب شده</q-list-header>
+<q-list highlight  >
+  <q-list-header>لیست رشته های انتخاب شده  
+    
+    
+      </q-list-header>
 
   <q-item v-for="major in selectedMajors" :key="major.Id" >
     <q-item-side>
@@ -77,6 +85,74 @@
 </q-list>
 
 
+  </div>
+
+ 
+  </div>
+<div class="col-md-12 row" v-else>
+<div class="col-md-12 q-ml-sm">
+   
+    <base-table :grid-data="studentMajorListStore.gridDataMajor" :columns="MajorListGridColumn" hasIndex>
+      <template slot="Id" slot-scope="data">
+        <q-btn round color="secondary" icon="add" @click="addToTable(data.row.Id)"/>
+
+      </template>
+    </base-table>
+  </div>
+  <div class="col-md-12" >
+    <div class=""><br/> </div>
+    <div class=""> <br/></div>
+    <base-input :model="$v.studentMajorList.Title" class="col-md-6"/>
+        <div class=""> <br/></div>
+<label class="text-red">تعداد رشته های انتخاب شده : {{selectedMajors.length}}</label>
+<q-btn class="q-ma-sm btn float-right" @click="changeLargList">
+          بزرگ نمایی              
+
+  </q-btn>
+ 
+        <div class=""> <br/></div>
+<q-list highlight  >
+  <q-list-header>لیست رشته های انتخاب شده  
+    
+    
+      </q-list-header>
+
+  <q-item v-for="major in selectedMajors" :key="major.Id" >
+    <q-item-side>
+      {{selectedMajors.indexOf(major)+1}}
+    </q-item-side>
+            <q-item-main :label="major.Apply" />
+
+    <q-item-main :label="major.Course" />
+    <q-item-main :label="major.Code.toString()" />
+    <q-item-main :label="major.MajorTitle" />
+    <q-item-main :label="major.University" />
+    <q-item-main :label="major.AdmissionFirst.toString()" />
+    <q-item-main :label="major.AdmissionSecond.toString()" />
+    <q-item-main :label="major.Man" />
+    <q-item-main :label="major.Woman" />
+
+
+    <q-item-main :label="major.Description" />
+
+
+        <q-item-side right>
+        
+              <q-btn size="sm" round dense color="secondary" icon="expand_less" @click="upList(major)" class="q-mr-xs" />
+              <q-btn size="sm" round dense color="tertiary" icon="expand_more" @click="downList(major)" class="q-mr-sm" />
+          </q-item-side>
+    <q-item-side right>
+      
+    <q-btn round color="negative" icon="remove" @click="deleteFromTable(major.Id)"/>
+    </q-item-side>
+  </q-item>
+ 
+  
+ 
+</q-list>
+
+
+
 
     <!-- <q-table
     
@@ -86,8 +162,9 @@
     row-key="Id"
   /> -->
   </div>
-  </div>
-  
+   
+    
+     </div>
    
   </base-modal-edit>
 </template>
@@ -99,6 +176,8 @@ import { studentMajorListValidations } from "src/validations/StudentMajorListVal
 import { Field ,HistoryAssay } from "src/utilities/enumeration";
 import util from "src/utilities";
 import { Major } from "src/models/IStudentMajorList";
+import IMessageResult from "src/models/IMessageResult";
+
 
 
 
@@ -113,10 +192,14 @@ export default class StudentMajorListEditVue extends Vue {
   studentMajorList = vxm.studentMajorListStore.studentMajorList;
 
    searchfilter ={ fieldFilter : Field["تجربی"], nameFilter : "" , history:HistoryAssay["با آزمون"]};
-
+  largeList :boolean = false;
 
 
   MajorListGridColumn = [
+     {
+      title: "نحوه پذیرش",
+      data: "Apply"
+    },
     {
       title: "دوره",
       data: "Course"
@@ -154,6 +237,11 @@ export default class StudentMajorListEditVue extends Vue {
       data: "University",
             searchable: true,
             sortable:true
+    },
+    {
+      title: "توضیحات",
+      data: "Description"
+            
     },
     {
       title: "عملیات",
@@ -198,6 +286,11 @@ get selectedMajors()
   return this.studentMajorList.Majors;
 }
 
+get getLargList()
+{
+  return this.largeList;
+}
+
 get fieldDdl() {
     return util.enumToDdl(Field);
   }
@@ -220,7 +313,24 @@ get fieldDdl() {
     if(tempMajor && !this.studentMajorList.Majors.find(x => x.Id === Id))
     {
       
-      this.studentMajorList.Majors.push(tempMajor);    
+        this.studentMajorList.Majors.push(tempMajor);    
+
+        var data : IMessageResult = {
+        MessageType : 1 ,
+        Message : "به لیست اضافه شد "
+
+      }
+      this.studentMajorListStore.notify( {vm:this,data:data});
+    }
+    else
+    {
+
+        var data : IMessageResult = {
+        MessageType : 2 ,
+        Message : "رشته تکراری  "
+
+      }
+      this.studentMajorListStore.notify( {vm:this,data:data});
     }
     
   }
@@ -233,8 +343,7 @@ get fieldDdl() {
         this.studentMajorList.Majors.splice(currentIndex-1, 0, this.studentMajorList.Majors.splice(currentIndex, 1)[0]);
     }
   }
-
-  downList(major:any)
+downList(major:any)
   {
     var currentIndex = this.studentMajorList.Majors.findIndex(x => x.Id === major.Id);
 
@@ -243,6 +352,15 @@ get fieldDdl() {
         this.studentMajorList.Majors.splice(currentIndex+1, 0, this.studentMajorList.Majors.splice(currentIndex, 1)[0]);
     }
   }
+  changeLargList()
+  {
+    if(this.largeList)
+     this.largeList = false;
+     else
+     this.largeList= true;
+  }
+
+  
 
    deleteFromTable(Id:number)
   {

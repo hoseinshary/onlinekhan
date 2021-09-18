@@ -47,6 +47,9 @@ namespace NasleGhalam.ServiceLayer.Services
             _questionGroupService = questionGroupService;
             _questionUpdateService = questionUpdate;
             _topicService = topicService;
+
+
+
         }
 
         /// <summary>
@@ -468,6 +471,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _questions
                 .Where(current => !current.IsActive)
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
+                .Where(x => x.QuestionJudges.Count >= x.QuestionGroups.FirstOrDefault().Lesson.NumberOfJudges)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionViewModel>)

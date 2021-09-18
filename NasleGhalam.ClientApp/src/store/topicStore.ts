@@ -127,7 +127,6 @@ export class TopicStore extends VuexModule {
   get treeDataByLessonIds() {
     
     return (lessonIds: Array<number>) => {
-      
       var list = this._topicList
         .filter(x => lessonIds.indexOf(x.LessonId) > -1)
         .map(x => ({
@@ -144,7 +143,7 @@ export class TopicStore extends VuexModule {
         "ParentTopicId",
         "displayPriority"
       );
-      return tree;
+      return tree; 
     };
   }
   //#endregion

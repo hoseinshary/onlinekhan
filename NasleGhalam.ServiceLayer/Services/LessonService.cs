@@ -55,7 +55,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<AllQuestionOfEachLessonViewModel> GetAllQuestionOfEachLesson()
         {
            var lessons = _lessons
-                .Where(current =>  current.QuestionGroups.Any(x => x.Questions.Any()))
+                .Where(current =>  current.Topics.Any(x => x.Questions.Any()) || current.QuestionGroups.Any(x => x.Questions.Any()) )
                 .Include(x=> x.Topics)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -84,20 +84,19 @@ namespace NasleGhalam.ServiceLayer.Services
                    .AsEnumerable()
                    .ToList();
 
-               var allQuestionNum = questions1.Concat(questions2).Select(x=>x.Id).Distinct().Count();
+               var allQuestionNum = questions1/*.Concat(questions2)*/.Select(x=>x.Id).Distinct().Count();
 
                var allQuestionTopiced = questions2
-                   .Count(x => x.Topics.Any<Topic>());
+                   .Count();
 
                var allQuestionJudged = questions2
                    .Count(x => x.QuestionJudges.Any<QuestionJudge>());
 
-               var allQuestionJudgedFull = questions2.Where(x => x.Topics.Any<Topic>())
-                   .Count(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges);
+               var allQuestionJudgedFull = questions2.Where(x => x.QuestionJudges.Select(z => z.UserId).Distinct().Count() >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges).Count();
                    
 
-               var allQuestionActived = questions2.Concat(questions2).Where(x => x.IsActive == true).Select(x=>x.Id).Distinct().Count();
-               var allQuestionHybrid = questions1.Concat(questions2).Where(x => x.IsHybrid == true).Select(x => x.Id).Distinct().Count();
+               var allQuestionActived = questions2.Where(x => x.IsActive).Where(x => x.QuestionJudges.Select(z => z.UserId).Distinct().Count() >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges).Count();
+                var allQuestionHybrid = questions2/*.Concat(questions2)*/.Where(x => x.IsHybrid == true).Select(x => x.Id).Distinct().Count();
 
                returnVal.Add( new AllQuestionOfEachLessonViewModel
                {

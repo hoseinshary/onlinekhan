@@ -10,6 +10,10 @@
 
     <template slot="Student.User.Family" slot-scope="data">{{data.row.Student.User.Name + " " +data.row.Student.User.Family }}</template>
       <template slot="Id" slot-scope="data">
+     
+
+        <q-btn class="q-ma-sm" size="sm" round color="purple" icon="print" @click="printList(data.row.Id)"/>
+
         <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
       </template>
@@ -32,6 +36,8 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
+import router from "src/router";
+
 
 @Component({
   components: {
@@ -89,7 +95,10 @@ export default class StudentMajorListVue extends Vue {
       this.studentMajorListStore.OPEN_MODAL_EDIT(true);
     });
   }
-
+ printList(id) {
+    this.studentMajorListStore.getById(id);
+    router.push("/studentMajorList/printMajorList");
+  }
   showModalDelete(id) {
     console.log(id);
     this.studentMajorListStore.getById(id).then(() => {

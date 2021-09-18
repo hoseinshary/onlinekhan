@@ -81,6 +81,7 @@ namespace NasleGhalam.WindowsApp
 
         public async Task<ResponseObject<QuestionViewModel>> QuestionCreate(QuestionCreateWindowsViewModel question)
         {
+            var content = "";
             try
             {
                 _client.Timeout = -1;
@@ -110,11 +111,13 @@ namespace NasleGhalam.WindowsApp
                 //request.AddFile("word", question.FilePath+".docx");
                 //request.AddFile("png", question.FilePath+".png");
                 IRestResponse response = _client.Execute(request);
-                var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<QuestionViewModel>>(response.Content);
+                content = response.Content;
+                var resultObject1 = JsonConvert.DeserializeObject<ResponseObject<QuestionViewModel>>(content);
                 return resultObject1;
             }
             catch (Exception e)
             {
+                LogWriter.LogException(content);
                 LogWriter.LogException(e);
             }
             return new ResponseObject<QuestionViewModel>();

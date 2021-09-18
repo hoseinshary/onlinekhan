@@ -85,6 +85,17 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerReadAccess)]
+        public IHttpActionResult GetByQuestionId(int id)
+        {
+            var questionAnswer = _questionAnswerService.GetByQuestionId(id);
+            if (questionAnswer == null)
+            {
+                return NotFound();
+            }
+            return Ok(questionAnswer);
+        }
+
+        [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerReadAccess)]
         public IHttpActionResult GetById(int id)
         {
             var questionAnswer = _questionAnswerService.GetById(id);

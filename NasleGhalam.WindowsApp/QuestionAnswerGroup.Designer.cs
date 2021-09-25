@@ -48,6 +48,8 @@ namespace NasleGhalam.WindowsApp
             this.textBox_wordfileAnswers = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.column1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.column2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -55,8 +57,6 @@ namespace NasleGhalam.WindowsApp
             this.label4 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.backgroundWorker4 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
@@ -76,7 +76,7 @@ namespace NasleGhalam.WindowsApp
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(928, 472);
+            this.tabPage6.Size = new System.Drawing.Size(956, 472);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "ثبت نهایی جواب";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -121,7 +121,7 @@ namespace NasleGhalam.WindowsApp
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(928, 472);
+            this.tabPage5.Size = new System.Drawing.Size(951, 544);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "پیش نمایش جواب ها";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -139,9 +139,9 @@ namespace NasleGhalam.WindowsApp
             // panel2
             // 
             this.panel2.AutoScroll = true;
-            this.panel2.Location = new System.Drawing.Point(21, 48);
+            this.panel2.Location = new System.Drawing.Point(6, 48);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(900, 489);
+            this.panel2.Size = new System.Drawing.Size(939, 489);
             this.panel2.TabIndex = 2;
             // 
             // tabPage4
@@ -158,7 +158,7 @@ namespace NasleGhalam.WindowsApp
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(928, 472);
+            this.tabPage4.Size = new System.Drawing.Size(951, 472);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "ورود فایل جواب ها";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -251,10 +251,30 @@ namespace NasleGhalam.WindowsApp
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(928, 472);
+            this.tabPage1.Size = new System.Drawing.Size(951, 472);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "ورود فایل سوالات";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(9, 417);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(613, 23);
+            this.button2.TabIndex = 13;
+            this.button2.Text = "وارد کردن جواب گروهی";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(159, 67);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "جستجو";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // listView1
             // 
@@ -314,33 +334,13 @@ namespace NasleGhalam.WindowsApp
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Location = new System.Drawing.Point(12, 1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tabControl1.RightToLeftLayout = true;
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(936, 498);
+            this.tabControl1.Size = new System.Drawing.Size(959, 570);
             this.tabControl1.TabIndex = 1;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(159, 67);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "جستجو";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(9, 417);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(613, 23);
-            this.button2.TabIndex = 13;
-            this.button2.Text = "وارد کردن جواب گروهی";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // backgroundWorker4
             // 
@@ -362,7 +362,7 @@ namespace NasleGhalam.WindowsApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(932, 495);
+            this.ClientSize = new System.Drawing.Size(974, 576);
             this.Controls.Add(this.tabControl1);
             this.Name = "QuestionAnswerGroup";
             this.Text = "QuestionAnswerGroup";

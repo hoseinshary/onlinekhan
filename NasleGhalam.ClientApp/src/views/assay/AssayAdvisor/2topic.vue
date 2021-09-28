@@ -5,6 +5,7 @@
     :show="assayStore.openModal._2topic"
     size="lg"
     @close="assayStore.OPEN_MODAL_2TOPIC(false)"
+    @open="bindLessonsCurrent"
   >
 
 
@@ -27,9 +28,9 @@
        <q-tabs v-model="selectedTab" class="bg-white corner-around col-md-12 " inverted animated color="indigo-8"  >
 
                   
-        <q-tab default v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name" slot="title" :label="lesson.Name" class="bg-yellow-2"  />
+        <q-tab default v-for="lesson in this.assayCreate.Lessons" :key="lesson.Id" :name="lesson.Name" slot="title" :label="lesson.Name" class="bg-yellow-2"  />
                   
-        <q-tab-pane v-for="lesson in lessonsCurrent" :key="lesson.Id" :name="lesson.Name">
+        <q-tab-pane v-for="lesson in this.assayCreate.Lessons" :key="lesson.Id" :name="lesson.Name">
           <section class="row col-md-12">
       <div class="col-md-12 shadow-1 q-ma-sm q-pa-sm">
          جابجایی ترتیب دروس 
@@ -48,16 +49,15 @@
       <q-checkbox v-if="assayCreate.RandomQuestion == true" v-model="checked" label="Checkbox Label" />
     </div> -->
     </div>
-
+      
     <div class="col-12 shadow-1 q-ma-sm q-pa-sm">
       <q-tree
         :nodes="topicStore.treeDataByLessonId(lesson.Id)"
-        ref="tree"
         class="q-pt-lg"
         color="primary"
         node-key="Id"
         tick-strategy="leaf"
-        :ticked.sync="topicLeafTicked"
+        :ticked.sync="lesson.TopicIds"
       >
         <div slot="header-custom" slot-scope="prop">
           <!-- <div class="col"> -->
@@ -154,6 +154,10 @@ export default class TopicTabVue extends Vue {
   topicStore = vxm.topicStore;
   studentStore = vxm.studentStore;
   assayCreate = vxm.assayStore.assayCreate;
+
+
+  lessonsCurrent : Array<any> = []; 
+  allTopicLeafTicked : Array<number> = [];
   topicLeafTicked: Array<number> = [];
   topicTreeData = [];
   numberOfQuestionReport: AssayNumberOfQuestionReportForTopic = new AssayNumberOfQuestionReportForTopic();
@@ -163,14 +167,7 @@ export default class TopicTabVue extends Vue {
 
   //#region ### computed ###
 
- get lessonsCurrent() {
 
-  return this.assayCreate.Lessons.map((x) => ({
-    Id: x.Id,
-    Name: x.Name
-    
-  }))
-}
   get getLesson() {
     return lessonId => {
       return this.assayStore.checkedLessons.find(x => x.Id == lessonId);
@@ -199,34 +196,48 @@ export default class TopicTabVue extends Vue {
     };
   }
 
+bindLessonsCurrent()
+{
+this.lessonsCurrent = this.assayCreate.Lessons.map((x) => ({
+    Id: x.Id,
+    Name: x.Name,
+    TopicIds: [],
+    Topics : []
+    
+  }))
+
+}
 
   upList(lesson : AssayLesson )
   {
-    console.log(lesson);  
-
-console.log(this.assayCreate.Lessons);
     var currentLesson = this.assayCreate.Lessons.findIndex(x => x.Id === lesson.Id);
     if(currentLesson)
     {
       this.assayCreate.Lessons.splice(currentLesson-1,0,this.assayCreate.Lessons.splice(currentLesson,1)[0]);
-      
     }
-console.log(this.assayCreate.Lessons);
+
+    var currentLesson2 = this.assayStore.checkedLessons.findIndex(x => x.Id === lesson.Id)
+    if(currentLesson2)
+    {
+      this.assayStore.checkedLessons.splice(currentLesson2-1,0,this.assayStore.checkedLessons.splice(currentLesson2,1)[0]);
+    }
   }
+
 downList(lesson : AssayLesson )
   {
-    console.log( lesson);
-    console.log(this.assayCreate.Lessons);
-    //
-    var currentLesson = this.assayCreate.Lessons.findIndex(x => x.Id === lesson.Id);
+
+   var currentLesson = this.assayCreate.Lessons.findIndex(x => x.Id === lesson.Id);
     if(currentLesson >= 0)
     {
-      
-       //   console.log(this.assayCreate.Lessons.splice(currentLesson,1)[0]);
-
       this.assayCreate.Lessons.splice(currentLesson+1,0,this.assayCreate.Lessons.splice(currentLesson,1)[0]);
     }
-    console.log(this.assayCreate.Lessons);
+
+       var currentLesson2 = this.assayStore.checkedLessons.findIndex(x => x.Id === lesson.Id)
+    if(currentLesson2 >= 0)
+    {
+      this.assayStore.checkedLessons.splice(currentLesson2+1,0,this.assayStore.checkedLessons.splice(currentLesson2,1)[0]);
+    }
+    
   }
   //#endregion
 
@@ -240,6 +251,7 @@ downList(lesson : AssayLesson )
   @Watch("topicLeafTicked")
   topicLeafTickedChanged(newVal, oldVal) {
     var getNodeByKey = this.$refs["tree"]["getNodeByKey"];
+    debugger;
     newVal.forEach(topicId => {
       var node = getNodeByKey(topicId);
       var topic = this.getTopic(node.lessonId, node.Id);

@@ -10,6 +10,8 @@ namespace NasleGhalam.ViewModels.Assay
 
         public string  Name { get; set; }
 
+        public IEnumerable<int> TopicIds { get; set; }
+
         public IEnumerable<TopicAssayViewModel> Topics { get; set; }
 
         public IEnumerable<QuestionViewModel> Questions { get; set; }

@@ -18,7 +18,7 @@ import IAssay from "src/models/IAssay";
 
 @Module({ namespacedPath: "assayStore/" })
 export class AssayStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean ; _4previewQuestion : boolean };
+  openModal: { create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean ; _3assayVue : boolean ; _4previewQuestion : boolean };
   assayCreate: AssayCreate;
   private _assayList: Array<IAssay>;
 
@@ -30,6 +30,7 @@ export class AssayStore extends VuexModule {
   private _0studentVue: Vue;
   private _1lessonVue: Vue;
   private _2topicVue: Vue;
+  private _3assayVue : Vue;
   private _4previewQuestionVue: Vue;
 
 
@@ -51,6 +52,7 @@ export class AssayStore extends VuexModule {
       _0student: false,
       _1lesson: false,
       _2topic: false,
+      _3assayVue:false,
       _4previewQuestion : false
     }
   }
@@ -123,6 +125,10 @@ get lessonChooseAllQuestioncount(){
   }
 
   @mutation
+  SET_3ASSAY_VUE(vm: Vue) {
+    this._3assayVue = vm;
+  }
+  @mutation
   SET_4OREVIEWQUESTION_VUE(vm: Vue) {
     this._4previewQuestionVue = vm;
   }
@@ -139,6 +145,10 @@ get lessonChooseAllQuestioncount(){
   @mutation
   OPEN_MODAL_2TOPIC(open: boolean) {
     this.openModal._2topic = open;
+  }
+  @mutation
+  OPEN_MODAL_3ASSAY(open: boolean) {
+    this.openModal._3assayVue = open;
   }
 
   @mutation
@@ -197,12 +207,11 @@ get lessonChooseAllQuestioncount(){
       IsOnline: this.assayCreate.IsOnline,
       RandomOptions: this.assayCreate.RandomOptions,
       RandomQuestion: this.assayCreate.RandomQuestion,
-      Lessons: this._lessonList.filter(x => x.Checked),
+      Lessons: this.assayCreate.Lessons,
       Page : this.assayCreate.Page
     };
-    data.Lessons.forEach(x => {
-      x.Topics = x.Topics.filter(x => x.Checked);
-    });
+    
+    
 
     type TQuestionAssay = { LessonId: number; Questions: Array<IQuestion> };
     

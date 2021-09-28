@@ -1,4 +1,14 @@
 <template>
+
+<bs-modal
+    title="ثبت نهایی آزمون "
+    :show="assayStore.openModal._3assay"
+    size="lg"
+    @close="assayStore.OPEN_MODAL_3ASSAY(false)"
+ 
+  >
+
+
   <section class="row gutter-md">
     <base-input :model="$v.assayCreate.Title" class="col-md-6" />
     <base-input :model="$v.assayCreate.Time" class="col-md-6" />
@@ -84,6 +94,8 @@
       <base-btn-save @click="getAllQuestions" />
     </div>
   </section>
+
+</bs-modal>
 </template>
 
 <script lang="ts">

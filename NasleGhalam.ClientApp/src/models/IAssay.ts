@@ -69,6 +69,7 @@ export class AssayLesson {
     return this.CountOfEasy + this.CountOfMedium + this.CountOfHard;
   }
   Topics: Array<AssayTopic>;
+  TopicIds : Array<number>;
   Questions: Array<IQuestion>;
   /**
    * constructor
@@ -85,6 +86,7 @@ export class AssayLesson {
     this.Questions = [];
     this.HaveWhiteSpace = false;
     this.WhiteSpacePosition = false;
+    this.TopicIds = [];
   }
 }
 export  default class AssayCreate {

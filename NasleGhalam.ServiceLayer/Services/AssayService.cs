@@ -83,7 +83,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     //foreach (var topic in lesson.Topics)
                     //{
                     var q = _questionService.Value.GetAllByTopicIdsForAssay(
-                        lesson.Topics.Select(x => x.Id).ToList(), assayGetQuestionsViewModel.Page,
+                        lesson.TopicIds.ToList(), assayGetQuestionsViewModel.Page,
                         20);
                     if (q.Count >0)
                             lessonItem.Questions.AddRange(q);

@@ -31,7 +31,7 @@
             />
           </div>
           <div class="col-3 q-pa-sm" style="color: red">
-            <q-btn color="primary" class="float-right" @click="goToTopicTab">
+            <q-btn color="primary" class="float-right" @click="showModal3assay">
               ثبت سوال ها
               <q-icon name="arrow_back" />
             </q-btn>
@@ -482,6 +482,12 @@ export default class AssayVue extends Vue {
 
 
     this.assayStore.OPEN_MODAL_1LESSON(true);
+  }
+
+   showModal3assay() {
+
+
+    this.assayStore.OPEN_MODAL_3ASSAY(true);
   }
 
   showQuestionAnswer(question : any)

@@ -364,6 +364,7 @@ timer
         <modal-student></modal-student>
         <modal-lesson></modal-lesson>
         <modal-topic></modal-topic>
+        <modal-assay></modal-assay>
                 <modal-previewQuestion></modal-previewQuestion>
 
   </div>
@@ -393,7 +394,8 @@ import IMessageResult from "src/models/IMessageResult";
    ModalStudent: () => import("./0student.vue"),
     ModalLesson: () => import("./1lesson.vue"),
     ModalTopic: () => import("./2topic.vue"),
-    ModalPreviewQuestion: () => import("./4previewQuestion.vue")
+    ModalPreviewQuestion: () => import("./4previewQuestion.vue"),
+    ModalAssay : () => import("./3assay.vue")
  
   }
 })

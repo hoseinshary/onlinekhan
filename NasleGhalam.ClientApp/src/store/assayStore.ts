@@ -18,7 +18,7 @@ import IAssay from "src/models/IAssay";
 
 @Module({ namespacedPath: "assayStore/" })
 export class AssayStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean ; _3assayVue : boolean ; _4previewQuestion : boolean };
+  openModal: { create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean ; _3assay : boolean ; _4previewQuestion : boolean };
   assayCreate: AssayCreate;
   private _assayList: Array<IAssay>;
 
@@ -52,7 +52,7 @@ export class AssayStore extends VuexModule {
       _0student: false,
       _1lesson: false,
       _2topic: false,
-      _3assayVue:false,
+      _3assay:false,
       _4previewQuestion : false
     }
   }
@@ -148,7 +148,7 @@ get lessonChooseAllQuestioncount(){
   }
   @mutation
   OPEN_MODAL_3ASSAY(open: boolean) {
-    this.openModal._3assayVue = open;
+    this.openModal._3assay = open;
   }
 
   @mutation
@@ -191,9 +191,6 @@ get lessonChooseAllQuestioncount(){
 
   @action()
   async submitPreCreate() {
-
-    
-
     let vm = this._assayVue;
     //if (!(await this.validateForm(vm))) return;
 
@@ -210,12 +207,9 @@ get lessonChooseAllQuestioncount(){
       Lessons: this.assayCreate.Lessons,
       Page : this.assayCreate.Page
     };
-    
-    
 
     type TQuestionAssay = { LessonId: number; Questions: Array<IQuestion> };
     
-
     return axios
       .post(`${baseUrl}/GetAllQuestion`, data)
       .then((response: AxiosResponse<Array<TQuestionAssay>>) => {
@@ -227,6 +221,39 @@ get lessonChooseAllQuestioncount(){
       });
   }
 
+
+  @action()
+  async submitCreate() {
+    let vm = this._assayVue;
+    //if (!(await this.validateForm(vm))) return;
+
+    var data = {
+      Title: this.assayCreate.Title,
+      Time: this.assayCreate.Time,
+      LookupId_Importance: this.assayCreate.LookupId_Importance,
+      LookupId_Type: this.assayCreate.LookupId_Type,
+      LookupId_QuestionType: this.assayCreate.LookupId_QuestionType,
+      IsPublic: this.assayCreate.IsPublic,
+      IsOnline: this.assayCreate.IsOnline,
+      RandomOptions: this.assayCreate.RandomOptions,
+      RandomQuestion: this.assayCreate.RandomQuestion,
+      Lessons: this.assayCreate.Lessons,
+      Page : this.assayCreate.Page
+    };
+
+    type TQuestionAssay = { LessonId: number; Questions: Array<IQuestion> };
+    
+    return axios
+      .post(`${baseUrl}/Create`, data)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+          
+        }
+      });
+  }
   //#endregion
 }
 

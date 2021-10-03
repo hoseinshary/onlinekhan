@@ -8,7 +8,13 @@
  
   >
 
-
+   <template slot="header">
+      <q-toolbar slot="header" color="primary" text-color>
+        <q-toolbar-title>ثبت نهایی آزمون</q-toolbar-title>
+        <q-btn dense icon="close" @click="assayStore.OPEN_MODAL_3ASSAY(false)" />
+      </q-toolbar>
+    </template>
+<slot>
   <section class="row gutter-md">
     <base-input :model="$v.assayCreate.Title" class="col-md-6" />
     <base-input :model="$v.assayCreate.Time" class="col-md-6" />
@@ -91,10 +97,10 @@
     </base-field>
 
     <div class="col-12">
-      <base-btn-save @click="getAllQuestions" />
+      <base-btn-save @click="submitAssay" />
     </div>
   </section>
-
+</slot>
 </bs-modal>
 </template>
 
@@ -134,7 +140,7 @@ export default class AssayTabVue extends Vue {
   //#endregion
 
   //#region ### methods ###
-  getAllQuestions() {
+  submitAssay() {
     this.assayStore.submitPreCreate().then(() => {
       this.$emit("changeTab", "questionTab");
     });

@@ -12,7 +12,7 @@ type TAssay = { assayCreate: AssayCreate; validationGroup: string[] };
 const assayValidations: ValidationRuleset<TAssay> = {
   assayCreate: {
     Title: {
-      displayName: displayName("نام"),
+      displayName: displayName(" نام آزمون"),
       maxLength: maxLength(75),
       required
     },

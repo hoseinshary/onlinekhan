@@ -120,15 +120,21 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Create(AssayCreateViewModel assayViewModel)
         {
             var assay = Mapper.Map<Assay>(assayViewModel);
-            _assays.Add(assay);
+
+
+            
+            
 
             foreach (var lesson in assayViewModel.Lessons)
             {
+                Lesson tempLesson = new Lesson();
+                tempLesson.Id = lesson.Id;
+                assay.Lessons.Add(tempLesson);
                 foreach (var question in lesson.Questions)
                 {
                     assay.AssayQuestions.Add(new AssayQuestion()
                     {
-                        LessonId = lesson.Id,
+                        
                         QuestionId = question.Id,
 
                         //todo: complete
@@ -137,7 +143,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     });
                 }
             }
-
+            _assays.Add(assay);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);

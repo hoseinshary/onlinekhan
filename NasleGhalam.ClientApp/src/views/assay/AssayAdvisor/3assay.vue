@@ -45,12 +45,11 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
       </template>
     </base-field>
-    <base-field class="col-md-4" :model="$v.assayCreate.RandomOptions">
-      <template slot-scope="data">
-        <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
-        <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
-      </template>
-    </base-field>
+     <base-select
+      :model="$v.assayCreate.NumberOfVarient"
+      :options="numberOfVarientDdl"
+      class="col-md-4"
+    />
     <base-select :model="$v.assayCreate.Font" :options="fontDdl" class="col-md-4" />
     <base-input :model="$v.assayCreate.FontSize" class="col-md-4" />
     <base-field class="col-md-4" :model="$v.assayCreate.TwoPageInOne">
@@ -60,7 +59,7 @@
       </template>
     </base-field>
 
-    <base-field class="col-md-6" :model="$v.assayCreate.QuestionsRelocation">
+    <!-- <base-field class="col-md-6" :model="$v.assayCreate.QuestionsRelocation">
       <template slot-scope="data">
         <q-checkbox v-model="data.obj.$model" />
         <q-radio
@@ -76,7 +75,7 @@
           label="در درس"
         />
       </template>
-    </base-field>
+    </base-field> -->
 
     <base-field class="col-md-6" :model="$v.assayCreate.HaveWhiteSpace">
       <template slot-scope="data">
@@ -109,7 +108,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { assayValidations } from "src/validations/assayValidation";
-import { Fonts } from "src/utilities/enumeration";
+import { AssayVarient, Fonts } from "src/utilities/enumeration";
 
 @Component({
   validations: assayValidations
@@ -137,11 +136,15 @@ export default class AssayTabVue extends Vue {
         value: Fonts[x]
       }));
   }
+
+   get numberOfVarientDdl() {
+    return util.enumToDdl2(AssayVarient);
+  }
   //#endregion
 
   //#region ### methods ###
   submitAssay() {
-    this.assayStore.submitPreCreate().then(() => {
+    this.assayStore.submitCreate().then(() => {
       this.$emit("changeTab", "questionTab");
     });
   }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
+using Microsoft.Office.Interop.Word;
 using NasleGhalam.Common;
 using NasleGhalam.DataAccess.Context;
 using NasleGhalam.DomainClasses.Entities;
@@ -122,36 +124,141 @@ namespace NasleGhalam.ServiceLayer.Services
             var assay = Mapper.Map<Assay>(assayViewModel);
 
 
-            
-            
+
+            if (assayViewModel.NumberOfVarient == AssayVarient.A)
+            {
+                assay.File1 = new Guid().ToString();
+            }
+            else
+            {
+
+            }
 
             foreach (var lesson in assayViewModel.Lessons)
             {
                 Lesson tempLesson = new Lesson();
                 tempLesson.Id = lesson.Id;
+                _uow.MarkAsChanged(tempLesson);
                 assay.Lessons.Add(tempLesson);
+                
                 foreach (var question in lesson.Questions)
                 {
-                    assay.AssayQuestions.Add(new AssayQuestion()
+                    if (assayViewModel.NumberOfVarient == AssayVarient.A)
+                    {
+                        assay.QuestionsFile1 += assay.QuestionsFile1 =="" || assay.QuestionsFile1 is null ? question.FileName  : ";" + question.FileName;
+                        assay.QuestionsAnswer1 += assay.QuestionsAnswer1 == ""  || assay.QuestionsAnswer1 is null ?  question.AnswerNumber.ToString() :  ";" + question.AnswerNumber;
+                        assay.AssayQuestions.Add(new AssayQuestion()
+                        {
+                            QuestionId = question.Id,
+                            LessonId = lesson.Id
+                        });
+                    }
+                    else
                     {
                         
-                        QuestionId = question.Id,
-
-                        //todo: complete
-                        AnswerNumber = 0,
-                        File = null
-                    });
+                    }
+                    
                 }
+
             }
             _assays.Add(assay);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            if (serverResult.MessageType == MessageType.Success)
+            {
+                string dir = SitePath.AssayRelPath + assay.File1;
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                // Open a doc file.
+                var app = new Microsoft.Office.Interop.Word.Application();
+                var target = app.Documents.Add(Visible: true);
+
+
+                bool firstTimeFlag = false;
+                foreach (var lesson in assayViewModel.Lessons)
+                {
+                   
+                    if(firstTimeFlag)
+                        addTextToDoc(app, lesson.Name);
+                    foreach (var question in lesson.Questions)
+                    {
+                        var wordFilename = question.QuestionWordPath;
+                        var source = app.Documents.Open(wordFilename, Visible: true);
+                        if (!firstTimeFlag)
+                        {
+                            //تریک درست شدن گزینه ها 
+                            source.ActiveWindow.Selection.WholeStory();
+                            source.ActiveWindow.Selection.Copy();
+                            target.ActiveWindow.Selection.Paste();
+                            target.ActiveWindow.Selection.WholeStory();
+                            target.ActiveWindow.Selection.Delete();
+                            firstTimeFlag = true;
+                            addTextToDoc(app, lesson.Name);
+                        }
+                        source.ActiveWindow.Selection.WholeStory();
+                        source.ActiveWindow.Selection.Copy();
+                        target.ActiveWindow.Selection.Paste();
+
+                        source.Close();
+                    }
+                }
+                target.SaveAs(assay.File1 + ".docx", WdSaveFormat.wdFormatDocument);
+
+                target.SaveAs(assay.File1 + ".pdf", WdSaveFormat.wdFormatPDF);
+                target.Close();
+                app.Quit();
+
+
+            }
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
                 clientResult.Obj = GetById(assay.Id);
 
             return clientResult;
+        }
+
+        public void addTextToDoc(Microsoft.Office.Interop.Word.Application app ,  string text)
+        {
+            Microsoft.Office.Interop.Word.Selection currentSelection = app.Selection;
+
+            // Store the user's current Overtype selection
+            bool userOvertype = app.Options.Overtype;
+
+            // Make sure Overtype is turned off.
+            if (app.Options.Overtype)
+            {
+                app.Options.Overtype = false;
+            }
+
+            // Test to see if selection is an insertion point.
+            if (currentSelection.Type == Microsoft.Office.Interop.Word.WdSelectionType.wdSelectionIP)
+            {
+                currentSelection.TypeText(text);
+                currentSelection.TypeParagraph();
+            }
+            else
+            if (currentSelection.Type == Microsoft.Office.Interop.Word.WdSelectionType.wdSelectionNormal)
+            {
+                // Move to start of selection.
+                if (app.Options.ReplaceSelection)
+                {
+                    object direction = Microsoft.Office.Interop.Word.WdCollapseDirection.wdCollapseStart;
+                    currentSelection.Collapse(ref direction);
+                }
+                currentSelection.TypeText(text);
+                currentSelection.TypeParagraph();
+            }
+            else
+            {
+                // Do nothing.
+            }
+
+            // Restore the user's Overtype selection
+            app.Options.Overtype = userOvertype;
         }
 
         /// <summary>

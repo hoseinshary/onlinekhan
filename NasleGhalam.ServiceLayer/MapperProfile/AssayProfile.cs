@@ -14,6 +14,7 @@ namespace NasleGhalam.ServiceLayer.MapperProfile
             CreateMap<AssayViewModel, Assay>();
             CreateMap<AssayCreateViewModel, Assay>();
 
+
         }
     }
 }

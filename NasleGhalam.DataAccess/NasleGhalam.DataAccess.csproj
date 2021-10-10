@@ -132,6 +132,26 @@
     <Compile Include="Migrations\202110091140428_fixAssayCreate.Designer.cs">
       <DependentUpon>202110091140428_fixAssayCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110100633349_changeAssayQuestionFile.cs" />
+    <Compile Include="Migrations\202110100633349_changeAssayQuestionFile.Designer.cs">
+      <DependentUpon>202110100633349_changeAssayQuestionFile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110100652401_changeAssayQuestionFile2.cs" />
+    <Compile Include="Migrations\202110100652401_changeAssayQuestionFile2.Designer.cs">
+      <DependentUpon>202110100652401_changeAssayQuestionFile2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110100846359_changeAssayVarient.cs" />
+    <Compile Include="Migrations\202110100846359_changeAssayVarient.Designer.cs">
+      <DependentUpon>202110100846359_changeAssayVarient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110100855055_changeAassayQuestionLessonId.cs" />
+    <Compile Include="Migrations\202110100855055_changeAassayQuestionLessonId.Designer.cs">
+      <DependentUpon>202110100855055_changeAassayQuestionLessonId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110101058586_fixAssayLengthField.cs" />
+    <Compile Include="Migrations\202110101058586_fixAssayLengthField.Designer.cs">
+      <DependentUpon>202110101058586_fixAssayLengthField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -213,6 +233,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110091140428_fixAssayCreate.resx">
       <DependentUpon>202110091140428_fixAssayCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110100633349_changeAssayQuestionFile.resx">
+      <DependentUpon>202110100633349_changeAssayQuestionFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110100652401_changeAssayQuestionFile2.resx">
+      <DependentUpon>202110100652401_changeAssayQuestionFile2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110100846359_changeAssayVarient.resx">
+      <DependentUpon>202110100846359_changeAssayVarient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110100855055_changeAassayQuestionLessonId.resx">
+      <DependentUpon>202110100855055_changeAassayQuestionLessonId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110101058586_fixAssayLengthField.resx">
+      <DependentUpon>202110101058586_fixAssayLengthField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

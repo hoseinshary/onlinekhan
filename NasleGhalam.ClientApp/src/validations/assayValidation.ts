@@ -33,6 +33,11 @@ const assayValidations: ValidationRuleset<TAssay> = {
       displayName: displayName("نوع سوالات"),
       requiredDdl: requiredDdl(0)
     },
+    NumberOfVarient: {
+      displayName: displayName("تعداد نسخه های آزمون"),
+      requiredDdl: requiredDdl(0)
+    },
+
     IsPublic: {
       displayName: displayName("قابل اجرا برای همه"),
       required

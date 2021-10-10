@@ -104,7 +104,8 @@ export  default class AssayCreate {
   FontSize: number;
   Font: Fonts;
   TwoPageInOne: boolean;
-
+  NumberOfVarient : number;
+  HaveWhiteSpace : boolean;
   Lessons: Array<AssayLesson>;
   Page : number;
 
@@ -126,7 +127,8 @@ export  default class AssayCreate {
     this.FontSize = 11;
     this.Font = Fonts.BNazanin;
     this.TwoPageInOne = false;
-  
+  this.NumberOfVarient = 1;
+  this.HaveWhiteSpace = false;
     this.Lessons = [];
     this.Page = 1;
   }

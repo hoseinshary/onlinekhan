@@ -15,9 +15,9 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Question Question { get; set; }
 
-        public string File { get; set; }
 
-        public int AnswerNumber { get; set; }
+        public int  LessonId { get; set; }
+
 
       
         

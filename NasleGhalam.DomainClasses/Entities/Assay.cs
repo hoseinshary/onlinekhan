@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using NasleGhalam.Common;
 
 namespace NasleGhalam.DomainClasses.Entities
 {
@@ -13,6 +15,9 @@ namespace NasleGhalam.DomainClasses.Entities
             Packages = new HashSet<Package>();
             AssayAnswerSheets = new HashSet<AssayAnswerSheet>();
             Lessons = new HashSet<Lesson>();
+
+
+
         }
         public int Id { get; set; }
 
@@ -38,10 +43,32 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public DateTime DateTimeCreate { get; set; }
 
+        public AssayVarient NumberOfVarient { get; set; }
+
         public string File1 { get; set; }
         public string File2 { get; set; }
         public string File3 { get; set; }
         public string File4 { get; set; }
+
+        public string QuestionsFile1 { get; set; }
+
+       
+        public string QuestionsFile2 { get; set; }
+       
+        public string QuestionsFile3 { get; set; }
+        
+        public string QuestionsFile4 { get; set; }
+      
+
+        public string QuestionsAnswer1 { get; set; }
+
+       
+        public string QuestionsAnswer2 { get; set; }
+      
+        public string QuestionsAnswer3 { get; set; }
+     
+        public string QuestionsAnswer4 { get; set; }
+      
 
         public ICollection<Lesson> Lessons { get; set; }
 

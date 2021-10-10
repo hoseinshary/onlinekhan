@@ -9,6 +9,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             HasKey(x => x.Id);
             Property(x => x.Title).HasMaxLength(50).IsRequired();
+            Property(x => x.QuestionsFile1).HasColumnType("nvarchar(max)");
+            Property(x => x.QuestionsFile2).HasColumnType("nvarchar(max)");
+            Property(x => x.QuestionsFile3).HasColumnType("nvarchar(max)");
+            Property(x => x.QuestionsFile4).HasColumnType("nvarchar(max)");
+            Property(x => x.QuestionsAnswer1).HasColumnType("nvarchar(max)");
+            Property(x => x.QuestionsAnswer2).HasColumnType("nvarchar(max)");
+            Property(x => x.QuestionsAnswer3).HasColumnType("nvarchar(max)");
+            Property(x => x.QuestionsAnswer4).HasColumnType("nvarchar(max)");
+
 
             HasRequired(x=>x.User)
                 .WithMany(x=>x.Assays)

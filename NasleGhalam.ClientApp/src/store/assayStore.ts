@@ -238,7 +238,8 @@ get lessonChooseAllQuestioncount(){
       RandomOptions: this.assayCreate.RandomOptions,
       RandomQuestion: this.assayCreate.RandomQuestion,
       Lessons: this.assayCreate.Lessons,
-      Page : this.assayCreate.Page
+      Page : this.assayCreate.Page,
+      NumberOfVarient : this.assayCreate.NumberOfVarient
     };
 
     type TQuestionAssay = { LessonId: number; Questions: Array<IQuestion> };

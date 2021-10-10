@@ -346,6 +346,13 @@ function enumToDdl(enumObject: any) {
   }));
 }
 
+function enumToDdl2(enumObject: any) {
+  return enumToArray(enumObject).map(x => ({
+    label: enumObject[x].toString(),
+    value: enumObject[x]
+  }));
+}
+
 /**
  * export data
  */
@@ -367,5 +374,6 @@ export default {
   searchTreeArray,
   treeToList,
   enumToDdl,
+  enumToDdl2,
   convertFileToBase64
 };

@@ -114,6 +114,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
             // Open a doc file.
             var app = new Microsoft.Office.Interop.Word.Application();
+           
 
             var source = app.Documents.Open(wordFilename);
 

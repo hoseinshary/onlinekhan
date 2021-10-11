@@ -148,9 +148,9 @@
     <Compile Include="Migrations\202110100855055_changeAassayQuestionLessonId.Designer.cs">
       <DependentUpon>202110100855055_changeAassayQuestionLessonId.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202110101058586_fixAssayLengthField.cs" />
-    <Compile Include="Migrations\202110101058586_fixAssayLengthField.Designer.cs">
-      <DependentUpon>202110101058586_fixAssayLengthField.cs</DependentUpon>
+    <Compile Include="Migrations\202110111029205_assayStringLegthFix.cs" />
+    <Compile Include="Migrations\202110111029205_assayStringLegthFix.Designer.cs">
+      <DependentUpon>202110111029205_assayStringLegthFix.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -246,8 +246,8 @@
     <EmbeddedResource Include="Migrations\202110100855055_changeAassayQuestionLessonId.resx">
       <DependentUpon>202110100855055_changeAassayQuestionLessonId.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110101058586_fixAssayLengthField.resx">
-      <DependentUpon>202110101058586_fixAssayLengthField.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202110111029205_assayStringLegthFix.resx">
+      <DependentUpon>202110111029205_assayStringLegthFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

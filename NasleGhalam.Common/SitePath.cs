@@ -18,7 +18,7 @@ namespace NasleGhalam.Common
 
         public static string MediaRelPath => "~/Content/Media/";
         public static string DefaultUserProfileRelPath => "~/Content/UserProfile/DefaultProfile.png";
-        public static string AssayRelPath => "~/Content/Assay/";
+        public static string AssayRelPath => "/Content/Assay/";
 
 
         public static string PDFtoPNGRelPath => "~/";

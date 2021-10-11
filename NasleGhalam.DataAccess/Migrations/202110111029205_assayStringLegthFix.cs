@@ -3,7 +3,7 @@ namespace NasleGhalam.DataAccess.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class fixAssayLengthField : DbMigration
+    public partial class assayStringLegthFix : DbMigration
     {
         public override void Up()
         {

@@ -127,20 +127,24 @@ namespace NasleGhalam.ServiceLayer.Services
 
             if (assayViewModel.NumberOfVarient == AssayVarient.A)
             {
-                assay.File1 = new Guid().ToString();
+                assay.File1 = Guid.NewGuid().ToString();
             }
             else
             {
 
             }
 
+            assay.Lessons = new List<Lesson>();
+
             foreach (var lesson in assayViewModel.Lessons)
             {
-                Lesson tempLesson = new Lesson();
-                tempLesson.Id = lesson.Id;
-                _uow.MarkAsChanged(tempLesson);
+                Lesson tempLesson = new Lesson()
+                {
+                    Id = lesson.Id
+                };
+                _uow.MarkAsUnChanged(tempLesson);
                 assay.Lessons.Add(tempLesson);
-                
+
                 foreach (var question in lesson.Questions)
                 {
                     if (assayViewModel.NumberOfVarient == AssayVarient.A)
@@ -166,7 +170,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             if (serverResult.MessageType == MessageType.Success)
             {
-                string dir = SitePath.AssayRelPath + assay.File1;
+                string dir = SitePath.ToAbsolutePath( SitePath.AssayRelPath + assay.File1);
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -174,15 +178,15 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 // Open a doc file.
                 var app = new Microsoft.Office.Interop.Word.Application();
+                app.Visible = true;
                 var target = app.Documents.Add(Visible: true);
 
-
+                int questionNumber = 1;
                 bool firstTimeFlag = false;
                 foreach (var lesson in assayViewModel.Lessons)
                 {
                    
-                    if(firstTimeFlag)
-                        addTextToDoc(app, lesson.Name);
+                  
                     foreach (var question in lesson.Questions)
                     {
                         var wordFilename = question.QuestionWordPath;
@@ -197,17 +201,40 @@ namespace NasleGhalam.ServiceLayer.Services
                             target.ActiveWindow.Selection.Delete();
                             firstTimeFlag = true;
                             addTextToDoc(app, lesson.Name);
+                            
+                            // اضافه کردن عدد اول سوالات 
+                            source.Paragraphs[2].Range.Characters[1].InsertBefore(questionNumber + "- ");
+
                         }
+                        else
+                        {
+                            // اضافه کردن عدد اول سوالات 
+
+                            source.Paragraphs[1].Range.Characters[1].InsertBefore(questionNumber + "- ");
+                            
+                           // source.Paragraphs[1].Range.Text = /*questionNumber + "-" +*/ source.Paragraphs[1].Range.Text;
+                        }
+
+                        for (int i = 1; i <= source.Paragraphs.Count; i++)
+                        {
+                            if(source.Paragraphs[i].Range.Text == "\r")
+                                source.Paragraphs[i].Range.Delete();
+
+                        }
+
+                      
+
                         source.ActiveWindow.Selection.WholeStory();
                         source.ActiveWindow.Selection.Copy();
                         target.ActiveWindow.Selection.Paste();
 
-                        source.Close();
+                        source.Close(WdSaveOptions.wdDoNotSaveChanges);
+                        questionNumber++;
                     }
                 }
-                target.SaveAs(assay.File1 + ".docx", WdSaveFormat.wdFormatDocument);
+                target.SaveAs(dir +"/" +assay.File1 + ".docx", WdSaveFormat.wdFormatXMLDocument);
 
-                target.SaveAs(assay.File1 + ".pdf", WdSaveFormat.wdFormatPDF);
+                target.SaveAs(dir + "/" + assay.File1 + ".pdf", WdSaveFormat.wdFormatPDF);
                 target.Close();
                 app.Quit();
 

@@ -12,7 +12,7 @@ import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
 import { ASSAY_URL as baseUrl } from "src/utilities/site-config";
-import utilities from "src/utilities";
+import util from "src/utilities";
 import IQuestion from "src/models/IQuestion";
 import IAssay from "src/models/IAssay";
 
@@ -23,7 +23,9 @@ export class AssayStore extends VuexModule {
   private _assayList: Array<IAssay>;
 
   _lessonList: Array<AssayLesson>;
+
   IsDetailTopic : boolean;
+  private _modelChanged: boolean = true;
 
   private _indexVue: Vue;
   private _assayVue: Vue;
@@ -68,6 +70,10 @@ export class AssayStore extends VuexModule {
 
   get lessonIds() {
     return this._lessonList.filter(x => x.Checked).map(x => x.Id);
+}
+
+get gridData() {
+  return this._assayList;
 }
 
 get IsShowAnswer()
@@ -155,12 +161,45 @@ get lessonChooseAllQuestioncount(){
   OPEN_MODAL_4PREVIEWQUESTION(open: boolean) {
     this.openModal._4previewQuestion = open;
   }
-
-
+  @mutation
+  private SET_LIST(list: Array<IAssay>) {
+    this._assayList = list;
+  }
+  @mutation
+  private MODEL_CHANGED(changed: boolean) {
+    this._modelChanged = changed;
+  }
+  @mutation
+  OPEN_MODAL_DELETE(open: boolean) {
+    this.openModal.delete = open;
+  }
 
   //#endregion
 
   //#region ### actions ###
+  @action()
+  async fillList() {
+    if (this._modelChanged) {
+      return axios
+        .get(`${baseUrl}/GetAll`)
+        .then((response: AxiosResponse<Array<IAssay>>) => {
+          this.SET_LIST(response.data);
+          this.MODEL_CHANGED(false);
+        });
+    } else {
+      return Promise.resolve(this._assayList);
+    }
+  }
+  @action()
+  async getById(id: number) {
+    return axios
+      .get(`${baseUrl}/GetById/${id}`)
+      .then((response: AxiosResponse<IAssay>) => {
+        util.mapObject(response.data, this.assayCreate);
+      });
+  }
+
+
   @action({ mode: "raw" })
   async validateForm(vm: any) {
     return new Promise(resolve => {

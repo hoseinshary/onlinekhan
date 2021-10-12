@@ -177,9 +177,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
                 // Open a doc file.
+                object missing = System.Reflection.Missing.Value;
+                object readOnly = false;
                 var app = new Microsoft.Office.Interop.Word.Application();
-                app.Visible = true;
-                var target = app.Documents.Add(Visible: true);
+                //app.Visible = true;
+                var target = app.Documents.Add();
 
                 int questionNumber = 1;
                 bool firstTimeFlag = false;
@@ -190,7 +192,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     foreach (var question in lesson.Questions)
                     {
                         var wordFilename = question.QuestionWordPath;
-                        var source = app.Documents.Open(wordFilename, Visible: true);
+                        var source = app.Documents.Open(wordFilename,ref missing, ref readOnly, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing); 
                         if (!firstTimeFlag)
                         {
                             //تریک درست شدن گزینه ها 

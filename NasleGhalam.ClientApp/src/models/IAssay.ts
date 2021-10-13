@@ -90,6 +90,7 @@ export class AssayLesson {
   }
 }
 export  default class AssayCreate {
+  Id: number;
   Title: string;
   Time: number;
   LookupId_Importance: number;
@@ -113,6 +114,7 @@ export  default class AssayCreate {
    * constructor
    */
   constructor() {
+    this.Id = 0;
     this.Title = "";
     this.Time = 0;
     this.LookupId_Importance = 0;

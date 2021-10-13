@@ -45,6 +45,7 @@ export class AssayStore extends VuexModule {
   constructor() {
     super();
     this.assayCreate = new AssayCreate();
+    this._assayList = [];
     this._lessonList = [];
     this.IsDetailTopic = false;
     this.openModal = {
@@ -104,6 +105,13 @@ get lessonChooseAllQuestioncount(){
   //#endregion
 
   //#region ### mutations ###
+  @mutation
+  private DELETE() {
+    let index = this._assayList.findIndex(x => x.Id == this.assayCreate.Id);
+    if (index < 0) return;
+    this._assayList.splice(index, 1);
+  }
+
   @mutation
   SET_INDEX_VUE(vm: Vue) {
     this._indexVue = vm;
@@ -184,6 +192,7 @@ get lessonChooseAllQuestioncount(){
         .get(`${baseUrl}/GetAll`)
         .then((response: AxiosResponse<Array<IAssay>>) => {
           this.SET_LIST(response.data);
+          console.log(this._assayList);
           this.MODEL_CHANGED(false);
         });
     } else {
@@ -259,7 +268,20 @@ get lessonChooseAllQuestioncount(){
         });
       });
   }
-
+  @action()
+  async submitDelete(vm: Vue) {
+    return axios
+      .post(`${baseUrl}/Delete/${this.assayCreate.Id}`)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+        if (data.MessageType == MessageType.Success) {
+          this.DELETE();
+          this.OPEN_MODAL_DELETE(false);
+          this.MODEL_CHANGED(true);
+        }
+      });
+  }
 
   @action()
   async submitCreate() {

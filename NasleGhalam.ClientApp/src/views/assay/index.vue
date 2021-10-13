@@ -10,6 +10,8 @@
       <template slot="Province.Name" slot-scope="data">{{data.row.Province.Name}}</template>
       <template slot="Id" slot-scope="data">
         <!-- <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" /> -->
+
+        <q-btn round @click="printAssay" />
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
       </template>
     </base-table>
@@ -29,6 +31,8 @@ import { assayStore } from "src/store/assayStore";
 
 @Component({
   components: {
+
+      ModalDelete: () => import("./delete.vue")
 
   }
 })
@@ -73,7 +77,10 @@ export default class CityVue extends Vue {
   //#endregion
 
   //#region ### methods ###
- 
+  printAssay(){
+    
+  }
+
 
   showModalDelete(id) {
     this.assayStore.getById(id).then(() => {

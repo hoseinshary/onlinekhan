@@ -11,7 +11,8 @@
       <template slot="Id" slot-scope="data">
         <!-- <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" /> -->
 
-        <q-btn round @click="printAssay" />
+        <q-btn class="q-ma-sm" size="sm" round color="purple" icon="print" @click="printAssay(data.row.Id)"/>
+
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
       </template>
     </base-table>
@@ -77,8 +78,11 @@ export default class CityVue extends Vue {
   //#endregion
 
   //#region ### methods ###
-  printAssay(){
+  printAssay(id){
     
+     this.assayStore.getById(id);
+    // router.push("/studentMajorList/printMajorList");
+  
   }
 
 

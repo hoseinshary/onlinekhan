@@ -18,7 +18,7 @@ import IAssay from "src/models/IAssay";
 
 @Module({ namespacedPath: "assayStore/" })
 export class AssayStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean ; _3assay : boolean ; _4previewQuestion : boolean };
+  openModal: { print:boolean; create: boolean; edit: boolean; delete: boolean; _0student: boolean; _1lesson: boolean; _2topic: boolean ; _3assay : boolean ; _4previewQuestion : boolean };
   assayCreate: AssayCreate;
   private _assayList: Array<IAssay>;
 
@@ -34,6 +34,7 @@ export class AssayStore extends VuexModule {
   private _2topicVue: Vue;
   private _3assayVue : Vue;
   private _4previewQuestionVue: Vue;
+  private _printAssay : Vue;
 
 
 
@@ -56,7 +57,8 @@ export class AssayStore extends VuexModule {
       _1lesson: false,
       _2topic: false,
       _3assay:false,
-      _4previewQuestion : false
+      _4previewQuestion : false,
+      print:false
     }
   }
   //#region ### getters ###
@@ -142,6 +144,12 @@ get lessonChooseAllQuestioncount(){
   SET_3ASSAY_VUE(vm: Vue) {
     this._3assayVue = vm;
   }
+
+  @mutation
+  SET_PRINT_VUE(vm: Vue) {
+    this._printAssay = vm;
+  }
+
   @mutation
   SET_4OREVIEWQUESTION_VUE(vm: Vue) {
     this._4previewQuestionVue = vm;
@@ -163,6 +171,11 @@ get lessonChooseAllQuestioncount(){
   @mutation
   OPEN_MODAL_3ASSAY(open: boolean) {
     this.openModal._3assay = open;
+  }
+
+  @mutation
+  OPEN_MODAL_PRINT(open: boolean) {
+    this.openModal.print = open;
   }
 
   @mutation

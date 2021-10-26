@@ -80,8 +80,9 @@ export default class CityVue extends Vue {
   //#region ### methods ###
   printAssay(id){
     
-     this.assayStore.getById(id);
-    // router.push("/studentMajorList/printMajorList");
+    this.assayStore.getById(id).then(() => {
+      this.assayStore.OPEN_MODAL_PRINT(true);
+    });
   
   }
 

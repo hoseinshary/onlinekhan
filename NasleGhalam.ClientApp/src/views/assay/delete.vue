@@ -6,6 +6,7 @@
     @confirm="confirm"
     @close="assayStore.OPEN_MODAL_DELETE(false)"
   ></base-modal-delete>
+  
 </template>
 
 <script lang="ts">
@@ -15,7 +16,7 @@ import { vxm } from "src/store";
 export default class AssayDeleteVue extends Vue {
   //#region ### data ###
   assayStore = vxm.assayStore;
-  //#endregion
+  //#endregionss
 
   //#region ### methods ###
   confirm() {

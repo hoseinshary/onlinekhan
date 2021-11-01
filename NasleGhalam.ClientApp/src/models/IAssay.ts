@@ -109,6 +109,18 @@ export  default class AssayCreate {
   HaveWhiteSpace : boolean;
   Lessons: Array<AssayLesson>;
   Page : number;
+  File1: string;
+  AssayPdfPath1 : string;
+  AssayWordPath1 : string;
+  File2: string;
+  AssayPdfPath2 : string;
+  AssayWordPath2 : string;
+  File3: string;
+  AssayPdfPath3 : string;
+  AssayWordPath3 : string;
+  File4: string;
+  AssayPdfPath4 : string;
+  AssayWordPath4 : string;
 
   /**
    * constructor
@@ -133,6 +145,18 @@ export  default class AssayCreate {
   this.HaveWhiteSpace = false;
     this.Lessons = [];
     this.Page = 1;
+    this.File1 = "";
+    this.AssayPdfPath1 = "";
+    this.AssayWordPath1 = "";
+    this.File2 = "";
+    this.AssayPdfPath2 = "";
+    this.AssayWordPath2 = "";
+    this.File3 = "";
+    this.AssayPdfPath3 = "";
+    this.AssayWordPath3 = "";
+    this.File4 = "";
+    this.AssayPdfPath4 = "";
+    this.AssayWordPath4 = "";
   }
 }
 

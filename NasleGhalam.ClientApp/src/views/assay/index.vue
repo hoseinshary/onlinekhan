@@ -21,7 +21,10 @@
     <!-- <modal-create v-if="canCreate"></modal-create>
     <modal-edit v-if="canEdit"></modal-edit> -->
     <modal-delete v-if="canDelete"></modal-delete>
+        <modal-print ></modal-print>
+
   </section>
+  
 </template>
 
 <script lang="ts">
@@ -33,8 +36,8 @@ import { assayStore } from "src/store/assayStore";
 @Component({
   components: {
 
-      ModalDelete: () => import("./delete.vue")
-
+      ModalDelete: () => import("./delete.vue"),
+      ModalPrint: () => import("./printAssay.vue")
   }
 })
 export default class CityVue extends Vue {

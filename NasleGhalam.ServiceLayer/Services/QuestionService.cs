@@ -100,7 +100,6 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<AllUsersReporQuestionViewModel> GetAllUsersReport()
         {
 
-
             return _users.Where(x => x.Role.Level == 3).Where(x => x.IsActive == true)
                 .Select(x => new AllUsersReporQuestionViewModel
                 {
@@ -108,6 +107,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     Family = x.Family,
                     NumberOfQuestionAnswerJudged = x.QuestionAnswerJudges.Count,
                     NumberOfQuestionJudged = x.QuestionJudges.Count,
+                    NumberOfQuestionTopiced = x.QuestionsUpdates.Where(current => current.QuestionActivity == QuestionActivity.Topic).Count(),
                     NumberOfSupervisorQuestion = x.SupervisorQuestions.Count,
                     NumberOfWriteQuestion = _questions.Count(y => y.WriterId == x.Id),
                     Department = x.Lessons.FirstOrDefault().LessonDepartments.FirstOrDefault().Name
@@ -1780,7 +1780,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
                 {
-                    QuestionId = serverResult.Id,
+                    QuestionId = question.Id,
                     UserId = questionViewModel.UserId,
                     DateTime = DateTime.Now,
                     QuestionActivity = QuestionActivity.Topic,

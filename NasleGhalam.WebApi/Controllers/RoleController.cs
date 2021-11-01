@@ -25,6 +25,8 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.RoleReadAccess)]
         public IHttpActionResult GetAll()
         {
+            
+
             return Ok(_roleService.GetAll(Request.GetRoleLevel()));
         }
 

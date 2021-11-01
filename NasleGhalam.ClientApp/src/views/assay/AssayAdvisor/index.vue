@@ -31,7 +31,7 @@
             />
           </div>
           <div class="col-3 q-pa-sm" style="color: red">
-            <q-btn color="primary" class="float-right" @click="goToTopicTab">
+            <q-btn color="primary" class="float-right" @click="showModal3assay">
               ثبت سوال ها
               <q-icon name="arrow_back" />
             </q-btn>
@@ -364,6 +364,7 @@ timer
         <modal-student></modal-student>
         <modal-lesson></modal-lesson>
         <modal-topic></modal-topic>
+        <modal-assay></modal-assay>
                 <modal-previewQuestion></modal-previewQuestion>
 
   </div>
@@ -393,7 +394,8 @@ import IMessageResult from "src/models/IMessageResult";
    ModalStudent: () => import("./0student.vue"),
     ModalLesson: () => import("./1lesson.vue"),
     ModalTopic: () => import("./2topic.vue"),
-    ModalPreviewQuestion: () => import("./4previewQuestion.vue")
+    ModalPreviewQuestion: () => import("./4previewQuestion.vue"),
+    ModalAssay : () => import("./3assay.vue")
  
   }
 })
@@ -482,6 +484,12 @@ export default class AssayVue extends Vue {
 
 
     this.assayStore.OPEN_MODAL_1LESSON(true);
+  }
+
+   showModal3assay() {
+
+
+    this.assayStore.OPEN_MODAL_3ASSAY(true);
   }
 
   showQuestionAnswer(question : any)

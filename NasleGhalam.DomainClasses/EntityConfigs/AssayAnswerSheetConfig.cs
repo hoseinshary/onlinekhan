@@ -15,14 +15,11 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .HasForeignKey(x => x.UserId)
                 .WillCascadeOnDelete(false);
 
-            HasRequired(x => x.AssaySchadule)
-                .WithMany(x => x.AssayAnswerSheets)
-                .HasForeignKey(x => x.AssaySchaduleId)
-                .WillCascadeOnDelete(false);
+     
 
-            HasRequired(x => x.AssayQuestion)
+            HasRequired(x => x.Assay)
                 .WithMany(x => x.AssayAnswerSheets)
-                .HasForeignKey(x => x.AssayQuestionId)
+                .HasForeignKey(x => x.AssayId)
                 .WillCascadeOnDelete(false);
 
             

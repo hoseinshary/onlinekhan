@@ -7,13 +7,13 @@ namespace NasleGhalam.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Majorlists : IMigrationMetadata
+    public sealed partial class assayStringLegthFix : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Majorlists));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(assayStringLegthFix));
         
         string IMigrationMetadata.Id
         {
-            get { return "202108071103112_Majorlists"; }
+            get { return "202110111029205_assayStringLegthFix"; }
         }
         
         string IMigrationMetadata.Source

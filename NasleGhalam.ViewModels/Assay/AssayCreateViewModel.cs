@@ -72,6 +72,7 @@ namespace NasleGhalam.ViewModels.Assay
         [Display(Name = "تاریخ ثبت")]
         public DateTime DateTimeCreate => DateTime.Now;
 
+        public AssayVarient NumberOfVarient { get; set; }
 
         [Display(Name = "فایل")]
         public string File { get; set; }

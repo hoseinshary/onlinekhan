@@ -7,13 +7,13 @@ namespace NasleGhalam.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Studentmajorlist : IMigrationMetadata
+    public sealed partial class changeAssayQuestionFile2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Studentmajorlist));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(changeAssayQuestionFile2));
         
         string IMigrationMetadata.Id
         {
-            get { return "202107310835164_Studentmajorlist"; }
+            get { return "202110100652401_changeAssayQuestionFile2"; }
         }
         
         string IMigrationMetadata.Source

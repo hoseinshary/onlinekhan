@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.ModelConfiguration;
+﻿using System;
+using System.Data.Entity.ModelConfiguration;
 using NasleGhalam.DomainClasses.Entities;
 
 namespace NasleGhalam.DomainClasses.EntityConfigs
@@ -9,6 +10,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             HasKey(x => x.Id);
             Property(x => x.Title).HasMaxLength(50).IsRequired();
+            Property(x => x.QuestionsFile1).HasMaxLength(Int32.MaxValue);
+            Property(x => x.QuestionsFile2).HasMaxLength(Int32.MaxValue);
+            Property(x => x.QuestionsFile3).HasMaxLength(Int32.MaxValue);
+            Property(x => x.QuestionsFile4).HasMaxLength(Int32.MaxValue);
+            Property(x => x.QuestionsAnswer1).HasMaxLength(Int32.MaxValue);
+            Property(x => x.QuestionsAnswer2).HasMaxLength(Int32.MaxValue);
+            Property(x => x.QuestionsAnswer3).HasMaxLength(Int32.MaxValue);
+            Property(x => x.QuestionsAnswer4).HasMaxLength(Int32.MaxValue);
+
 
             HasRequired(x=>x.User)
                 .WithMany(x=>x.Assays)
@@ -29,6 +39,19 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
                 .WithMany(x => x.Assay_Type)
                 .HasForeignKey(x => x.LookupId_Type)
                 .WillCascadeOnDelete(false);
+
+            HasMany(x => x.Lessons)
+                .WithMany(x => x.Assays)
+                .Map(config =>
+                {
+                    config.MapLeftKey("AssayId");
+                    config.MapRightKey("LessonId");
+                    config.ToTable("Assays_Lessons");
+
+                });
+
+
+
         }
     }
 }

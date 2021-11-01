@@ -45,8 +45,7 @@ namespace NasleGhalam.ViewModels.Assay
         public DateTime DateTimeCreate { get; set; }
 
 
-        [Display(Name = "")]
-        public string File { get; set; }
+  
 
 
     }

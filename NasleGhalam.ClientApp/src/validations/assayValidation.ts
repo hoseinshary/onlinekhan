@@ -12,7 +12,7 @@ type TAssay = { assayCreate: AssayCreate; validationGroup: string[] };
 const assayValidations: ValidationRuleset<TAssay> = {
   assayCreate: {
     Title: {
-      displayName: displayName("نام"),
+      displayName: displayName(" نام آزمون"),
       maxLength: maxLength(75),
       required
     },
@@ -33,6 +33,11 @@ const assayValidations: ValidationRuleset<TAssay> = {
       displayName: displayName("نوع سوالات"),
       requiredDdl: requiredDdl(0)
     },
+    NumberOfVarient: {
+      displayName: displayName("تعداد نسخه های آزمون"),
+      requiredDdl: requiredDdl(0)
+    },
+
     IsPublic: {
       displayName: displayName("قابل اجرا برای همه"),
       required

@@ -1,24 +1,34 @@
-﻿namespace NasleGhalam.DomainClasses.Entities
+﻿using System;
+using System.Collections.Generic;
+using NasleGhalam.Common;
+
+namespace NasleGhalam.DomainClasses.Entities
 {
     public class AssayAnswerSheet
     {
         public int Id { get; set; }
 
-        public int AssaySchaduleId { get; set; }
+      
 
-        public AssaySchedule AssaySchadule { get; set; }
+        public int AssayId { get; set; }
 
-        public int AssayQuestionId { get; set; }
+        public Assay Assay { get; set; }
 
-        public AssayQuestion AssayQuestion { get; set; }
+
 
         public int UserId { get; set; }
 
         public User User { get; set; }
 
-        public int AnswerTime { get; set; }
+        public AssayVarient AssayVarient { get; set; }
 
-        public int Answer { get; set; }
+        public DateTime AssayTime { get; set; }
+
+        public DateTime DateTime { get; set; }
+
+        public ICollection<int> AnswerTimes { get; set; }
+
+        public ICollection<int> Answers { get; set; }
 
 
 

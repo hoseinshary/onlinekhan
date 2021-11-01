@@ -183,6 +183,14 @@ namespace NasleGhalam.Common
         GradeLevel = 4,
     }
 
+    public enum AssayVarient
+    {
+        A = 1,
+        B = 2,
+        c = 3,
+        d = 4
+    }
+
     public enum DayOfWeak
     {
         [Display(Name = "شنبه")]

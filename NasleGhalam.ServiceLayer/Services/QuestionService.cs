@@ -742,7 +742,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
                     {
-                        QuestionId = serverResult.Id,
+                        QuestionId = question.Id,
                         UserId = questionViewModel.UserId,
                         DateTime = DateTime.Now,
                         QuestionActivity = QuestionActivity.Import,
@@ -833,7 +833,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
                 {
-                    QuestionId = serverResult.Id,
+                    QuestionId = question.Id,
                     UserId = questionViewModel.UserId,
                     DateTime = DateTime.Now,
                     QuestionActivity = QuestionActivity.Import,
@@ -1212,7 +1212,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
                 {
-                    QuestionId = serverResult.Id,
+                    QuestionId = question.Id,
                     UserId = questionViewModel.UserId,
                     DateTime = DateTime.Now,
                     QuestionActivity = QuestionActivity.UpdateAdmin,
@@ -1408,7 +1408,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
                 {
-                    QuestionId = serverResult.Id,
+                    QuestionId = question.Id,
                     UserId = questionViewModel.UserId,
                     DateTime = DateTime.Now,
                     QuestionActivity = QuestionActivity.UpdateImport,
@@ -1589,7 +1589,7 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 _questionUpdateService.Value.Create(new ViewModels.QuestionUpdate.QuestionUpdateViewModel
                 {
-                    QuestionId = serverResult.Id,
+                    QuestionId = question.Id,
                     UserId = questionViewModel.UserId,
                     DateTime = DateTime.Now,
                     QuestionActivity = QuestionActivity.UpdateEditor,

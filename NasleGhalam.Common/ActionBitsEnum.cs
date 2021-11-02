@@ -181,6 +181,13 @@
         StudentMajorListDeleteAccess = 151,
         StudentMajorListUpdateAccess = 152,
 
+        
+
+
+        AssayAnswerSheetReadAccess = 153,
+        AssayAnswerSheetCreateAccess = 154,
+        AssayAnswerSheetDeleteAccess = 155,
+        AssayAnswerSheetUpdateAccess = 156,
 
     }
 }

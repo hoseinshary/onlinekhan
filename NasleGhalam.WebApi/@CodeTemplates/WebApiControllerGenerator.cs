@@ -2,7 +2,7 @@
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
-using NasleGhalam.ViewModels.StudentMajorlist;
+using NasleGhalam.ViewModels.AssayAnswerSheet;
 using NasleGhalam.WebApi.Extentions;
 
 namespace NasleGhalam.WebApi.Controllers
@@ -12,51 +12,51 @@ namespace NasleGhalam.WebApi.Controllers
 	///     name: 
 	///     date: 
 	/// </author>
-	public class StudentMajorlistController : ApiController
+	public class AssayAnswerSheetController : ApiController
 	{
-        private readonly StudentMajorlistService _studentMajorlistService;
-		public StudentMajorlistController(StudentMajorlistService studentMajorlistService)
+        private readonly AssayAnswerSheetService _assayAnswerSheetService;
+		public AssayAnswerSheetController(AssayAnswerSheetService assayAnswerSheetService)
         {
-            _studentMajorlistService = studentMajorlistService;
+            _assayAnswerSheetService = assayAnswerSheetService;
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.StudentMajorlistReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.AssayAnswerSheetReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_studentMajorlistService.GetAll());
+            return Ok(_assayAnswerSheetService.GetAll());
         }
 
-		[HttpGet, CheckUserAccess(ActionBits.StudentMajorlistReadAccess)]
+		[HttpGet, CheckUserAccess(ActionBits.AssayAnswerSheetReadAccess)]
         public IHttpActionResult GetById(int id)
         {
-            var studentMajorlist = _studentMajorlistService.GetById(id);
-            if (studentMajorlist == null)
+            var assayAnswerSheet = _assayAnswerSheetService.GetById(id);
+            if (assayAnswerSheet == null)
             {
                 return NotFound();
             }
-            return Ok(studentMajorlist);
+            return Ok(assayAnswerSheet);
         }
 
 		[HttpPost]
-        [CheckUserAccess(ActionBits.StudentMajorlistCreateAccess)]
+        [CheckUserAccess(ActionBits.AssayAnswerSheetCreateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Create(StudentMajorlistCreateViewModel studentMajorlistViewModel)
+        public IHttpActionResult Create(AssayAnswerSheetCreateViewModel assayAnswerSheetViewModel)
         {
-            return Ok(_studentMajorlistService.Create(studentMajorlistViewModel));
+            return Ok(_assayAnswerSheetService.Create(assayAnswerSheetViewModel));
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.StudentMajorlistUpdateAccess)]
+        [CheckUserAccess(ActionBits.AssayAnswerSheetUpdateAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Update(StudentMajorlistUpdateViewModel studentMajorlistViewModel)
+        public IHttpActionResult Update(AssayAnswerSheetUpdateViewModel assayAnswerSheetViewModel)
         {
-            return Ok(_studentMajorlistService.Update(studentMajorlistViewModel));
+            return Ok(_assayAnswerSheetService.Update(assayAnswerSheetViewModel));
         }
 
-        [HttpPost, CheckUserAccess(ActionBits.StudentMajorlistDeleteAccess)]
+        [HttpPost, CheckUserAccess(ActionBits.AssayAnswerSheetDeleteAccess)]
         public IHttpActionResult Delete(int id)
         {
-            return Ok(_studentMajorlistService.Delete(id));
+            return Ok(_assayAnswerSheetService.Delete(id));
         }
 	}
 }

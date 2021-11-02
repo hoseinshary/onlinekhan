@@ -88,7 +88,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                var allQuestionTopiced = questions1.Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                    .Count();
-                var allQuestionJudged = questions2
+                var allQuestionJudged = questions1
                    .Count(x => x.QuestionJudges.Any<QuestionJudge>());
 
                var allQuestionJudgedFull = questions2.Where(x => x.QuestionJudges.Select(z => z.UserId).Distinct().Count() >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges).Count();

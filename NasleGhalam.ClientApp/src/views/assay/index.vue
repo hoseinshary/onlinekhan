@@ -11,7 +11,13 @@
       <template slot="Id" slot-scope="data">
         <!-- <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" /> -->
 
-        <q-btn class="q-ma-sm" size="sm" round color="purple" icon="print" @click="printAssay(data.row.Id)"/>
+        <q-btn class="q-ma-sm" size="sm" round color="blue" icon="directions_run" @click="runAssay(data.row.Id)">    
+        <q-tooltip>اچرا</q-tooltip>
+        </q-btn>
+        <q-btn class="q-ma-sm" size="sm" round color="purple" icon="print" @click="printAssay(data.row.Id)">
+          <q-tooltip>چاپ</q-tooltip>
+        </q-btn>
+        
 
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
       </template>
@@ -31,6 +37,8 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
+import router from "src/router";
+
 import { assayStore } from "src/store/assayStore";
 
 @Component({
@@ -86,6 +94,15 @@ export default class CityVue extends Vue {
     this.assayStore.getById(id).then(() => {
       this.assayStore.OPEN_MODAL_PRINT(true);
     });
+  
+  }
+
+
+  runAssay(id){
+    
+    this.assayStore.getById(id);
+    router.push("/assay/runAssay");
+
   
   }
 

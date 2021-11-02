@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using NasleGhalam.Common;
 
@@ -70,6 +71,12 @@ namespace NasleGhalam.ViewModels.Assay
         public string AssayPdfPath4 => $"/Api/Assay/GetPdfFile/{File4}".ToFullRelativePath();
 
         public string AssayWordPath4 => $"/Api/Assay/GetWordFile/{File4}".ToFullRelativePath();
+
+
+        public IList<string> QuestionsFile { get; set; }
+
+        public IList<string> QuestionsPath { get; set; }
+
 
 
 

@@ -122,6 +122,7 @@
     <Compile Include="MapperProfile\RoleProfile.cs" />
     <Compile Include="MapperProfile\WriterProfile.cs" />
     <Compile Include="Services\ActionService.cs" />
+    <Compile Include="Services\AssayAnswerSheetService.cs" />
     <Compile Include="Services\AssayService.cs" />
     <Compile Include="Services\AxillaryBookService.cs" />
     <Compile Include="Services\CityService.cs" />

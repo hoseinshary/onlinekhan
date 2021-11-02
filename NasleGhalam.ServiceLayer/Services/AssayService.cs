@@ -36,12 +36,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public AssayViewModel GetById(int id)
         {
-            return _assays
+            var assay = _assays
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<AssayViewModel>)
                 .FirstOrDefault();
+
+            AssayViewModel returnVal = Mapper.Map<AssayViewModel>(assay);
+            returnVal.QuestionsPath = new List<string>();
+            foreach (var x in returnVal.QuestionsFile)
+            {
+                returnVal.QuestionsPath.Add($"/Api/Question/GetPictureFile/{x}".ToFullRelativePath());
+            }
+            return returnVal;
         }
 
 

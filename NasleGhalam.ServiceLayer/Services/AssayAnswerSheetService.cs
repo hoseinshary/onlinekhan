@@ -10,34 +10,37 @@ using NasleGhalam.ViewModels.AssayAnswerSheet;
 
 namespace NasleGhalam.ServiceLayer.Services
 {
-	public class AssayAnswerSheetService
-	{
-		private const string Title = "پاسخ نامه";
+    public class AssayAnswerSheetService
+    {
+        private const string Title = "پاسخ نامه";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<AssayAnswerSheet> _assayAnswerSheets;
-       
-	    public AssayAnswerSheetService(IUnitOfWork uow)
+
+        public AssayAnswerSheetService(IUnitOfWork uow)
         {
             _uow = uow;
             _assayAnswerSheets = uow.Set<AssayAnswerSheet>();
         }
 
-		/// <summary>
+        /// <summary>
         /// گرفتن  پاسخ نامه با آی دی
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public AssayAnswerSheetViewModel GetById(int id)
         {
+            AssayAnswerSheetViewModel a = new AssayAnswerSheetViewModel();
             return _assayAnswerSheets
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<AssayAnswerSheetViewModel>)
                 .FirstOrDefault();
+
+            
         }
 
-		/// <summary>
+        /// <summary>
         /// گرفتن همه پاسخ نامه ها
         /// </summary>
         /// <returns></returns>
@@ -50,7 +53,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .ToList();
         }
 
-		/// <summary>
+        /// <summary>
         /// ثبت پاسخ نامه
         /// </summary>
         /// <param name="assayAnswerSheetViewModel"></param>
@@ -60,7 +63,7 @@ namespace NasleGhalam.ServiceLayer.Services
             var assayAnswerSheet = Mapper.Map<AssayAnswerSheet>(assayAnswerSheetViewModel);
             _assayAnswerSheets.Add(assayAnswerSheet);
 
-			var serverResult = _uow.CommitChanges(CrudType.Create, Title);
+            var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
@@ -69,7 +72,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return clientResult;
         }
 
-		/// <summary>
+        /// <summary>
         /// ویرایش پاسخ نامه
         /// </summary>
         /// <param name="assayAnswerSheetViewModel"></param>
@@ -78,8 +81,8 @@ namespace NasleGhalam.ServiceLayer.Services
         {
             var assayAnswerSheet = Mapper.Map<AssayAnswerSheet>(assayAnswerSheetViewModel);
             _uow.MarkAsChanged(assayAnswerSheet);
-			
-			 var serverResult = _uow.CommitChanges(CrudType.Update, Title);
+
+            var serverResult = _uow.CommitChanges(CrudType.Update, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
@@ -88,14 +91,14 @@ namespace NasleGhalam.ServiceLayer.Services
             return clientResult;
         }
 
-		/// <summary>
+        /// <summary>
         /// حذف پاسخ نامه
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-			var  assayAnswerSheetViewModel = GetById(id);
+            var assayAnswerSheetViewModel = GetById(id);
             if (assayAnswerSheetViewModel == null)
             {
                 return ClientMessageResult.NotFound();
@@ -103,9 +106,9 @@ namespace NasleGhalam.ServiceLayer.Services
 
             var assayAnswerSheet = Mapper.Map<AssayAnswerSheet>(assayAnswerSheetViewModel);
             _uow.MarkAsDeleted(assayAnswerSheet);
-            
-			var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-			return Mapper.Map<ClientMessageResult>(msgRes);
+
+            var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            return Mapper.Map<ClientMessageResult>(msgRes);
         }
-	}
+    }
 }

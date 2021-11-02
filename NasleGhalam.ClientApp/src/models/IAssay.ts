@@ -122,6 +122,8 @@ export  default class AssayCreate {
   AssayPdfPath4 : string;
   AssayWordPath4 : string;
 
+  QuestionsPath:Array<string>;
+
   /**
    * constructor
    */
@@ -157,6 +159,7 @@ export  default class AssayCreate {
     this.File4 = "";
     this.AssayPdfPath4 = "";
     this.AssayWordPath4 = "";
+    this.QuestionsPath = [];
   }
 }
 

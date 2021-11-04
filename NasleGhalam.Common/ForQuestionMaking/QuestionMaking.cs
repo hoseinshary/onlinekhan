@@ -60,6 +60,7 @@ namespace NasleGhalam.Common.ForQuestionMaking
                 if (arrayTemp[i] == ' ' || arrayTemp[i] == '\n' || arrayTemp[i] == '\r')
                 {
                     i++;
+                    continue;
                 }
                 else if (char.IsDigit(arrayTemp[i]))
                 {
@@ -73,6 +74,10 @@ namespace NasleGhalam.Common.ForQuestionMaking
                         var j = 0;
                         while (j < 5 && i < arrayTemp.Length)
                         {
+                            if(arrayTemp[i] == '=')
+                            {
+                                return false;
+                            }
                             i++;
                             j++;
                         }

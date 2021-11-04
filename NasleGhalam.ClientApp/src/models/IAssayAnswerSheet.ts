@@ -1,7 +1,7 @@
 import IAssayCrete from "./IAssay";
 import utilities from "src/utilities";
 import IUser, { DefaultUser } from "./IUser";
-import AssayCreate from "./IAssay";
+
 
 export default interface IAssayAnswerSheet {
   Id: number;
@@ -14,6 +14,9 @@ export default interface IAssayAnswerSheet {
   DateTime: string;
   AnswerTimes:Array<number>;
   Answers:Array<number>;
+  MaybeList:Array<boolean>;
+  AfterList:Array<boolean>;
+  CantList:Array<boolean>;
 
 }
 
@@ -25,6 +28,9 @@ export const DefaultAssayAnswerSheet: IAssayAnswerSheet = {
   AssayTime:"",
   AnswerTimes:[],
   Answers:[],
+  MaybeList:[],
+  AfterList:[],
+  CantList:[],
   DateTime: "",
   // Assay:utilities.cloneObject(),
   User:utilities.cloneObject(DefaultUser)

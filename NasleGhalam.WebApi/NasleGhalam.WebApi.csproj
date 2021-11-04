@@ -176,6 +176,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AssayAnswerSheetController.cs" />
     <Compile Include="Controllers\AssayController.cs" />
     <Compile Include="Controllers\AxillaryBookController.cs" />
     <Compile Include="Controllers\CityController.cs" />

@@ -36,12 +36,19 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public AssayViewModel GetById(int id)
         {
-            return _assays
+            var assay = _assays
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<AssayViewModel>)
                 .FirstOrDefault();
+
+            AssayViewModel returnVal = Mapper.Map<AssayViewModel>(assay);
+            returnVal.QuestionsPath = new List<string>();
+            foreach (var x in returnVal.QuestionsFile)
+            {
+                returnVal.QuestionsPath.Add($"/Api/Question/GetPictureFile/{x}".ToFullRelativePath());
+            }
+            return returnVal;
         }
 
 
@@ -180,15 +187,15 @@ namespace NasleGhalam.ServiceLayer.Services
                 object missing = System.Reflection.Missing.Value;
                 object readOnly = false;
                 var app = new Microsoft.Office.Interop.Word.Application();
-                //app.Visible = true;
+                app.Visible = true;
                 var target = app.Documents.Add();
-
-                int questionNumber = 1;
                 bool firstTimeFlag = false;
+                
+                int questionNumber = 1;
                 foreach (var lesson in assayViewModel.Lessons)
                 {
-                   
-                  
+                    bool firstTimeLesson = false;
+
                     foreach (var question in lesson.Questions)
                     {
                         var wordFilename = question.QuestionWordPath;
@@ -202,11 +209,18 @@ namespace NasleGhalam.ServiceLayer.Services
                             target.ActiveWindow.Selection.WholeStory();
                             target.ActiveWindow.Selection.Delete();
                             firstTimeFlag = true;
-                            addTextToDoc(app, lesson.Name);
                             
+
+                        }
+
+                        if (!firstTimeLesson)
+                        {
+                            addTextToDoc(app, lesson.Name);
+
                             // اضافه کردن عدد اول سوالات 
                             source.Paragraphs[2].Range.Characters[1].InsertBefore(questionNumber + "- ");
 
+                            firstTimeLesson = true;
                         }
                         else
                         {
@@ -217,12 +231,12 @@ namespace NasleGhalam.ServiceLayer.Services
                            // source.Paragraphs[1].Range.Text = /*questionNumber + "-" +*/ source.Paragraphs[1].Range.Text;
                         }
 
-                        for (int i = 1; i <= source.Paragraphs.Count; i++)
-                        {
-                            if(source.Paragraphs[i].Range.Text == "\r")
-                                source.Paragraphs[i].Range.Delete();
+                        //for (int i = 1; i <= source.Paragraphs.Count; i++)
+                        //{
+                        //    if(source.Paragraphs[i].Range.Text == "\r")
+                        //        source.Paragraphs[i].Range.Delete();
 
-                        }
+                        //}
 
                       
 
@@ -316,17 +330,79 @@ namespace NasleGhalam.ServiceLayer.Services
         /// <returns></returns>
         public ClientMessageResult Delete(int id)
         {
-            var assayViewModel = GetById(id);
+            var assayViewModel = _assays
+                .Include(current => current.AssayQuestions)
+                .Include(current => current.Lessons)
+                .FirstOrDefault(current => current.Id == id);
+
             if (assayViewModel == null)
             {
                 return ClientMessageResult.NotFound();
+            }
+
+            var lessons = assayViewModel.Lessons.ToList();
+            foreach (var lesson in lessons)
+            {
+                assayViewModel.Lessons.Remove(lesson);
+            }
+
+            var questions = assayViewModel.AssayQuestions.ToList();
+            foreach (var assayQuestion in questions)
+            {
+                _uow.MarkAsDeleted(assayQuestion);
             }
 
             var assay = Mapper.Map<Assay>(assayViewModel);
             _uow.MarkAsDeleted(assay);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                if (File.Exists(SitePath.GetAssayAbsPath( "\\" + assayViewModel.File1 + "\\" + assayViewModel.File1) + ".docx"))
+                {
+                    File.Delete(SitePath.GetAssayAbsPath("\\" + assayViewModel.File1 + "\\" + assayViewModel.File1) + ".docx");
+                }
+                if (File.Exists(SitePath.GetAssayAbsPath("\\" + assayViewModel.File1 + "\\" + assayViewModel.File1) + ".pdf"))
+                {
+                    File.Delete(SitePath.GetAssayAbsPath("\\" + assayViewModel.File1 + "\\" + assayViewModel.File1) + ".pdf");
+                }
+                if (File.Exists(SitePath.GetAssayAbsPath("\\" + assayViewModel.File2 + "\\" + assayViewModel.File2) + ".docx"))
+                {
+                    File.Delete(SitePath.GetAssayAbsPath("\\" + assayViewModel.File2 + "\\" + assayViewModel.File2) + ".docx");
+                }
+                if (File.Exists(SitePath.GetAssayAbsPath("\\" + assayViewModel.File2 + "\\" + assayViewModel.File2) + ".pdf"))
+                {
+                    File.Delete(SitePath.GetAssayAbsPath("\\" + assayViewModel.File2 + "\\" + assayViewModel.File2) + ".pdf");
+                }
+                if (File.Exists(SitePath.GetAssayAbsPath("\\" + assayViewModel.File3 + "\\" + assayViewModel.File3) + ".docx"))
+                {
+                    File.Delete(SitePath.GetAssayAbsPath("\\" + assayViewModel.File3 + "\\" + assayViewModel.File3) + ".docx");
+                }
+                if (File.Exists(SitePath.GetAssayAbsPath("\\" + assayViewModel.File3 + "\\" + assayViewModel.File3) + ".pdf"))
+                {
+                    File.Delete(SitePath.GetAssayAbsPath("\\" + assayViewModel.File3 + "\\" + assayViewModel.File3) + ".pdf");
+                }
+                if (File.Exists(SitePath.GetAssayAbsPath("\\" + assayViewModel.File4 + "\\" + assayViewModel.File4) + ".docx"))
+                {
+                    File.Delete(SitePath.GetAssayAbsPath("\\" + assayViewModel.File4 + "\\" + assayViewModel.File4) + ".docx");
+                }
+                if (File.Exists(SitePath.GetAssayAbsPath("\\" + assayViewModel.File4 + "\\" + assayViewModel.File4) + ".pdf"))
+                {
+                    File.Delete(SitePath.GetAssayAbsPath("\\" + assayViewModel.File4 + "\\" + assayViewModel.File4) + ".pdf");
+                }
+
+                string dir = SitePath.ToAbsolutePath(SitePath.AssayRelPath + assay.File1);
+                if (Directory.Exists(dir))
+                {
+                    Directory.Delete(dir);
+                }
+            }
+
+            var clientmessage = Mapper.Map<ClientMessageResult>(msgRes);
+            clientmessage.Obj = new {Id = assayViewModel.Id};
+
+            return clientmessage;
         }
 
 

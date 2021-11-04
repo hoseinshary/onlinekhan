@@ -1,4 +1,8 @@
-﻿using System.Web.Http;
+﻿using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
@@ -22,6 +26,60 @@ namespace NasleGhalam.WebApi.Controllers
             _assayService = assayService;
             _logService = logService;
         }
+
+        [HttpGet]
+        //[CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetWordFile(string id)
+        {
+            var stream = new MemoryStream();
+            var directory = id;
+
+            id += ".docx";
+            var filestraem = File.OpenRead(SitePath.GetAssayAbsPath("\\" + directory + "\\" + id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+            filestraem.Dispose();
+            stream.Dispose();
+            return result;
+        }
+
+        [HttpGet]
+        //[CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetPdfFile(string id)
+        {
+            var stream = new MemoryStream();
+            var directory = id;
+            id += ".pdf";
+            var filestraem = File.OpenRead(SitePath.GetAssayAbsPath( "\\" +directory + "\\"  + id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+            filestraem.Dispose();
+            stream.Dispose();
+            return result;
+        }
+
 
         [HttpGet, CheckUserAccess(ActionBits.AssayReadAccess)]
         public IHttpActionResult GetAll()

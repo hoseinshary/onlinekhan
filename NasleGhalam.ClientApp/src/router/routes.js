@@ -218,6 +218,11 @@ export default [
         path: "/StudentMajorList",
         name: "studentMajorList",
         component: () => import(/* webpackChunkName: "program" */"src/views/studentMajorList/index.vue")
+      },
+      {
+        path: "/Assay/runAssay",
+        name: "runAssay",
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/runAssay.vue")
       }
     ]
 

@@ -1,11 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NasleGhalam.ViewModels.QuestionUpdate
+namespace NasleGhalam.ViewModels.AssayAnswerSheet
 {
-	public class QuestionUpdateViewModel
+	public class AssayAnswerSheetViewModel
 	{
 		[Display(Name = "")]
 		public int Id { get; set; }
+
+
+		[Display(Name = "")]
+		public int AssayId { get; set; }
 
 
 		[Display(Name = "")]
@@ -13,19 +17,15 @@ namespace NasleGhalam.ViewModels.QuestionUpdate
 
 
 		[Display(Name = "")]
-		public int QuestionId { get; set; }
+		public AssayVarient AssayVarient { get; set; }
+
+
+		[Display(Name = "")]
+		public DateTime AssayTime { get; set; }
 
 
 		[Display(Name = "")]
 		public DateTime DateTime { get; set; }
-
-
-		[Display(Name = "")]
-		public string Description { get; set; }
-
-
-		[Display(Name = "")]
-		public QuestionActivity QuestionActivity { get; set; }
 
 
 	}

@@ -205,7 +205,7 @@ get lessonChooseAllQuestioncount(){
         .get(`${baseUrl}/GetAll`)
         .then((response: AxiosResponse<Array<IAssay>>) => {
           this.SET_LIST(response.data);
-          console.log(this._assayList);
+          //console.log(this._assayList);
           this.MODEL_CHANGED(false);
         });
     } else {

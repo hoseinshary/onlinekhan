@@ -29,10 +29,10 @@
                   <div class="shadow-1 q-ma-sm gutter-xs  bg-grey-2 corner-around ">
                     
 
-                  <q-radio v-model="answerSheet.Answers[index]" val="1" label="1" left-label @blur="addChoice(1,index)" :key="componentKey++"/>
-                  <q-radio v-model="answerSheet.Answers[index]" val="2" label="2" left-label @blur="addChoice(2,index)" :key="componentKey++"/>
-                  <q-radio v-model="answerSheet.Answers[index]" val="3" label="3" left-label @blur="addChoice(3,index)" :key="componentKey++"/>
-                  <q-radio v-model="answerSheet.Answers[index]" val="4" label="4" left-label @blur="addChoice(4,index)" :key="componentKey++"/>
+                  <q-radio v-model="answerSheet.Answers[index]" val="1" label="1" left-label @blur="addChoice(1,index)"/>
+                  <q-radio v-model="answerSheet.Answers[index]" val="2" label="2" left-label @blur="addChoice(2,index)"/>
+                  <q-radio v-model="answerSheet.Answers[index]" val="3" label="3" left-label @blur="addChoice(3,index)"/>
+                  <q-radio v-model="answerSheet.Answers[index]" val="4" label="4" left-label @blur="addChoice(4,index)"/>
 
                
                 </div>
@@ -125,7 +125,6 @@ export default class AssayAnswerSheetVue extends Vue {
   assayAnswerSheetStore = vxm.assayAnswerSheetStore;
   answerSheet = vxm.assayAnswerSheetStore.assayAnswerSheet;
    
-   componentKey = 0;
   
 
   pageAccess = util.getAccess(this.assayStore.modelName);
@@ -140,14 +139,10 @@ export default class AssayAnswerSheetVue extends Vue {
   //#endregion
 
   //#region ### methods ###
-  
-  forceRerender()
-  {
-    this.componentKey++;
-  }
-  scrollToElement (el) {
 
-    
+
+  scrollToElement (el) {
+   
     var element  = document.getElementById(el);
     if(element != null)
     {
@@ -162,8 +157,7 @@ export default class AssayAnswerSheetVue extends Vue {
   {
      
     this.answerSheet.Answers[index] = "0";
-    this.forceRerender();
-
+    this.$forceUpdate() ;
   }
   submitAnswerSheet()
   {

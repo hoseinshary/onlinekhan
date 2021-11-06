@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using NasleGhalam.Common;
 
@@ -28,6 +29,15 @@ namespace NasleGhalam.ViewModels.AssayAnswerSheet
 
         [Display(Name = "")]
         public DateTime DateTime { get; set; }
+
+        public IList<int> AnswerTimes { get; set; }
+
+        public IList<int> Answers { get; set; }
+
+        public IList<bool> MaybeList { get; set; }
+
+        public IList<bool> AgterfList { get; set; }
+        public IList<bool> CantList { get; set; }
 
 
     }

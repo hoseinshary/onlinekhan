@@ -11,10 +11,7 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
 
             
 
-            HasRequired(x => x.Assay)
-                .WithMany(x => x.AssaySchedules)
-                .HasForeignKey(x => x.AssayId)
-                .WillCascadeOnDelete(false);
+         
 
             
 

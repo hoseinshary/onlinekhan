@@ -23,17 +23,16 @@
                    <q-chip  small color="yellow text-black">4</q-chip>
                 </div> -->
                 <div class="col-md-12 row">
-                  <q-btn round dense color="blue" class="center q-mt-md" >
+                  <q-btn round dense color="blue" class="center q-mt-md" @click="scrollToElement(index)" >
                     {{index+1}}
                   </q-btn>
                   <div class="shadow-1 q-ma-sm gutter-xs  bg-grey-2 corner-around ">
-                    <div class="hidden">
-                    <q-radio v-model="answerSheet.Answers[index]" val="0"/>
-                    </div>
-                  <q-radio v-model="answerSheet.Answers[index]" val="1" label="1" left-label @blur="addChoice(1,index)"/>
-                  <q-radio v-model="answerSheet.Answers[index]" val="2" label="2" left-label @blur="addChoice(2,index)" />
-                  <q-radio v-model="answerSheet.Answers[index]" val="3" label="3" left-label @blur="addChoice(3,index)" />
-                  <q-radio v-model="answerSheet.Answers[index]" val="4" label="4" left-label @blur="addChoice(4,index)" />
+                    
+
+                  <q-radio v-model="answerSheet.Answers[index]" val="1" label="1" left-label @blur="addChoice(1,index)" :key="componentKey++"/>
+                  <q-radio v-model="answerSheet.Answers[index]" val="2" label="2" left-label @blur="addChoice(2,index)" :key="componentKey++"/>
+                  <q-radio v-model="answerSheet.Answers[index]" val="3" label="3" left-label @blur="addChoice(3,index)" :key="componentKey++"/>
+                  <q-radio v-model="answerSheet.Answers[index]" val="4" label="4" left-label @blur="addChoice(4,index)" :key="componentKey++"/>
 
                
                 </div>
@@ -68,7 +67,7 @@
                     >
                       <div class="row">
                         <div class="item-inverted-icon-size q-mt-lg  corner-around round">
-                        <q-chip  color="yellow text-black">
+                        <q-chip :id="index" color="yellow text-black">
                           {{index+1}}
                         </q-chip>
                         </div>
@@ -108,6 +107,10 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import util from "src/utilities";
 import { assayStore } from "src/store/assayStore";
+import { scroll } from 'quasar'
+import { off } from "process";
+const { getScrollTarget, setScrollPosition } = scroll
+
 
 @Component({
   components: {
@@ -121,6 +124,9 @@ export default class AssayAnswerSheetVue extends Vue {
   assay = vxm.assayStore.assayCreate;
   assayAnswerSheetStore = vxm.assayAnswerSheetStore;
   answerSheet = vxm.assayAnswerSheetStore.assayAnswerSheet;
+   
+   componentKey = 0;
+  
 
   pageAccess = util.getAccess(this.assayStore.modelName);
   
@@ -134,13 +140,29 @@ export default class AssayAnswerSheetVue extends Vue {
   //#endregion
 
   //#region ### methods ###
+  
+  forceRerender()
+  {
+    this.componentKey++;
+  }
+  scrollToElement (el) {
 
-
+    
+    var element  = document.getElementById(el);
+    if(element != null)
+    {
+      let target = getScrollTarget(element)
+      let offset = element.offsetTop
+      let duration = 1000
+      setScrollPosition(target, offset, duration)
+    }
+  }
 
   eraseAnswer(index)
   {
-    console.log("222");
-    this.answerSheet.Answers[index] = 0;
+     
+    this.answerSheet.Answers[index] = "0";
+    this.forceRerender();
 
   }
   submitAnswerSheet()
@@ -159,8 +181,11 @@ export default class AssayAnswerSheetVue extends Vue {
 
   //#region ### hooks ###
   created() {
+    // if(this.assay)
+
     for (let i = 0; i < this.assay.QuestionsPath.length; i++) {
-     this.answerSheet.Answers[i] = 0;
+      
+     this.answerSheet.Answers[i] = "0";
      this.answerSheet.MaybeList[i] = false;
      this.answerSheet.AfterList[i] = false;
      this.answerSheet.CantList[i] = false;

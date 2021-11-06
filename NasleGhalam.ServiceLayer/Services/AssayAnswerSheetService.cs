@@ -16,10 +16,13 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<AssayAnswerSheet> _assayAnswerSheets;
 
-        public AssayAnswerSheetService(IUnitOfWork uow)
+        private readonly Lazy<AssayService> _assayService;
+
+        public AssayAnswerSheetService(IUnitOfWork uow , Lazy<AssayService> assayService )
         {
             _uow = uow;
             _assayAnswerSheets = uow.Set<AssayAnswerSheet>();
+            _assayService = assayService;
         }
 
         /// <summary>
@@ -61,13 +64,23 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Create(AssayAnswerSheetCreateViewModel assayAnswerSheetViewModel)
         {
             var assayAnswerSheet = Mapper.Map<AssayAnswerSheet>(assayAnswerSheetViewModel);
+
+            foreach (var answer in assayAnswerSheet.Answers)
+            {
+                assayAnswerSheet.Answers += answer + ";";
+            }
+
             _assayAnswerSheets.Add(assayAnswerSheet);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
             if (clientResult.MessageType == MessageType.Success)
+            {
+                var assay = _assayService.Value.GetById(assayAnswerSheetViewModel.AssayId);
+
                 clientResult.Obj = GetById(assayAnswerSheet.Id);
+            }
 
             return clientResult;
         }

@@ -13,7 +13,7 @@ export default interface IAssayAnswerSheet {
   AssayTime: string;
   DateTime: string;
   AnswerTimes:Array<number>;
-  Answers:Array<number>;
+  Answers:Array<string>;
   MaybeList:Array<boolean>;
   AfterList:Array<boolean>;
   CantList:Array<boolean>;

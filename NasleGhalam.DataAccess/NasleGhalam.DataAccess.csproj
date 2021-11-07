@@ -152,6 +152,14 @@
     <Compile Include="Migrations\202110111029205_assayStringLegthFix.Designer.cs">
       <DependentUpon>202110111029205_assayStringLegthFix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111071713265_fixassayAnswerSheet.cs" />
+    <Compile Include="Migrations\202111071713265_fixassayAnswerSheet.Designer.cs">
+      <DependentUpon>202111071713265_fixassayAnswerSheet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111071721566_fixTable.cs" />
+    <Compile Include="Migrations\202111071721566_fixTable.Designer.cs">
+      <DependentUpon>202111071721566_fixTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -248,6 +256,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110111029205_assayStringLegthFix.resx">
       <DependentUpon>202110111029205_assayStringLegthFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111071713265_fixassayAnswerSheet.resx">
+      <DependentUpon>202111071713265_fixassayAnswerSheet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111071721566_fixTable.resx">
+      <DependentUpon>202111071721566_fixTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

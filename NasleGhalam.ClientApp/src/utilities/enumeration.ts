@@ -23,6 +23,12 @@ export enum AssayVarient{
   D =4
 }
 
+export enum Tashih {
+  Correct = 0,
+  Wrong = 1,
+  Non = 2
+}
+
 export enum MessageType {
   Error = 0,
   Success = 1,

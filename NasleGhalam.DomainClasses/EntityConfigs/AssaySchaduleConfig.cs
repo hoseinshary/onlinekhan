@@ -9,11 +9,15 @@ namespace NasleGhalam.DomainClasses.EntityConfigs
         {
             HasKey(x => x.Id);
 
-            
 
-         
+            HasRequired(x => x.Assay)
+                .WithMany(x => x.AssaySchedules)
+                .HasForeignKey(x => x.AssayId)
+                .WillCascadeOnDelete(false);
 
-            
+
+
+
 
         }
     }

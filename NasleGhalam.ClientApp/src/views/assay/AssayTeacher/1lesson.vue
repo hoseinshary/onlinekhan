@@ -1,5 +1,28 @@
 <template>
-  <section class="row gutter-sm">
+<bs-modal
+    title="انتخاب درس"
+    :show="assayStore.openModal._1lesson"
+    size="lg"
+    @close="assayStore.OPEN_MODAL_1LESSON(false)"
+  >
+
+
+    <template slot="header">
+      <q-toolbar slot="header" color="warning" text-color>
+        <q-toolbar-title>انتخاب درس</q-toolbar-title>
+        <q-btn dense icon="close" @click="assayStore.OPEN_MODAL_1LESSON(false)" />
+      </q-toolbar>
+    </template>
+
+    <slot>
+      <section class="row gutter-sm col-md-12">
+       <div class="col-12">
+      <q-btn color="primary" class="float-right" @click="assayStore.OPEN_MODAL_1LESSON(false)">
+        انتخاب مبحث
+        <q-icon name="arrow_back" />
+      </q-btn>
+    </div>
+        
     <div class="col-md-3">
       <q-select
         v-model="educationTree.id"
@@ -17,16 +40,18 @@
       />
     </div>
     <div class="col-md-9">
+      
       <ul style="max-height: 500px; overflow-y: auto">
         <li
-          v-for="lesson in assayCreate.Lessons"
+          v-for="lesson in assayStore._lessonList"
           :key="'lesson' + lesson.Id"
           class="row shadow-1 q-ma-sm q-pa-sm"
         >
           <div class="col-md-5">
             <q-checkbox
               v-model="lesson.Checked"
-              @input="getQuestionNumberReport(lesson.Id)"
+              @input="getQuestionNumberReport(lesson)"
+              
             />
 
             {{ lesson.Name }}
@@ -48,9 +73,8 @@
               </div>
               <div class="col">
                 <label>
-                  تعداد سوال تکلیف:{{
-                    numberOfQuestionReport.NumberOfHomeworkQuestions
-                  }}
+                  تعداد سوال تکلیف:
+                  {{numberOfQuestionReport.NumberOfHomeworkQuestions}}
                 </label>
 
                 <q-input
@@ -77,9 +101,7 @@
               </div>
               <div class="col">
                 <label>
-                  تعداد کل سوالات   :{{
-                    numberOfQuestionReport.NumberOfNewQuestions + numberOfQuestionReport.NumberOfAssayQuestions +numberOfQuestionReport.NumberOfHomeworkQuestions
-                  }}
+                  تعداد کل سوالات   :{{numberOfQuestionReport.NumberOfNewQuestions + numberOfQuestionReport.NumberOfAssayQuestions +numberOfQuestionReport.NumberOfHomeworkQuestions}}
                 </label>
                 <q-input
                   v-model="lesson.CountOfQuestions"
@@ -94,12 +116,25 @@
       </ul>
     </div>
     <div class="col-12">
-      <q-btn color="primary" class="float-right" @click="goToTopicTab">
+      <!-- <q-btn color="primary" class="float-right" @click="goToTopicTab">
         انتخاب مبحث
         <q-icon name="arrow_back" />
-      </q-btn>
+      </q-btn> -->
     </div>
   </section>
+    </slot>
+
+    <template slot="footer">
+      <!-- <base-btn-save-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-save-back>
+      <base-btn-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-back> -->
+    </template>
+  </bs-modal>
+
+
+
+
+
+  
 </template>
 
 <script lang="ts">
@@ -116,9 +151,10 @@ export default class LessonTabVue extends Vue {
   //#region ### data ###
   lessonStore = vxm.lessonStore;
   studentStore = vxm.studentStore;
+  assayStore = vxm.assayStore;
   educationTreeStore = vxm.educationTreeStore;
   educationTree = this.educationTreeStore.qTreeData;
-  assayCreate = vxm.assayStore.assayCreate;
+  //assayCreate = vxm.assayStore.assayCreate;
   numberOfQuestionReport: AssayNumberOfQuestionReport = new AssayNumberOfQuestionReport();
 
   //#endregion
@@ -158,10 +194,15 @@ export default class LessonTabVue extends Vue {
 
   @Watch("educationTree.leafTicked")
   tickedEducationTreeIdsChanged(newVal) {
-    util.clearArray(this.assayCreate.Lessons);
+
+    util.clearArray(this.assayStore._lessonList);
+   
     this.lessonStore.gridDataByEducationTreeIds(newVal).forEach(x => {
-      this.assayCreate.Lessons.push(new AssayLesson(x.Id, x.Name));
+      this.assayStore._lessonList.push(new AssayLesson(x.Id, x.Name));
     });
+
+     
+
   }
   //#endregion
 
@@ -170,21 +211,28 @@ export default class LessonTabVue extends Vue {
     this.$emit("changeTab", "topicTab");
   }
 
-  getQuestionNumberReport(LessonId: number) {
-    this.studentStore.numberOfQuestionReport({ lessonId: LessonId, studentId: 9 }).then(d => {
+  getQuestionNumberReport(Lesson: AssayLesson) {
+    if(this.assayStore.assayCreate.Lessons.find(x=> x.Id === Lesson.Id))
+    {
+
+        this.assayStore.assayCreate.Lessons.splice(this.assayStore.assayCreate.Lessons.findIndex(x=> x.Id === Lesson.Id),1)
+
+    }
+    else
+    {
+      Lesson.Questions = [];
+      var tempLesson = util.cloneObject(Lesson);
+   
+      
+    this.assayStore.assayCreate.Lessons.push(tempLesson);
+    this.studentStore.numberOfQuestionReport({ lessonId: Lesson.Id, studentId: 9 }).then(d => {
       this.numberOfQuestionReport = d;
     });
-    //debugger;
-    //  this.numberOfQuestionReport.NumberOfNewQuestions = this["numberOfQuestionReport.NumberOfNewQuestions"];
-    //  this.numberOfQuestionReport.NumberOfAssayQuestions = this["numberOfQuestionReport.NumberOfAssayQuestions"];
-    //  this.numberOfQuestionReport.NumberOfHomeworkQuestions = this["numberOfQuestionReport.NumberOfHomeworkQuestions"];
-
-
-    // console.log("vue :", this["numberOfQuestionReport.NumberOfNewQuestions"]);//255
-    // console.log("vue :", this.numberOfQuestionReport.NumberOfNewQuestions);//0
-
-
+    }
+      
   }
+
+  
 
   //#endregion
 

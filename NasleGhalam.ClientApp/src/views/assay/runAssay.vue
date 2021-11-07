@@ -1,5 +1,5 @@
 <template>
-  <section class="col-md-10 fixed" >
+  <section class="col-md-10" >
     <div class="col-md-12 row">
      
       <div class="col-md-3 ">
@@ -83,7 +83,6 @@
                         
                         <q-checkbox class="text-orange" v-model="answerSheet.MaybeList[index]" color="orange" val="1" label="شاید بزنم"  />
                         <q-checkbox class="text-red" v-model="answerSheet.CantList[index]" color="red" val="1" label="نمی توانم "   />
-
                       </div>
                       
                       </div>
@@ -95,9 +94,14 @@
        
       </div>
   
+   <modal-resualt></modal-resualt>
+
 
     
     </div>
+
+   
+
   </section>
   
 </template>
@@ -114,6 +118,7 @@ const { getScrollTarget, setScrollPosition } = scroll
 
 @Component({
   components: {
+   ModalResualt: () => import("./resualtAssay.vue")
 
       
   }

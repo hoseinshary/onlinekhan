@@ -1,5 +1,6 @@
 import Vue from "Vue";
-import IAssayAnswerSheet, { DefaultAssayAnswerSheet } from "src/models/IAssayAnswerSheet";
+import IAssayAnswerSheet , { DefaultAssayAnswerSheet } from "src/models/IAssayAnswerSheet";
+import AssayAnswerSheetCorectExam  from "src/models/IAssayAnswerSheet";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -12,25 +13,31 @@ import {
   Module,
   getRawActionContext
 } from "vuex-class-component";
+import router from "src/router";
+
 
 @Module({ namespacedPath: "assayAnswerSheetStore/" })
 export class AssayAnswerSheetStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean };
+  openModal: { resualt:boolean; create: boolean; edit: boolean; delete: boolean };
   assayAnswerSheet: IAssayAnswerSheet;
   private _assayAnswerSheetList: Array<IAssayAnswerSheet>;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
+  private _resualtVue: Vue;
+
+  assayAnswerSheetResult :Array <AssayAnswerSheetCorectExam>;
 
   /**
    * initialize data
    */
   constructor() {
     super();
-
+    
     this.assayAnswerSheet = util.cloneObject(DefaultAssayAnswerSheet);
     this._assayAnswerSheetList = [];
     this.openModal = {
+      resualt: false,
       create: false,
       edit: false,
       delete: false
@@ -94,6 +101,12 @@ export class AssayAnswerSheetStore extends VuexModule {
   }
 
   @mutation
+  OPEN_MODAL_RESUALT(open: boolean) {
+    this.openModal.resualt = open;
+  }
+
+
+  @mutation
   OPEN_MODAL_EDIT(open: boolean) {
     this.openModal.edit = open;
   }
@@ -106,6 +119,11 @@ export class AssayAnswerSheetStore extends VuexModule {
   @mutation
   SET_CREATE_VUE(vm: Vue) {
     this._createVue = vm;
+  }
+
+  @mutation
+  SET_RESUALT_VUE(vm: Vue) {
+    this._resualtVue = vm;
   }
 
   @mutation
@@ -177,15 +195,18 @@ export class AssayAnswerSheetStore extends VuexModule {
  
     return axios
       .post(`${baseUrl}/Create`, this.assayAnswerSheet)
-      .then((response: AxiosResponse<IMessageResult>) => {
+      .then((response: AxiosResponse<Array<AssayAnswerSheetCorectExam>>) => {
         let data = response.data;
-        this.notify({ vm, data });
+       
 
-        if (data.MessageType == MessageType.Success) {
-          this.CREATE(data.Obj);
-          
-          this.MODEL_CHANGED(true);
-          this.resetCreate();
+        if (data.length != 0) {
+          this.assayAnswerSheetResult = data;
+          //router.push("/assay/resualtAssay");
+          this.OPEN_MODAL_RESUALT(true);
+
+          console.log(this.assayAnswerSheetResult);
+
+
         }
       });
   }

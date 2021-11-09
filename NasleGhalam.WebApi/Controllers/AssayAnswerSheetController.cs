@@ -1,8 +1,10 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
 using NasleGhalam.ViewModels.AssayAnswerSheet;
+using NasleGhalam.WebApi.Extensions;
 
 
 namespace NasleGhalam.WebApi.Controllers
@@ -42,6 +44,9 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(AssayAnswerSheetCreateViewModel assayAnswerSheetViewModel)
         {
+            assayAnswerSheetViewModel.UserId = Request.GetUserId();
+            assayAnswerSheetViewModel.DateTime = DateTime.Now;
+            
             return Ok(_assayAnswerSheetService.Create(assayAnswerSheetViewModel));
         }
 

@@ -87,6 +87,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="MapperProfile\AssayProfile.cs" />
+    <Compile Include="MapperProfile\AssayAnswerSheetProfile.cs" />
     <Compile Include="MapperProfile\LogProfile.cs" />
     <Compile Include="MapperProfile\MediaProfile.cs" />
     <Compile Include="MapperProfile\PackageProfile.cs" />

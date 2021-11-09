@@ -1,5 +1,21 @@
 <template>
-  <section class="col-12 q-px-md">
+  <bs-modal
+    title="انتخاب دانش آموز"
+    :show="assayStore.openModal._0student"
+    size="md"
+    @close="assayStore.OPEN_MODAL_0STUDENT(false)"
+  >
+
+
+    <template slot="header">
+      <q-toolbar slot="header" color="warning" text-color>
+        <q-toolbar-title>انتخاب دانش آموز</q-toolbar-title>
+        <q-btn dense icon="close" @click="assayStore.OPEN_MODAL_0STUDENT(false)" />
+      </q-toolbar>
+    </template>
+
+    <slot>
+       <section class="col-12 q-px-md">
     <br />
     <br />
 
@@ -18,13 +34,12 @@
         :options="studentStore.ddl"
         float-label="انتخاب دانش آموز"
         filter
-        multiple
         clearable
+        multiple
       />
-
-
     </div>
-    <br/>
+
+      <br/>
 
     <br/>
     <br/>
@@ -39,18 +54,28 @@
 
 
     </div>
+
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
 
     <br />
     <br />
     <div class="col-12">
-      <q-btn color="primary" class="float-right" @click="goToLessonTab">
+      <!-- <q-btn color="primary" class="float-right" @click="goToLessonTab">
         انتخاب درس
         <q-icon name="arrow_back" />
-      </q-btn>
+      </q-btn> -->
     </div>
   </section>
+    </slot>
+
+    <template slot="footer">
+      <base-btn-save-back @click="assayStore.OPEN_MODAL_0STUDENT(false)"></base-btn-save-back>
+      <base-btn-back @click="assayStore.OPEN_MODAL_0STUDENT(false)"></base-btn-back>
+    </template>
+  </bs-modal>
+
+
 </template>
 
 <script lang="ts">
@@ -68,9 +93,8 @@ export default class StudentVue extends Vue {
   //#region ### data ###
   studentStore = vxm.studentStore;
   student = vxm.studentStore.student;
-  studentIds :Array<number> = [];
-  pageAccess = util.getAccess(this.studentStore.modelName);
-
+  assayStore = vxm.assayStore;
+ studentIds :Array<number> = [];
 selectOptions= [
         {
           label: 'گروه 1',
@@ -81,6 +105,7 @@ selectOptions= [
           value: '2'
         }
       ];
+  pageAccess = util.getAccess(this.studentStore.modelName);
 
   //#endregion
 

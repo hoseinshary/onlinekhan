@@ -75,6 +75,9 @@ namespace NasleGhalam.ViewModels.Assay
 
         public IList<string> QuestionsFile { get; set; }
 
+        public IList<string> QuestionsAnswer { get; set; }
+
+
         public IList<string> QuestionsPath { get; set; }
 
 

@@ -223,6 +223,11 @@ export default [
         path: "/Assay/runAssay",
         name: "runAssay",
         component: () => import(/* webpackChunkName: "program" */"src/views/assay/runAssay.vue")
+      },
+      {
+        path: "/Assay/resualtAssay",
+        name: "resualtAssay",
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/resualtAssay.vue")
       }
     ]
 

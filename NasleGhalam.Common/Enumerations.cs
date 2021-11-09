@@ -22,6 +22,13 @@ namespace NasleGhalam.Common
         Both = 2
     }
 
+    public enum Tashih
+    {
+        Correct = 0,
+        Wrong = 1,
+        Non = 2
+    }
+
     public enum Maghta
     {
         Dah = 0,

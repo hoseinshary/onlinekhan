@@ -9,10 +9,10 @@ module.exports = function(ctx) {
     css: ["app.styl"],
     extras: [
       ctx.theme.mat ? "roboto-font" : null,
-      "material-icons" // optional, you are not bound to it
+      "material-icons", // optional, you are not bound to it
       // 'ionicons',
       // 'mdi',
-      // 'fontawesome'
+      "fontawesome"
     ],
     supportIE: true,
     build: {
@@ -118,6 +118,9 @@ module.exports = function(ctx) {
         "QItemTile",
         "QItemSeparator",
         'QTable',
+        'QScrollArea',
+        'QOptionGroup'
+        
       ],
       directives: ["Ripple", "CloseOverlay",
       "BackToTop"],

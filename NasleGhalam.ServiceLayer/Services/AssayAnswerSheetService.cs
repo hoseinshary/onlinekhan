@@ -16,10 +16,13 @@ namespace NasleGhalam.ServiceLayer.Services
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<AssayAnswerSheet> _assayAnswerSheets;
 
-        public AssayAnswerSheetService(IUnitOfWork uow)
+        private readonly Lazy<AssayService> _assayService;
+
+        public AssayAnswerSheetService(IUnitOfWork uow , Lazy<AssayService> assayService )
         {
             _uow = uow;
             _assayAnswerSheets = uow.Set<AssayAnswerSheet>();
+            _assayService = assayService;
         }
 
         /// <summary>
@@ -58,18 +61,55 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="assayAnswerSheetViewModel"></param>
         /// <returns></returns>
-        public ClientMessageResult Create(AssayAnswerSheetCreateViewModel assayAnswerSheetViewModel)
+        public IList<AssayAnswerSheetCorectExamViewModel> Create(AssayAnswerSheetCreateViewModel assayAnswerSheetViewModel)
         {
             var assayAnswerSheet = Mapper.Map<AssayAnswerSheet>(assayAnswerSheetViewModel);
+
+            //foreach (var answer in assayAnswerSheet.Answers)
+            //{
+            //    assayAnswerSheet.Answers += answer + ";";
+            //}
+
             _assayAnswerSheets.Add(assayAnswerSheet);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
 
-            if (clientResult.MessageType == MessageType.Success)
-                clientResult.Obj = GetById(assayAnswerSheet.Id);
+            var returnVal= new List<AssayAnswerSheetCorectExamViewModel>();
 
-            return clientResult;
+            if (clientResult.MessageType == MessageType.Success)
+            {
+                var assay = _assayService.Value.GetById(assayAnswerSheetViewModel.AssayId);
+
+                for (int i = 0; i < assayAnswerSheetViewModel.Answers.Count ; i++)
+                {
+                    var tempVal = new AssayAnswerSheetCorectExamViewModel();
+                    if (assayAnswerSheetViewModel.Answers[i] == 0)
+                    {
+                        tempVal.Tashih = Tashih.Non;
+                    }
+                    else if (assayAnswerSheetViewModel.Answers[i].ToString() == assay.QuestionsAnswer[i])
+                    {
+                        tempVal.Tashih = Tashih.Correct;
+                    }
+                    else
+                    {
+                        tempVal.Tashih = Tashih.Wrong;
+                    }
+
+                    tempVal.NumberOfQuestion = i + 1;
+                    tempVal.Path = assay.QuestionsFile[i];
+
+                    returnVal.Add(tempVal);
+
+
+                }
+
+
+                clientResult.Obj = GetById(assayAnswerSheet.Id);
+            }
+
+            return returnVal ;
         }
 
         /// <summary>

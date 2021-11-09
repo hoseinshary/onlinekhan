@@ -188,6 +188,7 @@
         AssayAnswerSheetCreateAccess = 154,
         AssayAnswerSheetDeleteAccess = 155,
         AssayAnswerSheetUpdateAccess = 156,
+        AssayAnswerSheetResualtAccess = 157,
 
     }
 }

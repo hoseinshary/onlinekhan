@@ -26,12 +26,15 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public DateTime DateTime { get; set; }
 
-        public ICollection<int> AnswerTimes { get; set; }
+        public string AnswerTimes { get; set; }
 
-        public ICollection<int> Answers { get; set; }
+        public string Answers { get; set; }
 
 
+        public string MaybeList { get; set; }
 
+        public string AgterfList { get; set; }
+        public string CantList { get; set; }
 
     }
 }

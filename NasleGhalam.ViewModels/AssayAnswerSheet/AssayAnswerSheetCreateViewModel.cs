@@ -20,6 +20,8 @@ namespace NasleGhalam.ViewModels.AssayAnswerSheet
         public int UserId { get; set; }
 
 
+
+
         [Display(Name = "")]
         public AssayVarient AssayVarient { get; set; }
 
@@ -34,6 +36,11 @@ namespace NasleGhalam.ViewModels.AssayAnswerSheet
         public IList<int> AnswerTimes { get; set; }
 
         public IList<int> Answers { get; set; }
+
+        public IList<bool> MaybeList { get; set; }
+
+        public IList<bool> AgterfList { get; set; }
+        public IList<bool> CantList { get; set; }
 
 
     }

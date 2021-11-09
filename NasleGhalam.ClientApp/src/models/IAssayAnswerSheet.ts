@@ -1,7 +1,8 @@
 import IAssayCrete from "./IAssay";
 import utilities from "src/utilities";
 import IUser, { DefaultUser } from "./IUser";
-import AssayCreate from "./IAssay";
+import { Tashih } from "src/utilities/enumeration";
+
 
 export default interface IAssayAnswerSheet {
   Id: number;
@@ -13,7 +14,10 @@ export default interface IAssayAnswerSheet {
   AssayTime: string;
   DateTime: string;
   AnswerTimes:Array<number>;
-  Answers:Array<number>;
+  Answers:Array<string>;
+  MaybeList:Array<boolean>;
+  AfterList:Array<boolean>;
+  CantList:Array<boolean>;
 
 }
 
@@ -25,7 +29,28 @@ export const DefaultAssayAnswerSheet: IAssayAnswerSheet = {
   AssayTime:"",
   AnswerTimes:[],
   Answers:[],
+  MaybeList:[],
+  AfterList:[],
+  CantList:[],
   DateTime: "",
   // Assay:utilities.cloneObject(),
   User:utilities.cloneObject(DefaultUser)
 };
+
+
+export class AssayAnswerSheetCorectExam {
+  
+  Tashih :Tashih;
+  NumberOfQuestion : number;
+  Path : string;
+  AnswerPath : string;
+  /**
+   * constructor
+   */
+  constructor() {
+    this.Tashih = 0,
+    this.NumberOfQuestion = 0,
+    this.Path = "",
+    this.AnswerPath = ""
+  }
+}

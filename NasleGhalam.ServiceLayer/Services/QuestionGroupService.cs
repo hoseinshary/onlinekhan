@@ -426,6 +426,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Include(current => current.Questions)
                 .Include(current => current.Questions.Select(x => x.QuestionAnswers))
                 .Include(current => current.Questions.Select(x => x.Supervisors))
+                .Include(current => current.Questions.Select(x=>x.QuestionUpdates))
                 .First(current => current.Id == id);
 
             if (questionGroup == null)
@@ -469,8 +470,6 @@ namespace NasleGhalam.ServiceLayer.Services
 
                 i++;
             }
-
-
 
 
 

@@ -9,11 +9,12 @@ namespace NasleGhalam.ViewModels.Writer
 
         public string Name { get; set; }
 
-        //  public int? User_Id { get; set; }
+        public int UserId { get; set; }
 
         public string ProfilePic { get; set; }
 
         public string WriterPicturePath => $"/Api/Writer/GetPictureFile/{ProfilePic}".ToFullRelativePath();
+
         public UserViewModel User { get; set; }
     }
 }

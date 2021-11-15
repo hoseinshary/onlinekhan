@@ -61,8 +61,6 @@ namespace NasleGhalam.ServiceLayer.Services
         public int CountAll()
         {
             return _questionJudges
-                .AsNoTracking()
-                .AsEnumerable()
                 .Count();
         }
 

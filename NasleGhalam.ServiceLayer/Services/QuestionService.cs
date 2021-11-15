@@ -485,10 +485,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public int CountAllActive()
         {
             return _questions
-                .Where(current => current.IsActive)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Count();
+                .Count(current => current.IsActive);
         }
 
 
@@ -499,8 +496,6 @@ namespace NasleGhalam.ServiceLayer.Services
         public int CountAll()
         {
             return _questions
-                .AsNoTracking()
-                .AsEnumerable()
                 .Count();
         }
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -102,7 +104,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.WriterUpdateAccess)]
         [CheckModelValidation]
         [CheckImageValidationProfileNotRequired("img", 2048)]
-        public IHttpActionResult Update(WriterUpdateViewModel writerViewModel)
+        public IHttpActionResult Update([FromUri] WriterUpdateViewModel writerViewModel)
         {
             var postedFile = HttpContext.Current.Request.Files.Get("img");
             if (postedFile != null && postedFile.ContentLength > 0)
@@ -116,6 +118,8 @@ namespace NasleGhalam.WebApi.Controllers
 
                 if (msgRes.MessageType == MessageType.Success && !string.IsNullOrEmpty(writerViewModel.ProfilePic))
                 {
+           
+
                     postedFile?.SaveAs($"{SitePath.WriterPictureRelPath}{writerViewModel.ProfilePic}{Path.GetExtension(postedFile.FileName)}".ToAbsolutePath());
                     if (File.Exists(
                         $"{SitePath.WriterPictureRelPath}{previusFile}{Path.GetExtension(postedFile.FileName)}"
@@ -124,6 +128,8 @@ namespace NasleGhalam.WebApi.Controllers
                         File.Delete($"{SitePath.WriterPictureRelPath}{previusFile}{Path.GetExtension(postedFile.FileName)}"
                             .ToAbsolutePath());
                     }
+                    
+                    
                 }
                 if (msgRes.MessageType == MessageType.Success)
                 {

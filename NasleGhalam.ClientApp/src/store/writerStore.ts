@@ -209,6 +209,7 @@ export class WriterStore extends VuexModule {
   @action()
   async resetCreate() {
     this.writer.Id = 0;
+    
     this.RESET(this._createVue);
     this._createVue["searchTerm"] = "";
   }

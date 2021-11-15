@@ -18,6 +18,14 @@
       </q-input>
     </base-field>
      <slot>
+      
+        <img
+          :src="writer.WriterPicturePath"
+          class="profile-image "
+          alt="profile picture"
+          width="100px"
+          height="100px"
+        />
       <q-field class="col-sm-12">
         <q-uploader
           url="url"

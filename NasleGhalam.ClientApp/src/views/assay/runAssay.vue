@@ -5,7 +5,14 @@
       <div class="col-md-3 ">
         
          <q-scroll-area style="width: 100%; height: 600px;" >
+           
           <div class="panel center " >
+
+
+              <div id = "intro" style = "text-align:center;">
+                {{ timestamp }}
+              </div>
+
             پاسخ نامه 
             <br/>
          
@@ -113,6 +120,8 @@ import util from "src/utilities";
 import { assayStore } from "src/store/assayStore";
 import { scroll } from 'quasar'
 import { off } from "process";
+import * as moment from 'moment';
+import { start } from "repl";
 const { getScrollTarget, setScrollPosition } = scroll
 
 
@@ -130,7 +139,8 @@ export default class AssayAnswerSheetVue extends Vue {
   assayAnswerSheetStore = vxm.assayAnswerSheetStore;
   answerSheet = vxm.assayAnswerSheetStore.assayAnswerSheet;
    
-  
+  startTime : Date; 
+  timestamp = "";
 
   pageAccess = util.getAccess(this.assayStore.modelName);
   
@@ -144,7 +154,20 @@ export default class AssayAnswerSheetVue extends Vue {
   //#endregion
 
   //#region ### methods ###
+  getNow() {
+      const today = new Date();
+      const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      const dateTime = date +' '+ time;
+      
+   
+      var newDate =new Date( (today.getTime() - this.startTime.getTime()) + 621355968000000000 );
+      console.log(today.toTimeString());
+      console.log(this.startTime.toTimeString());
+      this.timestamp = moment(newDate).format('HH:MM:SS');
+      
 
+  }
 
   scrollToElement (el) {
    
@@ -181,7 +204,12 @@ export default class AssayAnswerSheetVue extends Vue {
   //#region ### hooks ###
   created() {
     // if(this.assay)
-
+      const today = new Date();
+      const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      this.startTime = today;
+      
+    setInterval(this.getNow, 1000);
     for (let i = 0; i < this.assay.QuestionsPath.length; i++) {
       
      this.answerSheet.Answers[i] = "0";

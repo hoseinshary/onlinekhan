@@ -642,7 +642,10 @@ namespace NasleGhalam.ServiceLayer.Services
                     File.Delete(SitePath.GetQuestionAnswerAbsPath(questionAnswer.FilePath) + ".png");
                 }
             }
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = id;
+            return clientResult;
         }
 
 
@@ -673,7 +676,10 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = id;
+            return clientResult;
         }
 
 

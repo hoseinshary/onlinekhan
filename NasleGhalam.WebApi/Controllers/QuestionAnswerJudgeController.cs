@@ -26,7 +26,7 @@ namespace NasleGhalam.WebApi.Controllers
         [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]
         public IHttpActionResult GetAllByQuestionAnswerId(int id)
         {
-            return Ok(_questionAnswerJudgeService.GetAllByQuestionAnswerId(id));
+            return Ok(_questionAnswerJudgeService.GetAllByQuestionAnswerId(id, Request.GetUserId(),Request.GetRoleLevel()));
         }
 
         [HttpGet, CheckUserAccess(ActionBits.QuestionAnswerJudgeReadAccess)]

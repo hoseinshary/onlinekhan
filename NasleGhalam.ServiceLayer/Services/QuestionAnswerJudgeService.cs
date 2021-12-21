@@ -50,9 +50,11 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کارشناسی جواب سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionAnswerJudgeViewModel> GetAllByQuestionAnswerId(int questionAnswerId)
+        public IList<QuestionAnswerJudgeViewModel> GetAllByQuestionAnswerId(int questionAnswerId, int userid, int rollLevel)
         {
-            return _questionAnswerJudges
+            if (rollLevel < 3)
+            {
+                return _questionAnswerJudges
                 .Include(current => current.User)
                 .Include(current => current.Lookup_ReasonProblem)
                 .Where(current => current.QuestionAnswerId == questionAnswerId)
@@ -60,6 +62,19 @@ namespace NasleGhalam.ServiceLayer.Services
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionAnswerJudgeViewModel>)
                 .ToList();
+            }
+            else
+            {
+                return _questionAnswerJudges
+                    .Include(current => current.User)
+                    .Include(current => current.Lookup_ReasonProblem)
+                    .Where(current => current.QuestionAnswerId == questionAnswerId)
+                    .Where(current => current.UserId == userid)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionAnswerJudgeViewModel>)
+                    .ToList();
+            }
         }
 
         /// <summary>
@@ -220,7 +235,11 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(questionAnswerJudge);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = id;
+            return clientResult;
         }
 
         /// <summary>

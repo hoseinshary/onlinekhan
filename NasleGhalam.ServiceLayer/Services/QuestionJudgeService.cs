@@ -47,6 +47,7 @@ namespace NasleGhalam.ServiceLayer.Services
             return _questionJudges
                 .Include(current => current.Lookup_QuestionHardnessType)
                 .Include(current => current.Lookup_RepeatnessType)
+                .Include(current => current.User)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -68,18 +69,34 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه کارشناسی سوال ها
         /// </summary>
         /// <returns></returns>
-        public IList<QuestionJudgeViewModel> GetAllByQuestionId(int questionId)
+        public IList<QuestionJudgeViewModel> GetAllByQuestionId(int questionId, int userid, int rollLevel)
         {
-
-            return _questionJudges
-                .Include(current => current.Lookup_QuestionHardnessType)
-                .Include(current => current.Lookup_RepeatnessType)
-                .Include(current => current.User)
-                .Where(current => current.QuestionId == questionId)
-                .AsNoTracking()
-                .AsEnumerable()
-                .Select(Mapper.Map<QuestionJudgeViewModel>)
-                .ToList();
+            if (rollLevel < 3)
+            {
+                return _questionJudges
+                    .Include(current => current.Lookup_QuestionHardnessType)
+                    .Include(current => current.Lookup_RepeatnessType)
+                    .Include(current => current.User)
+                    .Where(current => current.QuestionId == questionId)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionJudgeViewModel>)
+                    .ToList();
+            }
+            else
+            {
+                return _questionJudges
+                    .Include(current => current.Lookup_QuestionHardnessType)
+                    .Include(current => current.Lookup_RepeatnessType)
+                    .Include(current => current.User)
+                    .Where(current => current.QuestionId == questionId)
+                    .Where(current =>  current.UserId == userid)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<QuestionJudgeViewModel>)
+                    .ToList();
+            }
+            
         }
 
         //public ClientMessageResult CorrectAllJudges()
@@ -469,7 +486,12 @@ namespace NasleGhalam.ServiceLayer.Services
             _uow.MarkAsDeleted(questionJudge);
 
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+
+
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = id;
+            return clientResult;
         }
 
 

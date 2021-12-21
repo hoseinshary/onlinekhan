@@ -107,7 +107,10 @@ namespace NasleGhalam.ServiceLayer.Services
             }
 
             var msgRes = _uow.CommitChanges();
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = lesson_UserViewModel;
+            return clientResult;
         }
     }
 }

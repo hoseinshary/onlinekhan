@@ -1919,7 +1919,10 @@ namespace NasleGhalam.ServiceLayer.Services
                 DeleteOptionsOfQuestion(question.FileName);
             }
 
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = id;
+            return clientResult;
         }
 
 

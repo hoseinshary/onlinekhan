@@ -123,7 +123,11 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 File.Delete(axillaryBookViewModel.ImgAbsPath);
             }
-            return Mapper.Map<ClientMessageResult>(msgRes);
+
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = id;
+            return clientResult;
         }
     }
 }

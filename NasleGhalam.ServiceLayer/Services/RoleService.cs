@@ -148,7 +148,10 @@ namespace NasleGhalam.ServiceLayer.Services
             var role = Mapper.Map<Role>(roleViewModel);
             _uow.MarkAsDeleted(role);
             var msgRes = _uow.CommitChanges(CrudType.Create, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = id;
+            return clientResult;
         }
 
         /// <summary>

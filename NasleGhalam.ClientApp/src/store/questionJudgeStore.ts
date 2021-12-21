@@ -21,6 +21,7 @@ export class QuestionJudgeStore extends VuexModule {
   questionJudge: IQuestionJudge;
   private _questionJudgeList: Array<IQuestionJudge>;
   private _indexVue: Vue;
+  private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
   private _detailVue: Vue;
@@ -90,6 +91,10 @@ export class QuestionJudgeStore extends VuexModule {
   private SET_LIST(list: Array<IQuestionJudge>) {
     this._questionJudgeList = list;
   }
+  @mutation
+  private MODEL_CHANGED(changed: boolean) {
+    this._modelChanged = changed;
+  }
 
   @mutation
   OPEN_MODAL_INDEX(open: boolean) {
@@ -129,11 +134,15 @@ export class QuestionJudgeStore extends VuexModule {
 
   @action()
   async fillListByQuestionId(questionId: number) {
+
     return axios
       .get(`${baseUrl}/GetAllByQuestionId/${questionId}`)
       .then((response: AxiosResponse<Array<IQuestionJudge>>) => {
         this.SET_LIST(response.data);
+        this.MODEL_CHANGED(false);
+
       });
+    
   }
 
   @action({ mode: "raw" })
@@ -186,7 +195,11 @@ export class QuestionJudgeStore extends VuexModule {
 
         if (data.MessageType == MessageType.Success) {
           this.CREATE(data.Obj);
+          this.MODEL_CHANGED(true);
+          this.OPEN_MODAL_INDEX(false);
+     
           this.resetCreate();
+
         }
       });
   }
@@ -216,6 +229,8 @@ export class QuestionJudgeStore extends VuexModule {
 
         if (data.MessageType == MessageType.Success) {
           this.CREATE(data.Obj);
+          this.MODEL_CHANGED(true);
+          this.RESET();
         }
       });
   }
@@ -251,7 +266,11 @@ export class QuestionJudgeStore extends VuexModule {
 
         if (data.MessageType == MessageType.Success) {
           this.UPDATE(data.Obj);
+          this.MODEL_CHANGED(true);
+
           this.resetEdit();
+          this.RESET();
+
         }
       });
   }
@@ -272,6 +291,8 @@ export class QuestionJudgeStore extends VuexModule {
         if (data.MessageType == MessageType.Success) {
           this.DELETE();
           vm["selectedTab"] = "tab-create";
+          this.MODEL_CHANGED(true);
+
           this.RESET();
         }
       });

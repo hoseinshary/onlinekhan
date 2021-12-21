@@ -105,13 +105,13 @@
 
         QuestionJudgeReadAccess = 78,
         QuestionJudgeCreateAccess = 79,
-        QuestionJudgeDeleteAccess = 80,
-        QuestionJudgeUpdateAccess = 81,
+        QuestionJudgeUpdateAccess = 80,
+        QuestionJudgeDeleteAccess = 81,
 
         QuestionAnswerReadAccess = 84,
         QuestionAnswerCreateAccess = 85,
-        QuestionAnswerDeleteAccess = 86,
-        QuestionAnswerUpdateAccess = 87,
+        QuestionAnswerUpdateAccess = 86,
+        QuestionAnswerDeleteAccess = 87,
 
         WriterReadAccess = 88,
         WriterCreateAccess = 89,
@@ -138,8 +138,8 @@
 
         QuestionAnswerJudgeReadAccess = 106,
         QuestionAnswerJudgeCreateAccess = 107,
-        QuestionAnswerJudgeDeleteAccess = 108,
-        QuestionAnswerJudgeUpdateAccess = 109,
+        QuestionAnswerJudgeUpdateAccess = 108,
+        QuestionAnswerJudgeDeleteAccess = 109,
 
 
 

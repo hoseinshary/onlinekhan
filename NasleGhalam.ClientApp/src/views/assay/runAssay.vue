@@ -164,8 +164,7 @@ export default class AssayAnswerSheetVue extends Vue {
       var newDate =new Date( (today.getTime() - this.startTime.getTime()) + 621355968000000000 );
       console.log(today.toTimeString());
       console.log(this.startTime.toTimeString());
-      this.timestamp = moment(newDate).format('HH:MM:SS');
-      
+      this.timestamp = newDate.toString();
 
   }
 

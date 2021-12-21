@@ -360,7 +360,10 @@ namespace NasleGhalam.ServiceLayer.Services
 
             _uow.MarkAsDeleted(lesson);
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            return Mapper.Map<ClientMessageResult>(msgRes);
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = id;
+            return clientResult;
         }
     }
 }

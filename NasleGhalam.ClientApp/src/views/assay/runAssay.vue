@@ -8,10 +8,31 @@
            
           <div class="panel center " >
 
-
+          <div class="col-md-6">
+          <q-field
+            icon="timer"
+            label="زمان باقی مانده "
+          
+            
+          >
               <div id = "intro" style = "text-align:center;">
-                {{ timestamp }}
+                             {{ timeleft }}
               </div>
+          </q-field>
+          </div>
+
+          <div class="col-md-6">
+          <q-field
+            icon="schedule"
+            label="زمان سپری شده"
+          
+            
+          >
+              <div id = "intro" style = "text-align:center;">
+                             {{ timestamp }}
+              </div>
+          </q-field>
+          </div>
 
             پاسخ نامه 
             <br/>
@@ -141,6 +162,7 @@ export default class AssayAnswerSheetVue extends Vue {
    
   startTime : Date; 
   timestamp = "";
+  timeleft = "";
 
   pageAccess = util.getAccess(this.assayStore.modelName);
   
@@ -160,11 +182,31 @@ export default class AssayAnswerSheetVue extends Vue {
       const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       const dateTime = date +' '+ time;
       
-   
-      var newDate =new Date( (today.getTime() - this.startTime.getTime()) + 621355968000000000 );
-      console.log(today.toTimeString());
-      console.log(this.startTime.toTimeString());
-      this.timestamp = newDate.toString();
+      
+      var countDownDate = new Date(this.startTime.getTime() + this.assay.Time * 60000);
+
+
+      // Find the distance between now and the count down date
+      var distance = today.getTime() - this.startTime.getTime();
+
+
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      // var diffTimeHour = today.getHours() - this.startTime.getHours();
+      // var diffTimeMinutes = today.getMinutes() - this.startTime.getMinutes();
+      // var diffTimeSecond = today.getSeconds() - this.startTime.getSeconds();
+
+      var distance2 = countDownDate.getTime() - today.getTime();
+
+      var hours2 = Math.floor((distance2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes2 = Math.floor((distance2 % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds2 = Math.floor((distance2 % (1000 * 60)) / 1000);
+
+      
+      this.timestamp = seconds + " : " + minutes + " : " + hours;
+
+      this.timeleft = seconds2 + " : " + minutes2 + " : " + hours2;
 
   }
 

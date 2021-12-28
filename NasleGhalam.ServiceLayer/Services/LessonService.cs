@@ -84,6 +84,16 @@ namespace NasleGhalam.ServiceLayer.Services
                    .AsEnumerable()
                    .ToList();
 
+               var questions3 = new List<Question>();
+               var questions2Ids = questions2.Select(x => x.Id).ToArray();
+               foreach (var question in questions1)
+               {
+                   if (questions2Ids.Contains(question.Id))
+                   {
+                        questions3.Add(question);
+                   }
+               }
+
                var allQuestionNum = questions1/*.Concat(questions2)*/.Select(x=>x.Id).Distinct().Count();
 
                var allQuestionTopiced = questions1.Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
@@ -91,11 +101,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 var allQuestionJudged = questions1
                    .Count(x => x.QuestionJudges.Any<QuestionJudge>());
 
-               var allQuestionJudgedFull = questions2.Where(x => x.QuestionJudges.Select(z => z.UserId).Distinct().Count() >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges).Count();
+               var allQuestionJudgedFull = questions3.Where(x => x.QuestionJudges.Select(z => z.UserId).Distinct().Count() >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges).Count();
                    
 
-               var allQuestionActived = questions2.Where(x => x.IsActive).Where(x => x.QuestionJudges.Select(z => z.UserId).Distinct().Count() >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges).Count();
-                var allQuestionHybrid = questions2/*.Concat(questions2)*/.Where(x => x.IsHybrid == true).Select(x => x.Id).Distinct().Count();
+               var allQuestionActived = questions3.Where(x => x.IsActive).Where(x => x.QuestionJudges.Select(z => z.UserId).Distinct().Count() >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges).Count();
+                var allQuestionHybrid = questions3/*.Concat(questions2)*/.Where(x => x.IsHybrid == true).Select(x => x.Id).Distinct().Count();
 
                returnVal.Add( new AllQuestionOfEachLessonViewModel
                {

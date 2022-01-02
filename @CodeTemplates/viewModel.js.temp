@@ -1,0 +1,13 @@
+import {
+  required,
+  displayName,
+  maxLength,
+  numeric,
+  requiredDdl
+} from 'plugins/vuelidate';
+
+export default {
+  {__modelName}Obj: {
+    {__props}
+  }
+};

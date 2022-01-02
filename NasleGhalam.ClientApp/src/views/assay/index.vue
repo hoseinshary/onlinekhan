@@ -12,7 +12,7 @@
         <!-- <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" /> -->
 
         <q-btn class="q-ma-sm" size="sm" round color="blue" icon="directions_run" @click="runAssay(data.row.Id)">    
-        <q-tooltip>اچرا</q-tooltip>
+        <q-tooltip>اجرا</q-tooltip>
         </q-btn>
         <q-btn class="q-ma-sm" size="sm" round color="purple" icon="print" @click="printAssay(data.row.Id)">
           <q-tooltip>چاپ</q-tooltip>

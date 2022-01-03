@@ -365,5 +365,24 @@ namespace NasleGhalam.Common
             }
             return dataTable;
         }
+
+
+        public static List<int> ToInts(this IList<bool> list)
+        {
+            var returnList = new List<int>();
+            foreach (var b in list)
+            {
+                if (b)
+                {
+                    returnList.Add(1);
+                }
+                else
+                {
+                    returnList.Add(0);
+                }
+            }
+
+            return returnList;
+        }
     }
 }

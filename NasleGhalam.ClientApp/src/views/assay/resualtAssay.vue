@@ -1,46 +1,165 @@
 <template>
-  <bs-modal
-    title="نتیجه آزمون "
-    position="bottom"
-    
-    :show="assayAnswerSheetStore.openModal.resualt"
-    @close="assayAnswerSheetStore.OPEN_MODAL_RESUALT(false)"
-  >
-
-
-    <template slot="header">
-      <q-toolbar slot="header" color="warning" text-color>
-        <q-toolbar-title>نتیجه آزمون </q-toolbar-title>
-        <q-btn dense icon="close" @click="assayAnswerSheetStore.OPEN_MODAL_RESUALT(false)" />
-      </q-toolbar>
-    </template>
-
-    <slot>
-    <section class="col-md-10  " >
-    <div class="col-md-12 row ">
+  <section class="col-md-10 row">
+    <div class="col-md-4 ">
      
+     <q-card>
+      <q-card-title>
+        نتیجه آزمون 
+      </q-card-title>
+      <q-card-separator />
+       <q-card-main>
+         <div>
+         تعداد کل سوالات : {{getCountAll}}
+         </div>
+                  <div class="bg-black text-white">
+         درصد کنکوری : {{(((3 * getCorrect) - getWrong) / (getCountAll * 3)).toFixed(2) * 100}}
+         </div>
+      </q-card-main>
+      <q-card-main>
      <div class="text-green">
-       تعداد سوالات درست : {{2}}
+       تعداد سوالات درست : {{getCorrect}}
      </div>
-     <div class="text-red">
-       تعداد سوالات غلط : {{3}}
+        <div class="text-green">
+       درصد : {{(getCorrect /getCountAll).toFixed(2) * 100}}
      </div>
-     <div class="text-orange">
-       تعداد سوالات نزده : {{2}}
+      </q-card-main>
+       <q-card-main>
+   <div class="text-red">
+       تعداد سوالات غلط : {{getWrong}}
      </div>
+      <div class="text-red">
+        درصد : {{(getWrong /getCountAll).toFixed(2) * 100}}
+     </div>
+      </q-card-main>
+         <q-card-main>
+      <div class="text-orange">
+       تعداد سوالات نزده : {{getNon}}
+     </div>
+       <div class="text-orange">
+       درصد : {{getNon /getCountAll * 100}}
+     </div>
+      </q-card-main>
+    </q-card>
+     
+     
+ 
+     
+    </div>
+
+    <div class="col-md-4" >
+        <div class="col-md-12 ">
+        
+         
+           
+          <div class="panel center " >
+
+        
+         
+
+            پاسخ نامه 
+            <br/>
+         
+            <ul style="list-style-type:none"  class="float-left">
+              <li
+                v-for="(question,index) in answerSheet.Answers"
+                :key="`fruit-${index}`"
+                class="float-left"
+              >
+
+                <!-- <div v-if="index==0" class="row float-right">
+                   <q-chip small  color="yellow text-black">1</q-chip>
+                   <q-chip small  color="yellow text-black">2</q-chip>
+                   <q-chip small color="yellow text-black">3</q-chip>
+                   <q-chip  small color="yellow text-black">4</q-chip>
+                </div> -->
+
+                <div v-if="answerSheet.AnswerSheetCorectExams[index].Tashih == 0" class="col-md-12 row" >
+                  <q-btn round dense color="green" class="center q-mt-md"  >
+                    {{index+1}}
+                  </q-btn>
+                  <div class="shadow-1 q-ma-sm gutter-xs  bg-grey-2 corner-around ">
+                    
+                  
+                  <q-radio color="green" readonly v-model="answerSheet.Answers[index]" val="1" label="1" left-label />
+                  <q-radio color="green" readonly v-model="answerSheet.Answers[index]" val="2" label="2" left-label />
+                  <q-radio color="green" readonly v-model="answerSheet.Answers[index]" val="3" label="3" left-label />
+                  <q-radio color="green" readonly v-model="answerSheet.Answers[index]" val="4" label="4" left-label />
+            
+               
+                </div>
+                   <q-btn round class="center q-mt-md " @click="eraseAnswer(index)">
+
+                      <q-icon  name="description" />
+                  </q-btn>
+                   <div class="q-pa-lg gutter-xs center" >
+                     زمان پاسخ : {{0}}
+                  </div>
+                </div>
+                     <div v-if="answerSheet.AnswerSheetCorectExams[index].Tashih == 1" class="col-md-12 row" >
+                  <q-btn round dense color="red" class="center q-mt-md"  >
+                    {{index+1}}
+                  </q-btn>
+                  <div class="shadow-1 q-ma-sm gutter-xs  bg-grey-2 corner-around ">
+                    
+                  <q-checkbox readonly toggle-indeterminate indeterminate-value="1" checked-icon="cancel_presentation" unchecked-icon="radio_button_unchecked" indeterminate-icon="check_box" v-model="answerSheet.Answers[index]" true-value="1" val="1" label="1" left-label/>
+                  <q-checkbox readonly toggle-indeterminate indeterminate-value="2" checked-icon="cancel_presentation" unchecked-icon="radio_button_unchecked" indeterminate-icon="check_box" v-model="answerSheet.Answers[index]" true-value="2" val="2" label="2" left-label/>
+                  <q-checkbox readonly toggle-indeterminate indeterminate-value="3" checked-icon="cancel_presentation" unchecked-icon="radio_button_unchecked" indeterminate-icon="check_box" v-model="answerSheet.Answers[index]" true-value="3" val="3" label="3" left-label/>
+                  <q-checkbox readonly toggle-indeterminate indeterminate-value="4" checked-icon="cancel_presentation" unchecked-icon="radio_button_unchecked" indeterminate-icon="check_box" v-model="answerSheet.Answers[index]" true-value="4" val="4" label="4" left-label/>
+  
+
+
+                  <!-- <q-radio  checked-icon="cancel_presentation" color="red" readonly v-model="answerSheet.Answers[index]" val="1" label="1" left-label />
+                  <q-radio  checked-icon="cancel_presentation" color="red" readonly v-model="answerSheet.Answers[index]" val="2" label="2" left-label />
+                  <q-radio  checked-icon="cancel_presentation" color="red" readonly v-model="answerSheet.Answers[index]" val="3" label="3" left-label />
+                  <q-radio  checked-icon="cancel_presentation" color="red" readonly v-model="answerSheet.Answers[index]" val="4" label="4" left-label />
+                    -->
+                </div>
+                   <q-btn round class="center q-mt-md " @click="eraseAnswer(index)">
+
+                      <q-icon  name="description" />
+                  </q-btn>
+                   <div class="q-pa-lg gutter-xs center" >
+                     زمان پاسخ : {{0}}
+                  </div>
+                </div>
+                     <div v-if="answerSheet.AnswerSheetCorectExams[index].Tashih == 2" class="col-md-12 row" >
+                  <q-btn round dense color="orange" class="center q-mt-md"  >
+                    {{index+1}}
+                  </q-btn>
+                  <div class="shadow-1 q-ma-sm gutter-xs  bg-grey-2 corner-around ">
+                    
+                  
+                  <q-radio color="orange" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="1" label="1" left-label />
+                  <q-radio color="orange" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="2" label="2" left-label />
+                  <q-radio color="orange" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="3" label="3" left-label />
+                  <q-radio color="orange" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="4" label="4" left-label />
+                  
+               
+                </div>
+                
+                  <q-btn round class="center q-mt-md " @click="eraseAnswer(index)">
+
+                      <q-icon  name="description" />
+                  </q-btn>
+                  <div class="q-pa-lg gutter-xs center" >
+                     زمان پاسخ : {{0}}
+                  </div>
+                </div>
+                
+              </li>
+            </ul>
+
+            
+          </div>  
+       
+      </div>
      
     </div>
   </section>
-    </slot>
-
-    <template slot="footer">
-      <base-btn-save-back @click="assayAnswerSheetStore.OPEN_MODAL_RESUALT(false)"></base-btn-save-back>
-      <base-btn-back @click="assayAnswerSheetStore.OPEN_MODAL_RESUALT(false)"></base-btn-back>
-    </template>
-  </bs-modal>
-
-
 </template>
+
+
+
 
 
 
@@ -63,6 +182,7 @@ export default class AssayAnswerSheetVue extends Vue {
   assayStore = vxm.assayStore;
   assay = vxm.assayStore.assayCreate;
   assayAnswerSheetStore = vxm.assayAnswerSheetStore;
+  
   resualt = vxm.assayAnswerSheetStore.assayAnswerSheetResult;
   answerSheet = vxm.assayAnswerSheetStore.assayAnswerSheet;
    
@@ -74,7 +194,23 @@ export default class AssayAnswerSheetVue extends Vue {
   //#endregion
 
   //#region ### computed ###
- 
+  get getCorrect()
+  {
+    return this.answerSheet.AnswerSheetCorectExams.filter(x => x.Tashih ==0 ).length;
+  }
+get getNon()
+  {
+    return this.answerSheet.AnswerSheetCorectExams.filter(x => x.Tashih == 2).length;
+  }
+  get getWrong()
+  {
+    return this.answerSheet.AnswerSheetCorectExams.filter(x => x.Tashih ==1 ).length;
+  }
+
+  get getCountAll()
+  {
+    return this.answerSheet.AnswerSheetCorectExams.length;
+  }
 
   //#endregion
 
@@ -91,7 +227,9 @@ export default class AssayAnswerSheetVue extends Vue {
   
     this.assayAnswerSheetStore.SET_RESUALT_VUE(this);
 
-  
+
+    if(this.answerSheet.Id != 0)
+      this.assayAnswerSheetStore.getById(this.answerSheet.Id);
   }
   //#endregion
 }

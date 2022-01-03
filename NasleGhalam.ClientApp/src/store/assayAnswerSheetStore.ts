@@ -1,6 +1,6 @@
 import Vue from "Vue";
-import IAssayAnswerSheet , { DefaultAssayAnswerSheet } from "src/models/IAssayAnswerSheet";
-import AssayAnswerSheetCorectExam  from "src/models/IAssayAnswerSheet";
+import IAssayAnswerSheet , {  DefaultAssayAnswerSheet } from "src/models/IAssayAnswerSheet";
+import {AssayAnswerSheetCorectExam }  from "src/models/IAssayAnswerSheet";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -195,16 +195,19 @@ export class AssayAnswerSheetStore extends VuexModule {
  
     return axios
       .post(`${baseUrl}/Create`, this.assayAnswerSheet)
-      .then((response: AxiosResponse<Array<AssayAnswerSheetCorectExam>>) => {
+      .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
        
 
-        if (data.length != 0) {
-          this.assayAnswerSheetResult = data;
-          //router.push("/assay/resualtAssay");
-          this.OPEN_MODAL_RESUALT(true);
+        if (data.MessageType == 1) {
+          this.assayAnswerSheetResult = data.Obj;
 
-          console.log(this.assayAnswerSheetResult);
+          if(data.Id)
+           this.assayAnswerSheet.Id = data.Id ;
+          router.push("/assay/resualtAssay");
+          //this.OPEN_MODAL_RESUALT(true);
+          //console.log(data.Id);
+          //console.log(this.assayAnswerSheetResult);
 
 
         }

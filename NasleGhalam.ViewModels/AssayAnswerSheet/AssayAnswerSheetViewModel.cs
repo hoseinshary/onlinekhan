@@ -30,7 +30,7 @@ namespace NasleGhalam.ViewModels.AssayAnswerSheet
         [Display(Name = "")]
         public DateTime DateTime { get; set; }
 
-        public IList<string> AnswerTimes { get; set; }
+        public IList<int> AnswerTimes { get; set; }
 
         public IList<string> Answers { get; set; }
 
@@ -38,6 +38,9 @@ namespace NasleGhalam.ViewModels.AssayAnswerSheet
 
         public IList<bool> AfterList { get; set; }
         public IList<bool> CantList { get; set; }
+
+        public IList<int> QuestionIds { get; set; }
+
 
         public IList<AssayAnswerSheetCorectExamViewModel> AnswerSheetCorectExams { get; set; }
 

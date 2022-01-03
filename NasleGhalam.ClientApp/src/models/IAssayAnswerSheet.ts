@@ -18,6 +18,9 @@ export default interface IAssayAnswerSheet {
   MaybeList:Array<boolean>;
   AfterList:Array<boolean>;
   CantList:Array<boolean>;
+  QuestionIds:Array<number>;
+
+
 
   AnswerSheetCorectExams : Array<AssayAnswerSheetCorectExam>;
 
@@ -37,7 +40,8 @@ export const DefaultAssayAnswerSheet: IAssayAnswerSheet = {
   DateTime: "",
   // Assay:utilities.cloneObject(),
   User:utilities.cloneObject(DefaultUser),
-  AnswerSheetCorectExams:[]
+  AnswerSheetCorectExams:[],
+  QuestionIds:[]
 
 };
 

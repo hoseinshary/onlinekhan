@@ -33,13 +33,16 @@ namespace NasleGhalam.ServiceLayer.Services
         public AssayAnswerSheetViewModel GetById(int id)
         {
             AssayAnswerSheetViewModel a = new AssayAnswerSheetViewModel();
-              a=  _assayAnswerSheets
+              var b =  _assayAnswerSheets
+                  .Include(x =>x.Assay.AssayQuestions)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<AssayAnswerSheetViewModel>)
+                //.Select(Mapper.Map<AssayAnswerSheetViewModel>)
                 .FirstOrDefault();
 
+              a = Mapper.Map<AssayAnswerSheetViewModel>(b);
+              a.QuestionIds = b.Assay.AssayQuestions.Select(x => x.QuestionId).ToList();
               a.AnswerSheetCorectExams = new List<AssayAnswerSheetCorectExamViewModel>();
              var assay = _assayService.Value.GetById(a.AssayId);
 

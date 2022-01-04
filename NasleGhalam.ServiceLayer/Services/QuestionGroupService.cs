@@ -43,6 +43,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public QuestionGroupViewModel GetById(int id)
         {
             return _questionGroups
+                .Where(x => x.IsDeleted == false)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
@@ -58,6 +59,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionGroupViewModel> GetAll()
         {
             return _questionGroups
+                .Where(x => x.IsDeleted == false)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<QuestionGroupViewModel>)
@@ -420,98 +422,127 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// 
         public ClientMessageResult Delete(int id)
         {
             var questionGroup = _questionGroups
                 .Include(current => current.Questions)
-                .Include(current => current.Questions.Select(x => x.QuestionAnswers))
-                .Include(current => current.Questions.Select(x => x.Supervisors))
-                .Include(current => current.Questions.Select(x=>x.QuestionUpdates))
-                .First(current => current.Id == id);
+                .Where(current => current.Id == id).First();
 
             if (questionGroup == null)
                 return ClientMessageResult.NotFound();
 
             //remove questions relation
             var questions = questionGroup.Questions.ToList();
-            var questionAnswers = questionGroup.Questions.Select(x => x.QuestionAnswers.ToList()).ToList();
-            var supervisors = questionGroup.Questions.Select(x => x.Supervisors.ToList()).ToList();
-            var questionUpdates = questionGroup.Questions.Select(x => x.QuestionUpdates.ToList()).ToList();
-
-
-            int i = 0;
             foreach (var item in questions)
             {
-                foreach (var answer in questionAnswers[i])
-                {
-                    questionGroup.Questions.Where(x => x.Id == item.Id).First().QuestionAnswers.Remove(answer);
-                    _uow.MarkAsDeleted(answer);
-                }
-
-                foreach (var update in questionUpdates[i])
-                {
-                    questionGroup.Questions.Where(x => x.Id == item.Id).First().QuestionUpdates.Remove(update);
-                    _uow.MarkAsDeleted(update);
-                }
-
-                foreach (var supervisor in supervisors[i])
-                {
-                    questionGroup.Questions.Where(x => x.Id == item.Id).First().Supervisors.Remove(supervisor);
-                    _uow.MarkAsDeleted(supervisor);
-                }
-
-                questionGroup.Questions.Remove(item);
-                _uow.MarkAsDeleted(item);
-                if (item.AnswerNumber != 0)
-                {
-                    QuestionService.DeleteOptionsOfQuestion(item.FileName);
-                }
-
-
-                i++;
+                item.Deleted = true;
+                _uow.MarkAsChanged(item);
             }
 
-
-
-            _uow.MarkAsDeleted(questionGroup);
-
+            questionGroup.IsDeleted = true;
+            _uow.MarkAsChanged(questionGroup);
+            _uow.ValidateOnSaveEnabled(false);
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            if (msgRes.MessageType == MessageType.Success)
-            {
-                //remove questions file
-                int j = 0;
-                foreach (var item in questions)
-                {
-                    File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".docx");
-                    File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".png");
-
-                    foreach (var answer in questionAnswers[j])
-                    {
-                        if (File.Exists(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".docx"))
-                        {
-                            File.Delete(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".docx");
-                        }
-
-                        if (File.Exists(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".png"))
-                        {
-                            File.Delete(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".png");
-                        }
-                    }
-                    j++;
-                }
-
-
-
-
-                File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".docx");
-                File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".xlsx");
-            }
 
             var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
             if (clientResult.MessageType == MessageType.Success)
                 clientResult.Obj = id;
             return clientResult;
+
         }
+        //public ClientMessageResult Delete(int id)
+        //{
+        //    var questionGroup = _questionGroups
+        //        .Include(current => current.Questions)
+        //        .Include(current => current.Questions.Select(x => x.QuestionAnswers))
+        //        .Include(current => current.Questions.Select(x => x.Supervisors))
+        //        .Include(current => current.Questions.Select(x=>x.QuestionUpdates))
+        //        .First(current => current.Id == id);
+
+        //    if (questionGroup == null)
+        //        return ClientMessageResult.NotFound();
+
+        //    //remove questions relation
+        //    var questions = questionGroup.Questions.ToList();
+        //    var questionAnswers = questionGroup.Questions.Select(x => x.QuestionAnswers.ToList()).ToList();
+        //    var supervisors = questionGroup.Questions.Select(x => x.Supervisors.ToList()).ToList();
+        //    var questionUpdates = questionGroup.Questions.Select(x => x.QuestionUpdates.ToList()).ToList();
+
+
+        //    int i = 0;
+        //    foreach (var item in questions)
+        //    {
+        //        foreach (var answer in questionAnswers[i])
+        //        {
+        //            questionGroup.Questions.Where(x => x.Id == item.Id).First().QuestionAnswers.Remove(answer);
+        //            _uow.MarkAsDeleted(answer);
+        //        }
+
+        //        foreach (var update in questionUpdates[i])
+        //        {
+        //            questionGroup.Questions.Where(x => x.Id == item.Id).First().QuestionUpdates.Remove(update);
+        //            _uow.MarkAsDeleted(update);
+        //        }
+
+        //        foreach (var supervisor in supervisors[i])
+        //        {
+        //            questionGroup.Questions.Where(x => x.Id == item.Id).First().Supervisors.Remove(supervisor);
+        //            _uow.MarkAsDeleted(supervisor);
+        //        }
+
+        //        questionGroup.Questions.Remove(item);
+        //        _uow.MarkAsDeleted(item);
+        //        if (item.AnswerNumber != 0)
+        //        {
+        //            QuestionService.DeleteOptionsOfQuestion(item.FileName);
+        //        }
+
+
+        //        i++;
+        //    }
+
+
+
+        //    _uow.MarkAsDeleted(questionGroup);
+
+        //    var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+        //    if (msgRes.MessageType == MessageType.Success)
+        //    {
+        //        //remove questions file
+        //        int j = 0;
+        //        foreach (var item in questions)
+        //        {
+        //            File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".docx");
+        //            File.Delete(SitePath.GetQuestionAbsPath(item.FileName) + ".png");
+
+        //            foreach (var answer in questionAnswers[j])
+        //            {
+        //                if (File.Exists(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".docx"))
+        //                {
+        //                    File.Delete(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".docx");
+        //                }
+
+        //                if (File.Exists(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".png"))
+        //                {
+        //                    File.Delete(SitePath.GetQuestionAnswerAbsPath(answer.FilePath) + ".png");
+        //                }
+        //            }
+        //            j++;
+        //        }
+
+
+
+
+        //        File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".docx");
+        //        File.Delete(SitePath.GetQuestionGroupAbsPath(questionGroup.File) + ".xlsx");
+        //    }
+
+        //    var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+        //    if (clientResult.MessageType == MessageType.Success)
+        //        clientResult.Obj = id;
+        //    return clientResult;
+        //}
 
 
 

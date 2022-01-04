@@ -76,7 +76,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public int AnswerNumber { get; set; }
 
         public string  TopicAnswer { get; set; }
-
+        public bool Deleted { get; set; }
         public ICollection<QuestionJudge> QuestionJudges { get; set; }
                
         public ICollection<QuestionOption> QuestionOptions { get; set; }

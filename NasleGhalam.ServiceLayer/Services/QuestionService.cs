@@ -71,6 +71,7 @@ namespace NasleGhalam.ServiceLayer.Services
             //    .AsEnumerable()
             //    .FirstOrDefault();
             return _questions
+                .Where(x=>x.Deleted == false)
                 .Include(current => current.QuestionOptions)
                 .Include(current => current.Topics)
                 .Include(current => current.Topics.Select(x => x.Lesson))
@@ -109,7 +110,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     NumberOfQuestionJudged = x.QuestionJudges.Count,
                     NumberOfQuestionTopiced = x.QuestionsUpdates.Where(current => current.QuestionActivity == QuestionActivity.Topic).Count(),
                     NumberOfSupervisorQuestion = x.SupervisorQuestions.Count,
-                    NumberOfWriteQuestion = _questions.Count(y => y.WriterId == x.Id),
+                    NumberOfWriteQuestion = _questions.Where(current => current.Deleted == false).Count(y => y.WriterId == x.Id),
                     Department = x.Lessons.FirstOrDefault().LessonDepartments.FirstOrDefault().Name
                 }).ToList();
 
@@ -121,6 +122,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
             return _questions
+                .Where(x => x.Deleted == false)
                 .Include(x => x.Topics)
                 .Include(x => x.Topics.Select(y => y.Lesson))
                 .Include(x => x.QuestionJudges)
@@ -189,6 +191,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
             var returnVal = _questions
+                .Where(x => x.Deleted == false)
                 .Include(x => x.Topics)
                 .Include(x => x.Topics.Select(y => y.Lesson))
                 .Include(x => x.QuestionJudges)
@@ -302,6 +305,7 @@ namespace NasleGhalam.ServiceLayer.Services
             if (rollLevel < 3)
             {
                 return _questions
+                    .Where(x => x.Deleted == false)
                     .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                     .Where(x => x.QuestionJudges.Count < x.Topics.FirstOrDefault().Lesson.NumberOfJudges)
                     .AsNoTracking()
@@ -312,6 +316,7 @@ namespace NasleGhalam.ServiceLayer.Services
             else
             {
                 return _questions
+                    .Where(x => x.Deleted == false)
                     .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                     .Where(current =>
                         current.QuestionJudges.All(x => x.UserId != userid) /*|| !current.QuestionJudges.Any()*/)
@@ -329,6 +334,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
 
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                 .Where(x => !x.QuestionAnswers.Any())
                 .AsNoTracking()
@@ -342,6 +348,7 @@ namespace NasleGhalam.ServiceLayer.Services
         {
 
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                 .Where(x => x.IsActive)
                 .AsNoTracking()
@@ -358,6 +365,7 @@ namespace NasleGhalam.ServiceLayer.Services
             if (rollLevel < 3)
             {
                 return _questions
+                    .Where(x => x.Deleted == false)
                     .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                     //.Where(x => x.QuestionAnswers.All(y => y.QuestionAnswerJudges.Any()))
                     .Where(x => x.QuestionAnswers.Any(y => y.QuestionAnswerJudges.Count < x.Topics.FirstOrDefault().Lesson.NumberOfJudges))
@@ -370,6 +378,7 @@ namespace NasleGhalam.ServiceLayer.Services
             else
             {
                 return _questions
+                    .Where(x => x.Deleted == false)
                     .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                     .Where(x => x.QuestionAnswers.All(y => y.QuestionAnswerJudges.All(z => z.UserId != userid)))
                     .AsNoTracking()
@@ -389,6 +398,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllByTopicIds(IEnumerable<int> ids)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.Topics.Any(x => ids.Contains(x.Id)))
                 .AsNoTracking()
                 .AsEnumerable()
@@ -404,6 +414,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public int CountAllJudgedByUserId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.QuestionJudges.Any(x => x.UserId == id))
                 .AsNoTracking()
                 .AsEnumerable()
@@ -421,6 +432,7 @@ namespace NasleGhalam.ServiceLayer.Services
             if (rolllevel < 3)
             {
                 return _questions
+                    .Where(x => x.Deleted == false)
                     .Where(x => x.QuestionGroups.Any(y => y.LessonId == lessonId))
                     .Where(x => x.QuestionJudges.Count >= x.QuestionGroups.FirstOrDefault().Lesson.NumberOfJudges)
                     .OrderByDescending(x => x.Id)
@@ -433,6 +445,7 @@ namespace NasleGhalam.ServiceLayer.Services
             else
             {
                 return _questions
+                    .Where(x => x.Deleted == false)
                     .Where(current => current.QuestionJudges.Any(x => x.UserId == userId))
                     .Where(x => x.QuestionGroups.Any(y => y.LessonId == lessonId))
                     //.Where(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges)
@@ -453,6 +466,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllActiveByLessonId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.IsActive)
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
                 .AsNoTracking()
@@ -469,6 +483,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllUnActiveByLessonId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => !current.IsActive)
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
                 .Where(x => x.QuestionJudges.Count >= x.QuestionGroups.FirstOrDefault().Lesson.NumberOfJudges)
@@ -485,6 +500,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public int CountAllActive()
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Count(current => current.IsActive);
         }
 
@@ -496,6 +512,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public int CountAll()
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Count();
         }
 
@@ -508,6 +525,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllJudgedByUserId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.QuestionJudges.Any(x => x.UserId == id))
                 .OrderByDescending(x => x.Id)
                 .AsNoTracking()
@@ -527,6 +545,7 @@ namespace NasleGhalam.ServiceLayer.Services
             
 
             return _questions
+                .Where(x => x.Deleted == false)
                 .Include(current => current.Writer)
                 .Include(current => current.Lookup_AreaTypes)
                 .Include(current => current.Lookup_QuestionRank)
@@ -579,6 +598,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllNoTopicByLessonId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
                 .Where(x => !x.Topics.Any())
                 .AsNoTracking()
@@ -594,6 +614,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllByLessonId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
                 .AsNoTracking()
                 .AsEnumerable()
@@ -608,6 +629,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllJudgedByLessonId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Where(current => current.QuestionGroups.Any(x => x.LessonId == id))
                 .Where(x => x.QuestionJudges.Count >= x.Topics.FirstOrDefault().Lesson.NumberOfJudges)
                 .AsNoTracking()
@@ -624,6 +646,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<QuestionViewModel> GetAllByQuestionGroupId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Include(current => current.QuestionAnswers)
                 //.Include(current => current.QuestionAnswers.OrderBy(y => y.IsMaster))
                 .Where(current => current.QuestionGroups.Any(x => x.Id == id))
@@ -641,6 +664,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<Question> GetAllQuestionsByQuestionGroupId(int id)
         {
             return _questions
+                .Where(x => x.Deleted == false)
                 .Include(current => current.QuestionAnswers)
                 .Where(current => current.QuestionGroups.Any(x => x.Id == id))
                 .AsNoTracking()
@@ -1846,84 +1870,100 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// 
         public ClientMessageResult Delete(int id)
         {
-            var question = _questions
-                .Include(current => current.Topics)
-                .Include(current => current.Tags)
-                .Include(current => current.QuestionOptions)
-                .Include(current => current.Supervisors)
-                .Include(current => current.QuestionGroups)
-                .Include(current => current.QuestionUpdates)
-                .First(current => current.Id == id);
-
+            var question = _questions.Where(x => x.Id == id).First();
             if (question == null)
                 return ClientMessageResult.NotFound();
-
-            //remove topics
-            var topics = question.Topics.ToList();
-            foreach (var item in topics)
-            {
-                question.Topics.Remove(item);
-            }
-
-            //remove tags
-            var tags = question.Tags.ToList();
-            foreach (var item in tags)
-            {
-                question.Tags.Remove(item);
-            }
-
-            //delete supervisor
-            foreach (var user in question.Supervisors.ToList())
-            {
-                question.Supervisors.Remove(user);
-            }
-
-
-            //delete questionGroup
-            foreach (var questiongroup in question.QuestionGroups.ToList())
-            {
-                question.QuestionGroups.Remove(questiongroup);
-            }
-
-            //remove options
-            var options = question.QuestionOptions.ToList();
-            foreach (var item in options)
-            {
-                _uow.MarkAsDeleted(item);
-            }
-
-            //remove questionupdates
-            var questionUpdates = question.QuestionUpdates.ToList();
-            foreach (var item in questionUpdates)
-            {
-                _uow.MarkAsDeleted(item);
-            }
-
-            _uow.MarkAsDeleted(question);
-
+            question.Deleted = true;
+            _uow.ValidateOnSaveEnabled(false);
+            _uow.MarkAsChanged(question);
             var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
-            if (msgRes.MessageType == MessageType.Success)
-            {
-                if (File.Exists(SitePath.GetQuestionAbsPath(question.FileName) + ".docx"))
-                {
-                    File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".docx");
-                }
-
-                if (File.Exists(SitePath.GetQuestionAbsPath(question.FileName) + ".png"))
-                {
-                    File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".png");
-                }
-
-                DeleteOptionsOfQuestion(question.FileName);
-            }
 
             var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
             if (clientResult.MessageType == MessageType.Success)
                 clientResult.Obj = id;
             return clientResult;
         }
+            //public ClientMessageResult Delete(int id)
+            //{
+            //    var question = _questions
+            //        .Include(current => current.Topics)
+            //        .Include(current => current.Tags)
+            //        .Include(current => current.QuestionOptions)
+            //        .Include(current => current.Supervisors)
+            //        .Include(current => current.QuestionGroups)
+            //        .Include(current => current.QuestionUpdates)
+            //        .First(current => current.Id == id);
+
+            //    if (question == null)
+            //        return ClientMessageResult.NotFound();
+
+            //    //remove topics
+            //    var topics = question.Topics.ToList();
+            //    foreach (var item in topics)
+            //    {
+            //        question.Topics.Remove(item);
+            //    }
+
+            //    //remove tags
+            //    var tags = question.Tags.ToList();
+            //    foreach (var item in tags)
+            //    {
+            //        question.Tags.Remove(item);
+            //    }
+
+            //    //delete supervisor
+            //    foreach (var user in question.Supervisors.ToList())
+            //    {
+            //        question.Supervisors.Remove(user);
+            //    }
+
+
+            //    //delete questionGroup
+            //    foreach (var questiongroup in question.QuestionGroups.ToList())
+            //    {
+            //        question.QuestionGroups.Remove(questiongroup);
+            //    }
+
+            //    //remove options
+            //    var options = question.QuestionOptions.ToList();
+            //    foreach (var item in options)
+            //    {
+            //        _uow.MarkAsDeleted(item);
+            //    }
+
+            //    //remove questionupdates
+            //    var questionUpdates = question.QuestionUpdates.ToList();
+            //    foreach (var item in questionUpdates)
+            //    {
+            //        _uow.MarkAsDeleted(item);
+            //    }
+
+            //    _uow.MarkAsDeleted(question);
+
+            //    var msgRes = _uow.CommitChanges(CrudType.Delete, Title);
+            //    if (msgRes.MessageType == MessageType.Success)
+            //    {
+            //        if (File.Exists(SitePath.GetQuestionAbsPath(question.FileName) + ".docx"))
+            //        {
+            //            File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".docx");
+            //        }
+
+            //        if (File.Exists(SitePath.GetQuestionAbsPath(question.FileName) + ".png"))
+            //        {
+            //            File.Delete(SitePath.GetQuestionAbsPath(question.FileName) + ".png");
+            //        }
+
+            //        DeleteOptionsOfQuestion(question.FileName);
+            //    }
+
+            //    var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            //    if (clientResult.MessageType == MessageType.Success)
+            //        clientResult.Obj = id;
+            //    return clientResult;
+            //}
 
 
 
@@ -1931,13 +1971,13 @@ namespace NasleGhalam.ServiceLayer.Services
 
 
 
-        /// <summary>
-        /// برگشت تعدادکارشناس سوال
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// todo:   check with ali
-        public int GetNumberOfjudges(int questionId)
+            /// <summary>
+            /// برگشت تعدادکارشناس سوال
+            /// </summary>
+            /// <param name="id"></param>
+            /// <returns></returns>
+            /// todo:   check with ali
+            public int GetNumberOfjudges(int questionId)
         {
 
             if (_questionGroupService.Value.IsInQuestionGroup(questionId))

@@ -122,7 +122,7 @@
        
       </div>
   
-   <modal-resualt></modal-resualt>
+   <!-- <modal-resualt></modal-resualt> -->
 
 
     
@@ -148,7 +148,7 @@ const { getScrollTarget, setScrollPosition } = scroll
 
 @Component({
   components: {
-   ModalResualt: () => import("./resualtAssay.vue")
+   //ModalResualt: () => import("./resualtAssay.vue")
 
       
   }

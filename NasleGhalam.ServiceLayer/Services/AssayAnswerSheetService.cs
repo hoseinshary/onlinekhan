@@ -33,14 +33,47 @@ namespace NasleGhalam.ServiceLayer.Services
         public AssayAnswerSheetViewModel GetById(int id)
         {
             AssayAnswerSheetViewModel a = new AssayAnswerSheetViewModel();
-            return _assayAnswerSheets
+              var b =  _assayAnswerSheets
+                  .Include(x =>x.Assay.AssayQuestions)
                 .Where(current => current.Id == id)
                 .AsNoTracking()
                 .AsEnumerable()
-                .Select(Mapper.Map<AssayAnswerSheetViewModel>)
+                //.Select(Mapper.Map<AssayAnswerSheetViewModel>)
                 .FirstOrDefault();
 
-            
+              a = Mapper.Map<AssayAnswerSheetViewModel>(b);
+              a.QuestionIds = b.Assay.AssayQuestions.Select(x => x.QuestionId).ToList();
+              a.AnswerSheetCorectExams = new List<AssayAnswerSheetCorectExamViewModel>();
+             var assay = _assayService.Value.GetById(a.AssayId);
+
+             
+             for (int i = 0; i < a.Answers.Count; i++)
+             {
+                 var tempVal = new AssayAnswerSheetCorectExamViewModel();
+                 if (a.Answers[i] == "0")
+                 {
+                     tempVal.Tashih = Tashih.Non;
+                 }
+                 else if (a.Answers[i].ToString() == assay.QuestionsAnswer[i])
+                 {
+                     tempVal.Tashih = Tashih.Correct;
+                 }
+                 else
+                 {
+                     tempVal.Tashih = Tashih.Wrong;
+                 }
+
+                 tempVal.NumberOfQuestion = i + 1;
+                 tempVal.Path = assay.QuestionsFile[i];
+                 tempVal.CorrectAnswer = assay.QuestionsAnswer[i];
+
+                 a.AnswerSheetCorectExams.Add(tempVal);
+
+
+             }
+
+             return a;
+
         }
 
         /// <summary>
@@ -61,20 +94,15 @@ namespace NasleGhalam.ServiceLayer.Services
         /// </summary>
         /// <param name="assayAnswerSheetViewModel"></param>
         /// <returns></returns>
-        public IList<AssayAnswerSheetCorectExamViewModel> Create(AssayAnswerSheetCreateViewModel assayAnswerSheetViewModel)
+        public ClientMessageResult /*IList<AssayAnswerSheetCorectExamViewModel>*/ Create(AssayAnswerSheetCreateViewModel assayAnswerSheetViewModel)
         {
             var assayAnswerSheet = Mapper.Map<AssayAnswerSheet>(assayAnswerSheetViewModel);
-
-            //foreach (var answer in assayAnswerSheet.Answers)
-            //{
-            //    assayAnswerSheet.Answers += answer + ";";
-            //}
 
             _assayAnswerSheets.Add(assayAnswerSheet);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);
             var clientResult = Mapper.Map<ClientMessageResult>(serverResult);
-
+            clientResult.Id = assayAnswerSheet.Id;
             var returnVal= new List<AssayAnswerSheetCorectExamViewModel>();
 
             if (clientResult.MessageType == MessageType.Success)
@@ -99,6 +127,7 @@ namespace NasleGhalam.ServiceLayer.Services
 
                     tempVal.NumberOfQuestion = i + 1;
                     tempVal.Path = assay.QuestionsFile[i];
+                    tempVal.CorrectAnswer = assay.QuestionsAnswer[i];
 
                     returnVal.Add(tempVal);
 
@@ -106,10 +135,11 @@ namespace NasleGhalam.ServiceLayer.Services
                 }
 
 
-                clientResult.Obj = GetById(assayAnswerSheet.Id);
+                //clientResult.Obj = GetById(assayAnswerSheet.Id);
             }
 
-            return returnVal ;
+            clientResult.Obj = returnVal;
+            return clientResult ;
         }
 
         /// <summary>

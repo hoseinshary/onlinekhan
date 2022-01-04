@@ -33,7 +33,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string MaybeList { get; set; }
 
-        public string AgterfList { get; set; }
+        public string AfterList { get; set; }
         public string CantList { get; set; }
 
     }

@@ -1,6 +1,6 @@
 import Vue from "Vue";
-import IAssayAnswerSheet , { DefaultAssayAnswerSheet } from "src/models/IAssayAnswerSheet";
-import AssayAnswerSheetCorectExam  from "src/models/IAssayAnswerSheet";
+import IAssayAnswerSheet , {  DefaultAssayAnswerSheet } from "src/models/IAssayAnswerSheet";
+import {AssayAnswerSheetCorectExam }  from "src/models/IAssayAnswerSheet";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -18,13 +18,13 @@ import router from "src/router";
 
 @Module({ namespacedPath: "assayAnswerSheetStore/" })
 export class AssayAnswerSheetStore extends VuexModule {
-  openModal: { resualt:boolean; create: boolean; edit: boolean; delete: boolean };
+  openModal: { questionShow:boolean; create: boolean; edit: boolean; delete: boolean };
   assayAnswerSheet: IAssayAnswerSheet;
   private _assayAnswerSheetList: Array<IAssayAnswerSheet>;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
-  private _resualtVue: Vue;
+  private _questionShowVue: Vue;
 
   assayAnswerSheetResult :Array <AssayAnswerSheetCorectExam>;
 
@@ -37,7 +37,7 @@ export class AssayAnswerSheetStore extends VuexModule {
     this.assayAnswerSheet = util.cloneObject(DefaultAssayAnswerSheet);
     this._assayAnswerSheetList = [];
     this.openModal = {
-      resualt: false,
+      questionShow: false,
       create: false,
       edit: false,
       delete: false
@@ -101,8 +101,8 @@ export class AssayAnswerSheetStore extends VuexModule {
   }
 
   @mutation
-  OPEN_MODAL_RESUALT(open: boolean) {
-    this.openModal.resualt = open;
+  OPEN_MODAL_QUESTION(open: boolean) {
+    this.openModal.questionShow = open;
   }
 
 
@@ -122,8 +122,8 @@ export class AssayAnswerSheetStore extends VuexModule {
   }
 
   @mutation
-  SET_RESUALT_VUE(vm: Vue) {
-    this._resualtVue = vm;
+  SET_QUESTION_VUE(vm: Vue) {
+    this._questionShowVue = vm;
   }
 
   @mutation
@@ -195,16 +195,19 @@ export class AssayAnswerSheetStore extends VuexModule {
  
     return axios
       .post(`${baseUrl}/Create`, this.assayAnswerSheet)
-      .then((response: AxiosResponse<Array<AssayAnswerSheetCorectExam>>) => {
+      .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
        
 
-        if (data.length != 0) {
-          this.assayAnswerSheetResult = data;
-          //router.push("/assay/resualtAssay");
-          this.OPEN_MODAL_RESUALT(true);
+        if (data.MessageType == 1) {
+          this.assayAnswerSheetResult = data.Obj;
 
-          console.log(this.assayAnswerSheetResult);
+          if(data.Id)
+           this.assayAnswerSheet.Id = data.Id ;
+          router.push("/assay/resualtAssay");
+          //this.OPEN_MODAL_RESUALT(true);
+          //console.log(data.Id);
+          //console.log(this.assayAnswerSheetResult);
 
 
         }

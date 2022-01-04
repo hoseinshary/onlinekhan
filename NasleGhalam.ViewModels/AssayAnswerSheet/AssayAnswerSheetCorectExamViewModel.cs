@@ -11,6 +11,8 @@ namespace NasleGhalam.ViewModels.AssayAnswerSheet
         public Tashih Tashih { get; set; }
 
         public int NumberOfQuestion { get; set; }
+        public string CorrectAnswer { get; set; }
+
 
         public string Path { get; set; }
 

@@ -39,7 +39,7 @@ namespace NasleGhalam.ViewModels.AssayAnswerSheet
 
         public IList<bool> MaybeList { get; set; }
 
-        public IList<bool> AgterfList { get; set; }
+        public IList<bool> AfterList { get; set; }
         public IList<bool> CantList { get; set; }
 
 

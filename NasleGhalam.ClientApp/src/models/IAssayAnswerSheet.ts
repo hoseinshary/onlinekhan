@@ -18,6 +18,11 @@ export default interface IAssayAnswerSheet {
   MaybeList:Array<boolean>;
   AfterList:Array<boolean>;
   CantList:Array<boolean>;
+  QuestionIds:Array<number>;
+
+
+
+  AnswerSheetCorectExams : Array<AssayAnswerSheetCorectExam>;
 
 }
 
@@ -34,7 +39,10 @@ export const DefaultAssayAnswerSheet: IAssayAnswerSheet = {
   CantList:[],
   DateTime: "",
   // Assay:utilities.cloneObject(),
-  User:utilities.cloneObject(DefaultUser)
+  User:utilities.cloneObject(DefaultUser),
+  AnswerSheetCorectExams:[],
+  QuestionIds:[]
+
 };
 
 
@@ -44,6 +52,7 @@ export class AssayAnswerSheetCorectExam {
   NumberOfQuestion : number;
   Path : string;
   AnswerPath : string;
+  CorrectAnswer : string;
   /**
    * constructor
    */
@@ -51,6 +60,7 @@ export class AssayAnswerSheetCorectExam {
     this.Tashih = 0,
     this.NumberOfQuestion = 0,
     this.Path = "",
-    this.AnswerPath = ""
+    this.AnswerPath = "",
+    this.CorrectAnswer = ""
   }
 }

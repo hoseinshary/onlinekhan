@@ -57,7 +57,7 @@ namespace NasleGhalam.Common.ForQuestionMaking
             var i = 0;
             while (i < arrayTemp.Length)
             {
-                if (arrayTemp[i] == ' ' || arrayTemp[i] == '\n' || arrayTemp[i] == '\r')
+                if (arrayTemp[i] == ' ' || arrayTemp[i] == '\n' || arrayTemp[i] == '\r' || arrayTemp[i] == '\v')
                 {
                     i++;
                     continue;

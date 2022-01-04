@@ -28,7 +28,7 @@ namespace NasleGhalam.DomainClasses.Entities
         public Lesson Lesson { get; set; }
 
         public int UserId { get; set; }
-
+        public bool IsDeleted { get; set; }
         public User User { get; set; }
 
 

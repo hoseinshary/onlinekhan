@@ -58,6 +58,7 @@
     <Compile Include="AssayAnswerSheet\AssayAnswerSheetUpdateViewModel.cs" />
     <Compile Include="AssayAnswerSheet\AssayAnswerSheetCreateViewModel.cs" />
     <Compile Include="AssayAnswerSheet\AssayAnswerSheetCorectExamViewModel.cs" />
+    <Compile Include="AssayAnswerSheet\AssayAnswerSheetReportViewModel.cs" />
     <Compile Include="AssayAnswerSheet\AssayAnswerSheetViewModel.cs" />
     <Compile Include="Assay\AssayCreateViewModel.cs" />
     <Compile Include="Assay\AssayViewModel.cs" />

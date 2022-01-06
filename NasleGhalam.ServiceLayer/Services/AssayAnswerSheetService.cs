@@ -80,6 +80,53 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه پاسخ نامه ها
         /// </summary>
         /// <returns></returns>
+        public IList<AssayAnswerSheetReportViewModel> Report(int id)
+        {
+            List<AssayAnswerSheetReportViewModel> returnVal = new List<AssayAnswerSheetReportViewModel>();
+            var allAssay = _assayAnswerSheets.Include(x => x.Assay.AssayQuestions).Where(x => x.UserId == id).ToList();
+            foreach (var assayAnswerSheet in allAssay)
+            {
+                var itemAdd= new AssayAnswerSheetReportViewModel();
+                itemAdd.UserId = assayAnswerSheet.UserId;
+                itemAdd.AssayId = assayAnswerSheet.AssayId;
+                itemAdd.DateTime = assayAnswerSheet.DateTime;
+                itemAdd.QuestionIds = assayAnswerSheet.Assay.AssayQuestions.Select(x => x.QuestionId).ToList();
+                itemAdd.AssayVarient = assayAnswerSheet.AssayVarient;
+                itemAdd.Title = assayAnswerSheet.Assay.Title;
+                for (int i = 0; i < assayAnswerSheet.Answers.Length; i++)
+                {
+                    if (assayAnswerSheet.Answers[i] == 0)
+                    {
+                        itemAdd.NonScore++;
+                    }
+                    else if (assayAnswerSheet.Answers[i] == assayAnswerSheet.Assay.QuestionsAnswer1[i])
+                    {
+                        itemAdd.CorrectScore++;
+                    }
+                    else
+                    {
+                        itemAdd.WrongScore++;
+                    }
+                }
+
+                itemAdd.ExamScore =
+                    ((((itemAdd.CorrectScore * 3) - itemAdd.WrongScore) / (assayAnswerSheet.Answers.Length * 3)) * 100);
+                itemAdd.CorrectScore = ((itemAdd.CorrectScore) / (assayAnswerSheet.Answers.Length)) * 100;
+                itemAdd.WrongScore = ((itemAdd.WrongScore) / (assayAnswerSheet.Answers.Length)) * 100;
+                itemAdd.NonScore = ((itemAdd.NonScore) / (assayAnswerSheet.Answers.Length)) * 100;
+
+                
+                returnVal.Add(itemAdd);
+
+            }
+
+            return returnVal;
+        }
+
+        /// <summary>
+        /// گرفتن همه پاسخ نامه ها
+        /// </summary>
+        /// <returns></returns>
         public IList<AssayAnswerSheetViewModel> GetAll()
         {
             return _assayAnswerSheets

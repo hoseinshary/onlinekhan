@@ -1,6 +1,6 @@
 import Vue from "Vue";
 import IAssayAnswerSheet , {  DefaultAssayAnswerSheet } from "src/models/IAssayAnswerSheet";
-import {AssayAnswerSheetCorectExam }  from "src/models/IAssayAnswerSheet";
+import {AssayAnswerSheetCorectExam , AssayAnswerSheetReport }  from "src/models/IAssayAnswerSheet";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -21,6 +21,7 @@ export class AssayAnswerSheetStore extends VuexModule {
   openModal: { questionShow:boolean; create: boolean; edit: boolean; delete: boolean };
   assayAnswerSheet: IAssayAnswerSheet;
   private _assayAnswerSheetList: Array<IAssayAnswerSheet>;
+  private _assayAnswerSheetReportList : Array<AssayAnswerSheetReport>
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
@@ -36,6 +37,8 @@ export class AssayAnswerSheetStore extends VuexModule {
     
     this.assayAnswerSheet = util.cloneObject(DefaultAssayAnswerSheet);
     this._assayAnswerSheetList = [];
+    this._assayAnswerSheetReportList =[];
+    this._assayAnswerSheetList
     this.openModal = {
       questionShow: false,
       create: false,
@@ -50,7 +53,9 @@ export class AssayAnswerSheetStore extends VuexModule {
   }
 
 
-
+  get gridDataReport() {
+    return this._assayAnswerSheetReportList;
+  }
 
   get gridData() {
     return this._assayAnswerSheetList;
@@ -88,6 +93,11 @@ export class AssayAnswerSheetStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<IAssayAnswerSheet>) {
     this._assayAnswerSheetList = list;
+  }
+
+  @mutation
+  private SET_LIST_Report(list: Array<AssayAnswerSheetReport>) {
+    this._assayAnswerSheetReportList = list;
   }
 
   @mutation
@@ -130,6 +140,7 @@ export class AssayAnswerSheetStore extends VuexModule {
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
   }
+
   //#endregion
 
   //#region ### actions ###
@@ -153,6 +164,40 @@ export class AssayAnswerSheetStore extends VuexModule {
         });
     } else {
       return Promise.resolve(this._assayAnswerSheetList);
+    }
+  }
+
+  @action()
+  async fillListReport() {
+   
+      let vm = this._editVue;
+      if (!(await this.validateForm(vm))) return;
+  
+      return axios
+        .post(`${baseUrl}/Update`, this.assayAnswerSheet)
+        .then((response: AxiosResponse<IMessageResult>) => {
+          let data = response.data;
+          this.notify({ vm, data });
+  
+          if (data.MessageType == MessageType.Success) {
+            this.UPDATE(data.Obj);
+            this.OPEN_MODAL_EDIT(false);
+            this.MODEL_CHANGED(true);
+            this.resetEdit();
+          }
+        });
+
+
+
+    if (this._modelChanged) {
+      return axios
+        .get(`${baseUrl}/Report`)
+        .then((response: AxiosResponse<Array<AssayAnswerSheetReport>>) => {
+          this.SET_LIST_Report(response.data);
+          this.MODEL_CHANGED(false);
+        });
+    } else {
+      return Promise.resolve(this._assayAnswerSheetReportList);
     }
   }
 

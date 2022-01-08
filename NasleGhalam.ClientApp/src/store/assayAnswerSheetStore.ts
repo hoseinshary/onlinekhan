@@ -170,22 +170,19 @@ export class AssayAnswerSheetStore extends VuexModule {
   @action()
   async fillListReport() {
    
-      let vm = this._editVue;
-      if (!(await this.validateForm(vm))) return;
+
   
-      return axios
-        .post(`${baseUrl}/Update`, this.assayAnswerSheet)
-        .then((response: AxiosResponse<IMessageResult>) => {
-          let data = response.data;
-          this.notify({ vm, data });
+      // return axios
+      //   .post(`${baseUrl}/Report`,id)
+      //   .then((response: AxiosResponse<Array<AssayAnswerSheetReport>>) => {
+      //     let data = response.data;
+          
   
-          if (data.MessageType == MessageType.Success) {
-            this.UPDATE(data.Obj);
-            this.OPEN_MODAL_EDIT(false);
-            this.MODEL_CHANGED(true);
-            this.resetEdit();
-          }
-        });
+         
+      //     this.SET_LIST_Report(response.data);
+      //     this.MODEL_CHANGED(false);
+          
+      //   });
 
 
 

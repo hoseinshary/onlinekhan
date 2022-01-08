@@ -40,11 +40,12 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [CheckUserAccess(ActionBits.AssayAnswerSheetReadAccess)]
         [CheckModelValidation]
-        public IHttpActionResult Report(int id)
+        public IHttpActionResult Report(/*int id*/)
         {
+            int id = Request.GetUserId();
             return Ok(_assayAnswerSheetService.Report(id));
         }
 

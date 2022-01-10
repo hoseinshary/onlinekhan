@@ -18,7 +18,7 @@ import router from "src/router";
 
 @Module({ namespacedPath: "assayAnswerSheetStore/" })
 export class AssayAnswerSheetStore extends VuexModule {
-  openModal: { questionShow:boolean; create: boolean; edit: boolean; delete: boolean };
+  openModal: {runAssay_Start:boolean; runAssay_Stop:boolean; questionShow:boolean; create: boolean; edit: boolean; delete: boolean };
   assayAnswerSheet: IAssayAnswerSheet;
   private _assayAnswerSheetList: Array<IAssayAnswerSheet>;
   private _assayAnswerSheetReportList : Array<AssayAnswerSheetReport>
@@ -26,6 +26,8 @@ export class AssayAnswerSheetStore extends VuexModule {
   private _createVue: Vue;
   private _editVue: Vue;
   private _questionShowVue: Vue;
+  private _runAssay_StartVue: Vue;
+  private _runAssay_StopVue: Vue;
 
   assayAnswerSheetResult :Array <AssayAnswerSheetCorectExam>;
 
@@ -43,7 +45,9 @@ export class AssayAnswerSheetStore extends VuexModule {
       questionShow: false,
       create: false,
       edit: false,
-      delete: false
+      delete: false,
+      runAssay_Start : false,
+      runAssay_Stop: false
     };
   }
 
@@ -115,6 +119,16 @@ export class AssayAnswerSheetStore extends VuexModule {
     this.openModal.questionShow = open;
   }
 
+  @mutation
+  OPEN_MODAL_RUNASSAY_START(open: boolean) {
+    this.openModal.runAssay_Start = open;
+  }
+
+  @mutation
+  OPEN_MODAL_RUNASSAY_STOP(open: boolean) {
+    this.openModal.runAssay_Stop = open;
+  }
+
 
   @mutation
   OPEN_MODAL_EDIT(open: boolean) {
@@ -139,6 +153,17 @@ export class AssayAnswerSheetStore extends VuexModule {
   @mutation
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
+  }
+
+  @mutation
+  SET_RUNASSAY_START_VUE(vm: Vue) {
+    this._runAssay_StartVue = vm;
+  }
+
+
+  @mutation
+  SET_RUNASSAY_STOP_VUE(vm: Vue) {
+    this._runAssay_StopVue = vm;
   }
 
   //#endregion

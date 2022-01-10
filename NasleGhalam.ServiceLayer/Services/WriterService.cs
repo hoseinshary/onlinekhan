@@ -59,6 +59,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Create(WriterCreateViewModel writerViewModel)
         {
             var writer = Mapper.Map<Writer>(writerViewModel);
+            writer.User.Id = writerViewModel.UserId;
             _writers.Add(writer);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);

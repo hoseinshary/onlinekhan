@@ -576,7 +576,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Password == login.Password)
                 .ToList();
 
-            if (lstUsr.Count == 1)
+            if (lstUsr.Count > 0)
             {
                 var usr = lstUsr[0];
                 if (!usr.IsActive)

@@ -167,10 +167,23 @@ get lessonChooseAllQuestioncount(){
   @mutation
   OPEN_MODAL_2TOPIC(open: boolean) {
     this.openModal._2topic = open;
+  
   }
   @mutation
   OPEN_MODAL_3ASSAY(open: boolean) {
     this.openModal._3assay = open;
+    if(open)
+    {
+      var alltime = 0;
+      this.assayCreate.Lessons .forEach(element => {
+        element.Questions.forEach(element => {
+          alltime += element.ResponseSecond;
+        });
+      });
+  
+      this.assayCreate.Time =Math.ceil( alltime/60 ) ;
+
+    }
   }
 
   @mutation
@@ -325,7 +338,7 @@ get lessonChooseAllQuestioncount(){
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
-          
+          this.assayCreate.Id = data.Obj.Id;
         }
       });
   }

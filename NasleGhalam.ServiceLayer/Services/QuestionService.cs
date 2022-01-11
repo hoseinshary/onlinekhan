@@ -101,7 +101,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<AllUsersReporQuestionViewModel> GetAllUsersReport()
         {
 
-            return _users.Where(x => x.Role.Level == 3).Where(x => x.IsActive == true)
+            return _users.Where(x => x.Role.Level == 3 || x.Role.Level == 6).Where(x => x.IsActive == true)
                 .Select(x => new AllUsersReporQuestionViewModel
                 {
                     Name = x.Name,

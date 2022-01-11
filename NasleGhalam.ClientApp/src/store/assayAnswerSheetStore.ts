@@ -1,6 +1,6 @@
 import Vue from "Vue";
 import IAssayAnswerSheet , {  DefaultAssayAnswerSheet } from "src/models/IAssayAnswerSheet";
-import {AssayAnswerSheetCorectExam }  from "src/models/IAssayAnswerSheet";
+import {AssayAnswerSheetCorectExam , AssayAnswerSheetReport }  from "src/models/IAssayAnswerSheet";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
@@ -18,13 +18,16 @@ import router from "src/router";
 
 @Module({ namespacedPath: "assayAnswerSheetStore/" })
 export class AssayAnswerSheetStore extends VuexModule {
-  openModal: { questionShow:boolean; create: boolean; edit: boolean; delete: boolean };
+  openModal: {runAssay_Start:boolean; runAssay_Stop:boolean; questionShow:boolean; create: boolean; edit: boolean; delete: boolean };
   assayAnswerSheet: IAssayAnswerSheet;
   private _assayAnswerSheetList: Array<IAssayAnswerSheet>;
+  private _assayAnswerSheetReportList : Array<AssayAnswerSheetReport>
   private _modelChanged: boolean = true;
   private _createVue: Vue;
   private _editVue: Vue;
   private _questionShowVue: Vue;
+  private _runAssay_StartVue: Vue;
+  private _runAssay_StopVue: Vue;
 
   assayAnswerSheetResult :Array <AssayAnswerSheetCorectExam>;
 
@@ -36,11 +39,15 @@ export class AssayAnswerSheetStore extends VuexModule {
     
     this.assayAnswerSheet = util.cloneObject(DefaultAssayAnswerSheet);
     this._assayAnswerSheetList = [];
+    this._assayAnswerSheetReportList =[];
+    this._assayAnswerSheetList
     this.openModal = {
       questionShow: false,
       create: false,
       edit: false,
-      delete: false
+      delete: false,
+      runAssay_Start : false,
+      runAssay_Stop: false
     };
   }
 
@@ -50,7 +57,9 @@ export class AssayAnswerSheetStore extends VuexModule {
   }
 
 
-
+  get gridDataReport() {
+    return this._assayAnswerSheetReportList;
+  }
 
   get gridData() {
     return this._assayAnswerSheetList;
@@ -91,6 +100,11 @@ export class AssayAnswerSheetStore extends VuexModule {
   }
 
   @mutation
+  private SET_LIST_Report(list: Array<AssayAnswerSheetReport>) {
+    this._assayAnswerSheetReportList = list;
+  }
+
+  @mutation
   private MODEL_CHANGED(changed: boolean) {
     this._modelChanged = changed;
   }
@@ -103,6 +117,16 @@ export class AssayAnswerSheetStore extends VuexModule {
   @mutation
   OPEN_MODAL_QUESTION(open: boolean) {
     this.openModal.questionShow = open;
+  }
+
+  @mutation
+  OPEN_MODAL_RUNASSAY_START(open: boolean) {
+    this.openModal.runAssay_Start = open;
+  }
+
+  @mutation
+  OPEN_MODAL_RUNASSAY_STOP(open: boolean) {
+    this.openModal.runAssay_Stop = open;
   }
 
 
@@ -130,6 +154,18 @@ export class AssayAnswerSheetStore extends VuexModule {
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
   }
+
+  @mutation
+  SET_RUNASSAY_START_VUE(vm: Vue) {
+    this._runAssay_StartVue = vm;
+  }
+
+
+  @mutation
+  SET_RUNASSAY_STOP_VUE(vm: Vue) {
+    this._runAssay_StopVue = vm;
+  }
+
   //#endregion
 
   //#region ### actions ###
@@ -153,6 +189,37 @@ export class AssayAnswerSheetStore extends VuexModule {
         });
     } else {
       return Promise.resolve(this._assayAnswerSheetList);
+    }
+  }
+
+  @action()
+  async fillListReport() {
+   
+
+  
+      // return axios
+      //   .post(`${baseUrl}/Report`,id)
+      //   .then((response: AxiosResponse<Array<AssayAnswerSheetReport>>) => {
+      //     let data = response.data;
+          
+  
+         
+      //     this.SET_LIST_Report(response.data);
+      //     this.MODEL_CHANGED(false);
+          
+      //   });
+
+
+
+    if (this._modelChanged) {
+      return axios
+        .get(`${baseUrl}/Report`)
+        .then((response: AxiosResponse<Array<AssayAnswerSheetReport>>) => {
+          this.SET_LIST_Report(response.data);
+          this.MODEL_CHANGED(false);
+        });
+    } else {
+      return Promise.resolve(this._assayAnswerSheetReportList);
     }
   }
 

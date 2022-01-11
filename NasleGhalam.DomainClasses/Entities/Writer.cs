@@ -18,7 +18,7 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public string ProfilePic { get; set; }
 
-        //public int? User_Id { get; set; }
+       // public int? User_Id { get; set; }
 
         public User User { get; set; }
 

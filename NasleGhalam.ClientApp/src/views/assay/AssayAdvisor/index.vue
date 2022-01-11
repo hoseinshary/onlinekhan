@@ -189,6 +189,11 @@
           <q-btn color="primary" label="اعمال" />
         </q-card-actions> -->
                       </q-card>
+
+                        <q-btn color="primary" class="center" @click="showModal3assay">
+              ثبت سوال ها
+              <q-icon name="arrow_back" />
+            </q-btn>
                     
                   </div>
                 </div>

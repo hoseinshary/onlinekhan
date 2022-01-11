@@ -11,32 +11,32 @@
          <div>
          تعداد کل سوالات : {{getCountAll}}
          </div>
-                  <div class=" ">
-         درصد کنکوری : {{((((3 * getCorrect) - getWrong) / (getCountAll * 3)).toFixed(2) * 100).toFixed(0)}}
+                  <div class=" " style="font-size:20px">
+         درصد کنکوری : {{((((3 * getCorrect) - getWrong) / (getCountAll * 3)).toFixed(4) * 100).toFixed(2)}}%
          </div>
       </q-card-main>
       <q-card-main>
      <div class="text-green">
        تعداد سوالات درست : {{getCorrect}}
      </div>
-        <div class="text-green">
-       درصد : {{(getCorrect /getCountAll).toFixed(2) * 100}}
+        <div class="text-green" style="font-size:20px">
+       درصد : {{((getCorrect /getCountAll).toFixed(4) * 100).toFixed(2)}}%
      </div>
       </q-card-main>
        <q-card-main>
    <div class="text-red">
        تعداد سوالات غلط : {{getWrong}}
      </div>
-      <div class="text-red">
-        درصد : {{(getWrong /getCountAll).toFixed(2) * 100}}
+      <div class="text-red" style="font-size:20px">
+        درصد : {{((getWrong /getCountAll).toFixed(4) * 100).toFixed(2)}}%
      </div>
       </q-card-main>
          <q-card-main>
       <div class="text-orange">
        تعداد سوالات نزده : {{getNon}}
      </div>
-       <div class="text-orange">
-       درصد : {{getNon /getCountAll * 100}}
+       <div class="text-orange" style="font-size:20px">
+       درصد : {{(getNon /getCountAll * 100).toFixed(2)}}%
      </div>
       </q-card-main>
     </q-card>
@@ -80,10 +80,10 @@
                   <div class="shadow-1 q-ma-sm gutter-xs  bg-grey-2 corner-around ">
                     
                   
-                  <q-radio color="green" readonly v-model="answerSheet.Answers[index]" val="1" label="1" left-label />
-                  <q-radio color="green" readonly v-model="answerSheet.Answers[index]" val="2" label="2" left-label />
-                  <q-radio color="green" readonly v-model="answerSheet.Answers[index]" val="3" label="3" left-label />
-                  <q-radio color="green" readonly v-model="answerSheet.Answers[index]" val="4" label="4" left-label />
+                  <q-radio color="blue" checked-icon="check_box" readonly v-model="answerSheet.Answers[index]" val="1" label="1" left-label />
+                  <q-radio color="blue" checked-icon="check_box" readonly v-model="answerSheet.Answers[index]" val="2" label="2" left-label />
+                  <q-radio color="blue" checked-icon="check_box" readonly v-model="answerSheet.Answers[index]" val="3" label="3" left-label />
+                  <q-radio color="blue" checked-icon="check_box" readonly v-model="answerSheet.Answers[index]" val="4" label="4" left-label />
             
                
                 </div>
@@ -123,10 +123,10 @@
                   <div class="shadow-1 q-ma-sm gutter-xs  bg-grey-2 corner-around ">
                     
                   
-                  <q-radio color="orange" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="1" label="1" left-label />
-                  <q-radio color="orange" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="2" label="2" left-label />
-                  <q-radio color="orange" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="3" label="3" left-label />
-                  <q-radio color="orange" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="4" label="4" left-label />
+                  <q-radio color="grey" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="1" label="1" left-label />
+                  <q-radio color="grey" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="2" label="2" left-label />
+                  <q-radio color="grey" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="3" label="3" left-label />
+                  <q-radio color="grey" checked-icon="check_box" readonly v-model="answerSheet.AnswerSheetCorectExams[index].CorrectAnswer" val="4" label="4" left-label />
                   
                
                 </div>
@@ -142,7 +142,7 @@
                      زمان پاسخ : {{0}}
                   </div>
 
-                     <div class="q-pa-lg gutter-xs center text-grey" >
+                     <div class="q-pa-lg gutter-xs center text-grey"  >
                      مبحث : 
                   </div>
                 </div>

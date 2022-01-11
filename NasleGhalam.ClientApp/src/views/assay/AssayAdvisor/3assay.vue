@@ -5,7 +5,7 @@
     :show="assayStore.openModal._3assay"
     size="lg"
     @close="assayStore.OPEN_MODAL_3ASSAY(false)"
- 
+    
   >
 
    <template slot="header">
@@ -15,31 +15,35 @@
       </q-toolbar>
     </template>
 <slot>
-  <section class="row gutter-md">
-    <base-input :model="$v.assayCreate.Title" class="col-md-6" />
-    <base-input :model="$v.assayCreate.Time" class="col-md-6" />
+  <section class="row gutter-md ">
+    <div class="row col-md-12 text-black">
+
+        <base-input :model="$v.assayCreate.Title" class="col-md-4" />
+        <div class="col-md-8"></div>
+    </div>
+    <base-input :model="$v.assayCreate.Time" class="col-md-3" />
     <base-select
       :model="$v.assayCreate.LookupId_Importance"
       :options="lookupStore.assayImportanceDdl"
-      class="col-md-4"
+      class="col-md-3"
     />
     <base-select
       :model="$v.assayCreate.LookupId_QuestionType"
       :options="lookupStore.questionTypeDdl"
-      class="col-md-4"
+      class="col-md-3"
     />
     <base-select
       :model="$v.assayCreate.LookupId_Type"
       :options="lookupStore.assayTypeDdl"
-      class="col-md-4"
+      class="col-md-3"
     />
-    <base-field class="col-md-4" :model="$v.assayCreate.IsOnline">
+    <base-field class="col-md-3" :model="$v.assayCreate.IsOnline">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
       </template>
     </base-field>
-    <base-field class="col-md-4" :model="$v.assayCreate.IsPublic">
+    <base-field class="col-md-3" :model="$v.assayCreate.IsPublic">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
@@ -48,11 +52,11 @@
      <base-select
       :model="$v.assayCreate.NumberOfVarient"
       :options="numberOfVarientDdl"
-      class="col-md-4"
+      class="col-md-3"
     />
-    <base-select :model="$v.assayCreate.Font" :options="fontDdl" class="col-md-4" />
-    <base-input :model="$v.assayCreate.FontSize" class="col-md-4" />
-    <base-field class="col-md-4" :model="$v.assayCreate.TwoPageInOne">
+    <base-select :model="$v.assayCreate.Font" :options="fontDdl" class="col-md-3" />
+    <base-input :model="$v.assayCreate.FontSize" class="col-md-3" />
+    <base-field class="col-md-3" :model="$v.assayCreate.TwoPageInOne">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
@@ -77,7 +81,7 @@
       </template>
     </base-field> -->
 
-    <base-field class="col-md-6" :model="$v.assayCreate.HaveWhiteSpace">
+    <base-field class="col-md-3" :model="$v.assayCreate.HaveWhiteSpace">
       <template slot-scope="data">
         <q-checkbox v-model="data.obj.$model" />
         <q-radio
@@ -97,6 +101,10 @@
 
     <div class="col-12">
       <base-btn-save @click="submitAssay" />
+       <q-btn color="orange" @click="submitAssayAndRun">
+             ثبت و اجرا
+              <q-icon name="arrow_back" />
+            </q-btn>
     </div>
   </section>
 </slot>
@@ -109,6 +117,8 @@ import { vxm } from "src/store";
 import util from "src/utilities";
 import { assayValidations } from "src/validations/assayValidation";
 import { AssayVarient, Fonts } from "src/utilities/enumeration";
+import router from "src/router";
+
 
 @Component({
   validations: assayValidations
@@ -148,6 +158,13 @@ export default class AssayTabVue extends Vue {
       this.$emit("changeTab", "questionTab");
     });
   }
+
+    submitAssayAndRun() {
+    this.assayStore.submitCreate().then(() => {
+        this.assayStore.getById(this.assayCreate.Id);
+        router.push("/assay/runAssay");
+    });
+  }
   //#endregion
 
   //#region ### hooks ###
@@ -156,6 +173,10 @@ export default class AssayTabVue extends Vue {
     this.lookupStore.fillAssayImportance();
     this.lookupStore.fillAssayType();
     this.assayStore.SET_ASSAY_VUE(this);
+
+  
+
+
   }
   //#endregion
 }

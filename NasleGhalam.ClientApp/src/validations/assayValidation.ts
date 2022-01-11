@@ -17,7 +17,7 @@ const assayValidations: ValidationRuleset<TAssay> = {
       required
     },
     Time: {
-      displayName: displayName("زمان"),
+      displayName: displayName("زمان به دقیقه"),
       numeric,
       required
     },

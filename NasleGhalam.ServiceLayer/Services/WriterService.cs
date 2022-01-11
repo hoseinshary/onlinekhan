@@ -59,6 +59,10 @@ namespace NasleGhalam.ServiceLayer.Services
         public ClientMessageResult Create(WriterCreateViewModel writerViewModel)
         {
             var writer = Mapper.Map<Writer>(writerViewModel);
+            if (_writers.Where(x => x.User.Id == writerViewModel.UserId).FirstOrDefault() != null)
+                return new ClientMessageResult { Message = "نویسنده وجود دارد", MessageType = MessageType.Error };
+            writer.User = new User() { Id = writerViewModel.UserId };
+            _uow.MarkAsUnChanged(writer.User);
             _writers.Add(writer);
 
             var serverResult = _uow.CommitChanges(CrudType.Create, Title);

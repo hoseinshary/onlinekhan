@@ -9,7 +9,7 @@ namespace NasleGhalam.ViewModels.Writer
         public string Name { get; set; }
 
         [Display(Name = "کاربر")]
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public string ProfilePic { get; set; }
     }
 }

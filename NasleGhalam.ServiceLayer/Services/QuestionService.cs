@@ -110,7 +110,7 @@ namespace NasleGhalam.ServiceLayer.Services
                     NumberOfQuestionJudged = x.QuestionJudges.Count,
                     NumberOfQuestionTopiced = x.QuestionsUpdates.Where(current => current.QuestionActivity == QuestionActivity.Topic).Count(),
                     NumberOfSupervisorQuestion = x.SupervisorQuestions.Count,
-                    NumberOfWriteQuestion = _questions.Where(current => current.Deleted == false).Count(y => y.WriterId == x.Id),
+                    NumberOfWriteQuestion = _questions.Where(current => current.Deleted == false).Count(y => y.Writer.User.Id == x.Id),
                     Department = x.Lessons.FirstOrDefault().LessonDepartments.FirstOrDefault().Name
                 }).ToList();
 

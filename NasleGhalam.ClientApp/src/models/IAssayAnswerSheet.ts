@@ -2,12 +2,13 @@ import IAssayCrete from "./IAssay";
 import utilities from "src/utilities";
 import IUser, { DefaultUser } from "./IUser";
 import { Tashih } from "src/utilities/enumeration";
+import AssayCreate from "./IAssay";
 
 
 export default interface IAssayAnswerSheet {
   Id: number;
   AssayId: number;
-  // Assay?: IAssayCrete;
+  Assay?: IAssayCrete;
   UserId: number;
   User?: IUser;
   AssayVarient : number;
@@ -38,7 +39,7 @@ export const DefaultAssayAnswerSheet: IAssayAnswerSheet = {
   AfterList:[],
   CantList:[],
   DateTime: "",
-  // Assay:utilities.cloneObject(),
+  Assay:utilities.cloneObject(new AssayCreate),
   User:utilities.cloneObject(DefaultUser),
   AnswerSheetCorectExams:[],
   QuestionIds:[]

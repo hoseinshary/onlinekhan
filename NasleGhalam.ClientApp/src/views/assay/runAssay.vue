@@ -173,7 +173,6 @@ export default class AssayAnswerSheetVue extends Vue {
   //#endregion
 
   //#region ### computed ###
- 
 
 
   //#endregion
@@ -242,7 +241,16 @@ export default class AssayAnswerSheetVue extends Vue {
 
     this.answerSheet.Answers[index] = val;
   }
-  
+  startTimer()
+  {
+          const today = new Date();
+      const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      this.startTime = today ;
+      
+      
+     setInterval(this.getNow, 1000);
+  }
   //#endregion
 
   //#region ### hooks ###
@@ -257,18 +265,18 @@ export default class AssayAnswerSheetVue extends Vue {
     this.assayAnswerSheetStore.SET_CREATE_VUE(this);
     this.answerSheet.AssayId = this.assay.Id;
     this.answerSheet.AssayVarient = this.assay.NumberOfVarient;
-
+ 
+      this.$root.$on('component1', () => {
+            // your code goes here
+            this.startTimer()
+        });
 
 
     this.assayAnswerSheetStore.OPEN_MODAL_RUNASSAY_START(true);
-    while(this.assayAnswerSheetStore.openModal.runAssay_Start);
+    
     // if(this.assay)
-      const today = new Date();
-      const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      this.startTime = today;
-      
-    setInterval(this.getNow, 1000);
+    
+ 
     
   }
   //#endregion

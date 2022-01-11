@@ -28,6 +28,7 @@ export class AssayAnswerSheetStore extends VuexModule {
   private _questionShowVue: Vue;
   private _runAssay_StartVue: Vue;
   private _runAssay_StopVue: Vue;
+  public _indexVue : Vue;
 
   assayAnswerSheetResult :Array <AssayAnswerSheetCorectExam>;
 
@@ -53,7 +54,7 @@ export class AssayAnswerSheetStore extends VuexModule {
 
   //#region ### getters ###
   get modelName() {
-    return "پاسخ نامه";
+    return "جواب آزمون";
   }
 
 
@@ -122,6 +123,7 @@ export class AssayAnswerSheetStore extends VuexModule {
   @mutation
   OPEN_MODAL_RUNASSAY_START(open: boolean) {
     this.openModal.runAssay_Start = open;
+ 
   }
 
   @mutation
@@ -156,6 +158,11 @@ export class AssayAnswerSheetStore extends VuexModule {
   }
 
   @mutation
+  SET_INDEX_VUE(vm: Vue) {
+    this._indexVue = vm;
+  }
+
+  @mutation
   SET_RUNASSAY_START_VUE(vm: Vue) {
     this._runAssay_StartVue = vm;
   }
@@ -185,6 +192,7 @@ export class AssayAnswerSheetStore extends VuexModule {
         .get(`${baseUrl}/GetAll`)
         .then((response: AxiosResponse<Array<IAssayAnswerSheet>>) => {
           this.SET_LIST(response.data);
+          
           this.MODEL_CHANGED(false);
         });
     } else {

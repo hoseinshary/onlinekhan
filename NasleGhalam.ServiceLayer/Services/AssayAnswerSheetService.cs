@@ -130,6 +130,7 @@ namespace NasleGhalam.ServiceLayer.Services
         public IList<AssayAnswerSheetViewModel> GetAll()
         {
             return _assayAnswerSheets
+                .Include(x => x.Assay)
                 .AsNoTracking()
                 .AsEnumerable()
                 .Select(Mapper.Map<AssayAnswerSheetViewModel>)

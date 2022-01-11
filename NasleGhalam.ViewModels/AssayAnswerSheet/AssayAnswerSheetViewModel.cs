@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using NasleGhalam.Common;
+using NasleGhalam.ViewModels.Assay;
 
 namespace NasleGhalam.ViewModels.AssayAnswerSheet
 {
@@ -41,7 +42,7 @@ namespace NasleGhalam.ViewModels.AssayAnswerSheet
 
         public IList<int> QuestionIds { get; set; }
 
-
+        public AssayViewModel Assay { get; set; }
         public IList<AssayAnswerSheetCorectExamViewModel> AnswerSheetCorectExams { get; set; }
 
     }

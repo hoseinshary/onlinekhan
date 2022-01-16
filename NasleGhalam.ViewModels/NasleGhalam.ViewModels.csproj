@@ -131,6 +131,9 @@
     <Compile Include="Resume\TeachingResumeViewModel.cs" />
     <Compile Include="Role\RoleUpdateViewModel.cs" />
     <Compile Include="Role\RoleCreateViewModel.cs" />
+    <Compile Include="TeacherGroup\TeacherGroupCreateViewModel.cs" />
+    <Compile Include="TeacherGroup\TeacherGroupUpdateViewModel.cs" />
+    <Compile Include="TeacherGroup\TeacherGroupViewModel.cs" />
     <Compile Include="StudentMajorlist\MajorSearchViewModel.cs" />
     <Compile Include="StudentMajorlist\MajorViewModel.cs" />
     <Compile Include="StudentMajorlist\StudentMajorlistGetStudentMajorsViewModel.cs" />

@@ -101,6 +101,7 @@
     <Compile Include="MapperProfile\QuestionJudgeProfile.cs" />
     <Compile Include="MapperProfile\QuestionUpdateProfile.cs" />
     <Compile Include="MapperProfile\ResumeProfile.cs" />
+    <Compile Include="MapperProfile\TeacherGroupProfile.cs" />
     <Compile Include="MapperProfile\StudentMajorlistProfile.cs" />
     <Compile Include="MapperProfile\TeacherProfile.cs" />
     <Compile Include="MapperProfile\UnivercityBranchProfile.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Services\QuestionUpdateService.cs" />
     <Compile Include="Services\ResumeService.cs" />
     <Compile Include="Services\RoleService.cs" />
+    <Compile Include="Services\TeacherGroupService.cs" />
     <Compile Include="Services\StudentMajorlistService.cs" />
     <Compile Include="Services\TeacherService.cs" />
     <Compile Include="Services\StudentService.cs" />

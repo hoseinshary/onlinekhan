@@ -10,6 +10,7 @@ namespace NasleGhalam.DomainClasses.Entities
             QuestionAnswerViews = new HashSet<QuestionAnswerView>();
             Programs = new HashSet<Program>();
             StudentMajorlists = new HashSet<StudentMajorlist>();
+            TeacherGroups = new HashSet<TeacherGroup>();
         }
         public int Id { get; set; }
 
@@ -25,5 +26,6 @@ namespace NasleGhalam.DomainClasses.Entities
         
         public ICollection<Program> Programs { get; set; }
         public ICollection<StudentMajorlist> StudentMajorlists { get; set; }
+        public ICollection<TeacherGroup> TeacherGroups { get; set; }
     }
 }

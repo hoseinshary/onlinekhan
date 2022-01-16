@@ -160,6 +160,10 @@
     <Compile Include="Migrations\202111071721566_fixTable.Designer.cs">
       <DependentUpon>202111071721566_fixTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201161053561_TeacherGroup.cs" />
+    <Compile Include="Migrations\202201161053561_TeacherGroup.Designer.cs">
+      <DependentUpon>202201161053561_TeacherGroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -262,6 +266,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111071721566_fixTable.resx">
       <DependentUpon>202111071721566_fixTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201161053561_TeacherGroup.resx">
+      <DependentUpon>202201161053561_TeacherGroup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

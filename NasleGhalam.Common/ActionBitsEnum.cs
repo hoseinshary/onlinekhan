@@ -190,5 +190,10 @@
         AssayAnswerSheetUpdateAccess = 156,
         AssayAnswerSheetResualtAccess = 157,
 
+        TeacherGroupReadAccess = 160,
+        TeacherGroupCreateAccess = 161,
+        TeacherGroupDeleteAccess = 162,
+        TeacherGroupUpdateAccess = 163,
+
     }
 }

@@ -229,6 +229,14 @@ export default [
         name: "resualtAssay",
         component: () => import(/* webpackChunkName: "program" */"src/views/assay/resualtAssay.vue")
       }
+      /* webpackChunkName: "teacherGroup" */
+      ,
+      {
+        path: "/teacherGroup",
+        name: "teacherGroup",
+        component: () => import("src/views/teacherGroup/index.vue")
+      }
+      
     ]
 
   },

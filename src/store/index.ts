@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import { CityStore, cityStore } from "./cityStore";
 import { ProvinceStore, provinceStore } from "./provinceStore";
+import { TeacherGroupStore, teacherGroupStore } from "./teacherGroupStore";
 import { RoleStore, roleStore } from "./roleStore";
 import { AccessStore, accessStore } from "./accessStore";
 import { UserStore, userStore } from "./userStore";
@@ -103,6 +104,7 @@ const store = new Vuex.Store({
   modules: {
     cityStore,
     provinceStore,
+    teacherGroupStore,
     roleStore,
     accessStore,
     userStore,
@@ -148,6 +150,10 @@ export const vxm = {
     store,
     ProvinceStore
   ) as ProvinceStore,
+  teacherGroupStore: TeacherGroupStore.CreateProxy(
+    store,
+    TeacherGroupStore
+  ) as TeacherGroupStore,
   roleStore: RoleStore.CreateProxy(store, RoleStore) as RoleStore,
   accessStore: AccessStore.CreateProxy(store, AccessStore) as AccessStore,
   userStore: UserStore.CreateProxy(store, UserStore) as UserStore,

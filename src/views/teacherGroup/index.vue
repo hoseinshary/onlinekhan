@@ -2,15 +2,19 @@
   <section class="col-md-8">
     <base-btn-create
       v-if="canCreate"
-      :label="`ایجاد (${provinceStore.modelName}) جدید`"
+      :label="`ایجاد (${teacherGroupStore.modelName}) جدید`"
       @click="showModalCreate"
     />
     <br />
-    <base-table :grid-data="provinceStore.gridData" :columns="provinceGridColumn" hasIndex>
+    <base-table :grid-data="teacherGroupStore.gridData" :columns="teacherGroupGridColumn" hasIndex>
       <template slot="Id" slot-scope="data">
-        <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
+         <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
-      </template>
+        <!-- ati -->
+        <!-- <base-btn-edit v-if="true" round @click="showModalEdit(data.row.Id)" />
+        <base-btn-delete v-if="true" round @click="showModalDelete(data.row.Id)" /> -->
+    
+    </template>
     </base-table>
 
     <!-- modals -->
@@ -32,33 +36,36 @@ import util from "src/utilities";
     ModalDelete: () => import("./delete.vue")
   }
 })
-export default class ProvinceVue extends Vue {
+export default class TeacherGroupVue extends Vue {
   //#region ### data ###
-  provinceStore = vxm.provinceStore;
-  pageAccess = util.getAccess(this.provinceStore.modelName);
-  provinceGridColumn = [
+  teacherGroupStore = vxm.teacherGroupStore;
+  pageAccess = util.getAccess(this.teacherGroupStore.modelName);
+  teacherGroupGridColumn = [
     {
       title: "نام",
       data: "Name"
     },
     {
       title: "کد",
-      data: "Code"
+      data: "Id"
     },
     {
       title: "عملیات",
       data: "Id",
       searchable: false,
       sortable: false,
-      visible: this.canEdit || this.canDelete
+      // ati
+      // visible: this.canEdit || this.canDelete
+      visible: true
     }
   ];
   //#endregion
 
   //#region ### computed ###
   get canCreate() {
-    //ati console.log(this.pageAccess.indexOf("ایجاد") > -1);
+    console.log(this.pageAccess.indexOf("ایجاد") > -1);
     return this.pageAccess.indexOf("ایجاد") > -1;
+    //return true
   }
 
   get canEdit() {
@@ -72,27 +79,27 @@ export default class ProvinceVue extends Vue {
 
   //#region ### methods ###
   showModalCreate() {
-    this.provinceStore.resetCreate();
-    this.provinceStore.OPEN_MODAL_CREATE(true);
+    this.teacherGroupStore.resetCreate();
+    this.teacherGroupStore.OPEN_MODAL_CREATE(true);
   }
 
   showModalEdit(id) {
-    this.provinceStore.resetEdit();
-    this.provinceStore.getById(id).then(() => {
-      this.provinceStore.OPEN_MODAL_EDIT(true);
+    this.teacherGroupStore.resetEdit();
+    this.teacherGroupStore.getById(id).then(() => {
+      this.teacherGroupStore.OPEN_MODAL_EDIT(true);
     });
   }
 
   showModalDelete(id) {
-    this.provinceStore.getById(id).then(() => {
-      this.provinceStore.OPEN_MODAL_DELETE(true);
+    this.teacherGroupStore.getById(id).then(() => {
+      this.teacherGroupStore.OPEN_MODAL_DELETE(true);
     });
   }
   //#endregion
 
   //#region ### hooks ###
   created() {
-    this.provinceStore.fillList();
+    this.teacherGroupStore.fillList();
   }
   //#endregion
 }

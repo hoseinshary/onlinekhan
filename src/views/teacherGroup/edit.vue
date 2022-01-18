@@ -1,15 +1,14 @@
 <template>
-  <base-modal-create
+  <base-modal-edit
     :title="provinceStore.modelName"
-    :show="provinceStore.openModal.create"
-    @confirm="provinceStore.submitCreate"
-    @reset="provinceStore.resetCreate"
-    @close="provinceStore.OPEN_MODAL_CREATE(false)"
+    :show="provinceStore.openModal.edit"
+    @confirm="provinceStore.submitEdit"
+    @reset="provinceStore.resetEdit"
+    @close="provinceStore.OPEN_MODAL_EDIT(false)"
   >
- 
     <base-input :model="$v.province.Name" class="col-md-6"/>
     <base-input :model="$v.province.Code" class="col-md-6"/>
-  </base-modal-create>
+  </base-modal-edit>
 </template>
 
 <script lang="ts">
@@ -20,23 +19,17 @@ import { provinceValidations } from "src/validations/ProvinceValidation";
 @Component({
   validations: provinceValidations
 })
-export default class ProvinceCreateVue extends Vue {
+export default class ProvinceEditVue extends Vue {
   $v: any;
 
   //#region ### data ###
   provinceStore = vxm.provinceStore;
   province = vxm.provinceStore.province;
-
-  
-
-
   //#endregion
 
   //#region ### hooks ###
   created() {
-    this.provinceStore.SET_CREATE_VUE(this);
-
-    
+    this.provinceStore.SET_EDIT_VUE(this);
   }
   //#endregion
 }

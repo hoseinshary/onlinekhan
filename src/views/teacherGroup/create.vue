@@ -1,13 +1,13 @@
 <template>
-  <base-modal-edit
-    :title="provinceStore.modelName"
-    :show="provinceStore.openModal.edit"
-    @confirm="provinceStore.submitEdit"
-    @reset="provinceStore.resetEdit"
-    @close="provinceStore.OPEN_MODAL_EDIT(false)"
+  <base-modal-create
+    :title="teacherGroupStore.modelName"
+    :show="teacherGroupStore.openModal.create"
+    @confirm="teacherGroupStore.submitCreate"
+    @reset="teacherGroupStore.resetCreate"
+    @close="teacherGroupStore.OPEN_MODAL_CREATE(false)"
   >
 
-    <!--ATI  -->
+     <!--ATI  -->
     <br />
     <div class="">
         <base-table :grid-data="lesson_UserStore.userData" :columns="userGridColumn">
@@ -15,28 +15,30 @@
             <q-checkbox v-model="data.row.Checked" />
           </template>
         </base-table>
-      </div>
-  <!-- ATI -->
+    </div>
+    <!-- ATI -->
 
-    <base-input :model="$v.province.Name" class="col-md-6"/>
-    <base-input :model="$v.province.Code" class="col-md-6"/>
-  </base-modal-edit>
+    <base-input :model="$v.teacherGroup.Name" class="col-md-6"/>
+    <base-input :model="$v.teacherGroup.Id" class="col-md-6"/>
+  </base-modal-create>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
-import { provinceValidations } from "src/validations/ProvinceValidation";
+import { teacherGroupValidations } from "src/validations/TeacherGroupValidation";
 
 @Component({
-  validations: provinceValidations
+  validations: teacherGroupValidations
 })
-export default class ProvinceEditVue extends Vue {
+export default class TeacherGroupVue extends Vue {
   $v: any;
 
   //#region ### data ###
-  provinceStore = vxm.provinceStore;
-  province = vxm.provinceStore.province;
+  teacherGroupStore = vxm.teacherGroupStore;
+  teacherGroup = vxm.teacherGroupStore.teacherGroup;
+  //#endregion
+
 
   // ATI
   lesson_UserStore = vxm.lesson_UserStore;
@@ -61,17 +63,14 @@ export default class ProvinceEditVue extends Vue {
     },
     {
       title: "کد",
-      data: "Code"
+      data: "Id"
     }
   ];
-  // ATI
-
-
-  //#endregion
+  //ati
 
   //#region ### hooks ###
   created() {
-    this.provinceStore.SET_EDIT_VUE(this);
+    this.teacherGroupStore.SET_CREATE_VUE(this);
 
     // ati
     this.lesson_UserStore.fillUserList();

@@ -100,6 +100,13 @@ namespace NasleGhalam.WebApi.Controllers
             return result;
         }
 
+        
+        [HttpPost]
+        [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]
+        public IHttpActionResult UpdateQuestionsWriter()
+        {
+            return Ok(_questionGroupService.UpdateQuestionsWriter());
+        }
 
         [HttpPost]
         [CheckUserAccess(ActionBits.QuestionGroupCreateAccess)]

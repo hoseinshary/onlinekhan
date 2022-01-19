@@ -23,14 +23,14 @@ namespace NasleGhalam.ServiceLayer.Services
         private const string Title = "سوال گروهی";
         private readonly IUnitOfWork _uow;
         private readonly IDbSet<QuestionGroup> _questionGroups;
-
+        private readonly IDbSet<Writer> _writers;
         private readonly Lazy<QuestionUpdateService> _questionUpdateService;
 
         public QuestionGroupService(IUnitOfWork uow, Lazy<QuestionUpdateService> questionUpdate)
         {
             _uow = uow;
             _questionGroups = uow.Set<QuestionGroup>();
-
+            _writers = uow.Set<Writer>();
             _questionUpdateService = questionUpdate;
         }
 
@@ -93,8 +93,75 @@ namespace NasleGhalam.ServiceLayer.Services
             returnVal.Obj = Mapper.Map<QuestionGroupViewModel>(questionGroup);
             return returnVal;
         }
+        //Update Wrong Question's Writer via Excel File (Name Tarah => WriterId)
+        public ClientMessageResult UpdateQuestionsWriter()
+        {
+            var questiongroups = _questionGroups.Where(x => x.Questions.FirstOrDefault().WriterId == 1).Include(x => x.Questions).ToList();
+
+            foreach (var item in questiongroups)
+            {
+                string excelFilename = SitePath.GetQuestionGroupAbsPath(item.File) + ".xlsx";
+                var xlApp = new Microsoft.Office.Interop.Excel.Application();
+                var xlWorkbook = xlApp.Workbooks.Open(excelFilename, 0, false, 5, "", "", true, XlPlatform.xlWindows, "\t", true, false, 0, true, 1, 0);
+                var xlWorksheet = (_Worksheet)xlWorkbook.Sheets[1];
+                var xlRange = xlWorksheet.UsedRange;
+                var rowCount = xlRange.Rows.Count;
+                var colCount = xlRange.Columns.Count;
+                var dt = new System.Data.DataTable();
+                for (var k = 1; k <= rowCount; k++)
+                {
+                    var dr = dt.NewRow();
+                    for (var j = 1; j <= colCount; j++)
+                    {
+                        if (k == 1)
+                        {
+                            dt.Columns.Add(Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range)?.Value2));
+                        }
+                        else
+                        {
+                            dr[j - 1] = Convert.ToString((xlRange.Cells[k, j] as Microsoft.Office.Interop.Excel.Range)?.Value2);
+                        }
+
+                    }
+                    if (k != 1)
+                        dt.Rows.Add(dr);
+                }
+
+                
+
+                int count = 0;
+                foreach(var question in item.Questions.OrderBy(x=>x.Id))
+                {
+                    try
+                    {
+                        if (dt.Rows[count]["شماره طراح"] == DBNull.Value && dt.Rows[count]["نام طراح"] != DBNull.Value)
+                        {
+                            string tarah = dt.Rows[count]["نام طراح"].ToString();
+                            var writer = _writers.Where(x => x.Name == tarah).First();
+                            if (writer != null)
+                            {
+                                question.WriterId = writer.Id;
+                                _uow.ExcludeFieldsFromUpdate(question, x => x.Context);
+                                _uow.MarkAsChanged(question);
+                                xlWorksheet.Cells[count + 2, 16] = writer.Id.ToString();
+                                xlApp.Application.ActiveWorkbook.Save();
+                            }
+                        }
+                    }
+                    catch { }
+                    count++;
+                }
+                xlWorkbook.Close();
+                xlApp.Quit();
+                
+            }
 
 
+            _uow.ValidateOnSaveEnabled(false);
+            var msgRes = _uow.CommitChanges(CrudType.Update, Title);
+            var returnVal = Mapper.Map<ClientMessageResult>(msgRes);
+            return returnVal;
+        }
 
         /// <summary>
         /// ثبت سوال گروهی

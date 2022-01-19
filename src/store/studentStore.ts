@@ -128,6 +128,13 @@ export class StudentStore extends VuexModule {
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
   }
+
+
+  // ati
+  
+
+  //ati
+
   //#endregion
 
   //#region ### actions ###

@@ -17,7 +17,6 @@ const teacherGroupValidations: ValidationRuleset<TteacherGroup> = {
     TeacherId: {
       displayName: displayName("کد استاد"),
       maxLength: maxLength(10),
-      required
     },
     StudentsId:{
       displayName: displayName("اعضای گروه"),

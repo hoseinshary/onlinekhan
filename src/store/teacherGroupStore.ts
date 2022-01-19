@@ -1,10 +1,11 @@
 import Vue from "Vue";
-import ITeacherGroup, { DefaultTeacherGroup } from "src/models/ITeacherGroup";
+import ITeacherGroup , {DefaultTeacherGroup , IstudentGroup , DefaultIstudentGroup } from "src/models/ITeacherGroup";
 import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
 //edit api , below
 import { TEACHER_GROUP_URL as baseUrl } from "src/utilities/site-config";
+import { STUDENT_URL as base2 } from "src/utilities/site-config";
 import util from "src/utilities";
 import {
   VuexModule,
@@ -16,7 +17,8 @@ import {
 
 
 // ATI
-import IUser from "src/models/IUser";
+import IStudent from "src/models/IStudent";
+import { studentStore } from "./studentStore";
 
 // ATI
 
@@ -30,8 +32,8 @@ export class TeacherGroupStore extends VuexModule {
   private _editVue: Vue;
 
   // ATI
-  private _userList: Array<IUser>;
-
+  studentList:Array<IstudentGroup>;
+  
   // ATI
 
   /**
@@ -49,8 +51,7 @@ export class TeacherGroupStore extends VuexModule {
     };
 
     // ati
-    this._userList = [];
-
+    this.studentList = []
     // ati
   }
 
@@ -76,11 +77,13 @@ export class TeacherGroupStore extends VuexModule {
 
 
   // ATI
-  get checkedUserIds() {
-    return this._userList.filter(x => x.Checked).map(x => x.Id);
+  get checkedStudentsIds() {
+    return this.studentList.filter(x => x.Checked).map(x => x.Id);
   }
-
-
+  get studentData(){
+    return this.studentList;
+  }
+  
   // ATI
   //#endregion
 
@@ -115,6 +118,7 @@ export class TeacherGroupStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<ITeacherGroup>) {
     this._teacherGroupList = list;
+    console.log('this._teacherGroupList',this._teacherGroupList);
   }
 
   @mutation
@@ -146,6 +150,22 @@ export class TeacherGroupStore extends VuexModule {
   SET_EDIT_VUE(vm: Vue) {
     this._editVue = vm;
   }
+
+  //ati
+  @mutation
+  SET_STUDENT_DETAIL(list : Array<IStudent>) {
+    console.log('list',list);
+    this.studentList = list.map(x => ({
+      Id: x.Id,
+      FullName: x.User.FullName,
+      NationalNo : x.User.NationalNo,
+      Checked : false
+    }));
+    console.log('studentlist',this.studentList);
+    
+  }
+  // ati
+
   //#endregion
 
   //#region ### actions ###
@@ -206,11 +226,10 @@ export class TeacherGroupStore extends VuexModule {
   //warning -ati- edit with new api
   async submitCreate(closeModal: boolean) {
     let vm = this._createVue;
-    
-    this.teacherGroup['StudentsId']= [26,5678];
+    this.teacherGroup.Students = this.checkedStudentsIds;
     this.teacherGroup['Id']= Number(this.teacherGroup['Id']);
-    if (!(await this.validateForm(vm))) return;
     console.log('this.teachergroup',this.teacherGroup);
+    if (!(await this.validateForm(vm))) return;
     return axios
       .post(`${baseUrl}/Create`,this.teacherGroup)
       .then((response: AxiosResponse<IMessageResult>) => {
@@ -272,6 +291,31 @@ export class TeacherGroupStore extends VuexModule {
         }
       });
   }
+
+
+  //ati
+
+  @action()
+  async fillStudent(){
+    // await studentStore.actions['studentStore/fillList'];
+    // let tempList: Array<IStudent>;
+    // tempList = studentStore.getters['studentStore/gridData'];
+    if (this._modelChanged) {
+      return await axios
+        .get(`${base2}/GetAll`)
+        .then((response: AxiosResponse<Array<IStudent>>) => {
+          console.log('RESPONSEDATA',response.data);
+          this.SET_STUDENT_DETAIL(response.data);
+          
+          this.MODEL_CHANGED(false);
+        });
+    } 
+    else {
+      return Promise.resolve(this.studentList);
+    }
+  }
+
+  // ati
   //#endregion
 }
 

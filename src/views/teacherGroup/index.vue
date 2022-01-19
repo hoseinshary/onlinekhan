@@ -10,9 +10,6 @@
       <template slot="Id" slot-scope="data">
          <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
-        <!-- ati -->
-        <!-- <base-btn-edit v-if="true" round @click="showModalEdit(data.row.Id)" />
-        <base-btn-delete v-if="true" round @click="showModalDelete(data.row.Id)" /> -->
     
     </template>
     </base-table>
@@ -46,26 +43,22 @@ export default class TeacherGroupVue extends Vue {
       data: "Name"
     },
     {
-      title: "کد",
-      data: "Id"
+      title: "اعضا",
+      data: "Students"
     },
     {
       title: "عملیات",
       data: "Id",
       searchable: false,
       sortable: false,
-      // ati
-      // visible: this.canEdit || this.canDelete
-      visible: true
+      visible: this.canEdit || this.canDelete
     }
   ];
   //#endregion
 
   //#region ### computed ###
   get canCreate() {
-    console.log(this.pageAccess.indexOf("ایجاد") > -1);
     return this.pageAccess.indexOf("ایجاد") > -1;
-    //return true
   }
 
   get canEdit() {
@@ -100,6 +93,7 @@ export default class TeacherGroupVue extends Vue {
   //#region ### hooks ###
   created() {
     this.teacherGroupStore.fillList();
+    console.log('teacherGroupStore.gridData.StudentsId',this.teacherGroupStore.gridData)
   }
   //#endregion
 }

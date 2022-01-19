@@ -7,10 +7,12 @@
     @close="teacherGroupStore.OPEN_MODAL_CREATE(false)"
   >
 
+    <base-input :model="$v.teacherGroup.Name" class="col-md-6"/>
+
      <!--ATI  -->
     <br />
     <div class="">
-        <base-table :grid-data="lesson_UserStore.userData" :columns="userGridColumn">
+        <base-table :grid-data="teacherGroupStore.studentData" :columns="studentGridColumn">
           <template slot="Checked" slot-scope="data">
             <q-checkbox v-model="data.row.Checked" />
           </template>
@@ -18,8 +20,7 @@
     </div>
     <!-- ATI -->
 
-    <base-input :model="$v.teacherGroup.Name" class="col-md-6"/>
-    <base-input :model="$v.teacherGroup.Id" class="col-md-6"/>
+    
   </base-modal-create>
 </template>
 
@@ -41,8 +42,8 @@ export default class TeacherGroupVue extends Vue {
 
 
   // ATI
-  lesson_UserStore = vxm.lesson_UserStore;
-  userGridColumn = [
+  studentStore = vxm.studentStore;
+  studentGridColumn = [
     {
       title: "انتخاب",
       data: "Checked"
@@ -56,25 +57,20 @@ export default class TeacherGroupVue extends Vue {
       data: "NationalNo"
     }
   ];
-  provinceGridColumn = [
-    {
-      title: "نام",
-      data: "Name"
-    },
-    {
-      title: "کد",
-      data: "Id"
-    }
-  ];
   //ati
+
+
 
   //#region ### hooks ###
   created() {
+    // ati
+    this.teacherGroupStore.fillStudent();
+    console.log( ' this.teacherGroupStore.studentList',this.teacherGroupStore.studentList);
+    // ati
+    
     this.teacherGroupStore.SET_CREATE_VUE(this);
 
-    // ati
-    this.lesson_UserStore.fillUserList();
-    // ati
+    
 
   }
   //#endregion

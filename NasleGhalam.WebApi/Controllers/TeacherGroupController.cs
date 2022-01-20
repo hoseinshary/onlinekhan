@@ -44,6 +44,14 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Create(TeacherGroupCreateViewModel teacherGroupViewModel)
         {
+            if (Request.GetRoleLevel() == 6)
+            {
+                teacherGroupViewModel.TeacherId = Request.GetUserId();
+            }
+            else
+            {
+                teacherGroupViewModel.TeacherId = 1;
+            }
             return Ok(_teacherGroupService.Create(teacherGroupViewModel));
         }
 

@@ -62,7 +62,7 @@ namespace NasleGhalam.WebApi.Controllers
             return Ok(user);
         }
 
-        [HttpGet, CheckUserAccess(ActionBits.PanelAdminReadAccess , ActionBits.PanelTeacherReadAccess , ActionBits.PanelExpertReadAccess)]
+        [HttpGet, CheckUserAccess(ActionBits.PanelAdminReadAccess , ActionBits.PanelTeacherReadAccess , ActionBits.PanelExpertReadAccess,ActionBits.PanelStudentReadAccess)]
         public IHttpActionResult GetUserData()
         {
             var user = _userService.GetByIdPrivate(Request.GetUserId(), Request.GetRoleLevel());
@@ -201,7 +201,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess)]
+        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess, ActionBits.PanelStudentReadAccess)]
         [CheckModelValidation]
         public IHttpActionResult UpdateUser(UserUpdateViewModel userViewModel)
         {
@@ -214,7 +214,7 @@ namespace NasleGhalam.WebApi.Controllers
         }
 
         [HttpPost]
-        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess)]
+        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess, ActionBits.PanelStudentReadAccess)]
         [CheckModelValidation]
         public IHttpActionResult UpdateUserPassword(UserChangePasswordViewModel userViewModel)
         {
@@ -272,7 +272,7 @@ namespace NasleGhalam.WebApi.Controllers
 
         [HttpPost]
         [CheckModelValidation]
-        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess)]
+        [CheckUserAccess(ActionBits.PanelAdminReadAccess, ActionBits.PanelTeacherReadAccess, ActionBits.PanelExpertReadAccess, ActionBits.PanelStudentReadAccess)]
         [CheckImageValidationProfileNotRequired("img", 2048)]
         public IHttpActionResult UpdateUserImage()
         {

@@ -23,6 +23,13 @@ namespace NasleGhalam.WebApi.Controllers
             _logService = logService;
         }
 
+
+        [HttpGet, CheckUserAccess(ActionBits.MyLessonAccess)]
+        public IHttpActionResult GetAllMyLesson()
+        {
+            return Ok(_lesson_UserService.GetAllMyLesson(Request.GetUserId()));
+        }
+
         [HttpGet, CheckUserAccess(ActionBits.Lesson_UserReadAccess)]
         public IHttpActionResult GetAllByLessonIds([FromUri]IEnumerable<int> ids)
         {
@@ -46,6 +53,22 @@ namespace NasleGhalam.WebApi.Controllers
                 _logService.Create(CrudType.Create, "Lesson_User", msgRes.Obj, Request.GetUserId());
             }
             return Ok(msgRes);
+        }
+
+        [HttpPost]
+        [CheckUserAccess(ActionBits.LessonBuyAccess)]
+        [CheckModelValidation]
+        public IHttpActionResult BuyLesson(BuyLessonViewModel lesson_UserViewModel)
+        {
+            lesson_UserViewModel.UserId = Request.GetUserId();
+            var msgRes = _lesson_UserService.BuyLesson(lesson_UserViewModel);
+            if (msgRes.MessageType == MessageType.Success)
+            {
+                _logService.Create(CrudType.Create, "buyLesson", msgRes.Obj, Request.GetUserId());
+            }
+
+            return Ok(msgRes);
+         
         }
     }
 }

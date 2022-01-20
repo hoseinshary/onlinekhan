@@ -106,10 +106,10 @@ namespace NasleGhalam.ServiceLayer.Services
                 {
                     Name = x.Name,
                     Family = x.Family,
-                    NumberOfQuestionAnswerJudged = x.QuestionAnswerJudges.Count,
-                    NumberOfQuestionJudged = x.QuestionJudges.Count,
-                    NumberOfQuestionTopiced = x.QuestionsUpdates.Where(current => current.QuestionActivity == QuestionActivity.Topic).Count(),
-                    NumberOfSupervisorQuestion = x.SupervisorQuestions.Count,
+                    NumberOfQuestionAnswerJudged = x.QuestionAnswerJudges.Where(f=>f.QuestionAnswer.Question.Deleted == false).Count(),
+                    NumberOfQuestionJudged = x.QuestionJudges.Where(f=> f.Question.Deleted == false).Count(),
+                    NumberOfQuestionTopiced = x.QuestionsUpdates.Where(current =>current.Question.Deleted == false && current.QuestionActivity == QuestionActivity.Topic).Count(),
+                    NumberOfSupervisorQuestion = x.SupervisorQuestions.Where(current => current.Deleted==false).Count(),
                     NumberOfWriteQuestion = _questions.Where(current => current.Deleted == false).Count(y => y.Writer.User.Id == x.Id),
                     Department = x.Lessons.FirstOrDefault().LessonDepartments.FirstOrDefault().Name
                 }).ToList();

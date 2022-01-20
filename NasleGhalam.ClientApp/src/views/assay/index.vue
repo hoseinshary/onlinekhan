@@ -67,7 +67,7 @@ export default class CityVue extends Vue {
       data: "Id",
       searchable: false,
       sortable: false,
-      visible: this.canEdit || this.canDelete
+      visible: this.canEdit || this.canDelete || true
     }
   ];
   //#endregion

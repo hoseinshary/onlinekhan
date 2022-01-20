@@ -151,6 +151,7 @@
         PanelAdminReadAccess = 114,
         PanelTeacherReadAccess = 123,
         PanelExpertReadAccess = 124,
+        PanelStudentReadAccess = 164,
 
         TeacherReadAccess = 115,
         TeacherCreateAccess = 116,
@@ -194,6 +195,9 @@
         TeacherGroupCreateAccess = 161,
         TeacherGroupDeleteAccess = 162,
         TeacherGroupUpdateAccess = 163,
+
+        LessonBuyAccess = 165,
+        MyLessonAccess = 166
 
     }
 }

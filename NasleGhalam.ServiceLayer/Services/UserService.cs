@@ -426,6 +426,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 clientResult.Message = "نام کاربری تکراری می باشد";
             }
 
+            clientResult.Obj = user;
             return clientResult;
         }
 
@@ -477,8 +478,8 @@ namespace NasleGhalam.ServiceLayer.Services
             {
                 if (user != null) clientResult.Obj = GetById(user.Id, userRoleLevel);
             }
-          
 
+            clientResult.Obj = userViewModel;
             return clientResult;
         }
 
@@ -576,7 +577,7 @@ namespace NasleGhalam.ServiceLayer.Services
                 .Where(current => current.Password == login.Password)
                 .ToList();
 
-            if (lstUsr.Count > 0)
+            if (lstUsr.Count > 0 )
             {
                 var usr = lstUsr[0];
                 if (!usr.IsActive)
@@ -605,6 +606,10 @@ namespace NasleGhalam.ServiceLayer.Services
                         else if (lstUsr[0].Role.Id == 2015)
                         {
                             defaultPage = "/panel/teacherPanel";
+                        }
+                        else if (lstUsr[0].Role.Level == 100)
+                        {
+                            defaultPage = "/panel/studentPanel";
                         }
                         else
                         {

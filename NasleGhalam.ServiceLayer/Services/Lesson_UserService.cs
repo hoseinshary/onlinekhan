@@ -48,6 +48,20 @@ namespace NasleGhalam.ServiceLayer.Services
         }
 
         /// <summary>
+        /// گرفتن همه اختصاص کاربر به درس ها
+        /// </summary>
+        /// <returns></returns>
+        public IList<LessonViewModel> GetAllMyLesson(int id)
+        {
+            return _lessons
+                .Where(x => x.Users.Any(y => y.Id == id))
+                .AsNoTracking()
+                .AsEnumerable()
+                .Select(Mapper.Map<LessonViewModel>)
+                .ToList();
+        }
+
+        /// <summary>
         /// ثبت اختصاص کاربر به درس
         /// </summary>
         /// <param name="lesson_UserViewModel"></param>
@@ -105,6 +119,28 @@ namespace NasleGhalam.ServiceLayer.Services
                     }
                 }
             }
+
+            var msgRes = _uow.CommitChanges();
+            var clientResult = Mapper.Map<ClientMessageResult>(msgRes);
+            if (clientResult.MessageType == MessageType.Success)
+                clientResult.Obj = lesson_UserViewModel;
+            return clientResult;
+        }
+
+
+        /// <summary>
+        /// ثبت اختصاص کاربر به درس
+        /// </summary>
+        /// <param name="lesson_UserViewModel"></param>
+        /// <returns></returns>
+        public ClientMessageResult BuyLesson(BuyLessonViewModel lesson_UserViewModel)
+        {
+
+            var user = _users
+                .FirstOrDefault(x => x.Id == lesson_UserViewModel.UserId);
+
+            var lesson = _lessons.FirstOrDefault(x => x.Id == lesson_UserViewModel.LessonId);
+            user.Lessons.Add(lesson);
 
             var msgRes = _uow.CommitChanges();
             var clientResult = Mapper.Map<ClientMessageResult>(msgRes);

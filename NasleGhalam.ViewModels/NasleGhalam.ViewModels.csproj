@@ -81,6 +81,7 @@
     <Compile Include="LessonDepartment\LessonDepartmentAssignViewModel.cs" />
     <Compile Include="LessonDepartment\LessonDepatmentViewModel.cs" />
     <Compile Include="Lesson\LessonUpdateViewModel.cs" />
+    <Compile Include="Lesson\BuyLessonViewModel.cs" />
     <Compile Include="Lesson\Lesson_UserViewModel.cs" />
     <Compile Include="Log\BrowserInfoViewModel.cs" />
     <Compile Include="Log\LogGetAllViewModel.cs" />

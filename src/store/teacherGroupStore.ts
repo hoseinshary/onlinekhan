@@ -72,6 +72,7 @@ export class TeacherGroupStore extends VuexModule {
   }
 
   get gridData() {
+   // console.log(this._teacherGroupList);
     return this._teacherGroupList;
   }
 
@@ -81,6 +82,17 @@ export class TeacherGroupStore extends VuexModule {
     return this.studentList.filter(x => x.Checked).map(x => x.Id);
   }
   get studentData(){
+    return this.studentList;
+  }
+
+  get studentDataForEdit(){  
+    this.studentList.forEach(element => {
+      if(  this.teacherGroup.Students.map(x=> x.Id).indexOf(element.Id) > -1)
+      {
+        element.Checked = true;
+      }
+    });
+ 
     return this.studentList;
   }
   
@@ -118,7 +130,7 @@ export class TeacherGroupStore extends VuexModule {
   @mutation
   private SET_LIST(list: Array<ITeacherGroup>) {
     this._teacherGroupList = list;
-    console.log('this._teacherGroupList',this._teacherGroupList);
+    //console.log('this._teacherGroupList',this._teacherGroupList);
   }
 
   @mutation
@@ -154,14 +166,14 @@ export class TeacherGroupStore extends VuexModule {
   //ati
   @mutation
   SET_STUDENT_DETAIL(list : Array<IStudent>) {
-    console.log('list',list);
+    //console.log('list',list);
     this.studentList = list.map(x => ({
       Id: x.Id,
       FullName: x.User.FullName,
       NationalNo : x.User.NationalNo,
       Checked : false
     }));
-    console.log('studentlist',this.studentList);
+   // console.log('studentlist',this.studentList);
     
   }
   // ati
@@ -226,9 +238,9 @@ export class TeacherGroupStore extends VuexModule {
   //warning -ati- edit with new api
   async submitCreate(closeModal: boolean) {
     let vm = this._createVue;
-    this.teacherGroup.Students = this.checkedStudentsIds;
+    this.teacherGroup.StudentsId = this.checkedStudentsIds;
     this.teacherGroup['Id']= Number(this.teacherGroup['Id']);
-    console.log('this.teachergroup',this.teacherGroup);
+    //console.log('this.teachergroup',this.teacherGroup);
     if (!(await this.validateForm(vm))) return;
     return axios
       .post(`${baseUrl}/Create`,this.teacherGroup)
@@ -255,6 +267,8 @@ export class TeacherGroupStore extends VuexModule {
   @action()
   async submitEdit() {
     let vm = this._editVue;
+    this.teacherGroup.StudentsId = this.checkedStudentsIds;
+    this.teacherGroup['Id']= Number(this.teacherGroup['Id']);
     if (!(await this.validateForm(vm))) return;
 
     return axios
@@ -304,7 +318,7 @@ export class TeacherGroupStore extends VuexModule {
       return await axios
         .get(`${base2}/GetAll`)
         .then((response: AxiosResponse<Array<IStudent>>) => {
-          console.log('RESPONSEDATA',response.data);
+         // console.log('RESPONSEDATA',response.data);
           this.SET_STUDENT_DETAIL(response.data);
           
           this.MODEL_CHANGED(false);

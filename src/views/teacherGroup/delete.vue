@@ -1,10 +1,10 @@
 <template>
   <base-modal-delete
-    :title="provinceStore.modelName"
-    :recordName="provinceStore.recordName"
-    :show="provinceStore.openModal.delete"
+    :title="teacherGroupStore.modelName"
+    :recordName="teacherGroupStore.recordName"
+    :show="teacherGroupStore.openModal.delete"
     @confirm="confirm"
-    @close="provinceStore.OPEN_MODAL_DELETE(false)"
+    @close="teacherGroupStore.OPEN_MODAL_DELETE(false)"
   ></base-modal-delete>
 </template>
 
@@ -14,12 +14,12 @@ import { vxm } from "src/store";
 @Component
 export default class ProvinceDeleteVue extends Vue {
   //#region ### data ###
-  provinceStore = vxm.provinceStore;
+  teacherGroupStore = vxm.teacherGroupStore;
   //#endregion
 
   //#region ### methods ###
   confirm() {
-    this.provinceStore.submitDelete(this);
+    this.teacherGroupStore.submitDelete(this);
   }
   //#endregion
 }

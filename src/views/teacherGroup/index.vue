@@ -7,7 +7,12 @@
     />
     <br />
     <base-table :grid-data="teacherGroupStore.gridData" :columns="teacherGroupGridColumn" hasIndex>
+       <template slot="Teacher.User.FullName" slot-scope="data">{{data.row.Teacher.User.FullName}}</template>
+       <template slot="Students.User.FullName" slot-scope="data">{{data.row.Students.map(x => x.User.FullName)}}</template>
       <template slot="Id" slot-scope="data">
+     
+
+
          <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
     
@@ -43,8 +48,12 @@ export default class TeacherGroupVue extends Vue {
       data: "Name"
     },
     {
+      title: "نام دبیر",
+      data: "Teacher.User.FullName"
+    },
+    {
       title: "اعضا",
-      data: "Students"
+      data: "Students.User.FullName"
     },
     {
       title: "عملیات",
@@ -93,7 +102,7 @@ export default class TeacherGroupVue extends Vue {
   //#region ### hooks ###
   created() {
     this.teacherGroupStore.fillList();
-    console.log('teacherGroupStore.gridData.StudentsId',this.teacherGroupStore.gridData)
+   // console.log('teacherGroupStore.gridData.StudentsId',this.teacherGroupStore.gridData)
   }
   //#endregion
 }

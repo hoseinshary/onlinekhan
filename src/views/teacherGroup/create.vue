@@ -65,7 +65,7 @@ export default class TeacherGroupVue extends Vue {
   created() {
     // ati
     this.teacherGroupStore.fillStudent();
-    console.log( ' this.teacherGroupStore.studentList',this.teacherGroupStore.studentList);
+    //console.log( ' this.teacherGroupStore.studentList',this.teacherGroupStore.studentList);
     // ati
     
     this.teacherGroupStore.SET_CREATE_VUE(this);

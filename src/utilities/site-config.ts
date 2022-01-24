@@ -1,6 +1,6 @@
 // export const API_URL = "http://onlinekhan.ir";
-//export const API_URL = "http://localhost:63839";
-export const API_URL = "http://159.69.82.251";
+export const API_URL = "http://localhost:63839";
+//export const API_URL = "http://159.69.82.251";
 export const CITY_URL = "/api/city";
 export const PROVINCE_URL = "/api/province";
 export const TEACHER_GROUP_URL = "/api/teacherGroup";

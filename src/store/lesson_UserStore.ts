@@ -25,6 +25,7 @@ export class Lesson_UserStore extends VuexModule {
   private _lessonList: Array<ILesson>;
   private _userList: Array<IUser>;
   private _indexVue: Vue;
+  private _buyLessonVue : Vue;
 
   /**
    * initialize data
@@ -80,6 +81,11 @@ export class Lesson_UserStore extends VuexModule {
   SET_INDEX_VUE(vm: Vue) {
     this._indexVue = vm;
   }
+
+  @mutation
+  SET_BUY_LESSON_VUE(vm: Vue) {
+    this._buyLessonVue = vm;
+  }
   //#endregion
 
   //#region ### actions ###
@@ -98,6 +104,15 @@ export class Lesson_UserStore extends VuexModule {
       .get(`${USER_URL}/GetAll`)
       .then((response: AxiosResponse<Array<IUser>>) => {
         this.SET_USER_LIST(response.data);
+      });
+  }
+
+  @action()
+  async fillMyLesson() {
+    return axios
+      .get(`${baseUrl}/GetAllMyLesson`)
+      .then((response: AxiosResponse<Array<ILesson>>) => {
+        this.SET_LESSON_LIST(response.data);
       });
   }
 
@@ -148,6 +163,21 @@ export class Lesson_UserStore extends VuexModule {
     this.lesson_User.UserIds = this.checkedUserIds;
     return axios
       .post(`${baseUrl}/SubmitChanges`, this.lesson_User)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+      });
+  }
+
+  @action()
+  async buyLesson(id) {
+    let vm = this._buyLessonVue;
+    var data = {
+      UserId : 0 ,
+      LessonId : id
+    }
+    return axios
+      .post(`${baseUrl}/BuyLesson`, data)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });

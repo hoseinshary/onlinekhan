@@ -235,8 +235,23 @@ export default [
         path: "/teacherGroup",
         name: "teacherGroup",
         component: () => import("src/views/teacherGroup/index.vue")
-      }
       
+      },
+      {
+        path: "/student/buyLesson",
+        name: "buyLesson",
+        component: () => import(/* webpackChunkName: "lesson" */"src/views/lesson/buyLesson.vue")
+      },
+      {
+        path: "/student/myLesson",
+        name: "myLesson",
+        component: () => import(/* webpackChunkName: "lesson" */"src/views/lesson/myLesson.vue")
+      },
+      {
+        path: "/panel/studentPanel",
+        name: "studentPanel",
+        component: () => import(/* webpackChunkName: "teacherPanel" */"src/views/panel/studentPanel.vue")
+      }
     ]
 
   },

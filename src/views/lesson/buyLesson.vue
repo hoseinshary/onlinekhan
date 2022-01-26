@@ -33,10 +33,10 @@
             <base-btn-edit round v-if="canEdit" @click="showModalEdit(data.row.Id)" />
             <base-btn-delete round v-if="canDelete" @click="showModalDelete(data.row.Id)" />
 
-              <q-btn class="q-ma-sm" size="sm" round color="purple" icon="shopping_cart" @click="buyLesson(data.row.Id)">
-                خرید
-                <q-tooltip>خرید</q-tooltip>
-              </q-btn>
+            <q-btn class="q-ma-sm" size="sm" round color="purple" icon="shopping_cart" @click="buyLesson(data.row.Id)">
+              خرید
+              <q-tooltip>خرید</q-tooltip>
+            </q-btn>
           </template>
         </base-table>
       </div>

@@ -24,11 +24,13 @@ import { studentStore } from "./studentStore";
 
 @Module({ namespacedPath: "teacherGroupStore/" })
 export class TeacherGroupStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean };
+  openModal: { create: boolean; edit: boolean; delete: boolean ; createSub:boolean };
   teacherGroup: ITeacherGroup;
   private _teacherGroupList: Array<ITeacherGroup>;
   private _modelChanged: boolean = true;
   private _createVue: Vue;
+  private _createSubVue: Vue;
+
   private _editVue: Vue;
 
   // ATI
@@ -47,7 +49,8 @@ export class TeacherGroupStore extends VuexModule {
     this.openModal = {
       create: false,
       edit: false,
-      delete: false
+      delete: false,
+      createSub : false
     };
 
     // ati
@@ -85,15 +88,23 @@ export class TeacherGroupStore extends VuexModule {
     return this.studentList;
   }
 
+  get studentDataForSub(){
+    var x2 = util.cloneObject(this.studentList);
+    var x3 = x2.filter(x => this.teacherGroup.Students.map(y=> y.Id).indexOf(x.Id) > -1);
+    //console.log(x3);
+    return x3;
+  }
+
   get studentDataForEdit(){  
-    this.studentList.forEach(element => {
+    var x2 = util.cloneObject(this.studentList)
+    x2.forEach(element => {
       if(  this.teacherGroup.Students.map(x=> x.Id).indexOf(element.Id) > -1)
       {
         element.Checked = true;
       }
     });
  
-    return this.studentList;
+    return x2;
   }
   
   // ATI
@@ -144,6 +155,11 @@ export class TeacherGroupStore extends VuexModule {
   }
 
   @mutation
+  OPEN_MODAL_CREATE_SUB(open: boolean) {
+    this.openModal.createSub = open;
+  }
+
+  @mutation
   OPEN_MODAL_EDIT(open: boolean) {
     this.openModal.edit = open;
   }
@@ -156,6 +172,12 @@ export class TeacherGroupStore extends VuexModule {
   @mutation
   SET_CREATE_VUE(vm: Vue) {
     this._createVue = vm;
+  }
+
+  
+  @mutation
+  SET_CREATESUB_VUE(vm: Vue) {
+    this._createSubVue = vm;
   }
 
   @mutation
@@ -245,7 +267,7 @@ export class TeacherGroupStore extends VuexModule {
     return axios
       .post(`${baseUrl}/Create`,this.teacherGroup)
       .then((response: AxiosResponse<IMessageResult>) => {
-        console.log('response',response);
+        //console.log('response',response);
         let data = response.data;
         this.notify({ vm, data });
 
@@ -261,7 +283,16 @@ export class TeacherGroupStore extends VuexModule {
   @action()
   async resetCreate() {
     this.teacherGroup.Id = 0;
+    this._teacherGroupList =[];
     this.RESET(this._createVue);
+  }
+
+  
+  @action()
+  async resetCreateSub() {
+    this.teacherGroup.Id = 0;
+    this._teacherGroupList =[];
+    this.RESET(this._createSubVue);
   }
 
   @action()

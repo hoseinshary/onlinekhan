@@ -18,6 +18,8 @@ namespace NasleGhalam.ViewModels.TeacherGroup
 
         public int TeacherId { get; set; }
 
+        
+
         public TeacherViewModel Teacher { get; set; }
 
 

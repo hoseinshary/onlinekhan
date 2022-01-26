@@ -50,16 +50,33 @@ namespace NasleGhalam.ServiceLayer.Services
         /// گرفتن همه انتخاب رشته ها
         /// </summary>
         /// <returns></returns>
-        public IList<TeacherGroupViewModel> GetAll()
+        public IList<TeacherGroupViewModel> GetAll(int rollId ,  int userId)
         {
-            var std = _teacherGroups
-                    .Include(current => current.Students)
-                    .Include(current => current.Teacher)
+            if (rollId == 6)
+            {
+                var std = _teacherGroups
+                    .Include(current => current.Students.Select(x => x.User))
+                    .Include(current => current.Teacher.User)
+                    .Where(current => current.TeacherId == userId)
                     .AsNoTracking()
                     .AsEnumerable()
                     .Select(Mapper.Map<TeacherGroupViewModel>)
                     .ToList();
-            return std;
+
+                return std;
+            }
+            else
+            {
+                var std = _teacherGroups
+                    .Include(current => current.Students.Select(x => x.User))
+                    .Include(current => current.Teacher.User)
+                    .AsNoTracking()
+                    .AsEnumerable()
+                    .Select(Mapper.Map<TeacherGroupViewModel>)
+                    .ToList();
+
+                return std;
+            }
         }
 
         /// <summary>

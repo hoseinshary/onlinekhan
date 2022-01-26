@@ -23,7 +23,7 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckUserAccess(ActionBits.TeacherGroupReadAccess)]
         public IHttpActionResult GetAll()
         {
-            return Ok(_teacherGroupService.GetAll());
+            return Ok(_teacherGroupService.GetAll(Request.GetRoleLevel() , Request.GetUserId()));
         }
 
         [CheckUserAccess(ActionBits.TeacherGroupReadAccess)]
@@ -60,6 +60,14 @@ namespace NasleGhalam.WebApi.Controllers
         [CheckModelValidation]
         public IHttpActionResult Update(TeacherGroupUpdateViewModel teacherGroupViewModel)
         {
+            if (Request.GetRoleLevel() == 6)
+            {
+                teacherGroupViewModel.TeacherId = Request.GetUserId();
+            }
+            else
+            {
+                teacherGroupViewModel.TeacherId = 1;
+            }
             return Ok(_teacherGroupService.Update(teacherGroupViewModel));
         }
         [HttpPost]

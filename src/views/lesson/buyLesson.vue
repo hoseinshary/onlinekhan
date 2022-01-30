@@ -1,30 +1,66 @@
 <template>
-  <section class="col-md-12 q-px-lg">
-    <section slot="body" class="row gutter-sm">
-      <div class="col-md-4">
-        <q-select
-          v-model="educationTree.id"
-          :options="educationTree_GradeDdl"
-          float-label="جستجو درخت آموزش با مقطع"
-          clearable
-        />
-        <q-tree
-          :nodes="educationTreeData"
-          :expanded.sync="educationTree.expanded"
-          :ticked.sync="educationTree.leafTicked"
-          tick-strategy="leaf"
-          color="blue"
-          node-key="Id"
-        />
+  <section class="col-md-12 q-px-lg main">
+    <section slot="body" class="row">
+
+      <div class="col-md-3 q-py-lg">
+        
+        <!-- <q-card>
+          <q-tree
+            :nodes="educationTreeData"
+            :expanded.sync="educationTree.expanded"
+            :ticked.sync="educationTree.leafTicked"
+            tick-strategy="strict"
+            color="blue"
+            node-key="Id"
+          />
+        </q-card> -->
+
+        <br>
+        <q-card>
+          <q-list>
+              <q-collapsible 
+              v-for="item in educationTreeData"
+              :key="item.Id" 
+              :label="item.label">
+                <q-collapsible 
+                v-for="subItem in item.children"
+                :key="subItem.Id"
+                :label="subItem.label">
+                  <q-btn 
+                  v-for="section in subItem.children"
+                  :key="section.Id"
+                  :label="section.label"
+                  @click="pushId(section.Id)"
+                  :class="ids.indexOf(section.Id) > -1 ? 'colorOrange':''"
+                  >
+                  </q-btn>
+                </q-collapsible>
+                
+              </q-collapsible>
+
+          </q-list>
+
+        </q-card>
+          <br />
+        <q-card>
+          <q-select
+            v-model="educationTree.id"
+            :options="educationTree_GradeDdl"
+            float-label="جستجو درخت آموزش با مقطع"
+            clearable
+            @input="pushId(educationTree.id)"
+          />
+        </q-card>
       </div>
-      <div class="col-md-8">
-        <base-btn-create
-          v-if="canCreate"
-          :label="`ایجاد (${lessonStore.modelName}) جدید`"
-          @click="showModalCreate"
-        />
-        <br />
-        <base-table
+
+      <div class="col-md-9 q-px-lg">
+        <!--          
+          <base-btn-create
+            v-if="canCreate"
+            :label="`ایجاد (${lessonStore.modelName}) جدید`"
+            @click="showModalCreate"
+          /> -->
+        <!-- <base-table
           :grid-data="lessonStore.gridDataByEducationTreeIds(educationTree.leafTicked)"
           :columns="lessonGridColumn"
           hasIndex
@@ -38,7 +74,47 @@
                 <q-tooltip>خرید</q-tooltip>
               </q-btn>
           </template>
-        </base-table>
+        </base-table> -->
+
+        <!-- ati -->
+
+        <div class="row">
+
+          <div class="col-md-4 qCard q-pa-lg"
+            v-for="packet in gridDataPacket" :key="packet.Id">
+            <q-card>
+                <q-card-media overlay-position="top" class="">
+                <img src="/assets/f1.svg">
+              </q-card-media>
+              <q-card-title >
+                {{ packet.Name }}
+                <q-rating slot="subtitle" :max="5" />
+              </q-card-title>
+              <q-card-main class="">
+                <p class="text-faded">توضیحاتی در مورد بسته آموزشی فوق</p>
+              </q-card-main>
+              
+              <q-card-separator />
+
+              <q-card-actions class="row justify-between items-center">
+                <div>
+                  <p class="price"> 64،000 تومان </p>
+                </div>
+                  <q-btn size="md" class="qBtn" icon="shopping_cart" @click="buyLesson(data.row.Id)">
+                     
+                  </q-btn>
+              </q-card-actions>
+
+            </q-card>
+          </div>
+
+        </div>
+
+
+        <!-- ati -->
+
+
+
       </div>
     </section>
 
@@ -87,6 +163,9 @@ export default class LessonVue extends Vue {
   ];
   educationTree = this.educationTreeStore.qTreeData;
 
+  // ati
+  ids:Array<number> = [];
+
   //#endregion
 
   //#region ### computed ###
@@ -111,10 +190,24 @@ export default class LessonVue extends Vue {
   }
 
   get educationTreeData() {
+    console.log('this.educationTreeStore.treeDataByEducationTreeId',this.educationTreeStore.treeDataByEducationTreeId(
+      this.educationTree.id
+    ))
     return this.educationTreeStore.treeDataByEducationTreeId(
       this.educationTree.id
     );
   }
+
+
+  // ati
+  get gridDataPacket(){
+    console.log('this.ids',this.ids);
+    // console.log('this.lessonStore.gridDataByEducationTreeIds',this.lessonStore.gridDataByEducationTreeIds(this.ids));
+    return this.lessonStore.gridDataByEducationTreeIds(this.ids);
+  }
+
+
+  // ati
   //#endregion
 
   //#region ### watch ###
@@ -158,6 +251,13 @@ export default class LessonVue extends Vue {
     this.lessonUserStore.buyLesson(id);
   }
 
+  // ati
+  pushId(id): void{
+    this.ids = [];
+    // console.log('id',id);
+    this.ids.push(id);
+  }
+
   //#endregion
 
   //#region ### hooks ###
@@ -172,4 +272,52 @@ export default class LessonVue extends Vue {
   //#endregion
 }
 </script>
+
+<style scoped>
+*{
+  color: #3d348b;
+}
+.main{
+  background-color: #fcfaf9;
+  min-height: 100vh;
+}
+.qCard{
+  /* padding:1rem; */
+  height: 100%;
+}
+.qCard .q-card{
+  background-color: white;
+}
+.qCard .q-card:hover{
+  box-shadow: none;
+  border: .15rem solid #F36F21;
+}
+.qBtn{
+  /* border: .2rem solid #3d348b; */
+  border: none;
+  background-color: #3d348b;
+  color: #48E5C2;
+  padding: 0 1.4rem;
+}
+p.price{
+  margin: 0;
+}
+
+
+.q-option{
+  display: none;
+}
+
+.q-collapsible .q-btn{
+  border: none;
+  outline: none;
+  box-shadow: none;
+  display: block;
+  width: 100%;
+  margin: auto 1rem;
+}
+.q-btn.colorOrange{
+  color: #F36F21;
+}
+</style>
 

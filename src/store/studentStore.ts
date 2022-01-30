@@ -130,10 +130,7 @@ export class StudentStore extends VuexModule {
   }
 
 
-  // ati
-  
 
-  //ati
 
   //#endregion
 

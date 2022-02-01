@@ -1,0 +1,3 @@
+﻿https://stackoverflow.com/questions/18017869/build-tree-array-from-flat-array-in-javascript
+
+http://oskarhane.com/create-a-nested-array-recursively-in-javascript/

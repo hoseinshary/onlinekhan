@@ -119,7 +119,8 @@ module.exports = function(ctx) {
         "QItemSeparator",
         'QTable',
         'QScrollArea',
-        'QOptionGroup'
+        'QOptionGroup',
+        "QSearch"
         
       ],
       directives: ["Ripple", "CloseOverlay",

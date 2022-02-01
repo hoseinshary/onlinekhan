@@ -4,19 +4,25 @@
 
       <div class="col-md-3 q-py-lg">
         
-        <!-- <q-card>
+        <q-card>
+             <q-select
+          v-model="educationTree.id"
+          :options="educationTree_GradeDdl"
+          float-label="جستجو درخت آموزش با مقطع"
+          clearable
+        />
           <q-tree
             :nodes="educationTreeData"
             :expanded.sync="educationTree.expanded"
             :ticked.sync="educationTree.leafTicked"
-            tick-strategy="strict"
+            tick-strategy="leaf"
             color="blue"
             node-key="Id"
           />
-        </q-card> -->
+        </q-card>
 
         <br>
-        <q-card>
+        <!-- <q-card>
           <q-list>
               <q-collapsible 
               v-for="item in educationTreeData"
@@ -40,9 +46,9 @@
 
           </q-list>
 
-        </q-card>
+        </q-card> -->
           <br />
-        <q-card>
+        <!-- <q-card>
           <q-select
             v-model="educationTree.id"
             :options="educationTree_GradeDdl"
@@ -50,7 +56,7 @@
             clearable
             @input="pushId(educationTree.id)"
           />
-        </q-card>
+        </q-card> -->
       </div>
 
       <div class="col-md-9 q-px-lg">
@@ -81,10 +87,10 @@
         <div class="row">
 
           <div class="col-md-4 qCard q-pa-lg"
-            v-for="packet in gridDataPacket" :key="packet.Id">
+            v-for="packet in lessonStore.gridDataByEducationTreeIds(educationTree.leafTicked)" :key="packet.Id">
             <q-card>
                 <q-card-media overlay-position="top" class="">
-                <img src="/assets/f1.svg">
+                <img :src="packet.FilePath">
               </q-card-media>
               <q-card-title >
                 {{ packet.Name }}

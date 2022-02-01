@@ -29,6 +29,8 @@ namespace NasleGhalam.DomainClasses.Entities
 
         public Lookup Lookup_Nezam { get; set; }
 
+        public string File { get; set; }
+
         public ICollection<Ratio> Ratios { get; set; }
 
         public ICollection<EducationTree> EducationTrees { get; set; }

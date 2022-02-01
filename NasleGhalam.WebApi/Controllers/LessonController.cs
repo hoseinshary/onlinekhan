@@ -1,4 +1,8 @@
-﻿using System.Web.Http;
+﻿using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Web.Http;
 using NasleGhalam.Common;
 using NasleGhalam.ServiceLayer.Services;
 using NasleGhalam.WebApi.FilterAttribute;
@@ -34,6 +38,31 @@ namespace NasleGhalam.WebApi.Controllers
         //{
         //    return Ok(_lessonService.GetAllByEducationTreeIds(ids));
         //}
+        [HttpGet]
+        //[CheckUserAccess(ActionBits.QuestionReadAccess)]
+        public HttpResponseMessage GetPictureFile(string id)
+        {
+            var stream = new MemoryStream();
+            id += ".jpeg";
+            var filestraem = File.OpenRead(SitePath.GetLessonAbsPath(id));
+            filestraem.CopyTo(stream);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = id
+                };
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/octet-stream");
+            filestraem.Dispose();
+            stream.Dispose();
+            return result;
+        }
+
 
         [HttpGet, CheckUserAccess(ActionBits.Lesson_UserReadAccess, ActionBits.LessonReadAccess, ActionBits.TopicReadAccess,
              ActionBits.AssayReadAccess, ActionBits.EducationBookReadAccess, ActionBits.QuestionReadAccess, ActionBits.QuestionGroupReadAccess)]

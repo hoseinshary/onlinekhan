@@ -19,7 +19,7 @@
 
           <router-link to="/panel/adminpanel" class="logo"></router-link>
         
-          <q-search class="search-box" icon="search" v-model="searchBox" float-label="عبارت موردنظر خود را بنویسید"/>
+          <!-- <q-search class="search-box" icon="search" v-model="searchBox" float-label="عبارت موردنظر خود را بنویسید"/> -->
           
           <div class="profile q-ml-auto q-mr-lg ">
                 <div class="row justify-center align-center">
@@ -38,7 +38,7 @@
                 <div v-if="showProfileMenu" class="profile-menu">
                     <q-list>
                       <q-item  label="ویرایش اطلاعات کابری">
-                        <q-btn flat dense>
+                        <q-btn flat>
                         ویرایش اطلاعات کاربری
                         </q-btn>
                       </q-item>
@@ -48,7 +48,7 @@
                         </q-btn>
                       </q-item>
                       <q-item  label="خروج از حساب کاربری">
-                        <q-btn @click="logout" flat dense>
+                        <q-btn @click="logout" flat>
                           خروج از حساب کاربری
                         </q-btn>
                       </q-item>
@@ -61,7 +61,34 @@
 
         <q-toolbar class="toolbar-header2">
 
-          <q-toolbar-title class="">{{
+          <q-list no-border inset-delimiter class="row">
+
+              <q-item
+                v-for="menu in menuList"
+                :key="menu.ModuleId"
+                class="menu-item"
+              >
+                <q-item-main>{{ menu.ModuleName }}</q-item-main>
+                <div class="subMenu">
+                  <router-link
+                    v-for="item in subMenuList.filter(
+                    (x) => x.ModuleId == menu.ModuleId)"
+                    :key="item.EnName"
+                    :to="item.EnName">
+                    <q-item>
+                    <!-- <q-item-side icon='map' /> -->
+                    <!--"item.Icon" />-->
+                    <q-item-main :label="item.FaName" sublabel color="white" />
+                    </q-item>
+                  </router-link>
+                </div>
+
+
+              </q-item>
+
+          </q-list>
+
+          <q-toolbar-title class="title">{{
             $q.localStorage.get.item("title")
           }}
           </q-toolbar-title>
@@ -108,6 +135,7 @@
             </router-link>
           </q-collapsible>
         </q-list>
+
       </q-layout-drawer>
 
       <q-page-container>
@@ -148,7 +176,8 @@ export default {
       menuList: null,
       subMenuList: null,
       showProfileMenu : false,
-      searchBox : ''
+      searchBox : '',
+      showSubMenu:false
     };
   },
   methods: {
@@ -161,6 +190,7 @@ export default {
     logout() {
       util.logout();
     }
+     // ati
   },
   created: function () {
     this.menuList = this.$q.localStorage.get.item("menuList");
@@ -170,6 +200,9 @@ export default {
 </script>
 
 <style>
+a{
+  text-decoration: none !important;
+}
 .background{
   background-color: #fcfaf9;
 }
@@ -183,44 +216,46 @@ export default {
 /* toolbar-header1 */
 .toolbar-header1 {
   background-color: #fcfaf9 !important;
-  height: 115px;
 }
 
 .toolbar-header1 .logo {
   background-image: url("../assets/img/logo1-old.png");
   background-repeat: no-repeat;
   background-size: contain;
-  height: 90px;
-  width: 240px;
+  height: 60px;
+  width: 170px;
   max-width: 100%;
   /* margin: 0 auto; */
+}
+
+.toolbar-header1 img.profile-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
 }
 /* --- */
 
 /* toolbar-header2 */
 .toolbar-header2 {
   background-color: #0A3F7E !important;
-  height: 60px;
+  /* height: 60px; */
   color: #fcfaf9;
-  position: relative;
+  /* position: relative; */
+  overflow:inherit !important;
 }
 
 .toolbar-header2 .q-toolbar-title {
   text-align: right;
-  margin-right: 6.5rem;
+  margin-right: 5rem;
+  font-size: 1.1rem !important;
+  color: #48e5c2;
 }
 
 .toolbar-header2 img.header-image {
   position: fixed;
-  top: 130px;
+  top: 5.5rem;
   width: 50px;
   right: 40px;
-}
-
-.toolbar-header1 img.profile-image {
-  width: 55px;
-  height: 55px;
-  border-radius: 50px;
 }
 
 .toolbar-header2 .q-btn,
@@ -293,7 +328,7 @@ export default {
 .profile-menu{
   position: fixed;
   z-index: 100;
-  margin-top: 6.8%;
+  margin-top:4.7rem;
   top: 0;
   color:#0A3F7E ;
   background-color: #fcfaf9;
@@ -311,10 +346,34 @@ export default {
   background-color: #fcfaf9;;
   color: #0A3F7E;
 }
-.search-box{
-  direction: rtl;
-  width: 40%;
-  margin: 0 auto;
-  color: #f36f21 !important;
+.subMenu{
+  color: #f36f21;
+  position: absolute;
+  top: 0;
+  margin-top:4rem;
+  left: -400%;
+  display:none;
+  /* border: 2px solid #f36f21; */
+  background-color: #0A3F7E;
+  transition: .2s;
+} 
+.toolbar-header2 .q-item{
+  font-size: 1.2rem !important;
+  color: #fcfaf9 !important;
+  margin:.2rem 1rem;
+  cursor: pointer;
+}
+.toolbar-header2 .menu-item:hover .subMenu{
+  /* left: 20%; */
+  display: block;
+  left: 0;
+}
+.toolbar-header2 .q-item:hover{
+  color: #48e5c2;
+}
+.subMenu .q-item-label{
+  color: #48e5c2 !important;
+  margin: .1rem 1rem;
+  width: max-content;
 }
 </style>

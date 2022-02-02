@@ -38,7 +38,7 @@
                 <div v-if="showProfileMenu" class="profile-menu">
                     <q-list>
                       <q-item  label="ویرایش اطلاعات کابری">
-                        <q-btn flat>
+                        <q-btn flat dense>
                         ویرایش اطلاعات کاربری
                         </q-btn>
                       </q-item>
@@ -61,32 +61,28 @@
 
         <q-toolbar class="toolbar-header2">
 
-          <q-list no-border inset-delimiter class="row">
+          <div class="navbar">
+            <div class="subnav"
+              v-for="menu in menuList"
+                :key="menu.ModuleId">
+                <button class="subnavbtn">{{ menu.ModuleName }}</button>
+                <div class="subnav-content">
 
-              <q-item
-                v-for="menu in menuList"
-                :key="menu.ModuleId"
-                class="menu-item"
-              >
-                <q-item-main>{{ menu.ModuleName }}</q-item-main>
-                <div class="subMenu">
                   <router-link
                     v-for="item in subMenuList.filter(
                     (x) => x.ModuleId == menu.ModuleId)"
                     :key="item.EnName"
                     :to="item.EnName">
-                    <q-item>
-                    <!-- <q-item-side icon='map' /> -->
-                    <!--"item.Icon" />-->
-                    <q-item-main :label="item.FaName" sublabel color="white" />
-                    </q-item>
+                    {{ item.FaName }}
                   </router-link>
+
                 </div>
+            </div>
+          </div>
 
 
-              </q-item>
 
-          </q-list>
+
 
           <q-toolbar-title class="title">{{
             $q.localStorage.get.item("title")
@@ -238,10 +234,12 @@ a{
 /* toolbar-header2 */
 .toolbar-header2 {
   background-color: #0A3F7E !important;
-  /* height: 60px; */
   color: #fcfaf9;
-  /* position: relative; */
   overflow:inherit !important;
+  padding-bottom: 0;
+  padding-top: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .toolbar-header2 .q-toolbar-title {
@@ -253,7 +251,7 @@ a{
 
 .toolbar-header2 img.header-image {
   position: fixed;
-  top: 5.5rem;
+  top:5.5rem;
   width: 50px;
   right: 40px;
 }
@@ -334,7 +332,6 @@ a{
   background-color: #fcfaf9;
   border: 2px solid #48e5c2;
   border-radius: 4px;
-
 }
 .profile .q-btn:hover,
 .name-profile:hover{
@@ -346,34 +343,69 @@ a{
   background-color: #fcfaf9;;
   color: #0A3F7E;
 }
-.subMenu{
-  color: #f36f21;
-  position: absolute;
-  top: 0;
-  margin-top:4rem;
-  left: -400%;
-  display:none;
-  /* border: 2px solid #f36f21; */
-  background-color: #0A3F7E;
-  transition: .2s;
-} 
-.toolbar-header2 .q-item{
-  font-size: 1.2rem !important;
-  color: #fcfaf9 !important;
-  margin:.2rem 1rem;
-  cursor: pointer;
+
+
+ /* The navigation menu */
+.navbar {
+  overflow: hidden;
 }
-.toolbar-header2 .menu-item:hover .subMenu{
-  /* left: 20%; */
-  display: block;
-  left: 0;
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
 }
-.toolbar-header2 .q-item:hover{
+
+.subnav {
+  float: left;
+  overflow: hidden;
+}
+
+.subnav .subnavbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .subnav:hover .subnavbtn {
   color: #48e5c2;
 }
-.subMenu .q-item-label{
-  color: #48e5c2 !important;
-  margin: .1rem 1rem;
-  width: max-content;
+
+.subnav-content {
+  display: none;
+  position: absolute;
+  left: 0;
+  background-color:#0A3F7E;
+  width: 100%;
+  z-index: 1;
+  padding-bottom: 0;
+  padding-top: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
+
+.subnav-content a {
+  float: left;
+  color: white;
+  text-decoration: none;
+  border-bottom: 2px solid #0A3F7E;
+}
+
+.subnav-content a:hover {
+  color: #48e5c2;
+  border-color: #48e5c2;
+}
+
+.subnav:hover .subnav-content {
+  display: block;
+} 
+
 </style>

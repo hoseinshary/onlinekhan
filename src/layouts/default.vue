@@ -19,7 +19,7 @@
 
           <router-link to="/panel/adminpanel" class="logo"></router-link>
         
-          <q-search class="search-box" icon="search" v-model="searchBox" float-label="عبارت موردنظر خود را بنویسید"/>
+          <!-- <q-search class="search-box" icon="search" v-model="searchBox" float-label="عبارت موردنظر خود را بنویسید"/> -->
           
           <div class="profile q-ml-auto q-mr-lg ">
                 <div class="row justify-center align-center">
@@ -48,7 +48,7 @@
                         </q-btn>
                       </q-item>
                       <q-item  label="خروج از حساب کاربری">
-                        <q-btn @click="logout" flat dense>
+                        <q-btn @click="logout" flat>
                           خروج از حساب کاربری
                         </q-btn>
                       </q-item>
@@ -61,7 +61,30 @@
 
         <q-toolbar class="toolbar-header2">
 
-          <q-toolbar-title class="">{{
+          <div class="navbar">
+            <div class="subnav"
+              v-for="menu in menuList"
+                :key="menu.ModuleId">
+                <button class="subnavbtn">{{ menu.ModuleName }}</button>
+                <div class="subnav-content">
+
+                  <router-link
+                    v-for="item in subMenuList.filter(
+                    (x) => x.ModuleId == menu.ModuleId)"
+                    :key="item.EnName"
+                    :to="item.EnName">
+                    {{ item.FaName }}
+                  </router-link>
+
+                </div>
+            </div>
+          </div>
+
+
+
+
+
+          <q-toolbar-title class="title">{{
             $q.localStorage.get.item("title")
           }}
           </q-toolbar-title>
@@ -108,6 +131,7 @@
             </router-link>
           </q-collapsible>
         </q-list>
+
       </q-layout-drawer>
 
       <q-page-container>
@@ -148,7 +172,8 @@ export default {
       menuList: null,
       subMenuList: null,
       showProfileMenu : false,
-      searchBox : ''
+      searchBox : '',
+      showSubMenu:false
     };
   },
   methods: {
@@ -161,6 +186,7 @@ export default {
     logout() {
       util.logout();
     }
+     // ati
   },
   created: function () {
     this.menuList = this.$q.localStorage.get.item("menuList");
@@ -170,6 +196,9 @@ export default {
 </script>
 
 <style>
+a{
+  text-decoration: none !important;
+}
 .background{
   background-color: #fcfaf9;
 }
@@ -183,44 +212,48 @@ export default {
 /* toolbar-header1 */
 .toolbar-header1 {
   background-color: #fcfaf9 !important;
-  height: 115px;
 }
 
 .toolbar-header1 .logo {
   background-image: url("../assets/img/logo1-old.png");
   background-repeat: no-repeat;
   background-size: contain;
-  height: 90px;
-  width: 240px;
+  height: 60px;
+  width: 170px;
   max-width: 100%;
   /* margin: 0 auto; */
+}
+
+.toolbar-header1 img.profile-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
 }
 /* --- */
 
 /* toolbar-header2 */
 .toolbar-header2 {
   background-color: #0A3F7E !important;
-  height: 60px;
   color: #fcfaf9;
-  position: relative;
+  overflow:inherit !important;
+  padding-bottom: 0;
+  padding-top: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .toolbar-header2 .q-toolbar-title {
   text-align: right;
-  margin-right: 6.5rem;
+  margin-right: 5rem;
+  font-size: 1.1rem !important;
+  color: #48e5c2;
 }
 
 .toolbar-header2 img.header-image {
   position: fixed;
-  top: 130px;
+  top:5.5rem;
   width: 50px;
   right: 40px;
-}
-
-.toolbar-header1 img.profile-image {
-  width: 55px;
-  height: 55px;
-  border-radius: 50px;
 }
 
 .toolbar-header2 .q-btn,
@@ -293,13 +326,12 @@ export default {
 .profile-menu{
   position: fixed;
   z-index: 100;
-  margin-top: 6.8%;
+  margin-top:4.7rem;
   top: 0;
   color:#0A3F7E ;
   background-color: #fcfaf9;
   border: 2px solid #48e5c2;
   border-radius: 4px;
-
 }
 .profile .q-btn:hover,
 .name-profile:hover{
@@ -311,10 +343,69 @@ export default {
   background-color: #fcfaf9;;
   color: #0A3F7E;
 }
-.search-box{
-  direction: rtl;
-  width: 40%;
-  margin: 0 auto;
-  color: #f36f21 !important;
+
+
+ /* The navigation menu */
+.navbar {
+  overflow: hidden;
 }
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.subnav {
+  float: left;
+  overflow: hidden;
+}
+
+.subnav .subnavbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .subnav:hover .subnavbtn {
+  color: #48e5c2;
+}
+
+.subnav-content {
+  display: none;
+  position: absolute;
+  left: 0;
+  background-color:#0A3F7E;
+  width: 100%;
+  z-index: 1;
+  padding-bottom: 0;
+  padding-top: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.subnav-content a {
+  float: left;
+  color: white;
+  text-decoration: none;
+  border-bottom: 2px solid #0A3F7E;
+}
+
+.subnav-content a:hover {
+  color: #48e5c2;
+  border-color: #48e5c2;
+}
+
+.subnav:hover .subnav-content {
+  display: block;
+} 
+
 </style>

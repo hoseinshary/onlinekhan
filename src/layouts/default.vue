@@ -38,12 +38,12 @@
                 <div v-if="showProfileMenu" class="profile-menu">
                     <q-list>
                       <q-item  label="ویرایش اطلاعات کابری">
-                        <q-btn flat dense>
+                        <q-btn flat>
                         ویرایش اطلاعات کاربری
                         </q-btn>
                       </q-item>
                       <q-item  label="شارژ کیف پول">
-                        <q-btn flat dense>
+                        <q-btn flat>
                         شارژ کیف پول
                         </q-btn>
                       </q-item>
@@ -61,27 +61,41 @@
 
         <q-toolbar class="toolbar-header2">
 
-          <div class="navbar">
+          <!-- navbar - hoverable -->
+          <!-- <div class="navbar">
             <div class="subnav"
               v-for="menu in menuList"
                 :key="menu.ModuleId">
-                <button class="subnavbtn">{{ menu.ModuleName }}</button>
-                <div class="subnav-content">
-
-                  <router-link
-                    v-for="item in subMenuList.filter(
-                    (x) => x.ModuleId == menu.ModuleId)"
-                    :key="item.EnName"
-                    :to="item.EnName">
-                    {{ item.FaName }}
-                  </router-link>
-
+                <button class="subnavbtn">
+                  <span>{{ menu.ModuleName }}</span>
+                  </button>
+                <div 
+                class="subnav-content">
+                  <div class="column">
+                    <router-link
+                      v-for="item in subMenuList.filter(
+                      (x) => x.ModuleId == menu.ModuleId)"
+                      :key="item.EnName"
+                      :to="item.EnName">
+                      {{ item.FaName }}
+                    </router-link>
+                  </div>
                 </div>
             </div>
-          </div>
+          </div> -->
 
-
-
+          <!-- navbar - clickable -->
+            <div class="navbar">
+              <dropdown v-for="(menu,i) in menuList2"
+              :key="menu.id"
+              :id="i"
+              :title="menu.name"
+              :items="menu.items"
+              :isOpen="menu.subnavActive"
+              @toggleSubnav="toggleSubnav1(i)" 
+              >
+              </dropdown>
+            </div>
 
 
           <q-toolbar-title class="title">{{
@@ -156,14 +170,19 @@
           </q-btn>
         </div>
       </q-page-container>
+      
     </q-layout>
   </div>
 </template>
 
 <script>
 import util from "src/utilities";
+import dropdown from "./dropdown.vue";
 
 export default {
+  components:{
+    dropdown
+  },
   data() {
     return {
       siteName: "آنلاین خوان",
@@ -172,8 +191,8 @@ export default {
       menuList: null,
       subMenuList: null,
       showProfileMenu : false,
-      searchBox : '',
-      showSubMenu:false
+      //ati
+      menuList2:[]
     };
   },
   methods: {
@@ -185,12 +204,45 @@ export default {
     },
     logout() {
       util.logout();
-    }
+    },
      // ati
+     setmenuList2(){
+       for(const menu in this.menuList){
+         const temp = {};
+         temp.id = this.menuList[menu].ModuleId;
+         temp.name = this.menuList[menu].ModuleName;
+         temp.items = this.subMenuList.filter((x) => x.ModuleId == this.menuList[menu].ModuleId);
+         temp.subnavActive = false;
+         this.menuList2.push(temp);
+       }
+       console.log('menulist2',this.menuList2);
+     },
+     toggleSubnav1(newId){
+       let activeId = null;
+       console.log('newid',newId);
+       for(const menu in this.menuList2){  
+         if(this.menuList2[menu].subnavActive === true ){
+            activeId = menu;
+           if(activeId === newId){
+              this.menuList2[newId].subnavActive = false;
+           }else{
+             this.menuList2[newId].subnavActive = true;
+             this.menuList2[activeId].subnavActive = false;
+           }
+           return
+        }
+        // console.log('menu',this.menuList2[menu].id);
+       };
+       this.menuList2[newId].subnavActive = true;
+       console.log('menu2',this.menuList2);
+     }
   },
-  created: function () {
-    this.menuList = this.$q.localStorage.get.item("menuList");
-    this.subMenuList = this.$q.localStorage.get.item("subMenuList");
+  async created() {
+    this.menuList = await this.$q.localStorage.get.item("menuList");
+    // console.log('menuLIst',this.menuList);
+    this.subMenuList = await this.$q.localStorage.get.item("subMenuList");
+    // console.log('submenuLIst',this.subMenuList);
+    await this.setmenuList2();
   }
 };
 </script>
@@ -333,6 +385,9 @@ a{
   border: 2px solid #48e5c2;
   border-radius: 4px;
 }
+.profile-menu .q-item{
+  padding: 0;
+}
 .profile .q-btn:hover,
 .name-profile:hover{
   cursor: pointer;
@@ -347,25 +402,26 @@ a{
 
  /* The navigation menu */
 .navbar {
-  overflow: hidden;
+  display: none;
 }
 
 .navbar a {
   float: left;
-  font-size: 16px;
+  font-size: 12px;
   color: white;
   text-align: center;
-  padding: 14px 16px;
+  padding: .5rem 1.2rem;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .subnav {
-  float: left;
-  overflow: hidden;
+  position: relative;
+  cursor: pointer;
 }
 
 .subnav .subnavbtn {
-  font-size: 16px;
+  font-size: 12px;
   border: none;
   outline: none;
   color: white;
@@ -380,32 +436,34 @@ a{
 }
 
 .subnav-content {
-  display: none;
+  /* display: none; */
   position: absolute;
   left: 0;
-  background-color:#0A3F7E;
-  width: 100%;
+  background-image:linear-gradient(180deg, hsla(213, 85%, 27%, 1) 5%, hsla(22, 90%, 54%, 0.8) 100%);
   z-index: 1;
   padding-bottom: 0;
   padding-top: 0;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  border-radius:0 0 4px 4px;
+  width: 13vw;
 }
 
 .subnav-content a {
-  float: left;
-  color: white;
+  width: max-content;
+  color: #fcfaf9;
   text-decoration: none;
-  border-bottom: 2px solid #0A3F7E;
+  border-left: 4px solid transparent;
+  
 }
-
 .subnav-content a:hover {
   color: #48e5c2;
-  border-color: #48e5c2;
+  border-color: #48e5c2 ;
 }
-
-.subnav:hover .subnav-content {
+/* .subnav:hover .subnav-content {
   display: block;
-} 
-
+} */
+@media screen and (min-width:768px){
+  .navbar{
+    display: flex;
+  }
+}
 </style>

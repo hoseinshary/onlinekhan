@@ -61,29 +61,6 @@
 
         <q-toolbar class="toolbar-header2">
 
-          <!-- navbar - hoverable -->
-          <!-- <div class="navbar">
-            <div class="subnav"
-              v-for="menu in menuList"
-                :key="menu.ModuleId">
-                <button class="subnavbtn">
-                  <span>{{ menu.ModuleName }}</span>
-                  </button>
-                <div 
-                class="subnav-content">
-                  <div class="column">
-                    <router-link
-                      v-for="item in subMenuList.filter(
-                      (x) => x.ModuleId == menu.ModuleId)"
-                      :key="item.EnName"
-                      :to="item.EnName">
-                      {{ item.FaName }}
-                    </router-link>
-                  </div>
-                </div>
-            </div>
-          </div> -->
-
           <!-- navbar - clickable -->
             <div class="navbar">
               <dropdown v-for="(menu,i) in menuList2"
@@ -93,6 +70,7 @@
               :items="menu.items"
               :isOpen="menu.subnavActive"
               @toggleSubnav="toggleSubnav1(i)" 
+              @closeSubmenu="closeSub"
               >
               </dropdown>
             </div>
@@ -235,7 +213,13 @@ export default {
        };
        this.menuList2[newId].subnavActive = true;
        console.log('menu2',this.menuList2);
+     },
+     closeSub(){
+       for(const item in this.menuList2){
+         this.menuList2[item].subnavActive = false;
+       }
      }
+
   },
   async created() {
     this.menuList = await this.$q.localStorage.get.item("menuList");
@@ -407,7 +391,7 @@ a{
 
 .navbar a {
   float: left;
-  font-size: 12px;
+  font-size: 14px;
   color: white;
   text-align: center;
   padding: .5rem 1.2rem;
@@ -421,7 +405,7 @@ a{
 }
 
 .subnav .subnavbtn {
-  font-size: 12px;
+  font-size: 15px;
   border: none;
   outline: none;
   color: white;
@@ -439,7 +423,8 @@ a{
   /* display: none; */
   position: absolute;
   left: 0;
-  background-image:linear-gradient(180deg, hsla(213, 85%, 27%, 1) 5%, hsla(22, 90%, 54%, 0.8) 100%);
+  background-image:linear-gradient(180deg, hsla(213, 85%, 27%, 1) 0%, hsla(193, 100%, 43%, 1) 100%);
+  /* background-image:linear-gradient(180deg, hsla(213, 85%, 27%, 1) 0%, hsla(22, 90%, 54%, 0.5) 100%); */
   z-index: 1;
   padding-bottom: 0;
   padding-top: 0;

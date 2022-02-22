@@ -1,1 +1,0 @@
-Type '() => { Id: number; FullName: string; NationalNo: string; Checked: boolean; }[]' is missing the following properties from type 'IstudentGroup[]': pop, push, concat, join, and 26 more.

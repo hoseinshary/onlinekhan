@@ -122,13 +122,15 @@
        
       </div>
   
-   <modal-resualt></modal-resualt>
+   <!-- <modal-resualt></modal-resualt> -->
 
 
     
     </div>
 
    
+        <modal-start ></modal-start>
+        <modal-stop ></modal-stop>
 
   </section>
   
@@ -148,8 +150,9 @@ const { getScrollTarget, setScrollPosition } = scroll
 
 @Component({
   components: {
-   ModalResualt: () => import("./resualtAssay.vue")
-
+   //ModalResualt: () => import("./resualtAssay.vue")
+      ModalStart: () => import("./runAssay_Start.vue"),
+      ModalStop: () => import("./runAssay_Stop.vue")
       
   }
 })
@@ -170,7 +173,6 @@ export default class AssayAnswerSheetVue extends Vue {
   //#endregion
 
   //#region ### computed ###
- 
 
 
   //#endregion
@@ -239,18 +241,20 @@ export default class AssayAnswerSheetVue extends Vue {
 
     this.answerSheet.Answers[index] = val;
   }
-  
+  startTimer()
+  {
+          const today = new Date();
+      const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      this.startTime = today ;
+      
+      
+     setInterval(this.getNow, 1000);
+  }
   //#endregion
 
   //#region ### hooks ###
   created() {
-    // if(this.assay)
-      const today = new Date();
-      const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      this.startTime = today;
-      
-    setInterval(this.getNow, 1000);
     for (let i = 0; i < this.assay.QuestionsPath.length; i++) {
       
      this.answerSheet.Answers[i] = "0";
@@ -261,6 +265,19 @@ export default class AssayAnswerSheetVue extends Vue {
     this.assayAnswerSheetStore.SET_CREATE_VUE(this);
     this.answerSheet.AssayId = this.assay.Id;
     this.answerSheet.AssayVarient = this.assay.NumberOfVarient;
+ 
+      this.$root.$on('component1', () => {
+            // your code goes here
+            this.startTimer()
+        });
+
+
+    this.assayAnswerSheetStore.OPEN_MODAL_RUNASSAY_START(true);
+    
+    // if(this.assay)
+    
+ 
+    
   }
   //#endregion
 }

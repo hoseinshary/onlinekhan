@@ -6,7 +6,7 @@
       @click="showModalCreate"
     /> -->
     <br />
-    <base-table :grid-data="assayStore.gridData" :columns="assayGridColumn" hasIndex>
+    <base-table :grid-data="assayAnswerSheetStore.gridData" :columns="assayGridColumn" hasIndex>
       <template slot="Province.Name" slot-scope="data">{{data.row.Province.Name}}</template>
       <template slot="Id" slot-scope="data">
         <!-- <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" /> -->
@@ -50,57 +50,51 @@ import { assayStore } from "src/store/assayStore";
 })
 export default class CityVue extends Vue {
   //#region ### data ###
-  assayStore = vxm.assayStore;
+  assayAnswerSheetStore = vxm.assayAnswerSheetStore;
   
-  pageAccess = util.getAccess(this.assayStore.modelName);
+  pageAccess = util.getAccess(this.assayAnswerSheetStore.modelName);
   assayGridColumn = [
     {
       title: "نام آزمون",
-      data: "Title"
+      data: "Assay.Title"
     },
     {
-      title: "تاریخ ساخت",
-      data: "DateTimeCreate"
+      title: "تاریخ آزمون",
+      data: "DateTime"
     },
     {
       title: "عملیات",
       data: "Id",
       searchable: false,
       sortable: false,
-      visible: this.canEdit || this.canDelete || true
+      visible: this.canEdit || this.canDelete
     }
   ];
   //#endregion
 
   //#region ### computed ###
   get canCreate() {
-    return this.pageAccess.indexOf("ایجاد") > -1;
+    return this.pageAccess.indexOf("مشاهده") > -1;
   }
 
   get canEdit() {
-    return this.pageAccess.indexOf("ویرایش") > -1;
+    return this.pageAccess.indexOf("مشاهده") > -1;
   }
 
   get canDelete() {
-    return this.pageAccess.indexOf("حذف") > -1;
+    return this.pageAccess.indexOf("مشاهده") > -1;
   }
 
 
   //#endregion
 
   //#region ### methods ###
-  printAssay(id){
-    
-    this.assayStore.getById(id).then(() => {
-      this.assayStore.OPEN_MODAL_PRINT(true);
-    });
-  
-  }
+
 
 
   runAssay(id){
     
-    this.assayStore.getById(id);
+    this.assayAnswerSheetStore.getById(id);
     router.push("/assay/runAssay");
 
   
@@ -108,15 +102,15 @@ export default class CityVue extends Vue {
 
 
   showModalDelete(id) {
-    this.assayStore.getById(id).then(() => {
-      this.assayStore.OPEN_MODAL_DELETE(true);
+    this.assayAnswerSheetStore.getById(id).then(() => {
+      this.assayAnswerSheetStore.OPEN_MODAL_DELETE(true);
     });
   }
   //#endregion
 
   //#region ### hooks ###
   created() {
-    this.assayStore.fillList();
+    this.assayAnswerSheetStore.fillList();
   }
   //#endregion
 }

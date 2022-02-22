@@ -123,7 +123,6 @@
             </router-link>
           </q-collapsible>
         </q-list>
-
       </q-layout-drawer>
 
       <q-page-container>

@@ -9,7 +9,7 @@
     
     <transition name="fade" appear>
       <div class="subnav-content" v-if="isOpen">
-        <div v-for="(item, i) in items" :key="i" class="column">
+        <div v-for="(item, i) in items" :key="i" class="column" @click="closeSubmenu">
           <router-link :to="item.EnName">{{ item.FaName }}</router-link>
         </div>
       </div>
@@ -21,7 +21,7 @@
 export default {
   name: 'dropdown',
   props: ['title', 'items','id','isOpen'],
-  emits:['toggleSubnav'],
+  emits:['toggleSubnav','closeSubmenu'],
   data () {
     return {
       isopen: this.isOpen
@@ -30,6 +30,9 @@ export default {
   methods:{
     clickSubnav(id){
       this.$emit('toggleSubnav',id);
+    },
+    closeSubmenu(){
+      this.$emit('closeSubmenu');
     }
   }
 }

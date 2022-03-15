@@ -97,7 +97,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { studentValidations } from "src/validations/student/studentCreateValidation";
-import { Field, Maghta, UserType } from "src/utilities/enumeration";
+import { Field, Maghta } from "src/utilities/enumeration";
 import  util  from '../../utilities/index';
 
 @Component({

@@ -1,6 +1,7 @@
 <template>
+<div class="row">
   <section class="col-12 q-px-md">
-    <q-layout view="lHh Lpr lFf">
+    <!-- <q-layout view="lHh Lpr lFf"> -->
       <q-page-container>
         <div class="row justify-center q-mt-lg">
           <div class="col-md-8">
@@ -21,7 +22,7 @@
                 :model="$v.user.RoleId"
                 :options="roleDdl"
                 class="col-sm-6 col-md-4"
-                filter
+                
               />
               <base-select
                 :model="$v.user.ProvinceId"
@@ -52,15 +53,23 @@
               <base-input :model="$v.user.Phone" align="right" class="col-sm-6 col-md-4" />
               <base-input :model="$v.user.Mobile" align="right" class="col-sm-6 col-md-4" />
 
-              <div class="col-12">
-                <base-btn-save @click="userStore.register" />
-              </div>
+
             </section>
           </div>
         </div>
       </q-page-container>
-    </q-layout>
+     
+    <!-- </q-layout> -->
+    
   </section>
+
+    <template>
+      <base-btn-save-back @click="userStore.registerModal"></base-btn-save-back>
+      <base-btn-back @click="userStore.OPEN_MODAL_REGISTER(false)"></base-btn-back>
+    </template>
+
+</div>
+
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
@@ -80,20 +89,31 @@ export default class UserRegisterVue extends Vue {
   cityStore = vxm.cityStore;
   roleStore = vxm.roleStore;
   user = vxm.userStore.user;
-  //#endregion
 
+  //#endregion
+  selectOptions= [
+        {
+          label: "معلم" , 
+          value: -2
+          }
+        ]
   //#region ### computed ###
   get roleDdl() {
-    return [{label: "دبیر" , value: -1} , {label: "دانش آموز" , value: -2},{label: "مشاور" , value: -3}]
+    return this.selectOptions;
   }
   //#endregion
-
-  //#region ### hooks ###
-  created() {
-    this.userStore.SET_REGISTER_VUE(this);
+ open() {
     this.provinceStore.fillList();
     this.cityStore.fillList();
+    
   }
+
+  created()
+  {
+    this.userStore.SET_REGISTER_TEACHER_VUE(this); 
+
+  }
+  //#region ### hooks ###
   //#endregion
 }
 </script>

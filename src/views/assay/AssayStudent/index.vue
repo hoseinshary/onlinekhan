@@ -364,7 +364,7 @@ timer
         <modal-lesson></modal-lesson>
         <modal-topic></modal-topic>
         <modal-assay></modal-assay>
-                <modal-previewQuestion></modal-previewQuestion>
+        <modal-previewQuestion></modal-previewQuestion>
 
   </div>
 </template>

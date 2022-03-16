@@ -16,8 +16,9 @@
     </template>
 <slot>
   <section class="row gutter-md">
-    <base-input :model="$v.assayCreate.Title" class="col-md-6" />
-    <base-input :model="$v.assayCreate.Time" class="col-md-6" />
+    <base-input :model="$v.assayCreate.Title" class="col-md-4" />
+    <base-input :model="$v.assayCreate.Time" class="col-md-4" />
+    <div class="col-md-4"></div>
     <base-select
       :model="$v.assayCreate.LookupId_Importance"
       :options="lookupStore.assayImportanceDdl"
@@ -39,7 +40,7 @@
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
       </template>
     </base-field>
-    <base-field class="col-md-4" :model="$v.assayCreate.IsPublic">
+    <base-field class="col-md-4" :model="$v.assayCreate.IsPublic" v-show="false">
       <template slot-scope="data">
         <q-radio v-model="data.obj.$model" :val="false" label="خیر" />
         <q-radio v-model="data.obj.$model" :val="true" label="بلی" />
@@ -77,7 +78,7 @@
       </template>
     </base-field> -->
 
-    <base-field class="col-md-6" :model="$v.assayCreate.HaveWhiteSpace">
+    <base-field class="col-md-4" :model="$v.assayCreate.HaveWhiteSpace">
       <template slot-scope="data">
         <q-checkbox v-model="data.obj.$model" />
         <q-radio
@@ -156,6 +157,7 @@ export default class AssayTabVue extends Vue {
     this.lookupStore.fillAssayImportance();
     this.lookupStore.fillAssayType();
     this.assayStore.SET_ASSAY_VUE(this);
+    // console.log('temp',this.$v.assayCreate.IsPublic);
   }
   //#endregion
 }

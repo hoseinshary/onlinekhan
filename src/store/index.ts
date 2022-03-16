@@ -57,6 +57,9 @@ import { AssayAnswerSheetStore, assayAnswerSheetStore } from "./assayAnswerSheet
 
 import { StudentMajorListStore, studentMajorListStore } from "./studentMajorListStore";
 
+import {defaultStore,DefaultStore} from "./defaultStore";
+
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -138,7 +141,8 @@ const store = new Vuex.Store({
     programStore,
     mediaStore,
     studentMajorListStore,
-    assayAnswerSheetStore
+    assayAnswerSheetStore,
+    defaultStore
   }
 });
 
@@ -229,5 +233,6 @@ export const vxm = {
   programStore: ProgramStore.CreateProxy(store, ProgramStore) as ProgramStore,
   mediaStore: MediaStore.CreateProxy(store, MediaStore) as MediaStore,
   assayAnswerSheetStore: AssayAnswerSheetStore.CreateProxy(store, AssayAnswerSheetStore) as AssayAnswerSheetStore,
-  studentMajorListStore: StudentMajorListStore.CreateProxy(store, StudentMajorListStore) as StudentMajorListStore
+  studentMajorListStore: StudentMajorListStore.CreateProxy(store, StudentMajorListStore) as StudentMajorListStore,
+  defaultStore:DefaultStore.CreateProxy(store,DefaultStore) as DefaultStore
 };

@@ -37,4 +37,5 @@ export const PROGRAM_URL = "/api/program";
 export const MEDIA_URL = "/api/media";
 export const STUDENTMAJORLIST_URL = "/api/studentMajorList";
 export const ASSAYANSWERSHEET_URL = "/api/assayAnswerSheet";
+export const CREDIT_URL = "/api/credit";
 

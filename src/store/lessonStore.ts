@@ -23,6 +23,10 @@ export class LessonStore extends VuexModule {
   private _createVue: Vue;
   private _editVue: Vue;
 
+
+  // ati
+  private _imgPath:string;
+
   /**
    * initialize data
    */
@@ -36,6 +40,7 @@ export class LessonStore extends VuexModule {
       edit: false,
       delete: false
     };
+    this._imgPath = ""
   }
 
   //#region ### getters ###
@@ -142,9 +147,11 @@ export class LessonStore extends VuexModule {
       return x;
     };
   }
+
   //#endregion
 
   //#region ### mutations ###
+
   @mutation
   private CREATE(lesson: ILesson) {
     this._lessonList.push(lesson);

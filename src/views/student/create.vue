@@ -43,6 +43,30 @@
     <base-input :model="$v.student.User.Mobile" align="right" class="col-sm-6 col-md-4"/>
     <base-input :model="$v.student.FatherName" class="col-md-6"/>
     <base-input :model="$v.student.Address" class="col-md-6"/>
+
+    
+              <base-select
+                :model="$v.student.EducationGroupEnum"
+                :options="getField"
+                class="col-sm-6 col-md-4"
+                filter
+              />
+
+              <base-select
+                :model="$v.student.GradeEnum"
+                :options="getMaghta"
+                class="col-sm-6 col-md-4"
+                filter
+              />
+
+              <base-input :model="$v.student.SchoolName" align="right" class="col-sm-6 col-md-4" />
+
+
+              <div class="col-sm-6 col-md-4"></div>
+
+              <base-input :model="$v.student.IntroducedCode" align="right" class="col-sm-6 col-md-4" />
+
+
   </base-modal-create>
 </template>
 
@@ -51,6 +75,10 @@ import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
 import { studentValidations } from "src/validations/student/studentCreateValidation";
 import { UserType } from "../../utilities/enumeration";
+import  util  from '../../utilities/index';
+import { Field, Maghta } from "src/utilities/enumeration";
+
+
 
 @Component({
   validations: studentValidations
@@ -69,6 +97,12 @@ export default class StudentCreateVue extends Vue {
   //#region ### computed ###
   get roleDdl() {
     return this.roleStore.ddlByUserType(UserType.Student);
+  }
+   get getField(){
+    return util.enumToDdl(Field)
+  }
+  get getMaghta(){
+    return util.enumToDdl(Maghta)
   }
   //#endregion
 

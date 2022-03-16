@@ -92,7 +92,7 @@ const studentValidations: ValidationRuleset<TStudent> = {
     // ati
       IntroducedCode:{
         displayName:displayName("کد معرف"),
-        required
+        
       },
       EducationGroupEnum:{
         displayName:displayName("گروه تحصیلی"),

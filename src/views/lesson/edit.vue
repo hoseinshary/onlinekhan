@@ -207,7 +207,7 @@ export default class LessonEditVue extends Vue {
   }
 
   submit() {
-    this.lessonStore.submitEdit(this.lesson);
+    this.lessonStore.submitEdit(this.educationGroup);
   }
 
   fillEducationGroup() {

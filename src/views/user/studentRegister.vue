@@ -120,7 +120,7 @@ export default class StudentRegisterVue extends Vue {
   selectOptions= [
         {
           label: "دانش آموز" , 
-          value: -2
+          value: 2005
           }
         ]
   //#region ### computed ###

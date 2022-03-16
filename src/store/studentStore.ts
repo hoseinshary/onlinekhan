@@ -16,6 +16,7 @@ import {
 } from "vuex-class-component";
 
 import router from "src/router";
+import { teacherGroupStore } from "./teacherGroupStore";
 
 @Module({ namespacedPath: "studentStore/" })
 export class StudentStore extends VuexModule {
@@ -261,6 +262,16 @@ export class StudentStore extends VuexModule {
     let vm = this._editVue;
     if (!(await this.validateForm(vm))) return;
 
+    //جدید اضافه شده برای ارسال فایل به صورت base 64
+    var File = vm.$refs.fileUpload;
+
+    var base64File: any = "";
+    if (File && File["files"][0]) {
+      base64File = await util.convertFileToBase64(File["files"][0]);
+    }
+
+    this.student.User.base64File = base64File;
+
     return axios
       .post(`${baseUrl}/Update`, this.student)
       .then((response: AxiosResponse<IMessageResult>) => {
@@ -308,31 +319,61 @@ export class StudentStore extends VuexModule {
   @action()
   async registerModal() {
     let vm = this._registerStudentVue;
-   if (!(await this.validateForm(vm))) return;
+    if (!(await this.validateForm(vm))) return;
 
-    var formData = new FormData();
-    var fileUpload = vm.$refs.fileUpload;
+    //جدید اضافه شده برای ارسال فایل به صورت base 64
+    var File = vm.$refs.fileUpload;
 
-    if (fileUpload && fileUpload["files"].length > 0) {
-      formData.append(fileUpload["name"], fileUpload["files"][0]);
+    
+    var base64File: any = "";
+    if (File && File["files"][0]) {
+      base64File = await util.convertFileToBase64(File["files"][0]);
     }
-    var params = util.toParam(this.student);
 
-    return axios({
-      method: "post",
-      url: `${baseUrl}/create?${params}`,
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" }
-    })
+    this.student.User.base64File = base64File;
+
+    return axios
+      .post(`${baseUrl}/Create`, this.student)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
-          this.resetRegister();
-          router.push("/user/login");
+          this.UPDATE(data.Obj);
+          this.OPEN_MODAL_EDIT(false);
+          this.MODEL_CHANGED(true);
+          this.resetEdit();
         }
       });
+
+  //   let vm = this._registerStudentVue;
+  //  if (!(await this.validateForm(vm))) return;
+
+  //   var formData = new FormData();
+  //   var fileUpload = vm.$refs.fileUpload;
+
+  //   console.log(this.student);
+
+  //   if (fileUpload && fileUpload["files"].length > 0) {
+  //     formData.append(fileUpload["name"], fileUpload["files"][0]);
+  //   }
+  //   var params = util.toParam(this.student);
+
+  //   return axios({
+  //     method: "post",
+  //     url: `${baseUrl}/create?${params}`,
+  //     data: formData,
+  //     headers: { "Content-Type": "multipart/form-data" }
+  //   })
+  //     .then((response: AxiosResponse<IMessageResult>) => {
+  //       let data = response.data;
+  //       this.notify({ vm, data });
+
+  //       if (data.MessageType == MessageType.Success) {
+  //         //this.resetRegister();
+  //         router.push("/user/login");
+  //       }
+  //     });
 
   //#endregion
 }

@@ -8,102 +8,78 @@
 
      <template slot="header">
       <q-toolbar slot="header" color="yellow-8">
-        <q-toolbar-title>{{ userStore.modelName }}</q-toolbar-title>
+        <q-toolbar-title>{{ select }}</q-toolbar-title>
         <q-btn
           dense
           icon="close"
           @click="userStore.OPEN_MODAL_REGISTER(false)"
         />
+
       </q-toolbar>
     </template>
 
-  <section class="col-12 q-px-md">
-    <!-- <q-layout view="lHh Lpr lFf"> -->
-      <q-page-container>
-        <div class="row justify-center q-mt-lg">
-          <div class="col-md-8">
-            <section class="row gutter-sm">
-              <q-field class="col-sm-6">
-                <q-uploader
-                  url="url"
-                  float-label="عکس کاربر"
-                  name="img"
-                  hide-upload-button
-                  auto-expand
-                  ref="fileUpload"
-                  extensions=".jpg"
-                />
-              </q-field>
-              <div class="col-12"></div>
-              <base-select
-                :model="$v.user.RoleId"
-                :options="roleDdl"
-                class="col-sm-6 col-md-4"
-                
-              />
-              <base-select
-                :model="$v.user.ProvinceId"
-                :options="provinceStore.ddl"
-                class="col-sm-6 col-md-4"
-                filter
-                @change="user.CityId=0"
-              />
-              <base-select
-                :model="$v.user.CityId"
-                :options="cityStore.ddlByProvinceId(user.ProvinceId)"
-                class="col-sm-6 col-md-4"
-                filter
-              />
-              <!-- <base-hr /> -->
-              <base-input :model="$v.user.Name" class="col-sm-6 col-md-4" />
-              <base-input :model="$v.user.Family" class="col-sm-6 col-md-4" />
-              <base-field class="col-sm-6 col-md-4" :model="$v.user.Gender">
-                <template slot-scope="data">
-                  <q-radio v-model="data.obj.$model" :val="false" label="دختر" />
-                  <q-radio v-model="data.obj.$model" :val="true" label="پسر" />
-                </template>
-              </base-field>
-              <base-input :model="$v.user.NationalNo" align="right" class="col-sm-6 col-md-4" />
-              <base-input :model="$v.user.Username" class="col-sm-6 col-md-4" />
-              <base-input :model="$v.user.Password" type="password" class="col-sm-6 col-md-4" />
+    <template class="q-center">
 
-              <base-input :model="$v.user.Phone" align="right" class="col-sm-6 col-md-4" />
-              <base-input :model="$v.user.Mobile" align="right" class="col-sm-6 col-md-4" />
+      <div>
+        <q-list>
+          <q-item  label=" دانش آموز">
+            <q-btn
+            @click="openStudentRegister"
+             flat>
+              ثبت نام دانش آموز
+            </q-btn>
+            </q-item>
+            <q-item  label=" معلم">
+              <q-btn 
+              @click="openTeacherRegister"
+              flat>
+                ثبت نام معلم
+              </q-btn>
+             </q-item>
+          </q-list>
+       </div>
 
-            </section>
-          </div>
-        </div>
-      </q-page-container>
-     
-    <!-- </q-layout> -->
-    
-  </section>
 
-   <template slot="footer">
-      <base-btn-save-back @click="userStore.registerModal"></base-btn-save-back>
-      <base-btn-back @click="userStore.OPEN_MODAL_REGISTER(false)"></base-btn-back>
+        <student-register
+        v-show="selected === 'student'"></student-register>
+
+        <teacher-register
+        v-show="selected === 'teacher'"></teacher-register>
+
+
     </template>
+
+
+
     </bs-modal>
 
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
-import { userCreateValidations } from "src/validations/user/UserCreateValidation";
 import { UserType } from "src/utilities/enumeration";
-
+import { userLoginValidations } from "src/validations/user/userLoginValidation";
 @Component({
-  validations: userCreateValidations
+  validations: userLoginValidations,
+
+  components: {
+    studentRegister: () => import("./studentRegister.vue"),
+    teacherRegister:()=>import('./teacherRegister.vue')
+  }
 })
+
 export default class UserRegisterVue extends Vue {
   $v: any;
 
   //#region ### data ###
   userStore = vxm.userStore;
+  studentStore = vxm.studentStore;
   provinceStore = vxm.provinceStore;
   cityStore = vxm.cityStore;
   roleStore = vxm.roleStore;
   user = vxm.userStore.user;
+  select='انتخاب نقش';
+  selected='student'
   //#endregion
   selectOptions= [
         {
@@ -117,15 +93,39 @@ export default class UserRegisterVue extends Vue {
   }
   //#endregion
  open() {
-    this.provinceStore.fillList();
-    this.cityStore.fillList();
    
   }
+
+  openStudentRegister()
+    {
+      this.selected = 'student'
+    }
+  openTeacherRegister(){
+    this.selected = 'teacher'
+  }
+
   //#region ### hooks ###
-  created() {
-    this.userStore.SET_REGISTER_MODAL_VUE(this);
-   
+  created() { 
+    this.provinceStore.fillList();
+    this.cityStore.fillList();
+    this.userStore.SET_REGISTER_VUE(this);
   }
   //#endregion
 }
 </script>
+
+<style scoped>
+.profile-menu{
+  position: fixed;
+  z-index: 100;
+  margin-top:4.7rem;
+  top: 0;
+  color:#0A3F7E ;
+  background-color: #fcfaf9;
+  border: 2px solid #48e5c2;
+  border-radius: 4px;
+}
+.profile-menu .q-item{
+  padding: 0;
+}
+</style>

@@ -4,7 +4,7 @@ import IMessageResult from "src/models/IMessageResult";
 import axios, { AxiosResponse } from "src/plugins/axios";
 import { MessageType } from "src/utilities/enumeration";
 import { STUDENT_URL as baseUrl } from "src/utilities/site-config";
-import AssayCreate, { AssayLesson , AssayNumberOfQuestionReport ,AssayNumberOfQuestionReportForTopic} from "src/models/IAssay";
+import { AssayNumberOfQuestionReport ,AssayNumberOfQuestionReportForTopic} from "src/models/IAssay";
 
 import util from "src/utilities";
 import {
@@ -15,6 +15,8 @@ import {
   getRawActionContext
 } from "vuex-class-component";
 
+import router from "src/router";
+
 @Module({ namespacedPath: "studentStore/" })
 export class StudentStore extends VuexModule {
   openModal: { create: boolean; edit: boolean; delete: boolean };
@@ -24,6 +26,11 @@ export class StudentStore extends VuexModule {
   private _createVue: Vue;
   private _editVue: Vue;
   private _lessonAssayVue : Vue;
+
+  private _registerVue: Vue;
+
+
+  private _registerStudentVue: Vue;
 
   /**
    * initialize data
@@ -129,8 +136,10 @@ export class StudentStore extends VuexModule {
     this._editVue = vm;
   }
 
-
-
+  @mutation
+  SET_REGISTER_STUDENT_VUE(vm:Vue){
+    this._registerStudentVue = vm;
+  }
 
   //#endregion
 
@@ -286,7 +295,47 @@ export class StudentStore extends VuexModule {
         }
       });
   }
+
+
+  // ati
+  @action()
+  async resetRegister() {
+    this.student.Id = 0;
+    this.RESET(this._registerVue);
+  }
+
+
+  @action()
+  async registerModal() {
+    let vm = this._registerStudentVue;
+   if (!(await this.validateForm(vm))) return;
+
+    var formData = new FormData();
+    var fileUpload = vm.$refs.fileUpload;
+
+    if (fileUpload && fileUpload["files"].length > 0) {
+      formData.append(fileUpload["name"], fileUpload["files"][0]);
+    }
+    var params = util.toParam(this.student);
+
+    return axios({
+      method: "post",
+      url: `${baseUrl}/create?${params}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" }
+    })
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+          this.resetRegister();
+          router.push("/user/login");
+        }
+      });
+
   //#endregion
+}
 }
 
 export const studentStore = StudentStore.ExtractVuexModule(StudentStore);

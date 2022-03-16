@@ -39,8 +39,6 @@
               </button>
 
               <button class="q-ma-sm btn btn-login bg-green" @click="openModalRegister">
-             
-              
                 <i class="fa fa-pencil-square q-mx-xs"></i>ثبت نام
                </button>
 
@@ -66,7 +64,8 @@
       </section>
     </q-page-container>
 
-        <modal-register></modal-register>
+        <modal-register ></modal-register>
+        
 
   </q-layout>
 
@@ -82,7 +81,6 @@ import { userLoginValidations } from "src/validations/user/userLoginValidation";
 
   components: {
     ModalRegister: () => import("./registerModal.vue")
-
   }
 })
 export default class UserLoginVue extends Vue {
@@ -101,9 +99,10 @@ export default class UserLoginVue extends Vue {
   openModalRegister()
   {
     console.log(1);
-    this.userStore.resetRegisterModal();
+    //this.userStore.resetRegisterModal();
     this.userStore.OPEN_MODAL_REGISTER(true);
   }
+  
   //--------------------------------------------------
 }
 </script>

@@ -19,7 +19,9 @@ import router from "src/router";
 
 @Module({ namespacedPath: "userStore/" })
 export class UserStore extends VuexModule {
-  openModal: { create: boolean; edit: boolean; delete: boolean ; update_user_image : boolean ; update_user : boolean ; update_user_password : boolean ; register : boolean};
+  openModal: { create: boolean; edit: boolean; delete: boolean ; update_user_image : boolean ; update_user : boolean ; update_user_password : boolean ;
+     register : boolean;
+    };
   user: IUser;
   userChangePassword : IUserChangePassword;
   loginUser: ILogin;
@@ -32,7 +34,10 @@ export class UserStore extends VuexModule {
   private _updateUserImageVue : Vue;
   private _updateUserPasswordVue : Vue;
   private _updateUserVue : Vue;
+
   private _registerModalVue : Vue;
+
+  private _registerTeacherVue: Vue;
   
 
   /**
@@ -136,6 +141,7 @@ export class UserStore extends VuexModule {
   OPEN_MODAL_REGISTER(open: boolean) {
     this.openModal.register = open;
   }
+
   
   @mutation
   OPEN_MODAL_EDIT(open: boolean) {
@@ -146,7 +152,7 @@ export class UserStore extends VuexModule {
   OPEN_MODAL_DELETE(open: boolean) {
     this.openModal.delete = open;
   }
-
+  
   @mutation
   SET_CREATE_VUE(vm: Vue) {
     this._createVue = vm;
@@ -155,6 +161,11 @@ export class UserStore extends VuexModule {
   @mutation
   SET_REGISTER_VUE(vm: Vue) {
     this._registerVue = vm;
+  }
+
+  @mutation
+  SET_REGISTER_TEACHER_VUE(vm: Vue) {
+    this._registerTeacherVue = vm;
   }
 
   @mutation
@@ -542,8 +553,8 @@ export class UserStore extends VuexModule {
 
   @action()
   async registerModal() {
-    let vm = this._registerModalVue;
-    if (!(await this.validateForm(vm))) return;
+    let vm = this._registerTeacherVue;
+   if (!(await this.validateForm(vm))) return;
 
     var formData = new FormData();
     var fileUpload = vm.$refs.fileUpload;
@@ -571,6 +582,7 @@ export class UserStore extends VuexModule {
         }
       });
   }
+
 
   //#endregion
 }

@@ -21,6 +21,22 @@
     </div>
     <div class="col-md-8">
       <section class="row gutter-sm">
+
+        <!-- ati -->
+        <q-field class="col-sm-6">
+                <q-uploader
+                  url="url"
+                  float-label="تصویر درس"
+                  name="img"
+                  hide-upload-button
+                  auto-expand
+                  ref="fileUpload"
+                  extensions=".jpg"
+                />
+              </q-field>
+              <div class="col-12"></div>
+        <!-- ati -->
+
         <base-input :model="$v.lesson.Name" class="col-md-6" />
         <base-select
           :model="$v.lesson.LookupId_Nezam"
@@ -191,7 +207,7 @@ export default class LessonEditVue extends Vue {
   }
 
   submit() {
-    this.lessonStore.submitEdit(this.educationGroup);
+    this.lessonStore.submitEdit(this.lesson);
   }
 
   fillEducationGroup() {

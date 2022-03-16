@@ -5,7 +5,7 @@
     :show="assayStore.openModal._3assay"
     size="lg"
     @close="assayStore.OPEN_MODAL_3ASSAY(false)"
- 
+    
   >
 
    <template slot="header">
@@ -15,8 +15,10 @@
       </q-toolbar>
     </template>
 <slot>
-  <section class="row gutter-md">
+  <section class="row gutter-md ">
+
     <base-input :model="$v.assayCreate.Title" class="col-md-4" />
+    <!-- <div class="col-md-8"></div> -->
     <base-input :model="$v.assayCreate.Time" class="col-md-4" />
     <div class="col-md-4"></div>
     <base-select
@@ -98,6 +100,10 @@
 
     <div class="col-12">
       <base-btn-save @click="submitAssay" />
+       <q-btn color="orange" @click="submitAssayAndRun">
+             ثبت و اجرا
+              <q-icon name="arrow_back" />
+            </q-btn>
     </div>
   </section>
 </slot>
@@ -110,6 +116,8 @@ import { vxm } from "src/store";
 import util from "src/utilities";
 import { assayValidations } from "src/validations/assayValidation";
 import { AssayVarient, Fonts } from "src/utilities/enumeration";
+import router from "src/router";
+
 
 @Component({
   validations: assayValidations
@@ -145,8 +153,15 @@ export default class AssayTabVue extends Vue {
 
   //#region ### methods ###
   submitAssay() {
-    this.assayStore.submitCreate().then(() => {
+    this.assayStore.submitCreateStudent().then(() => {
       this.$emit("changeTab", "questionTab");
+    });
+  }
+
+    submitAssayAndRun() {
+    this.assayStore.submitCreateStudent().then(() => {
+        this.assayStore.getById(this.assayCreate.Id);
+        router.push("/assay/runAssay");
     });
   }
   //#endregion
@@ -157,7 +172,7 @@ export default class AssayTabVue extends Vue {
     this.lookupStore.fillAssayImportance();
     this.lookupStore.fillAssayType();
     this.assayStore.SET_ASSAY_VUE(this);
-    // console.log('temp',this.$v.assayCreate.IsPublic);
+
   }
   //#endregion
 }

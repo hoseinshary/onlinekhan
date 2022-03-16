@@ -12,8 +12,10 @@ export default interface ILesson {
   EducationTrees?: Array<IEducationTree>;
   Ratios: Array<IRatio>;
   Checked: boolean;
+  File: string;
   LessonDepartmentId: number;
   LessonDepartments?: Array<ILessonDepartment>;
+  FilePath:string;
 }
 
 export const DefaultLesson: ILesson = {
@@ -25,6 +27,8 @@ export const DefaultLesson: ILesson = {
   EducationTreeIds: [],
   Ratios: [],
   Checked: false,
+  File: "",
   LessonDepartmentId: 0,
-  LessonDepartments: []
+  LessonDepartments: [],
+  FilePath:""
 };

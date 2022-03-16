@@ -15,12 +15,16 @@
 
          <base-btn-edit v-if="canEdit" round @click="showModalEdit(data.row.Id)" />
         <base-btn-delete v-if="canDelete" round @click="showModalDelete(data.row.Id)" />
-    
+        <q-btn class="q-ma-sm" size="sm" round color="purple" icon="group_add" @click="showModalSubGroup(data.row.Id)">
+          
+          <q-tooltip>زیر گروه</q-tooltip>
+        </q-btn>
     </template>
     </base-table>
 
     <!-- modals -->
     <modal-create v-if="canCreate"></modal-create>
+    <modal-create-sub v-if="canCreate"></modal-create-sub>
     <modal-edit v-if="canEdit"></modal-edit>
     <modal-delete v-if="canDelete"></modal-delete>
   </section>
@@ -34,6 +38,7 @@ import util from "src/utilities";
 @Component({
   components: {
     ModalCreate: () => import("./create.vue"),
+    ModalCreateSub: () => import("./createSub.vue"),
     ModalEdit: () => import("./edit.vue"),
     ModalDelete: () => import("./delete.vue")
   }
@@ -96,6 +101,15 @@ export default class TeacherGroupVue extends Vue {
     this.teacherGroupStore.getById(id).then(() => {
       this.teacherGroupStore.OPEN_MODAL_DELETE(true);
     });
+  }
+
+   showModalSubGroup(id) {
+     this.teacherGroupStore.getById(id).then(() => {
+        this.teacherGroupStore.resetCreateSub();
+        this.teacherGroupStore.OPEN_MODAL_CREATE_SUB(true);
+
+    });
+     
   }
   //#endregion
 

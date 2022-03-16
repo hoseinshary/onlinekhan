@@ -7,12 +7,7 @@
           مشخصه های سوال
         </p> -->
           <div class="col-3 q-pa-sm" style="color: white">
-            <q-btn
-              class="bg-blue-5"
-              icon="person"
-              @click="showModal0student"
-              label="دانش آموز"
-            />
+         
           </div>
           <div class="col-6 q-pa-sm center" style="color: black">
             <q-btn
@@ -366,11 +361,10 @@ timer
     </div>
 
 
-        <modal-student></modal-student>
         <modal-lesson></modal-lesson>
         <modal-topic></modal-topic>
         <modal-assay></modal-assay>
-                <modal-previewQuestion></modal-previewQuestion>
+        <modal-previewQuestion></modal-previewQuestion>
 
   </div>
 </template>
@@ -396,7 +390,7 @@ import IMessageResult from "src/models/IMessageResult";
 
 
  
-   ModalStudent: () => import("./0student.vue"),
+ 
     ModalLesson: () => import("./1lesson.vue"),
     ModalTopic: () => import("./2topic.vue"),
     ModalPreviewQuestion: () => import("./4previewQuestion.vue"),
@@ -479,10 +473,7 @@ export default class AssayVue extends Vue {
     this.selectedTab = tab;
   }
 
-  showModal0student() {
-    //this.userStore.resetCreate();
-    this.assayStore.OPEN_MODAL_0STUDENT(true);
-  }
+
 
   showModal1lesson() {
     //this.userStore.resetCreate();

@@ -167,10 +167,23 @@ get lessonChooseAllQuestioncount(){
   @mutation
   OPEN_MODAL_2TOPIC(open: boolean) {
     this.openModal._2topic = open;
+  
   }
   @mutation
   OPEN_MODAL_3ASSAY(open: boolean) {
     this.openModal._3assay = open;
+    if(open)
+    {
+      var alltime = 0;
+      this.assayCreate.Lessons .forEach(element => {
+        element.Questions.forEach(element => {
+          alltime += element.ResponseSecond;
+        });
+      });
+  
+      this.assayCreate.Time =Math.ceil( alltime/60 ) ;
+
+    }
   }
 
   @mutation
@@ -325,7 +338,41 @@ get lessonChooseAllQuestioncount(){
         this.notify({ vm, data });
 
         if (data.MessageType == MessageType.Success) {
-          
+          this.assayCreate.Id = data.Obj.Id;
+        }
+      });
+  }
+
+  @action()
+  async submitCreateStudent() {
+    let vm = this._assayVue;
+    //if (!(await this.validateForm(vm))) return;
+
+    var data = {
+      Title: this.assayCreate.Title,
+      Time: this.assayCreate.Time,
+      LookupId_Importance: this.assayCreate.LookupId_Importance,
+      LookupId_Type: this.assayCreate.LookupId_Type,
+      LookupId_QuestionType: this.assayCreate.LookupId_QuestionType,
+      IsPublic: this.assayCreate.IsPublic,
+      IsOnline: this.assayCreate.IsOnline,
+      RandomOptions: this.assayCreate.RandomOptions,
+      RandomQuestion: this.assayCreate.RandomQuestion,
+      Lessons: this.assayCreate.Lessons,
+      Page : this.assayCreate.Page,
+      NumberOfVarient : this.assayCreate.NumberOfVarient
+    };
+
+    type TQuestionAssay = { LessonId: number; Questions: Array<IQuestion> };
+    
+    return axios
+      .post(`${baseUrl}/CreateStudent`, data)
+      .then((response: AxiosResponse<IMessageResult>) => {
+        let data = response.data;
+        this.notify({ vm, data });
+
+        if (data.MessageType == MessageType.Success) {
+          this.assayCreate.Id = data.Obj.Id;
         }
       });
   }

@@ -180,6 +180,11 @@ export default [
         component: () => import(/* webpackChunkName: "teacherPanel" */"src/views/panel/teacherPanel.vue")
       },
       {
+        path: "/panel/studentPanel",
+        name: "studentPanel",
+        component: () => import(/* webpackChunkName: "teacherPanel" */"src/views/panel/studentPanel.vue")
+      },
+      {
         path: "/report/questionOfEachLesson",
         name: "questionOfEachLesson",
         component: () => import(/* webpackChunkName: "questionOfEachLesson" */"src/views/report/questionOfEachLesson.vue")
@@ -238,6 +243,16 @@ export default [
       
       },
       {
+        path: "/Assay/report",
+        name: "report",
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/report.vue")
+      },
+      {
+        path: "/Assay/index_resualt",
+        name: "index_resualt",
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/index_resualt.vue")
+      },
+      {
         path: "/student/buyLesson",
         name: "buyLesson",
         component: () => import(/* webpackChunkName: "lesson" */"src/views/lesson/buyLesson.vue")
@@ -251,6 +266,11 @@ export default [
         path: "/panel/studentPanel",
         name: "studentPanel",
         component: () => import(/* webpackChunkName: "teacherPanel" */"src/views/panel/studentPanel.vue")
+      },
+      {
+        path: "/AssayStudent",
+        name: "assayStudent",
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/AssayStudent/index.vue")
       }
     ]
 

@@ -34,7 +34,14 @@
                   extensions=".jpg"
                 />
               </q-field>
-              <div class="col-12"></div>
+              <div class="col-sm-6">
+                <p class="text-center">
+                  تصویر فعلی
+                </p>
+                <div class="q-pa-sm text-center">
+                  <img class="img-lesson" :src="imgpath" alt="">
+                </div>
+              </div>
         <!-- ati -->
 
         <base-input :model="$v.lesson.Name" class="col-md-6" />
@@ -191,6 +198,9 @@ export default class LessonEditVue extends Vue {
     });
     return list;
   }
+  get imgpath(){
+    return this.lessonStore.lesson.FilePath;
+  }
   //#endregion
 
   //#region ### methods ###
@@ -249,7 +259,15 @@ export default class LessonEditVue extends Vue {
   //#region ### hooks ###
   created() {
     this.lessonStore.SET_EDIT_VUE(this);
+    
   }
   //#endregion
 }
 </script>
+
+<style scoped>
+.img-lesson{
+  max-width: 50%;
+  height: auto;
+}
+</style>

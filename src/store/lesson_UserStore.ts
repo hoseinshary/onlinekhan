@@ -55,6 +55,8 @@ export class Lesson_UserStore extends VuexModule {
     return this._lessonList.filter(x => x.Checked).map(x => x.Id);
   }
 
+
+
   get checkedUserIds() {
     return this._userList.filter(x => x.Checked).map(x => x.Id);
   }
@@ -182,6 +184,17 @@ export class Lesson_UserStore extends VuexModule {
         let data = response.data;
         this.notify({ vm, data });
       });
+  }
+
+  
+  @action()
+  async GetAllMyLesson() {
+    return axios
+      .get(`${baseUrl}/GetAllMyLesson`)
+      .then((response: AxiosResponse<Array<ILesson>>) => {
+        this.SET_LESSON_LIST(response.data);
+      });
+    
   }
   //#endregion
 }

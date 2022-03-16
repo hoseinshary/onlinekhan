@@ -266,6 +266,11 @@ export default [
         path: "/panel/studentPanel",
         name: "studentPanel",
         component: () => import(/* webpackChunkName: "teacherPanel" */"src/views/panel/studentPanel.vue")
+      },
+      {
+        path: "/AssayStudent",
+        name: "assayStudent",
+        component: () => import(/* webpackChunkName: "program" */"src/views/assay/AssayStudent/index.vue")
       }
     ]
 

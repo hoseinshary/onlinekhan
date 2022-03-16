@@ -1,0 +1,235 @@
+<template>
+<bs-modal
+    title="انتخاب درس"
+    :show="assayStore.openModal._1lesson"
+    size="lg"
+    @close="assayStore.OPEN_MODAL_1LESSON(false)"
+  >
+
+
+    <template slot="header">
+      <q-toolbar slot="header" color="warning" text-color>
+        <q-toolbar-title>انتخاب درس</q-toolbar-title>
+        <q-btn dense icon="close" @click="assayStore.OPEN_MODAL_1LESSON(false)" />
+      </q-toolbar>
+    </template>
+
+    <slot>
+      <section class="row gutter-sm col-md-12">
+       <div class="col-12">
+      <q-btn color="primary" class="float-right" @click="assayStore.OPEN_MODAL_1LESSON(false)">
+        انتخاب مبحث
+        <q-icon name="arrow_back" />
+      </q-btn>
+    </div>
+        
+   
+    <div class="col-md-9">
+      
+      <ul style="max-height: 500px; overflow-y: auto">
+        <li
+          v-for="lesson in assayStore._lessonList"
+          :key="'lesson' + lesson.Id"
+          class="row shadow-1 q-ma-sm q-pa-sm"
+        >
+          <div class="col-md-5">
+            <q-checkbox
+              v-model="lesson.Checked"
+              @input="getQuestionNumberReport(lesson)"
+              
+            />
+
+            {{ lesson.Name }}
+          </div>
+          <div v-if="lesson.Checked" class="col-md-12">
+            <section class="row gutter-sm">
+              <div class="col">
+                <label>
+                  تعداد سوال جدید:
+                  {{ numberOfQuestionReport.NumberOfNewQuestions }}</label
+                >
+                <q-input
+                  v-model="lesson.CountOfEasy"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <label>
+                  تعداد سوال تکلیف:
+                  {{numberOfQuestionReport.NumberOfHomeworkQuestions}}
+                </label>
+
+                <q-input
+                  v-model="lesson.CountOfMedium"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <label>
+                  تعداد سوال آزمون قبلی:
+                  {{ numberOfQuestionReport.NumberOfAssayQuestions }}</label
+                >
+
+                <q-input
+                  v-model="lesson.CountOfHard"
+                  @focus="$event.target.select()"
+                  class="col"
+                  align="center"
+                  type="number"
+                />
+              </div>
+              <div class="col">
+                <label>
+                  تعداد کل سوالات   :{{numberOfQuestionReport.NumberOfNewQuestions + numberOfQuestionReport.NumberOfAssayQuestions +numberOfQuestionReport.NumberOfHomeworkQuestions}}
+                </label>
+                <q-input
+                  v-model="lesson.CountOfQuestions"
+                  class="col"
+                  align="center"
+                  readonly
+                />
+              </div>
+            </section>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-12">
+      <!-- <q-btn color="primary" class="float-right" @click="goToTopicTab">
+        انتخاب مبحث
+        <q-icon name="arrow_back" />
+      </q-btn> -->
+    </div>
+  </section>
+    </slot>
+
+    <template slot="footer">
+      <!-- <base-btn-save-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-save-back>
+      <base-btn-back @click="assayStore.OPEN_MODAL_1LESSON(false)"></base-btn-back> -->
+    </template>
+  </bs-modal>
+
+
+
+
+
+  
+</template>
+
+<script lang="ts">
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { vxm } from "src/store";
+import util from "src/utilities";
+import { EducationTreeState } from "../../../utilities/enumeration";
+import AssayCreate, { AssayLesson, AssayNumberOfQuestionReport } from "src/models/IAssay";
+import ILesson from "src/models/ILesson";
+import { DefaultUser } from "src/models/IUser";
+
+@Component({})
+export default class LessonTabVue extends Vue {
+  //#region ### data ###
+  lessonStore = vxm.lesson_UserStore;
+  studentStore = vxm.studentStore;
+  assayStore = vxm.assayStore;
+  educationTreeStore = vxm.educationTreeStore;
+  educationTree = this.educationTreeStore.qTreeData;
+  //assayCreate = vxm.assayStore.assayCreate;
+  numberOfQuestionReport: AssayNumberOfQuestionReport = new AssayNumberOfQuestionReport();
+
+  //#endregion
+
+  //#region ### computed ###
+  get educationTree_GradeDdl() {
+    return this.educationTreeStore.byStateDdl(EducationTreeState.Grade);
+  }
+
+  get educationTreeData() {
+    return this.educationTreeStore.treeDataByEducationTreeId(
+      this.educationTree.id
+    );
+  }
+
+
+  //#endregion
+
+  //#region ### watch ###
+  @Watch("educationTree.id")
+  educationTreeIdChanged(newVal, oldVal) {
+    this.educationTree.leafTicked.splice(
+      0,
+      this.educationTree.leafTicked.length
+    );
+    let index = this.educationTree.expanded.indexOf(oldVal);
+    if (index > -1) {
+      this.educationTree.expanded.splice(index, 1);
+    }
+
+    if (this.educationTree.expanded.indexOf(newVal) == -1) {
+      this.educationTree.expanded.push(newVal);
+    }
+  }
+
+
+
+  fillLesson() {
+
+    util.clearArray(this.assayStore._lessonList);
+   
+    this.lessonStore.GetAllMyLesson().then(() => {
+      this.lessonStore.lessonData.forEach(x => {
+      this.assayStore._lessonList.push(new AssayLesson(x.Id, x.Name));
+    });
+    });
+
+  }
+
+  
+  //#endregion
+
+  //#region ### methods ###
+  goToTopicTab() {
+    this.$emit("changeTab", "topicTab");
+  }
+
+  getQuestionNumberReport(Lesson: AssayLesson) {
+    if(this.assayStore.assayCreate.Lessons.find(x=> x.Id === Lesson.Id))
+    {
+
+        this.assayStore.assayCreate.Lessons.splice(this.assayStore.assayCreate.Lessons.findIndex(x=> x.Id === Lesson.Id),1)
+
+    }
+    else
+    {
+      Lesson.Questions = [];
+      var tempLesson = util.cloneObject(Lesson);
+   
+      
+    this.assayStore.assayCreate.Lessons.push(tempLesson);
+    this.studentStore.numberOfQuestionReport({ lessonId: Lesson.Id, studentId: 9 }).then(d => {
+      this.numberOfQuestionReport = d;
+    });
+    }
+      
+  }
+
+  
+
+  //#endregion
+
+  //#region ### hooks ###
+  created() {
+    this.fillLesson();
+    
+    this.studentStore.SET_LESSON_ASSAY_VUE(this);
+
+   
+  }
+  //#endregion
+}
+</script>

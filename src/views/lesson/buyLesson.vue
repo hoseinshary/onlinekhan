@@ -106,7 +106,7 @@
                 <div>
                   <p class="price"> 64،000 تومان </p>
                 </div>
-                  <q-btn size="md" class="qBtn" icon="shopping_cart" @click="buyLesson(data.row.Id)">
+                  <q-btn size="md" class="qBtn" icon="shopping_cart" @click="buyLesson(packet.Id)">
                      
                   </q-btn>
               </q-card-actions>

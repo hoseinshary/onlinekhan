@@ -15,6 +15,9 @@
               <q-btn flat color="primary" label="تکمیل پروفایل" />
             </q-card-actions> -->
             <q-card-actions>
+              <q-btn flat color="primary" label="ساخت آزمون جدید" @click="createNewTest"  />
+            </q-card-actions>
+            <q-card-actions>
               <q-btn flat color="primary" label="دروس من" @click="myLessonClick" />
             </q-card-actions>
             <q-card-actions>
@@ -119,6 +122,9 @@ export default class TeacherPanelVue extends Vue {
   buyLessonClick()
   {
     router.push('/student/buylesson')
+  }
+  createNewTest(){
+    router.push('/AssayStudent')
   }
 
 

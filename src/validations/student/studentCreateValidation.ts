@@ -17,13 +17,11 @@ const studentValidations: ValidationRuleset<TStudent> = {
     FatherName: {
       displayName: displayName("نام پدر"),
       maxLength: maxLength(50),
-      required,
       onlyPersianChar: onlyPersianChar()
     },
     Address: {
       displayName: displayName("آدرس"),
       maxLength: maxLength(300),
-      required,
       onlyPersianChar: onlyPersianChar()
     },
     User: {
@@ -90,7 +88,24 @@ const studentValidations: ValidationRuleset<TStudent> = {
         displayName: displayName("شهر"),
         requiredDdl: requiredDdl(0)
       }
-    }
+    },
+    // ati
+      IntroducedCode:{
+        displayName:displayName("کد معرف"),
+        required
+      },
+      EducationGroupEnum:{
+        displayName:displayName("گروه تحصیلی"),
+        required
+      },
+      GradeEnum:{
+        displayName:displayName("پایه تحصیلی"),
+        required
+      },
+      SchoolName:{
+        displayName:displayName("نام مدرسه"),
+        required
+      }
   }
 };
 

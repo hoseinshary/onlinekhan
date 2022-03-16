@@ -15,7 +15,6 @@ export default interface IUser {
   ProvinceId: number;
   Checked: boolean;
   ProfilePic: string;
-
 }
 
 export const DefaultUser: IUser = {
@@ -34,6 +33,5 @@ export const DefaultUser: IUser = {
   CityId: 0,
   ProvinceId: 0,
   Checked: false,
-  ProfilePic : ""
-
+  ProfilePic : "",
 };

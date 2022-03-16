@@ -127,7 +127,7 @@
 
       <q-page-container>
         <br />
-        <div class="row justify-center q-mt-lg">
+        <div class="row justify-center q-mt-lg"  @click="closeSub">
           <transition
             name="transitions"
             enter-active-class="animated bounceInDown"
@@ -217,6 +217,13 @@ export default {
        for(const item in this.menuList2){
          this.menuList2[item].subnavActive = false;
        }
+     },
+     handleScroll(){
+       console.log(window.scrollY);
+       console.log(window.screenY);
+       if(window.scrollY = (window.innerHeight /10)){
+         this.closeSub();
+       }
      }
 
   },
@@ -224,8 +231,10 @@ export default {
     this.menuList = await this.$q.localStorage.get.item("menuList");
     // console.log('menuLIst',this.menuList);
     this.subMenuList = await this.$q.localStorage.get.item("subMenuList");
-    // console.log('submenuLIst',this.subMenuList);
+    console.log('submenuLIst',this.subMenuList);
     await this.setmenuList2();
+
+    window.addEventListener("scroll", this.handleScroll);
   }
 };
 </script>

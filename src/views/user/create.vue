@@ -47,7 +47,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { vxm } from "src/store";
-import { userCreateValidations } from "src/validations/user/UserCreateValidation";
+import { userCreateValidations } from "src/validations/user/userCreateValidation";
 import { UserType } from "src/utilities/enumeration";
 
 @Component({

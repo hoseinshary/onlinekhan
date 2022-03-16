@@ -15,7 +15,6 @@ import {
 } from "vuex-class-component";
 import router from "src/router";
 
-
 @Module({ namespacedPath: "assayAnswerSheetStore/" })
 export class AssayAnswerSheetStore extends VuexModule {
   openModal: {runAssay_Start:boolean; runAssay_Stop:boolean; questionShow:boolean; create: boolean; edit: boolean; delete: boolean };
@@ -259,26 +258,21 @@ export class AssayAnswerSheetStore extends VuexModule {
   }
 
   @action()
-  async submitCreate() {
-    
-    
+  async submitCreate() { 
     let vm = this._createVue;
     //if (!(await this.validateForm(vm))) return;
 
- 
-    
- 
     return axios
       .post(`${baseUrl}/Create`, this.assayAnswerSheet)
       .then((response: AxiosResponse<IMessageResult>) => {
         let data = response.data;
-       
+        // console.log('response',data);
 
         if (data.MessageType == 1) {
           this.assayAnswerSheetResult = data.Obj;
 
-          if(data.Id)
-           this.assayAnswerSheet.Id = data.Id ;
+          // if(data.Id)
+          //  this.assayAnswerSheet.Id = data.Id ;
           router.push("/assay/resualtAssay");
           //this.OPEN_MODAL_RESUALT(true);
           //console.log(data.Id);

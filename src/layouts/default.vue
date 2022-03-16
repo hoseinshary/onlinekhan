@@ -42,9 +42,14 @@
                         ویرایش اطلاعات کاربری
                         </q-btn>
                       </q-item>
-                      <q-item  label="شارژ کیف پول">
+                      <q-item  label=" کیف پول">
                         <q-btn flat>
-                        شارژ کیف پول
+                          <div class="" >
+                            <span> کیف پول</span>
+                            <span class="charge">
+                              {{ getCredit }}
+                            </span>
+                          </div>
                         </q-btn>
                       </q-item>
                       <q-item  label="خروج از حساب کاربری">
@@ -155,6 +160,7 @@
 <script>
 import util from "src/utilities";
 import dropdown from "./dropdown.vue";
+import { vxm } from "src/store";
 
 export default {
   components:{
@@ -169,8 +175,15 @@ export default {
       subMenuList: null,
       showProfileMenu : false,
       //ati
-      menuList2:[]
+      menuList2:[],
+      charge:10000,
+      defaultStore:vxm.defaultStore
     };
+  },
+  computed:{
+    getCredit(){
+      return ` ${this.defaultStore.getCREDIT } تومان`;
+    }
   },
   methods: {
     drawerClick(e) {
@@ -182,7 +195,6 @@ export default {
     logout() {
       util.logout();
     },
-     // ati
      setmenuList2(){
        for(const menu in this.menuList){
          const temp = {};
@@ -192,11 +204,9 @@ export default {
          temp.subnavActive = false;
          this.menuList2.push(temp);
        }
-       console.log('menulist2',this.menuList2);
      },
      toggleSubnav1(newId){
        let activeId = null;
-       console.log('newid',newId);
        for(const menu in this.menuList2){  
          if(this.menuList2[menu].subnavActive === true ){
             activeId = menu;
@@ -208,10 +218,8 @@ export default {
            }
            return
         }
-        // console.log('menu',this.menuList2[menu].id);
        };
        this.menuList2[newId].subnavActive = true;
-       console.log('menu2',this.menuList2);
      },
      closeSub(){
        for(const item in this.menuList2){
@@ -219,8 +227,6 @@ export default {
        }
      },
      handleScroll(){
-       console.log(window.scrollY);
-       console.log(window.screenY);
        if(window.scrollY = (window.innerHeight /10)){
          this.closeSub();
        }
@@ -231,8 +237,10 @@ export default {
     this.menuList = await this.$q.localStorage.get.item("menuList");
     // console.log('menuLIst',this.menuList);
     this.subMenuList = await this.$q.localStorage.get.item("subMenuList");
-    console.log('submenuLIst',this.subMenuList);
+    // console.log('submenuLIst',this.subMenuList);
     await this.setmenuList2();
+
+    this.defaultStore.creditGetById();
 
     window.addEventListener("scroll", this.handleScroll);
   }
@@ -376,9 +384,15 @@ a{
   background-color: #fcfaf9;
   border: 2px solid #48e5c2;
   border-radius: 4px;
+  width: max-content;
 }
 .profile-menu .q-item{
   padding: 0;
+}
+.profile-menu .charge{
+  color: #f36f21;
+  font-size: .75rem;
+  margin-left: .5rem;
 }
 .profile .q-btn:hover,
 .name-profile:hover{

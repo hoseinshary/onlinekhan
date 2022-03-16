@@ -15,6 +15,7 @@ export default interface ILesson {
   File: string;
   LessonDepartmentId: number;
   LessonDepartments?: Array<ILessonDepartment>;
+  FilePath:string;
 }
 
 export const DefaultLesson: ILesson = {
@@ -28,5 +29,6 @@ export const DefaultLesson: ILesson = {
   Checked: false,
   File: "",
   LessonDepartmentId: 0,
-  LessonDepartments: []
+  LessonDepartments: [],
+  FilePath:""
 };

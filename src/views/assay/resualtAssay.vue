@@ -235,10 +235,14 @@ showModalQuestion(index : number ) {
   created() {
   
     
-
+    console.log(this.answerSheet.Id);
 
     if(this.answerSheet.Id != 0)
+    {
+      console.log(123);
       this.assayAnswerSheetStore.getById(this.answerSheet.Id);
+
+    }
   }
   //#endregion
 }

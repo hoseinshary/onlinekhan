@@ -271,11 +271,11 @@ export class AssayAnswerSheetStore extends VuexModule {
         if (data.MessageType == 1) {
           this.assayAnswerSheetResult = data.Obj;
 
-          // if(data.Id)
-          //  this.assayAnswerSheet.Id = data.Id ;
+          if(data.Id)
+           this.assayAnswerSheet.Id = data.Id ;
           router.push("/assay/resualtAssay");
           //this.OPEN_MODAL_RESUALT(true);
-          //console.log(data.Id);
+         // console.log(data.Id);
           //console.log(this.assayAnswerSheetResult);
 
 
